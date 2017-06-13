@@ -348,12 +348,12 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 	@Override
 	public List<CategoryTree> getTreeCategory(String parentId) {
 		PrCategoryCriteria categoryCriteria = new PrCategoryCriteria();
-		Criteria criteria = categoryCriteria.createCriteria();
+		/*Criteria criteria = categoryCriteria.createCriteria();
 		if (null == parentId) {
 			criteria.andParentIdIsNull();
 		} else {
 			criteria.andParentIdEqualTo(parentId);
-		}
+		}*/
 		List<PrCategory> list = this.prCategoryMapper.selectByExample(categoryCriteria);
 		List<CategoryTree> result = new ArrayList<CategoryTree>();
 		for (PrCategory prCategory : list) {
@@ -366,6 +366,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
+			result.add(categoryTree);
 		}
 		result = buildListToTree(result);
 		return result;
