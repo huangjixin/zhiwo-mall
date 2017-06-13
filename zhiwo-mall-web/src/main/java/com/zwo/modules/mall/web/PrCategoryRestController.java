@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageInfo2;
+import com.zwo.modules.mall.domain.CategoryTree;
 import com.zwo.modules.mall.domain.PrCategory;
 import com.zwo.modules.mall.domain.PrCategoryCriteria;
 import com.zwo.modules.mall.service.IPrCategoryService;
@@ -72,9 +73,24 @@ public class PrCategoryRestController extends BaseController<PrCategory> {
 		PrCategory product = categoryService.selectByPrimaryKey(id);
 		return product;
 	}
+	
+	/**
+	 * @Description: 获得树结构的列表。
+	 * @param id
+	 * @param uiModel
+	 * @param httpServletRequest
+	 * @param httpServletResponse
+	 * @return
+	 */
+	@RequestMapping(value = "getTreeCategory")
+	public List <CategoryTree> getTreeCategory(Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		List <CategoryTree> list = categoryService.getTreeCategory(null);
+		return list;
+	}
 
-	@RequestMapping(value = "/select")
-	public PageInfo2<PrCategory> select(@ModelAttribute PageInfo2<PrCategory> page, @ModelAttribute PrCategory product,
+	@RequestMapping(value = "select")
+	public PageInfo2<PrCategory> select(@ModelAttribute PageInfo2<PrCategory> page, @ModelAttribute PrCategory category,
 			Model uiModel, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
 		super.select(page, uiModel, httpServletRequest, httpServletResponse);
@@ -83,8 +99,8 @@ public class PrCategoryRestController extends BaseController<PrCategory> {
 		productCriteria = new PrCategoryCriteria();
 		PrCategoryCriteria.Criteria criteria = productCriteria.createCriteria();
 		productCriteria.setOrderByClause("id desc");
-		if (null != product.getName() && !"".equals(product.getName())) {
-			criteria.andNameLike("%" + product.getName() + "%");
+		if (null != category.getName() && !"".equals(category.getName())) {
+			criteria.andNameLike("%" + category.getName() + "%");
 		}
 
 		page = categoryService.selectByPageInfo(productCriteria, page);

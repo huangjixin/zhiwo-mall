@@ -2,7 +2,14 @@ package com.zwo.modules.mall.domain;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -489,4 +496,5 @@ public class PrCategory implements Serializable {
     public void setCode(String code) {
         this.code = code == null ? null : code.trim();
     }
+    
 }

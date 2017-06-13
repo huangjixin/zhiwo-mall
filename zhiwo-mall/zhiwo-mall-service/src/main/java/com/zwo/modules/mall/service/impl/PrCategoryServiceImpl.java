@@ -3,8 +3,12 @@
  */
 package com.zwo.modules.mall.service.impl;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +21,12 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.PageInfo2;
 import com.zwo.modules.mall.dao.PrCategoryMapper;
+import com.zwo.modules.mall.domain.CategoryTree;
 import com.zwo.modules.mall.domain.PrCategory;
 import com.zwo.modules.mall.domain.PrCategoryCriteria;
+import com.zwo.modules.mall.domain.PrCategoryCriteria.Criteria;
 import com.zwo.modules.mall.service.IPrCategoryService;
 import com.zwotech.modules.core.service.impl.BaseService;
 
@@ -38,33 +43,38 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 	private static Logger logger = LoggerFactory.getLogger(PrCategoryServiceImpl.class);
 
 	private static final String BASE_MESSAGE = "【PrCategoryServiceImpl服务类提供的基础操作增删改查等】";
-	
+
 	@Autowired
 	@Lazy(true)
 	private PrCategoryMapper prCategoryMapper;
-	
+
 	@Override
 	public Mapper<PrCategory> getBaseMapper() {
 		return prCategoryMapper;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.zwotech.modules.core.service.IBaseService#insertBatch(java.util.List)
-	 */
-	/*@Override
-	public int insertBatch(List<PrCategory> list) {
-		// TODO Auto-generated method stub
-		return 0;
-	}*/
 
-	/* (non-Javadoc)
-	 * @see com.zwotech.modules.core.service.IBaseService#countByExample(java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.zwotech.modules.core.service.IBaseService#insertBatch(java.util.List)
 	 */
-	/*@Override
-	public int countByExample(Object example) {
-		// TODO Auto-generated method stub
-		return 0;
-	}*/
+	/*
+	 * @Override public int insertBatch(List<PrCategory> list) { // TODO
+	 * Auto-generated method stub return 0; }
+	 */
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.zwotech.modules.core.service.IBaseService#countByExample(java.lang.
+	 * Object)
+	 */
+	/*
+	 * @Override public int countByExample(Object example) { // TODO
+	 * Auto-generated method stub return 0; }
+	 */
 
 	/*
 	 * (non-Javadoc)
@@ -216,7 +226,8 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 		// 逻辑操作
 		PrCategory prCategory = super.selectByPrimaryKey(id);
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询结束,结果对象为:" + prCategory==null?"NULL":prCategory.toString());
+			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询结束,结果对象为:" + prCategory == null ? "NULL"
+					: prCategory.toString());
 		return prCategory;
 	}
 
@@ -254,17 +265,17 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 	@Override
 	@CacheEvict(value = "PrCategory", allEntries = true)
 	public int updateByExample(PrCategory record, Object example) {
-		//日志记录
-		if(logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE+"updateByExample更新开始");
-		if(logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
-										
-		//逻辑操作		
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExample更新开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExample更新对象为：" + record.toString());
+
+		// 逻辑操作
 		int result = super.updateByExample(record, example);
-		//日志记录
-		if(logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE+"updateByExample更新结束");
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExample更新结束");
 		return result;
 	}
 
@@ -334,13 +345,92 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 		return pageInfo;
 	}
 
+	@Override
+	public List<CategoryTree> getTreeCategory(String parentId) {
+		PrCategoryCriteria categoryCriteria = new PrCategoryCriteria();
+		Criteria criteria = categoryCriteria.createCriteria();
+		if (null == parentId) {
+			criteria.andParentIdIsNull();
+		} else {
+			criteria.andParentIdEqualTo(parentId);
+		}
+		List<PrCategory> list = this.prCategoryMapper.selectByExample(categoryCriteria);
+		List<CategoryTree> result = new ArrayList<CategoryTree>();
+		for (PrCategory prCategory : list) {
+			CategoryTree categoryTree = new CategoryTree();
+			try {
+				BeanUtils.copyProperties(categoryTree, prCategory);
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+		result = buildListToTree(result);
+		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<CategoryTree> buildListToTree(List<CategoryTree> dirs) {
+		List<CategoryTree> roots = findRoots(dirs);
+		List<CategoryTree> notRoots = (List<CategoryTree>) CollectionUtils.subtract(dirs, roots);
+		
+		for (CategoryTree root : roots) {
+			root.setChildren(findChildren(root, notRoots));
+		}
+		return roots;
+	}
+
+	public List<CategoryTree> findRoots(List<CategoryTree> allPrCategorys) {
+		List<CategoryTree> results = new ArrayList<CategoryTree>();
+		for (CategoryTree node : allPrCategorys) {
+			boolean isRoot = true;
+			for (PrCategory comparedOne : allPrCategorys) {
+				if (node.getParentId() == comparedOne.getId()) {
+					isRoot = false;
+					break;
+				}
+			}
+			if (isRoot) {
+				node.setLevel(0);
+				results.add(node);
+				node.setRootId(node.getId());
+			}
+		}
+		return results;
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<CategoryTree> findChildren(CategoryTree root, List<CategoryTree> allPrCategorys) {
+		List<CategoryTree> children = new ArrayList<CategoryTree>();
+
+		for (CategoryTree comparedOne : allPrCategorys) {
+			if (comparedOne.getParentId() == root.getId()) {
+				comparedOne.setParent(root);
+				comparedOne.setLevel(root.getLevel() + 1);
+				children.add(comparedOne);
+			}
+		}
+		List<CategoryTree> notChildren = (List<CategoryTree>) CollectionUtils.subtract(allPrCategorys, children);
+		for (CategoryTree child : children) {
+			List<CategoryTree> tmpChildren = findChildren(child, notChildren);
+			if (tmpChildren == null || tmpChildren.size() < 1) {
+				child.setLeaf(true);
+			} else {
+				child.setLeaf(false);
+			}
+			child.setChildren(tmpChildren);
+		}
+		return children;
+	}
+
 	public static void main(String[] args) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");//此文件放在SRC目录下
-		IPrCategoryService prductService = (IPrCategoryService)context.getBean("prCategoryServiceImpl");
+		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
+		IPrCategoryService prductService = (IPrCategoryService) context.getBean("prCategoryServiceImpl");
 		PrCategory product = new PrCategory();
-		product.setId(System.currentTimeMillis()+"");
+		product.setId(System.currentTimeMillis() + "");
 		int result = prductService.insertSelective(product);
-		logger.info(result+"");
+		logger.info(result + "");
 	}
 
 }
