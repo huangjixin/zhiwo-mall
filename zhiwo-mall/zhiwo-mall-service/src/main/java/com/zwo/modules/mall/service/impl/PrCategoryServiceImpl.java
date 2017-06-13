@@ -358,6 +358,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 		List<CategoryTree> result = new ArrayList<CategoryTree>();
 		for (PrCategory prCategory : list) {
 			CategoryTree categoryTree = new CategoryTree();
+			categoryTree.setId(prCategory.getId());
 			try {
 				BeanUtils.copyProperties(categoryTree, prCategory);
 			} catch (IllegalAccessException e) {
@@ -427,10 +428,13 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 	public static void main(String[] args) {
 		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
 		IPrCategoryService prductService = (IPrCategoryService) context.getBean("prCategoryServiceImpl");
-		PrCategory product = new PrCategory();
-		product.setId(System.currentTimeMillis() + "");
-		int result = prductService.insertSelective(product);
-		logger.info(result + "");
+		//PrCategory product = new PrCategory();
+		//product.setId(System.currentTimeMillis() + "");
+		//int result = prductService.insertSelective(product);
+		//logger.info(result + "");
+		
+		List<CategoryTree> list =  prductService.getTreeCategory(null);
+		logger.info("");
 	}
 
 }
