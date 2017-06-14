@@ -13,10 +13,15 @@ import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.zwotech.modules.core.domain.TreeNode;
 
 @Table(name = "pr_category")
-public class PrCategory implements Serializable {
-    @Id
+public class PrCategory extends TreeNode implements Serializable {
+    public PrCategory(String id, String name, String parentId) {
+		super(id, name, parentId);
+	}
+
+	@Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
