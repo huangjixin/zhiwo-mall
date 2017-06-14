@@ -1,25 +1,27 @@
 package com.zwotech.modules.core.domain;
 import java.util.List;
 
+import javax.persistence.Transient;
+
 public class Node implements java.io.Serializable {
     private static final long serialVersionUID = -2721191232926604726L;
 
     private int id;
 
     private int parentId;
-
+    @Transient
     private Node parent;
-
+    @Transient
     private List<Node> children;
 
     private String name;
-
+    @Transient
     private int level;
 
     private int sort;
-
+    @Transient
     private int rootId;
-
+    @Transient
     private String type;
 
     private boolean isLeaf;

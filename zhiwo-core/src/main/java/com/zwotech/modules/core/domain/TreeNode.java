@@ -1,6 +1,8 @@
 package com.zwotech.modules.core.domain;
 import java.util.List;
 
+import javax.persistence.Transient;
+
 /**
  * Created by Massive on 2016/12/26.
  */
@@ -11,7 +13,8 @@ public class TreeNode {
     private String parentId;
 
     private String name;
-
+    
+    @Transient
     private List<TreeNode> children;
 
     public TreeNode(String id, String name, String parentId) {
