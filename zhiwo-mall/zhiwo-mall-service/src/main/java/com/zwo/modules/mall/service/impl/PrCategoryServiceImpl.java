@@ -3,12 +3,9 @@
  */
 package com.zwo.modules.mall.service.impl;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageInfo2;
 import com.zwo.modules.mall.dao.PrCategoryMapper;
-import com.zwo.modules.mall.domain.CategoryTree;
 import com.zwo.modules.mall.domain.PrCategory;
 import com.zwo.modules.mall.domain.PrCategoryCriteria;
-import com.zwo.modules.mall.domain.PrCategoryCriteria.Criteria;
 import com.zwo.modules.mall.service.IPrCategoryService;
 import com.zwotech.modules.core.service.impl.BaseService;
 
@@ -346,7 +341,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 	}
 
 	@Override
-	public List<CategoryTree> getTreeCategory(String parentId) {
+	public List<PrCategory> getTreeCategory(String parentId) {
 		PrCategoryCriteria categoryCriteria = new PrCategoryCriteria();
 		/*Criteria criteria = categoryCriteria.createCriteria();
 		if (null == parentId) {
@@ -355,75 +350,9 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 			criteria.andParentIdEqualTo(parentId);
 		}*/
 		List<PrCategory> list = this.prCategoryMapper.selectByExample(categoryCriteria);
-		List<CategoryTree> result = new ArrayList<CategoryTree>();
-		for (PrCategory prCategory : list) {
-			CategoryTree categoryTree = new CategoryTree();
-			categoryTree.setId(prCategory.getId());
-			try {
-				BeanUtils.copyProperties(categoryTree, prCategory);
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
-			result.add(categoryTree);
-		}
-		result = buildListToTree(result);
-		return result;
-	}
-
-	@SuppressWarnings("unchecked")
-	private List<CategoryTree> buildListToTree(List<CategoryTree> dirs) {
-		List<CategoryTree> roots = findRoots(dirs);
-		List<CategoryTree> notRoots = (List<CategoryTree>) CollectionUtils.subtract(dirs, roots);
+		List<PrCategory> result = new ArrayList<PrCategory>();
 		
-		for (CategoryTree root : roots) {
-			root.setChildren(findChildren(root, notRoots));
-		}
-		return roots;
-	}
-
-	public List<CategoryTree> findRoots(List<CategoryTree> allPrCategorys) {
-		List<CategoryTree> results = new ArrayList<CategoryTree>();
-		for (CategoryTree node : allPrCategorys) {
-			boolean isRoot = true;
-			for (PrCategory comparedOne : allPrCategorys) {
-				if (node.getParentId() == comparedOne.getId()) {
-					isRoot = false;
-					break;
-				}
-			}
-			if (isRoot) {
-				node.setLevel(0);
-				results.add(node);
-				node.setRootId(node.getId());
-			}
-		}
-		return results;
-	}
-
-	@SuppressWarnings("unchecked")
-	private List<CategoryTree> findChildren(CategoryTree root, List<CategoryTree> allPrCategorys) {
-		List<CategoryTree> children = new ArrayList<CategoryTree>();
-
-		for (CategoryTree comparedOne : allPrCategorys) {
-			if (comparedOne.getParentId() == root.getId()) {
-				comparedOne.setParent(root);
-				comparedOne.setLevel(root.getLevel() + 1);
-				children.add(comparedOne);
-			}
-		}
-		List<CategoryTree> notChildren = (List<CategoryTree>) CollectionUtils.subtract(allPrCategorys, children);
-		for (CategoryTree child : children) {
-			List<CategoryTree> tmpChildren = findChildren(child, notChildren);
-			if (tmpChildren == null || tmpChildren.size() < 1) {
-				child.setLeaf(true);
-			} else {
-				child.setLeaf(false);
-			}
-			child.setChildren(tmpChildren);
-		}
-		return children;
+		return result;
 	}
 
 	public static void main(String[] args) {
@@ -434,7 +363,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 		//int result = prductService.insertSelective(product);
 		//logger.info(result + "");
 		
-		List<CategoryTree> list =  prductService.getTreeCategory(null);
+		List<PrCategory> list =  prductService.getTreeCategory(null);
 		logger.info("");
 	}
 

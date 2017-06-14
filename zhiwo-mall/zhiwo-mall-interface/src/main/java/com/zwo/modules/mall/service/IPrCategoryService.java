@@ -5,7 +5,6 @@ package com.zwo.modules.mall.service;
 
 import java.util.List;
 
-import com.zwo.modules.mall.domain.CategoryTree;
 import com.zwo.modules.mall.domain.PrCategory;
 import com.zwotech.modules.core.service.IBaseService;
 
@@ -19,5 +18,5 @@ public interface IPrCategoryService extends IBaseService<PrCategory> {
 	 * @param parentId
 	 * @return
 	 */
-	List<CategoryTree> getTreeCategory(String parentId);
+	List<PrCategory> getTreeCategory(String parentId);
 }
