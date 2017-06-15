@@ -6,18 +6,23 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.HtmlUtils;
 
 import com.github.pagehelper.PageInfo2;
+import com.zwo.modules.mall.domain.PrCategory;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductCriteria;
 import com.zwo.modules.mall.service.IPrductService;
@@ -65,6 +70,7 @@ public class ProductRestController extends BaseController<PrProduct> {
 	public PrProduct getPrProduct(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		PrProduct product = prductService.selectByPrimaryKey(id);
+		
 		return product;
 	}
 	
@@ -85,5 +91,28 @@ public class ProductRestController extends BaseController<PrProduct> {
 		
 		page = prductService.selectByPageInfo(productCriteria, page);
 		return page;
+	}
+	
+
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public String create(@Valid PrProduct product, BindingResult result, Model uiModel,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		if (result.hasErrors()) {
+
+		}
+		
+		String res = ""+prductService.insertSelective(product);
+		return res;
+	}
+	
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public String update(@Valid PrProduct product, BindingResult result, Model uiModel,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		if (result.hasErrors()) {
+			
+		}
+		
+		String res = ""+this.prductService.updateByPrimaryKeySelective(product);
+		return res;
 	}
 }

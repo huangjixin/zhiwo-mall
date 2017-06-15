@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.util.HtmlUtils;
 
 import com.github.pagehelper.PageInfo2;
 import com.zwo.modules.mall.dao.PrProductMapper;
@@ -148,7 +149,11 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 			logger.info(BASE_MESSAGE + "insert插入开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-
+		if(null!=record.getContent() && "".equals(record.getContent())){
+			String content = record.getContent();
+			content = HtmlUtils.htmlEscape(content);
+			record.setContent(content);
+		}
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
@@ -175,7 +180,11 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 			logger.info(BASE_MESSAGE + "insert插入开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-
+		if(null!=record.getContent() && "".equals(record.getContent())){
+			String content = record.getContent();
+			content = HtmlUtils.htmlEscape(content);
+			record.setContent(content);
+		}
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
@@ -217,11 +226,15 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询参数为：" + id);
 
 		// 逻辑操作
-		PrProduct prProduct = super.selectByPrimaryKey(id);
-		
+		PrProduct product = super.selectByPrimaryKey(id);
+		if(null!=product.getContent() && "".equals(product.getContent())){
+			String content = product.getContent();
+			content = HtmlUtils.htmlUnescape(content);
+			product.setContent(content);
+		}
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询结束,结果对象为:" + prProduct==null?"NULL":prProduct.toString());
-		return prProduct;
+			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询结束,结果对象为:" + product==null?"NULL":product.toString());
+		return product;
 	}
 
 	/*
@@ -239,7 +252,11 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
-
+		if(null!=record.getContent() && "".equals(record.getContent())){
+			String content = record.getContent();
+			content = HtmlUtils.htmlEscape(content);
+			record.setContent(content);
+		}
 		// 逻辑操作
 		int result = super.updateByExampleSelective(record, example);
 		// 日志记录
@@ -263,7 +280,11 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 			logger.info(BASE_MESSAGE+"updateByExample更新开始");
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
-										
+		if(null!=record.getContent() && "".equals(record.getContent())){
+			String content = record.getContent();
+			content = HtmlUtils.htmlEscape(content);
+			record.setContent(content);
+		}						
 		//逻辑操作		
 		int result = super.updateByExample(record, example);
 		//日志记录
@@ -287,7 +308,11 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
-
+		if(null!=record.getContent() && "".equals(record.getContent())){
+			String content = record.getContent();
+			content = HtmlUtils.htmlEscape(content);
+			record.setContent(content);
+		}
 		// 逻辑操作
 		int result = super.updateByPrimaryKeySelective(record);
 		if (logger.isInfoEnabled())
@@ -310,7 +335,11 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为：" + record.toString());
-
+		if(null!=record.getContent() && "".equals(record.getContent())){
+			String content = record.getContent();
+			content = HtmlUtils.htmlEscape(content);
+			record.setContent(content);
+		}
 		// 逻辑操作
 		int result = super.updateByPrimaryKey(record);
 		if (logger.isInfoEnabled())
