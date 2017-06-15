@@ -48,7 +48,7 @@
 			<tr>
 				<th data-options="field:'ck',checkbox:true"></th>
 				<th data-options="field:'id',align:'center'" width="100%">id</th>
-				<th data-options="field:'name',align:'center'" width="100%">商品名称</th>
+				<th data-options="field:'name',align:'center'" width="100%">商品分类名称</th>
 				<th data-options="field:'createDate',align:'center',width:100">创建日期</th>
 				<th data-options="field:'updateDate',align:'center',width:100">更新日期</th>
 				<!-- <th data-options="field:'By',align:'center',width:100">创建人</th>
@@ -89,7 +89,7 @@
 		
 		var url;
 		function create() {
-			$('#dlg').dialog('open').dialog('setTitle', 'New User');
+			$('#dlg').dialog('open').dialog('setTitle', '新增商品分类');
 			$('#fm').form('clear');
 			url = '${ctx}/category/create';
 		}
@@ -97,7 +97,7 @@
 		function edit() {
 			var row = $('#dg').datagrid('getSelected');
 			if (row) {
-				$('#dlg').dialog('open').dialog('setTitle', '商品信息编辑');
+				$('#dlg').dialog('open').dialog('setTitle', '商品分类信息编辑');
 				$('#fm').form('load', row);
 				url = '${ctx}/category/update';
 			}
