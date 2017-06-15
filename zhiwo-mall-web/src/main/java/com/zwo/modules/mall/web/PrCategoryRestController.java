@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageInfo2;
-import com.zwo.modules.mall.domain.CategoryTree;
 import com.zwo.modules.mall.domain.PrCategory;
 import com.zwo.modules.mall.domain.PrCategoryCriteria;
 import com.zwo.modules.mall.service.IPrCategoryService;
@@ -83,9 +82,9 @@ public class PrCategoryRestController extends BaseController<PrCategory> {
 	 * @return
 	 */
 	@RequestMapping(value = "getTreeCategory")
-	public List <CategoryTree> getTreeCategory(Model uiModel, HttpServletRequest httpServletRequest,
+	public List <PrCategory> getTreeCategory(Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		List <CategoryTree> list = categoryService.getTreeCategory(null);
+		List <PrCategory> list = categoryService.getTreeCategory(null);
 		return list;
 	}
 

@@ -22,7 +22,9 @@ import com.github.pagehelper.PageInfo2;
 import com.zwo.modules.mall.dao.PrCategoryMapper;
 import com.zwo.modules.mall.domain.PrCategory;
 import com.zwo.modules.mall.domain.PrCategoryCriteria;
+import com.zwo.modules.mall.domain.PrCategoryCriteria.Criteria;
 import com.zwo.modules.mall.service.IPrCategoryService;
+import com.zwotech.common.utils.TreeBuilder;
 import com.zwotech.modules.core.service.impl.BaseService;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -343,27 +345,62 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 	@Override
 	public List<PrCategory> getTreeCategory(String parentId) {
 		PrCategoryCriteria categoryCriteria = new PrCategoryCriteria();
-		/*Criteria criteria = categoryCriteria.createCriteria();
+
+		// 日志记录开始,方法开始
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "getTreeCategory开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "参数ID为：" + parentId);
+
+		// 定义局部变量
+		List<PrCategory> categories = new ArrayList<PrCategory>();
+		PrCategoryCriteria prCategoryCriteria = new PrCategoryCriteria();
+		Criteria criteria = prCategoryCriteria.createCriteria();
+		// 业务操作开始
 		if (null == parentId) {
 			criteria.andParentIdIsNull();
 		} else {
-			criteria.andParentIdEqualTo(parentId);
-		}*/
-		List<PrCategory> list = this.prCategoryMapper.selectByExample(categoryCriteria);
-		List<PrCategory> result = new ArrayList<PrCategory>();
-		
-		return result;
+			criteria.andParentidsLike(parentId);
+		}
+
+		prCategoryCriteria.setOrderByClause("sort asc");
+
+		List<PrCategory> list = prCategoryMapper.selectByExample(prCategoryCriteria);
+		if (null == parentId) {
+			for (PrCategory category : list) {
+				PrCategoryCriteria orgCriteria = new PrCategoryCriteria();
+				Criteria cri = prCategoryCriteria.createCriteria();
+				cri.andParentidsLike("%" + category.getId() + "%");
+				List<PrCategory> prCategories = prCategoryMapper.selectByExample(orgCriteria);
+				categories.addAll(prCategories);
+			}
+		}
+
+		TreeBuilder<PrCategory> tb = new TreeBuilder<PrCategory>();
+		if (null == parentId) {
+			categories = tb.buildListToTree(categories, false);
+		} else {
+			list = tb.buildListToTree(list, false);
+		}
+
+		// 业务操作结束
+
+		// 日志记录结束,方法结束
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "getOrgCheckboxTree结束");
+
+		return null == parentId ? categories : list;
 	}
 
 	public static void main(String[] args) {
 		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
 		IPrCategoryService prductService = (IPrCategoryService) context.getBean("prCategoryServiceImpl");
-		//PrCategory product = new PrCategory();
-		//product.setId(System.currentTimeMillis() + "");
-		//int result = prductService.insertSelective(product);
-		//logger.info(result + "");
-		
-		List<PrCategory> list =  prductService.getTreeCategory(null);
+		// PrCategory product = new PrCategory();
+		// product.setId(System.currentTimeMillis() + "");
+		// int result = prductService.insertSelective(product);
+		// logger.info(result + "");
+
+		List<PrCategory> list = prductService.getTreeCategory(null);
 		logger.info("");
 	}
 

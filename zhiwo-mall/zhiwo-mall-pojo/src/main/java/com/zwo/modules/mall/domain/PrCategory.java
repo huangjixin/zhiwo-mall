@@ -2,7 +2,6 @@ package com.zwo.modules.mall.domain;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -13,13 +12,10 @@ import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.zwotech.modules.core.domain.TreeNode;
+import com.zwotech.modules.core.domain.Node;
 
 @Table(name = "pr_category")
-public class PrCategory extends TreeNode implements Serializable {
-    public PrCategory(String id, String name, String parentId) {
-		super(id, name, parentId);
-	}
+public class PrCategory extends Node implements Serializable {
 
 	@Id
     @Column(name = "ID")
@@ -149,6 +145,7 @@ public class PrCategory extends TreeNode implements Serializable {
     /**
      * @return ID
      */
+    @Override
     public String getId() {
         return id;
     }
@@ -309,6 +306,7 @@ public class PrCategory extends TreeNode implements Serializable {
      *
      * @return SORT - 排序
      */
+    @Override
     public Integer getSort() {
         return sort;
     }
@@ -399,6 +397,7 @@ public class PrCategory extends TreeNode implements Serializable {
      *
      * @return PARENT_ID - 父类ID
      */
+    @Override
     public String getParentId() {
         return parentId;
     }

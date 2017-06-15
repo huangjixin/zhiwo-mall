@@ -3,113 +3,115 @@ package com.zwotech.common.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.zwotech.modules.core.domain.TreeNode;
+import org.apache.commons.collections.CollectionUtils;
 
-/**
- * Created by Massive on 2016/12/26.
- */
-public class TreeBuilder {
+import com.zwotech.modules.core.domain.Node;
 
-	/**
-	 * 两层循环实现建树
-	 * 
-	 * @param treeNodes
-	 *            传入的树节点列表
-	 * @return
-	 */
-	public static List<TreeNode> bulid(List<TreeNode> treeNodes) {
+public class TreeBuilder<T extends Node> {
 
-		List<TreeNode> trees = new ArrayList<TreeNode>();
+	@SuppressWarnings("unchecked")
+	public List<T> buildListToTree(List<T> dirs, boolean menuOnly) {
+		List<T> roots = findRoots(dirs,menuOnly);
+		List<T> notRoots = (List<T>) CollectionUtils.subtract(dirs, roots);
+		for (T root : roots) {
+			root.setChildren(findChildren(root, notRoots,menuOnly));
+		}
+		return roots;
+	}
 
-		for (TreeNode treeNode : treeNodes) {
-
-			if ("".equals(treeNode.getParentId()) || null == treeNode.getParentId()) {
-				trees.add(treeNode);
-			}
-
-			for (TreeNode it : treeNodes) {
-				if (it.getParentId() == treeNode.getId()) {
-					if (treeNode.getChildren() == null) {
-						treeNode.setChildren(new ArrayList<TreeNode>());
+	public List<T> findRoots(List<T> allNodes, boolean menuOnly) {
+		List<T> results = new ArrayList<T>();
+		for (T node : allNodes) {
+			boolean isRoot = true;
+			if(node.getParentId()!=null){
+				isRoot = false;
+				/*for (Node comparedOne : allNodes) {
+					if (node.getParentId() == comparedOne.getId()) {
+						isRoot = false;
+						break;
 					}
-					treeNode.getChildren().add(it);
-				}
+				}*/
+			}else{
+				isRoot = true;
+			}
+			
+			if (isRoot) {
+				node.setLevel(0);
+				results.add(node);
+				node.setRootId(node.getId());
 			}
 		}
-		return trees;
+		return results;
 	}
 
-	/**
-	 * 使用递归方法建树
-	 * 
-	 * @param treeNodes
-	 * @return
-	 */
-	public static List<TreeNode> buildByRecursive(List<TreeNode> treeNodes) {
-		List<TreeNode> trees = new ArrayList<TreeNode>();
-		for (TreeNode treeNode : treeNodes) {
-			if ("".equals(treeNode.getParentId()) || null == treeNode.getParentId()) {
-				trees.add(findChildren(treeNode, treeNodes));
+	@SuppressWarnings("unchecked")
+	private List<T> findChildren(T root, List<T> allNodes, boolean menuOnly) {
+		List<T> children = new ArrayList<T>();
+
+		for (T comparedOne : allNodes) {
+			if (root.getId().equals(comparedOne.getParentId()) 
+					|| comparedOne.getParentId() == root.getId()) {
+				comparedOne.setParent(root);
+				comparedOne.setLevel(root.getLevel() + 1);
+				children.add(comparedOne);
 			}
 		}
-		return trees;
+		List<T> notChildren = (List<T>) CollectionUtils.subtract(allNodes, children);
+		for (T child : children) {
+			List<T> tmpChildren = findChildren(child, notChildren, menuOnly);
+			if (tmpChildren == null || tmpChildren.size() < 1) {
+				child.setLeaf(true);
+			} else {
+				child.setLeaf(false);
+			}
+			child.setChildren(tmpChildren);
+		}
+		return children;
 	}
 
-	/**
-	 * 递归查找子节点
-	 * 
-	 * @param treeNodes
-	 * @return
-	 */
-	public static TreeNode findChildren(TreeNode treeNode, List<TreeNode> treeNodes) {
-		for (TreeNode it : treeNodes) {
-			if (treeNode.getId().equals(it.getParentId())) {
-				if (treeNode.getChildren() == null) {
-					treeNode.setChildren(new ArrayList<TreeNode>());
-				}
-				treeNode.getChildren().add(findChildren(it, treeNodes));
+	private List<T> getLeafChildren(List<T> resultList, List<T> children) {
+		for (T node : children) {
+			if (node.isLeaf()) {
+				resultList.add(node);
+			} else {
+				getLeafChildren(resultList, node.getChildren());
 			}
 		}
-		return treeNode;
+		return resultList;
 	}
 
 	public static void main(String[] args) {
-
-		TreeNode treeNode1 = new TreeNode("1", "广州", "");
-		TreeNode treeNode2 = new TreeNode("2", "深圳", "");
-
-		TreeNode treeNode3 = new TreeNode("3", "天河区", treeNode1);
-		TreeNode treeNode4 = new TreeNode("4", "越秀区", treeNode1);
-		TreeNode treeNode5 = new TreeNode("5", "黄埔区", treeNode1);
-		TreeNode treeNode6 = new TreeNode("6", "石牌", treeNode3);
-		TreeNode treeNode7 = new TreeNode("7", "百脑汇", treeNode6);
-
-		TreeNode treeNode8 = new TreeNode("8", "南山区", treeNode2);
-		TreeNode treeNode9 = new TreeNode("9", "宝安区", treeNode2);
-		TreeNode treeNode10 = new TreeNode("10", "科技园", treeNode8);
-
-		List<TreeNode> list = new ArrayList<TreeNode>();
-
-		list.add(treeNode1);
-		list.add(treeNode2);
-		list.add(treeNode3);
-		list.add(treeNode4);
-		list.add(treeNode5);
-		list.add(treeNode6);
-		list.add(treeNode7);
-		list.add(treeNode8);
-		list.add(treeNode9);
-		list.add(treeNode10);
-
-		List<TreeNode> trees = TreeBuilder.bulid(list);
-		for (TreeNode treeNode : trees) {
-			System.out.println(treeNode.getName());
+		TreeBuilder tb = new TreeBuilder();
+		List<Node> allNodes = new ArrayList<Node>();
+		allNodes.add(new Node("1", "0", "节点1"));
+		allNodes.add(new Node("2", "0", "节点2"));
+		allNodes.add(new Node("3", "0", "节点3"));
+		allNodes.add(new Node("4", "1", "节点4"));
+		allNodes.add(new Node("5", "1", "节点5"));
+		allNodes.add(new Node("6", "1", "节点6"));
+		allNodes.add(new Node("7", "4", "节点7"));
+		allNodes.add(new Node("8", "4", "节点8"));
+		allNodes.add(new Node("9", "5", "节点9"));
+		allNodes.add(new Node("10", "5", "节点10"));
+		allNodes.add(new Node("11", "7", "节点11"));
+		allNodes.add(new Node("12", "7", "节点12"));
+		// 显示所有节点
+		List<Node> roots = tb.buildListToTree(allNodes,true);
+		for (Node n : roots) {
+			System.out.println(n);
 		}
-		System.out.println("---------------------------------------");
-		List<TreeNode> trees_ = TreeBuilder.buildByRecursive(list);
-		for (TreeNode treeNode : trees) {
-			System.out.println(treeNode.getName());
+		System.out.println("------------------");
+		// 查找所有子节点
+		List<Node> children = tb.findChildren(new Node("1", "0", "节点1"), allNodes,true);
+		for (Node n : children) {
+			System.out.println(n);
 		}
+		// 查找所有叶子节点
+		System.out.println("------------------");
+		List<Node> resultList = tb.getLeafChildren(new ArrayList(), children);
+		for (Node n : resultList) {
+			System.out.println(n);
+		}
+
 	}
-
 }

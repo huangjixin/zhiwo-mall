@@ -1,160 +1,141 @@
 package com.zwotech.modules.core.domain;
+
 import java.util.List;
 
 import javax.persistence.Transient;
 
+/**
+ * @author 黄记新 E-mail: 517714860@qq.com
+ * @Date 创建时间：2017年1月10日 上午9:24:50
+ * @version 1.0 类说明 :树节点,所有具有上级节点的VO类要继承该类方可以使用构造树工具.
+ */
 public class Node implements java.io.Serializable {
-    private static final long serialVersionUID = -2721191232926604726L;
 
-    private int id;
+	/**
+	 * @Fields serialVersionUID : 默认系列化版本UID  
+	 */
+	private static final long serialVersionUID = 1L;
 
-    private int parentId;
-    @Transient
-    private Node parent;
-    @Transient
-    private List<Node> children;
+	private String id;
 
-    private String name;
-    @Transient
-    private int level;
+	private String parentId;
 
-    private int sort;
-    @Transient
-    private int rootId;
-    @Transient
-    private String type;
+	@Transient
+	private Node parent;
+	
+	@Transient
+	private List children;
 
-    private boolean isLeaf;
+	private String name;
+	@Transient
+	private int level;
 
-    private String description;
+	private Integer sort;
+	@Transient
+	private String rootId;
 
-    public Node() {
-        super();
-    }
+//	private String type;
+	@Transient
+	private boolean isLeaf;
 
-    public Node(int id, int parentId, String name) {
-        super();
-        this.id = id;
-        this.parentId = parentId;
-        this.name = name;
-    }
+	private String description;
+	
+	public Node() {  
+        super();  
+    }  
+  
+    public Node(String id, String parentId, String name) {  
+        super();  
+        this.id = id;  
+        this.parentId = parentId;  
+        this.name = name;  
+    } 
+	public String getId() {
+		return id;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public String getParentId() {
+		return parentId;
+	}
 
-    public int getId() {
-        return id;
-    }
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public Node getParent() {
+		return parent;
+	}
 
-    public Node getParent() {
-        return parent;
-    }
+	public void setParent(Node parent) {
+		this.parent = parent;
+	}
 
-    public void setParent(Node parent) {
-        this.parent = parent;
-    }
+	public List getChildren() {
+		return children;
+	}
 
-    public int getParentId() {
-        return parentId;
-    }
+	public void setChildren(List children) {
+		this.children = children;
+	}
 
-    public void setParentId(int parentId) {
-        this.parentId = parentId;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public int getLevel() {
+		return level;
+	}
 
-    public int getLevel() {
-        return level;
-    }
+	public void setLevel(int level) {
+		this.level = level;
+	}
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
+	public Integer getSort() {
+		return sort;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public void setSort(Integer sort) {
+		this.sort = sort;
+	}
 
-    public List<Node> getChildren() {
-        return children;
-    }
+	public String getRootId() {
+		return rootId;
+	}
 
-    public void setChildren(List<Node> children) {
-        this.children = children;
-    }
+	public void setRootId(String rootId) {
+		this.rootId = rootId;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+//	public String getType() {
+//		return type;
+//	}
+//
+//	public void setType(String type) {
+//		this.type = type;
+//	}
 
-    public boolean isLeaf() {
-        return isLeaf;
-    }
+	public boolean isLeaf() {
+		return isLeaf;
+	}
 
-    public void setLeaf(boolean isLeaf) {
-        this.isLeaf = isLeaf;
-    }
+	public void setLeaf(boolean isLeaf) {
+		this.isLeaf = isLeaf;
+	}
 
-    public int getSort() {
-        return sort;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setSort(int sort) {
-        this.sort = sort;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public int getRootId() {
-        return rootId;
-    }
-
-    public void setRootId(int rootId) {
-        this.rootId = rootId;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + id;
-        result = prime * result + parentId;
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Node other = (Node) obj;
-        if (id != other.id)
-            return false;
-        if (parentId != other.parentId)
-            return false;
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Node {id=" + id + ", parentId=" + parentId + ", children="
-                + children + ", name=" + name + ", level =" + level + "}";
-    }
 }
