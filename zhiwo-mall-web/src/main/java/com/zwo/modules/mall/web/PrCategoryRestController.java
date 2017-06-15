@@ -124,6 +124,14 @@ public class PrCategoryRestController extends BaseController<PrCategory> {
 			
 		}
 		
+		if("".equals(category.getParentId())){
+			category.setParentId(null);
+		}
+		
+		if(category.getId().equals(category.getParentId())){
+			return "不能够选择自身为父类节点";
+		}
+		
 		String res = ""+this.categoryService.updateByPrimaryKeySelective(category);
 		return res;
 	}

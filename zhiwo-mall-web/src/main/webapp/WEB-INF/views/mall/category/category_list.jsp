@@ -36,8 +36,8 @@
 <body>
 	<div id="toolbar">
 		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-			onclick="create()">新增</a> <a href="#" class="easyui-linkbutton"
-			iconCls="icon-edit" plain="true" onclick="edit()">编辑</a> <a href="#"
+			onclick="createCategory()">新增</a> <a href="#" class="easyui-linkbutton"
+			iconCls="icon-edit" plain="true" onclick="editCategory()">编辑</a> <a href="#"
 			class="easyui-linkbutton" iconCls="icon-remove" plain="true"
 			onclick="destroy()">删除</a>
 	</div>
@@ -64,8 +64,7 @@
 		<form id="fm" method="post">
 			<input id="parentids" name="parentids" type="hidden">
 			<div class="fitem">
-				<label>父类名称:</label> <input id="parentId" name="parentId"
-					value="${org.parentId}" />
+				<label>父类名称:</label> <input id="parentId" name="parentId"/>
 			</div>
 			<div class="fitem">
 				<label>类目名称:</label> <input name="name" class="easyui-validatebox"
@@ -87,14 +86,14 @@
 			createCategoryTree('parentId','${ctx}/category/getTreeCategory');
 		});	
 		
-		var url;
-		function create() {
+		var url= '${ctx}/category/create';
+		function createCategory() {
 			$('#dlg').dialog('open').dialog('setTitle', '新增商品分类');
 			$('#fm').form('clear');
 			url = '${ctx}/category/create';
 		}
 
-		function edit() {
+		function editCategory() {
 			var row = $('#dg').datagrid('getSelected');
 			if (row) {
 				$('#dlg').dialog('open').dialog('setTitle', '商品分类信息编辑');
