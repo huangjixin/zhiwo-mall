@@ -62,6 +62,7 @@
 		buttons="#dlg-buttons">
 		<div class="ftitle">商品分类信息</div>
 		<form id="fm" method="post">
+			<input id="id" name="id" type="hidden">
 			<input id="parentids" name="parentids" type="hidden">
 			<div class="fitem">
 				<label>父类名称:</label> <input id="parentId" name="parentId"/>
