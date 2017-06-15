@@ -51,7 +51,7 @@ public class TreeBuilder<T extends Node> {
 		for (T comparedOne : allNodes) {
 			if (root.getId().equals(comparedOne.getParentId()) 
 					|| comparedOne.getParentId() == root.getId()) {
-				comparedOne.setParent(root);
+//				comparedOne.setParent(root);
 				comparedOne.setLevel(root.getLevel() + 1);
 				children.add(comparedOne);
 			}

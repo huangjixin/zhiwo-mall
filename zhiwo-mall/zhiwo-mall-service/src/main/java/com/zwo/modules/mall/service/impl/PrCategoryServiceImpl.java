@@ -18,6 +18,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo2;
 import com.zwo.modules.mall.dao.PrCategoryMapper;
 import com.zwo.modules.mall.domain.PrCategory;
@@ -47,7 +49,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 
 	@Override
 	public Mapper<PrCategory> getBaseMapper() {
-		return prCategoryMapper;
+		return null;
 	}
 
 	/*
@@ -88,7 +90,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
 
 		// 逻辑操作
-		int result = prCategoryMapper.deleteByExample(example);
+		int result = prCategoryMapper.deleteByExample((PrCategoryCriteria) example);
 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除结束");
@@ -131,7 +133,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为：" + id.toString());
 
 		// 逻辑操作
-		int result = super.deleteByPrimaryKey(id);
+		int result = prCategoryMapper.deleteByPrimaryKey(id);
 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除结束");
@@ -157,7 +159,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
 		}
-		int result = super.insert(record);
+		int result = prCategoryMapper.insert(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入结束");
 		return result;
@@ -184,7 +186,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
 		}
-		int result = super.insertSelective(record);
+		int result = prCategoryMapper.insertSelective(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入结束");
 		return result;
@@ -221,7 +223,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询参数为：" + id);
 
 		// 逻辑操作
-		PrCategory prCategory = super.selectByPrimaryKey(id);
+		PrCategory prCategory = prCategoryMapper.selectByPrimaryKey(id);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询结束,结果对象为:" + prCategory == null ? "NULL"
 					: prCategory.toString());
@@ -245,7 +247,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
 
 		// 逻辑操作
-		int result = super.updateByExampleSelective(record, example);
+		int result = prCategoryMapper.updateByExampleSelective(record, (PrCategoryCriteria) example);
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新结束");
@@ -269,7 +271,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 			logger.info(BASE_MESSAGE + "updateByExample更新对象为：" + record.toString());
 
 		// 逻辑操作
-		int result = super.updateByExample(record, example);
+		int result = prCategoryMapper.updateByExample(record, (PrCategoryCriteria) example);
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExample更新结束");
@@ -293,7 +295,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
 
 		// 逻辑操作
-		int result = super.updateByPrimaryKeySelective(record);
+		int result = prCategoryMapper.updateByPrimaryKeySelective(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新结束");
 		return result;
@@ -316,7 +318,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为：" + record.toString());
 
 		// 逻辑操作
-		int result = super.updateByPrimaryKey(record);
+		int result = prCategoryMapper.updateByPrimaryKey(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新结束");
 		return result;
@@ -336,7 +338,22 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 			logger.info(BASE_MESSAGE + "分页开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页参数：" + pageInfo.toString());
-		pageInfo = super.selectByPageInfo(example, pageInfo);
+		PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+		List<PrCategory> list = this.prCategoryMapper.selectByExample((PrCategoryCriteria) example);
+//		if(logger.isInfoEnabled())
+//			logger.info(MESSAGE+"分页开始");
+//		if(logger.isInfoEnabled())
+//			logger.info(MESSAGE+"分页参数：" + pageInfo.toString());
+		
+		Page<PrCategory> page = (Page<PrCategory>) list;
+		pageInfo.setList(list);
+		pageInfo.setTotal(page.getTotal());
+		pageInfo.setEndRow(page.getEndRow());
+		pageInfo.setStartRow(page.getStartRow());
+//		if(logger.isInfoEnabled())
+//			logger.info(MESSAGE+"分页结束");
+//		return pageInfo;
+//		pageInfo = super.selectByPageInfo(example, pageInfo);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页结束");
 		return pageInfo;
