@@ -1,7 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <script type="text/javascript" src="${ctx}/js/jquery-easyui/jquery.min.js"></script>
 <script type="text/javascript" src="${ctx}/js/jquery-easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${ctx}/js/jquery-easyui/themes/insdep/jquery.insdep-extend.min.js"></script>
 <script type="text/javascript" src="${ctx}/js/jquery-easyui/easyloader.js"></script>
 <script type="text/javascript" src="${ctx}/js/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
 <script type="text/javascript" src="${ctx}/js/jquery-easyui/ajaxfileupload.js"></script>
