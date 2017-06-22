@@ -20,7 +20,7 @@
     <result column="KEYWORDS" property="keywords" jdbcType="VARCHAR" />
     <result column="THUMBNAIL" property="thumbnail" jdbcType="VARCHAR" />
     <result column="CODE" property="code" jdbcType="VARCHAR" />
-    <result column="BRAND_ID" property="brandId" jdbcType="VARCHAR" />
+    <result column="CATEGORY_ID" property="categoryId" jdbcType="VARCHAR" />
     <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
     <result column="CONTENT" property="content" jdbcType="LONGVARCHAR" />
     <result column="EN_CONTENT" property="enContent" jdbcType="LONGVARCHAR" />
