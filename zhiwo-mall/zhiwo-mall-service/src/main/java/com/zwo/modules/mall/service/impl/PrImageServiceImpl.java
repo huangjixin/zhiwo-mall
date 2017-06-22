@@ -93,7 +93,7 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 	}
 
 	@CacheEvict(value = "PrImage", allEntries = true)
-	@Override
+//	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
 		if (logger.isInfoEnabled())

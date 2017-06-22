@@ -93,7 +93,7 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 	}
 
 	@CacheEvict(value = "PrProduct", allEntries = true)
-	@Override
+//	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
 		if (logger.isInfoEnabled())

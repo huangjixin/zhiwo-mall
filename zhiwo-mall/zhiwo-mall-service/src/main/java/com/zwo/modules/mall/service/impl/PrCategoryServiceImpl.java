@@ -98,7 +98,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 	}
 
 	@CacheEvict(value = "PrCategory", allEntries = true)
-	@Override
+//	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -359,7 +359,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 		return pageInfo;
 	}
 
-	@Override
+//	@Override
 	public List<PrCategory> getTreeCategory(String parentId) {
 		PrCategoryCriteria categoryCriteria = new PrCategoryCriteria();
 
