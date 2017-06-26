@@ -19,5 +19,6 @@
         	   http://www.springframework.org/schema/cache/spring-cache.xsd">
 
 	<import resource="mall-applicationContext-datasource.xml" />
+	<import resource="mall-applicationContext-activemq.xml" />
 	
 </beans>
