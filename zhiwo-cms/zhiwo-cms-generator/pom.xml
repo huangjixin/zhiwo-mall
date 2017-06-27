@@ -10,7 +10,7 @@
   <groupId>com.zwo.cms.modules</groupId>
   <artifactId>zhiwo-cms-generator</artifactId>
   <version>1.0</version>
-  <packaging>war</packaging>
+  <packaging>jar</packaging>
   <name>zhiwo-cms-generator Maven Webapp</name>
   <url>http://maven.apache.org</url>
   <dependencies>

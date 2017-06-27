@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zwo.modules.mall.dao.PrProductMapper" >
-  <resultMap id="BaseResultMap" type="com.zwo.modules.mall.domain.PrProduct" >
-    <id column="ID" property="id" jdbcType="VARCHAR" />
+  <id column="ID" property="id" jdbcType="VARCHAR" />
     <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
     <result column="ORG_ID" property="orgId" jdbcType="VARCHAR" />
     <result column="UPDATER" property="updater" jdbcType="VARCHAR" />
@@ -21,7 +20,6 @@
     <result column="THUMBNAIL" property="thumbnail" jdbcType="VARCHAR" />
     <result column="CODE" property="code" jdbcType="VARCHAR" />
     <result column="CATEGORY_ID" property="categoryId" jdbcType="VARCHAR" />
-    <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
     <result column="CONTENT" property="content" jdbcType="LONGVARCHAR" />
     <result column="EN_CONTENT" property="enContent" jdbcType="LONGVARCHAR" />
   </resultMap>

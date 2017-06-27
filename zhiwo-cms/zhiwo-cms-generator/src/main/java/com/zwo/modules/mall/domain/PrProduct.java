@@ -459,23 +459,4 @@ public class PrProduct implements Serializable {
     public void setCategoryId(String categoryId) {
         this.categoryId = categoryId == null ? null : categoryId.trim();
     }
-    
-    public String getEnContent() {
-		return enContent;
-	}
-
-	public void setEnContent(String enContent) {
-		this.enContent = enContent;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
-
-	private String content;
-    private String enContent;
 }
