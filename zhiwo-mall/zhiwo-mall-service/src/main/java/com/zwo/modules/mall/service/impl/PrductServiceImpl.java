@@ -5,15 +5,24 @@ package com.zwo.modules.mall.service.impl;
 
 import java.util.List;
 
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.HtmlUtils;
@@ -47,6 +56,14 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 	public Mapper<PrProduct> getBaseMapper() {
 		return prProductMapper;
 	}
+	
+	@Lazy(true)
+	@Autowired
+    private Destination mallProductQueueDestination;  
+	
+	@Lazy(true)
+	@Autowired 
+	private JmsTemplate jmsTemplate; 
 	
 	/* (non-Javadoc)
 	 * @see com.zwotech.modules.core.service.IBaseService#insertBatch(java.util.List)
@@ -192,6 +209,14 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 		int result = super.insertSelective(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入结束");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "ACTIVEMQ发送创建完成消息，消息体为(0代表新增，1代表删除，2代表修改):0:"+record.getId());
+		if(jmsTemplate!= null && mallProductQueueDestination!= null){
+			sendMessage(this.mallProductQueueDestination,record.getId());
+		}
+		
+		 if (logger.isInfoEnabled())
+				logger.info(BASE_MESSAGE + "ACTIVEMQ发送创建完成消息结束");
 		return result;
 	}
 
@@ -366,6 +391,16 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 			logger.info(BASE_MESSAGE + "分页结束");
 		return pageInfo;
 	}
+	
+	public void sendMessage(Destination destination, final String msg) {  
+        jmsTemplate.send(destination, new MessageCreator() {  
+            public Message createMessage(Session session) throws JMSException {  
+            	TextMessage message =session.createTextMessage();
+            	message.setText(msg);
+            	return message;
+            }  
+        });  
+    }
 
 	public static void main(String[] args) {
 		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");//此文件放在SRC目录下

@@ -14,12 +14,19 @@
         http://activemq.apache.org/schema/core/activemq-core-5.8.0.xsd">
 
 	<amq:connectionFactory id="amqConnectionFactory"
-		brokerURL="tcp://localhost:61616" userName="admin" password="admin" />
+		brokerURL="${mall.activemq.brokerURL}" userName="${mall.activemq.username}" password="${mall.activemq.password}" />
 	<bean id="connectionFactory"
 		class="org.springframework.jms.connection.CachingConnectionFactory">
 		<property name="targetConnectionFactory" ref="amqConnectionFactory"></property>
-		<property name="sessionCacheSize" value="100" />
+		<property name="sessionCacheSize" value="100" ></property>
 	</bean>
+	
+	<!-- Spring提供的JMS工具类，它可以进行消息发送、接收等 -->  
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">  
+        <!-- 这个connectionFactory对应的是我们定义的Spring提供的那个ConnectionFactory对象 -->  
+        <property name="connectionFactory" ref="connectionFactory"/>  
+    </bean>  
+	
 	<bean id="jmsQueueTemplate" class="org.springframework.jms.core.JmsTemplate">
 		<constructor-arg ref="connectionFactory" />
 		<property name="pubSubDomain" value="false" />
@@ -29,11 +36,26 @@
 		<property name="pubSubDomain" value="true" />
 	</bean>
 
+	<!--这个是队列目的地-->  
+    <bean id="mallProductQueueDestination" class="org.apache.activemq.command.ActiveMQQueue">  
+        <constructor-arg>  
+            <value>mall.product.queue</value>  
+        </constructor-arg>  
+    </bean>
+    
+    <bean id="mallProductTopicDestination" class="org.apache.activemq.command.ActiveMQTopic">  
+        <constructor-arg>  
+            <value>mall.product.topic</value>  
+        </constructor-arg>  
+    </bean>
+    <!-- 消息监听器 -->  
+    <bean id="productConsumerMessageListener" class="com.zwo.modules.mall.service.impl.ConsumerMessageListener"/> 
+    
 	<jms:listener-container destination-type="queue"
 		container-type="default" connection-factory="connectionFactory"
 		acknowledge="auto">
-		<!-- <jms:listener destination="test.queue" ref="queueReceiver1" />
-		<jms:listener destination="test.queue" ref="queueReceiver2" /> -->
+		<jms:listener destination="mallProductQueueDestination" ref="productConsumerMessageListener" />
+		<!-- <jms:listener destination="test.queue" ref="queueReceiver2" /> -->
 	</jms:listener-container>
 
 	<jms:listener-container destination-type="topic"

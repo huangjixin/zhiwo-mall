@@ -105,6 +105,14 @@ public class ProductRestController extends BaseController<PrProduct> {
 		return res;
 	}
 	
+	@RequestMapping(value = "/testcreate", method = RequestMethod.GET)
+	public String testcreate(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		PrProduct product = new PrProduct();
+		product.setId(System.currentTimeMillis()+"");
+		String res = ""+prductService.insertSelective(product);
+		return res;
+	}
+	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(@Valid PrProduct product, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
