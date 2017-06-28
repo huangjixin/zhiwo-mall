@@ -220,7 +220,7 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 		// 逻辑操作
 		PrImage prImage = super.selectByPrimaryKey(id);
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询结束,结果对象为:"  + prImage==null?"NULL": prImage.toString());
+			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询结束");
 		return prImage;
 	}
 

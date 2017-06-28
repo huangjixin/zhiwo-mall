@@ -212,7 +212,7 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "ACTIVEMQ发送创建完成消息，消息体为(0代表新增，1代表删除，2代表修改):0:"+record.getId());
 		if(jmsTemplate!= null && mallProductQueueDestination!= null){
-			sendMessage(this.mallProductQueueDestination,record.getId());
+			sendMessage(record.getId());
 		}
 		
 		 if (logger.isInfoEnabled())
@@ -252,13 +252,13 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 
 		// 逻辑操作
 		PrProduct product = super.selectByPrimaryKey(id);
-		if(null!=product.getContent() && "".equals(product.getContent())){
+		if(null!=product && null!=product.getContent() && !"".equals(product.getContent())){
 			String content = product.getContent();
 			content = HtmlUtils.htmlUnescape(content);
 			product.setContent(content);
 		}
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询结束,结果对象为:" + product==null?"NULL":product.toString());
+			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询结束");
 		return product;
 	}
 
@@ -392,8 +392,8 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 		return pageInfo;
 	}
 	
-	public void sendMessage(Destination destination, final String msg) {  
-        jmsTemplate.send(destination, new MessageCreator() {  
+	public void sendMessage(final String msg) {  
+        jmsTemplate.send("mall.product.queue", new MessageCreator() {  
             public Message createMessage(Session session) throws JMSException {  
             	TextMessage message =session.createTextMessage();
             	message.setText(msg);

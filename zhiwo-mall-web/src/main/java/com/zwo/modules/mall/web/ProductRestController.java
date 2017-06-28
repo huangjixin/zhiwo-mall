@@ -66,7 +66,7 @@ public class ProductRestController extends BaseController<PrProduct> {
 	 * @param httpServletResponse
 	 * @return
 	 */
-	@RequestMapping(value = "/{id}")
+	@RequestMapping(value = "/show/{id}")
 	public PrProduct getPrProduct(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		PrProduct product = prductService.selectByPrimaryKey(id);

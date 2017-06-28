@@ -225,8 +225,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 		// 逻辑操作
 		PrCategory prCategory = prCategoryMapper.selectByPrimaryKey(id);
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询结束,结果对象为:" + prCategory == null ? "NULL"
-					: prCategory.toString());
+			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询结束");
 		return prCategory;
 	}
 
