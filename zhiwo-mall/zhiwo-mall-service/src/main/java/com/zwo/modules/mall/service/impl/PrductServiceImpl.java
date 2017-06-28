@@ -411,4 +411,16 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 		logger.info(result+"");
 	}
 
+	@Override
+	public void sendCreateProductTopic(final String msg) {
+		if(jmsTemplate!=null){
+			 jmsTemplate.send("mall.product.topic", new MessageCreator() {  
+				 @Override
+				public Message createMessage(Session session) throws JMSException {
+						return session.createTextMessage(msg);
+				} 
+		     });
+		}
+	}
+
 }

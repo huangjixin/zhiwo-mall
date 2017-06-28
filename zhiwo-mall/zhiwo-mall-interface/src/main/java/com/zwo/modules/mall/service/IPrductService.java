@@ -11,5 +11,9 @@ import com.zwotech.modules.core.service.IBaseService;
  *
  */
 public interface IPrductService extends IBaseService<PrProduct> {
-
+	/**
+	 * 发送创建产品Topic。
+	 * @param msg
+	 */
+	void sendCreateProductTopic(final String msg);
 }

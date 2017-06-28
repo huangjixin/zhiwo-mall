@@ -50,6 +50,7 @@
     </bean>
     <!-- 消息监听器 -->  
     <bean id="productConsumerMessageListener" class="com.zwo.modules.mall.service.impl.ConsumerMessageListener"/> 
+    <bean id="consumerProductTopicMessageListener" class="com.zwo.modules.mall.service.impl.ConsumerProductTopicMessageListener"/> 
     
 	<jms:listener-container destination-type="queue"
 		container-type="default" connection-factory="connectionFactory"
@@ -61,7 +62,7 @@
 	<jms:listener-container destination-type="topic"
 		container-type="default" connection-factory="connectionFactory"
 		acknowledge="auto">
-		<!-- <jms:listener destination="test.topic" ref="topicReceiver1" />
-		<jms:listener destination="test.topic" ref="topicReceiver2" /> -->
+		 <jms:listener destination="mall.product.topic" ref="consumerProductTopicMessageListener" />
+		<!--<jms:listener destination="test.topic" ref="topicReceiver2" /> -->
 	</jms:listener-container>
 </beans>
