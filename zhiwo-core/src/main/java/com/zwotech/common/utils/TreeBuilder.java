@@ -25,12 +25,12 @@ public class TreeBuilder<T extends Node> {
 			boolean isRoot = true;
 			if(node.getParentId()!=null){
 				isRoot = false;
-				/*for (Node comparedOne : allNodes) {
+				for (Node comparedOne : allNodes) {
 					if (node.getParentId() == comparedOne.getId()) {
 						isRoot = false;
 						break;
 					}
-				}*/
+				}
 			}else{
 				isRoot = true;
 			}
