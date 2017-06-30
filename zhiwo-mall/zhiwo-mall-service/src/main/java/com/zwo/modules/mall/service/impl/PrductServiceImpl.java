@@ -5,12 +5,6 @@ package com.zwo.modules.mall.service.impl;
 
 import java.util.List;
 
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Session;
-import javax.jms.TextMessage;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +14,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.HtmlUtils;
@@ -56,13 +48,7 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 		return prProductMapper;
 	}
 	
-	@Lazy(true)
-	@Autowired
-    private Destination mallProductQueueDestination;  
 	
-	@Lazy(true)
-	@Autowired 
-	private JmsTemplate jmsTemplate; 
 	
 	/* (non-Javadoc)
 	 * @see com.zwotech.modules.core.service.IBaseService#insertBatch(java.util.List)
@@ -126,7 +112,7 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 			logger.info(BASE_MESSAGE + "deleteBatch批量删除结束");
 		return result;
 	}
-
+ 
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -210,10 +196,7 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 			logger.info(BASE_MESSAGE + "insert插入结束");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "ACTIVEMQ发送创建完成消息，消息体为(0代表新增，1代表删除，2代表修改):0:"+record.getId());
-		if(jmsTemplate!= null && mallProductQueueDestination!= null){
-			sendMessage(record.getId());
-		}
-		
+				
 		 if (logger.isInfoEnabled())
 				logger.info(BASE_MESSAGE + "ACTIVEMQ发送创建完成消息结束");
 		return result;
@@ -391,15 +374,6 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 		return pageInfo;
 	}
 	
-	public void sendMessage(final String msg) {  
-        jmsTemplate.send("mall.product.queue", new MessageCreator() {  
-            public Message createMessage(Session session) throws JMSException {  
-            	TextMessage message =session.createTextMessage();
-            	message.setText(msg);
-            	return message;
-            }  
-        });  
-    }
 
 	public static void main(String[] args) {
 		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");//此文件放在SRC目录下
@@ -408,18 +382,6 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 		product.setId(System.currentTimeMillis()+"");
 		int result = prductService.insertSelective(product);
 		logger.info(result+"");
-	}
-
-	@Override
-	public void sendCreateProductTopic(final String msg) {
-		if(jmsTemplate!=null){
-			 jmsTemplate.send("mall.product.topic", new MessageCreator() {  
-				 @Override
-				public Message createMessage(Session session) throws JMSException {
-						return session.createTextMessage(msg);
-				} 
-		     });
-		}
 	}
 
 }

@@ -15,5 +15,5 @@ public interface IPrductService extends IBaseService<PrProduct> {
 	 * 发送创建产品Topic。
 	 * @param msg
 	 */
-	void sendCreateProductTopic(final String msg);
+//	void sendCreateProductTopic(final String msg);
 }

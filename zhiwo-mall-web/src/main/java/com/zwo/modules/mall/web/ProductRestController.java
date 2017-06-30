@@ -131,7 +131,7 @@ public class ProductRestController extends BaseController<PrProduct> {
 	
 	@RequestMapping(value = "/sendCreatProductTopic", method = RequestMethod.GET)
 	public void sendCreatProductTopic(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		prductService.sendCreateProductTopic("创建一个Topic成功。");
+//		prductService.sendCreateProductTopic("创建一个Topic成功。");
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
