@@ -17,7 +17,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pagehelper.PageInfo2;
+import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.dao.PrImageMapper;
 import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.domain.PrImageCriteria;
@@ -327,7 +327,7 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 	 */
 	@Transactional(readOnly = true)
 	@Override
-	public PageInfo2<PrImage> selectByPageInfo(Object example, PageInfo2<PrImage> pageInfo) {
+	public PageInfo<PrImage> selectByPageInfo(Object example, PageInfo<PrImage> pageInfo) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页开始");
 		if (logger.isInfoEnabled())

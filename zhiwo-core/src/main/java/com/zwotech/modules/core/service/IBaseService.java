@@ -35,7 +35,7 @@ public interface IBaseService<T> {
 
 	int updateByPrimaryKey(T record);
 	
-	PageInfo2<T> selectByPageInfo(Object example,
-			PageInfo2<T> pageInfo);
+	PageInfo<T> selectByPageInfo(Object example,
+			PageInfo<T> pageInfo);
 
 }

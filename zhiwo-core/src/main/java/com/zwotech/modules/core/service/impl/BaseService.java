@@ -9,8 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.github.pagehelper.PageInfo2;
-import com.zwotech.modules.core.mapper.IBaseMapper;
 import com.zwotech.modules.core.service.IBaseService;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -111,8 +109,8 @@ public abstract class BaseService<T> implements IBaseService<T> {
 
 	
 	@Transactional(readOnly = true)
-	public PageInfo2<T> selectByPageInfo(Object example,
-			PageInfo2<T> pageInfo){
+	public PageInfo<T> selectByPageInfo(Object example,
+			PageInfo<T> pageInfo){
 		PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
 		List<T> list = this.getBaseMapper().selectByExample(example);
 //		if(logger.isInfoEnabled())
@@ -121,7 +119,7 @@ public abstract class BaseService<T> implements IBaseService<T> {
 //			logger.info(MESSAGE+"分页参数：" + pageInfo.toString());
 		
 		Page<T> page = (Page<T>) list;
-		pageInfo.setList(list);
+		pageInfo.setRows(list);
 		pageInfo.setTotal(page.getTotal());
 		pageInfo.setEndRow(page.getEndRow());
 		pageInfo.setStartRow(page.getStartRow());

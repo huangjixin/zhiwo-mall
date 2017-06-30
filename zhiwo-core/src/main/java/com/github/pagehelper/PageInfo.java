@@ -62,8 +62,8 @@ public class PageInfo<T> implements Serializable {
     //总页数
     private int pages;
     //结果集
-    private List<T> list;
     private List<T> rows;
+//    private List<T> rows;
 
     //前一页
     private int prePage;
@@ -113,7 +113,7 @@ public class PageInfo<T> implements Serializable {
             this.orderBy = page.getOrderBy();
 
             this.pages = page.getPages();
-            this.list = page;
+            this.rows = page;
             this.size = page.size();
             this.total = page.getTotal();
             //由于结果是>startRow的，所以实际的需要+1
@@ -130,7 +130,7 @@ public class PageInfo<T> implements Serializable {
             this.pageSize = list.size();
 
             this.pages = 1;
-            this.list = list;
+            this.rows = list;
             this.size = list.size();
             this.total = list.size();
             this.startRow = 0;
@@ -273,13 +273,12 @@ public class PageInfo<T> implements Serializable {
         this.pages = pages;
     }
 
-    public List<T> getList() {
-        return list;
+    public List<T> getRows() {
+        return rows;
     }
 
-    public void setList(List<T> list) {
-    	setRows(list);
-        this.list = list;
+    public void setRows(List<T> list) {
+        this.rows = list;
     }
 
     @Deprecated
@@ -384,14 +383,6 @@ public class PageInfo<T> implements Serializable {
         this.navigateLastPage = navigateLastPage;
     }
 
-    public List<T> getRows(){
-    	return this.list;
-    }
-    
-    public void setRows(List<T> rows) {
-		this.rows = rows;
-	}
-
 	@Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("PageInfo{");
@@ -402,7 +393,7 @@ public class PageInfo<T> implements Serializable {
         sb.append(", endRow=").append(endRow);
         sb.append(", total=").append(total);
         sb.append(", pages=").append(pages);
-        sb.append(", list=").append(list);
+        sb.append(", list=").append(rows);
         sb.append(", prePage=").append(prePage);
         sb.append(", nextPage=").append(nextPage);
         sb.append(", isFirstPage=").append(isFirstPage);

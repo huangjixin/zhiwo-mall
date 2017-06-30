@@ -14,7 +14,6 @@ import javax.jms.TextMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -27,7 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.HtmlUtils;
 
-import com.github.pagehelper.PageInfo2;
+import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.dao.PrProductMapper;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductCriteria;
@@ -381,7 +380,7 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 	 */
 	@Transactional(readOnly = true)
 	@Override
-	public PageInfo2<PrProduct> selectByPageInfo(Object example, PageInfo2<PrProduct> pageInfo) {
+	public PageInfo<PrProduct> selectByPageInfo(Object example, PageInfo<PrProduct> pageInfo) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页开始");
 		if (logger.isInfoEnabled())

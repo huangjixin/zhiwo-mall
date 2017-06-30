@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo2;
+import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.dao.PrCategoryMapper;
 import com.zwo.modules.mall.domain.PrCategory;
 import com.zwo.modules.mall.domain.PrCategoryCriteria;
@@ -186,6 +186,9 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
 		}
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}
 		int result = prCategoryMapper.insertSelective(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入结束");
@@ -332,7 +335,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 	 */
 	@Transactional(readOnly = true)
 	@Override
-	public PageInfo2<PrCategory> selectByPageInfo(Object example, PageInfo2<PrCategory> pageInfo) {
+	public PageInfo<PrCategory> selectByPageInfo(Object example, PageInfo<PrCategory> pageInfo) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页开始");
 		if (logger.isInfoEnabled())
@@ -345,7 +348,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 //			logger.info(MESSAGE+"分页参数：" + pageInfo.toString());
 		
 		Page<PrCategory> page = (Page<PrCategory>) list;
-		pageInfo.setList(list);
+		pageInfo.setRows(list);
 		pageInfo.setTotal(page.getTotal());
 		pageInfo.setEndRow(page.getEndRow());
 		pageInfo.setStartRow(page.getStartRow());

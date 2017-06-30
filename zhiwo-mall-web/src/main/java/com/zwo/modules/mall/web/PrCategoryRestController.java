@@ -66,7 +66,7 @@ public class PrCategoryRestController extends BaseController<PrCategory> {
 	 * @param httpServletResponse
 	 * @return
 	 */
-	@RequestMapping(value = "/{id}")
+	@RequestMapping(value = "/show/{id}")
 	public PrCategory getPrCategory(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		PrCategory product = categoryService.selectByPrimaryKey(id);

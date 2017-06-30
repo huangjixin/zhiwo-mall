@@ -49,11 +49,11 @@
 			<label>商品英文名称:</label> <input name="enName"
 				class="easyui-validatebox" required="true">
 		</div>
-		<!-- <div id="dlg-buttons">
+		<div id="dlg-buttons"> 
 			<a href="#" class="easyui-linkbutton" iconCls="icon-ok"
 				onclick="save()">保存</a> <a href="#" class="easyui-linkbutton"
 				iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">取消</a>
-		</div> -->
+		</div>
 	</form>
 
 	<script>

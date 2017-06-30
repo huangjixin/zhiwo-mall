@@ -58,6 +58,23 @@ public class ProductRestController extends BaseController<PrProduct> {
 		return result+"";
 	}
 	
+	/** 
+	 * @Title: deleteById 
+	 * @Description: 批量删除 
+	 * @param idstring
+	 * @param httpServletRequest
+	 * @param httpServletResponse
+	 * @return String    返回类型 
+	 * @throws 
+	 */
+	@RequestMapping(value = "/delete")
+	public String delete(@RequestParam(value = "id",required=true) String id, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) throws IOException {
+		
+		int result = prductService.deleteByPrimaryKey(id);
+		return result+"";
+	}
+	 
 	/**
 	 * @Description: 查看详情 
 	 * @param id

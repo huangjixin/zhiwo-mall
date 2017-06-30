@@ -41,9 +41,15 @@
 			class="easyui-linkbutton" iconCls="icon-remove" plain="true"
 			onclick="destroy()">删除</a>
 	</div>
-	<table id="dg" title="商品列表" class="easyui-datagrid"
-		url="${ctx}/product/select" toolbar="#toolbar" rownumbers="true"
-		fitColumns="true" fit="true" singleSelect="true">
+	<table id="dg" 
+		title="商品列表" 
+		class="easyui-datagrid"
+		url="${ctx}/product/select" 
+		toolbar="#toolbar" 
+		rownumbers="true"
+		fitColumns="true" 
+		fit="true" 
+		singleSelect="true">
 		<thead>
 			<tr>
 				<th data-options="field:'ck',checkbox:true"></th>
@@ -63,7 +69,7 @@
 			if (row) {
 				$.messager.confirm('确定', '确定删除？', function(r) {
 					if (r) {
-						$.post('${ctx}/category/delete', {
+						$.post('${ctx}/product/delete', {
 							id : row.id
 						}, function(result) {
 							if (result > 0) {
