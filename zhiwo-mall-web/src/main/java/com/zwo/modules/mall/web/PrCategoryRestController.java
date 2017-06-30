@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.pagehelper.PageInfo2;
+import com.github.pagehelper.DatagridPage;
+import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.domain.PrCategory;
 import com.zwo.modules.mall.domain.PrCategoryCriteria;
 import com.zwo.modules.mall.service.IPrCategoryService;
@@ -89,11 +90,11 @@ public class PrCategoryRestController extends BaseController<PrCategory> {
 	}
 
 	@RequestMapping(value = "select")
-	public PageInfo2<PrCategory> select(@ModelAttribute PageInfo2<PrCategory> page, @ModelAttribute PrCategory category,
+	public DatagridPage<PrCategory> select(@ModelAttribute PageInfo<PrCategory> pageInfo, @ModelAttribute PrCategory category,
 			Model uiModel, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
-		super.select(page, uiModel, httpServletRequest, httpServletResponse);
-
+		super.select(pageInfo, uiModel, httpServletRequest, httpServletResponse);
+ 
 		PrCategoryCriteria productCriteria = null;
 		productCriteria = new PrCategoryCriteria();
 		PrCategoryCriteria.Criteria criteria = productCriteria.createCriteria();
@@ -102,8 +103,8 @@ public class PrCategoryRestController extends BaseController<PrCategory> {
 			criteria.andNameLike("%" + category.getName() + "%");
 		}
 
-		page = categoryService.selectByPageInfo(productCriteria, page);
-		return page;
+		pageInfo = categoryService.selectByPageInfo(productCriteria, pageInfo);
+		return super.setPage(pageInfo);
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)

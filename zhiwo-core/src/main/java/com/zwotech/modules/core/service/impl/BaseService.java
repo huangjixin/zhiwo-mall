@@ -118,8 +118,8 @@ public abstract class BaseService<T> implements IBaseService<T> {
 //		if(logger.isInfoEnabled())
 //			logger.info(MESSAGE+"分页参数：" + pageInfo.toString());
 		
-		Page<T> page = (Page<T>) list;
-		pageInfo.setRows(list);
+		PageInfo<T> page = new PageInfo<T>(list);
+		pageInfo.setList(list);
 		pageInfo.setTotal(page.getTotal());
 		pageInfo.setEndRow(page.getEndRow());
 		pageInfo.setStartRow(page.getStartRow());

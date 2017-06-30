@@ -3,7 +3,6 @@ package com.zwotech.modules.core.service;
 import java.util.List;
 
 import com.github.pagehelper.PageInfo;
-import com.github.pagehelper.PageInfo2;
 
 /**
  * Created by Martin on 2016/7/01.

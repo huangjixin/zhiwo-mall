@@ -347,8 +347,8 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 //		if(logger.isInfoEnabled())
 //			logger.info(MESSAGE+"分页参数：" + pageInfo.toString());
 		
-		Page<PrCategory> page = (Page<PrCategory>) list;
-		pageInfo.setRows(list);
+		PageInfo<PrCategory> page = new PageInfo<PrCategory>( list);
+		pageInfo.setList(list);
 		pageInfo.setTotal(page.getTotal());
 		pageInfo.setEndRow(page.getEndRow());
 		pageInfo.setStartRow(page.getStartRow());

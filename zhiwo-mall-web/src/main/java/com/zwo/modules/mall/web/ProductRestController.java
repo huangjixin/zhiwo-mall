@@ -19,10 +19,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.HtmlUtils;
 
-import com.github.pagehelper.PageInfo2;
-import com.zwo.modules.mall.domain.PrCategory;
+import com.github.pagehelper.DatagridPage;
+import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductCriteria;
 import com.zwo.modules.mall.service.IPrductService;
@@ -93,11 +92,11 @@ public class ProductRestController extends BaseController<PrProduct> {
 	
 	@RequestMapping(value = "/select")
 	@ResponseBody
-	public PageInfo2<PrProduct> select(@ModelAttribute PageInfo2<PrProduct> page, @ModelAttribute PrProduct product, Model uiModel,
+	public DatagridPage<PrProduct> select(@ModelAttribute PageInfo<PrProduct> pageInfo, @ModelAttribute PrProduct product, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
-		super.select(page, uiModel, httpServletRequest, httpServletResponse);
-
+		super.select(pageInfo, uiModel, httpServletRequest, httpServletResponse);
+ 
 		PrProductCriteria productCriteria = null;
 		productCriteria = new PrProductCriteria();
 		PrProductCriteria.Criteria criteria = productCriteria.createCriteria();
@@ -106,8 +105,8 @@ public class ProductRestController extends BaseController<PrProduct> {
 			criteria.andNameLike("%" + product.getName() + "%");
 		}
 		
-		page = prductService.selectByPageInfo(productCriteria, page);
-		return page;
+		pageInfo = prductService.selectByPageInfo(productCriteria, pageInfo);
+		return super.setPage(pageInfo);
 	}
 	
 
