@@ -7,14 +7,12 @@
     <artifactId>zhiwo-member</artifactId>
     <version>1.0</version>
   </parent>
-  <groupId>com.zwo.member.interface</groupId>
-  <artifactId>zhiwo-member-interface</artifactId>
+  <groupId>com.zwo.member.service</groupId>
+  <artifactId>zhiwo-member-service</artifactId>
   <version>1.0</version>
-  <name>zhiwo-member-interface</name>
+  <packaging>war</packaging>
+  <name>zhiwo-member-service Maven Webapp</name>
   <url>http://maven.apache.org</url>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -22,10 +20,8 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-			<groupId>com.zwo.member.pojo</groupId>
-  			<artifactId>zhiwo-member-pojo</artifactId>
-  			<version>1.0</version>
-		</dependency>
   </dependencies>
+  <build>
+    <finalName>zhiwo-member-service</finalName>
+  </build>
 </project>

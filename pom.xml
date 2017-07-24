@@ -825,7 +825,7 @@
 
 	<build>
 		<finalName>${project.artifactId}</finalName>
-		<!-- <plugins>
+		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
@@ -836,14 +836,28 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
+				 <executions>  
+                  <execution>  
+                      <id>default-compile</id>  
+                      <phase>compile</phase>  
+                      <goals>  
+                          <goal>compile</goal>  
+                      </goals>  
+                      <configuration> 
+                      <source>1.8</source>
+					<target>1.8</target> 
+                          <encoding>UTF-8</encoding>  
+                      </configuration>  
+                  </execution>  
+              </executions>
+				<!-- <configuration>
 					<source>1.8</source>
 					<target>1.8</target>
 					<encoding>UTF-8</encoding>
-				</configuration>
+				</configuration> -->
 			</plugin>
 		</plugins>
-		<pluginManagement>
+		<!-- <pluginManagement>
 			<plugins>
 				<plugin>
 					<groupId>org.apache.tomcat.maven</groupId>
