@@ -874,5 +874,6 @@
 		<!-- <module>zhiwo-cms</module> -->
 		<!-- <module>zhiwo-shop</module> -->
 		<!-- <module>zhiwo-payment</module> -->
+		<module>zhiwo-core-web</module>
 	</modules>
 </project>
