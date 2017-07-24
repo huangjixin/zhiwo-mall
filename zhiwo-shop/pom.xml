@@ -7,11 +7,11 @@
     <artifactId>zhiwo-parent</artifactId>
     <version>1.0</version>
   </parent> -->
-  <groupId>com.zwo.trade</groupId>
-  <artifactId>zhiwo-trade</artifactId>
+  <groupId>com.zwo.shop</groupId>
+  <artifactId>zhiwo-shop</artifactId>
   <version>1.0</version>
   <packaging>pom</packaging>
-  <name>zhiwo-trade</name>
+  <name>zhiwo-shop</name>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,11 +22,6 @@
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.zwo.core</groupId>
-      <artifactId>zhiwo-core</artifactId>
-      <version>1.0</version>
     </dependency>
   </dependencies>
   <build>
@@ -78,9 +73,9 @@
 		</pluginManagement>
 	</build>
   <modules>
-  	<module>zhiwo-trade-pojo</module>
-  	<module>zhiwo-trade-dao</module>
-  	<module>zhiwo-trade-interface</module>
-  	<module>zhiwo-trade-service</module>
+  	<module>zhiwo-shop-pojo</module>
+  	<module>zhiwo-shop-interface</module>
+  	<module>zhiwo-shop-dao</module>
+  	<module>zhiwo-shop-service</module>
   </modules>
 </project>

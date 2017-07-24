@@ -872,5 +872,6 @@
 		<module>zhiwo-mall-web</module>
 		<!-- <module>zhiwo-member</module> -->
 		<!-- <module>zhiwo-cms</module> -->
+		<!-- <module>zhiwo-shop</module> -->
 	</modules>
 </project>
