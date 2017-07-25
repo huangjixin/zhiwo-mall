@@ -6,14 +6,18 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.service.IPrductService;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
 @Controller
@@ -23,6 +27,10 @@ public class ProductController extends BaseController<PrProduct> {
 	@Autowired
 	@Lazy(true)
 	private IPrductService prductService;
+	
+	/*@Autowired
+	@Lazy(true)*/
+	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
 	
 	private static final String basePath = "views/mall/product/";
 	
@@ -37,14 +45,32 @@ public class ProductController extends BaseController<PrProduct> {
 		uiModel.addAttribute("product", product);
 		return basePath+"product_edit";
 	}
-	
-	@RequestMapping(value = {"edit"},method=RequestMethod.GET)
-	public String edit(@Valid PrProduct product, BindingResult result, Model uiModel,
+	  
+	@RequestMapping(value = "edit",method=RequestMethod.GET)
+	public String edit(@RequestParam("id") String id, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		product = prductService.selectByPrimaryKey(product.getId());
+		PrProduct product = null;
+		ValueOperations<String, Object> valueOperations = null;
+		if(redisTemplate!=null){
+			valueOperations =redisTemplate.opsForValue();
+			product = (PrProduct) valueOperations.get(id);
+		}
+		
+		if(product==null){
+			product=prductService.selectByPrimaryKey(id);
+			if(valueOperations != null ){
+				valueOperations.set(id, product);
+			}
+		}
+		
 		uiModel.addAttribute("product", product);
 		uiModel.addAttribute("operation", "edit");
 		return basePath+"product_edit";
 	}
 	
+	@RequestMapping(value = {"test"},method=RequestMethod.GET)
+	public String test(Model uiModel,HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		uiModel.addAttribute("rawData", 123456);
+		return "test";
+	}
 }

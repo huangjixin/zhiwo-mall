@@ -83,5 +83,6 @@
   	<module>zhiwo-member-dao</module>
   	<module>zhiwo-member-interface</module>
   	<module>zhiwo-member-service</module>
+  	<module>zhiwo-member-web</module>
   </modules>
 </project>

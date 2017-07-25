@@ -17,8 +17,9 @@
                http://www.springframework.org/schema/websocket/spring-websocket-4.0.xsd
                http://www.springframework.org/schema/cache   
         	   http://www.springframework.org/schema/cache/spring-cache.xsd">
-
+	<bean id="springContextHolder" class="com.zwotech.common.utils.SpringContextHolder"></bean>
 	<import resource="mall-applicationContext-datasource.xml" />
+	<import resource="mall-applicationContext-Redis.xml" />
 	<!-- <import resource="mall-applicationContext-activemq.xml" /> -->
 	
 </beans>
