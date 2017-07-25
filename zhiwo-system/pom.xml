@@ -82,5 +82,6 @@
   	<module>zhiwo-system-dao</module>
   	<module>zhiwo-system-interface</module>
   	<module>zhiwo-system-service</module>
+  	<module>zhiwo-system-web</module>
   </modules>
 </project>

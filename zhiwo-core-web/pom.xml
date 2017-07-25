@@ -7,7 +7,7 @@
     <artifactId>zhiwo-parent</artifactId>
     <version>1.0</version>
   </parent>
-  <groupId>com.zwo.core</groupId>
+  <groupId>com.zwo.core.web</groupId>
   <artifactId>zhiwo-core-web</artifactId>
   <version>1.0</version>
   <packaging>war</packaging>
