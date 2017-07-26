@@ -77,7 +77,7 @@
 	
 	<context:annotation-config />
 
-	<aop:config ></aop:config>
+	<aop:config></aop:config>
 
 	<aop:aspectj-autoproxy/>
 
@@ -85,5 +85,15 @@
 		<context:exclude-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
-
+	
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"
+		scope="prototype">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="namedParameterJdbcTemplate"
+		class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate"
+		scope="prototype">
+		<constructor-arg ref="dataSource" />
+	</bean>
 </beans>
