@@ -241,7 +241,7 @@ CREATE TABLE `group_purcse` (
   KEY `FK_GROUP_PURCSE_PRODUCT_idx` (`PRODUCT_ID`),
   CONSTRAINT `FK_GROUP_PURCSE_MEMBER` FOREIGN KEY (`MEMEBER_ID`) REFERENCES `member` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_GROUP_PURCSE_PRODUCT` FOREIGN KEY (`PRODUCT_ID`) REFERENCES `pr_product` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='开团表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -298,11 +298,11 @@ CREATE TABLE `member` (
   `LAST_LOGIN_DATE` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '上次登录日期',
   `EMAIL` varchar(120) DEFAULT NULL COMMENT '邮箱',
   `MOBIL_PHONE` varchar(120) DEFAULT NULL COMMENT '手机',
-  `DISABLE` tinyint(1) DEFAULT NULL COMMENT '是否禁用',
+  `DISABLED` tinyint(1) DEFAULT '0' COMMENT '是否禁用',
   `CREATOR` varchar(120) DEFAULT NULL COMMENT '创建人',
   `UPDATER` varchar(120) DEFAULT NULL COMMENT '更新人',
   `SEX` tinyint(1) DEFAULT NULL COMMENT '性别',
-  `ICON` varchar(120) DEFAULT NULL COMMENT '头像',
+  `ICON` varchar(1200) DEFAULT NULL COMMENT '头像',
   `DESCRIPTION` varchar(1200) DEFAULT NULL COMMENT '描述',
   `AGE` int(11) DEFAULT NULL COMMENT '身高',
   `WEIGHT` int(11) DEFAULT NULL COMMENT '体重',
@@ -315,6 +315,7 @@ CREATE TABLE `member` (
   `PARENT_ID` varchar(120) DEFAULT NULL COMMENT '父类ID',
   `PARENTIDS` varchar(3200) DEFAULT NULL COMMENT '父类IDS',
   `MEMBER_GROUP_ID` varchar(120) DEFAULT NULL,
+  `NICKNAME` varchar(45) DEFAULT NULL COMMENT '昵称',
   PRIMARY KEY (`ID`),
   KEY `SORT` (`SORT`),
   KEY `FK_MEMBER_MEMBER_idx` (`PARENT_ID`),
@@ -434,27 +435,59 @@ LOCK TABLES `member_level` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `member_product`
+-- Table structure for table `member_product_distribution`
 --
 
-DROP TABLE IF EXISTS `member_product`;
+DROP TABLE IF EXISTS `member_product_distribution`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `member_product` (
+CREATE TABLE `member_product_distribution` (
   `ID` varchar(120) NOT NULL,
   `MEMBER_ID` varchar(45) DEFAULT NULL COMMENT '会员ID',
   `PRODUCT_ID` varchar(45) DEFAULT NULL COMMENT '产品ID',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员分销产品中间表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员分销产品中间表（越高级的会员能够分销的商品越多）';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `member_product`
+-- Dumping data for table `member_product_distribution`
 --
 
-LOCK TABLES `member_product` WRITE;
-/*!40000 ALTER TABLE `member_product` DISABLE KEYS */;
-/*!40000 ALTER TABLE `member_product` ENABLE KEYS */;
+LOCK TABLES `member_product_distribution` WRITE;
+/*!40000 ALTER TABLE `member_product_distribution` DISABLE KEYS */;
+/*!40000 ALTER TABLE `member_product_distribution` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `member_profit`
+--
+
+DROP TABLE IF EXISTS `member_profit`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `member_profit` (
+  `ID` varchar(32) NOT NULL,
+  `MEMBER_ID` varchar(32) DEFAULT NULL,
+  `PRODUCT_ID` varchar(45) DEFAULT NULL,
+  `SALE_PRICE` double DEFAULT NULL COMMENT '销售价',
+  `DEAL_PRICE` double DEFAULT NULL COMMENT '成交价',
+  `PROFIT` double DEFAULT NULL COMMENT '盈利',
+  `DISTRIBUTION_VALUE` double DEFAULT NULL COMMENT '分销让利值,是指该商品允许分销以后,销售出去给分销者的钱',
+  `REAL_PROFIT` double DEFAULT '0',
+  KEY `FK_MEMPROFIT_MEMBER_idx` (`MEMBER_ID`),
+  KEY `FK_MEMPROFIT_PRODUCT_idx` (`PRODUCT_ID`),
+  CONSTRAINT `FK_MEMPROFIT_MEMBER` FOREIGN KEY (`MEMBER_ID`) REFERENCES `member` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_MEMPROFIT_PRODUCT` FOREIGN KEY (`PRODUCT_ID`) REFERENCES `pr_product` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员盈利表，会员可以分销商品，';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `member_profit`
+--
+
+LOCK TABLES `member_profit` WRITE;
+/*!40000 ALTER TABLE `member_profit` DISABLE KEYS */;
+/*!40000 ALTER TABLE `member_profit` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -484,11 +517,18 @@ CREATE TABLE `order` (
   `DEAL_PRICE` varchar(120) DEFAULT NULL COMMENT '实付',
   `MEMBER_ID` varchar(120) DEFAULT NULL COMMENT '会员ID',
   `BUY_NUM` int(11) DEFAULT NULL COMMENT '购买数量',
+  `RECIVE_NAME` varchar(45) DEFAULT NULL COMMENT '收货人名称',
+  `ADDRESS` varchar(45) DEFAULT NULL COMMENT '具体地址',
+  `TELEPHONE` varchar(45) DEFAULT NULL COMMENT '电话',
+  `MAIL_CODE` varchar(45) DEFAULT '000000' COMMENT '邮码',
+  `DELIVERY_COMPANY` varchar(45) DEFAULT '申通公司' COMMENT '物流公司',
+  `DELIVERY_ORDER_CODE` varchar(120) DEFAULT NULL COMMENT '物流公司订单号',
   PRIMARY KEY (`ID`),
   KEY `SORT` (`SORT`),
   KEY `FK_ORDER_SHOP_idx` (`SHOP_ID`),
   KEY `FK_ORDER_PRODUCT_idx` (`PRODUCT_ID`),
   KEY `FK_ORDER_MEMBER_idx` (`MEMBER_ID`),
+  KEY `DELIVERY_ORDER_CODE` (`DELIVERY_ORDER_CODE`),
   CONSTRAINT `FK_ORDER_MEMBER` FOREIGN KEY (`MEMBER_ID`) REFERENCES `member` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ORDER_PRODUCT` FOREIGN KEY (`PRODUCT_ID`) REFERENCES `pr_product` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ORDER_SHOP` FOREIGN KEY (`SHOP_ID`) REFERENCES `shop` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -502,6 +542,106 @@ CREATE TABLE `order` (
 LOCK TABLES `order` WRITE;
 /*!40000 ALTER TABLE `order` DISABLE KEYS */;
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `order_delivery`
+--
+
+DROP TABLE IF EXISTS `order_delivery`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `order_delivery` (
+  `ID` varchar(32) NOT NULL,
+  `CREATOR` varchar(120) DEFAULT NULL COMMENT '创建人',
+  `UPDATER` varchar(120) DEFAULT NULL COMMENT '更新人',
+  `ORG_ID` varchar(32) DEFAULT NULL COMMENT '组织结构表ID，该字段用于过滤数据，不做外键关联',
+  `CREATE_DATE` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
+  `UPDATE_DATE` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新日期',
+  `DISABLED` tinyint(1) DEFAULT '0' COMMENT '是否禁用',
+  `START_TIME` timestamp NULL DEFAULT NULL COMMENT '开始时间，用于查询绑定',
+  `END_TIME` timestamp NULL DEFAULT NULL COMMENT '结束时间，用于查询绑定',
+  `SORT` int(11) DEFAULT NULL COMMENT '排序',
+  `DELIVERY_COMPANY` varchar(45) DEFAULT '申通公司' COMMENT '物流公司',
+  `DELIVERY_ORDER_CODE` varchar(120) DEFAULT NULL COMMENT '物流公司订单号',
+  `NAME` varchar(45) DEFAULT NULL COMMENT '名称',
+  `ORDER_ID` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `DELIVERY_ORDER_CODEINDEX` (`DELIVERY_ORDER_CODE`),
+  KEY `ORDER_INDEX` (`ORDER_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单包裹信息，包括物流单号，订单号';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order_delivery`
+--
+
+LOCK TABLES `order_delivery` WRITE;
+/*!40000 ALTER TABLE `order_delivery` DISABLE KEYS */;
+/*!40000 ALTER TABLE `order_delivery` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pay_trade_payment_order`
+--
+
+DROP TABLE IF EXISTS `pay_trade_payment_order`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pay_trade_payment_order` (
+  `ID` varchar(120) NOT NULL,
+  `CREATOR` varchar(120) DEFAULT NULL COMMENT '创建人',
+  `UPDATER` varchar(120) DEFAULT NULL COMMENT '更新人',
+  `CREATE_DATE` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
+  `UPDATE_DATE` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新日期',
+  `DISABLE` tinyint(1) DEFAULT '0' COMMENT '是否禁用',
+  `START_TIME` timestamp NULL DEFAULT NULL COMMENT '开始时间，用于查询绑定',
+  `END_TIME` timestamp NULL DEFAULT NULL COMMENT '结束时间，用于查询绑定',
+  `SORT` int(11) NOT NULL AUTO_INCREMENT COMMENT '排序',
+  `MEMBER_ID` varchar(120) DEFAULT NULL COMMENT '会员ID外键',
+  `ORDER_ID` varchar(120) DEFAULT NULL COMMENT '订单ID外键',
+  `PRODUCT_ID` varchar(120) DEFAULT NULL COMMENT '商品ID外键',
+  `ORG_ID` varchar(120) DEFAULT NULL COMMENT '用户ID外键',
+  `MEM_NAME` varchar(120) DEFAULT NULL COMMENT '会员名称',
+  `DESCRIPTION` varchar(1200) DEFAULT NULL COMMENT '描述',
+  `STATUS` varchar(45) DEFAULT NULL COMMENT '订单状态:',
+  `PRODUCT_NAME` varchar(120) DEFAULT NULL,
+  `ORDER_AMOUNT` double DEFAULT NULL COMMENT '订单金额',
+  `MERCHANT_ORDER_NO` varchar(120) DEFAULT NULL COMMENT '订单商户号',
+  `ORDER_FROM` varchar(120) DEFAULT NULL COMMENT '订单来源',
+  `MERCHANT_NAME` varchar(120) DEFAULT NULL COMMENT '商家名称',
+  `MERCHANT_NO` varchar(120) DEFAULT NULL COMMENT '商户编号',
+  `ORDER_TIME` timestamp NULL DEFAULT NULL COMMENT '订单时间戳',
+  `ORDER_DATE` date DEFAULT NULL COMMENT '订单日期',
+  `ORDER_IP` varchar(20) DEFAULT NULL COMMENT '订单IP地址',
+  `ORDER_REFERER_URL` varchar(240) DEFAULT NULL COMMENT '从哪个页面链接过来的(可用于防诈骗)',
+  `RETURN_URL` varchar(600) DEFAULT NULL COMMENT '页面回调通知url',
+  `NOTIFY_URL` varchar(600) DEFAULT NULL COMMENT '后台异步通知url',
+  `CANCEL_REASON` varchar(600) DEFAULT NULL COMMENT '订单撤销原因',
+  `ORDER_PERIOD` int(11) DEFAULT NULL COMMENT '订单有效期(单位分钟)',
+  `EXPIRE_TIME` date DEFAULT NULL COMMENT '到期时间',
+  `REMARK` varchar(200) DEFAULT NULL COMMENT '支付备注',
+  `PAY_WAY_NAME` varchar(45) DEFAULT NULL COMMENT '支付方式名称',
+  `PAY_WAY_CODE` varchar(120) DEFAULT NULL COMMENT '支付方式编号',
+  `TRX_TYPE` varchar(45) DEFAULT NULL COMMENT '交易业务类型  ：消费、充值等',
+  `TRX_NO` varchar(120) DEFAULT NULL COMMENT '支付流水号',
+  `PAY_TYPE_CODE` varchar(120) DEFAULT NULL,
+  `PAY_TYPE_NAME` varchar(45) DEFAULT NULL COMMENT '支付类型名称',
+  `FUND_INTO_TYPE` varchar(45) DEFAULT NULL COMMENT '资金流入类型',
+  `IS_REFUND` tinyint(1) DEFAULT '0' COMMENT '是否退款(1:是,0:否,默认值为:0)',
+  `REFUND_TIMES` int(11) DEFAULT '0' COMMENT '退款次数(默认值为:0)',
+  PRIMARY KEY (`ID`),
+  KEY `SORTINDEX` (`SORT`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='支付订单';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pay_trade_payment_order`
+--
+
+LOCK TABLES `pay_trade_payment_order` WRITE;
+/*!40000 ALTER TABLE `pay_trade_payment_order` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pay_trade_payment_order` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -622,10 +762,13 @@ CREATE TABLE `pr_product` (
   `ALLOW_DISTRIBUTION` tinyint(1) DEFAULT NULL COMMENT '是否允许分销',
   `DISTRIBUTION_VALUE` double DEFAULT NULL COMMENT '分销让利值,是指该商品允许分销以后,销售出去给分销者的钱',
   `SHOP_ID` varchar(120) DEFAULT NULL COMMENT '该商品所属的店',
+  `USER_ID` varchar(32) DEFAULT NULL COMMENT '用户ID，本来通过shop_id可以通过查询SHOP表拿到用户ID，但是此处为了方便查询做了冗余',
+  `PURCHASING_COST` double DEFAULT NULL COMMENT '进货价',
   PRIMARY KEY (`ID`),
   KEY `SORT` (`SORT`),
   KEY `fk_product_category_idx` (`CATEGORY_ID`),
   KEY `FK_PRODUCT_SHOP_idx` (`SHOP_ID`),
+  KEY `USER_ID_INDEX` (`USER_ID`),
   CONSTRAINT `FK_PRODUCT_SHOP` FOREIGN KEY (`SHOP_ID`) REFERENCES `shop` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_product_category` FOREIGN KEY (`CATEGORY_ID`) REFERENCES `pr_category` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='产品';
@@ -637,7 +780,7 @@ CREATE TABLE `pr_product` (
 
 LOCK TABLES `pr_product` WRITE;
 /*!40000 ALTER TABLE `pr_product` DISABLE KEYS */;
-INSERT INTO `pr_product` VALUES ('1498644416575',NULL,NULL,NULL,'2017-06-28 10:06:58','2017-06-28 10:06:58',0,NULL,NULL,10,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),('1498644425913',NULL,NULL,NULL,'2017-06-28 10:07:06','2017-06-28 10:07:06',0,NULL,NULL,11,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `pr_product` VALUES ('1498644416575',NULL,NULL,NULL,'2017-06-28 10:06:58','2017-06-28 10:06:58',0,NULL,NULL,10,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),('1498644425913',NULL,NULL,NULL,'2017-06-28 10:07:06','2017-06-28 10:07:06',0,NULL,NULL,11,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `pr_product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -674,7 +817,9 @@ CREATE TABLE `shop` (
   PRIMARY KEY (`ID`),
   KEY `SORT` (`SORT`),
   KEY `FK_SHOP_SHOP_CATEGORY_idx` (`CATEGORY_ID`),
-  CONSTRAINT `FK_SHOP_SHOP_CATEGORY` FOREIGN KEY (`CATEGORY_ID`) REFERENCES `shop_category` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `FK_SHOP_TB_USER_idx` (`USER_ID`),
+  CONSTRAINT `FK_SHOP_SHOP_CATEGORY` FOREIGN KEY (`CATEGORY_ID`) REFERENCES `shop_category` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_SHOP_TB_USER` FOREIGN KEY (`USER_ID`) REFERENCES `tb_user` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='店铺';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -729,4 +874,214 @@ CREATE TABLE `shop_category` (
 LOCK TABLES `shop_category` WRITE;
 /*!40000 ALTER TABLE `shop_category` DISABLE KEYS */;
 /*!40000 ALTER TABLE `shop_category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_resources`
+--
+
+DROP TABLE IF EXISTS `tb_resources`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_resources` (
+  `ID` varchar(32) NOT NULL,
+  `NAME` varchar(120) DEFAULT NULL COMMENT '资源名称',
+  `PARENT_ID` varchar(32) DEFAULT NULL COMMENT '父类ID',
+  `PARENTIDS` varchar(340) DEFAULT NULL COMMENT '父类IDS',
+  `CREATE_DATE` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
+  `UPDATE_DATE` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新日期',
+  `CREATOR` varchar(120) DEFAULT NULL COMMENT '创建人',
+  `UPDATER` varchar(120) DEFAULT NULL COMMENT '更新人',
+  `DESCRIPTION` varchar(1200) DEFAULT NULL COMMENT '描述',
+  `AUTH_NAME` varchar(120) DEFAULT NULL COMMENT '权限名称',
+  `PATH` varchar(120) DEFAULT NULL COMMENT '访问路径',
+  `SORT` int(11) DEFAULT NULL COMMENT '排序',
+  `TYPE` varchar(120) DEFAULT NULL COMMENT '类型',
+  `CHECKED` tinyint(1) DEFAULT NULL COMMENT '是否勾选',
+  `TEXT` varchar(120) DEFAULT NULL COMMENT '文本',
+  `CODE` varchar(120) DEFAULT NULL COMMENT '代码',
+  `ORG_ID` varchar(32) DEFAULT NULL COMMENT '组织结构表ID，该字段用于过滤数据，不做外键关联',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='资源';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_resources`
+--
+
+LOCK TABLES `tb_resources` WRITE;
+/*!40000 ALTER TABLE `tb_resources` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_resources` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_role`
+--
+
+DROP TABLE IF EXISTS `tb_role`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_role` (
+  `ID` varchar(32) NOT NULL,
+  `NAME` varchar(32) DEFAULT NULL COMMENT '角色名称',
+  `CREATE_DATE` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
+  `UPDATE_DATE` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新日期',
+  `DISABLED` tinyint(1) DEFAULT '0' COMMENT '是否禁用,0否，1是',
+  `CREATOR` varchar(120) DEFAULT NULL COMMENT '创建人',
+  `UPDATER` varchar(120) DEFAULT NULL COMMENT '更新人',
+  `SORT` int(11) NOT NULL AUTO_INCREMENT COMMENT '排序',
+  `ORG_ID` varchar(32) DEFAULT NULL COMMENT '组织结构表ID，该字段用于过滤数据，不做外键关联',
+  `CODE` varchar(45) DEFAULT NULL COMMENT '代码，比如管理员角色，可填写为admin_role',
+  PRIMARY KEY (`ID`),
+  KEY `SORTINDEX` (`SORT`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色组';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_role`
+--
+
+LOCK TABLES `tb_role` WRITE;
+/*!40000 ALTER TABLE `tb_role` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_role_resources`
+--
+
+DROP TABLE IF EXISTS `tb_role_resources`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_role_resources` (
+  `ID` varchar(32) NOT NULL,
+  `RESOURCES_ID` varchar(32) DEFAULT NULL,
+  `ROLE_ID` varchar(32) DEFAULT NULL,
+  KEY `FK_ROLERESOURCES_RESOURCES_idx` (`RESOURCES_ID`),
+  KEY `FK_ROLERESOURCE_ROLE_idx` (`ROLE_ID`),
+  CONSTRAINT `FK_ROLERESOURCES_RESOURCES` FOREIGN KEY (`RESOURCES_ID`) REFERENCES `tb_resources` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_ROLERESOURCE_ROLE` FOREIGN KEY (`ROLE_ID`) REFERENCES `tb_role` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色资源中间表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_role_resources`
+--
+
+LOCK TABLES `tb_role_resources` WRITE;
+/*!40000 ALTER TABLE `tb_role_resources` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_role_resources` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_user`
+--
+
+DROP TABLE IF EXISTS `tb_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_user` (
+  `ID` varchar(32) NOT NULL,
+  `USERNAME` varchar(120) DEFAULT NULL COMMENT '用户名',
+  `PASSWORD` varchar(120) DEFAULT NULL COMMENT '密码',
+  `LOGIN_DATE` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '登录日期',
+  `CREATE_DATE` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
+  `UPDATE_DATE` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新日期',
+  `LAST_LOGIN_DATE` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '上次登录日期',
+  `EMAIL` varchar(120) DEFAULT NULL COMMENT '邮箱',
+  `MOBIL_PHONE` varchar(120) DEFAULT NULL COMMENT '手机',
+  `DISABLE` tinyint(1) DEFAULT '0' COMMENT '是否禁用',
+  `CREATOR` varchar(120) DEFAULT NULL COMMENT '创建人',
+  `UPDATER` varchar(120) DEFAULT NULL COMMENT '更新人',
+  `SEX` tinyint(1) DEFAULT NULL COMMENT '性别',
+  `ICON` varchar(1200) DEFAULT NULL COMMENT '头像',
+  `DESCRIPTION` varchar(1200) DEFAULT NULL COMMENT '描述',
+  `AGE` int(11) DEFAULT NULL COMMENT '身高',
+  `WEIGHT` int(11) DEFAULT NULL COMMENT '体重',
+  `QQ` varchar(32) DEFAULT NULL COMMENT 'QQ',
+  `WEIXIN` varchar(32) DEFAULT NULL COMMENT '微信',
+  `REAL_NAME` varchar(32) DEFAULT NULL COMMENT '实名',
+  `LOGIN_COUNT` int(11) DEFAULT NULL COMMENT '登录次数',
+  `SORT` int(11) NOT NULL AUTO_INCREMENT COMMENT '排序',
+  `ORG_ID` varchar(32) DEFAULT NULL COMMENT '组织结构表ID，该字段用于过滤数据，不做外键关联',
+  `PARENT_ID` varchar(120) DEFAULT NULL COMMENT '父类ID',
+  `PARENTIDS` varchar(3200) DEFAULT NULL COMMENT '父类IDS',
+  `MEMBER_GROUP_ID` varchar(120) DEFAULT NULL,
+  `NICKNAME` varchar(45) DEFAULT NULL COMMENT '昵称',
+  `LOGIN_NAME` varchar(45) DEFAULT NULL COMMENT '登录名',
+  `USERGROUP_ID` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `SORTINDEX` (`SORT`),
+  KEY `FK_USER_USERGROUP_idx` (`USERGROUP_ID`),
+  CONSTRAINT `FK_USER_USERGROUP` FOREIGN KEY (`USERGROUP_ID`) REFERENCES `tb_user_group` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_user`
+--
+
+LOCK TABLES `tb_user` WRITE;
+/*!40000 ALTER TABLE `tb_user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_user_group`
+--
+
+DROP TABLE IF EXISTS `tb_user_group`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_user_group` (
+  `ID` varchar(32) NOT NULL,
+  `NAME` varchar(32) DEFAULT NULL COMMENT '角色名称',
+  `CREATE_DATE` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
+  `UPDATE_DATE` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新日期',
+  `DISABLED` tinyint(1) DEFAULT '0' COMMENT '是否禁用,0否，1是',
+  `CREATOR` varchar(120) DEFAULT NULL COMMENT '创建人',
+  `UPDATER` varchar(120) DEFAULT NULL COMMENT '更新人',
+  `SORT` int(11) NOT NULL AUTO_INCREMENT COMMENT '排序',
+  `ORG_ID` varchar(32) DEFAULT NULL COMMENT '组织结构表ID，该字段用于过滤数据，不做外键关联',
+  `CODE` varchar(45) DEFAULT NULL COMMENT '代码，比如管理员角色，可填写为admin_role',
+  PRIMARY KEY (`ID`),
+  KEY `SORTINDEX` (`SORT`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户组';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_user_group`
+--
+
+LOCK TABLES `tb_user_group` WRITE;
+/*!40000 ALTER TABLE `tb_user_group` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_user_group` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_user_group_role`
+--
+
+DROP TABLE IF EXISTS `tb_user_group_role`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_user_group_role` (
+  `ID` varchar(32) NOT NULL,
+  `USERGROUP_ID` varchar(32) DEFAULT NULL,
+  `ROLE_ID` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `FK_USERGROUP_idx` (`USERGROUP_ID`),
+  KEY `FK_USERGROUP_ROLE_idx` (`ROLE_ID`),
+  CONSTRAINT `FK_USERGROUP_ROLE` FOREIGN KEY (`ROLE_ID`) REFERENCES `tb_role` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_USERGROUP_USER` FOREIGN KEY (`USERGROUP_ID`) REFERENCES `tb_user_group` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户组——角色中间表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_user_group_role`
+--
+
+LOCK TABLES `tb_user_group_role` WRITE;
+/*!40000 ALTER TABLE `tb_user_group_role` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_user_group_role` ENABLE KEYS */;
 UNLOCK TABLES;
