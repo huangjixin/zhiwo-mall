@@ -1,4 +1,4 @@
-package com.zwo.modules.member.dao;
+package com.zwo.modules.member.domain;
 
 /**
  * Hello world!
