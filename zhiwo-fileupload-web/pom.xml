@@ -20,8 +20,51 @@
 			<artifactId>zhiwo-core</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<!-- <dependency>
+			<groupId>com.zwo.core.web</groupId>
+			<artifactId>zhiwo-core-web</artifactId>
+			<version>1.0</version>
+			<type>war</type>
+		</dependency> -->
 	</dependencies>
-	<build>
-		<finalName>zhiwo-fileupload-web</finalName>
-	</build>
+	<!-- <build>
+		<finalName>${project.artifactId}</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.1.1</version>
+				<configuration>
+					<warSourceDirectory>src/main/webapp</warSourceDirectory>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<overlays>
+						<overlay>
+							<groupId>com.zwo.core.web</groupId>
+							<artifactId>zhiwo-core-web</artifactId>
+							<excludes>
+								<exclude>WEB-INF/lib/*</exclude>
+								<exclude>WEB-INF/web.xml</exclude>
+							</excludes>
+						</overlay>
+					</overlays>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<configuration>
+					<path>/</path>
+					<port>8081</port>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build> -->
 </project>

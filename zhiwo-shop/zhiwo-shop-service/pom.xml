@@ -1,27 +1,32 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.zwo.shop</groupId>
-    <artifactId>zhiwo-shop</artifactId>
-    <version>1.0</version>
-  </parent>
-  <groupId>com.zwo.shop.service.impl</groupId>
-  <artifactId>zhiwo-shop-service</artifactId>
-  <version>1.0</version>
-  <packaging>war</packaging>
-  <name>zhiwo-shop-service Maven Webapp</name>
-  <url>http://maven.apache.org</url>
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-  <build>
-    <finalName>zhiwo-shop-service</finalName>
-  </build>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.zwo.shop</groupId>
+		<artifactId>zhiwo-shop</artifactId>
+		<version>1.0</version>
+	</parent>
+	<groupId>com.zwo.shop.service.impl</groupId>
+	<artifactId>zhiwo-shop-service</artifactId>
+	<version>1.0</version>
+	<packaging>war</packaging>
+	<name>zhiwo-shop-service Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+	<dependencies>
+		<dependency>
+			<groupId>com.zwo.shop.dao</groupId>
+			<artifactId>zhiwo-shop-dao</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.zwo.shop.service</groupId>
+			<artifactId>zhiwo-shop-interface</artifactId>
+			<version>1.0</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>zhiwo-shop-service</finalName>
+	</build>
 </project>

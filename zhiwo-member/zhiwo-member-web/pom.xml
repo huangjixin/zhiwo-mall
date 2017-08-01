@@ -15,11 +15,30 @@
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
+			<groupId>com.zwo.core</groupId>
+			<artifactId>zhiwo-core</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.zwo.member.interface</groupId>
+  			<artifactId>zhiwo-member-interface</artifactId>
+  			<version>1.0</version>
+		</dependency>
+  		<dependency>
+			<groupId>com.zwo.member.dao</groupId>
+  			<artifactId>zhiwo-member-dao</artifactId>
+  			<version>1.0</version>
+		</dependency>
+  		<dependency>
+			<groupId>com.zwo.member.pojo</groupId>
+  			<artifactId>zhiwo-member-pojo</artifactId>
+  			<version>1.0</version>
+		</dependency>
+  		<dependency>
+			<groupId>com.zwo.member.service</groupId>
+  			<artifactId>zhiwo-member-service</artifactId>
+  			<version>1.0</version>
+		</dependency>
   </dependencies>
   <build>
     <finalName>zhiwo-member-web</finalName>
