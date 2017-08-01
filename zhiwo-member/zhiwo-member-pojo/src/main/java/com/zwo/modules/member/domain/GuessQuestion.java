@@ -1,12 +1,12 @@
-package com.zwo.modules.mall.domain;
+package com.zwo.modules.member.domain;
 
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-@Table(name = "pr_product")
-public class PrProduct implements Serializable {
+@Table(name = "guess_question")
+public class GuessQuestion implements Serializable {
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,16 +19,16 @@ public class PrProduct implements Serializable {
     private String creator;
 
     /**
-     * 组织结构表ID，该字段用于过滤数据，不做外键关联
-     */
-    @Column(name = "ORG_ID")
-    private String orgId;
-
-    /**
      * 更新人
      */
     @Column(name = "UPDATER")
     private String updater;
+
+    /**
+     * 组织结构表ID，该字段用于过滤数据，不做外键关联
+     */
+    @Column(name = "ORG_ID")
+    private String orgId;
 
     /**
      * 创建日期
@@ -114,11 +114,23 @@ public class PrProduct implements Serializable {
     @Column(name = "CODE")
     private String code;
 
+    @Column(name = "USER_ID")
+    private String userId;
+
+    @Column(name = "GUESS_CATEGORY_ID")
+    private String guessCategoryId;
+
     /**
-     * 品牌外键ID
+     * 问题答案ID引用
      */
-    @Column(name = "CATEGORY_ID")
-    private String categoryId;
+    @Column(name = "GUESS_ANSWER_ID")
+    private String guessAnswerId;
+
+    /**
+     * 竞猜活动截止时间
+     */
+    @Column(name = "QUESTION_END_TIME")
+    private Date questionEndTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -155,24 +167,6 @@ public class PrProduct implements Serializable {
     }
 
     /**
-     * 获取组织结构表ID，该字段用于过滤数据，不做外键关联
-     *
-     * @return ORG_ID - 组织结构表ID，该字段用于过滤数据，不做外键关联
-     */
-    public String getOrgId() {
-        return orgId;
-    }
-
-    /**
-     * 设置组织结构表ID，该字段用于过滤数据，不做外键关联
-     *
-     * @param orgId 组织结构表ID，该字段用于过滤数据，不做外键关联
-     */
-    public void setOrgId(String orgId) {
-        this.orgId = orgId == null ? null : orgId.trim();
-    }
-
-    /**
      * 获取更新人
      *
      * @return UPDATER - 更新人
@@ -188,6 +182,24 @@ public class PrProduct implements Serializable {
      */
     public void setUpdater(String updater) {
         this.updater = updater == null ? null : updater.trim();
+    }
+
+    /**
+     * 获取组织结构表ID，该字段用于过滤数据，不做外键关联
+     *
+     * @return ORG_ID - 组织结构表ID，该字段用于过滤数据，不做外键关联
+     */
+    public String getOrgId() {
+        return orgId;
+    }
+
+    /**
+     * 设置组织结构表ID，该字段用于过滤数据，不做外键关联
+     *
+     * @param orgId 组织结构表ID，该字段用于过滤数据，不做外键关联
+     */
+    public void setOrgId(String orgId) {
+        this.orgId = orgId == null ? null : orgId.trim();
     }
 
     /**
@@ -443,20 +455,66 @@ public class PrProduct implements Serializable {
     }
 
     /**
-     * 获取品牌外键ID
-     *
-     * @return CATEGORY_ID - 品牌外键ID
+     * @return USER_ID
      */
-    public String getCategoryId() {
-        return categoryId;
+    public String getUserId() {
+        return userId;
     }
 
     /**
-     * 设置品牌外键ID
-     *
-     * @param categoryId 品牌外键ID
+     * @param userId
      */
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId == null ? null : categoryId.trim();
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
+    }
+
+    /**
+     * @return GUESS_CATEGORY_ID
+     */
+    public String getGuessCategoryId() {
+        return guessCategoryId;
+    }
+
+    /**
+     * @param guessCategoryId
+     */
+    public void setGuessCategoryId(String guessCategoryId) {
+        this.guessCategoryId = guessCategoryId == null ? null : guessCategoryId.trim();
+    }
+
+    /**
+     * 获取问题答案ID引用
+     *
+     * @return GUESS_ANSWER_ID - 问题答案ID引用
+     */
+    public String getGuessAnswerId() {
+        return guessAnswerId;
+    }
+
+    /**
+     * 设置问题答案ID引用
+     *
+     * @param guessAnswerId 问题答案ID引用
+     */
+    public void setGuessAnswerId(String guessAnswerId) {
+        this.guessAnswerId = guessAnswerId == null ? null : guessAnswerId.trim();
+    }
+
+    /**
+     * 获取竞猜活动截止时间
+     *
+     * @return QUESTION_END_TIME - 竞猜活动截止时间
+     */
+    public Date getQuestionEndTime() {
+        return questionEndTime;
+    }
+
+    /**
+     * 设置竞猜活动截止时间
+     *
+     * @param questionEndTime 竞猜活动截止时间
+     */
+    public void setQuestionEndTime(Date questionEndTime) {
+        this.questionEndTime = questionEndTime;
     }
 }

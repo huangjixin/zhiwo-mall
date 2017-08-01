@@ -5,8 +5,8 @@ import java.util.Date;
 import javax.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-@Table(name = "pr_image")
-public class PrImage implements Serializable {
+@Table(name = "order_delivery")
+public class OrderDelivery implements Serializable {
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,16 +19,16 @@ public class PrImage implements Serializable {
     private String creator;
 
     /**
-     * 组织结构表ID，该字段用于过滤数据，不做外键关联
-     */
-    @Column(name = "ORG_ID")
-    private String orgId;
-
-    /**
      * 更新人
      */
     @Column(name = "UPDATER")
     private String updater;
+
+    /**
+     * 组织结构表ID，该字段用于过滤数据，不做外键关联
+     */
+    @Column(name = "ORG_ID")
+    private String orgId;
 
     /**
      * 创建日期
@@ -45,8 +45,8 @@ public class PrImage implements Serializable {
     /**
      * 是否禁用
      */
-    @Column(name = "DISABLE")
-    private Boolean disable;
+    @Column(name = "DISABLED")
+    private Boolean disabled;
 
     /**
      * 开始时间，用于查询绑定
@@ -67,16 +67,16 @@ public class PrImage implements Serializable {
     private Integer sort;
 
     /**
-     * 是否为默认，0：非，1：是
+     * 物流公司
      */
-    @Column(name = "IS_DEFAULT")
-    private Boolean isDefault;
+    @Column(name = "DELIVERY_COMPANY")
+    private String deliveryCompany;
 
     /**
-     * 英文名称
+     * 物流公司订单号
      */
-    @Column(name = "EN_NAME")
-    private String enName;
+    @Column(name = "DELIVERY_ORDER_CODE")
+    private String deliveryOrderCode;
 
     /**
      * 名称
@@ -84,29 +84,8 @@ public class PrImage implements Serializable {
     @Column(name = "NAME")
     private String name;
 
-    /**
-     * 描述
-     */
-    @Column(name = "DESCRIPTION")
-    private String description;
-
-    /**
-     * 图片连接地址
-     */
-    @Column(name = "URL")
-    private String url;
-
-    /**
-     * 产品ID
-     */
-    @Column(name = "PRODUCT_ID")
-    private String productId;
-
-    /**
-     * 图片物理地址
-     */
-    @Column(name = "LOCATION")
-    private String location;
+    @Column(name = "ORDER_ID")
+    private String orderId;
 
     private static final long serialVersionUID = 1L;
 
@@ -143,24 +122,6 @@ public class PrImage implements Serializable {
     }
 
     /**
-     * 获取组织结构表ID，该字段用于过滤数据，不做外键关联
-     *
-     * @return ORG_ID - 组织结构表ID，该字段用于过滤数据，不做外键关联
-     */
-    public String getOrgId() {
-        return orgId;
-    }
-
-    /**
-     * 设置组织结构表ID，该字段用于过滤数据，不做外键关联
-     *
-     * @param orgId 组织结构表ID，该字段用于过滤数据，不做外键关联
-     */
-    public void setOrgId(String orgId) {
-        this.orgId = orgId == null ? null : orgId.trim();
-    }
-
-    /**
      * 获取更新人
      *
      * @return UPDATER - 更新人
@@ -176,6 +137,24 @@ public class PrImage implements Serializable {
      */
     public void setUpdater(String updater) {
         this.updater = updater == null ? null : updater.trim();
+    }
+
+    /**
+     * 获取组织结构表ID，该字段用于过滤数据，不做外键关联
+     *
+     * @return ORG_ID - 组织结构表ID，该字段用于过滤数据，不做外键关联
+     */
+    public String getOrgId() {
+        return orgId;
+    }
+
+    /**
+     * 设置组织结构表ID，该字段用于过滤数据，不做外键关联
+     *
+     * @param orgId 组织结构表ID，该字段用于过滤数据，不做外键关联
+     */
+    public void setOrgId(String orgId) {
+        this.orgId = orgId == null ? null : orgId.trim();
     }
 
     /**
@@ -217,19 +196,19 @@ public class PrImage implements Serializable {
     /**
      * 获取是否禁用
      *
-     * @return DISABLE - 是否禁用
+     * @return DISABLED - 是否禁用
      */
-    public Boolean getDisable() {
-        return disable;
+    public Boolean getDisabled() {
+        return disabled;
     }
 
     /**
      * 设置是否禁用
      *
-     * @param disable 是否禁用
+     * @param disabled 是否禁用
      */
-    public void setDisable(Boolean disable) {
-        this.disable = disable;
+    public void setDisabled(Boolean disabled) {
+        this.disabled = disabled;
     }
 
     /**
@@ -287,39 +266,39 @@ public class PrImage implements Serializable {
     }
 
     /**
-     * 获取是否为默认，0：非，1：是
+     * 获取物流公司
      *
-     * @return IS_DEFAULT - 是否为默认，0：非，1：是
+     * @return DELIVERY_COMPANY - 物流公司
      */
-    public Boolean getIsDefault() {
-        return isDefault;
+    public String getDeliveryCompany() {
+        return deliveryCompany;
     }
 
     /**
-     * 设置是否为默认，0：非，1：是
+     * 设置物流公司
      *
-     * @param isDefault 是否为默认，0：非，1：是
+     * @param deliveryCompany 物流公司
      */
-    public void setIsDefault(Boolean isDefault) {
-        this.isDefault = isDefault;
+    public void setDeliveryCompany(String deliveryCompany) {
+        this.deliveryCompany = deliveryCompany == null ? null : deliveryCompany.trim();
     }
 
     /**
-     * 获取英文名称
+     * 获取物流公司订单号
      *
-     * @return EN_NAME - 英文名称
+     * @return DELIVERY_ORDER_CODE - 物流公司订单号
      */
-    public String getEnName() {
-        return enName;
+    public String getDeliveryOrderCode() {
+        return deliveryOrderCode;
     }
 
     /**
-     * 设置英文名称
+     * 设置物流公司订单号
      *
-     * @param enName 英文名称
+     * @param deliveryOrderCode 物流公司订单号
      */
-    public void setEnName(String enName) {
-        this.enName = enName == null ? null : enName.trim();
+    public void setDeliveryOrderCode(String deliveryOrderCode) {
+        this.deliveryOrderCode = deliveryOrderCode == null ? null : deliveryOrderCode.trim();
     }
 
     /**
@@ -341,74 +320,16 @@ public class PrImage implements Serializable {
     }
 
     /**
-     * 获取描述
-     *
-     * @return DESCRIPTION - 描述
+     * @return ORDER_ID
      */
-    public String getDescription() {
-        return description;
+    public String getOrderId() {
+        return orderId;
     }
 
     /**
-     * 设置描述
-     *
-     * @param description 描述
+     * @param orderId
      */
-    public void setDescription(String description) {
-        this.description = description == null ? null : description.trim();
-    }
-
-    /**
-     * 获取图片连接地址
-     *
-     * @return URL - 图片连接地址
-     */
-    public String getUrl() {
-        return url;
-    }
-
-    /**
-     * 设置图片连接地址
-     *
-     * @param url 图片连接地址
-     */
-    public void setUrl(String url) {
-        this.url = url == null ? null : url.trim();
-    }
-
-    /**
-     * 获取产品ID
-     *
-     * @return PRODUCT_ID - 产品ID
-     */
-    public String getProductId() {
-        return productId;
-    }
-
-    /**
-     * 设置产品ID
-     *
-     * @param productId 产品ID
-     */
-    public void setProductId(String productId) {
-        this.productId = productId == null ? null : productId.trim();
-    }
-
-    /**
-     * 获取图片物理地址
-     *
-     * @return LOCATION - 图片物理地址
-     */
-    public String getLocation() {
-        return location;
-    }
-
-    /**
-     * 设置图片物理地址
-     *
-     * @param location 图片物理地址
-     */
-    public void setLocation(String location) {
-        this.location = location == null ? null : location.trim();
+    public void setOrderId(String orderId) {
+        this.orderId = orderId == null ? null : orderId.trim();
     }
 }

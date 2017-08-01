@@ -1,17 +1,17 @@
-package com.zwo.modules.mall.domain;
+package com.zwo.modules.member.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class PrProductCriteria {
+public class GuessQuestionCriteria {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public PrProductCriteria() {
+    public GuessQuestionCriteria() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -245,76 +245,6 @@ public class PrProductCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdIsNull() {
-            addCriterion("ORG_ID is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgIdIsNotNull() {
-            addCriterion("ORG_ID is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgIdEqualTo(String value) {
-            addCriterion("ORG_ID =", value, "orgId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgIdNotEqualTo(String value) {
-            addCriterion("ORG_ID <>", value, "orgId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgIdGreaterThan(String value) {
-            addCriterion("ORG_ID >", value, "orgId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgIdGreaterThanOrEqualTo(String value) {
-            addCriterion("ORG_ID >=", value, "orgId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgIdLessThan(String value) {
-            addCriterion("ORG_ID <", value, "orgId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgIdLessThanOrEqualTo(String value) {
-            addCriterion("ORG_ID <=", value, "orgId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgIdLike(String value) {
-            addCriterion("ORG_ID like", value, "orgId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgIdNotLike(String value) {
-            addCriterion("ORG_ID not like", value, "orgId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgIdIn(List<String> values) {
-            addCriterion("ORG_ID in", values, "orgId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgIdNotIn(List<String> values) {
-            addCriterion("ORG_ID not in", values, "orgId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgIdBetween(String value1, String value2) {
-            addCriterion("ORG_ID between", value1, value2, "orgId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgIdNotBetween(String value1, String value2) {
-            addCriterion("ORG_ID not between", value1, value2, "orgId");
-            return (Criteria) this;
-        }
-
         public Criteria andUpdaterIsNull() {
             addCriterion("UPDATER is null");
             return (Criteria) this;
@@ -382,6 +312,76 @@ public class PrProductCriteria {
 
         public Criteria andUpdaterNotBetween(String value1, String value2) {
             addCriterion("UPDATER not between", value1, value2, "updater");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdIsNull() {
+            addCriterion("ORG_ID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdIsNotNull() {
+            addCriterion("ORG_ID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdEqualTo(String value) {
+            addCriterion("ORG_ID =", value, "orgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdNotEqualTo(String value) {
+            addCriterion("ORG_ID <>", value, "orgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdGreaterThan(String value) {
+            addCriterion("ORG_ID >", value, "orgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdGreaterThanOrEqualTo(String value) {
+            addCriterion("ORG_ID >=", value, "orgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdLessThan(String value) {
+            addCriterion("ORG_ID <", value, "orgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdLessThanOrEqualTo(String value) {
+            addCriterion("ORG_ID <=", value, "orgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdLike(String value) {
+            addCriterion("ORG_ID like", value, "orgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdNotLike(String value) {
+            addCriterion("ORG_ID not like", value, "orgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdIn(List<String> values) {
+            addCriterion("ORG_ID in", values, "orgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdNotIn(List<String> values) {
+            addCriterion("ORG_ID not in", values, "orgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdBetween(String value1, String value2) {
+            addCriterion("ORG_ID between", value1, value2, "orgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdNotBetween(String value1, String value2) {
+            addCriterion("ORG_ID not between", value1, value2, "orgId");
             return (Criteria) this;
         }
 
@@ -1295,73 +1295,273 @@ public class PrProductCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdIsNull() {
-            addCriterion("CATEGORY_ID is null");
+        public Criteria andUserIdIsNull() {
+            addCriterion("USER_ID is null");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdIsNotNull() {
-            addCriterion("CATEGORY_ID is not null");
+        public Criteria andUserIdIsNotNull() {
+            addCriterion("USER_ID is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdEqualTo(String value) {
-            addCriterion("CATEGORY_ID =", value, "categoryId");
+        public Criteria andUserIdEqualTo(String value) {
+            addCriterion("USER_ID =", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdNotEqualTo(String value) {
-            addCriterion("CATEGORY_ID <>", value, "categoryId");
+        public Criteria andUserIdNotEqualTo(String value) {
+            addCriterion("USER_ID <>", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdGreaterThan(String value) {
-            addCriterion("CATEGORY_ID >", value, "categoryId");
+        public Criteria andUserIdGreaterThan(String value) {
+            addCriterion("USER_ID >", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdGreaterThanOrEqualTo(String value) {
-            addCriterion("CATEGORY_ID >=", value, "categoryId");
+        public Criteria andUserIdGreaterThanOrEqualTo(String value) {
+            addCriterion("USER_ID >=", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdLessThan(String value) {
-            addCriterion("CATEGORY_ID <", value, "categoryId");
+        public Criteria andUserIdLessThan(String value) {
+            addCriterion("USER_ID <", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdLessThanOrEqualTo(String value) {
-            addCriterion("CATEGORY_ID <=", value, "categoryId");
+        public Criteria andUserIdLessThanOrEqualTo(String value) {
+            addCriterion("USER_ID <=", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdLike(String value) {
-            addCriterion("CATEGORY_ID like", value, "categoryId");
+        public Criteria andUserIdLike(String value) {
+            addCriterion("USER_ID like", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdNotLike(String value) {
-            addCriterion("CATEGORY_ID not like", value, "categoryId");
+        public Criteria andUserIdNotLike(String value) {
+            addCriterion("USER_ID not like", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdIn(List<String> values) {
-            addCriterion("CATEGORY_ID in", values, "categoryId");
+        public Criteria andUserIdIn(List<String> values) {
+            addCriterion("USER_ID in", values, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdNotIn(List<String> values) {
-            addCriterion("CATEGORY_ID not in", values, "categoryId");
+        public Criteria andUserIdNotIn(List<String> values) {
+            addCriterion("USER_ID not in", values, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdBetween(String value1, String value2) {
-            addCriterion("CATEGORY_ID between", value1, value2, "categoryId");
+        public Criteria andUserIdBetween(String value1, String value2) {
+            addCriterion("USER_ID between", value1, value2, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdNotBetween(String value1, String value2) {
-            addCriterion("CATEGORY_ID not between", value1, value2, "categoryId");
+        public Criteria andUserIdNotBetween(String value1, String value2) {
+            addCriterion("USER_ID not between", value1, value2, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessCategoryIdIsNull() {
+            addCriterion("GUESS_CATEGORY_ID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessCategoryIdIsNotNull() {
+            addCriterion("GUESS_CATEGORY_ID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessCategoryIdEqualTo(String value) {
+            addCriterion("GUESS_CATEGORY_ID =", value, "guessCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessCategoryIdNotEqualTo(String value) {
+            addCriterion("GUESS_CATEGORY_ID <>", value, "guessCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessCategoryIdGreaterThan(String value) {
+            addCriterion("GUESS_CATEGORY_ID >", value, "guessCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessCategoryIdGreaterThanOrEqualTo(String value) {
+            addCriterion("GUESS_CATEGORY_ID >=", value, "guessCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessCategoryIdLessThan(String value) {
+            addCriterion("GUESS_CATEGORY_ID <", value, "guessCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessCategoryIdLessThanOrEqualTo(String value) {
+            addCriterion("GUESS_CATEGORY_ID <=", value, "guessCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessCategoryIdLike(String value) {
+            addCriterion("GUESS_CATEGORY_ID like", value, "guessCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessCategoryIdNotLike(String value) {
+            addCriterion("GUESS_CATEGORY_ID not like", value, "guessCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessCategoryIdIn(List<String> values) {
+            addCriterion("GUESS_CATEGORY_ID in", values, "guessCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessCategoryIdNotIn(List<String> values) {
+            addCriterion("GUESS_CATEGORY_ID not in", values, "guessCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessCategoryIdBetween(String value1, String value2) {
+            addCriterion("GUESS_CATEGORY_ID between", value1, value2, "guessCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessCategoryIdNotBetween(String value1, String value2) {
+            addCriterion("GUESS_CATEGORY_ID not between", value1, value2, "guessCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessAnswerIdIsNull() {
+            addCriterion("GUESS_ANSWER_ID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessAnswerIdIsNotNull() {
+            addCriterion("GUESS_ANSWER_ID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessAnswerIdEqualTo(String value) {
+            addCriterion("GUESS_ANSWER_ID =", value, "guessAnswerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessAnswerIdNotEqualTo(String value) {
+            addCriterion("GUESS_ANSWER_ID <>", value, "guessAnswerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessAnswerIdGreaterThan(String value) {
+            addCriterion("GUESS_ANSWER_ID >", value, "guessAnswerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessAnswerIdGreaterThanOrEqualTo(String value) {
+            addCriterion("GUESS_ANSWER_ID >=", value, "guessAnswerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessAnswerIdLessThan(String value) {
+            addCriterion("GUESS_ANSWER_ID <", value, "guessAnswerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessAnswerIdLessThanOrEqualTo(String value) {
+            addCriterion("GUESS_ANSWER_ID <=", value, "guessAnswerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessAnswerIdLike(String value) {
+            addCriterion("GUESS_ANSWER_ID like", value, "guessAnswerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessAnswerIdNotLike(String value) {
+            addCriterion("GUESS_ANSWER_ID not like", value, "guessAnswerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessAnswerIdIn(List<String> values) {
+            addCriterion("GUESS_ANSWER_ID in", values, "guessAnswerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessAnswerIdNotIn(List<String> values) {
+            addCriterion("GUESS_ANSWER_ID not in", values, "guessAnswerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessAnswerIdBetween(String value1, String value2) {
+            addCriterion("GUESS_ANSWER_ID between", value1, value2, "guessAnswerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessAnswerIdNotBetween(String value1, String value2) {
+            addCriterion("GUESS_ANSWER_ID not between", value1, value2, "guessAnswerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionEndTimeIsNull() {
+            addCriterion("QUESTION_END_TIME is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionEndTimeIsNotNull() {
+            addCriterion("QUESTION_END_TIME is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionEndTimeEqualTo(Date value) {
+            addCriterion("QUESTION_END_TIME =", value, "questionEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionEndTimeNotEqualTo(Date value) {
+            addCriterion("QUESTION_END_TIME <>", value, "questionEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionEndTimeGreaterThan(Date value) {
+            addCriterion("QUESTION_END_TIME >", value, "questionEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionEndTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("QUESTION_END_TIME >=", value, "questionEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionEndTimeLessThan(Date value) {
+            addCriterion("QUESTION_END_TIME <", value, "questionEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionEndTimeLessThanOrEqualTo(Date value) {
+            addCriterion("QUESTION_END_TIME <=", value, "questionEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionEndTimeIn(List<Date> values) {
+            addCriterion("QUESTION_END_TIME in", values, "questionEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionEndTimeNotIn(List<Date> values) {
+            addCriterion("QUESTION_END_TIME not in", values, "questionEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionEndTimeBetween(Date value1, Date value2) {
+            addCriterion("QUESTION_END_TIME between", value1, value2, "questionEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionEndTimeNotBetween(Date value1, Date value2) {
+            addCriterion("QUESTION_END_TIME not between", value1, value2, "questionEndTime");
             return (Criteria) this;
         }
 
@@ -1375,13 +1575,13 @@ public class PrProductCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdLikeInsensitive(String value) {
-            addCriterion("upper(ORG_ID) like", value.toUpperCase(), "orgId");
+        public Criteria andUpdaterLikeInsensitive(String value) {
+            addCriterion("upper(UPDATER) like", value.toUpperCase(), "updater");
             return (Criteria) this;
         }
 
-        public Criteria andUpdaterLikeInsensitive(String value) {
-            addCriterion("upper(UPDATER) like", value.toUpperCase(), "updater");
+        public Criteria andOrgIdLikeInsensitive(String value) {
+            addCriterion("upper(ORG_ID) like", value.toUpperCase(), "orgId");
             return (Criteria) this;
         }
 
@@ -1420,8 +1620,18 @@ public class PrProductCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdLikeInsensitive(String value) {
-            addCriterion("upper(CATEGORY_ID) like", value.toUpperCase(), "categoryId");
+        public Criteria andUserIdLikeInsensitive(String value) {
+            addCriterion("upper(USER_ID) like", value.toUpperCase(), "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessCategoryIdLikeInsensitive(String value) {
+            addCriterion("upper(GUESS_CATEGORY_ID) like", value.toUpperCase(), "guessCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuessAnswerIdLikeInsensitive(String value) {
+            addCriterion("upper(GUESS_ANSWER_ID) like", value.toUpperCase(), "guessAnswerId");
             return (Criteria) this;
         }
     }

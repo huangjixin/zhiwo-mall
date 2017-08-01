@@ -1,36 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zwo.modules.mall.dao.PrProductMapper" >
-  <resultMap id="BaseResultMap" type="com.zwo.modules.mall.domain.PrProduct" >
+<mapper namespace="com.zwo.modules.mall.dao.OrderDeliveryMapper" >
+  <resultMap id="BaseResultMap" type="com.zwo.modules.mall.domain.OrderDelivery" >
     <!--
       WARNING - @mbg.generated
     -->
     <id column="ID" property="id" jdbcType="VARCHAR" />
     <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
-    <result column="ORG_ID" property="orgId" jdbcType="VARCHAR" />
     <result column="UPDATER" property="updater" jdbcType="VARCHAR" />
+    <result column="ORG_ID" property="orgId" jdbcType="VARCHAR" />
     <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
     <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
-    <result column="DISABLE" property="disable" jdbcType="BIT" />
+    <result column="DISABLED" property="disabled" jdbcType="BIT" />
     <result column="START_TIME" property="startTime" jdbcType="TIMESTAMP" />
     <result column="END_TIME" property="endTime" jdbcType="TIMESTAMP" />
     <result column="SORT" property="sort" jdbcType="INTEGER" />
-    <result column="IS_DEFAULT" property="isDefault" jdbcType="BIT" />
-    <result column="EN_NAME" property="enName" jdbcType="VARCHAR" />
+    <result column="DELIVERY_COMPANY" property="deliveryCompany" jdbcType="VARCHAR" />
+    <result column="DELIVERY_ORDER_CODE" property="deliveryOrderCode" jdbcType="VARCHAR" />
     <result column="NAME" property="name" jdbcType="VARCHAR" />
-    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
-    <result column="ICON" property="icon" jdbcType="VARCHAR" />
-    <result column="KEYWORDS" property="keywords" jdbcType="VARCHAR" />
-    <result column="THUMBNAIL" property="thumbnail" jdbcType="VARCHAR" />
-    <result column="CODE" property="code" jdbcType="VARCHAR" />
-    <result column="CATEGORY_ID" property="categoryId" jdbcType="VARCHAR" />
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.zwo.modules.mall.domain.PrProductWithBLOBs" extends="BaseResultMap" >
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <result column="CONTENT" property="content" jdbcType="LONGVARCHAR" />
-    <result column="EN_CONTENT" property="enContent" jdbcType="LONGVARCHAR" />
+    <result column="ORDER_ID" property="orderId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <!--
@@ -100,16 +88,10 @@
     <!--
       WARNING - @mbg.generated
     -->
-    ID, CREATOR, ORG_ID, UPDATER, CREATE_DATE, UPDATE_DATE, DISABLE, START_TIME, END_TIME, 
-    SORT, IS_DEFAULT, EN_NAME, NAME, DESCRIPTION, ICON, KEYWORDS, THUMBNAIL, CODE, CATEGORY_ID
+    ID, CREATOR, UPDATER, ORG_ID, CREATE_DATE, UPDATE_DATE, DISABLED, START_TIME, END_TIME, 
+    SORT, DELIVERY_COMPANY, DELIVERY_ORDER_CODE, NAME, ORDER_ID
   </sql>
-  <sql id="Blob_Column_List" >
-    <!--
-      WARNING - @mbg.generated
-    -->
-    CONTENT, EN_CONTENT
-  </sql>
-  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.zwo.modules.mall.domain.PrProductCriteria" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zwo.modules.mall.domain.OrderDeliveryCriteria" >
     <!--
       WARNING - @mbg.generated
     -->
@@ -118,9 +100,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from pr_product
+    from order_delivery
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -128,37 +108,20 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zwo.modules.mall.domain.PrProductCriteria" >
+  <delete id="deleteByExample" parameterType="com.zwo.modules.mall.domain.OrderDeliveryCriteria" >
     <!--
       WARNING - @mbg.generated
     -->
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from pr_product
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
-  <delete id="deleteByExample" parameterType="com.zwo.modules.mall.domain.PrProductCriteria" >
-    <!--
-      WARNING - @mbg.generated
-    -->
-    delete from pr_product
+    delete from order_delivery
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <select id="countByExample" parameterType="com.zwo.modules.mall.domain.PrProductCriteria" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.zwo.modules.mall.domain.OrderDeliveryCriteria" resultType="java.lang.Integer" >
     <!--
       WARNING - @mbg.generated
     -->
-    select count(*) from pr_product
+    select count(*) from order_delivery
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -167,7 +130,7 @@
     <!--
       WARNING - @mbg.generated
     -->
-    update pr_product
+    update order_delivery
     <set >
       <if test="record.id != null" >
         ID = #{record.id,jdbcType=VARCHAR},
@@ -175,11 +138,11 @@
       <if test="record.creator != null" >
         CREATOR = #{record.creator,jdbcType=VARCHAR},
       </if>
-      <if test="record.orgId != null" >
-        ORG_ID = #{record.orgId,jdbcType=VARCHAR},
-      </if>
       <if test="record.updater != null" >
         UPDATER = #{record.updater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgId != null" >
+        ORG_ID = #{record.orgId,jdbcType=VARCHAR},
       </if>
       <if test="record.createDate != null" >
         CREATE_DATE = #{record.createDate,jdbcType=TIMESTAMP},
@@ -187,8 +150,8 @@
       <if test="record.updateDate != null" >
         UPDATE_DATE = #{record.updateDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.disable != null" >
-        DISABLE = #{record.disable,jdbcType=BIT},
+      <if test="record.disabled != null" >
+        DISABLED = #{record.disabled,jdbcType=BIT},
       </if>
       <if test="record.startTime != null" >
         START_TIME = #{record.startTime,jdbcType=TIMESTAMP},
@@ -199,70 +162,19 @@
       <if test="record.sort != null" >
         SORT = #{record.sort,jdbcType=INTEGER},
       </if>
-      <if test="record.isDefault != null" >
-        IS_DEFAULT = #{record.isDefault,jdbcType=BIT},
+      <if test="record.deliveryCompany != null" >
+        DELIVERY_COMPANY = #{record.deliveryCompany,jdbcType=VARCHAR},
       </if>
-      <if test="record.enName != null" >
-        EN_NAME = #{record.enName,jdbcType=VARCHAR},
+      <if test="record.deliveryOrderCode != null" >
+        DELIVERY_ORDER_CODE = #{record.deliveryOrderCode,jdbcType=VARCHAR},
       </if>
       <if test="record.name != null" >
         NAME = #{record.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.description != null" >
-        DESCRIPTION = #{record.description,jdbcType=VARCHAR},
-      </if>
-      <if test="record.icon != null" >
-        ICON = #{record.icon,jdbcType=VARCHAR},
-      </if>
-      <if test="record.keywords != null" >
-        KEYWORDS = #{record.keywords,jdbcType=VARCHAR},
-      </if>
-      <if test="record.thumbnail != null" >
-        THUMBNAIL = #{record.thumbnail,jdbcType=VARCHAR},
-      </if>
-      <if test="record.code != null" >
-        CODE = #{record.code,jdbcType=VARCHAR},
-      </if>
-      <if test="record.categoryId != null" >
-        CATEGORY_ID = #{record.categoryId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.content != null" >
-        CONTENT = #{record.content,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="record.enContent != null" >
-        EN_CONTENT = #{record.enContent,jdbcType=LONGVARCHAR},
+      <if test="record.orderId != null" >
+        ORDER_ID = #{record.orderId,jdbcType=VARCHAR},
       </if>
     </set>
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map" >
-    <!--
-      WARNING - @mbg.generated
-    -->
-    update pr_product
-    set ID = #{record.id,jdbcType=VARCHAR},
-      CREATOR = #{record.creator,jdbcType=VARCHAR},
-      ORG_ID = #{record.orgId,jdbcType=VARCHAR},
-      UPDATER = #{record.updater,jdbcType=VARCHAR},
-      CREATE_DATE = #{record.createDate,jdbcType=TIMESTAMP},
-      UPDATE_DATE = #{record.updateDate,jdbcType=TIMESTAMP},
-      DISABLE = #{record.disable,jdbcType=BIT},
-      START_TIME = #{record.startTime,jdbcType=TIMESTAMP},
-      END_TIME = #{record.endTime,jdbcType=TIMESTAMP},
-      SORT = #{record.sort,jdbcType=INTEGER},
-      IS_DEFAULT = #{record.isDefault,jdbcType=BIT},
-      EN_NAME = #{record.enName,jdbcType=VARCHAR},
-      NAME = #{record.name,jdbcType=VARCHAR},
-      DESCRIPTION = #{record.description,jdbcType=VARCHAR},
-      ICON = #{record.icon,jdbcType=VARCHAR},
-      KEYWORDS = #{record.keywords,jdbcType=VARCHAR},
-      THUMBNAIL = #{record.thumbnail,jdbcType=VARCHAR},
-      CODE = #{record.code,jdbcType=VARCHAR},
-      CATEGORY_ID = #{record.categoryId,jdbcType=VARCHAR},
-      CONTENT = #{record.content,jdbcType=LONGVARCHAR},
-      EN_CONTENT = #{record.enContent,jdbcType=LONGVARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -271,26 +183,21 @@
     <!--
       WARNING - @mbg.generated
     -->
-    update pr_product
+    update order_delivery
     set ID = #{record.id,jdbcType=VARCHAR},
       CREATOR = #{record.creator,jdbcType=VARCHAR},
-      ORG_ID = #{record.orgId,jdbcType=VARCHAR},
       UPDATER = #{record.updater,jdbcType=VARCHAR},
+      ORG_ID = #{record.orgId,jdbcType=VARCHAR},
       CREATE_DATE = #{record.createDate,jdbcType=TIMESTAMP},
       UPDATE_DATE = #{record.updateDate,jdbcType=TIMESTAMP},
-      DISABLE = #{record.disable,jdbcType=BIT},
+      DISABLED = #{record.disabled,jdbcType=BIT},
       START_TIME = #{record.startTime,jdbcType=TIMESTAMP},
       END_TIME = #{record.endTime,jdbcType=TIMESTAMP},
       SORT = #{record.sort,jdbcType=INTEGER},
-      IS_DEFAULT = #{record.isDefault,jdbcType=BIT},
-      EN_NAME = #{record.enName,jdbcType=VARCHAR},
+      DELIVERY_COMPANY = #{record.deliveryCompany,jdbcType=VARCHAR},
+      DELIVERY_ORDER_CODE = #{record.deliveryOrderCode,jdbcType=VARCHAR},
       NAME = #{record.name,jdbcType=VARCHAR},
-      DESCRIPTION = #{record.description,jdbcType=VARCHAR},
-      ICON = #{record.icon,jdbcType=VARCHAR},
-      KEYWORDS = #{record.keywords,jdbcType=VARCHAR},
-      THUMBNAIL = #{record.thumbnail,jdbcType=VARCHAR},
-      CODE = #{record.code,jdbcType=VARCHAR},
-      CATEGORY_ID = #{record.categoryId,jdbcType=VARCHAR}
+      ORDER_ID = #{record.orderId,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
