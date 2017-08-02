@@ -2,9 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zwo.modules.system.dao.TbResourcesMapper" >
   <resultMap id="BaseResultMap" type="com.zwo.modules.system.domain.TbResources" >
-    <!--
-      WARNING - @mbg.generated
-    -->
     <id column="ID" property="id" jdbcType="VARCHAR" />
     <result column="NAME" property="name" jdbcType="VARCHAR" />
     <result column="PARENT_ID" property="parentId" jdbcType="VARCHAR" />
@@ -24,9 +21,6 @@
     <result column="ORG_ID" property="orgId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
-    <!--
-      WARNING - @mbg.generated
-    -->
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
         <if test="criteria.valid" >
@@ -56,9 +50,6 @@
     </where>
   </sql>
   <sql id="Update_By_Example_Where_Clause" >
-    <!--
-      WARNING - @mbg.generated
-    -->
     <where >
       <foreach collection="example.oredCriteria" item="criteria" separator="or" >
         <if test="criteria.valid" >
@@ -88,16 +79,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    <!--
-      WARNING - @mbg.generated
-    -->
     ID, NAME, PARENT_ID, PARENTIDS, CREATE_DATE, UPDATE_DATE, CREATOR, UPDATER, DESCRIPTION, 
     AUTH_NAME, PATH, SORT, TYPE, CHECKED, TEXT, CODE, ORG_ID
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zwo.modules.system.domain.TbResourcesCriteria" >
-    <!--
-      WARNING - @mbg.generated
-    -->
+  <!-- <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zwo.modules.system.domain.TbResourcesCriteria" >
     select
     <if test="distinct" >
       distinct
@@ -112,27 +97,18 @@
     </if>
   </select>
   <delete id="deleteByExample" parameterType="com.zwo.modules.system.domain.TbResourcesCriteria" >
-    <!--
-      WARNING - @mbg.generated
-    -->
     delete from tb_resources
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <select id="countByExample" parameterType="com.zwo.modules.system.domain.TbResourcesCriteria" resultType="java.lang.Integer" >
-    <!--
-      WARNING - @mbg.generated
-    -->
     select count(*) from tb_resources
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    <!--
-      WARNING - @mbg.generated
-    -->
     update tb_resources
     <set >
       <if test="record.id != null" >
@@ -192,9 +168,6 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    <!--
-      WARNING - @mbg.generated
-    -->
     update tb_resources
     set ID = #{record.id,jdbcType=VARCHAR},
       NAME = #{record.name,jdbcType=VARCHAR},
@@ -216,5 +189,5 @@
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
-  </update>
+  </update> -->
 </mapper>

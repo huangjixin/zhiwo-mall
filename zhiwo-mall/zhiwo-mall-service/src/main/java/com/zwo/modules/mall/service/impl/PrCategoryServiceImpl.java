@@ -124,7 +124,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "PrCategory", allEntries = true)
+	@CacheEvict(value = "PrCategory",key="#id")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -288,7 +288,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrCategory", allEntries = true)
+	@CacheEvict(value = "PrCategory",key="#record.id")
 	public int updateByPrimaryKeySelective(PrCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -311,7 +311,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 	 * lang.Object)
 	 */
 	@Override
-	@CachePut(value = "PrCategory", key = "#record.id")
+	@CacheEvict(value = "PrCategory",key="#record.id")
 	public int updateByPrimaryKey(PrCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

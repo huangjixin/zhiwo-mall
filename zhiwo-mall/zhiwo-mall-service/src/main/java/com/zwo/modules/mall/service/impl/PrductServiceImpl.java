@@ -121,7 +121,7 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "PrProduct", allEntries = true)
+	@CacheEvict(value = "PrProduct",key="#id")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -308,7 +308,7 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrProduct", allEntries = true)
+	@CacheEvict(value = "PrProduct",key="#record.id")
 	public int updateByPrimaryKeySelective(PrProduct record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -335,7 +335,7 @@ public class PrductServiceImpl extends BaseService<PrProduct> implements IPrduct
 	 * lang.Object)
 	 */
 	@Override
-	@CachePut(value = "PrProduct", key = "#record.id")
+	@CacheEvict(value = "PrProduct",key="#record.id")
 	public int updateByPrimaryKey(PrProduct record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

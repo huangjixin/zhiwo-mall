@@ -14,11 +14,9 @@
 		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 	
-	      
+	<task:annotation-driven scheduler="scheduler" mode="proxy"/>  
+	<task:scheduler id="scheduler" pool-size="10"/> 
 	
-	<!-- <task:annotation-driven scheduler="qbScheduler" mode="proxy"/>  
-	<task:scheduler id="qbScheduler" pool-size="10"/> 
-	
-	<bean id="quartzJob" class="com.cuiyongzhi.wechat.quartz.QuartzJob"></bean> -->
+	<!-- <bean id="quartzJob" class="com.cuiyongzhi.wechat.quartz.QuartzJob"></bean> -->
 
 </beans>

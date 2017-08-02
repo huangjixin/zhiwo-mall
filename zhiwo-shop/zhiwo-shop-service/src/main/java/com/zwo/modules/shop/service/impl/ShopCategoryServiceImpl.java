@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.zwo.modules.mall.service.impl;
+package com.zwo.modules.shop.service.impl;
 
 import java.util.List;
 
@@ -17,11 +17,14 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.zwo.modules.mall.dao.PrImageMapper;
-import com.zwo.modules.mall.domain.PrImage;
-import com.zwo.modules.mall.domain.PrImageCriteria;
-import com.zwo.modules.mall.service.IPrImageService;
+import com.zwo.modules.shop.dao.ShopCategoryMapper;
+import com.zwo.modules.shop.domain.Shop;
+import com.zwo.modules.shop.domain.ShopCategory;
+import com.zwo.modules.shop.domain.ShopCategoryCriteria;
+import com.zwo.modules.shop.domain.ShopCriteria;
+import com.zwo.modules.shop.service.IShopCategoryService;
 import com.zwotech.modules.core.service.impl.BaseService;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -33,18 +36,18 @@ import tk.mybatis.mapper.common.Mapper;
 @Service
 @Lazy(true)
 @Transactional(readOnly = false)
-public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImageService {
-	private static Logger logger = LoggerFactory.getLogger(PrImageServiceImpl.class);
+public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implements IShopCategoryService {
+	private static Logger logger = LoggerFactory.getLogger(ShopCategoryServiceImpl.class);
 
-	private static final String BASE_MESSAGE = "【PrImageServiceImpl服务类提供的基础操作增删改查等】";
+	private static final String BASE_MESSAGE = "【ShopCategoryServiceImpl服务类提供的基础操作增删改查等】";
 
 	@Autowired
 	@Lazy(true)
-	private PrImageMapper prImageMapper;
+	private ShopCategoryMapper shopCategoryMapper;
 
 	@Override
-	public Mapper<PrImage> getBaseMapper() {
-		return prImageMapper;
+	public Mapper<ShopCategory> getBaseMapper() {
+		return null;
 	}
 
 	/*
@@ -54,7 +57,7 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 	 * com.zwotech.modules.core.service.IBaseService#insertBatch(java.util.List)
 	 */
 	/*
-	 * @Override public int insertBatch(List<PrImage> list) { // TODO
+	 * @Override public int insertBatch(List<ShopCategory> list) { // TODO
 	 * Auto-generated method stub return 0; }
 	 */
 
@@ -78,21 +81,21 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrImage", allEntries = true)
+	@CacheEvict(value = "ShopCategory", allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
 
 		// 逻辑操作
-		int result = prImageMapper.deleteByExample(example);
+		int result = shopCategoryMapper.deleteByExample((ShopCategoryCriteria)example);
 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除结束");
 		return result;
 	}
 
-	@CacheEvict(value = "PrImage", allEntries = true)
+	@CacheEvict(value = "ShopCategory", allEntries = true)
 //	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
@@ -102,9 +105,9 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 			logger.info(BASE_MESSAGE + "deleteBatch批量删除ID为：" + list.toString());
 
 		// 逻辑操作
-		PrImageCriteria prImageCriteria = new PrImageCriteria();
-		prImageCriteria.createCriteria().andIdIn(list);
-		int result = prImageMapper.deleteByExample(prImageCriteria);
+		ShopCategoryCriteria shopCategoryCriteria = new ShopCategoryCriteria();
+		shopCategoryCriteria.createCriteria().andIdIn(list);
+		int result = shopCategoryMapper.deleteByExample(shopCategoryCriteria);
 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteBatch批量删除结束");
@@ -119,7 +122,7 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "PrImage",key="#id")
+	@CacheEvict(value = "ShopCategory", key="#id")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -128,7 +131,7 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为：" + id.toString());
 
 		// 逻辑操作
-		int result = super.deleteByPrimaryKey(id);
+		int result = this.shopCategoryMapper.deleteByPrimaryKey(id);
 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除结束");
@@ -142,8 +145,8 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "PrImage", key = "#record.id")
-	public int insert(PrImage record) {
+	@CachePut(value = "ShopCategory", key = "#record.id")
+	public int insert(ShopCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入开始");
@@ -154,7 +157,7 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
 		}
-		int result = super.insert(record);
+		int result = this.shopCategoryMapper.insert(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入结束");
 		return result;
@@ -169,8 +172,8 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 	 */
 
 	@Override
-	@CachePut(value = "PrImage", key = "#record.id")
-	public int insertSelective(PrImage record) {
+	@CachePut(value = "ShopCategory", key = "#record.id")
+	public int insertSelective(ShopCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入开始");
@@ -181,7 +184,7 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
 		}
-		int result = super.insertSelective(record);
+		int result = this.shopCategoryMapper.insertSelective(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入结束");
 		return result;
@@ -196,8 +199,8 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public List<PrImage> selectByExample(Object example) {
-		return null;
+	public List<ShopCategory> selectByExample(Object example) {
+		return shopCategoryMapper.selectByExample((ShopCategoryCriteria)example);
 	}
 
 	/*
@@ -208,9 +211,9 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id", value = "PrImage")
+	@Cacheable(key = "#id", value = "ShopCategory")
 	@Transactional(readOnly = true)
-	public PrImage selectByPrimaryKey(String id) {
+	public ShopCategory selectByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询开始");
@@ -218,10 +221,10 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询参数为：" + id);
 
 		// 逻辑操作
-		PrImage prImage = super.selectByPrimaryKey(id);
+		ShopCategory shopCategory = this.shopCategoryMapper.selectByPrimaryKey(id);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询结束");
-		return prImage;
+		return shopCategory;
 	}
 
 	/*
@@ -231,9 +234,9 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 	 * com.zwotech.modules.core.service.IBaseService#updateByExampleSelective(
 	 * java.lang.Object, java.lang.Object)
 	 */
-	@CacheEvict(value = "PrImage", allEntries = true)
+	@CacheEvict(value = "ShopCategory", allEntries = true)
 	@Override
-	public int updateByExampleSelective(PrImage record, Object example) {
+	public int updateByExampleSelective(ShopCategory record, Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新开始");
@@ -241,7 +244,7 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
 
 		// 逻辑操作
-		int result = super.updateByExampleSelective(record, example);
+		int result = this.shopCategoryMapper.updateByExampleSelective(record,(ShopCategoryCriteria) example);
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新结束");
@@ -256,8 +259,8 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 	 * Object, java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrImage", allEntries = true)
-	public int updateByExample(PrImage record, Object example) {
+	@CacheEvict(value = "ShopCategory", allEntries = true)
+	public int updateByExample(ShopCategory record, Object example) {
 		//日志记录
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新开始");
@@ -265,7 +268,7 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
 										
 		//逻辑操作		
-		int result = super.updateByExample(record, example);
+		int result = this.shopCategoryMapper.updateByExample(record, (ShopCategoryCriteria)example);
 		//日志记录
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新结束");
@@ -280,8 +283,8 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrImage",key="#record.id")
-	public int updateByPrimaryKeySelective(PrImage record) {
+	@CacheEvict(value = "ShopCategory", key="#record.id")
+	public int updateByPrimaryKeySelective(ShopCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新开始");
@@ -289,7 +292,7 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
 
 		// 逻辑操作
-		int result = super.updateByPrimaryKeySelective(record);
+		int result = this.shopCategoryMapper.updateByPrimaryKeySelective(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新结束");
 		return result;
@@ -303,8 +306,8 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrImage",key="#record.id")
-	public int updateByPrimaryKey(PrImage record) {
+	@CacheEvict(value = "ShopCategory", key="#record.id")
+	public int updateByPrimaryKey(ShopCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新开始");
@@ -312,7 +315,7 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为：" + record.toString());
 
 		// 逻辑操作
-		int result = super.updateByPrimaryKey(record);
+		int result = this.shopCategoryMapper.updateByPrimaryKey(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新结束");
 		return result;
@@ -327,12 +330,18 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 	 */
 	@Transactional(readOnly = true)
 	@Override
-	public PageInfo<PrImage> selectByPageInfo(Object example, PageInfo<PrImage> pageInfo) {
+	public PageInfo<ShopCategory> selectByPageInfo(Object example, PageInfo<ShopCategory> pageInfo) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页参数：" + pageInfo.toString());
-		pageInfo = super.selectByPageInfo(example, pageInfo);
+		PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+		List<ShopCategory> list = this.shopCategoryMapper.selectByExample((ShopCategoryCriteria) example);
+		PageInfo<ShopCategory> page = new PageInfo<ShopCategory>(list);
+		pageInfo.setList(list);
+		pageInfo.setTotal(page.getTotal());
+		pageInfo.setEndRow(page.getEndRow());
+		pageInfo.setStartRow(page.getStartRow());
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页结束");
 		return pageInfo;
@@ -340,10 +349,10 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 
 	public static void main(String[] args) {
 		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
-		IPrImageService prImageServiceImpl = (IPrImageService) context.getBean("prImageServiceImpl");
-		PrImage prImage = new PrImage();
-		prImage.setId(System.currentTimeMillis() + "");
-		int result = prImageServiceImpl.insertSelective(prImage);
+		IShopCategoryService shopCategoryServiceImpl = (IShopCategoryService) context.getBean("shopCategoryServiceImpl");
+		ShopCategory shopCategory = new ShopCategory();
+		shopCategory.setId(System.currentTimeMillis() + "");
+		int result = shopCategoryServiceImpl.insertSelective(shopCategory);
 		logger.info(result + "");
 	}
 
