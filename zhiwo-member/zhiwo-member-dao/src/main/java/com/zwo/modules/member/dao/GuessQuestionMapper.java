@@ -7,13 +7,5 @@ import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
 public interface GuessQuestionMapper extends Mapper<GuessQuestion> {
-    int countByExample(GuessQuestionCriteria example);
-
-    int deleteByExample(GuessQuestionCriteria example);
-
-    List<GuessQuestion> selectByExample(GuessQuestionCriteria example);
-
-    int updateByExampleSelective(@Param("record") GuessQuestion record, @Param("example") GuessQuestionCriteria example);
-
-    int updateByExample(@Param("record") GuessQuestion record, @Param("example") GuessQuestionCriteria example);
+    
 }
