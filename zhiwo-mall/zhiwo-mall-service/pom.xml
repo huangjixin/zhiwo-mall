@@ -1,37 +1,30 @@
 <?xml version="1.0"?>
-<project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>com.zwo.mall</groupId>
-		<artifactId>zhiwo-mall</artifactId>
-		<version>1.0</version>
-	</parent>
-	<groupId>com.zwo.mall</groupId>
-	<artifactId>zhiwo-mall-service</artifactId>
-	<version>1.0</version>
-	<packaging>war</packaging>
-	<name>zhiwo-mall-service Maven Webapp</name>
-	<url>http://maven.apache.org</url>
-	<dependencies>
-		<dependency>
-			<groupId>com.zwo.core</groupId>
-			<artifactId>zhiwo-core</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.zwo.mall</groupId>
+    <artifactId>zhiwo-mall</artifactId>
+    <version>1.0</version>
+  </parent>
+  <groupId>com.zwo.mall.service</groupId>
+  <artifactId>zhiwo-mall-service</artifactId>
+  <version>1.0</version>
+  <name>zhiwo-mall-service</name>
+  <url>http://maven.apache.org</url>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <dependencies>
+    <dependency>
 			<groupId>com.zwo.mall</groupId>
-			<artifactId>zhiwo-mall-interface</artifactId>
-			<version>1.0</version>
+  			<artifactId>zhiwo-mall-interface</artifactId>
+  			<version>1.0</version>
 		</dependency>
-		<dependency>
+  		<dependency>
 			<groupId>com.zwo.mall</groupId>
-			<artifactId>zhiwo-mall-dao</artifactId>
-			<version>1.0</version>
+  			<artifactId>zhiwo-mall-dao</artifactId>
+  			<version>1.0</version>
 		</dependency>
-	</dependencies>
-	<build>
-		<finalName>zhiwo-mall-service</finalName>
-	</build>
+  </dependencies>
 </project>
