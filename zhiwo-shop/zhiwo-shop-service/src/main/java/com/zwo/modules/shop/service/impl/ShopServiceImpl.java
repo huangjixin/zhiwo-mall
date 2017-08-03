@@ -109,7 +109,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "Shop", key="#id")
+	@CacheEvict(value = "Shop", key = "#id")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -225,7 +225,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "Shop", key="#record.id")
+	@CacheEvict(value = "Shop", key = "#record.id")
 	public int updateByPrimaryKey(Shop record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -355,8 +355,18 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 	@CacheEvict(value = "Shop", allEntries = true)
 	@Override
 	public int updateByExampleWithBLOBs(ShopWithBLOBs record, ShopCriteria example) {
-		// TODO Auto-generated method stub
-		return 0;
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExampleWithBLOBs更新开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExampleWithBLOBs更新条件对象为：" + record.toString());
+
+		// 逻辑操作
+		int result = this.shopMapper.updateByExampleWithBLOBs(record, example);
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExampleWithBLOBs更新结束");
+		return result;
 	}
 
 	@CacheEvict(value = "Shop", allEntries = true)
