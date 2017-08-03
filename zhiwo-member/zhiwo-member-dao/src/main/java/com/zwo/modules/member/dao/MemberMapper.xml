@@ -106,5 +106,32 @@
     WEIXIN, REAL_NAME, LOGIN_COUNT, SORT, ORG_ID, PARENT_ID, PARENTIDS, MEMBER_GROUP_ID, 
     NICKNAME
   </sql>
-  
+  <select id="selectByPid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    	mem.*
+	FROM
+    	member mem
+    LEFT JOIN
+    	member_product_distribution mpd ON mem.id = mpd.MEMBER_ID
+    LEFT JOIN
+    	pr_product prod ON mpd.PRODUCT_ID = prod.id
+	WHERE
+    	prod.id = #{productId}
+  </select>
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+	    mem.*
+	FROM
+	    member mem
+	        LEFT JOIN
+	    member_product_distribution mpd ON mem.id = mpd.MEMBER_ID
+	        LEFT JOIN
+	    pr_product prod ON prod.id = mpd.PRODUCT_ID
+	        LEFT JOIN
+	    shop s ON s.id = prod.SHOP_ID
+	        LEFT JOIN
+	    tb_user user ON s.USER_ID = user.id
+	WHERE
+	    user.id  = #{userId}
+  </select>
 </mapper>

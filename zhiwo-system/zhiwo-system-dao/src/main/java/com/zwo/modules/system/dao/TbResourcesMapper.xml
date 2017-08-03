@@ -82,6 +82,52 @@
     ID, NAME, PARENT_ID, PARENTIDS, CREATE_DATE, UPDATE_DATE, CREATOR, UPDATER, DESCRIPTION, 
     AUTH_NAME, PATH, SORT, TYPE, CHECKED, TEXT, CODE, ORG_ID
   </sql>
+  <select id="selectByUsernameOrMPhone" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	SELECT 
+    	resources.*
+	FROM
+    tb_user user
+        LEFT JOIN
+    tb_user_group usergroup ON user.USERGROUP_ID = usergroup.id
+        LEFT JOIN
+    tb_user_group_role ugr ON usergroup.id = ugr.USERGROUP_ID
+        LEFT JOIN
+    tb_role role ON ugr.ROLE_ID = role.id
+        LEFT JOIN
+    tb_role_resources rr ON rr.ROLE_ID = role.id
+        LEFT JOIN
+    tb_resources resources ON rr.RESOURCES_ID = resources.id
+    
+    where user.USERNAME=#{usernameOrMPhone} or user.MOBIL_PHONE=#{usernameOrMPhone}
+  </select>
+  <select id="selectByGroupname" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	SELECT 
+    	resources.*
+	FROM
+    tb_user_group usergroup
+        LEFT JOIN
+    tb_user_group_role ugr ON usergroup.id = ugr.USERGROUP_ID
+        LEFT JOIN
+    tb_role role ON ugr.ROLE_ID = role.id
+        LEFT JOIN
+    tb_role_resources rr ON rr.ROLE_ID = role.id
+        LEFT JOIN
+    tb_resources resources ON rr.RESOURCES_ID = resources.id
+    
+    where usergroup.NAME=#{groupname}
+  </select>
+  <select id="selectByRolename" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	SELECT 
+    	resources.*
+	FROM
+    tb_role role
+        LEFT JOIN
+    tb_role_resources rr ON rr.ROLE_ID = role.id
+        LEFT JOIN
+    tb_resources resources ON rr.RESOURCES_ID = resources.id
+    
+    where role.NAME=#{rolename}
+  </select>
   <!-- <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zwo.modules.system.domain.TbResourcesCriteria" >
     select
     <if test="distinct" >

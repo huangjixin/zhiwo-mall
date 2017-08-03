@@ -3,7 +3,10 @@
  */
 package com.zwo.modules.system.service.impl;
 
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +21,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageInfo;
+import com.zwo.modules.system.dao.TbResourcesMapper;
+import com.zwo.modules.system.dao.TbRoleMapper;
+import com.zwo.modules.system.dao.TbUserGroupRoleMapper;
 import com.zwo.modules.system.dao.TbUserMapper;
+import com.zwo.modules.system.domain.TbResources;
+import com.zwo.modules.system.domain.TbRole;
 import com.zwo.modules.system.domain.TbUser;
 import com.zwo.modules.system.domain.TbUserCriteria;
+import com.zwo.modules.system.domain.TbUserGroupRole;
+import com.zwo.modules.system.domain.TbUserGroupRoleCriteria;
 import com.zwo.modules.system.service.ITbUserService;
 import com.zwotech.modules.core.service.impl.BaseService;
 
@@ -41,6 +51,18 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	@Autowired
 	@Lazy(true)
 	private TbUserMapper tbUserMapper;
+
+	@Autowired
+	@Lazy(true)
+	private TbResourcesMapper resourcesMapper;
+
+	@Autowired
+	@Lazy(true)
+	private TbRoleMapper roleMapper;
+	
+	@Autowired
+	@Lazy(true)
+	private TbUserGroupRoleMapper userGroupRoleMapper;
 
 	@Override
 	public Mapper<TbUser> getBaseMapper() {
@@ -93,7 +115,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	}
 
 	@CacheEvict(value = "TbUser", allEntries = true)
-//	@Override
+	// @Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -119,7 +141,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "TbUser", key="#id")
+	@CacheEvict(value = "TbUser", key = "#id")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -258,17 +280,17 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	@Override
 	@CacheEvict(value = "TbUser", allEntries = true)
 	public int updateByExample(TbUser record, Object example) {
-		//日志记录
-		if(logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE+"updateByExample更新开始");
-		if(logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
-										
-		//逻辑操作		
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExample更新开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExample更新对象为：" + record.toString());
+
+		// 逻辑操作
 		int result = super.updateByExample(record, example);
-		//日志记录
-		if(logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE+"updateByExample更新结束");
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExample更新结束");
 		return result;
 	}
 
@@ -280,7 +302,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbUser", key="#record.id")
+	@CacheEvict(value = "TbUser", key = "#record.id")
 	public int updateByPrimaryKeySelective(TbUser record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -298,12 +320,11 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.zwotech.modules.core.service.IBaseService#updateByPrimaryKey(java.
+	 * @see com.zwotech.modules.core.service.IBaseService#updateByPrimaryKey(java.
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbUser", key="#record.id")
+	@CacheEvict(value = "TbUser", key = "#record.id")
 	public int updateByPrimaryKey(TbUser record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -345,6 +366,96 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 		tbUser.setId(System.currentTimeMillis() + "");
 		int result = tbUserServiceImpl.insertSelective(tbUser);
 		logger.info(result + "");
+	}
+
+	@Override
+	public TbUser findByUsername(String username) {
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "findByUsername查询开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "findByUsername查询参数为：" + username);
+
+		TbUserCriteria example = new TbUserCriteria();
+		example.createCriteria().andUsernameEqualTo(username);
+		TbUserCriteria.Criteria criteria = example.createCriteria().andMobilPhoneEqualTo(username);
+		example.or(criteria);
+		List<TbUser> list = tbUserMapper.selectByExample(example);
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "findByUsername查询结束，结果个数为：" + list.size());
+		return list.size() > 0 ? list.get(0) : null;
+	}
+
+	@Override
+	public Set<String> findRoles(String username) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "findRoles查询开始");
+		List<TbRole> list = roleMapper.selectByUsernameOrPhone(username);
+		Set<String> set = new HashSet<String>(list.size());
+		for (TbRole role : list) {
+			set.add(role.getName());
+		}
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "findRoles查询结束");
+		if (logger.isInfoEnabled())
+			logger.info("角色集合是：{：" + set.toString() + "}");
+		return set;
+	}
+
+	@Override
+	public Set<String> findPermissions(String username) {
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "findPermissions查询开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "findPermissions查询参数为：" + username);
+		List<TbResources> resources = resourcesMapper.selectByUsernameOrMPhone(username);
+		Set<String> set = new HashSet<String>(resources.size());
+		for (TbResources resource : resources) {
+			if (null != resource.getAuthName() && !"".equals(resource.getAuthName())) {
+				set.add(resource.getAuthName());
+			}
+		}
+		return set;
+	}
+
+	@Override
+	public TbUser login(TbUser user) {
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "login查询开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "login查询参数为：" + user.toString());
+
+		TbUserCriteria example = new TbUserCriteria();
+		TbUserCriteria.Criteria criteria = example.createCriteria();
+		criteria.andUsernameEqualTo(user.getUsername()).andPasswordEqualTo(user.getPassword());
+		TbUserCriteria.Criteria criteria1 = example.createCriteria();
+		criteria1.andUsernameEqualTo(user.getMobilPhone()).andPasswordEqualTo(user.getPassword());
+		example.or(criteria1);
+		List<TbUser> list = tbUserMapper.selectByExample(example);
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "login查询结束，结果个数为：" + list.size());
+		return list.size() > 0 ? list.get(0) : null;
+	}
+
+	@Override
+	public void connectUserGroupRole(String userGroupId, String roleId) {
+		TbUserGroupRole record = new TbUserGroupRole();
+		record.setId(new Date().getTime() + ""+ Math.round(Math.random() * 99));
+		record.setUsergroupId(userGroupId);
+		record.setRoleId(roleId);
+		userGroupRoleMapper.insert(record);
+	}
+
+	@Override
+	public void unconnectUserGroupRole(String userGroupId, String roleId) {
+		TbUserGroupRoleCriteria example = new TbUserGroupRoleCriteria();
+		example.createCriteria().andUsergroupIdEqualTo(userGroupId)
+				.andRoleIdEqualTo(roleId);
+		userGroupRoleMapper.deleteByExample(example);
 	}
 
 }

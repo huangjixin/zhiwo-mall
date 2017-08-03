@@ -86,4 +86,13 @@
     -->
     ID, NAME, CREATE_DATE, UPDATE_DATE, DISABLED, CREATOR, UPDATER, SORT, ORG_ID, CODE
   </sql>
+  <select id="selectByUsernameOrPhone" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	SELECT 
+    	role.*
+	FROM
+    tb_role role 
+        LEFT JOIN tb_user_group_role ugr on role.id=ugr.ROLE_ID
+        left join tb_user user on ugr.USERGROUP_ID = user.ID
+	where user.USERNAME=#{usernameOrPhone} or user.MOBIL_PHONE=#{usernameOrPhone}
+  </select>
 </mapper>
