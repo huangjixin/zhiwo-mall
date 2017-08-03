@@ -7,13 +7,5 @@ import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
 public interface PrSupplierMapper extends Mapper<PrSupplier> {
-    int countByExample(PrSupplierCriteria example);
-
-    int deleteByExample(PrSupplierCriteria example);
-
-    List<PrSupplier> selectByExample(PrSupplierCriteria example);
-
-    int updateByExampleSelective(@Param("record") PrSupplier record, @Param("example") PrSupplierCriteria example);
-
-    int updateByExample(@Param("record") PrSupplier record, @Param("example") PrSupplierCriteria example);
+   
 }
