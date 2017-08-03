@@ -8,7 +8,7 @@
 		<artifactId>zhiwo-cms</artifactId>
 		<version>1.0</version>
 	</parent>
-	<groupId>com.zwo.cms.modules.portal.service.impl</groupId>
+	<groupId>com.zwo.cms.service</groupId>
 	<artifactId>zhiwo-cms-service</artifactId>
 	<version>1.0</version>
 	<packaging>war</packaging>
