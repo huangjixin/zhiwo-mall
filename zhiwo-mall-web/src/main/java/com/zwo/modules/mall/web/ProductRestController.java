@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
@@ -25,6 +28,7 @@ import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductCriteria;
 import com.zwo.modules.mall.service.IPrductService;
+import com.zwo.modules.system.domain.TbUser;
 import com.zwotech.common.web.BaseController;
 
 @RestController
@@ -116,7 +120,16 @@ public class ProductRestController extends BaseController<PrProduct> {
 		if (result.hasErrors()) {
 
 		}
-		
+		Subject currentUser = SecurityUtils.getSubject();
+		if(currentUser!=null){
+			Session session = currentUser.getSession();
+			if(session != null){
+				TbUser tbUser = (TbUser) session.getAttribute("tbUser");
+				if(tbUser != null){
+					product.setUserId(tbUser.getId());
+				}
+			}
+		}
 		String res = ""+prductService.insertSelective(product);
 		return res;
 	}

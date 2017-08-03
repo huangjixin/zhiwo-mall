@@ -4,6 +4,8 @@
 package com.zwo.modules.mall.service;
 
 import com.zwo.modules.mall.domain.PrProduct;
+import com.zwo.modules.mall.domain.PrProductCriteria;
+import com.zwo.modules.mall.domain.PrProductWithBLOBs;
 import com.zwotech.modules.core.service.IBaseService;
 
 /**
@@ -16,4 +18,22 @@ public interface IPrductService extends IBaseService<PrProduct> {
 	 * @param msg
 	 */
 //	void sendCreateProductTopic(final String msg);
+	
+	int countByExample(PrProductCriteria example);
+
+    int insert(PrProductWithBLOBs record);
+
+    int insertSelective(PrProductWithBLOBs record);
+
+    PrProductWithBLOBs selectByPrimKey(String id);
+
+    int updateByExampleSelective(PrProductWithBLOBs record,PrProductCriteria example);
+
+    int updateByExampleWithBLOBs(PrProductWithBLOBs record, PrProductCriteria example);
+   
+    int updateByExample(PrProduct record,PrProductCriteria example);
+
+    int updateByPrimaryKeySelective(PrProductWithBLOBs record);
+
+    int updateByPrimaryKeyWithBLOBs(PrProductWithBLOBs record);
 }

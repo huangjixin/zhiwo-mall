@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
@@ -24,10 +27,11 @@ import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.domain.PrCategory;
 import com.zwo.modules.mall.domain.PrCategoryCriteria;
 import com.zwo.modules.mall.service.IPrCategoryService;
+import com.zwo.modules.system.domain.TbUser;
 import com.zwotech.common.web.BaseController;
 
 @RestController
-@RequestMapping("category")
+@RequestMapping("prCategory")
 @Lazy(true)
 public class PrCategoryRestController extends BaseController<PrCategory> {
 
@@ -37,12 +41,13 @@ public class PrCategoryRestController extends BaseController<PrCategory> {
 
 	/**
 	 * @Title: deleteById @Description: 批量删除 @param idstring @param
-	 * httpServletRequest @param httpServletResponse @return String 返回类型 @throws
+	 *         httpServletRequest @param httpServletResponse @return String
+	 *         返回类型 @throws
 	 */
 	@RequestMapping(value = "/deleteById")
 	public String deleteById(@RequestParam(value = "ids", required = true) String ids,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
- 
+
 		String[] idArray = ids.split(",");
 		List<String> list = new ArrayList<String>();
 		for (String idstr : idArray) {
@@ -51,10 +56,10 @@ public class PrCategoryRestController extends BaseController<PrCategory> {
 		int result = categoryService.deleteBatch(list);
 		return result + "";
 	}
-	
+
 	@RequestMapping(value = "/delete")
-	public String delete(@RequestParam(value = "id", required = true) String id,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+	public String delete(@RequestParam(value = "id", required = true) String id, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
 		int result = categoryService.deleteByPrimaryKey(id);
 		return result + "";
 	}
@@ -73,7 +78,7 @@ public class PrCategoryRestController extends BaseController<PrCategory> {
 		PrCategory product = categoryService.selectByPrimaryKey(id);
 		return product;
 	}
-	
+
 	/**
 	 * @Description: 获得树结构的列表。
 	 * @param id
@@ -83,18 +88,19 @@ public class PrCategoryRestController extends BaseController<PrCategory> {
 	 * @return
 	 */
 	@RequestMapping(value = "getTreeCategory")
-	public List <PrCategory> getTreeCategory(Model uiModel, HttpServletRequest httpServletRequest,
+	public List<PrCategory> getTreeCategory(Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		List <PrCategory> list = categoryService.getTreeCategory(null);
+		List<PrCategory> list = categoryService.getTreeCategory(null);
 		return list;
 	}
 
 	@RequestMapping(value = "select")
-	public DatagridPage<PrCategory> select(@ModelAttribute PageInfo<PrCategory> pageInfo, @ModelAttribute PrCategory category,
-			Model uiModel, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+	public DatagridPage<PrCategory> select(@ModelAttribute PageInfo<PrCategory> pageInfo,
+			@ModelAttribute PrCategory category, Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
 
 		super.select(pageInfo, uiModel, httpServletRequest, httpServletResponse);
- 
+
 		PrCategoryCriteria productCriteria = null;
 		productCriteria = new PrCategoryCriteria();
 		PrCategoryCriteria.Criteria criteria = productCriteria.createCriteria();
@@ -114,26 +120,26 @@ public class PrCategoryRestController extends BaseController<PrCategory> {
 
 		}
 		
-		String res = ""+this.categoryService.insertSelective(category);
+		String res = "" + this.categoryService.insertSelective(category);
 		return res;
 	}
-	
+
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(@Valid PrCategory category, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-			
+
 		}
-		
-		if("".equals(category.getParentId())){
+
+		if ("".equals(category.getParentId())) {
 			category.setParentId(null);
 		}
-		
-		if(category.getId().equals(category.getParentId())){
+
+		if (category.getId().equals(category.getParentId())) {
 			return "不能够选择自身为父类节点";
 		}
-		
-		String res = ""+this.categoryService.updateByPrimaryKeySelective(category);
+
+		String res = "" + this.categoryService.updateByPrimaryKeySelective(category);
 		return res;
 	}
 }

@@ -23,21 +23,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.zwo.system.service</groupId>
-			<artifactId>zhiwo-system-interface</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.zwo.system.dao</groupId>
-			<artifactId>zhiwo-system-dao</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.zwo.system.pojo</groupId>
-			<artifactId>zhiwo-system-pojo</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.zwo.system.service.impl</groupId>
 			<artifactId>zhiwo-system-service</artifactId>
 			<version>1.0</version>
 		</dependency>

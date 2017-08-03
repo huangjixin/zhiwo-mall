@@ -43,7 +43,7 @@ public class PrProduct implements Serializable {
     private Date updateDate;
 
     /**
-     * 是否禁用
+     * 是否禁用，产品默认不可以用，必须经过审核
      */
     @Column(name = "DISABLE")
     private Boolean disable;
@@ -115,10 +115,76 @@ public class PrProduct implements Serializable {
     private String code;
 
     /**
-     * 品牌外键ID
+     * 产品分类外键ID
      */
     @Column(name = "CATEGORY_ID")
     private String categoryId;
+
+    /**
+     * 是否允许分销
+     */
+    @Column(name = "ALLOW_DISTRIBUTION")
+    private Boolean allowDistribution;
+
+    /**
+     * 分销让利值,是指该商品允许分销以后,销售出去给分销者的钱
+     */
+    @Column(name = "DISTRIBUTION_VALUE")
+    private Double distributionValue;
+
+    /**
+     * 该商品所属的店
+     */
+    @Column(name = "SHOP_ID")
+    private String shopId;
+
+    /**
+     * 用户ID，本来通过shop_id可以通过查询SHOP表拿到用户ID，但是此处为了方便查询做了冗余
+     */
+    @Column(name = "USER_ID")
+    private String userId;
+
+    /**
+     * 进货价
+     */
+    @Column(name = "PURCHASING_COST")
+    private Double purchasingCost;
+
+    /**
+     * 分销介绍
+     */
+    @Column(name = "DIST_INTRUEDUTION")
+    private String distIntruedution;
+
+    /**
+     * 供应商ID
+     */
+    @Column(name = "SUPPLIER_ID")
+    private String supplierId;
+
+    /**
+     * 团购价
+     */
+    @Column(name = "GOURP_SALE_PRICE")
+    private Double gourpSalePrice;
+
+    /**
+     * 独立销售价
+     */
+    @Column(name = "INDEPENDENT_PRICE")
+    private Double independentPrice;
+
+    /**
+     * 开团人数
+     */
+    @Column(name = "NUMBER_COUNT")
+    private Integer numberCount;
+
+    /**
+     * 审核原因，多条用“||”分割开，比如管理员觉得你图片质量非常差，打回去让你重新修改上架，这个时候修改数据库的时候，用“||”分割开来多个原因
+     */
+    @Column(name = "AUDIT_DESCRIPTION")
+    private String auditDescription;
 
     private static final long serialVersionUID = 1L;
 
@@ -227,18 +293,18 @@ public class PrProduct implements Serializable {
     }
 
     /**
-     * 获取是否禁用
+     * 获取是否禁用，产品默认不可以用，必须经过审核
      *
-     * @return DISABLE - 是否禁用
+     * @return DISABLE - 是否禁用，产品默认不可以用，必须经过审核
      */
     public Boolean getDisable() {
         return disable;
     }
 
     /**
-     * 设置是否禁用
+     * 设置是否禁用，产品默认不可以用，必须经过审核
      *
-     * @param disable 是否禁用
+     * @param disable 是否禁用，产品默认不可以用，必须经过审核
      */
     public void setDisable(Boolean disable) {
         this.disable = disable;
@@ -443,39 +509,218 @@ public class PrProduct implements Serializable {
     }
 
     /**
-     * 获取品牌外键ID
+     * 获取产品分类外键ID
      *
-     * @return CATEGORY_ID - 品牌外键ID
+     * @return CATEGORY_ID - 产品分类外键ID
      */
     public String getCategoryId() {
         return categoryId;
     }
 
     /**
-     * 设置品牌外键ID
+     * 设置产品分类外键ID
      *
-     * @param categoryId 品牌外键ID
+     * @param categoryId 产品分类外键ID
      */
     public void setCategoryId(String categoryId) {
         this.categoryId = categoryId == null ? null : categoryId.trim();
     }
-    
-    public String getEnContent() {
-		return enContent;
-	}
 
-	public void setEnContent(String enContent) {
-		this.enContent = enContent;
-	}
+    /**
+     * 获取是否允许分销
+     *
+     * @return ALLOW_DISTRIBUTION - 是否允许分销
+     */
+    public Boolean getAllowDistribution() {
+        return allowDistribution;
+    }
 
-	public String getContent() {
-		return content;
-	}
+    /**
+     * 设置是否允许分销
+     *
+     * @param allowDistribution 是否允许分销
+     */
+    public void setAllowDistribution(Boolean allowDistribution) {
+        this.allowDistribution = allowDistribution;
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    /**
+     * 获取分销让利值,是指该商品允许分销以后,销售出去给分销者的钱
+     *
+     * @return DISTRIBUTION_VALUE - 分销让利值,是指该商品允许分销以后,销售出去给分销者的钱
+     */
+    public Double getDistributionValue() {
+        return distributionValue;
+    }
 
-	private String content;
-    private String enContent;
+    /**
+     * 设置分销让利值,是指该商品允许分销以后,销售出去给分销者的钱
+     *
+     * @param distributionValue 分销让利值,是指该商品允许分销以后,销售出去给分销者的钱
+     */
+    public void setDistributionValue(Double distributionValue) {
+        this.distributionValue = distributionValue;
+    }
+
+    /**
+     * 获取该商品所属的店
+     *
+     * @return SHOP_ID - 该商品所属的店
+     */
+    public String getShopId() {
+        return shopId;
+    }
+
+    /**
+     * 设置该商品所属的店
+     *
+     * @param shopId 该商品所属的店
+     */
+    public void setShopId(String shopId) {
+        this.shopId = shopId == null ? null : shopId.trim();
+    }
+
+    /**
+     * 获取用户ID，本来通过shop_id可以通过查询SHOP表拿到用户ID，但是此处为了方便查询做了冗余
+     *
+     * @return USER_ID - 用户ID，本来通过shop_id可以通过查询SHOP表拿到用户ID，但是此处为了方便查询做了冗余
+     */
+    public String getUserId() {
+        return userId;
+    }
+
+    /**
+     * 设置用户ID，本来通过shop_id可以通过查询SHOP表拿到用户ID，但是此处为了方便查询做了冗余
+     *
+     * @param userId 用户ID，本来通过shop_id可以通过查询SHOP表拿到用户ID，但是此处为了方便查询做了冗余
+     */
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
+    }
+
+    /**
+     * 获取进货价
+     *
+     * @return PURCHASING_COST - 进货价
+     */
+    public Double getPurchasingCost() {
+        return purchasingCost;
+    }
+
+    /**
+     * 设置进货价
+     *
+     * @param purchasingCost 进货价
+     */
+    public void setPurchasingCost(Double purchasingCost) {
+        this.purchasingCost = purchasingCost;
+    }
+
+    /**
+     * 获取分销介绍
+     *
+     * @return DIST_INTRUEDUTION - 分销介绍
+     */
+    public String getDistIntruedution() {
+        return distIntruedution;
+    }
+
+    /**
+     * 设置分销介绍
+     *
+     * @param distIntruedution 分销介绍
+     */
+    public void setDistIntruedution(String distIntruedution) {
+        this.distIntruedution = distIntruedution == null ? null : distIntruedution.trim();
+    }
+
+    /**
+     * 获取供应商ID
+     *
+     * @return SUPPLIER_ID - 供应商ID
+     */
+    public String getSupplierId() {
+        return supplierId;
+    }
+
+    /**
+     * 设置供应商ID
+     *
+     * @param supplierId 供应商ID
+     */
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId == null ? null : supplierId.trim();
+    }
+
+    /**
+     * 获取团购价
+     *
+     * @return GOURP_SALE_PRICE - 团购价
+     */
+    public Double getGourpSalePrice() {
+        return gourpSalePrice;
+    }
+
+    /**
+     * 设置团购价
+     *
+     * @param gourpSalePrice 团购价
+     */
+    public void setGourpSalePrice(Double gourpSalePrice) {
+        this.gourpSalePrice = gourpSalePrice;
+    }
+
+    /**
+     * 获取独立销售价
+     *
+     * @return INDEPENDENT_PRICE - 独立销售价
+     */
+    public Double getIndependentPrice() {
+        return independentPrice;
+    }
+
+    /**
+     * 设置独立销售价
+     *
+     * @param independentPrice 独立销售价
+     */
+    public void setIndependentPrice(Double independentPrice) {
+        this.independentPrice = independentPrice;
+    }
+
+    /**
+     * 获取开团人数
+     *
+     * @return NUMBER_COUNT - 开团人数
+     */
+    public Integer getNumberCount() {
+        return numberCount;
+    }
+
+    /**
+     * 设置开团人数
+     *
+     * @param numberCount 开团人数
+     */
+    public void setNumberCount(Integer numberCount) {
+        this.numberCount = numberCount;
+    }
+
+    /**
+     * 获取审核原因，多条用“||”分割开，比如管理员觉得你图片质量非常差，打回去让你重新修改上架，这个时候修改数据库的时候，用“||”分割开来多个原因
+     *
+     * @return AUDIT_DESCRIPTION - 审核原因，多条用“||”分割开，比如管理员觉得你图片质量非常差，打回去让你重新修改上架，这个时候修改数据库的时候，用“||”分割开来多个原因
+     */
+    public String getAuditDescription() {
+        return auditDescription;
+    }
+
+    /**
+     * 设置审核原因，多条用“||”分割开，比如管理员觉得你图片质量非常差，打回去让你重新修改上架，这个时候修改数据库的时候，用“||”分割开来多个原因
+     *
+     * @param auditDescription 审核原因，多条用“||”分割开，比如管理员觉得你图片质量非常差，打回去让你重新修改上架，这个时候修改数据库的时候，用“||”分割开来多个原因
+     */
+    public void setAuditDescription(String auditDescription) {
+        this.auditDescription = auditDescription == null ? null : auditDescription.trim();
+    }
 }

@@ -41,6 +41,12 @@
 			<version>1.0</version>
 			<type>war</type>
 		</dependency>
+		<!-- 系统依赖库 -->
+		<dependency>
+			<groupId>com.zwo.system.service</groupId>
+			<artifactId>zhiwo-system-service</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>${project.artifactId}</finalName>

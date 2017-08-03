@@ -8,7 +8,7 @@
 		<artifactId>zhiwo-system</artifactId>
 		<version>1.0</version>
 	</parent>
-	<groupId>com.zwo.system.service.impl</groupId>
+	<groupId>com.zwo.system.service</groupId>
 	<artifactId>zhiwo-system-service</artifactId>
 	<version>1.0</version>
 	<name>zhiwo-system-service</name>
@@ -23,7 +23,7 @@
 			<version>1.0</version>
 		</dependency>
 		<dependency>
-			<groupId>com.zwo.system.service</groupId>
+			<groupId>com.zwo.system.interface</groupId>
 			<artifactId>zhiwo-system-interface</artifactId>
 			<version>1.0</version>
 		</dependency>

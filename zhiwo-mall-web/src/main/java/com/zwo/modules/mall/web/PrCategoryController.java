@@ -12,9 +12,9 @@ import com.zwo.modules.mall.service.IPrductService;
 import com.zwotech.common.web.BaseController;
 
 @Controller
-@RequestMapping("category")
+@RequestMapping("prCategory")
 @Lazy(true)
-public class CategoryController extends BaseController<PrProduct> {
+public class PrCategoryController extends BaseController<PrProduct> {
 	@Autowired
 	@Lazy(true)
 	private IPrductService prductService;
