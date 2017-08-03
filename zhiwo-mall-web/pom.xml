@@ -15,11 +15,11 @@
 	<name>zhiwo-mall-web Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
-		<!-- <dependency>
+		<dependency>
 			<groupId>com.zwo.core</groupId>
 			<artifactId>zhiwo-core</artifactId>
 			<version>1.0</version>
-		</dependency> -->
+		</dependency>
 		<dependency>
 			<groupId>com.zwo.mall.service</groupId>
 			<artifactId>zhiwo-mall-service</artifactId>
