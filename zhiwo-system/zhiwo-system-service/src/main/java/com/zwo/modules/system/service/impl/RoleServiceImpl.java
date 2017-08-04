@@ -380,6 +380,8 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 
 	@Override
 	public void batchConnectRoleResources(List<TbRoleResources> roleResources, String roleId) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "批量关联角色资源开始");
 		for (TbRoleResources tbRoleResources : roleResources) {
 			tbRoleResources.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
 		}
@@ -396,6 +398,28 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 				return roleResources.size();
 			}
 		});
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "批量关联角色资源结束");
+	}
+
+	@Override
+	public void batchUnconnectRoleResources(List<TbRoleResources> roleResources, String roleId) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "批量解除角色资源开始");
+		String sql = " delete from tb_role_resources where resources_id=? and role_id=? ";
+		this.jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+			@Override
+			public void setValues(PreparedStatement ps, int i) throws SQLException {
+				ps.setString(1, roleResources.get(i).getResourcesId());
+				ps.setString(2, roleId);
+			}
+			@Override
+			public int getBatchSize() {
+				return roleResources.size();
+			}
+		});
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "批量解除角色资源结束");
 	}
 
 }
