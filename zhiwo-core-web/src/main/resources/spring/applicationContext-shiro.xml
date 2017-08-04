@@ -124,6 +124,7 @@
 		<property name="filterChainDefinitions">
 			<value>
 				/login = anon
+				/checkLogin = anon
 				/logout = logout
 				/authenticated = authc
 				/css/* = anon
@@ -131,6 +132,7 @@
 				/js/* = anon
 				/*.htm = anon
 				/*.html = anon
+				/** = anon
 			</value>
 		</property>
 	</bean>

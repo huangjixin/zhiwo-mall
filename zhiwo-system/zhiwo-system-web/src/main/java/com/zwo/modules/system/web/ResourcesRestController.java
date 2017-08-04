@@ -25,18 +25,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.DatagridPage;
 import com.github.pagehelper.PageInfo;
-import com.zwo.modules.system.domain.TbRole;
-import com.zwo.modules.system.domain.TbRoleCriteria;
-import com.zwo.modules.system.service.ITbRoleService;
+import com.zwo.modules.system.domain.TbResources;
+import com.zwo.modules.system.domain.TbResourcesCriteria;
+import com.zwo.modules.system.service.ITbResourcesService;
 import com.zwotech.common.web.BaseController;
 
 @RestController
-@RequestMapping("role")
+@RequestMapping("resources")
 @Lazy(true)
-public class ResourcesRestController extends BaseController<TbRole> {
+public class ResourcesRestController extends BaseController<TbResources> {
 	@Autowired
 	@Lazy(true)
-	private ITbRoleService roleService;
+	private ITbResourcesService resourcesService;
 	
 	/** 
 	 * @Title: deleteById 
@@ -56,7 +56,7 @@ public class ResourcesRestController extends BaseController<TbRole> {
 		for (String idstr : ids) {
 			list.add(idstr);
 		}
-		int result = roleService.deleteBatch(list);
+		int result = resourcesService.deleteBatch(list);
 		return result+"";
 	}
 	
@@ -73,7 +73,7 @@ public class ResourcesRestController extends BaseController<TbRole> {
 	public String delete(@RequestParam(value = "id",required=true) String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
 		
-		int result = roleService.deleteByPrimaryKey(id);
+		int result = resourcesService.deleteByPrimaryKey(id);
 		return result+"";
 	}
 	 
@@ -86,49 +86,49 @@ public class ResourcesRestController extends BaseController<TbRole> {
 	 * @return
 	 */
 	@RequestMapping(value = "/show/{id}")
-	public TbRole getTbRole(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
+	public TbResources getTbResources(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		TbRole tbrole = roleService.selectByPrimaryKey(id);
+		TbResources tbresources = resourcesService.selectByPrimaryKey(id);
 		
-		return tbrole;
+		return tbresources;
 	}
 	
 	@RequestMapping(value = "/select")
 	@ResponseBody
-	public DatagridPage<TbRole> select(@ModelAttribute PageInfo<TbRole> pageInfo, @ModelAttribute TbRole tbrole, Model uiModel,
+	public DatagridPage<TbResources> select(@ModelAttribute PageInfo<TbResources> pageInfo, @ModelAttribute TbResources tbresources, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
 		super.select(pageInfo, uiModel, httpServletRequest, httpServletResponse);
  
-		TbRoleCriteria tbroleCriteria = null;
-		tbroleCriteria = new TbRoleCriteria();
-		TbRoleCriteria.Criteria criteria = tbroleCriteria.createCriteria();
-		tbroleCriteria.setOrderByClause("id desc");
-		if (null != tbrole.getName() && !"".equals(tbrole.getName())) {
-			criteria.andNameLike("%" + tbrole.getName() + "%");
+		TbResourcesCriteria tbresourcesCriteria = null;
+		tbresourcesCriteria = new TbResourcesCriteria();
+		TbResourcesCriteria.Criteria criteria = tbresourcesCriteria.createCriteria();
+		tbresourcesCriteria.setOrderByClause("id desc");
+		if (null != tbresources.getName() && !"".equals(tbresources.getName())) {
+			criteria.andNameLike("%" + tbresources.getName() + "%");
 		}
 		
-		pageInfo = roleService.selectByPageInfo(tbroleCriteria, pageInfo);
+		pageInfo = resourcesService.selectByPageInfo(tbresourcesCriteria, pageInfo);
 		return super.setPage(pageInfo);
 	}
 	
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String create(@Valid TbRole tbrole, BindingResult result, Model uiModel,
+	public String create(@Valid TbResources tbresources, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
 
 		}
 		
-		String res = ""+roleService.insertSelective(tbrole);
+		String res = ""+resourcesService.insertSelective(tbresources);
 		return res;
 	}
 	
 	@RequestMapping(value = "/testcreate", method = RequestMethod.GET)
 	public String testcreate(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		TbRole tbrole = new TbRole();
-		tbrole.setId(System.currentTimeMillis()+"");
-		String res = ""+roleService.insertSelective(tbrole);
+		TbResources tbresources = new TbResources();
+		tbresources.setId(System.currentTimeMillis()+"");
+		String res = ""+resourcesService.insertSelective(tbresources);
 		return res;
 	}
 	
@@ -138,13 +138,13 @@ public class ResourcesRestController extends BaseController<TbRole> {
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(@Valid TbRole role, BindingResult result, Model uiModel,
+	public String update(@Valid TbResources resources, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
 			
 		}
 		
-		String res = ""+this.roleService.updateByPrimaryKeySelective(role);
+		String res = ""+this.resourcesService.updateByPrimaryKeySelective(resources);
 		return res;
 	}
 }

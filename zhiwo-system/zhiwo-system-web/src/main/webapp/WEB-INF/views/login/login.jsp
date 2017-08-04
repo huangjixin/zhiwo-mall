@@ -1,12 +1,37 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>登录页面</title>
+<script src="<%=request.getContextPath()%>/js/jquery-easyui/jquery.min.js"></script>
 </head>
 <body>
-
+username: <input type="text" id="username"><br><br>  
+password: <input type="password" id="password"><br><br>
+<button id="loginbtn">登录</button>
 </body>
+<script type="text/javascript">
+$('#loginbtn').click(function() {
+    var param = {
+        username : $("#username").val(),
+        password : $("#password").val()
+    };
+    $.ajax({ 
+        type: "post", 
+        url: "<%=request.getContextPath()%>" + "/login", 
+        data: param, 
+        dataType: "json", 
+        success: function(data) { 
+            if(data.success == false){
+                alert(data.errorMsg);
+            }else{
+            	alert("登录成功");
+                //登录成功
+                //window.location.href = "<%=request.getContextPath()%>" +  "/loginsuccess.jhtml";
+            }
+        },
+        error: function(data) { 
+            alert("调用失败...."); 
+        }
+    });
+});
+</script>
 </html>
