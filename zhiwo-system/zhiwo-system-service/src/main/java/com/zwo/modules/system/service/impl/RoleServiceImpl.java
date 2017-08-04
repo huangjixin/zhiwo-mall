@@ -19,8 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.system.dao.TbRoleMapper;
+import com.zwo.modules.system.dao.TbRoleResourcesMapper;
 import com.zwo.modules.system.domain.TbRole;
 import com.zwo.modules.system.domain.TbRoleCriteria;
+import com.zwo.modules.system.domain.TbRoleResources;
+import com.zwo.modules.system.domain.TbRoleResourcesCriteria;
 import com.zwo.modules.system.service.ITbRoleService;
 import com.zwotech.modules.core.service.impl.BaseService;
 
@@ -41,6 +44,10 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	@Autowired
 	@Lazy(true)
 	private TbRoleMapper roleMapper;
+	
+	@Autowired
+	@Lazy(true)
+	private TbRoleResourcesMapper roleResourcesMapper;
 
 	@Override
 	public Mapper<TbRole> getBaseMapper() {
@@ -345,6 +352,22 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 		role.setId(System.currentTimeMillis() + "");
 		int result = roleServiceImpl.insertSelective(role);
 		logger.info(result + "");
+	}
+
+	@Override
+	public void connectRoleResources(String resourcesId, String roleId) {
+		TbRoleResources record = new TbRoleResources();
+		record.setResourcesId(resourcesId);
+		record.setRoleId(roleId);
+		this.roleResourcesMapper.insert(record);
+	}
+
+	@Override
+	public void unconnectRoleResources(String resourcesId, String roleId) {
+		TbRoleResourcesCriteria example = new TbRoleResourcesCriteria();
+		example.createCriteria().andResourcesIdEqualTo(resourcesId)
+				.andRoleIdEqualTo(roleId);
+		roleResourcesMapper.deleteByExample(example);
 	}
 
 }

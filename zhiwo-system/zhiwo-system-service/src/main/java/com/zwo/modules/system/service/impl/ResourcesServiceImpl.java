@@ -17,6 +17,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.system.dao.TbResourcesMapper;
 import com.zwo.modules.system.domain.TbResources;
@@ -40,11 +41,11 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 
 	@Autowired
 	@Lazy(true)
-	private TbResourcesMapper roleMapper;
+	private TbResourcesMapper resourcesMapper;
 
 	@Override
 	public Mapper<TbResources> getBaseMapper() {
-		return roleMapper;
+		return null;
 	}
 
 	/*
@@ -85,7 +86,7 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
 
 		// 逻辑操作
-		int result = roleMapper.deleteByExample(example);
+		int result = resourcesMapper.deleteByExample((TbResourcesCriteria)example);
 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除结束");
@@ -104,7 +105,7 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 		// 逻辑操作
 		TbResourcesCriteria roleCriteria = new TbResourcesCriteria();
 		roleCriteria.createCriteria().andIdIn(list);
-		int result = roleMapper.deleteByExample(roleCriteria);
+		int result = resourcesMapper.deleteByExample(roleCriteria);
 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteBatch批量删除结束");
@@ -128,7 +129,7 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为：" + id.toString());
 
 		// 逻辑操作
-		int result = super.deleteByPrimaryKey(id);
+		int result = resourcesMapper.deleteByPrimaryKey(id);
 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除结束");
@@ -149,12 +150,14 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 			logger.info(BASE_MESSAGE + "insert插入开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
 		}
-		int result = super.insert(record);
+		int result = resourcesMapper.insert(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入结束");
 		return result;
@@ -176,12 +179,14 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 			logger.info(BASE_MESSAGE + "insert插入开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
 		}
-		int result = super.insertSelective(record);
+		int result = resourcesMapper.insertSelective(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入结束");
 		return result;
@@ -197,7 +202,7 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 	@Override
 	@Transactional(readOnly = true)
 	public List<TbResources> selectByExample(Object example) {
-		return null;
+		return this.resourcesMapper.selectByExample((TbResourcesCriteria)example);
 	}
 
 	/*
@@ -218,7 +223,7 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询参数为：" + id);
 
 		// 逻辑操作
-		TbResources role = super.selectByPrimaryKey(id);
+		TbResources role = resourcesMapper.selectByPrimaryKey(id);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询结束");
 		return role;
@@ -239,9 +244,11 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
-
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}
 		// 逻辑操作
-		int result = super.updateByExampleSelective(record, example);
+		int result = resourcesMapper.updateByExampleSelective(record, (TbResourcesCriteria)example);
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新结束");
@@ -263,9 +270,11 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 			logger.info(BASE_MESSAGE+"updateByExample更新开始");
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
-										
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}								
 		//逻辑操作		
-		int result = super.updateByExample(record, example);
+		int result = resourcesMapper.updateByExample(record, (TbResourcesCriteria)example);
 		//日志记录
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新结束");
@@ -287,9 +296,11 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
-
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}
 		// 逻辑操作
-		int result = super.updateByPrimaryKeySelective(record);
+		int result = resourcesMapper.updateByPrimaryKeySelective(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新结束");
 		return result;
@@ -310,9 +321,11 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为：" + record.toString());
-
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}
 		// 逻辑操作
-		int result = super.updateByPrimaryKey(record);
+		int result = resourcesMapper.updateByPrimaryKey(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新结束");
 		return result;
@@ -332,7 +345,13 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 			logger.info(BASE_MESSAGE + "分页开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页参数：" + pageInfo.toString());
-		pageInfo = super.selectByPageInfo(example, pageInfo);
+		PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+		List<TbResources> list = this.resourcesMapper.selectByExample((TbResourcesCriteria) example);
+		PageInfo<TbResources> page = new PageInfo<TbResources>(list);
+		pageInfo.setList(list);
+		pageInfo.setTotal(page.getTotal());
+		pageInfo.setEndRow(page.getEndRow());
+		pageInfo.setStartRow(page.getStartRow());
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页结束");
 		return pageInfo;
