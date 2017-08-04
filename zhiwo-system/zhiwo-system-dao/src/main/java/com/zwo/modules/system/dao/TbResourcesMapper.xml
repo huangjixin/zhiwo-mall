@@ -490,6 +490,7 @@
     tb_resources resources ON rr.RESOURCES_ID = resources.id
     
     where user.USERNAME=#{usernameOrMPhone} or user.MOBIL_PHONE=#{usernameOrMPhone}
+    	   or user.EMAIL=#{usernameOrMPhone}
   </select>
   <select id="selectByGroupname" resultMap="BaseResultMap" parameterType="java.lang.String">
   	SELECT 

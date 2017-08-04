@@ -454,7 +454,10 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 		criteria.andUsernameEqualTo(user.getUsername()).andPasswordEqualTo(user.getPassword());
 		TbUserCriteria.Criteria criteria1 = example.createCriteria();
 		criteria1.andUsernameEqualTo(user.getMobilPhone()).andPasswordEqualTo(user.getPassword());
+		TbUserCriteria.Criteria criteria2 = example.createCriteria();
+		criteria2.andEmailEqualTo(user.getMobilPhone()).andPasswordEqualTo(user.getPassword());
 		example.or(criteria1);
+		example.or(criteria2);
 		List<TbUser> list = tbUserMapper.selectByExample(example);
 		// 日志记录
 		if (logger.isInfoEnabled())
