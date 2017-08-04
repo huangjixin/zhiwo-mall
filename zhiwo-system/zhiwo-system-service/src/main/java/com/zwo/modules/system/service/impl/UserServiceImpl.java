@@ -32,6 +32,7 @@ import com.zwo.modules.system.domain.TbUserCriteria;
 import com.zwo.modules.system.domain.TbUserGroupRole;
 import com.zwo.modules.system.domain.TbUserGroupRoleCriteria;
 import com.zwo.modules.system.service.ITbUserService;
+import com.zwotech.common.utils.PasswordHelper;
 import com.zwotech.modules.core.service.impl.BaseService;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -176,6 +177,10 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
 		}
+		//逻辑操作		
+		if(record.getPassword()!=null){
+			record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
+		}
 		int result = super.insert(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入结束");
@@ -202,6 +207,9 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
+		}
+		if(record.getPassword()!=null){
+			record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
 		}
 		int result = super.insertSelective(record);
 		if (logger.isInfoEnabled())
@@ -263,6 +271,9 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
 
 		// 逻辑操作
+		if(record.getPassword()!=null){
+			record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
+		}
 		int result = super.updateByExampleSelective(record, example);
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -287,6 +298,9 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 			logger.info(BASE_MESSAGE + "updateByExample更新对象为：" + record.toString());
 
 		// 逻辑操作
+		if(record.getPassword()!=null){
+			record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
+		}
 		int result = super.updateByExample(record, example);
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -311,6 +325,9 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
 
 		// 逻辑操作
+		if(record.getPassword()!=null){
+			record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
+		}
 		int result = super.updateByPrimaryKeySelective(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新结束");
@@ -333,6 +350,10 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为：" + record.toString());
 
 		// 逻辑操作
+		if(record.getPassword()!=null){
+			record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
+		}
+		
 		int result = super.updateByPrimaryKey(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新结束");

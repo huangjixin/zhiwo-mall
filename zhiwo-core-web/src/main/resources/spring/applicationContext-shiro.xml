@@ -19,13 +19,17 @@
 	<bean id="credentialsMatcher"
 		class="com.zwotech.common.security.shiro.credentials.RetryLimitHashedCredentialsMatcher">
 <!-- 		<constructor-arg ref="shiroCacheManager" /> -->
-		<property name="cacheManager" ref="shiroCacheManager"></property>
+<!-- 		<property name="cacheManager" ref="shiroCacheManager"></property> -->
+		<!-- redis缓存 -->
+		<property name="cacheManager" ref="redisShiroCacheManager"></property>
 		<property name="hashAlgorithmName" value="md5" />
 		<property name="hashIterations" value="2" />
 		<property name="storedCredentialsHexEncoded" value="true" />
 	</bean>
 	
-	<bean id="userRealm" class="com.zwotech.common.security.shiro.realm.UserRealm">
+	<bean id="userRealm" class="com.zwo.modules.system.service.impl.UserRealm">
+		<!-- redis缓存，Redis没有使用的时候，请放开。 -->
+		<!-- <property name="cacheManager" value="redisShiroCacheManager"></property> -->
         <property name="credentialsMatcher" ref="credentialsMatcher"/>
         <property name="cachingEnabled" value="true"/>
         <property name="authenticationCachingEnabled" value="true"/>
@@ -60,8 +64,8 @@
 		<property name="sessionValidationSchedulerEnabled" value="true" />
 		<property name="sessionValidationScheduler" ref="sessionValidationScheduler" />
 		<!-- 此处必须严重注意，不要用Redis的话，要把下面的注释打开，把redisSessionDAO给注释 -->
-		<property name="sessionDAO" ref="sessionDAO" />
-		<!-- <property name="sessionDAO" ref="redisSessionDAO" /> -->
+		<!-- <property name="sessionDAO" ref="sessionDAO" /> -->
+		<property name="sessionDAO" ref="redisSessionDAO" />
 		<property name="sessionIdCookieEnabled" value="true" />
 		<property name="sessionIdCookie" ref="sessionIdCookie" />
 	</bean>
@@ -82,8 +86,8 @@
 		<property name="realm" ref="userRealm" />
 		<property name="sessionManager" ref="sessionManager" />
 		<!-- 此处必须严重注意，不要用Redis的话，要把下面的注释打开，把redisSessionDAO给注释 -->
-		<!-- <property name="cacheManager" ref="redisShiroCacheManager" /> -->
-		<property name="cacheManager" ref="shiroCacheManager" />
+		<property name="cacheManager" ref="redisShiroCacheManager" />
+		<!-- <property name="cacheManager" ref="shiroCacheManager" /> -->
 		<property name="rememberMeManager" ref="rememberMeManager" />
 	</bean>
 
@@ -99,41 +103,34 @@
 		<property name="usernameParam" value="username" />
 		<property name="passwordParam" value="password" />
 		<property name="rememberMeParam" value="rememberMe" />
-		<property name="successUrl" value="/admin/index" />
-		<property name="loginUrl" value="/admin/login" />
+		<property name="successUrl" value="/index" />
+		<property name="loginUrl" value="/login" />
 	</bean>
 	<bean id="logoutFilter" class="org.apache.shiro.web.filter.authc.LogoutFilter">
-		<property name="redirectUrl" value="/admin/login" />
+		<property name="redirectUrl" value="/login" />
 	</bean>
-	<bean id="forceLogoutFilter" class="com.zwotech.modules.syst.web.ForceLogoutFilter">
-		<property name="loginUrl" value="/admin/login" />
-	</bean>
-	<!-- <bean id="kickoutSessionControlFilter" class="com.github.zhangkaitao.shiro.chapter18.web.shiro.filter.KickoutSessionControlFilter">
-	    <property name="cacheManager" ref="cacheManager"/>
-	    <property name="sessionManager" ref="sessionManager"/>
-	    <property name="kickoutAfter" value="false"/>
-	    <property name="maxSession" value="2"/>
-	    <property name="kickoutUrl" value="/login?kickout=1"/>
-	</bean> -->
+	
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" />
-		<property name="loginUrl" value="/admin/login" />
-		<property name="unauthorizedUrl" value="/admin/login" />
-		<property name="successUrl" value="/admin/index" />
+		<property name="loginUrl" value="/login" />
+		<property name="unauthorizedUrl" value="/login" />
+		<property name="successUrl" value="/index" />
 		<property name="filters">
 			<util:map>
 				<entry key="authc" value-ref="formAuthenticationFilter" />
 				<entry key="logout" value-ref="logoutFilter" />
-				<entry key="forceLogout" value-ref="forceLogoutFilter" />
-				<!-- <entry key="sysUser" value-ref="sysUserFilter" /> -->
 			</util:map>
 		</property>
 		<property name="filterChainDefinitions">
 			<value>
-				/admin/login = anon
-				/admin/logout = logout
-				/admin/authenticated = authc
-				/admin/** = forceLogout,user
+				/login = anon
+				/logout = logout
+				/authenticated = authc
+				/css/* = anon
+				/images/* = anon
+				/js/* = anon
+				/*.htm = anon
+				/*.html = anon
 			</value>
 		</property>
 	</bean>

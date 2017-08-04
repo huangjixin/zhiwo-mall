@@ -21,67 +21,9 @@
 		<property name="cacheManagers">
 			<list>
 				<ref bean="ehCacheCacheManager" />
-				<!-- <ref bean="redisCacheManager" /> -->
+				<ref bean="redisCacheManager" />
 			</list>
 		</property>
 		<property name="fallbackToNoOpCache" value="true" />
-	</bean>    
-	<!--  -->
-		
-	 <!-- <bean id="ehCacheCacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
-		<property name="cacheManager" ref="ehcacheManager" />
-		<property name="transactionAware" value="true" />
-	</bean> -->
-
-	<!--<cache:advice id="userCacheAdvice" cache-manager="ehCacheCacheManager">
-		<cache:caching cache="user">
-			<cache:cacheable method="selectByPrimaryKey" key="#id"/>
-			<cache:cacheable method="getByParentId" key="#id" />
-			<cache:cacheable method="insert" key="#record.id" />
-			<cache:cacheable method="insertSelective" key="#record.id" />
-			<cache:cacheable method="findByUsername" key="#username" />
-			<cache:cache-evict all-entries="true" method="deleteByPrimaryKey"
-				key="#id" />
-			<cache:cache-evict all-entries="true"
-				method="updateByPrimaryKeySelective" key="#record.id" />
-			<cache:cache-evict all-entries="true" method="updateByPrimaryKey"
-				key="#record.id" />
-		</cache:caching>
-	</cache:advice>
-
-	<cache:advice id="resourceCacheAdvice" cache-manager="ehCacheCacheManager">
-		<cache:caching cache="resources">
-			<cache:cacheable method="selectByPrimaryKey" key="#id" />
-			<cache:cacheable method="getByParentId" key="#id" />
-			<cache:cacheable method="insert" key="#record.id" />
-			<cache:cacheable method="insertSelective" key="#record.id" />
-			<cache:cache-evict all-entries="true" method="deleteByPrimaryKey"
-				key="#id" />
-			<cache:cache-evict all-entries="true"
-				method="updateByPrimaryKeySelective" key="#record.id" />
-			<cache:cache-evict all-entries="true" method="updateByPrimaryKey"
-				key="#record.id" />
-		</cache:caching>
-	</cache:advice>
-
-	<aop:config>
-		<aop:advisor advice-ref="userCacheAdvice"
-			pointcut="execution(* com.zwotech.modules.syst.service.impl.UserServiceImpl.*(..))" />
-		<aop:advisor advice-ref="resourceCacheAdvice"
-			pointcut="execution(* com.zwotech.modules.syst.service.impl.ResourcesServiceImpl.*(..))" />
-	</aop:config> -->
-	
-	<!-- <bean id="springCacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager"> 
-		<property name="cacheManager" ref="cacheManager" /> </bean> <bean id="shiroCacheManager" 
-		class="com.zwotech.common.security.shiro.cache.SpringCacheManagerWrapper"> 
-		<property name="cacheManager" ref="springCacheManager" /> </bean> -->
-
-	<!-- <bean id="redisCacheManager" class="org.springframework.data.redis.cache.RedisCacheManager"> 
-		<constructor-arg name="redisOperations" ref="redisTemplate" /> <property 
-		name="defaultExpiration" value="${redis.timeout}" /> </bean> -->
-
-	<!-- <bean id="cacheManager" class="org.springframework.cache.support.CompositeCacheManager"> 
-		<property name="cacheManagers"> <list> <ref bean="ehcacheManager" /> <ref 
-		bean="redisCacheManager" /> </list> </property> <property name="fallbackToNoOpCache" 
-		value="true" /> </bean> -->
+	</bean>
 </beans>

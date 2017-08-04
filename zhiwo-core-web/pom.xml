@@ -20,6 +20,11 @@
 			<artifactId>zhiwo-core</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.zwo.system.service</groupId>
+			<artifactId>zhiwo-system-service</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>zhiwo-core-web</finalName>

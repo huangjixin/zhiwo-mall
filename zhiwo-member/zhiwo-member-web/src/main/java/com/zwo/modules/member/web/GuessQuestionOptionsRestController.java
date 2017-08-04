@@ -1,4 +1,4 @@
-package com.zwo.modules.mall.web;
+package com.zwo.modules.member.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,9 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
@@ -25,20 +22,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.DatagridPage;
 import com.github.pagehelper.PageInfo;
-import com.zwo.modules.mall.domain.PrProductPropertyValue;
-import com.zwo.modules.mall.domain.PrProductPropertyValueCriteria;
-import com.zwo.modules.mall.service.IPrProductPropertyValueService;
-import com.zwo.modules.mall.service.IPrductService;
-import com.zwo.modules.system.domain.TbUser;
+import com.zwo.modules.member.domain.GuessQuestionOptions;
+import com.zwo.modules.member.domain.GuessQuestionOptionsCriteria;
+import com.zwo.modules.member.service.IGuessQuestionOptionsService;
 import com.zwotech.common.web.BaseController;
 
 @RestController
-@RequestMapping("product")
+@RequestMapping("guessQuestionOptions")
 @Lazy(true)
-public class ProductPropertyValueRestController extends BaseController<PrProductPropertyValue> {
+public class GuessQuestionOptionsRestController extends BaseController<GuessQuestionOptions> {
 	@Autowired
 	@Lazy(true)
-	private IPrProductPropertyValueService productPropertyValueService;
+	private IGuessQuestionOptionsService guessQuestionOptionsService;
 	
 	/** 
 	 * @Title: deleteById 
@@ -58,7 +53,7 @@ public class ProductPropertyValueRestController extends BaseController<PrProduct
 		for (String idstr : ids) {
 			list.add(idstr);
 		}
-		int result = productPropertyValueService.deleteBatch(list);
+		int result = guessQuestionOptionsService.deleteBatch(list);
 		return result+"";
 	}
 	
@@ -75,7 +70,7 @@ public class ProductPropertyValueRestController extends BaseController<PrProduct
 	public String delete(@RequestParam(value = "id",required=true) String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
 		
-		int result = productPropertyValueService.deleteByPrimaryKey(id);
+		int result = guessQuestionOptionsService.deleteByPrimaryKey(id);
 		return result+"";
 	}
 	 
@@ -88,58 +83,49 @@ public class ProductPropertyValueRestController extends BaseController<PrProduct
 	 * @return
 	 */
 	@RequestMapping(value = "/show/{id}")
-	public PrProductPropertyValue getPrProductPropertyValue(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
+	public GuessQuestionOptions getGuessQuestionOptions(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		PrProductPropertyValue product = productPropertyValueService.selectByPrimaryKey(id);
+		GuessQuestionOptions guessQuestionOptions = guessQuestionOptionsService.selectByPrimaryKey(id);
 		
-		return product;
+		return guessQuestionOptions;
 	}
 	
 	@RequestMapping(value = "/select")
 	@ResponseBody
-	public DatagridPage<PrProductPropertyValue> select(@ModelAttribute PageInfo<PrProductPropertyValue> pageInfo, @ModelAttribute PrProductPropertyValue product, Model uiModel,
+	public DatagridPage<GuessQuestionOptions> select(@ModelAttribute PageInfo<GuessQuestionOptions> pageInfo, @ModelAttribute GuessQuestionOptions guessQuestionOptions, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
 		super.select(pageInfo, uiModel, httpServletRequest, httpServletResponse);
  
-		PrProductPropertyValueCriteria productCriteria = null;
-		productCriteria = new PrProductPropertyValueCriteria();
-		PrProductPropertyValueCriteria.Criteria criteria = productCriteria.createCriteria();
-		productCriteria.setOrderByClause("id desc");
-		if (null != product.getName() && !"".equals(product.getName())) {
-			criteria.andNameLike("%" + product.getName() + "%");
+		GuessQuestionOptionsCriteria guessQuestionOptionsCriteria = null;
+		guessQuestionOptionsCriteria = new GuessQuestionOptionsCriteria();
+		GuessQuestionOptionsCriteria.Criteria criteria = guessQuestionOptionsCriteria.createCriteria();
+		guessQuestionOptionsCriteria.setOrderByClause("id desc");
+		if (null != guessQuestionOptions.getName() && !"".equals(guessQuestionOptions.getName())) {
+			criteria.andNameLike("%" + guessQuestionOptions.getName() + "%");
 		}
 		
-		pageInfo = productPropertyValueService.selectByPageInfo(productCriteria, pageInfo);
+		pageInfo = guessQuestionOptionsService.selectByPageInfo(guessQuestionOptionsCriteria, pageInfo);
 		return super.setPage(pageInfo);
 	}
 	
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String create(@Valid PrProductPropertyValue product, BindingResult result, Model uiModel,
+	public String create(@Valid GuessQuestionOptions guessQuestionOptions, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
 
 		}
-		/*Subject currentUser = SecurityUtils.getSubject();
-		if(currentUser!=null){
-			Session session = currentUser.getSession();
-			if(session != null){
-				TbUser tbUser = (TbUser) session.getAttribute("tbUser");
-				if(tbUser != null){
-					product.setUserId(tbUser.getId());
-				}
-			}
-		}*/
-		String res = ""+productPropertyValueService.insertSelective(product);
+		
+		String res = ""+guessQuestionOptionsService.insertSelective(guessQuestionOptions);
 		return res;
 	}
 	
 	@RequestMapping(value = "/testcreate", method = RequestMethod.GET)
 	public String testcreate(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		PrProductPropertyValue product = new PrProductPropertyValue();
-		product.setId(System.currentTimeMillis()+"");
-		String res = ""+productPropertyValueService.insertSelective(product);
+		GuessQuestionOptions guessQuestionOptions = new GuessQuestionOptions();
+		guessQuestionOptions.setId(System.currentTimeMillis()+"");
+		String res = ""+guessQuestionOptionsService.insertSelective(guessQuestionOptions);
 		return res;
 	}
 	
@@ -149,13 +135,13 @@ public class ProductPropertyValueRestController extends BaseController<PrProduct
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(@Valid PrProductPropertyValue product, BindingResult result, Model uiModel,
+	public String update(@Valid GuessQuestionOptions guessQuestionOptions, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
 			
 		}
 		
-		String res = ""+this.productPropertyValueService.updateByPrimaryKeySelective(product);
+		String res = ""+this.guessQuestionOptionsService.updateByPrimaryKeySelective(guessQuestionOptions);
 		return res;
 	}
 }
