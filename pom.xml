@@ -877,5 +877,6 @@
 		<module>zhiwo-core-web</module>
 		<module>zhiwo-fileupload-web</module>
 		<module>zhiwo-cms-web</module>
+		<module>zhiwo-shop-web</module>
 	</modules>
 </project>

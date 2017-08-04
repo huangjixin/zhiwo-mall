@@ -8,7 +8,7 @@
 		<artifactId>zhiwo-shop</artifactId>
 		<version>1.0</version>
 	</parent>
-	<groupId>com.zwo.shop.service</groupId>
+	<groupId>com.zwo.shop.interface</groupId>
 	<artifactId>zhiwo-shop-interface</artifactId>
 	<version>1.0</version>
 	<name>zhiwo-shop-interface</name>
