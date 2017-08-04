@@ -11,8 +11,7 @@
 	<groupId>com.zwo.cms.service</groupId>
 	<artifactId>zhiwo-cms-service</artifactId>
 	<version>1.0</version>
-	<packaging>war</packaging>
-	<name>zhiwo-cms-service Maven Webapp</name>
+	<name>zhiwo-cms-service</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
