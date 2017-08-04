@@ -347,4 +347,5 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 		logger.info(result + "");
 	}
 
+
 }

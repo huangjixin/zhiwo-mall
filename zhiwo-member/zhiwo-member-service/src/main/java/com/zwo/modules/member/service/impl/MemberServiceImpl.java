@@ -18,8 +18,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageInfo;
+import com.zwo.modules.member.dao.MemberAddressMapper;
 import com.zwo.modules.member.dao.MemberMapper;
 import com.zwo.modules.member.domain.Member;
+import com.zwo.modules.member.domain.MemberAddress;
+import com.zwo.modules.member.domain.MemberAddressCriteria;
 import com.zwo.modules.member.domain.MemberCriteria;
 import com.zwo.modules.member.service.IMemberService;
 import com.zwotech.modules.core.service.impl.BaseService;
@@ -41,6 +44,10 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	@Autowired
 	@Lazy(true)
 	private MemberMapper memberMapper;
+	
+	@Autowired
+	@Lazy(true)
+	private MemberAddressMapper addressMapper;
 
 	@Override
 	public Mapper<Member> getBaseMapper() {
@@ -347,4 +354,15 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		logger.info(result + "");
 	}
 
+	@Override
+	public List<MemberAddress> selectByMId(String memberId) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "会员查询地址开始");
+		MemberAddressCriteria memberAddressCriteria = new MemberAddressCriteria();
+		memberAddressCriteria.createCriteria().andMemberIdEqualTo(memberId);
+		List<MemberAddress> list = addressMapper.selectByExample(memberAddressCriteria);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "会员查询地址结束,结果："+list.size());
+		return list;
+	}
 }
