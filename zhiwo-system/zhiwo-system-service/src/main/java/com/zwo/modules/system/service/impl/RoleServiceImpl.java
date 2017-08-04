@@ -3,6 +3,8 @@
  */
 package com.zwo.modules.system.service.impl;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -14,6 +16,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +45,10 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 
 	private static final String BASE_MESSAGE = "【TbRoleServiceImpl服务类提供的基础操作增删改查等】";
 
+	@Autowired
+	@Lazy(true)
+	private JdbcTemplate jdbcTemplate;
+	
 	@Autowired
 	@Lazy(true)
 	private TbRoleMapper roleMapper;
@@ -368,6 +376,26 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 		example.createCriteria().andResourcesIdEqualTo(resourcesId)
 				.andRoleIdEqualTo(roleId);
 		roleResourcesMapper.deleteByExample(example);
+	}
+
+	@Override
+	public void batchConnectRoleResources(List<TbRoleResources> roleResources, String roleId) {
+		for (TbRoleResources tbRoleResources : roleResources) {
+			tbRoleResources.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
+		}
+		String sql = " INSERT INTO tb_role_resources (id,resources_id,role_id) VALUES (?,?,?)";
+		this.jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+			@Override
+			public void setValues(PreparedStatement ps, int i) throws SQLException {
+				ps.setString(1, roleResources.get(i).getId());
+				ps.setString(2, roleResources.get(i).getResourcesId());
+				ps.setString(3, roleId);
+			}
+			@Override
+			public int getBatchSize() {
+				return roleResources.size();
+			}
+		});
 	}
 
 }
