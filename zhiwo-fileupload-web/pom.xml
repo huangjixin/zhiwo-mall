@@ -20,14 +20,29 @@
 			<artifactId>zhiwo-core</artifactId>
 			<version>1.0</version>
 		</dependency>
-		<!-- <dependency>
+		<dependency>
+			<groupId>com.zwo.system.service</groupId>
+			<artifactId>zhiwo-system-service</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.zwo.cms.service</groupId>
+			<artifactId>zhiwo-cms-service</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.zwo.mall.service</groupId>
+			<artifactId>zhiwo-mall-service</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
 			<groupId>com.zwo.core.web</groupId>
 			<artifactId>zhiwo-core-web</artifactId>
 			<version>1.0</version>
 			<type>war</type>
-		</dependency> -->
+		</dependency>
 	</dependencies>
-	<!-- <build>
+	<build>
 		<finalName>${project.artifactId}</finalName>
 		<plugins>
 			<plugin>
@@ -35,8 +50,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -57,6 +72,7 @@
 					</overlays>
 				</configuration>
 			</plugin>
+			<!-- 配置Tomcat插件 -->
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
@@ -66,5 +82,5 @@
 				</configuration>
 			</plugin>
 		</plugins>
-	</build> -->
+	</build>
 </project>
