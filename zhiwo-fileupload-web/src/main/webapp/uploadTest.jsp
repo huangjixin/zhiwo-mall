@@ -19,7 +19,7 @@
 		<label>选择文件 </label> 
 		<input type="file" id="file" name="file" 
 			style="display: none;" onchange="$('#path').val($('#file').val());"
-			 multiple/>
+			 multiple accept="image/*"/>
 		<input type="button" id="selectFile" value="选择文件"
 			onclick="$('#file').click();" /> 
 		<input type="button" id="upload"
