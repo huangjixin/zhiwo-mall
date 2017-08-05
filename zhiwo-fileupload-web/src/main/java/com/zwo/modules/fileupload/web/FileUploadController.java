@@ -43,7 +43,7 @@ public class FileUploadController {
 	@Autowired
 	@Lazy(true)
 	private ICmsAssetsService cmsAssetsService;
-
+      
 	@RequestMapping(value = "userAssets")
 	@ResponseBody
 	public Map<String, Object> userAssetsUpload(
@@ -54,6 +54,8 @@ public class FileUploadController {
 		List<TbUserAssets> userAssets = new ArrayList<TbUserAssets>();
 		Calendar date = Calendar.getInstance();
 		String rootDir = httpServletRequest.getSession().getServletContext().getRealPath("/");
+		rootDir = "D:"+File.separator;
+		
 		String url = "images/uassets/" + date.get(Calendar.YEAR) + "/" + (date.get(Calendar.MONTH) + 1) + "/"
 				+ date.get(Calendar.DAY_OF_MONTH);
 		String uploadPath = rootDir + "images" + File.separator + "uassets";
