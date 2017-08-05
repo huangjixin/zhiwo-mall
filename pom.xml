@@ -511,7 +511,7 @@
 		<!-- SECURITY end -->
 
 		<!-- Activiti -->
-		<!-- <dependency>
+		<dependency>
 			<groupId>org.activiti</groupId>
 			<artifactId>activiti-engine</artifactId>
 			<version>${activiti.version}</version>
@@ -549,7 +549,7 @@
 			<groupId>org.activiti</groupId>
 			<artifactId>activiti-diagram-rest</artifactId>
 			<version>${activiti.version}</version>
-		</dependency> -->
+		</dependency>
 
 		<!-- 支持activiti缓存 -->
 		<!-- <dependency> <groupId>org.infinispan</groupId> <artifactId>infinispan-core</artifactId> 
