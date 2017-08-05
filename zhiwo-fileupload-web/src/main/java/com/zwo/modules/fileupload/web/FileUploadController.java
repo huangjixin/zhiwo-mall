@@ -1,5 +1,12 @@
 package com.zwo.modules.fileupload.web;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,33 +29,58 @@ import com.zwo.modules.system.service.ITbUserAssetsService;
 @Controller
 @RequestMapping(value = "fileupload")
 @Lazy(true)
-public class FileUploadController{
-	
+public class FileUploadController {
+
 	@Autowired
 	@Lazy(true)
 	private ITbUserAssetsService userAssetsService;
-	
+
 	@Autowired
 	@Lazy(true)
 	private IPrImageService imageService;
-	
+
 	@Autowired
 	@Lazy(true)
 	private ICmsAssetsService cmsAssetsService;
+
 	
 	@RequestMapping(value = "userAssets")
 	@ResponseBody
-	public Map<String, Object> upload(
-			@RequestParam(value = "file", required = false) CommonsMultipartFile[] files, String HTTP_CONTENT_DISPOSITION, 
-			HttpServletRequest httpServletRequest,
+	public Map<String, Object> upload(@RequestParam(value = "file", required = false) CommonsMultipartFile[] files,
+			String HTTP_CONTENT_DISPOSITION, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse, Model uiModel) {
 		Map<String, Object> map = new HashMap<String, Object>();
+		Calendar date = Calendar.getInstance();
+		String rootDir =  httpServletRequest.getSession().getServletContext().getRealPath("/");
+		String uploadPath = rootDir +"userAssets";
+		uploadPath = uploadPath + File.separator + date.get(Calendar.YEAR)
+		+ File.separator + (date.get(Calendar.MONTH)+1) + File.separator
+		+ date.get(Calendar.DAY_OF_MONTH);
 		
-		if ("application/octet-stream".equals(httpServletRequest
-				.getContentType())) {// HTML 5 上传
-		} else {
-			Map<String, Object> map0 = new HashMap<String, Object>();
+		for (int i = 0; i < files.length; i++) {
+			if (!files[i].isEmpty()) {
+				String name = files[i].getOriginalFilename();
+				int index = name.indexOf(".");
+
+				name = new Date().getTime()
+						+ ((int) Math.random() * 10000) + ""
+						+ name.substring(index, name.length());
+				File file = new File(uploadPath,name);
+				
+				if(!file.exists()){//目录不存在则直接创建
+					file.mkdirs();
+				}
+				CommonsMultipartFile commonsMultipartFile = files[i];
+				try {
+					commonsMultipartFile.transferTo(file);
+				} catch (IllegalStateException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
+
 		return map;
 	}
 }
