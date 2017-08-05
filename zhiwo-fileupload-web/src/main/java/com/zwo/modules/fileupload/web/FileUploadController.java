@@ -36,7 +36,7 @@ public class FileUploadController{
 	@Lazy(true)
 	private ICmsAssetsService cmsAssetsService;
 	
-	@RequestMapping(value = "/userAssets")
+	@RequestMapping(value = "userAssets")
 	@ResponseBody
 	public Map<String, Object> upload(
 			@RequestParam(value = "file", required = false) CommonsMultipartFile[] files, String HTTP_CONTENT_DISPOSITION, 
