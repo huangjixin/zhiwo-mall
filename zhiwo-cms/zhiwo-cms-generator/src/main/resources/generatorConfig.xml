@@ -20,23 +20,23 @@
 			password="root">
 		</jdbcConnection>
 
-		<javaModelGenerator targetPackage="com.zwo.modules.cms.domain"
+		<javaModelGenerator targetPackage="com.zwo.modules.mall.domain"
 			targetProject="src/main/java">
 			<property name="enableSubPackages" value="true" />
 			<property name="trimStrings" value="true" />
 		</javaModelGenerator>
 
-		<sqlMapGenerator targetPackage="com.zwo.modules.cms.dao"
+		<sqlMapGenerator targetPackage="com.zwo.modules.mall.dao"
 			targetProject="src/main/java">
 			<property name="enableSubPackages" value="true" />
 		</sqlMapGenerator>
 
 		<javaClientGenerator type="XMLMAPPER"
-			targetPackage="com.zwo.modules.cms.dao" targetProject="src/main/java">
+			targetPackage="com.zwo.modules.mall.dao" targetProject="src/main/java">
 			<property name="enableSubPackages" value="true" />
 		</javaClientGenerator>
 
-		<table tableName="cms_document%">
+		<table tableName="pr_product%">
 			<!-- <generatedKey column="id" sqlStatement="Mysql" identity="true" /> -->
 		</table>
 	</context>
