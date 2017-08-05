@@ -53,10 +53,11 @@ public class UserAssetsServiceImpl extends BaseService<TbUserAssets> implements 
 	 * @see
 	 * com.zwotech.modules.core.service.IBaseService#insertBatch(java.util.List)
 	 */
-	/*
-	 * @Override public int insertBatch(List<TbUserAssets> list) { // TODO
-	 * Auto-generated method stub return 0; }
-	 */
+
+	@Override
+	public int batchInsert(List<TbUserAssets> list) {
+		return userAssetsMapper.batchInsert(list);
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -93,7 +94,7 @@ public class UserAssetsServiceImpl extends BaseService<TbUserAssets> implements 
 	}
 
 	@CacheEvict(value = "TbUserAssets", allEntries = true)
-//	@Override
+	// @Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -119,7 +120,7 @@ public class UserAssetsServiceImpl extends BaseService<TbUserAssets> implements 
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "TbUserAssets", key="#id")
+	@CacheEvict(value = "TbUserAssets", key = "#id")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -258,17 +259,17 @@ public class UserAssetsServiceImpl extends BaseService<TbUserAssets> implements 
 	@Override
 	@CacheEvict(value = "TbUserAssets", allEntries = true)
 	public int updateByExample(TbUserAssets record, Object example) {
-		//日志记录
-		if(logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE+"updateByExample更新开始");
-		if(logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
-										
-		//逻辑操作		
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExample更新开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExample更新对象为：" + record.toString());
+
+		// 逻辑操作
 		int result = super.updateByExample(record, example);
-		//日志记录
-		if(logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE+"updateByExample更新结束");
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExample更新结束");
 		return result;
 	}
 
@@ -280,7 +281,7 @@ public class UserAssetsServiceImpl extends BaseService<TbUserAssets> implements 
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbUserAssets",key="#record.id")
+	@CacheEvict(value = "TbUserAssets", key = "#record.id")
 	public int updateByPrimaryKeySelective(TbUserAssets record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -303,7 +304,7 @@ public class UserAssetsServiceImpl extends BaseService<TbUserAssets> implements 
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbUserAssets", key="#record.id")
+	@CacheEvict(value = "TbUserAssets", key = "#record.id")
 	public int updateByPrimaryKey(TbUserAssets record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -346,5 +347,6 @@ public class UserAssetsServiceImpl extends BaseService<TbUserAssets> implements 
 		int result = userAssetsServiceImpl.insertSelective(userAssets);
 		logger.info(result + "");
 	}
+
 
 }
