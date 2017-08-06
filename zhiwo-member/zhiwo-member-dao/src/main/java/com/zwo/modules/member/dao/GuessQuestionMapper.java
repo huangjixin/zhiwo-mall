@@ -12,5 +12,5 @@ public interface GuessQuestionMapper extends Mapper<GuessQuestion> {
      * @param memberId
      * @return
      */
-    List<GuessQuestion> selectByMemberId(String memberId);
+    List<GuessQuestion> selectGuessQuestionByMemberId(String memberId);
 }

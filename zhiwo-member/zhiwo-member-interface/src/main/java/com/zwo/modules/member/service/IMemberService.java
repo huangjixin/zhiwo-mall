@@ -6,7 +6,9 @@ package com.zwo.modules.member.service;
 import java.util.List;
 
 import com.github.pagehelper.PageInfo;
+import com.zwo.modules.mall.domain.Order;
 import com.zwo.modules.mall.domain.PrProduct;
+import com.zwo.modules.member.domain.GuessQuestion;
 import com.zwo.modules.member.domain.Member;
 import com.zwo.modules.member.domain.MemberAddress;
 import com.zwotech.modules.core.service.IBaseService;
@@ -37,4 +39,46 @@ public interface IMemberService extends IBaseService<Member> {
 	 * @return
 	 */
 	PageInfo<PrProduct> selectByMemberId(String memberId,PageInfo<PrProduct> pageInfo);
+	
+	/**
+     * 根据会员ID查询会员参与的竞猜
+     * @param memberId
+     * @return
+     */
+    List<GuessQuestion> selectGuessQuestionByMemberId(String memberId);
+    
+    /**
+	 * 分页会员ID查询会员参与的竞猜
+	 * @param example
+	 * @param pageInfo
+	 * @return
+	 */
+	PageInfo<GuessQuestion> selectGuessQuestionByMemberId(String memberId,PageInfo<GuessQuestion> pageInfo);
+	/**
+	 * 根据会员ID查询会员参与的订单
+	 * @param memberId
+	 * @return
+	 */
+	List<Order> selectOrderByMemberId(String memberId);
+	
+	/**
+	 * 分页会员ID查询会员参与的订单
+	 * @param example
+	 * @param pageInfo
+	 * @return
+	 */
+	PageInfo<Order> selectOrderByMemberId(String memberId,PageInfo<Order> pageInfo);
+	
+	/**
+	 * 统计会员：我的分销商品盈利
+	 * @param memberId
+	 * @return
+	 */
+	Double sumProfitByMemberId(String memberId);
+	/**
+	 * 统计会员：我的分销商品盈利实际到帐
+	 * @param memberId
+	 * @return
+	 */
+	Double sumRealProfitByMemberId(String memberId);
 }

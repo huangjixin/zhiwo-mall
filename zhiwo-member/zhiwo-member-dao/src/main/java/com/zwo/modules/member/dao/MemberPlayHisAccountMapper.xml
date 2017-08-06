@@ -1,32 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zwo.modules.member.dao.GuessQuestionMapper" >
-  <resultMap id="BaseResultMap" type="com.zwo.modules.member.domain.GuessQuestion" >
+<mapper namespace="com.zwo.modules.member.dao.MemberPlayHisAccountMapper" >
+  <resultMap id="BaseResultMap" type="com.zwo.modules.member.domain.MemberPlayHisAccount" >
     <!--
       WARNING - @mbg.generated
     -->
     <id column="ID" property="id" jdbcType="VARCHAR" />
-    <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
-    <result column="UPDATER" property="updater" jdbcType="VARCHAR" />
-    <result column="ORG_ID" property="orgId" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
     <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
     <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
-    <result column="DISABLE" property="disable" jdbcType="BIT" />
-    <result column="START_TIME" property="startTime" jdbcType="TIMESTAMP" />
-    <result column="END_TIME" property="endTime" jdbcType="TIMESTAMP" />
-    <result column="SORT" property="sort" jdbcType="INTEGER" />
-    <result column="IS_DEFAULT" property="isDefault" jdbcType="BIT" />
-    <result column="EN_NAME" property="enName" jdbcType="VARCHAR" />
-    <result column="NAME" property="name" jdbcType="VARCHAR" />
-    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
-    <result column="ICON" property="icon" jdbcType="VARCHAR" />
-    <result column="KEYWORDS" property="keywords" jdbcType="VARCHAR" />
-    <result column="THUMBNAIL" property="thumbnail" jdbcType="VARCHAR" />
-    <result column="CODE" property="code" jdbcType="VARCHAR" />
-    <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
-    <result column="GUESS_CATEGORY_ID" property="guessCategoryId" jdbcType="VARCHAR" />
-    <result column="GUESS_ANSWER_ID" property="guessAnswerId" jdbcType="VARCHAR" />
-    <result column="QUESTION_END_TIME" property="questionEndTime" jdbcType="TIMESTAMP" />
+    <result column="DISABLED" property="disabled" jdbcType="BIT" />
+    <result column="ZHIHUIDOU_COUNT" property="zhihuidouCount" jdbcType="INTEGER" />
+    <result column="MEMBER_ID" property="memberId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <!--
@@ -96,20 +81,6 @@
     <!--
       WARNING - @mbg.generated
     -->
-    ID, CREATOR, UPDATER, ORG_ID, CREATE_DATE, UPDATE_DATE, DISABLE, START_TIME, END_TIME, 
-    SORT, IS_DEFAULT, EN_NAME, NAME, DESCRIPTION, ICON, KEYWORDS, THUMBNAIL, CODE, USER_ID, 
-    GUESS_CATEGORY_ID, GUESS_ANSWER_ID, QUESTION_END_TIME
+    ID, NAME, CREATE_DATE, UPDATE_DATE, DISABLED, ZHIHUIDOU_COUNT, MEMBER_ID
   </sql>
-  <select id="selectGuessQuestionByMemberId" resultMap="BaseResultMap" parameterType="java.lang.String">
-  	SELECT 
-	    g.*
-	FROM
-	    member mem
-	        LEFT JOIN
-	    member_guess_question mgq ON mem.id = mgq.MEMBER_ID
-	        LEFT JOIN
-	    guess_question g ON g.id = mgq.GUESS_QUESTION_ID
-	WHERE
-	    mem.id = #{memberId}
-  </select>
 </mapper>

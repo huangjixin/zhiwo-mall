@@ -614,6 +614,66 @@ public class MemberProfitCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andTransportFeeIsNull() {
+            addCriterion("TRANSPORT_FEE is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransportFeeIsNotNull() {
+            addCriterion("TRANSPORT_FEE is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransportFeeEqualTo(Double value) {
+            addCriterion("TRANSPORT_FEE =", value, "transportFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransportFeeNotEqualTo(Double value) {
+            addCriterion("TRANSPORT_FEE <>", value, "transportFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransportFeeGreaterThan(Double value) {
+            addCriterion("TRANSPORT_FEE >", value, "transportFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransportFeeGreaterThanOrEqualTo(Double value) {
+            addCriterion("TRANSPORT_FEE >=", value, "transportFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransportFeeLessThan(Double value) {
+            addCriterion("TRANSPORT_FEE <", value, "transportFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransportFeeLessThanOrEqualTo(Double value) {
+            addCriterion("TRANSPORT_FEE <=", value, "transportFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransportFeeIn(List<Double> values) {
+            addCriterion("TRANSPORT_FEE in", values, "transportFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransportFeeNotIn(List<Double> values) {
+            addCriterion("TRANSPORT_FEE not in", values, "transportFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransportFeeBetween(Double value1, Double value2) {
+            addCriterion("TRANSPORT_FEE between", value1, value2, "transportFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransportFeeNotBetween(Double value1, Double value2) {
+            addCriterion("TRANSPORT_FEE not between", value1, value2, "transportFee");
+            return (Criteria) this;
+        }
+
         public Criteria andIdLikeInsensitive(String value) {
             addCriterion("upper(ID) like", value.toUpperCase(), "id");
             return (Criteria) this;
