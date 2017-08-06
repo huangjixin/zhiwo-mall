@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -35,11 +36,13 @@ public class MemberController extends BaseController<Member> {
 	private static final String basePath = "views/mall/member/";
 	
 	@RequestMapping(value = { "", "list" })
+	@RequiresPermissions("member:member:view")
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath+"member_list";
 	}
 	
 	@RequestMapping(value = {"create"},method=RequestMethod.GET)
+	@RequiresPermissions("member:member:create")
 	public String create(@Valid Member member, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		uiModel.addAttribute("member", member);
@@ -47,6 +50,7 @@ public class MemberController extends BaseController<Member> {
 	}
 	  
 	@RequestMapping(value = "edit",method=RequestMethod.GET)
+	@RequiresPermissions("member:member:edit")
 	public String edit(@RequestParam("id") String id, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		Member member = null;

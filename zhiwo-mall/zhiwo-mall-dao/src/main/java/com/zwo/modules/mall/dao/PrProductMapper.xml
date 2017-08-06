@@ -826,4 +826,14 @@
       AUDIT_DESCRIPTION = #{auditDescription,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=VARCHAR}
   </update>
+  
+  <!-- 查询会员分销的商品 -->
+  <select id="selectByMemberId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select prod.* from member mem
+        LEFT JOIN
+    member_product_distribution mpd ON mem.id = mpd.MEMBER_ID
+        LEFT JOIN
+    pr_product prod ON prod.id = mpd.PRODUCT_ID
+    where mem.id= #{memberId}
+  </select>
 </mapper>

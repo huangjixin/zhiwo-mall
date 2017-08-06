@@ -7,7 +7,7 @@
     <artifactId>zhiwo-mall</artifactId>
     <version>1.0</version>
   </parent>
-  <groupId>com.zwo.mall</groupId>
+  <groupId>com.zwo.mall.pojo</groupId>
   <artifactId>zhiwo-mall-pojo</artifactId>
   <version>1.0</version>
   <name>zhiwo-mall-pojo</name>

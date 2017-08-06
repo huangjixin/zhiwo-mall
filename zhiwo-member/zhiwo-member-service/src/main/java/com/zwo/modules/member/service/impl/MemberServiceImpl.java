@@ -17,7 +17,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.zwo.modules.mall.dao.PrProductMapper;
+import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.member.dao.MemberAddressMapper;
 import com.zwo.modules.member.dao.MemberMapper;
 import com.zwo.modules.member.domain.Member;
@@ -44,6 +47,10 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	@Autowired
 	@Lazy(true)
 	private MemberMapper memberMapper;
+	
+	@Autowired
+	@Lazy(true)
+	private PrProductMapper productMapper;
 	
 	@Autowired
 	@Lazy(true)
@@ -355,6 +362,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<MemberAddress> selectByMId(String memberId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "会员查询地址开始");
@@ -364,5 +372,35 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "会员查询地址结束,结果："+list.size());
 		return list;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<PrProduct> selectByMemberId(String memberId) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "会员查询分销的商品开始");
+		List<PrProduct> list = productMapper.selectByMemberId(memberId);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "会员查询分销的商品结束,结果查询的条目数为："+list.size());
+		return list;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public PageInfo<PrProduct> selectByMemberId(String memberId,PageInfo<PrProduct> pageInfo) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询会员分销的商品分页开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询会员分销的商品分页参数：" + pageInfo.toString());
+		PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+		List<PrProduct> list = productMapper.selectByMemberId(memberId);
+		PageInfo<PrProduct> page = new PageInfo<PrProduct>(list);
+		pageInfo.setList(list);
+		pageInfo.setTotal(page.getTotal());
+		pageInfo.setEndRow(page.getEndRow());
+		pageInfo.setStartRow(page.getStartRow());
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询会员分销的商品分页结束");
+		return pageInfo;
 	}
 }

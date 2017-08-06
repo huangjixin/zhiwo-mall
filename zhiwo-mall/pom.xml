@@ -42,16 +42,29 @@
 				</configuration>
 			</plugin> -->
 			<!-- java编译插件 -->
-			<!-- <plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.6.0</version>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+				 <executions>  
+                  <execution>  
+                      <id>default-compile</id>  
+                      <phase>compile</phase>  
+                      <goals>  
+                          <goal>compile</goal>  
+                      </goals>  
+                      <configuration> 
+                      <source>1.8</source>
+					<target>1.8</target> 
+                          <encoding>UTF-8</encoding>  
+                      </configuration>  
+                  </execution>  
+              </executions>
+				<!-- <configuration>
+					<source>1.8</source>
+					<target>1.8</target>
 					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin> -->
+				</configuration> -->
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>

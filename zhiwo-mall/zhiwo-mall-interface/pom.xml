@@ -8,7 +8,7 @@
 		<artifactId>zhiwo-mall</artifactId>
 		<version>1.0</version>
 	</parent>
-	<groupId>com.zwo.mall</groupId>
+	<groupId>com.zwo.mall.interface</groupId>
 	<artifactId>zhiwo-mall-interface</artifactId>
 	<version>1.0</version>
 	<name>zhiwo-mall-interface</name>
@@ -18,7 +18,7 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>com.zwo.mall</groupId>
+			<groupId>com.zwo.mall.pojo</groupId>
   			<artifactId>zhiwo-mall-pojo</artifactId>
   			<version>1.0</version>
 		</dependency>

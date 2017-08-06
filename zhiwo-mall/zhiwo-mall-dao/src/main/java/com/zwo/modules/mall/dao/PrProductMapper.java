@@ -118,4 +118,11 @@ public interface PrProductMapper {
      * @mbggenerated Sat Aug 05 10:56:51 CST 2017
      */
     int updateByPrimaryKey(PrProduct record);
+    
+    /**
+     * 查询会员分销的商品。
+     * @param memberId
+     * @return
+     */
+    List<PrProduct> selectByMemberId(String memberId);
 }
