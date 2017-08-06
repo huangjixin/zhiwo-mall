@@ -162,6 +162,12 @@ public class Order implements Serializable {
     @Column(name = "IS_FORM_SCCUESS")
     private Boolean isFormSccuess;
 
+    /**
+     * 运费
+     */
+    @Column(name = "TRANSPORT_FEE")
+    private Double transportFee;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -626,5 +632,23 @@ public class Order implements Serializable {
      */
     public void setIsFormSccuess(Boolean isFormSccuess) {
         this.isFormSccuess = isFormSccuess;
+    }
+
+    /**
+     * 获取运费
+     *
+     * @return TRANSPORT_FEE - 运费
+     */
+    public Double getTransportFee() {
+        return transportFee;
+    }
+
+    /**
+     * 设置运费
+     *
+     * @param transportFee 运费
+     */
+    public void setTransportFee(Double transportFee) {
+        this.transportFee = transportFee;
     }
 }

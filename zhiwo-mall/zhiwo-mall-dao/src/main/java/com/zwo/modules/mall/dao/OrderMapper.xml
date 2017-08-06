@@ -31,6 +31,7 @@
     <result column="DELIVERY_COMPANY" property="deliveryCompany" jdbcType="VARCHAR" />
     <result column="DELIVERY_ORDER_CODE" property="deliveryOrderCode" jdbcType="VARCHAR" />
     <result column="IS_FORM_SCCUESS" property="isFormSccuess" jdbcType="BIT" />
+    <result column="TRANSPORT_FEE" jdbcType="DOUBLE" property="transportFee" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <!--
@@ -103,7 +104,7 @@
     ID, CREATOR, UPDATER, ORG_ID, CREATE_DATE, UPDATE_DATE, DISABLE, START_TIME, END_TIME, 
     SORT, IS_DEFAULT, DESCRIPTION, CODE, STATUS, SHOP_ID, PRODUCT_ID, DEAL_PRICE, MEMBER_ID, 
     BUY_NUM, RECIVE_NAME, ADDRESS, TELEPHONE, MAIL_CODE, DELIVERY_COMPANY, DELIVERY_ORDER_CODE, 
-    IS_FORM_SCCUESS
+    IS_FORM_SCCUESS,TRANSPORT_FEE
   </sql>
   
 </mapper>

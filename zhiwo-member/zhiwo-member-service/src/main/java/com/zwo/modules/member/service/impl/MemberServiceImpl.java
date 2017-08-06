@@ -19,10 +19,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.zwo.modules.mall.dao.OrderMapper;
 import com.zwo.modules.mall.dao.PrProductMapper;
+import com.zwo.modules.mall.domain.Order;
+import com.zwo.modules.mall.domain.OrderCriteria;
 import com.zwo.modules.mall.domain.PrProduct;
+import com.zwo.modules.member.dao.GuessQuestionMapper;
 import com.zwo.modules.member.dao.MemberAddressMapper;
 import com.zwo.modules.member.dao.MemberMapper;
+import com.zwo.modules.member.dao.MemberProfitMapper;
+import com.zwo.modules.member.domain.GuessQuestion;
 import com.zwo.modules.member.domain.Member;
 import com.zwo.modules.member.domain.MemberAddress;
 import com.zwo.modules.member.domain.MemberAddressCriteria;
@@ -50,11 +56,23 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	
 	@Autowired
 	@Lazy(true)
+	private OrderMapper orderMapper;
+	
+	@Autowired
+	@Lazy(true)
+	private MemberProfitMapper memberProfitMapper ;
+	
+	@Autowired
+	@Lazy(true)
 	private PrProductMapper productMapper;
 	
 	@Autowired
 	@Lazy(true)
 	private MemberAddressMapper addressMapper;
+	
+	@Autowired
+	@Lazy(true)
+	private GuessQuestionMapper questionMapper;
 
 	@Override
 	public Mapper<Member> getBaseMapper() {
@@ -389,7 +407,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	@Transactional(readOnly = true)
 	public PageInfo<PrProduct> selectByMemberId(String memberId,PageInfo<PrProduct> pageInfo) {
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "查询会员分销的商品分页开始");
+			logger.info(BASE_MESSAGE + "查询会员ID(参数)为"+memberId+"分销的商品分页开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "查询会员分销的商品分页参数：" + pageInfo.toString());
 		PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
@@ -402,5 +420,89 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "查询会员分销的商品分页结束");
 		return pageInfo;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<GuessQuestion> selectGuessQuestionByMemberId(String memberId) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询会员id为"+memberId+"竞猜所有问题开始");
+		List<GuessQuestion> list = questionMapper.selectGuessQuestionByMemberId(memberId);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询会员id为"+memberId+"竞猜所有问题结束，结果条目数为："+list.size());
+		return list;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public PageInfo<GuessQuestion> selectGuessQuestionByMemberId(String memberId, PageInfo<GuessQuestion> pageInfo) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询会员id为"+memberId+"竞猜所有问题开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询分页参数：" + pageInfo.toString());
+		PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+		List<GuessQuestion> list = questionMapper.selectGuessQuestionByMemberId(memberId);
+		PageInfo<GuessQuestion> page = new PageInfo<GuessQuestion>(list);
+		pageInfo.setList(list);
+		pageInfo.setTotal(page.getTotal());
+		pageInfo.setEndRow(page.getEndRow());
+		pageInfo.setStartRow(page.getStartRow());
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询会员id为"+memberId+"竞猜所有问题开始");
+		return pageInfo;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Order> selectOrderByMemberId(String memberId) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询订单会员id为"+memberId+"开始");
+		OrderCriteria orderCriteria = new OrderCriteria();
+		orderCriteria.createCriteria().andMemberIdEqualTo(memberId);
+		List<Order> list = orderMapper.selectByExample(orderCriteria);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询订单会员id为"+memberId+"结束，结果条目数为："+list.size());
+		return list;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public PageInfo<Order> selectOrderByMemberId(String memberId, PageInfo<Order> pageInfo) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询订单会员id为"+memberId+"开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询分页参数：" + pageInfo.toString());
+		PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+		OrderCriteria orderCriteria = new OrderCriteria();
+		orderCriteria.createCriteria().andMemberIdEqualTo(memberId);
+		List<Order> list = orderMapper.selectByExample(orderCriteria);
+		PageInfo<Order> page = new PageInfo<Order>(list);
+		pageInfo.setList(list);
+		pageInfo.setTotal(page.getTotal());
+		pageInfo.setEndRow(page.getEndRow());
+		pageInfo.setStartRow(page.getStartRow());
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询订单会员id为"+memberId+"结束");
+		return pageInfo;
+	}
+
+	@Override
+	public Double sumProfitByMemberId(String memberId) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "统计会员我的分销商品盈利,会员id为"+memberId+"开始");
+		Double result = this.memberProfitMapper.sumProfitByMemberId( memberId);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "统计会员我的分销商品盈利,会员id为"+memberId+"结束，结果为："+result);
+		return result;
+	}
+
+	@Override
+	public Double sumRealProfitByMemberId(String memberId) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "统计会员我的分销商品盈利实际到帐,会员id为"+memberId+"开始");
+		Double result = this.memberProfitMapper.sumRealProfitByMemberId( memberId);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "统计会员我的分销商品盈利实际到帐,会员id为"+memberId+"结束，结果为："+result);
+		return result;
 	}
 }
