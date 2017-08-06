@@ -372,6 +372,65 @@ LOCK TABLES `guess_question` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `guess_question_answer`
+--
+
+DROP TABLE IF EXISTS `guess_question_answer`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `guess_question_answer` (
+  `ID` varchar(32) NOT NULL,
+  `question_id` varchar(32) DEFAULT NULL,
+  `question_options_id` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `FK_guess_question_answer_guess_question_idx` (`question_id`),
+  KEY `FK_guess_question_answer_question_options_idx` (`question_options_id`),
+  CONSTRAINT `FK_guess_question_answer_guess_question` FOREIGN KEY (`question_id`) REFERENCES `guess_question` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_guess_question_answer_question_options` FOREIGN KEY (`question_options_id`) REFERENCES `guess_question_options` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='竞猜问题答案';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `guess_question_answer`
+--
+
+LOCK TABLES `guess_question_answer` WRITE;
+/*!40000 ALTER TABLE `guess_question_answer` DISABLE KEYS */;
+/*!40000 ALTER TABLE `guess_question_answer` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `guess_question_memanswer`
+--
+
+DROP TABLE IF EXISTS `guess_question_memanswer`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `guess_question_memanswer` (
+  `ID` varchar(32) NOT NULL,
+  `MEMBER_ID` varchar(32) DEFAULT NULL,
+  `question_id` varchar(32) DEFAULT NULL,
+  `question_options_id` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `FK_GUESS_QUESTION_MEMANSWER_MEMBER_idx` (`MEMBER_ID`),
+  KEY `FK_GUESS_QUESTION_MEMANSWER_QUESTION_idx` (`question_id`),
+  KEY `FK_GUESS_QUESTION_MEMANSWER_OPTIONS_idx` (`question_options_id`),
+  CONSTRAINT `FK_GUESS_QUESTION_MEMANSWER_MEMBER` FOREIGN KEY (`MEMBER_ID`) REFERENCES `member` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_GUESS_QUESTION_MEMANSWER_OPTIONS` FOREIGN KEY (`question_options_id`) REFERENCES `guess_question_options` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_GUESS_QUESTION_MEMANSWER_QUESTION` FOREIGN KEY (`question_id`) REFERENCES `guess_question` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员竞猜的答案';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `guess_question_memanswer`
+--
+
+LOCK TABLES `guess_question_memanswer` WRITE;
+/*!40000 ALTER TABLE `guess_question_memanswer` DISABLE KEYS */;
+/*!40000 ALTER TABLE `guess_question_memanswer` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `guess_question_options`
 --
 
@@ -383,6 +442,7 @@ CREATE TABLE `guess_question_options` (
   `NAME` varchar(100) DEFAULT NULL COMMENT '名称',
   `BET_RATE` double DEFAULT NULL COMMENT '赔率',
   `GUESS_QUESTION_ID` varchar(32) DEFAULT NULL COMMENT '竞猜问题ID',
+  PRIMARY KEY (`ID`),
   KEY `FK_GQOPTIONS_QUESTION_idx` (`GUESS_QUESTION_ID`),
   CONSTRAINT `FK_GQOPTIONS_QUESTION` FOREIGN KEY (`GUESS_QUESTION_ID`) REFERENCES `guess_question` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='竞猜活动备选项目';
@@ -680,6 +740,36 @@ LOCK TABLES `member_play_account` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `member_play_his_account`
+--
+
+DROP TABLE IF EXISTS `member_play_his_account`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `member_play_his_account` (
+  `ID` varchar(32) NOT NULL,
+  `NAME` varchar(120) DEFAULT NULL COMMENT '用户名',
+  `CREATE_DATE` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
+  `UPDATE_DATE` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新日期',
+  `DISABLED` tinyint(1) DEFAULT '0' COMMENT '是否禁用',
+  `ZHIHUIDOU_COUNT` int(11) DEFAULT NULL COMMENT '智慧豆数量',
+  `MEMBER_ID` varchar(32) DEFAULT NULL COMMENT '会员外键',
+  PRIMARY KEY (`ID`),
+  KEY `FK_MPAHIS_MEMBER_idx` (`MEMBER_ID`),
+  CONSTRAINT `FK_MPAHIS_MEMBER` FOREIGN KEY (`MEMBER_ID`) REFERENCES `member` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员智惠豆帐号历史记录';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `member_play_his_account`
+--
+
+LOCK TABLES `member_play_his_account` WRITE;
+/*!40000 ALTER TABLE `member_play_his_account` DISABLE KEYS */;
+/*!40000 ALTER TABLE `member_play_his_account` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `member_product_distribution`
 --
 
@@ -719,6 +809,7 @@ CREATE TABLE `member_profit` (
   `PROFIT` double DEFAULT NULL COMMENT '盈利',
   `DISTRIBUTION_VALUE` double DEFAULT NULL COMMENT '分销让利值,是指该商品允许分销以后,销售出去给分销者的钱',
   `REAL_PROFIT` double DEFAULT '0',
+  `TRANSPORT_FEE` double DEFAULT NULL COMMENT '运费',
   KEY `FK_MEMPROFIT_MEMBER_idx` (`MEMBER_ID`),
   KEY `FK_MEMPROFIT_PRODUCT_idx` (`PRODUCT_ID`),
   CONSTRAINT `FK_MEMPROFIT_MEMBER` FOREIGN KEY (`MEMBER_ID`) REFERENCES `member` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -769,6 +860,7 @@ CREATE TABLE `order` (
   `DELIVERY_COMPANY` varchar(45) DEFAULT '申通公司' COMMENT '物流公司',
   `DELIVERY_ORDER_CODE` varchar(120) DEFAULT NULL COMMENT '物流公司订单号',
   `IS_FORM_SCCUESS` tinyint(1) DEFAULT '0' COMMENT '是否为默认，0：非，1：是',
+  `TRANSPORT_FEE` double DEFAULT NULL COMMENT '运费',
   PRIMARY KEY (`ID`),
   KEY `SORT` (`SORT`),
   KEY `FK_ORDER_SHOP_idx` (`SHOP_ID`),
@@ -1330,7 +1422,7 @@ CREATE TABLE `tb_resources` (
 
 LOCK TABLES `tb_resources` WRITE;
 /*!40000 ALTER TABLE `tb_resources` DISABLE KEYS */;
-INSERT INTO `tb_resources` VALUES ('150183915978716','资源管理',NULL,NULL,'2017-08-04 09:32:40','2017-08-04 09:32:40',NULL,NULL,NULL,'system:resources:view',NULL,NULL,'menu',NULL,NULL,'resourcesManage',NULL),('15018393878145','资源管理-新增','150183915978716','150183915978716','2017-08-04 09:36:28','2017-08-04 09:36:28',NULL,NULL,NULL,'system:resources:create',NULL,NULL,'button',NULL,NULL,'resourcesManageCreate',NULL),('150183945124351','资源管理-编辑','150183915978716','150183915978716','2017-08-04 09:37:31','2017-08-04 09:37:31',NULL,NULL,NULL,'system:resources:edit',NULL,NULL,'button',NULL,NULL,'resourcesManageEdit',NULL);
+INSERT INTO `tb_resources` VALUES ('150183915978716','资源管理',NULL,NULL,'2017-08-04 09:32:40','2017-08-04 09:32:40',NULL,NULL,NULL,'system:resources:view',NULL,NULL,'menu',NULL,NULL,'resourcesManage',NULL),('15018393878145','资源管理-新增','150183915978716','150183915978716','2017-08-04 09:36:28','2017-08-04 09:36:28',NULL,NULL,NULL,'system:resources:create',NULL,NULL,'button',NULL,NULL,'resourcesManageCreate',NULL),('150183945124351','资源管理-编辑','150183915978716','150183915978716','2017-08-04 09:37:31','2017-08-04 09:37:31',NULL,NULL,NULL,'system:resources:edit',NULL,NULL,'button',NULL,NULL,'resourcesManageEdit',NULL),('150198229992573','会员',NULL,NULL,'2017-08-06 01:18:20','2017-08-06 01:18:20',NULL,NULL,NULL,'member:member:view',NULL,NULL,'menu',NULL,NULL,NULL,NULL),('150198239904588','会员新增','150198229992573','150183915978716','2017-08-06 01:19:59','2017-08-06 01:19:59',NULL,NULL,NULL,'member:member:create',NULL,NULL,'button',NULL,NULL,'resourcesManageCreate',NULL);
 /*!40000 ALTER TABLE `tb_resources` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1453,7 +1545,7 @@ CREATE TABLE `tb_user` (
   KEY `SORTINDEX` (`SORT`),
   KEY `FK_USER_USERGROUP_idx` (`USERGROUP_ID`),
   CONSTRAINT `FK_USER_USERGROUP` FOREIGN KEY (`USERGROUP_ID`) REFERENCES `tb_user_group` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='用户';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='用户';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1556,7 +1648,7 @@ CREATE TABLE `tb_user_assets` (
   `IP` varchar(32) DEFAULT NULL COMMENT 'IP',
   PRIMARY KEY (`ID`),
   KEY `SORTINDEX` (`SORT`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户附件';
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='用户附件';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1565,6 +1657,7 @@ CREATE TABLE `tb_user_assets` (
 
 LOCK TABLES `tb_user_assets` WRITE;
 /*!40000 ALTER TABLE `tb_user_assets` DISABLE KEYS */;
+INSERT INTO `tb_user_assets` VALUES ('150192413505221',NULL,'1501924135045.png',NULL,'2017-08-05 09:08:56','2017-08-05 09:08:56',1,NULL,NULL,'D:\\zwoweb_workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp8\\wtpwebapps\\zhiwo-fileupload-web\\userAssets\\2017\\8\\5\\1501924135045.png',NULL,NULL,NULL,NULL,NULL,1,'userAssets/\\2017/8/5/1501924135045.png',NULL),('15019241368541',NULL,'1501924136847.jpg',NULL,'2017-08-05 09:08:56','2017-08-05 09:08:56',1,NULL,NULL,'D:\\zwoweb_workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp8\\wtpwebapps\\zhiwo-fileupload-web\\userAssets\\2017\\8\\5\\1501924136847.jpg',NULL,NULL,NULL,NULL,NULL,2,'userAssets/\\2017/8/5/1501924136847.jpg',NULL),('150192474307979',NULL,'1501924743023.jpg',NULL,'2017-08-05 09:19:03','2017-08-05 09:19:03',1,NULL,NULL,'D:\\zwoweb_workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp8\\wtpwebapps\\zhiwo-fileupload-web\\userAssets\\2017\\8\\5\\1501924743023.jpg',NULL,NULL,NULL,NULL,NULL,3,'userAssets/2017/8/5/1501924743023.jpg',NULL),('150192640000137',NULL,'1501926399980.jpg',NULL,'2017-08-05 09:46:40','2017-08-05 09:46:40',1,NULL,NULL,'D:\\zwoweb_workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp8\\wtpwebapps\\zhiwo-fileupload-web\\userAssets\\2017\\8\\5\\1501926399980.jpg',NULL,NULL,NULL,NULL,NULL,4,'uassets/2017/8/5/1501926399980.jpg',NULL),('150192640009937',NULL,'1501926400094.jpg',NULL,'2017-08-05 09:46:40','2017-08-05 09:46:40',1,NULL,NULL,'D:\\zwoweb_workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp8\\wtpwebapps\\zhiwo-fileupload-web\\userAssets\\2017\\8\\5\\1501926400094.jpg',NULL,NULL,NULL,NULL,NULL,5,'uassets/2017/8/5/1501926400094.jpg',NULL),('150192655170447',NULL,'1501926551673.jpg',NULL,'2017-08-05 09:49:11','2017-08-05 09:49:11',1,NULL,NULL,'D:\\zwoweb_workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp8\\wtpwebapps\\zhiwo-fileupload-web\\images\\uassets\\2017\\8\\5\\1501926551673.jpg',NULL,NULL,NULL,NULL,NULL,6,'images/uassets/2017/8/5/1501926551673.jpg',NULL),('150192655181124',NULL,'1501926551805.jpg',NULL,'2017-08-05 09:49:11','2017-08-05 09:49:11',1,NULL,NULL,'D:\\zwoweb_workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp8\\wtpwebapps\\zhiwo-fileupload-web\\images\\uassets\\2017\\8\\5\\1501926551805.jpg',NULL,NULL,NULL,NULL,NULL,7,'images/uassets/2017/8/5/1501926551805.jpg',NULL),('150193785152452',NULL,'1501937851507.jpg',NULL,'2017-08-05 12:57:34','2017-08-05 12:57:34',1,NULL,NULL,'D:\\zwoweb_workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp8\\wtpwebapps\\zhiwo-fileupload-web\\images\\uassets\\2017\\8\\5\\1501937851507.jpg',NULL,NULL,NULL,NULL,NULL,8,'images/uassets/2017/8/5/1501937851507.jpg',NULL),('150193794371878',NULL,'1501937943709.jpg',NULL,'2017-08-05 12:59:03','2017-08-05 12:59:03',1,NULL,NULL,'D:\\images\\uassets\\2017\\8\\5\\1501937943709.jpg',NULL,NULL,NULL,NULL,NULL,9,'images/uassets/2017/8/5/1501937943709.jpg',NULL),('150193798868715',NULL,'1501937988683.jpg',NULL,'2017-08-05 12:59:48','2017-08-05 12:59:48',1,NULL,NULL,'D:\\images\\uassets\\2017\\8\\5\\1501937988683.jpg',NULL,NULL,NULL,NULL,NULL,10,'images/uassets/2017/8/5/1501937988683.jpg',NULL),('150194046403243',NULL,'1501940464020.jpg',NULL,'2017-08-05 13:41:06','2017-08-05 13:41:06',1,NULL,NULL,'D:\\images\\uassets\\2017\\8\\5\\1501940464020.jpg',NULL,NULL,NULL,NULL,NULL,11,'images/uassets/2017/8/5/1501940464020.jpg',NULL),('150194051716486',NULL,'1501940517098.jpg',NULL,'2017-08-05 13:41:57','2017-08-05 13:41:57',1,NULL,NULL,'D:\\zwoweb_workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp8\\wtpwebapps\\zhiwo-fileupload-web\\images\\uassets\\2017\\8\\5\\1501940517098.jpg',NULL,NULL,NULL,NULL,NULL,12,'images/uassets/2017/8/5/1501940517098.jpg',NULL),('150194057301019',NULL,'1501940573002.jpg',NULL,'2017-08-05 13:42:53','2017-08-05 13:42:53',1,NULL,NULL,'D:\\zwoweb_workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp8\\wtpwebapps\\zhiwo-fileupload-web\\images\\uassets\\2017\\8\\5\\1501940573002.jpg',NULL,NULL,NULL,NULL,NULL,13,'images/uassets/2017/8/5/1501940573002.jpg',NULL),('150194061426168',NULL,'1501940614251.jpg',NULL,'2017-08-05 13:43:34','2017-08-05 13:43:34',1,NULL,NULL,'D:\\zwoweb_workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp8\\wtpwebapps\\zhiwo-fileupload-web\\images\\uassets\\2017\\8\\5\\1501940614251.jpg',NULL,NULL,NULL,NULL,NULL,14,'images/uassets/2017/8/5/1501940614251.jpg',NULL);
 /*!40000 ALTER TABLE `tb_user_assets` ENABLE KEYS */;
 UNLOCK TABLES;
 
