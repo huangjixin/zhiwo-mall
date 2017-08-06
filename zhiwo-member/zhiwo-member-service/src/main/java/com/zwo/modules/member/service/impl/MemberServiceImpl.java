@@ -27,12 +27,18 @@ import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.member.dao.GuessQuestionMapper;
 import com.zwo.modules.member.dao.MemberAddressMapper;
 import com.zwo.modules.member.dao.MemberMapper;
+import com.zwo.modules.member.dao.MemberPlayAccountMapper;
+import com.zwo.modules.member.dao.MemberPlayHisAccountMapper;
 import com.zwo.modules.member.dao.MemberProfitMapper;
 import com.zwo.modules.member.domain.GuessQuestion;
 import com.zwo.modules.member.domain.Member;
 import com.zwo.modules.member.domain.MemberAddress;
 import com.zwo.modules.member.domain.MemberAddressCriteria;
 import com.zwo.modules.member.domain.MemberCriteria;
+import com.zwo.modules.member.domain.MemberPlayAccount;
+import com.zwo.modules.member.domain.MemberPlayAccountCriteria;
+import com.zwo.modules.member.domain.MemberPlayHisAccount;
+import com.zwo.modules.member.domain.MemberPlayHisAccountCriteria;
 import com.zwo.modules.member.service.IMemberService;
 import com.zwotech.modules.core.service.impl.BaseService;
 
@@ -61,6 +67,14 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	@Autowired
 	@Lazy(true)
 	private MemberProfitMapper memberProfitMapper ;
+	
+	@Autowired
+	@Lazy(true)
+	private MemberPlayAccountMapper memberPlayAccountMapper;
+	
+	@Autowired
+	@Lazy(true)
+	private MemberPlayHisAccountMapper memberPlayHisAccountMapper;
 	
 	@Autowired
 	@Lazy(true)
@@ -487,6 +501,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Double sumProfitByMemberId(String memberId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "统计会员我的分销商品盈利,会员id为"+memberId+"开始");
@@ -497,6 +512,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Double sumRealProfitByMemberId(String memberId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "统计会员我的分销商品盈利实际到帐,会员id为"+memberId+"开始");
@@ -504,5 +520,52 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "统计会员我的分销商品盈利实际到帐,会员id为"+memberId+"结束，结果为："+result);
 		return result;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public MemberPlayAccount selectMemberPlayAccountByMemberId(String memberId) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "根据会员ID查询会员智慧豆账户记录,会员id为"+memberId+"开始");
+		MemberPlayAccountCriteria memberPlayAccountCriteria = new MemberPlayAccountCriteria();
+		memberPlayAccountCriteria.createCriteria().andMemberIdEqualTo(memberId);
+		List<MemberPlayAccount>list = memberPlayAccountMapper.selectByExample(memberPlayAccountCriteria);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "根据会员ID查询会员智慧豆账户记录,会员id为"+memberId+"结束，结果为："+list.size());
+		return list.isEmpty()?null:list.get(0);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<MemberPlayHisAccount> selectMemberPlayHisAccountByMemberId(String memberId) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "根据会员ID查询会员智慧豆账户记录,会员id为"+memberId+"开始");
+		MemberPlayHisAccountCriteria memberPlayAccountCriteria = new MemberPlayHisAccountCriteria();
+		memberPlayAccountCriteria.createCriteria().andMemberIdEqualTo(memberId);
+		List<MemberPlayHisAccount>list = memberPlayHisAccountMapper.selectByExample(memberPlayAccountCriteria);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "根据会员ID查询会员智慧豆账户记录,会员id为"+memberId+"结束，结果为："+list.size());
+		return list;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public PageInfo<MemberPlayHisAccount> selectMemberPlayHisAccountByMemberId(String memberId, PageInfo<MemberPlayHisAccount> pageInfo) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "分页会员ID查询会员智慧豆账户历史记录,会员id为"+memberId+"开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询分页参数：" + pageInfo.toString());
+		PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+		MemberPlayHisAccountCriteria orderCriteria = new MemberPlayHisAccountCriteria();
+		orderCriteria.createCriteria().andMemberIdEqualTo(memberId);
+		List<MemberPlayHisAccount> list = memberPlayHisAccountMapper.selectByExample(orderCriteria);
+		PageInfo<MemberPlayHisAccount> page = new PageInfo<MemberPlayHisAccount>(list);
+		pageInfo.setList(list);
+		pageInfo.setTotal(page.getTotal());
+		pageInfo.setEndRow(page.getEndRow());
+		pageInfo.setStartRow(page.getStartRow());
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "分页会员ID查询会员智慧豆账户历史记录,会员id为"+memberId+"结束");
+		return pageInfo;
 	}
 }

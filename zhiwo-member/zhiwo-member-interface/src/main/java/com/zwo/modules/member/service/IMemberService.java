@@ -11,6 +11,8 @@ import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.member.domain.GuessQuestion;
 import com.zwo.modules.member.domain.Member;
 import com.zwo.modules.member.domain.MemberAddress;
+import com.zwo.modules.member.domain.MemberPlayAccount;
+import com.zwo.modules.member.domain.MemberPlayHisAccount;
 import com.zwotech.modules.core.service.IBaseService;
 
 /**
@@ -81,4 +83,26 @@ public interface IMemberService extends IBaseService<Member> {
 	 * @return
 	 */
 	Double sumRealProfitByMemberId(String memberId);
+	
+	/**
+	 * 根据会员ID查询会员智慧豆账户记录
+	 * @param memberId
+	 * @return
+	 */
+	MemberPlayAccount selectMemberPlayAccountByMemberId(String memberId);
+	
+	/**
+	 * 根据会员ID查询会员智慧豆账户历史记录
+	 * @param memberId
+	 * @return
+	 */
+	List<MemberPlayHisAccount> selectMemberPlayHisAccountByMemberId(String memberId);
+	
+	/**
+	 * 分页会员ID查询会员智慧豆账户历史记录
+	 * @param example
+	 * @param pageInfo
+	 * @return
+	 */
+	PageInfo<MemberPlayHisAccount> selectMemberPlayHisAccountByMemberId(String memberId,PageInfo<MemberPlayHisAccount> pageInfo);
 }
