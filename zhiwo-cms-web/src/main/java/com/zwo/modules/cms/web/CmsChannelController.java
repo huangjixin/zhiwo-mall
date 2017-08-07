@@ -35,7 +35,7 @@ public class CmsChannelController extends BaseController<CmsChannel> {
 	@SuppressWarnings("rawtypes")
 	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
 
-	private static final String basePath = "views/system/cmsChannel/";
+	private static final String basePath = "views/cms/channel/";
 
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {

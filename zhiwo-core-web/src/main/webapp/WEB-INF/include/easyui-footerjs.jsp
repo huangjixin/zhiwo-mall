@@ -13,6 +13,7 @@
 			}
 		})
 	}
+	
 	function createDataGrid(gridId,url) {
 		$('#'+gridId)
 				.datagrid(
@@ -115,10 +116,12 @@
 	function unselect(grid) {
 		$("#"+grid).datagrid('unselectAll');
 	}
+	
 	//刷新；
 	function refresh(grid) {
 		$("#"+grid).datagrid('reload'); // 重新加载;
 	}
+	
 	//添加；
 	function create(module) {
 		window.location.href = '${ctx}/' + module + '/create';

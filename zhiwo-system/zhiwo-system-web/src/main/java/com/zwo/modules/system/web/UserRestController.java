@@ -8,9 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
@@ -129,18 +126,6 @@ public class UserRestController extends BaseController<TbUser> {
 		return res;
 	}
 	
-	@RequestMapping(value = "/testcreate", method = RequestMethod.GET)
-	public String testcreate(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		TbUser tbuser = new TbUser();
-		tbuser.setId(System.currentTimeMillis()+"");
-		String res = ""+userService.insertSelective(tbuser);
-		return res;
-	}
-	
-	@RequestMapping(value = "/sendCreatProductTopic", method = RequestMethod.GET)
-	public void sendCreatProductTopic(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-//		prductService.sendCreateProductTopic("创建一个Topic成功。");
-	}
 	
 //	@RequiresPermissions("system:user:edit")
 	@RequestMapping(value = "/update", method = RequestMethod.POST)

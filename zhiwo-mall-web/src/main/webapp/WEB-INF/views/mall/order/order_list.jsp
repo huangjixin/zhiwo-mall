@@ -5,46 +5,27 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>用户列表</title>
+<title>订单列表</title>
 <%@ include file="/WEB-INF/include/easyui-css.jsp"%>
 <%@ include file="/WEB-INF/include/easyui-js.jsp"%>
-<style type="text/css">
-#fm {
-	margin: 0;
-	padding: 10px 30px;
-}
 
-.ftitle {
-	font-size: 14px;
-	font-weight: bold;
-	color: #666;
-	padding: 5px 0;
-	margin-bottom: 10px;
-	border-bottom: 1px solid #ccc;
-}
-
-.fitem {
-	margin-bottom: 5px;
-}
-
-.fitem label {
-	display: inline-block;
-	width: 80px;
-}
-</style>
 </head>
 <body>
 	<div id="toolbar">
-		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-			onclick="create('user')">新增</a> <a href="#" class="easyui-linkbutton"
+		<%@ include file="/WEB-INF/include/easyui-buttonGroup.jsp"%>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+		<label>名称：</label>&nbsp;<input id="ordernameInput" class="input" style="width:100px;"/>&nbsp;
+		<%@ include file="/WEB-INF/include/easyui-queryButton.jsp"%>
+		<!-- <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
+			onclick="create('order')">新增</a> <a href="#" class="easyui-linkbutton"
 			iconCls="icon-edit" plain="true" onclick="editCategory()">编辑</a> <a href="#"
 			class="easyui-linkbutton" iconCls="icon-remove" plain="true"
-			onclick="destroy()">删除</a>
+			onclick="destroy()">删除</a> -->
 	</div>
-	<table id="dg" 
+	<table id="tgrid" 
 		title="用户列表" 
 		class="easyui-datagrid"
-		url="${ctx}/user/select" 
+		url="${ctx}/order/select" 
 		toolbar="#toolbar" 
 		rownumbers="true"
 		fitColumns="true" 
@@ -54,7 +35,7 @@
 			<tr>
 				<th data-options="field:'ck',checkbox:true"></th>
 				<th data-options="field:'id',align:'center'">id</th>
-				<th data-options="field:'username',align:'center'">账户名称</th>
+				<th data-options="field:'name',align:'center'">名称</th>
 				<th data-options="field:'createDate',align:'center',width:100">创建日期</th>
 				<th data-options="field:'updateDate',align:'center',width:100">更新日期</th>
 				<!-- <th data-options="field:'By',align:'center',width:100">创建人</th>
@@ -63,28 +44,33 @@
 			</tr>
 		</thead>
 	</table>
-	<script>
+	<script type="text/javascript">
+		// 初始化按钮等工作。
+		$().ready(function() {
+			init("order","tgrid");
+		})
 		
-		//操作
+		//格式化操作，添加删除和编辑按钮。
 		function formatOpt(value, rec) {
 			var btn = '<div style="padding: 5px;">';
-			<%
-				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:user:delete")){
-				%>
-				btn += '<a href="#" class="btn btn-danger btn-xs" class="btn btn-danger btn-xs"  onclick="deleteById(\'tgrid\',\''
-					+ rec.id + '\',\'user\')"><i class="icon-trash"></i>&nbsp;&nbsp;删除 </a>';
-					btn += "&nbsp;&nbsp;"
-				<%
-				}
-			%>
-			<%
-				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:user:edit")){
-				%>
-				btn += '<a href="#" class="btn btn-success btn-xs"  onclick="update(\''
-					+ rec.id + '\',\'user\')"><i class="icon-edit"></i>&nbsp;&nbsp;编辑 </a>';
-				<%
-				}
-			%>
+//			<%
+//				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:order:delete")){
+//				%>
+				btn += '<a href="#" class="easyui-linkbutton button-red"  onclick="deleteById(\'tgrid\',\''
+					+ rec.id + '\',\'order\')"><i class="icon-trash"></i>&nbsp;&nbsp;删除 </a>';
+					btn += "&nbsp;&nbsp;";
+					btn += ''
+//				<%
+//				}
+//			%>
+//			<%
+//				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:order:edit")){
+//				%> 
+				btn += '<a href="#" class="easyui-linkbutton button-green"  onclick="update(\''
+					+ rec.id + '\',\'order\')"><i class="icon-edit"></i>&nbsp;&nbsp;编辑 </a>';
+//				 <%
+//				}
+//							%> 
 			
 			btn += '</div>';
 			return btn;
@@ -92,15 +78,15 @@
 
 		// 删除
 		function destroy() {
-			var row = $('#dg').datagrid('getSelected');
+			var row = $('#tgrid').datagrid('getSelected');
 			if (row) {
 				$.messager.confirm('确定', '确定删除？', function(r) {
 					if (r) {
-						$.post('${ctx}/user/delete', {
+						$.post('${ctx}/order/delete', {
 							id : row.id
 						}, function(result) {
 							if (result > 0) {
-								$('#dg').datagrid('reload'); // reload the user data
+								$('#tgrid').datagrid('reload'); // reload the order data
 							} else {
 								$.messager.show({ // show error message
 									title : 'Error',

@@ -14,10 +14,10 @@
 	<div id="toolbar">
 		<%@ include file="/WEB-INF/include/easyui-buttonGroup.jsp"%>
         &nbsp;&nbsp;&nbsp;&nbsp;
-		<label>名称：</label>&nbsp;<input id="usernameInput" class="input" style="width:100px;"/>&nbsp;
+		<label>名称：</label>&nbsp;<input id="userGroupnameInput" class="input" style="width:100px;"/>&nbsp;
 		<%@ include file="/WEB-INF/include/easyui-queryButton.jsp"%>
 		<!-- <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-			onclick="create('user')">新增</a> <a href="#" class="easyui-linkbutton"
+			onclick="create('userGroup')">新增</a> <a href="#" class="easyui-linkbutton"
 			iconCls="icon-edit" plain="true" onclick="editCategory()">编辑</a> <a href="#"
 			class="easyui-linkbutton" iconCls="icon-remove" plain="true"
 			onclick="destroy()">删除</a> -->
@@ -25,7 +25,7 @@
 	<table id="tgrid" 
 		title="用户列表" 
 		class="easyui-datagrid"
-		url="${ctx}/user/select" 
+		url="${ctx}/userGroup/select" 
 		toolbar="#toolbar" 
 		rownumbers="true"
 		fitColumns="true" 
@@ -35,7 +35,7 @@
 			<tr>
 				<th data-options="field:'ck',checkbox:true"></th>
 				<th data-options="field:'id',align:'center'">id</th>
-				<th data-options="field:'username',align:'center'">账户名称</th>
+				<th data-options="field:'userGroupname',align:'center'">账户名称</th>
 				<th data-options="field:'createDate',align:'center',width:100">创建日期</th>
 				<th data-options="field:'updateDate',align:'center',width:100">更新日期</th>
 				<!-- <th data-options="field:'By',align:'center',width:100">创建人</th>
@@ -47,27 +47,27 @@
 	<script type="text/javascript">
 		// 初始化按钮等工作。
 		$().ready(function() {
-			init("user","tgrid");
+			init("userGroup","tgrid");
 		})
 		
 		//格式化操作，添加删除和编辑按钮。
 		function formatOpt(value, rec) {
 			var btn = '<div style="padding: 5px;">';
 //			<%
-//				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:user:delete")){
+//				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:userGroup:delete")){
 //				%>
 				btn += '<a href="#" class="easyui-linkbutton button-red"  onclick="deleteById(\'tgrid\',\''
-					+ rec.id + '\',\'user\')"><i class="icon-trash"></i>&nbsp;&nbsp;删除 </a>';
+					+ rec.id + '\',\'userGroup\')"><i class="icon-trash"></i>&nbsp;&nbsp;删除 </a>';
 					btn += "&nbsp;&nbsp;";
 					btn += ''
 //				<%
 //				}
 //			%>
 //			<%
-//				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:user:edit")){
+//				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:userGroup:edit")){
 //				%> 
 				btn += '<a href="#" class="easyui-linkbutton button-green"  onclick="update(\''
-					+ rec.id + '\',\'user\')"><i class="icon-edit"></i>&nbsp;&nbsp;编辑 </a>';
+					+ rec.id + '\',\'userGroup\')"><i class="icon-edit"></i>&nbsp;&nbsp;编辑 </a>';
 //				 <%
 //				}
 //							%> 
@@ -82,11 +82,11 @@
 			if (row) {
 				$.messager.confirm('确定', '确定删除？', function(r) {
 					if (r) {
-						$.post('${ctx}/user/delete', {
+						$.post('${ctx}/userGroup/delete', {
 							id : row.id
 						}, function(result) {
 							if (result > 0) {
-								$('#dg').datagrid('reload'); // reload the user data
+								$('#dg').datagrid('reload'); // reload the userGroup data
 							} else {
 								$.messager.show({ // show error message
 									title : 'Error',

@@ -35,7 +35,7 @@ public class CmsDocumentController extends BaseController<CmsDocument> {
 	@SuppressWarnings("rawtypes")
 	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
 
-	private static final String basePath = "views/system/cmsDocument/";
+	private static final String basePath = "views/cms/document/";
 
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {
