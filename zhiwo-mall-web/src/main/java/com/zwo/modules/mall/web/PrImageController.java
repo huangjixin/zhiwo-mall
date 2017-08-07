@@ -67,10 +67,4 @@ public class PrImageController extends BaseController<PrImage> {
 		uiModel.addAttribute("operation", "edit");
 		return basePath+"prImage_edit";
 	}
-	
-	@RequestMapping(value = {"test"},method=RequestMethod.GET)
-	public String test(Model uiModel,HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		uiModel.addAttribute("rawData", 123456);
-		return "test";
-	}
 }

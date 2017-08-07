@@ -15,6 +15,11 @@
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
+			<groupId>com.zwo.member.pojo</groupId>
+			<artifactId>zhiwo-member-pojo</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
 			<groupId>com.zwo.member.interface</groupId>
 			<artifactId>zhiwo-member-interface</artifactId>
 			<version>1.0</version>

@@ -91,7 +91,6 @@ public class GuessQuestionOptionsRestController extends BaseController<GuessQues
 	}
 	
 	@RequestMapping(value = "/select")
-	@ResponseBody
 	public DatagridPage<GuessQuestionOptions> select(@ModelAttribute PageInfo<GuessQuestionOptions> pageInfo, @ModelAttribute GuessQuestionOptions guessQuestionOptions, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
@@ -119,19 +118,6 @@ public class GuessQuestionOptionsRestController extends BaseController<GuessQues
 		
 		String res = ""+guessQuestionOptionsService.insertSelective(guessQuestionOptions);
 		return res;
-	}
-	
-	@RequestMapping(value = "/testcreate", method = RequestMethod.GET)
-	public String testcreate(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		GuessQuestionOptions guessQuestionOptions = new GuessQuestionOptions();
-		guessQuestionOptions.setId(System.currentTimeMillis()+"");
-		String res = ""+guessQuestionOptionsService.insertSelective(guessQuestionOptions);
-		return res;
-	}
-	
-	@RequestMapping(value = "/sendCreatProductTopic", method = RequestMethod.GET)
-	public void sendCreatProductTopic(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-//		prductService.sendCreateProductTopic("创建一个Topic成功。");
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)

@@ -48,6 +48,7 @@ public class UserRestController extends BaseController<TbUser> {
 	 * @throws 
 	 */
 	@RequestMapping(value = "/deleteById")
+//	@RequiresPermissions("system:user:delete")
 	public String deleteById(@RequestParam(value = "idstring",required=true) String idstring, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
 
@@ -70,6 +71,7 @@ public class UserRestController extends BaseController<TbUser> {
 	 * @throws 
 	 */
 	@RequestMapping(value = "/delete")
+//	@RequiresPermissions("system:user:delete")
 	public String delete(@RequestParam(value = "id",required=true) String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
 		
@@ -85,6 +87,7 @@ public class UserRestController extends BaseController<TbUser> {
 	 * @param httpServletResponse
 	 * @return
 	 */
+//	@RequiresPermissions("system:user:view")
 	@RequestMapping(value = "/show/{id}")
 	public TbUser getTbUser(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -93,6 +96,7 @@ public class UserRestController extends BaseController<TbUser> {
 		return tbuser;
 	}
 	
+//	@RequiresPermissions("system:user:view")
 	@RequestMapping(value = "/select")
 	@ResponseBody
 	public DatagridPage<TbUser> select(@ModelAttribute PageInfo<TbUser> pageInfo, @ModelAttribute TbUser tbuser, Model uiModel,
@@ -113,6 +117,7 @@ public class UserRestController extends BaseController<TbUser> {
 	}
 	
 
+//	@RequiresPermissions("system:user:create")
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public String create(@Valid TbUser tbuser, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -137,6 +142,7 @@ public class UserRestController extends BaseController<TbUser> {
 //		prductService.sendCreateProductTopic("创建一个Topic成功。");
 	}
 	
+//	@RequiresPermissions("system:user:edit")
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(@Valid TbUser tbuser, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {

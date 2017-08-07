@@ -8,9 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
@@ -28,8 +25,6 @@ import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.domain.OrderDelivery;
 import com.zwo.modules.mall.domain.OrderDeliveryCriteria;
 import com.zwo.modules.mall.service.IOrderDeliveryService;
-import com.zwo.modules.mall.service.IPrductService;
-import com.zwo.modules.system.domain.TbUser;
 import com.zwotech.common.web.BaseController;
 
 @RestController
@@ -124,19 +119,6 @@ public class OrderDeliveryRestController extends BaseController<OrderDelivery> {
 		
 		String res = ""+orderDeliveryService.insertSelective(orderDelivery);
 		return res;
-	}
-	
-	@RequestMapping(value = "/testcreate", method = RequestMethod.GET)
-	public String testcreate(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		OrderDelivery orderDelivery = new OrderDelivery();
-		orderDelivery.setId(System.currentTimeMillis()+"");
-		String res = ""+orderDeliveryService.insertSelective(orderDelivery);
-		return res;
-	}
-	
-	@RequestMapping(value = "/sendCreatProductTopic", method = RequestMethod.GET)
-	public void sendCreatProductTopic(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-//		prductService.sendCreateProductTopic("创建一个Topic成功。");
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)

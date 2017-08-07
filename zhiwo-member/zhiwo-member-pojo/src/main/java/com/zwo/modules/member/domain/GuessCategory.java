@@ -2,7 +2,6 @@ package com.zwo.modules.member.domain;
 
 import java.io.Serializable;
 import java.util.Date;
-import org.springframework.format.annotation.DateTimeFormat;
 
 public class GuessCategory implements Serializable {
     /**

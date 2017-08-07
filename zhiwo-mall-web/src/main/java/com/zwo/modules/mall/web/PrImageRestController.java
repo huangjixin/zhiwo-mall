@@ -91,7 +91,6 @@ public class PrImageRestController extends BaseController<PrImage> {
 	}
 	
 	@RequestMapping(value = "/select")
-	@ResponseBody
 	public DatagridPage<PrImage> select(@ModelAttribute PageInfo<PrImage> pageInfo, @ModelAttribute PrImage prImage, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
@@ -119,19 +118,6 @@ public class PrImageRestController extends BaseController<PrImage> {
 		
 		String res = ""+prImageService.insertSelective(prImage);
 		return res;
-	}
-	
-	@RequestMapping(value = "/testcreate", method = RequestMethod.GET)
-	public String testcreate(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		PrImage prImage = new PrImage();
-		prImage.setId(System.currentTimeMillis()+"");
-		String res = ""+prImageService.insertSelective(prImage);
-		return res;
-	}
-	
-	@RequestMapping(value = "/sendCreatProductTopic", method = RequestMethod.GET)
-	public void sendCreatProductTopic(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-//		prductService.sendCreateProductTopic("创建一个Topic成功。");
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)

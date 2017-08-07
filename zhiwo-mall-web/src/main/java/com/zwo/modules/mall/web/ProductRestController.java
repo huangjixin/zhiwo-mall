@@ -95,7 +95,6 @@ public class ProductRestController extends BaseController<PrProduct> {
 	}
 	
 	@RequestMapping(value = "/select")
-	@ResponseBody
 	public DatagridPage<PrProduct> select(@ModelAttribute PageInfo<PrProduct> pageInfo, @ModelAttribute PrProduct product, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
@@ -134,18 +133,6 @@ public class ProductRestController extends BaseController<PrProduct> {
 		return res;
 	}
 	
-	@RequestMapping(value = "/testcreate", method = RequestMethod.GET)
-	public String testcreate(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		PrProduct product = new PrProduct();
-		product.setId(System.currentTimeMillis()+"");
-		String res = ""+prductService.insertSelective(product);
-		return res;
-	}
-	
-	@RequestMapping(value = "/sendCreatProductTopic", method = RequestMethod.GET)
-	public void sendCreatProductTopic(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-//		prductService.sendCreateProductTopic("创建一个Topic成功。");
-	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(@Valid PrProduct product, BindingResult result, Model uiModel,

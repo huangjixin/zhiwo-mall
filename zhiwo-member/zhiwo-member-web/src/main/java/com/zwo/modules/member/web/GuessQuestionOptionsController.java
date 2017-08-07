@@ -68,9 +68,4 @@ public class GuessQuestionOptionsController extends BaseController<GuessQuestion
 		return basePath+"guessQuestionOptions_edit";
 	}
 	
-	@RequestMapping(value = {"test"},method=RequestMethod.GET)
-	public String test(Model uiModel,HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		uiModel.addAttribute("rawData", 123456);
-		return "test";
-	}
 }

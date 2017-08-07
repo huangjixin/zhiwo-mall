@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.DatagridPage;
@@ -91,7 +90,6 @@ public class MemberRestController extends BaseController<Member> {
 	}
 	
 	@RequestMapping(value = "/select")
-	@ResponseBody
 	public DatagridPage<Member> select(@ModelAttribute PageInfo<Member> pageInfo, @ModelAttribute Member member, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
@@ -119,19 +117,6 @@ public class MemberRestController extends BaseController<Member> {
 		
 		String res = ""+memberService.insertSelective(member);
 		return res;
-	}
-	
-	@RequestMapping(value = "/testcreate", method = RequestMethod.GET)
-	public String testcreate(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		Member member = new Member();
-		member.setId(System.currentTimeMillis()+"");
-		String res = ""+memberService.insertSelective(member);
-		return res;
-	}
-	
-	@RequestMapping(value = "/sendCreatProductTopic", method = RequestMethod.GET)
-	public void sendCreatProductTopic(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-//		prductService.sendCreateProductTopic("创建一个Topic成功。");
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)

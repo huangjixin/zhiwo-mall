@@ -67,10 +67,4 @@ public class ProductPropertyController extends BaseController<PrProductProperty>
 		uiModel.addAttribute("operation", "edit");
 		return basePath+"productProperty_edit";
 	}
-	
-	@RequestMapping(value = {"test"},method=RequestMethod.GET)
-	public String test(Model uiModel,HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		uiModel.addAttribute("rawData", 123456);
-		return "test";
-	}
 }

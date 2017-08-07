@@ -15,62 +15,57 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.zwo.modules.mall.domain.OrderDelivery;
-import com.zwo.modules.mall.service.IOrderDeliveryService;
+import com.zwo.modules.mall.domain.Order;
+import com.zwo.modules.mall.service.IOrderService;
 import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
 @Controller
-@RequestMapping("orderDelivery")
+@RequestMapping("order")
 @Lazy(true)
-public class OrderController extends BaseController<OrderDelivery> {
+public class OrderController extends BaseController<Order> {
 	@Autowired
 	@Lazy(true)
-	private IOrderDeliveryService orderDeliveryService;
+	private IOrderService orderService;
 	
 	/*@Autowired
 	@Lazy(true)*/
 	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
 	
-	private static final String basePath = "views/mall/orderDelivery/";
+	private static final String basePath = "views/mall/order/";
 	
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {
-		return basePath+"orderDelivery_list";
+		return basePath+"order_list";
 	}
 	
 	@RequestMapping(value = {"create"},method=RequestMethod.GET)
-	public String create(@Valid OrderDelivery orderDelivery, BindingResult result, Model uiModel,
+	public String create(@Valid Order order, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		uiModel.addAttribute("orderDelivery", orderDelivery);
-		return basePath+"orderDelivery_edit";
+		uiModel.addAttribute("order", order);
+		return basePath+"order_edit";
 	}
 	  
 	@RequestMapping(value = "edit",method=RequestMethod.GET)
 	public String edit(@RequestParam("id") String id, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		OrderDelivery orderDelivery = null;
+		Order order = null;
 		ValueOperations<String, Object> valueOperations = null;
 		if(redisTemplate!=null){
 			valueOperations =redisTemplate.opsForValue();
-			orderDelivery = (OrderDelivery) valueOperations.get(id);
+			order = (Order) valueOperations.get(id);
 		}
 		
-		if(orderDelivery==null){
-			orderDelivery=orderDeliveryService.selectByPrimaryKey(id);
+		if(order==null){
+			order=orderService.selectByPrimaryKey(id);
 			if(valueOperations != null ){
-				valueOperations.set(id, orderDelivery);
+				valueOperations.set(id, order);
 			}
 		}
 		
-		uiModel.addAttribute("orderDelivery", orderDelivery);
+		uiModel.addAttribute("order", order);
 		uiModel.addAttribute("operation", "edit");
-		return basePath+"orderDelivery_edit";
+		return basePath+"order_edit";
 	}
 	
-	@RequestMapping(value = {"test"},method=RequestMethod.GET)
-	public String test(Model uiModel,HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		uiModel.addAttribute("rawData", 123456);
-		return "test";
-	}
 }

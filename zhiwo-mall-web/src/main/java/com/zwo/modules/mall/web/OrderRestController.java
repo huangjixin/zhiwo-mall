@@ -8,9 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
@@ -25,20 +22,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.DatagridPage;
 import com.github.pagehelper.PageInfo;
-import com.zwo.modules.mall.domain.OrderDelivery;
-import com.zwo.modules.mall.domain.OrderDeliveryCriteria;
-import com.zwo.modules.mall.service.IOrderDeliveryService;
-import com.zwo.modules.mall.service.IPrductService;
-import com.zwo.modules.system.domain.TbUser;
+import com.zwo.modules.mall.domain.Order;
+import com.zwo.modules.mall.domain.OrderCriteria;
+import com.zwo.modules.mall.service.IOrderService;
 import com.zwotech.common.web.BaseController;
 
 @RestController
-@RequestMapping("orderDelivery")
+@RequestMapping("order")
 @Lazy(true)
-public class OrderRestController extends BaseController<OrderDelivery> {
+public class OrderRestController extends BaseController<Order> {
 	@Autowired
 	@Lazy(true)
-	private IOrderDeliveryService orderDeliveryService;
+	private IOrderService orderService;
 	
 	/** 
 	 * @Title: deleteById 
@@ -58,7 +53,7 @@ public class OrderRestController extends BaseController<OrderDelivery> {
 		for (String idstr : ids) {
 			list.add(idstr);
 		}
-		int result = orderDeliveryService.deleteBatch(list);
+		int result = orderService.deleteBatch(list);
 		return result+"";
 	}
 	
@@ -75,7 +70,7 @@ public class OrderRestController extends BaseController<OrderDelivery> {
 	public String delete(@RequestParam(value = "id",required=true) String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
 		
-		int result = orderDeliveryService.deleteByPrimaryKey(id);
+		int result = orderService.deleteByPrimaryKey(id);
 		return result+"";
 	}
 	 
@@ -88,65 +83,53 @@ public class OrderRestController extends BaseController<OrderDelivery> {
 	 * @return
 	 */
 	@RequestMapping(value = "/show/{id}")
-	public OrderDelivery getOrderDelivery(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
+	public Order getOrder(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		OrderDelivery orderDelivery = orderDeliveryService.selectByPrimaryKey(id);
+		Order order = orderService.selectByPrimaryKey(id);
 		
-		return orderDelivery;
+		return order;
 	}
 	
 	@RequestMapping(value = "/select")
 	@ResponseBody
-	public DatagridPage<OrderDelivery> select(@ModelAttribute PageInfo<OrderDelivery> pageInfo, @ModelAttribute OrderDelivery orderDelivery, Model uiModel,
+	public DatagridPage<Order> select(@ModelAttribute PageInfo<Order> pageInfo, @ModelAttribute Order order, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
 		super.select(pageInfo, uiModel, httpServletRequest, httpServletResponse);
  
-		OrderDeliveryCriteria orderDeliveryCriteria = null;
-		orderDeliveryCriteria = new OrderDeliveryCriteria();
-		OrderDeliveryCriteria.Criteria criteria = orderDeliveryCriteria.createCriteria();
-		orderDeliveryCriteria.setOrderByClause("id desc");
-		if (null != orderDelivery.getName() && !"".equals(orderDelivery.getName())) {
-			criteria.andNameLike("%" + orderDelivery.getName() + "%");
-		}
+		OrderCriteria orderCriteria = null;
+		orderCriteria = new OrderCriteria();
+		OrderCriteria.Criteria criteria = orderCriteria.createCriteria();
+		orderCriteria.setOrderByClause("id desc");
+		/*if (null != order.getName() && !"".equals(order.getName())) {
+			criteria.andNameLike("%" + order.getName() + "%");
+		}*/
 		
-		pageInfo = orderDeliveryService.selectByPageInfo(orderDeliveryCriteria, pageInfo);
+		pageInfo = orderService.selectByPageInfo(orderCriteria, pageInfo);
 		return super.setPage(pageInfo);
 	}
 	
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String create(@Valid OrderDelivery orderDelivery, BindingResult result, Model uiModel,
+	public String create(@Valid Order order, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
 
 		}
 		
-		String res = ""+orderDeliveryService.insertSelective(orderDelivery);
+		String res = ""+orderService.insertSelective(order);
 		return res;
 	}
 	
-	@RequestMapping(value = "/testcreate", method = RequestMethod.GET)
-	public String testcreate(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		OrderDelivery orderDelivery = new OrderDelivery();
-		orderDelivery.setId(System.currentTimeMillis()+"");
-		String res = ""+orderDeliveryService.insertSelective(orderDelivery);
-		return res;
-	}
-	
-	@RequestMapping(value = "/sendCreatProductTopic", method = RequestMethod.GET)
-	public void sendCreatProductTopic(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-//		prductService.sendCreateProductTopic("创建一个Topic成功。");
-	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(@Valid OrderDelivery orderDelivery, BindingResult result, Model uiModel,
+	public String update(@Valid Order order, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
 			
 		}
 		
-		String res = ""+this.orderDeliveryService.updateByPrimaryKeySelective(orderDelivery);
+		String res = ""+this.orderService.updateByPrimaryKeySelective(order);
 		return res;
 	}
 }

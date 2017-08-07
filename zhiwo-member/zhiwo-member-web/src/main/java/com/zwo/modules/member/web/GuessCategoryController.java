@@ -68,9 +68,4 @@ public class GuessCategoryController extends BaseController<GuessCategory> {
 		return basePath+"guessCategory_edit";
 	}
 	
-	@RequestMapping(value = {"test"},method=RequestMethod.GET)
-	public String test(Model uiModel,HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		uiModel.addAttribute("rawData", 123456);
-		return "test";
-	}
 }
