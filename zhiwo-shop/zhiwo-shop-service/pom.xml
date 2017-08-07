@@ -11,22 +11,21 @@
 	<groupId>com.zwo.shop.service</groupId>
 	<artifactId>zhiwo-shop-service</artifactId>
 	<version>1.0</version>
-	<packaging>war</packaging>
-	<name>zhiwo-shop-service Maven Webapp</name>
+	<name>zhiwo-shop-service</name>
 	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>com.zwo.shop.dao</groupId>
-			<artifactId>zhiwo-shop-dao</artifactId>
-			<version>1.0</version>
-		</dependency>
 		<dependency>
 			<groupId>com.zwo.shop.interface</groupId>
 			<artifactId>zhiwo-shop-interface</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.zwo.shop.dao</groupId>
+			<artifactId>zhiwo-shop-dao</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
-	<build>
-		<finalName>zhiwo-shop-service</finalName>
-	</build>
 </project>
