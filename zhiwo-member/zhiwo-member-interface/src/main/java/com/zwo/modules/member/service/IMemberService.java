@@ -10,6 +10,7 @@ import com.zwo.modules.mall.domain.Order;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.member.domain.GuessQuestion;
 import com.zwo.modules.member.domain.Member;
+import com.zwo.modules.member.domain.MemberAccount;
 import com.zwo.modules.member.domain.MemberAddress;
 import com.zwo.modules.member.domain.MemberPlayAccount;
 import com.zwo.modules.member.domain.MemberPlayHisAccount;
@@ -26,6 +27,13 @@ public interface IMemberService extends IBaseService<Member> {
 	 * @return
 	 */
 	List<MemberAddress> selectByMId(String memberId);
+	
+	/**
+	 * 根据会员Id进行会员账户查询。
+	 * @param memberId
+	 * @return
+	 */
+	MemberAccount selectMemberAccountByMId(String memberId);
 	
 	/**
      * 查询会员分销的商品。

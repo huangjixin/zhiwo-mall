@@ -5,7 +5,7 @@ import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
  * Created by szsonic on 2017/2/24.
  */
 public class EncryptPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigurer {
-    private String[] encryptPropNames = {"username", "password"};
+    private String[] encryptPropNames = {"jdbc.username", "jdbc.password"};
     //这里写上需要解密的key值
 
     @Override
@@ -16,7 +16,6 @@ public class EncryptPropertyPlaceholderConfigurer extends PropertyPlaceholderCon
         if (isEncryptProp(propertyName))
         {
             String decryptValue = DESUtils.getDecryptString(propertyValue);
-            System.out.println(decryptValue);
             return decryptValue;
         }else {
             return propertyValue;

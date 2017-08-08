@@ -28,8 +28,6 @@ public class UserController extends BaseController<TbUser> {
 	@Lazy(true)
 	private ITbUserService userService;
 	
-	/*@Autowired
-	@Lazy(true)*/
 	@SuppressWarnings("rawtypes")
 	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
 	

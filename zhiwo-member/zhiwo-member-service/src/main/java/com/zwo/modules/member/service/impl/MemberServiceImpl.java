@@ -25,6 +25,7 @@ import com.zwo.modules.mall.domain.Order;
 import com.zwo.modules.mall.domain.OrderCriteria;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.member.dao.GuessQuestionMapper;
+import com.zwo.modules.member.dao.MemberAccountMapper;
 import com.zwo.modules.member.dao.MemberAddressMapper;
 import com.zwo.modules.member.dao.MemberMapper;
 import com.zwo.modules.member.dao.MemberPlayAccountMapper;
@@ -32,6 +33,8 @@ import com.zwo.modules.member.dao.MemberPlayHisAccountMapper;
 import com.zwo.modules.member.dao.MemberProfitMapper;
 import com.zwo.modules.member.domain.GuessQuestion;
 import com.zwo.modules.member.domain.Member;
+import com.zwo.modules.member.domain.MemberAccount;
+import com.zwo.modules.member.domain.MemberAccountCriteria;
 import com.zwo.modules.member.domain.MemberAddress;
 import com.zwo.modules.member.domain.MemberAddressCriteria;
 import com.zwo.modules.member.domain.MemberCriteria;
@@ -68,9 +71,19 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	@Lazy(true)
 	private MemberProfitMapper memberProfitMapper ;
 	
+	/**
+	 * 会员智惠豆账户接口。
+	 */
 	@Autowired
 	@Lazy(true)
 	private MemberPlayAccountMapper memberPlayAccountMapper;
+	
+	/**
+	 * 会员账户接口。
+	 */
+	@Autowired
+	@Lazy(true)
+	private MemberAccountMapper memberAccountMapper;
 	
 	@Autowired
 	@Lazy(true)
@@ -567,5 +580,17 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页会员ID查询会员智慧豆账户历史记录,会员id为"+memberId+"结束");
 		return pageInfo;
+	}
+
+	@Override
+	public MemberAccount selectMemberAccountByMId(String memberId) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "根据会员ID查询会员账户,会员id为"+memberId+"开始");
+		MemberAccountCriteria memberAccountCriteria = new MemberAccountCriteria();
+		memberAccountCriteria.createCriteria().andMemberIdEqualTo(memberId);
+		List<MemberAccount>list = memberAccountMapper.selectByExample(memberAccountCriteria);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "根据会员ID查询会员账户,会员id为"+memberId+"结束，结果为："+list.size());
+		return list.isEmpty()?null:list.get(0);
 	}
 }

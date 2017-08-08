@@ -77,7 +77,8 @@ public class DESUtils {
 
     public static void main(String[] args)
     {
-        String name ="root";
+    	org.apache.shiro.codec.Base64.decode("4AvVhmFLUs0KTA3Kprsdag==");
+        /*String name ="root";
         String password="123456";
         //测试数据
         String encryname = getEncryptString(name);
@@ -87,5 +88,5 @@ public class DESUtils {
 
         System.out.println(getDecryptString(encryname));//解密后用户名
         System.out.println(getDecryptString(encrypassword));//解密后密码
-    }
+*/    }
 }
