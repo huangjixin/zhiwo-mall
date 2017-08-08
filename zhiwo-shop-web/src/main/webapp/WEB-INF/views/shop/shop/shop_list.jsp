@@ -14,7 +14,7 @@
 	<div id="toolbar">
 		<%@ include file="/WEB-INF/include/easyui-buttonGroup.jsp"%>
         &nbsp;&nbsp;&nbsp;&nbsp;
-		<label>名称：</label>&nbsp;<input id="shopnameInput" class="input" style="width:100px;"/>&nbsp;
+		<label>店铺名称：</label>&nbsp;<input id="nameInput" class="input" style="width:100px;"/>&nbsp;
 		<%@ include file="/WEB-INF/include/easyui-queryButton.jsp"%>
 		<!-- <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
 			onclick="create('shop')">新增</a> <a href="#" class="easyui-linkbutton"
@@ -23,7 +23,7 @@
 			onclick="destroy()">删除</a> -->
 	</div>
 	<table id="tgrid" 
-		title="用户列表" 
+		title="店铺列表" 
 		class="easyui-datagrid"
 		url="${ctx}/shop/select" 
 		toolbar="#toolbar" 
@@ -34,13 +34,14 @@
 		<thead>
 			<tr>
 				<th data-options="field:'ck',checkbox:true"></th>
-				<th data-options="field:'id',align:'center'">id</th>
-				<th data-options="field:'shopname',align:'center'">名称</th>
-				<th data-options="field:'createDate',align:'center',width:100">创建日期</th>
-				<th data-options="field:'updateDate',align:'center',width:100">更新日期</th>
+				<th data-options="field:'id',align:'center',hidden:true">id</th>
+				<th data-options="field:'name',align:'center',width:100">店铺名称</th>
+                <th data-options="field:'code',align:'center',width:100">代码</th>
+				<th data-options="field:'createDate',align:'center',width:100,formatter:formatTime">创建日期</th>
+				<th data-options="field:'updateDate',align:'center',width:100,formatter:formatTime">更新日期</th>
 				<!-- <th data-options="field:'By',align:'center',width:100">创建人</th>
 				<th data-options="field:'updateBy',align:'center',width:100">更新人</th> -->
-				<th data-options="field:'opt',align:'center',formatter:formatOpt">操作</th>
+				<th data-options="field:'opt',align:'center',width:100,formatter:formatOpt">操作</th>
 			</tr>
 		</thead>
 	</table>
@@ -48,7 +49,34 @@
 		// 初始化按钮等工作。
 		$().ready(function() {
 			init("shop","tgrid");
+			
+			$('#nameInput').bind('keypress',function(event){
+			  if(event.keyCode == "13")    
+			  {
+				    doResearch();
+			  }
+			});
+			
+			$("#queryBtn").bind("click", function() {
+				doResearch();
+			});
+	
+			$("#removeBatchBtn").bind("click", function() {
+				deleteRows('tgrid','user');
+			});
 		})
+		
+		
+		//查询
+		function doResearch(){
+			var parameters = {};
+			//var usergroupId = $('#shop').combobox('getValue');
+//			if(usergroupId!=''){
+//				parameters.usergroupId = usergroupId;
+//			}
+			parameters.username = $('#nameInput').val();
+			query('tgrid',parameters);
+		}
 		
 		//格式化操作，添加删除和编辑按钮。
 		function formatOpt(value, rec) {
