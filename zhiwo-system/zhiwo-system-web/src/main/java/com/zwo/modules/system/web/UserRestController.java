@@ -104,10 +104,15 @@ public class UserRestController extends BaseController<TbUser> {
 		TbUserCriteria tbuserCriteria = null;
 		tbuserCriteria = new TbUserCriteria();
 		TbUserCriteria.Criteria criteria = tbuserCriteria.createCriteria();
+		criteria.andDisableEqualTo(false);
 		tbuserCriteria.setOrderByClause("id desc");
 		if (null != tbuser.getUsername() && !"".equals(tbuser.getUsername())) {
 			criteria.andUsernameLike("%" + tbuser.getUsername() + "%");
 		}
+		if (null != tbuser.getUsergroupId() && !"".equals(tbuser.getUsergroupId())) {
+			criteria.andUsergroupIdEqualTo(tbuser.getUsergroupId());
+		}
+		
 		
 		pageInfo = userService.selectByPageInfo(tbuserCriteria, pageInfo);
 		return super.setPage(pageInfo);
@@ -115,7 +120,7 @@ public class UserRestController extends BaseController<TbUser> {
 	
 
 //	@RequiresPermissions("system:user:create")
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid TbUser tbuser, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
@@ -128,7 +133,7 @@ public class UserRestController extends BaseController<TbUser> {
 	
 	
 //	@RequiresPermissions("system:user:edit")
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid TbUser tbuser, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {

@@ -94,7 +94,6 @@ public class UserGroupRestController extends BaseController<TbUserGroup> {
 	}
 	
 	@RequestMapping(value = "/select")
-	@ResponseBody
 	public DatagridPage<TbUserGroup> select(@ModelAttribute PageInfo<TbUserGroup> pageInfo, @ModelAttribute TbUserGroup tbuserGroup, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
@@ -112,8 +111,14 @@ public class UserGroupRestController extends BaseController<TbUserGroup> {
 		return super.setPage(pageInfo);
 	}
 	
+	@RequestMapping(value = "listAll")
+	public List<TbUserGroup> listAll(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		List<TbUserGroup> list  = userGroupService.selectByExample(null);
+		return list;
+	}
+	
 
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid TbUserGroup tbuserGroup, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
@@ -122,19 +127,6 @@ public class UserGroupRestController extends BaseController<TbUserGroup> {
 		
 		String res = ""+userGroupService.insertSelective(tbuserGroup);
 		return res;
-	}
-	
-	@RequestMapping(value = "/testcreate", method = RequestMethod.GET)
-	public String testcreate(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		TbUserGroup tbuserGroup = new TbUserGroup();
-		tbuserGroup.setId(System.currentTimeMillis()+"");
-		String res = ""+userGroupService.insertSelective(tbuserGroup);
-		return res;
-	}
-	
-	@RequestMapping(value = "/sendCreatProductTopic", method = RequestMethod.GET)
-	public void sendCreatProductTopic(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-//		prductService.sendCreateProductTopic("创建一个Topic成功。");
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)

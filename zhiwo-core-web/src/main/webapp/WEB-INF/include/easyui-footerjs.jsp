@@ -154,7 +154,7 @@
 	//是否可用
 	function formatDisable(value, row, index) {
 		if (value) {
-			return '<label style="color:blue;font-size:14px;">禁用</label>';
+			return '<label style="color:red;font-size:14px;">禁用</label>';
 		}
 		if (!value) {
 			return '<label style="color:green;font-size:14px;">可用</label>';
@@ -189,8 +189,38 @@
 			});
 	}
 	
+	//时间格式化函数
 	function formatTime(value,row){  
         var unixTimestamp = new Date(value);  
         return unixTimestamp.toLocaleString();  
     }  
+	
+	//读取cookies
+	function getCookie(name)
+	{
+		var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+		if(arr=document.cookie.match(reg))
+		return unescape(arr[2]);
+		else
+		return null;
+	}
+	
+	//删除cookies
+	function delCookie(name)
+	{
+		var exp = new Date();
+		exp.setTime(exp.getTime() - 1);
+		var cval=getCookie(name);
+		if(cval!=null)
+		document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+	}
+	
+	//写cookies,时间默认一个月。
+	function setCookie(name,value)
+	{
+		var Days = 30;
+		var exp = new Date();
+		exp.setTime(exp.getTime() + Days*24*60*60*1000);
+		document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+	}
 </script>

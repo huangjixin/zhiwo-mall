@@ -878,5 +878,6 @@
 		<module>zhiwo-fileupload-web</module>
 		<module>zhiwo-cms-web</module>
 		<module>zhiwo-shop-web</module>
+		<module>zhiwo-zhihuiduo-web</module>
 	</modules>
 </project>

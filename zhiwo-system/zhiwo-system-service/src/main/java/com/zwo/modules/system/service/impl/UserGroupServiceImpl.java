@@ -197,9 +197,10 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 	@Override
 	@Transactional(readOnly = true)
 	public List<TbUserGroup> selectByExample(Object example) {
-		return null;
+		return super.selectByExample(example);
 	}
 
+	
 	/*
 	 * (non-Javadoc)
 	 * 

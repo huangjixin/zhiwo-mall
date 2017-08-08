@@ -51,11 +51,10 @@
     <result column="QUANTITY_REPORT_ID" property="quantityReportId" jdbcType="VARCHAR" />
     <result column="TYPE" property="type" jdbcType="VARCHAR" />
   </resultMap>
+  <resultMap id="ResultMapWithGroupName" type="com.zwo.modules.system.domain.TbUserUserGroup" extends="BaseResultMap" >
+    <result column="GROUP_NAME" property="groupName" jdbcType="VARCHAR" />
+  </resultMap>
   <sql id="Example_Where_Clause" >
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
         <if test="criteria.valid" >
           <trim prefix="(" suffix=")" prefixOverrides="and" >
@@ -81,13 +80,9 @@
           </trim>
         </if>
       </foreach>
-    </where>
   </sql>
   <sql id="Update_By_Example_Where_Clause" >
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <where >
+  	 <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or" >
         <if test="criteria.valid" >
           <trim prefix="(" suffix=")" prefixOverrides="and" >
@@ -113,12 +108,9 @@
           </trim>
         </if>
       </foreach>
-    </where>
+      </where>
   </sql>
   <sql id="Base_Column_List" >
-    <!--
-      WARNING - @mbg.generated
-    -->
     ID, USERNAME, PASSWORD, LOGIN_DATE, CREATE_DATE, UPDATE_DATE, LAST_LOGIN_DATE, EMAIL, 
     MOBIL_PHONE, DISABLE, CREATOR, UPDATER, SEX, ICON, DESCRIPTION, AGE, WEIGHT, QQ, 
     WEIXIN, REAL_NAME, LOGIN_COUNT, SORT, ORG_ID, PARENT_ID, PARENTIDS, MEMBER_GROUP_ID, 
@@ -127,4 +119,19 @@
     LEGAL_REPRESENTATIVE_CARD1, LEGAL_REPRESENTATIVE_CARD2, LEGAL_IDCARD_EFFITIVE, BUSSINESS_LICENSE_PIC, 
     LICENSE_FOR_OPENING_COUNT, QUANTITY_REPORT_ID, TYPE
   </sql>
+  <!-- <select id="selectByExampleAndGroupCode"  resultMap="ResultMapWithGroupName" parameterType="map" >
+  	SELECT 
+	    tb_user.*, tb_user_group.NAME AS group_name
+	FROM
+	    tb_user
+	        LEFT JOIN
+	    tb_user_group ON tb_user.USERGROUP_ID = tb_user_group.ID
+	where 1=1
+	<if test="groupName != null" >
+	    and tb_user_group.code=#{groupName}
+	</if>
+	<if test="example != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select> -->
 </mapper>

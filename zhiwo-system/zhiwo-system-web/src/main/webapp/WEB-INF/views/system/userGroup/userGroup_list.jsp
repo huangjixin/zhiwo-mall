@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>用户列表</title>
+<title>用户组列表</title>
 <%@ include file="/WEB-INF/include/easyui-css.jsp"%>
 <%@ include file="/WEB-INF/include/easyui-js.jsp"%>
 
@@ -35,7 +35,7 @@
 			<tr>
 				<th data-options="field:'ck',checkbox:true"></th>
 				<th data-options="field:'id',align:'center'">id</th>
-				<th data-options="field:'userGroupname',align:'center'">账户名称</th>
+				<th data-options="field:'name',align:'center'">用户组名称</th>
 				<th data-options="field:'createDate',align:'center',width:100">创建日期</th>
 				<th data-options="field:'updateDate',align:'center',width:100">更新日期</th>
 				<!-- <th data-options="field:'By',align:'center',width:100">创建人</th>

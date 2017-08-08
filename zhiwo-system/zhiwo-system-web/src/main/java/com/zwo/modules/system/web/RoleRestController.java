@@ -8,9 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
@@ -103,6 +100,7 @@ public class RoleRestController extends BaseController<TbRole> {
 		TbRoleCriteria tbroleCriteria = null;
 		tbroleCriteria = new TbRoleCriteria();
 		TbRoleCriteria.Criteria criteria = tbroleCriteria.createCriteria();
+		criteria.andDisabledEqualTo(false);
 		tbroleCriteria.setOrderByClause("id desc");
 		if (null != tbrole.getName() && !"".equals(tbrole.getName())) {
 			criteria.andNameLike("%" + tbrole.getName() + "%");

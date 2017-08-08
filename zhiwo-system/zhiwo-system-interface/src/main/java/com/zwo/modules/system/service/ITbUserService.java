@@ -3,9 +3,14 @@
  */
 package com.zwo.modules.system.service;
 
+import java.util.List;
 import java.util.Set;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.zwo.modules.system.domain.TbUser;
+import com.zwo.modules.system.domain.TbUserCriteria;
+import com.zwo.modules.system.domain.TbUserUserGroup;
 import com.zwotech.modules.core.service.IBaseService;
 
 /**
@@ -54,5 +59,15 @@ public interface ITbUserService extends IBaseService<TbUser> {
 	 * @param roleId
 	 */
 	void unconnectUserGroupRole(String userGroupId, String roleId);
+	
+	
+	/**
+	 * 根据查询条件进行查询以及组名进行查询
+	 * @param example
+	 * @param groupName
+	 * @return
+	 */
+	List<TbUserUserGroup> selectByExampleAndGroupName(TbUserCriteria example,
+			String groupName);
 	
 }

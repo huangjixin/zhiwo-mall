@@ -102,6 +102,9 @@ public class MemberRestController extends BaseController<Member> {
 		if (null != member.getUsername() && !"".equals(member.getUsername())) {
 			criteria.andUsernameLike("%" + member.getUsername() + "%");
 		}
+		if (null != member.getMobilPhone() && !"".equals(member.getMobilPhone())) {
+			criteria.andMobilPhoneLike("%" + member.getMobilPhone() + "%");
+		}
 		
 		pageInfo = memberService.selectByPageInfo(memberCriteria, pageInfo);
 		return super.setPage(pageInfo);

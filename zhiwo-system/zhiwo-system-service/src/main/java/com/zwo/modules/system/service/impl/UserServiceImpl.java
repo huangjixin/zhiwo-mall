@@ -31,6 +31,7 @@ import com.zwo.modules.system.domain.TbUser;
 import com.zwo.modules.system.domain.TbUserCriteria;
 import com.zwo.modules.system.domain.TbUserGroupRole;
 import com.zwo.modules.system.domain.TbUserGroupRoleCriteria;
+import com.zwo.modules.system.domain.TbUserUserGroup;
 import com.zwo.modules.system.service.ITbUserService;
 import com.zwotech.common.utils.PasswordHelper;
 import com.zwotech.modules.core.service.impl.BaseService;
@@ -60,7 +61,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	@Autowired
 	@Lazy(true)
 	private TbRoleMapper roleMapper;
-	
+
 	@Autowired
 	@Lazy(true)
 	private TbUserGroupRoleMapper userGroupRoleMapper;
@@ -177,8 +178,8 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
 		}
-		//逻辑操作		
-		if(record.getPassword()!=null){
+		// 逻辑操作
+		if (record.getPassword() != null) {
 			record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
 		}
 		int result = super.insert(record);
@@ -208,7 +209,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
 		}
-		if(record.getPassword()!=null){
+		if (record.getPassword() != null) {
 			record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
 		}
 		int result = super.insertSelective(record);
@@ -271,7 +272,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
 
 		// 逻辑操作
-		if(record.getPassword()!=null){
+		if (record.getPassword() != null) {
 			record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
 		}
 		int result = super.updateByExampleSelective(record, example);
@@ -298,7 +299,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 			logger.info(BASE_MESSAGE + "updateByExample更新对象为：" + record.toString());
 
 		// 逻辑操作
-		if(record.getPassword()!=null){
+		if (record.getPassword() != null) {
 			record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
 		}
 		int result = super.updateByExample(record, example);
@@ -325,7 +326,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
 
 		// 逻辑操作
-		if(record.getPassword()!=null){
+		if (record.getPassword() != null) {
 			record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
 		}
 		int result = super.updateByPrimaryKeySelective(record);
@@ -337,7 +338,8 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.zwotech.modules.core.service.IBaseService#updateByPrimaryKey(java.
+	 * @see
+	 * com.zwotech.modules.core.service.IBaseService#updateByPrimaryKey(java.
 	 * lang.Object)
 	 */
 	@Override
@@ -350,10 +352,10 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为：" + record.toString());
 
 		// 逻辑操作
-		if(record.getPassword()!=null){
+		if (record.getPassword() != null) {
 			record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
 		}
-		
+
 		int result = super.updateByPrimaryKey(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新结束");
@@ -367,6 +369,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	 * com.zwotech.modules.core.service.IBaseService#selectByPageInfo(java.lang.
 	 * Object, com.github.pagehelper.PageInfo)
 	 */
+//	@Cacheable(value = "TbUsersPageInfoCache", key = "#root.target+'_'+#root.method.name+'_'+#pageInfo.startRow+'_'+#pageInfo.endRow", condition = "#example==null")
 	@Transactional(readOnly = true)
 	@Override
 	public PageInfo<TbUser> selectByPageInfo(Object example, PageInfo<TbUser> pageInfo) {
@@ -468,7 +471,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	@Override
 	public void connectUserGroupRole(String userGroupId, String roleId) {
 		TbUserGroupRole record = new TbUserGroupRole();
-		record.setId(new Date().getTime() + ""+ Math.round(Math.random() * 99));
+		record.setId(new Date().getTime() + "" + Math.round(Math.random() * 99));
 		record.setUsergroupId(userGroupId);
 		record.setRoleId(roleId);
 		userGroupRoleMapper.insert(record);
@@ -477,9 +480,15 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	@Override
 	public void unconnectUserGroupRole(String userGroupId, String roleId) {
 		TbUserGroupRoleCriteria example = new TbUserGroupRoleCriteria();
-		example.createCriteria().andUsergroupIdEqualTo(userGroupId)
-				.andRoleIdEqualTo(roleId);
+		example.createCriteria().andUsergroupIdEqualTo(userGroupId).andRoleIdEqualTo(roleId);
 		userGroupRoleMapper.deleteByExample(example);
+	}
+
+	@Override
+	public List<TbUserUserGroup> selectByExampleAndGroupName(TbUserCriteria example, String groupName) {
+		List<TbUserUserGroup> list = null;
+//				tbUserMapper.selectByExampleAndGroupCode(example, groupName);
+		return list;
 	}
 
 }

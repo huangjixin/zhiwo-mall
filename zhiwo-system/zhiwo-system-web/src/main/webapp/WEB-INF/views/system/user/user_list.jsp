@@ -14,7 +14,9 @@
 	<div id="toolbar">
 		<%@ include file="/WEB-INF/include/easyui-buttonGroup.jsp"%>
         &nbsp;&nbsp;&nbsp;&nbsp;
-		<label>名称：</label>&nbsp;<input id="usernameInput" class="input" style="width:100px;"/>&nbsp;
+        <input id="userGroup" name="userGroup"   
+    		 editable="false"/>&nbsp;&nbsp;
+		<label>名称：</label>&nbsp;<input id="usernameInput" class="easyui-textbox" style="width:100px;"/>&nbsp;
 		<%@ include file="/WEB-INF/include/easyui-queryButton.jsp"%>
 		<!-- <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
 			onclick="create('user')">新增</a> <a href="#" class="easyui-linkbutton"
@@ -34,13 +36,20 @@
 		<thead>
 			<tr>
 				<th data-options="field:'ck',checkbox:true"></th>
-				<th data-options="field:'id',align:'center'">id</th>
-				<th data-options="field:'username',align:'center'">账户名称</th>
-				<th data-options="field:'createDate',align:'center',width:100">创建日期</th>
-				<th data-options="field:'updateDate',align:'center',width:100">更新日期</th>
+                <th data-options="field:'id',align:'center',hidden:true">id</th>
+				<th data-options="field:'username',align:'center',width:100">账号名称</th>
+                <th data-options="field:'password',align:'center',width:100">密码</th>
+                <th data-options="field:'mobilPhone',align:'center',width:100">电话</th>
+                <th data-options="field:'mobilPhone',align:'center',width:100">邮箱</th>
+                <th data-options="field:'realName',align:'center',width:100">实名</th>
+                <th data-options="field:'icon',align:'center',width:100">头像</th>
+                <th data-options="field:'loginCount',align:'center',width:100">登录次数</th>
+                <th data-options="field:'type',align:'center',width:100">商户类型</th>
+				<!--<th data-options="field:'createDate',align:'center',width:100,formatter:formatTime">创建日期</th>
+				<th data-options="field:'updateDate',align:'center',width:100,formatter:formatTime">更新日期</th>-->
 				<!-- <th data-options="field:'By',align:'center',width:100">创建人</th>
 				<th data-options="field:'updateBy',align:'center',width:100">更新人</th> -->
-				<th data-options="field:'opt',align:'center',formatter:formatOpt">操作</th>
+				<th data-options="field:'opt',align:'center',width:100,formatter:formatOpt">操作</th>
 			</tr>
 		</thead>
 	</table>
@@ -48,7 +57,50 @@
 		// 初始化按钮等工作。
 		$().ready(function() {
 			init("user","tgrid");
+			createUserGroupCombobox();
+			
+			$('#usernameInput').bind('keypress',function(event){
+			  if(event.keyCode == "13")    
+			  {
+				    doResearch();
+			  }
+			});
+			
+			$("#queryBtn").bind("click", function() {
+				doResearch();
+			});
+	
+			$("#removeBatchBtn").bind("click", function() {
+				deleteRows('tgrid','user');
+			});
 		})
+		
+		//创建下拉用户组Combobox
+		function createUserGroupCombobox(){
+			$('#userGroup').combobox({    
+				url:'${ctx}/userGroup/listAll',    
+				valueField:'id',    
+				textField:'name',
+				onLoadSuccess:function(){
+					//var data = $('#userGroup').combobox('getData');	
+					//if (data.length > 0) {  
+					//  $('#userGroup').combobox('select', data[0].id);  
+				  	//}
+				}
+			});
+		}
+		
+		//查询
+		function doResearch(){
+			var parameters = {};
+			var usergroupId = $('#userGroup').combobox('getValue');
+			parameters.username = $('#usernameInput').val();
+			if(usergroupId!=''){
+				parameters.usergroupId = usergroupId;
+			}
+			
+			query('tgrid',parameters);
+		}
 		
 		//格式化操作，添加删除和编辑按钮。
 		function formatOpt(value, rec) {
