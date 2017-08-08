@@ -39,7 +39,7 @@ public class CmsDocumentController extends BaseController<CmsDocument> {
 
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {
-		return basePath + "cmsDocument_list";
+		return basePath + "document_list";
 	}
 
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)

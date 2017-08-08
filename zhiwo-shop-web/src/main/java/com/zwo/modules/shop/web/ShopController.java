@@ -35,7 +35,7 @@ public class ShopController extends BaseController<Shop> {
 	@SuppressWarnings("rawtypes")
 	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
 
-	private static final String basePath = "views/system/shop/";
+	private static final String basePath = "views/shop/shop/";
 
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {

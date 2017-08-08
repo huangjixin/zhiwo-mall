@@ -39,7 +39,7 @@ public class CmsChannelController extends BaseController<CmsChannel> {
 
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {
-		return basePath + "cmsChannel_list";
+		return basePath + "channel_list";
 	}
 
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
