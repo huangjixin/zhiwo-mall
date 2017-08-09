@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import com.alibaba.fastjson.JSON;
 import com.zwo.modules.cms.service.ICmsAssetsService;
 import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.service.IPrImageService;
@@ -44,9 +45,10 @@ public class FileUploadController {
 	@Lazy(true)
 	private ICmsAssetsService cmsAssetsService;
       
+	
 	@RequestMapping(value = "userAssets")
 	@ResponseBody
-	public Map<String, Object> userAssetsUpload(
+	public String userAssetsUpload(
 			@RequestParam(value = "file", required = false) CommonsMultipartFile[] files,
 			String HTTP_CONTENT_DISPOSITION, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse, Model uiModel) {
@@ -54,7 +56,7 @@ public class FileUploadController {
 		List<TbUserAssets> userAssets = new ArrayList<TbUserAssets>();
 		Calendar date = Calendar.getInstance();
 		String rootDir = httpServletRequest.getSession().getServletContext().getRealPath("/");
-		rootDir = "D:"+File.separator;
+//		rootDir = "D:"+File.separator;
 		
 		String url = "images/uassets/" + date.get(Calendar.YEAR) + "/" + (date.get(Calendar.MONTH) + 1) + "/"
 				+ date.get(Calendar.DAY_OF_MONTH);
@@ -88,13 +90,15 @@ public class FileUploadController {
 				assets.setUrl(url + "/" + name);
 				assets.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
 				userAssetsService.insertSelective(assets);
-				// userAssets.add(assets);
+				userAssets.add(assets);
 			}
 		}
-
+		map.put("assets", userAssets);
+		String result = JSON.toJSONString(map);
 		// userAssetsService.batchInsert(userAssets);
-		return map;
+		return result;
 	}
+	
 
 	@RequestMapping(value = "proAssets")
 	@ResponseBody

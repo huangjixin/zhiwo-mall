@@ -11,11 +11,23 @@
 
 </head>
 <body>
+	<%@ include file="/WEB-INF/include/easyui-toolbar.jsp"%>
 	<div id="toolbar">
-		<%@ include file="/WEB-INF/include/easyui-buttonGroup.jsp"%>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-		<label>店铺名称：</label>&nbsp;<input id="nameInput" class="input" style="width:100px;"/>&nbsp;
-		<%@ include file="/WEB-INF/include/easyui-queryButton.jsp"%>
+		<nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid"> 
+           
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <%@ include file="/WEB-INF/include/easyui-buttonGroup.jsp"%>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+               <input id="nameInput"  class="form-control" placeholder="名称">
+                </div>
+                <button type="submit" class="btn btn-default">查询</button>
+            </form>
+            </div>
+        </nav>
+		
+		<%-- <%@ include file="/WEB-INF/include/easyui-queryButton.jsp"%> --%>
 		<!-- <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
 			onclick="create('shop')">新增</a> <a href="#" class="easyui-linkbutton"
 			iconCls="icon-edit" plain="true" onclick="editCategory()">编辑</a> <a href="#"

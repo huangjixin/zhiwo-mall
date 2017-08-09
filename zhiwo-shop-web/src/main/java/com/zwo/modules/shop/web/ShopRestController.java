@@ -108,26 +108,4 @@ public class ShopRestController extends BaseController<Shop> {
 		return super.setPage(pageInfo);
 	}
 	
-
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String create(@Valid Shop tbshop, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-
-		}
-		
-		String res = ""+shopService.insertSelective(tbshop);
-		return res;
-	}
-	
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(@Valid Shop shop, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-			
-		}
-		
-		String res = ""+this.shopService.updateByPrimaryKeySelective(shop);
-		return res;
-	}
 }

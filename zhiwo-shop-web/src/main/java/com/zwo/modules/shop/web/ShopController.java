@@ -13,8 +13,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.zwo.modules.shop.domain.Shop;
+import com.zwo.modules.shop.domain.ShopWithBLOBs;
 import com.zwo.modules.shop.service.IShopService;
 import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
@@ -43,7 +46,7 @@ public class ShopController extends BaseController<Shop> {
 	}
 
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
-	public String create(@Valid Shop shop, BindingResult result, Model uiModel,
+	public String tocreate(@Valid Shop shop, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		uiModel.addAttribute("shop", shop);
 		return basePath + "shop_edit";
@@ -71,6 +74,37 @@ public class ShopController extends BaseController<Shop> {
 		uiModel.addAttribute("shop", shop);
 		uiModel.addAttribute("operation", "edit");
 		return basePath + "shop_edit";
+	}
+	
+
+	@RequestMapping(value = "create", method = RequestMethod.POST)
+	public String create(@Valid ShopWithBLOBs tbshop, BindingResult result, Model uiModel,
+			RedirectAttributes redirectAttributes,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		if (result.hasErrors()) {
+
+		}
+		
+		int res = shopService.insertSelective(tbshop);
+		if(res==1){
+			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+		}
+		
+		return "redirect:/shop/create";
+	}
+	
+	
+	@RequestMapping(value = "update", method = RequestMethod.POST)
+	@ResponseBody
+	public String update(@Valid ShopWithBLOBs shop, BindingResult result, Model uiModel,
+			RedirectAttributes attr,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		if (result.hasErrors()) {
+			
+		}
+		
+		String res = ""+this.shopService.updateByPrimaryKeySelective(shop);
+		return res;
 	}
 
 }
