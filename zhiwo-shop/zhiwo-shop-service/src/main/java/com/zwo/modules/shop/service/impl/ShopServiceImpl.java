@@ -109,7 +109,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "Shop", key = "#id")
+	@CacheEvict(value = "Shop", key = "#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())

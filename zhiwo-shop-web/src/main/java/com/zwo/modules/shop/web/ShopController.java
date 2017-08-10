@@ -60,7 +60,9 @@ public class ShopController extends BaseController<Shop> {
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-
+			redirectAttributes.addFlashAttribute("shop", shop);
+			redirectAttributes.addFlashAttribute("message", "数据绑定有误！");
+			return "redirect:/shop/create";
 		}
 		
 		int res = shopService.insertSelective(shop);
@@ -68,7 +70,6 @@ public class ShopController extends BaseController<Shop> {
 			redirectAttributes.addFlashAttribute("shop", shop);
 			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
 		}
-		uiModel.addAttribute("shop", shop);
 		return "redirect:/shop/create";
 	}
 	 
@@ -84,7 +85,7 @@ public class ShopController extends BaseController<Shop> {
 		
 		int res = this.shopService.updateByPrimaryKeySelective(shop);
 		if(res==1){
-			redirectAttributes.addFlashAttribute("shop", shop);
+//			redirectAttributes.addFlashAttribute("shop", shop);
 			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
 		}
 		return "redirect:/shop/edit/"+shop.getId();

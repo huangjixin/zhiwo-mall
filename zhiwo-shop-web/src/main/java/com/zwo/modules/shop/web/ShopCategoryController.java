@@ -6,20 +6,16 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.zwo.modules.shop.domain.ShopCategory;
-import com.zwo.modules.shop.domain.ShopCategory;
 import com.zwo.modules.shop.service.IShopCategoryService;
-import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
 @Controller
@@ -30,7 +26,7 @@ public class ShopCategoryController extends BaseController<ShopCategory> {
 	@Lazy(true)
 	private IShopCategoryService shopCategoryService;
 
-	private static final String basePath = "views/system/shopCategory/";
+	private static final String basePath = "views/shop/category/";
 
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {
@@ -56,17 +52,19 @@ public class ShopCategoryController extends BaseController<ShopCategory> {
 	
 
 	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public String create(@Valid ShopCategory tbshopCategory, BindingResult result, Model uiModel,
+	public String create(@Valid ShopCategory shopCategory, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-
+			redirectAttributes.addFlashAttribute("shopCategory", shopCategory);
+			redirectAttributes.addFlashAttribute("message", "数据绑定有误！");
+			return "redirect:/shopCategory/create";
 		}
 		
-		int res = shopCategoryService.insertSelective(tbshopCategory);
+		int res = shopCategoryService.insertSelective(shopCategory);
 		if(res==1){
-			redirectAttributes.addFlashAttribute("shopCategory", tbshopCategory);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+			redirectAttributes.addFlashAttribute("shopCategory", shopCategory);
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
 		
 		return "redirect:/shopCategory/create";
@@ -77,17 +75,17 @@ public class ShopCategoryController extends BaseController<ShopCategory> {
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-			
+			redirectAttributes.addFlashAttribute("shopCategory", shopCategory);
+			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
 		}
 		
 		int res = this.shopCategoryService.updateByPrimaryKeySelective(shopCategory);
 		if(res==1){
 			redirectAttributes.addFlashAttribute("shopCategory", shopCategory);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
-		uiModel.addAttribute("shopCategory", shopCategory);
-		uiModel.addAttribute("operation", "edit");
-		return basePath + "shopCategory_edit";
+		redirectAttributes.addAttribute("operation", "edit");
+		return "redirect:/shopCategory/edit/"+shopCategory.getId();
 	}
 
 }

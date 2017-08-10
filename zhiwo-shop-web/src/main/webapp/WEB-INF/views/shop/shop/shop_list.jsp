@@ -55,12 +55,12 @@
 		$().ready(function() {
 			init("shop","tgrid");
 			
-			/* $('#nameInput').bind('keypress',function(event){
+			$('#nameInput').bind('keypress',function(event){
 			  if(event.keyCode == "13")    
 			  {
 				    doResearch();
 			  }
-			}); */
+			});
 			
 			$("#queryBtn").bind("click", function() {
 				doResearch();

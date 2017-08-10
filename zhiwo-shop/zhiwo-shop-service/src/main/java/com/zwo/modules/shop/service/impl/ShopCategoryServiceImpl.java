@@ -122,7 +122,7 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "ShopCategory", key="#id")
+	@CacheEvict(value = "ShopCategory", key="#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())

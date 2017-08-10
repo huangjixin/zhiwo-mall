@@ -11,4 +11,14 @@
 <link href="${ctx}/js/jquery-easyui/themes/insdep/insdep_theme_default.css" rel="stylesheet" type="text/css">
 <link href="${ctx}/js/jquery-easyui/themes/insdep/icon.css" rel="stylesheet" type="text/css"> --%>
 
+<%--<script type="text/javascript" src="http://cdn.bootcss.com/blueimp-file-upload/9.17.0/js/vendor/jquery.ui.widget.min.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/blueimp-file-upload/9.17.0/js/jquery.fileupload.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/blueimp-file-upload/9.17.0/js/jquery.iframe-transport.min.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/blueimp-file-upload/9.17.0/js/jquery.fileupload-process.min.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/blueimp-file-upload/9.17.0/js/jquery.fileupload-image.min.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/blueimp-file-upload/9.17.0/js/jquery.fileupload-audio.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/blueimp-file-upload/9.17.0/js/jquery.fileupload-video.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/blueimp-file-upload/9.17.0/js/jquery.fileupload-validate.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/blueimp-file-upload/9.17.0/js/jquery.fileupload-ui.js"></script>--%>
+
 	

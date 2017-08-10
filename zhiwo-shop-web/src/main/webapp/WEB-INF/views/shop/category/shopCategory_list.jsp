@@ -8,19 +8,23 @@
 <title>店铺分类列表</title>
 <%@ include file="/WEB-INF/include/easyui-css.jsp"%>
 <%@ include file="/WEB-INF/include/easyui-js.jsp"%>
-
 </head>
 <body>
+	<%@ include file="/WEB-INF/include/easyui-toolbar.jsp"%>
 	<div id="toolbar">
-		<%@ include file="/WEB-INF/include/easyui-buttonGroup.jsp"%>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-		<label>名称：</label>&nbsp;<input id="shopCategorynameInput" class="input" style="width:100px;"/>&nbsp;
-		<%@ include file="/WEB-INF/include/easyui-queryButton.jsp"%>
-		<!-- <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-			onclick="create('shopCategory')">新增</a> <a href="#" class="easyui-linkbutton"
-			iconCls="icon-edit" plain="true" onclick="editCategory()">编辑</a> <a href="#"
-			class="easyui-linkbutton" iconCls="icon-remove" plain="true"
-			onclick="destroy()">删除</a> -->
+		<nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid"> 
+           
+            <div class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <%@ include file="/WEB-INF/include/easyui-buttonGroup.jsp"%>
+                	&nbsp;&nbsp;&nbsp;&nbsp;
+               		<input id="nameInput"  class="form-control" placeholder="名称">
+                </div>
+                <button id="queryBtn" class="btn btn-default">查询</button>
+            </div>
+            </div>
+        </nav>
 	</div>
 	<table id="tgrid" 
 		title="店铺列表" 
@@ -30,17 +34,19 @@
 		rownumbers="true"
 		fitColumns="true" 
 		fit="true" 
-		singleSelect="true">
+		singleSelect="false"
+        pagination="true">
 		<thead>
 			<tr>
 				<th data-options="field:'ck',checkbox:true"></th>
-				<th data-options="field:'id',align:'center'">id</th>
-				<th data-options="field:'shopCategoryname',align:'center'">名称</th>
-				<th data-options="field:'createDate',align:'center',width:100">创建日期</th>
-				<th data-options="field:'updateDate',align:'center',width:100">更新日期</th>
+				<th data-options="field:'id',align:'center',hidden:true">id</th>
+				<th data-options="field:'name',align:'center',width:100">店铺分类名称</th>
+                <th data-options="field:'code',align:'center',width:100">代码</th>
+				<th data-options="field:'createDate',align:'center',width:100,formatter:formatTime">创建日期</th>
+				<th data-options="field:'updateDate',align:'center',width:100,formatter:formatTime">更新日期</th>
 				<!-- <th data-options="field:'By',align:'center',width:100">创建人</th>
 				<th data-options="field:'updateBy',align:'center',width:100">更新人</th> -->
-				<th data-options="field:'opt',align:'center',formatter:formatOpt">操作</th>
+				<th data-options="field:'opt',align:'center',width:100,formatter:formatOpt">操作</th>
 			</tr>
 		</thead>
 	</table>
@@ -48,7 +54,30 @@
 		// 初始化按钮等工作。
 		$().ready(function() {
 			init("shopCategory","tgrid");
+			
+			/* $('#nameInput').bind('keypress',function(event){
+			  if(event.keyCode == "13")    
+			  {
+				    doResearch();
+			  }
+			}); */
+			
+			$("#queryBtn").bind("click", function() {
+				doResearch();
+			});
+	
+			$("#removeBatchBtn").bind("click", function() {
+				deleteRows('tgrid','user');
+			});
 		})
+		
+		
+		//查询
+		function doResearch(){
+			var parameters = {};
+			parameters.name = $('#nameInput').val();
+			query('tgrid',parameters);
+		}
 		
 		//格式化操作，添加删除和编辑按钮。
 		function formatOpt(value, rec) {
@@ -56,8 +85,8 @@
 //			<%
 //				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:shopCategory:delete")){
 //				%>
-				btn += '<a href="#" class="easyui-linkbutton button-red"  onclick="deleteById(\'tgrid\',\''
-					+ rec.id + '\',\'shopCategory\')"><i class="icon-trash"></i>&nbsp;&nbsp;删除 </a>';
+				btn += '<button type="button" class="btn btn-danger btn-sm" onclick="deleteById(\'tgrid\',\''
+					+ rec.id + '\',\'shopCategory\')"><i class="fa fa-trash fa-lg"></i>&nbsp;&nbsp;删除 </button>';
 					btn += "&nbsp;&nbsp;";
 					btn += ''
 //				<%
@@ -66,8 +95,8 @@
 //			<%
 //				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:shopCategory:edit")){
 //				%> 
-				btn += '<a href="#" class="easyui-linkbutton button-green"  onclick="update(\''
-					+ rec.id + '\',\'shopCategory\')"><i class="icon-edit"></i>&nbsp;&nbsp;编辑 </a>';
+				btn += '<button type="button" class="btn btn-info btn-sm" onclick="update(\''
+					+ rec.id + '\',\'shopCategory\')"><i class="fa fa-edit fa-lg"></i>&nbsp;&nbsp;编辑</button>';
 //				 <%
 //				}
 //							%> 
