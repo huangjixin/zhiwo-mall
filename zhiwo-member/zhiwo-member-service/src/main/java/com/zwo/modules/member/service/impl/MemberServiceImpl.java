@@ -19,10 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.zwo.modules.mall.dao.OrderMapper;
+import com.zwo.modules.mall.dao.OrderTradeMapper;
 import com.zwo.modules.mall.dao.PrProductMapper;
-import com.zwo.modules.mall.domain.Order;
-import com.zwo.modules.mall.domain.OrderCriteria;
+import com.zwo.modules.mall.domain.OrderTrade;
+import com.zwo.modules.mall.domain.OrderTradeCriteria;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.member.dao.GuessQuestionMapper;
 import com.zwo.modules.member.dao.MemberAccountMapper;
@@ -65,7 +65,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	
 	@Autowired
 	@Lazy(true)
-	private OrderMapper orderMapper;
+	private OrderTradeMapper orderMapper;
 	
 	@Autowired
 	@Lazy(true)
@@ -481,12 +481,12 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Order> selectOrderByMemberId(String memberId) {
+	public List<OrderTrade> selectOrderByMemberId(String memberId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "查询订单会员id为"+memberId+"开始");
-		OrderCriteria orderCriteria = new OrderCriteria();
+		OrderTradeCriteria orderCriteria = new OrderTradeCriteria();
 		orderCriteria.createCriteria().andMemberIdEqualTo(memberId);
-		List<Order> list = orderMapper.selectByExample(orderCriteria);
+		List<OrderTrade> list = orderMapper.selectByExample(orderCriteria);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "查询订单会员id为"+memberId+"结束，结果条目数为："+list.size());
 		return list;
@@ -494,16 +494,16 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 
 	@Override
 	@Transactional(readOnly = true)
-	public PageInfo<Order> selectOrderByMemberId(String memberId, PageInfo<Order> pageInfo) {
+	public PageInfo<OrderTrade> selectOrderByMemberId(String memberId, PageInfo<OrderTrade> pageInfo) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "查询订单会员id为"+memberId+"开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "查询分页参数：" + pageInfo.toString());
 		PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
-		OrderCriteria orderCriteria = new OrderCriteria();
+		OrderTradeCriteria orderCriteria = new OrderTradeCriteria();
 		orderCriteria.createCriteria().andMemberIdEqualTo(memberId);
-		List<Order> list = orderMapper.selectByExample(orderCriteria);
-		PageInfo<Order> page = new PageInfo<Order>(list);
+		List<OrderTrade> list = orderMapper.selectByExample(orderCriteria);
+		PageInfo<OrderTrade> page = new PageInfo<OrderTrade>(list);
 		pageInfo.setList(list);
 		pageInfo.setTotal(page.getTotal());
 		pageInfo.setEndRow(page.getEndRow());

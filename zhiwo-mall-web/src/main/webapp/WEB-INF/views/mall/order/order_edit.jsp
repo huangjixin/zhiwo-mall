@@ -4,7 +4,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>商品分类编辑</title>
+<title>订单编辑</title>
 <%@ include file="/WEB-INF/include/easyui-css.jsp"%>
 <%@ include file="/WEB-INF/include/easyui-js.jsp"%>
 <script type="text/javascript"
@@ -13,70 +13,50 @@
 <body>
 	<form class="form-horizontal" role="form"
 		<c:if test="${operation=='edit'}">
- action="${ctx}/prCategory/update"
+ action="${ctx}/order/update"
 		</c:if>
 		<c:if test="${operation==null}">
- action="${ctx}/prCategory/create"
+ action="${ctx}/order/create"
 		</c:if>
 		method="post">
-        <c:if test="${operation=='edit'}">
-        <input id="id" name="id" value="${prCategory.id}" type="hidden"/>
-		</c:if>
-        <input id="icon" name="icon" value="${prCategory.icon}" type="hidden"/>
-		<div class="form-group">
-			<label for="name" class="col-sm-1 control-label">商品分类名称</label>
+        <%-- <c:if test="${operation=='edit'}">
+        <input id="id" name="id" value="${order.id}" type="hidden"/>
+		</c:if> --%>
+		<%-- <div class="form-group">
+			<label for="name" class="col-sm-1 control-label">订单id</label>
 			<div class="col-sm-4">
-				<input type="text" class="form-control" id="name" name="name"
-					placeholder="请输入商品分类名称" value="${prCategory.name}">
+				<input type="text" class="form-control" id="id" name="id" editable="false"
+					placeholder="请输入订单名称" value="${order.name}">
 			</div>
-		</div>
+		</div> --%>
 		<div class="form-group">
-			<label for="code" class="col-sm-1 control-label">商品分类代码</label>
+			<label for="code" class="col-sm-1 control-label">订单代码</label>
 			<div class="col-sm-4">
 				<input type="text" class="form-control" id="code" name="code"
-					placeholder="请输入商品分类代码(商品分类拼音)" value="${prCategory.code}">
-			</div>
-		</div>
-		<div class="form-group">
-			<label for="file" class="col-sm-1 control-label">商品分类缩略图</label>
-			<div class="col-sm-4">
-				<input type="file" id="file" name="file" style="display: none;"
-					accept="image/*" onChange="$('#message').html($('#file').val())" />
-				<button type="button" class="btn btn-success fileinput-button"
-					onclick="$('#file').click();">
-					<i class="fa fa-plus"></i>&nbsp;&nbsp;选择文件
-				</button>
-				<button type="button" class="btn btn-primary start"
-					onclick="fileUploadToServer();">
-					<i class="fa fa-upload"></i> <span>&nbsp;&nbsp;开始上传</span>
-				</button>
-				<%@ include file="/WEB-INF/include/easyui-buttonForm.jsp"%>
-				<label id="message">${message}</label>
-			</div>
-		</div>
-		<div class="form-group">
-			<label for="file" class="col-sm-1 control-label"></label>
-			<div class="col-sm-4">
-				<img id="iconImg" src="${ctx}/${prCategory.icon}" 	class=".img-responsive"
-					style="width: 100px;">
+					placeholder="请输入订单代码(订单拼音)" value="${order.code}">
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="description" class="col-sm-1 control-label">分类描述</label>
 			<div class="col-sm-4">
-				<textarea name="description" class="form-control" rows="4" >${prCategory.description}</textarea>
+				<textarea name="description" class="form-control" rows="4" >${order.description}</textarea>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="file" class="col-sm-1 control-label"></label>
+			<div class="col-sm-4">
+				<%@ include file="/WEB-INF/include/easyui-buttonForm.jsp"%>
+				<label id="message">${message}</label>
 			</div>
 		</div>
 	</form>
 
 	<script type="text/javascript">
-		
 		// 初始化按钮等工作。
 		$().ready(function() {
-
 			//返回列表。
 			$("#returnBtn").bind("click", function() {
-				backToList('prCategory');
+				backToList('order');
 			});
 		});
 

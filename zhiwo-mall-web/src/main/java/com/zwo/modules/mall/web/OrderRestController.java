@@ -22,18 +22,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.DatagridPage;
 import com.github.pagehelper.PageInfo;
-import com.zwo.modules.mall.domain.Order;
-import com.zwo.modules.mall.domain.OrderCriteria;
-import com.zwo.modules.mall.service.IOrderService;
+import com.zwo.modules.mall.domain.OrderTrade;
+import com.zwo.modules.mall.domain.OrderTradeCriteria;
+import com.zwo.modules.mall.service.IOrderTradeService;
 import com.zwotech.common.web.BaseController;
 
 @RestController
 @RequestMapping("order")
 @Lazy(true)
-public class OrderRestController extends BaseController<Order> {
+public class OrderRestController extends BaseController<OrderTrade> {
 	@Autowired
 	@Lazy(true)
-	private IOrderService orderService;
+	private IOrderTradeService orderService;
 	
 	/** 
 	 * @Title: deleteById 
@@ -83,23 +83,23 @@ public class OrderRestController extends BaseController<Order> {
 	 * @return
 	 */
 	@RequestMapping(value = "/show/{id}")
-	public Order getOrder(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
+	public OrderTrade getOrderTrade(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		Order order = orderService.selectByPrimaryKey(id);
+		OrderTrade order = orderService.selectByPrimaryKey(id);
 		
 		return order;
 	}
 	
 	@RequestMapping(value = "/select")
 	@ResponseBody
-	public DatagridPage<Order> select(@ModelAttribute PageInfo<Order> pageInfo, @ModelAttribute Order order, Model uiModel,
+	public DatagridPage<OrderTrade> select(@ModelAttribute PageInfo<OrderTrade> pageInfo, @ModelAttribute OrderTrade order, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
 		super.select(pageInfo, uiModel, httpServletRequest, httpServletResponse);
  
-		OrderCriteria orderCriteria = null;
-		orderCriteria = new OrderCriteria();
-		OrderCriteria.Criteria criteria = orderCriteria.createCriteria();
+		OrderTradeCriteria orderCriteria = null;
+		orderCriteria = new OrderTradeCriteria();
+		OrderTradeCriteria.Criteria criteria = orderCriteria.createCriteria();
 		orderCriteria.setOrderByClause("id desc");
 		/*if (null != order.getName() && !"".equals(order.getName())) {
 			criteria.andNameLike("%" + order.getName() + "%");

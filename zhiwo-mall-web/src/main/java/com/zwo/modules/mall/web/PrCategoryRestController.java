@@ -40,12 +40,16 @@ public class PrCategoryRestController extends BaseController<PrCategory> {
 	private IPrCategoryService categoryService;
 
 	/**
-	 * @Title: deleteById @Description: 批量删除 @param idstring @param
-	 *         httpServletRequest @param httpServletResponse @return String
-	 *         返回类型 @throws
+	 * @Title: deleteById 
+	 * @Description: 批量删除 
+	 * @param idstring 
+	 * @param httpServletRequest 
+	 * @param httpServletResponse
+	 * @return String 返回类型
+	 * @throws
 	 */
 	@RequestMapping(value = "/deleteById")
-	public String deleteById(@RequestParam(value = "ids", required = true) String ids,
+	public String deleteById(@RequestParam(value = "idstring", required = true) String ids,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
 
 		String[] idArray = ids.split(",");

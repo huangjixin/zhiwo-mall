@@ -6,7 +6,7 @@ package com.zwo.modules.member.service;
 import java.util.List;
 
 import com.github.pagehelper.PageInfo;
-import com.zwo.modules.mall.domain.Order;
+import com.zwo.modules.mall.domain.OrderTrade;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.member.domain.GuessQuestion;
 import com.zwo.modules.member.domain.Member;
@@ -69,7 +69,7 @@ public interface IMemberService extends IBaseService<Member> {
 	 * @param memberId
 	 * @return
 	 */
-	List<Order> selectOrderByMemberId(String memberId);
+	List<OrderTrade> selectOrderByMemberId(String memberId);
 	
 	/**
 	 * 分页会员ID查询会员参与的订单
@@ -77,7 +77,7 @@ public interface IMemberService extends IBaseService<Member> {
 	 * @param pageInfo
 	 * @return
 	 */
-	PageInfo<Order> selectOrderByMemberId(String memberId,PageInfo<Order> pageInfo);
+	PageInfo<OrderTrade> selectOrderByMemberId(String memberId,PageInfo<OrderTrade> pageInfo);
 	
 	/**
 	 * 统计会员：我的分销商品盈利

@@ -17,11 +17,12 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.zwo.modules.mall.dao.OrderMapper;
-import com.zwo.modules.mall.domain.Order;
-import com.zwo.modules.mall.domain.OrderCriteria;
-import com.zwo.modules.mall.service.IOrderService;
+import com.zwo.modules.mall.dao.OrderTradeMapper;
+import com.zwo.modules.mall.domain.OrderTrade;
+import com.zwo.modules.mall.domain.OrderTradeCriteria;
+import com.zwo.modules.mall.service.IOrderTradeService;
 import com.zwotech.modules.core.service.impl.BaseService;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -33,18 +34,18 @@ import tk.mybatis.mapper.common.Mapper;
 @Service
 @Lazy(true)
 @Transactional(readOnly = false)
-public class OrderServiceImpl extends BaseService<Order> implements IOrderService {
-	private static Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements IOrderTradeService {
+	private static Logger logger = LoggerFactory.getLogger(OrderTradeServiceImpl.class);
 
-	private static final String BASE_MESSAGE = "【OrderServiceImpl服务类提供的基础操作增删改查等】";
+	private static final String BASE_MESSAGE = "【OrderTradeServiceImpl服务类提供的基础操作增删改查等】";
 
 	@Autowired
 	@Lazy(true)
-	private OrderMapper orderMapper;
+	private OrderTradeMapper orderTradeMapper;
 
 	@Override
-	public Mapper<Order> getBaseMapper() {
-		return orderMapper;
+	public Mapper<OrderTrade> getBaseMapper() {
+		return null;
 	}
 
 	/*
@@ -54,7 +55,7 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 	 * com.zwotech.modules.core.service.IBaseService#insertBatch(java.util.List)
 	 */
 	/*
-	 * @Override public int insertBatch(List<Order> list) { // TODO
+	 * @Override public int insertBatch(List<OrderTrade> list) { // TODO
 	 * Auto-generated method stub return 0; }
 	 */
 
@@ -78,21 +79,21 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = "Order", allEntries = true)
+	@CacheEvict(value = "OrderTrade", allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
 
 		// 逻辑操作
-		int result = orderMapper.deleteByExample(example);
+		int result = orderTradeMapper.deleteByExample((OrderTradeCriteria)example);
 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除结束");
 		return result;
 	}
 
-	@CacheEvict(value = "Order", allEntries = true)
+	@CacheEvict(value = "OrderTrade", allEntries = true)
 //	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
@@ -102,9 +103,9 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 			logger.info(BASE_MESSAGE + "deleteBatch批量删除ID为：" + list.toString());
 
 		// 逻辑操作
-		OrderCriteria orderCriteria = new OrderCriteria();
+		OrderTradeCriteria orderCriteria = new OrderTradeCriteria();
 		orderCriteria.createCriteria().andIdIn(list);
-		int result = orderMapper.deleteByExample(orderCriteria);
+		int result = orderTradeMapper.deleteByExample(orderCriteria);
 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteBatch批量删除结束");
@@ -119,7 +120,7 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "Order",key="#id+''")
+	@CacheEvict(value = "OrderTrade",key="#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -128,7 +129,7 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为：" + id.toString());
 
 		// 逻辑操作
-		int result = super.deleteByPrimaryKey(id);
+		int result = orderTradeMapper.deleteByPrimaryKey(id);
 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除结束");
@@ -142,8 +143,8 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "Order", key = "#record.id")
-	public int insert(Order record) {
+	@CachePut(value = "OrderTrade", key = "#record.id")
+	public int insert(OrderTrade record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入开始");
@@ -154,7 +155,7 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
 		}
-		int result = super.insert(record);
+		int result = orderTradeMapper.insert(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入结束");
 		return result;
@@ -169,8 +170,8 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 	 */
 
 	@Override
-	@CachePut(value = "Order", key = "#record.id")
-	public int insertSelective(Order record) {
+	@CachePut(value = "OrderTrade", key = "#record.id")
+	public int insertSelective(OrderTrade record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入开始");
@@ -181,7 +182,7 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
 		}
-		int result = super.insertSelective(record);
+		int result = orderTradeMapper.insertSelective(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入结束");
 		return result;
@@ -196,7 +197,7 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public List<Order> selectByExample(Object example) {
+	public List<OrderTrade> selectByExample(Object example) {
 		return null;
 	}
 
@@ -208,9 +209,9 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = "Order")
+	@Cacheable(key = "#id+''", value = "OrderTrade")
 	@Transactional(readOnly = true)
-	public Order selectByPrimaryKey(String id) {
+	public OrderTrade selectByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询开始");
@@ -218,7 +219,7 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询参数为：" + id);
 
 		// 逻辑操作
-		Order order = super.selectByPrimaryKey(id);
+		OrderTrade order = orderTradeMapper.selectByPrimaryKey(id);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询结束");
 		return order;
@@ -231,9 +232,9 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 	 * com.zwotech.modules.core.service.IBaseService#updateByExampleSelective(
 	 * java.lang.Object, java.lang.Object)
 	 */
-	@CacheEvict(value = "Order", allEntries = true)
+	@CacheEvict(value = "OrderTrade", allEntries = true)
 	@Override
-	public int updateByExampleSelective(Order record, Object example) {
+	public int updateByExampleSelective(OrderTrade record, Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新开始");
@@ -241,7 +242,7 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
 
 		// 逻辑操作
-		int result = super.updateByExampleSelective(record, example);
+		int result = orderTradeMapper.updateByExampleSelective(record, (OrderTradeCriteria)example);
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新结束");
@@ -256,8 +257,8 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 	 * Object, java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "Order", allEntries = true)
-	public int updateByExample(Order record, Object example) {
+	@CacheEvict(value = "OrderTrade", allEntries = true)
+	public int updateByExample(OrderTrade record, Object example) {
 		//日志记录
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新开始");
@@ -265,7 +266,7 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
 										
 		//逻辑操作		
-		int result = super.updateByExample(record, example);
+		int result = orderTradeMapper.updateByExample(record, (OrderTradeCriteria)example);
 		//日志记录
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新结束");
@@ -280,8 +281,8 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "Order",key="#record.id")
-	public int updateByPrimaryKeySelective(Order record) {
+	@CacheEvict(value = "OrderTrade",key="#record.id")
+	public int updateByPrimaryKeySelective(OrderTrade record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新开始");
@@ -289,7 +290,7 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
 
 		// 逻辑操作
-		int result = super.updateByPrimaryKeySelective(record);
+		int result = orderTradeMapper.updateByPrimaryKeySelective(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新结束");
 		return result;
@@ -303,8 +304,8 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "Order",key="#record.id")
-	public int updateByPrimaryKey(Order record) {
+	@CacheEvict(value = "OrderTrade",key="#record.id")
+	public int updateByPrimaryKey(OrderTrade record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新开始");
@@ -312,7 +313,7 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为：" + record.toString());
 
 		// 逻辑操作
-		int result = super.updateByPrimaryKey(record);
+		int result = orderTradeMapper.updateByPrimaryKey(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新结束");
 		return result;
@@ -327,12 +328,18 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 	 */
 	@Transactional(readOnly = true)
 	@Override
-	public PageInfo<Order> selectByPageInfo(Object example, PageInfo<Order> pageInfo) {
+	public PageInfo<OrderTrade> selectByPageInfo(Object example, PageInfo<OrderTrade> pageInfo) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页参数：" + pageInfo.toString());
-		pageInfo = super.selectByPageInfo(example, pageInfo);
+		PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+		List<OrderTrade> list = orderTradeMapper.selectByExample((OrderTradeCriteria) example);
+		PageInfo<OrderTrade> page = new PageInfo<OrderTrade>( list);
+		pageInfo.setList(list);
+		pageInfo.setTotal(page.getTotal());
+		pageInfo.setEndRow(page.getEndRow());
+		pageInfo.setStartRow(page.getStartRow());
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页结束");
 		return pageInfo;
@@ -340,8 +347,8 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 
 	public static void main(String[] args) {
 		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
-		IOrderService orderServiceImpl = (IOrderService) context.getBean("orderServiceImpl");
-		Order order = new Order();
+		IOrderTradeService orderServiceImpl = (IOrderTradeService) context.getBean("orderServiceImpl");
+		OrderTrade order = new OrderTrade();
 		order.setId(System.currentTimeMillis() + "");
 		int result = orderServiceImpl.insertSelective(order);
 		logger.info(result + "");
