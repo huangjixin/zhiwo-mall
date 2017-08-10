@@ -281,7 +281,7 @@ public class UserAssetsServiceImpl extends BaseService<TbUserAssets> implements 
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbUserAssets", key = "#record.id")
+	@CachePut(value = "TbUserAssets", key = "#record.id")
 	public int updateByPrimaryKeySelective(TbUserAssets record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -304,7 +304,7 @@ public class UserAssetsServiceImpl extends BaseService<TbUserAssets> implements 
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbUserAssets", key = "#record.id")
+	@CachePut(value = "TbUserAssets", key = "#record.id")
 	public int updateByPrimaryKey(TbUserAssets record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

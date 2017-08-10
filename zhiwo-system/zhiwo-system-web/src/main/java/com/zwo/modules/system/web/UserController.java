@@ -55,17 +55,19 @@ public class UserController extends BaseController<TbUser> {
 	
 //	@RequiresPermissions("system:user:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public String create(@Valid TbUser tbuser, BindingResult result, Model uiModel,
+	public String create(@Valid TbUser user, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-
+			redirectAttributes.addFlashAttribute("user", user);
+			redirectAttributes.addFlashAttribute("message", "数据绑定有误！");
+			return "redirect:/user/create";
 		}
 		
-		int res = userService.insertSelective(tbuser);
-		if(res==1){
-			redirectAttributes.addFlashAttribute("user", tbuser);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+		int res = userService.insertSelective(user);
+		if(res!=0){
+			redirectAttributes.addFlashAttribute("user", user);
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
 		
 		return "redirect:/user/create";
@@ -77,16 +79,16 @@ public class UserController extends BaseController<TbUser> {
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-			
+			redirectAttributes.addFlashAttribute("user", user);
+			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
 		}
 		
 		int res = this.userService.updateByPrimaryKeySelective(user);
 		if(res==1){
 			redirectAttributes.addFlashAttribute("user", user);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
-		uiModel.addAttribute("user", user);
-		uiModel.addAttribute("operation", "edit");
-		return basePath + "user_edit";
+		redirectAttributes.addAttribute("operation", "edit");
+		return "redirect:/user/edit/"+user.getId();
 	}
 }

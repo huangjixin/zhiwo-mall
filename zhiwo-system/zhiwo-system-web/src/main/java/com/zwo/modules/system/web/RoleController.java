@@ -6,7 +6,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,7 +16,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.zwo.modules.system.domain.TbRole;
 import com.zwo.modules.system.service.ITbRoleService;
-import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
 @Controller
@@ -28,18 +26,13 @@ public class RoleController extends BaseController<TbRole> {
 	@Lazy(true)
 	private ITbRoleService roleService;
 	
-	/*@Autowired
-	@Lazy(true)*/
-	@SuppressWarnings("rawtypes")
-	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
-	
 	private static final String basePath = "views/system/role/";
 	
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath+"role_list";
 	}
-	
+
 //	@RequiresPermissions("system:role:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid TbRole role, BindingResult result, Model uiModel,
@@ -61,17 +54,19 @@ public class RoleController extends BaseController<TbRole> {
 	
 //	@RequiresPermissions("system:role:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public String create(@Valid TbRole tbrole, BindingResult result, Model uiModel,
+	public String create(@Valid TbRole role, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-
+			redirectAttributes.addFlashAttribute("role", role);
+			redirectAttributes.addFlashAttribute("message", "数据绑定有误！");
+			return "redirect:/role/create";
 		}
 		
-		int res = roleService.insertSelective(tbrole);
-		if(res==1){
-			redirectAttributes.addFlashAttribute("role", tbrole);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+		int res = roleService.insertSelective(role);
+		if(res!=0){
+			redirectAttributes.addFlashAttribute("role", role);
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
 		
 		return "redirect:/role/create";
@@ -83,16 +78,16 @@ public class RoleController extends BaseController<TbRole> {
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-			
+			redirectAttributes.addFlashAttribute("role", role);
+			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
 		}
 		
 		int res = this.roleService.updateByPrimaryKeySelective(role);
 		if(res==1){
 			redirectAttributes.addFlashAttribute("role", role);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
-		uiModel.addAttribute("role", role);
-		uiModel.addAttribute("operation", "edit");
-		return basePath + "role_edit";
+		redirectAttributes.addAttribute("operation", "edit");
+		return "redirect:/role/edit/"+role.getId();
 	}
 }

@@ -34,7 +34,7 @@ public class ProductController extends BaseController<PrProduct> {
 		return basePath+"product_list";
 	}
 	
-//	@RequiresPermissions("system:product:create")
+//	@RequiresPermissions("mall:product:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid PrProductWithBLOBs product, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -42,7 +42,7 @@ public class ProductController extends BaseController<PrProduct> {
 		return basePath + "product_edit";
 	}
 
-//	@RequiresPermissions("system:product:view")
+//	@RequiresPermissions("mall:product:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -53,7 +53,7 @@ public class ProductController extends BaseController<PrProduct> {
 		return basePath + "product_edit";
 	}
 	
-//	@RequiresPermissions("system:product:create")
+//	@RequiresPermissions("mall:product:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid PrProductWithBLOBs product, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
@@ -73,7 +73,7 @@ public class ProductController extends BaseController<PrProduct> {
 		return "redirect:/product/create";
 	}
 	 
-//	@RequiresPermissions("system:product:edit")
+//	@RequiresPermissions("mall:product:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid PrProductWithBLOBs product, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,

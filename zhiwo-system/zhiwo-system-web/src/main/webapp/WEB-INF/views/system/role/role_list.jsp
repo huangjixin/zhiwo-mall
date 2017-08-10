@@ -8,19 +8,23 @@
 <title>角色列表</title>
 <%@ include file="/WEB-INF/include/easyui-css.jsp"%>
 <%@ include file="/WEB-INF/include/easyui-js.jsp"%>
-
 </head>
 <body>
+	<%@ include file="/WEB-INF/include/easyui-toolbar.jsp"%>
 	<div id="toolbar">
-		<%@ include file="/WEB-INF/include/easyui-buttonGroup.jsp"%>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-		<label>名称：</label>&nbsp;<input id="rolenameInput" class="input" style="width:100px;"/>&nbsp;
-		<%@ include file="/WEB-INF/include/easyui-queryButton.jsp"%>
-		<!-- <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-			onclick="create('role')">新增</a> <a href="#" class="easyui-linkbutton"
-			iconCls="icon-edit" plain="true" onclick="editCategory()">编辑</a> <a href="#"
-			class="easyui-linkbutton" iconCls="icon-remove" plain="true"
-			onclick="destroy()">删除</a> -->
+		<nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid"> 
+           
+            <div class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <%@ include file="/WEB-INF/include/easyui-buttonGroup.jsp"%>
+                	&nbsp;&nbsp;&nbsp;&nbsp;
+               		<input id="nameInput"  class="form-control" placeholder="名称">
+                </div>
+                <button id="queryBtn" class="btn btn-default">查询</button>
+            </div>
+            </div>
+        </nav>
 	</div>
 	<table id="tgrid" 
 		title="角色列表" 
@@ -49,7 +53,30 @@
 		// 初始化按钮等工作。
 		$().ready(function() {
 			init("role","tgrid");
+			
+			$('#nameInput').bind('keypress',function(event){
+			  if(event.keyCode == "13")    
+			  {
+				    doResearch();
+			  }
+			});
+			
+			$("#queryBtn").bind("click", function() {
+				doResearch();
+			});
+	
+			$("#removeBatchBtn").bind("click", function() {
+				deleteRows('tgrid','role');
+			});
 		})
+		
+		
+		//查询
+		function doResearch(){
+			var parameters = {};
+			parameters.name = $('#nameInput').val();
+			query('tgrid',parameters);
+		}
 		
 		//格式化操作，添加删除和编辑按钮。
 		function formatOpt(value, rec) {
@@ -57,8 +84,8 @@
 //			<%
 //				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:role:delete")){
 //				%>
-				btn += '<a href="#" class="easyui-linkbutton button-red"  onclick="deleteById(\'tgrid\',\''
-					+ rec.id + '\',\'role\')"><i class="icon-trash"></i>&nbsp;&nbsp;删除 </a>';
+				btn += '<button type="button" class="btn btn-danger btn-sm" onclick="deleteById(\'tgrid\',\''
+					+ rec.id + '\',\'role\')"><i class="fa fa-trash fa-lg"></i>&nbsp;&nbsp;删除 </button>';
 					btn += "&nbsp;&nbsp;";
 					btn += ''
 //				<%
@@ -67,8 +94,8 @@
 //			<%
 //				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:role:edit")){
 //				%> 
-				btn += '<a href="#" class="easyui-linkbutton button-green"  onclick="update(\''
-					+ rec.id + '\',\'role\')"><i class="icon-edit"></i>&nbsp;&nbsp;编辑 </a>';
+				btn += '<button type="button" class="btn btn-info btn-sm" onclick="update(\''
+					+ rec.id + '\',\'role\')"><i class="fa fa-edit fa-lg"></i>&nbsp;&nbsp;编辑</button>';
 //				 <%
 //				}
 //							%> 
@@ -77,6 +104,10 @@
 			return btn;
 		}
 
+		function formatIcon(value, rec) {
+			var result = '<img id="iconImg" src="${ctx}/'+rec.icon+'" class=".img-responsive" style="width: 100px;">';
+			return result;
+		}
 		// 删除
 		function destroy() {
 			var row = $('#tgrid').datagrid('getSelected');
@@ -87,7 +118,7 @@
 							id : row.id
 						}, function(result) {
 							if (result > 0) {
-								$('#dg').datagrid('reload'); // reload the role data
+								$('#tgrid').datagrid('reload'); // reload the role data
 							} else {
 								$.messager.show({ // show error message
 									title : 'Error',
