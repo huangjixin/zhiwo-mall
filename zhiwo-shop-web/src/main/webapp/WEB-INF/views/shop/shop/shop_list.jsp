@@ -8,7 +8,6 @@
 <title>店铺列表</title>
 <%@ include file="/WEB-INF/include/easyui-css.jsp"%>
 <%@ include file="/WEB-INF/include/easyui-js.jsp"%>
-
 </head>
 <body>
 	<%@ include file="/WEB-INF/include/easyui-toolbar.jsp"%>
@@ -19,20 +18,13 @@
             <form class="navbar-form navbar-left" role="search">
                 <div class="form-group">
                     <%@ include file="/WEB-INF/include/easyui-buttonGroup.jsp"%>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-               <input id="nameInput"  class="form-control" placeholder="名称">
+                	&nbsp;&nbsp;&nbsp;&nbsp;
+               		<input id="nameInput"  class="form-control" placeholder="名称">
                 </div>
-                <button type="submit" class="btn btn-default">查询</button>
+                <button id="queryBtn" class="btn btn-default">查询</button>
             </form>
             </div>
         </nav>
-		
-		<%-- <%@ include file="/WEB-INF/include/easyui-queryButton.jsp"%> --%>
-		<!-- <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-			onclick="create('shop')">新增</a> <a href="#" class="easyui-linkbutton"
-			iconCls="icon-edit" plain="true" onclick="editCategory()">编辑</a> <a href="#"
-			class="easyui-linkbutton" iconCls="icon-remove" plain="true"
-			onclick="destroy()">删除</a> -->
 	</div>
 	<table id="tgrid" 
 		title="店铺列表" 
@@ -42,7 +34,7 @@
 		rownumbers="true"
 		fitColumns="true" 
 		fit="true" 
-		singleSelect="true">
+		singleSelect="false">
 		<thead>
 			<tr>
 				<th data-options="field:'ck',checkbox:true"></th>
@@ -82,11 +74,7 @@
 		//查询
 		function doResearch(){
 			var parameters = {};
-			//var usergroupId = $('#shop').combobox('getValue');
-//			if(usergroupId!=''){
-//				parameters.usergroupId = usergroupId;
-//			}
-			parameters.username = $('#nameInput').val();
+			parameters.name = $('#nameInput').val();
 			query('tgrid',parameters);
 		}
 		
@@ -96,8 +84,8 @@
 //			<%
 //				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:shop:delete")){
 //				%>
-				btn += '<a href="#" class="easyui-linkbutton button-red"  onclick="deleteById(\'tgrid\',\''
-					+ rec.id + '\',\'shop\')"><i class="icon-trash"></i>&nbsp;&nbsp;删除 </a>';
+				btn += '<button type="button" class="btn btn-danger btn-sm" onclick="deleteById(\'tgrid\',\''
+					+ rec.id + '\',\'shop\')"><i class="fa fa-trash fa-lg"></i>&nbsp;&nbsp;删除 </button>';
 					btn += "&nbsp;&nbsp;";
 					btn += ''
 //				<%
@@ -106,8 +94,8 @@
 //			<%
 //				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:shop:edit")){
 //				%> 
-				btn += '<a href="#" class="easyui-linkbutton button-green"  onclick="update(\''
-					+ rec.id + '\',\'shop\')"><i class="icon-edit"></i>&nbsp;&nbsp;编辑 </a>';
+				btn += '<button type="button" class="btn btn-info" id="validateBtn" onclick="update(\''
+					+ rec.id + '\',\'shop\')"><i class="fa fa-edit fa-lg"></i>&nbsp;&nbsp;编辑</button>';
 //				 <%
 //				}
 //							%> 

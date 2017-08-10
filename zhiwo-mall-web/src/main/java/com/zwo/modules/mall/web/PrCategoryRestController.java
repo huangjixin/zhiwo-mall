@@ -112,34 +112,4 @@ public class PrCategoryRestController extends BaseController<PrCategory> {
 		pageInfo = categoryService.selectByPageInfo(productCriteria, pageInfo);
 		return super.setPage(pageInfo);
 	}
-
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String create(@Valid PrCategory category, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-
-		}
-		
-		String res = "" + this.categoryService.insertSelective(category);
-		return res;
-	}
-
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(@Valid PrCategory category, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-
-		}
-
-		if ("".equals(category.getParentId())) {
-			category.setParentId(null);
-		}
-
-		if (category.getId().equals(category.getParentId())) {
-			return "不能够选择自身为父类节点";
-		}
-
-		String res = "" + this.categoryService.updateByPrimaryKeySelective(category);
-		return res;
-	}
 }

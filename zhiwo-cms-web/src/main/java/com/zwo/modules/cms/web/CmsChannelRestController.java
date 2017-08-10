@@ -108,40 +108,4 @@ public class CmsChannelRestController extends BaseController<CmsChannel> {
 		pageInfo = cmsChannelService.selectByPageInfo(tbcmsChannelCriteria, pageInfo);
 		return super.setPage(pageInfo);
 	}
-	
-
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String create(@Valid CmsChannel tbcmsChannel, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-
-		}
-		
-		String res = ""+cmsChannelService.insertSelective(tbcmsChannel);
-		return res;
-	}
-	
-	@RequestMapping(value = "/testcreate", method = RequestMethod.GET)
-	public String testcreate(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		CmsChannel tbcmsChannel = new CmsChannel();
-		tbcmsChannel.setId(System.currentTimeMillis()+"");
-		String res = ""+cmsChannelService.insertSelective(tbcmsChannel);
-		return res;
-	}
-	
-	@RequestMapping(value = "/sendCreatProductTopic", method = RequestMethod.GET)
-	public void sendCreatProductTopic(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-//		prductService.sendCreateProductTopic("创建一个Topic成功。");
-	}
-	
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(@Valid CmsChannel cmsChannel, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-			
-		}
-		
-		String res = ""+this.cmsChannelService.updateByPrimaryKeySelective(cmsChannel);
-		return res;
-	}
 }

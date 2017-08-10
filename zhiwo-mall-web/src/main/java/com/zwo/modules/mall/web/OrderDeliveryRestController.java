@@ -108,27 +108,4 @@ public class OrderDeliveryRestController extends BaseController<OrderDelivery> {
 		pageInfo = orderDeliveryService.selectByPageInfo(orderDeliveryCriteria, pageInfo);
 		return super.setPage(pageInfo);
 	}
-	
-
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String create(@Valid OrderDelivery orderDelivery, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-
-		}
-		
-		String res = ""+orderDeliveryService.insertSelective(orderDelivery);
-		return res;
-	}
-	
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(@Valid OrderDelivery orderDelivery, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-			
-		}
-		
-		String res = ""+this.orderDeliveryService.updateByPrimaryKeySelective(orderDelivery);
-		return res;
-	}
 }

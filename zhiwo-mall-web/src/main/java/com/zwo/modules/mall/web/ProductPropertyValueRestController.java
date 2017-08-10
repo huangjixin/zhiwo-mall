@@ -106,36 +106,4 @@ public class ProductPropertyValueRestController extends BaseController<PrProduct
 		pageInfo = productPropertyValueService.selectByPageInfo(productCriteria, pageInfo);
 		return super.setPage(pageInfo);
 	}
-	
-
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String create(@Valid PrProductPropertyValue productPropertyValue, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-
-		}
-		/*Subject currentUser = SecurityUtils.getSubject();
-		if(currentUser!=null){
-			Session session = currentUser.getSession();
-			if(session != null){
-				TbUser tbUser = (TbUser) session.getAttribute("tbUser");
-				if(tbUser != null){
-					product.setUserId(tbUser.getId());
-				}
-			}
-		}*/
-		String res = ""+productPropertyValueService.insertSelective(productPropertyValue);
-		return res;
-	}
-	
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(@Valid PrProductPropertyValue productPropertyValue, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-			
-		}
-		
-		String res = ""+this.productPropertyValueService.updateByPrimaryKeySelective(productPropertyValue);
-		return res;
-	}
 }

@@ -6,17 +6,16 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.zwo.modules.cms.domain.CmsAssets;
 import com.zwo.modules.cms.service.ICmsAssetsService;
-import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
 @Controller
@@ -25,15 +24,7 @@ import com.zwotech.common.web.BaseController;
 public class CmsAssetsController extends BaseController<CmsAssets> {
 	@Autowired
 	@Lazy(true)
-	private ICmsAssetsService cmsAssetsService;
-
-	/*
-	 * @Autowired
-	 * 
-	 * @Lazy(true)
-	 */
-	@SuppressWarnings("rawtypes")
-	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
+	private ICmsAssetsService assetsService;
 
 	private static final String basePath = "views/system/cmsAssets/";
 
@@ -42,40 +33,60 @@ public class CmsAssetsController extends BaseController<CmsAssets> {
 		return basePath + "cmsAssets_list";
 	}
 
+	
+//	@RequiresPermissions("system:assets:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
-	public String create(@Valid CmsAssets cmsAssets, BindingResult result, Model uiModel,
+	public String tocreate(@Valid CmsAssets assets, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		uiModel.addAttribute("cmsAssets", cmsAssets);
-		return basePath + "cmsAssets_edit";
+		uiModel.addAttribute("assets", assets);
+		return basePath + "assets_edit";
 	}
 
-	@RequestMapping(value = "edit", method = RequestMethod.GET)
-	public String edit(@RequestParam("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
+//	@RequiresPermissions("system:assets:view")
+	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
+	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		CmsAssets cmsAssets = null;
-		/*
-		 * ValueOperations<String, Object> valueOperations = null;
-		 * if(redisTemplate!=null){ valueOperations
-		 * =redisTemplate.opsForValue(); cmsAssets = (CmsAssets)
-		 * valueOperations.get(id); }
-		 */
+		CmsAssets assets = assetsService.selectByPrimaryKey(id);
 
-		if (cmsAssets == null) {
-			cmsAssets = cmsAssetsService.selectByPrimaryKey(id);
-			/*
-			 * if(valueOperations != null ){ valueOperations.set(id, cmsAssets);
-			 * }
-			 */
-		}
-
-		uiModel.addAttribute("cmsAssets", cmsAssets);
+		uiModel.addAttribute("assets", assets);
 		uiModel.addAttribute("operation", "edit");
-		return basePath + "cmsAssets_edit";
+		return basePath + "assets_edit";
 	}
+	
+//	@RequiresPermissions("system:assets:create")
+	@RequestMapping(value = "create", method = RequestMethod.POST)
+	public String create(@Valid CmsAssets tbassets, BindingResult result, Model uiModel,
+			RedirectAttributes redirectAttributes,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		if (result.hasErrors()) {
 
-	@RequestMapping(value = { "test" }, method = RequestMethod.GET)
-	public String test(Model uiModel, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		uiModel.addAttribute("rawData", 123456);
-		return "test";
+		}
+		
+		int res = assetsService.insertSelective(tbassets);
+		if(res==1){
+			redirectAttributes.addFlashAttribute("assets", tbassets);
+			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+		}
+		
+		return "redirect:/assets/create";
+	}
+	 
+//	@RequiresPermissions("system:assets:edit")
+	@RequestMapping(value = "update", method = RequestMethod.POST)
+	public String update(@Valid CmsAssets assets, BindingResult result, Model uiModel,
+			RedirectAttributes redirectAttributes,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		if (result.hasErrors()) {
+			
+		}
+		
+		int res = this.assetsService.updateByPrimaryKeySelective(assets);
+		if(res==1){
+			redirectAttributes.addFlashAttribute("assets", assets);
+			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+		}
+		uiModel.addAttribute("assets", assets);
+		uiModel.addAttribute("operation", "edit");
+		return basePath + "assets_edit";
 	}
 }

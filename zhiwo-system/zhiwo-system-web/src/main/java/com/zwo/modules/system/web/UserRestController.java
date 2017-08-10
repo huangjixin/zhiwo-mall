@@ -117,30 +117,4 @@ public class UserRestController extends BaseController<TbUser> {
 		pageInfo = userService.selectByPageInfo(tbuserCriteria, pageInfo);
 		return super.setPage(pageInfo);
 	}
-	
-
-//	@RequiresPermissions("system:user:create")
-	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public String create(@Valid TbUser tbuser, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-
-		}
-		
-		String res = ""+userService.insertSelective(tbuser);
-		return res;
-	}
-	
-	
-//	@RequiresPermissions("system:user:edit")
-	@RequestMapping(value = "update", method = RequestMethod.POST)
-	public String update(@Valid TbUser tbuser, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-			
-		}
-		
-		String res = ""+this.userService.updateByPrimaryKeySelective(tbuser);
-		return res;
-	}
 }

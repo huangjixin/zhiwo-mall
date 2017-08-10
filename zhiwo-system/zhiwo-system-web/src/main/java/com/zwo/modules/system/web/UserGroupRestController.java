@@ -117,26 +117,4 @@ public class UserGroupRestController extends BaseController<TbUserGroup> {
 		return list;
 	}
 	
-
-	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public String create(@Valid TbUserGroup tbuserGroup, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-
-		}
-		
-		String res = ""+userGroupService.insertSelective(tbuserGroup);
-		return res;
-	}
-	
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(@Valid TbUserGroup userGroup, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-			
-		}
-		
-		String res = ""+this.userGroupService.updateByPrimaryKeySelective(userGroup);
-		return res;
-	}
 }

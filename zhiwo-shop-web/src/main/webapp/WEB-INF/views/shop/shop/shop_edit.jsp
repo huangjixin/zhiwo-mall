@@ -23,15 +23,15 @@
 	<div class="form-group">
 		<label for="name" class="col-sm-1 control-label">店铺名称</label>
 		<div class="col-sm-4">
-			<input type="text" class="form-control" id="name" 
-				   placeholder="请输入店铺名称">
+			<input type="text" class="form-control" id="name" name="name"
+				   placeholder="请输入店铺名称" value="${shop.name}">
 		</div>
 	</div>
 	<div class="form-group">
 		<label for="code" class="col-sm-1 control-label">店铺代码</label>
 		<div class="col-sm-4">
-			<input type="text" class="form-control" id="code" 
-				   placeholder="请输入店铺代码(店铺拼音)">
+			<input type="text" class="form-control" id="code" name="code"
+				   placeholder="请输入店铺代码(店铺拼音)" value="${shop.code}">
 		</div>
 	</div>
     <div class="form-group">
@@ -44,20 +44,20 @@
                     <i class="fa fa-upload"></i>
                     <span>&nbsp;&nbsp;开始上传</span>
               </button>
-              <button type="submit" class="btn btn-default"><i class="fa fa-floppy-o" aria-hidden="true"></i>&nbsp;&nbsp;保存</button>
-              <label id="message"></label>
+              <%@ include file="/WEB-INF/include/easyui-buttonForm.jsp"%>
+              <label id="message">${message}</label>
 		</div>
 	</div>
     <div class="form-group">
 		<label for="file" class="col-sm-1 control-label"></label>
 		<div class="col-sm-4">
-			<img id="icon" class=".img-responsive" style="width:100px;">
+			<img id="icon" src="${shop.icon}" class=".img-responsive" style="width:100px;">
 		</div>
 	</div>
     <div class="form-group">
 		<label for="file" class="col-sm-1 control-label">店铺内容</label>
 		<div class="col-sm-10">
-		<script id="container" name="content" type="text/plain">这里写你的初始化内容</script>
+		<script id="container" name="content" type="text/plain">${shop.content}</script>
 		</div>
 	</div>
     
@@ -74,14 +74,21 @@
         autoFloatEnabled: true,
         initialFrameHeight:483
     });
-	
+	// 初始化按钮等工作。
+	$().ready(function() {
+		//返回列表。
+		$("#returnBtn").bind("click", function() {
+			backToList('shop');
+		});	
+	});
+		
 	function fileUploadToServer() {
 		var fileValue = $('#file').val();
 	 	if(fileValue==''){
 			$('#message').html('请选择一个文件')
 	 		return;
 	 	}
-		$('#message').html('正在上传');
+		$('#message').html('正在上传……');
 	 	var url = '${ctx}/fileupload/userAssets';
 			$.ajaxFileUpload({
 				url : url, //用于文件上传的服务器端请求地址

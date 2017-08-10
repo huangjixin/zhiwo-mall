@@ -6,18 +6,16 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.zwo.modules.member.domain.GuessQuestion;
 import com.zwo.modules.member.service.IGuessQuestionService;
-import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
 @Controller
@@ -28,10 +26,6 @@ public class GuessQuestionController extends BaseController<GuessQuestion> {
 	@Lazy(true)
 	private IGuessQuestionService guessQuestionService;
 	
-	/*@Autowired
-	@Lazy(true)*/
-	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
-	
 	private static final String basePath = "views/mall/guessQuestion/";
 	
 	@RequestMapping(value = { "", "list" })
@@ -39,38 +33,59 @@ public class GuessQuestionController extends BaseController<GuessQuestion> {
 		return basePath+"guessQuestion_list";
 	}
 	
-	@RequestMapping(value = {"create"},method=RequestMethod.GET)
-	public String create(@Valid GuessQuestion guessQuestion, BindingResult result, Model uiModel,
+//	@RequiresPermissions("system:guessQuestion:create")
+	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
+	public String tocreate(@Valid GuessQuestion guessQuestion, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		uiModel.addAttribute("guessQuestion", guessQuestion);
-		return basePath+"guessQuestion_edit";
+		return basePath + "guessQuestion_edit";
 	}
-	  
-	@RequestMapping(value = "edit",method=RequestMethod.GET)
-	public String edit(@RequestParam("id") String id, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		GuessQuestion guessQuestion = null;
-		ValueOperations<String, Object> valueOperations = null;
-		if(redisTemplate!=null){
-			valueOperations =redisTemplate.opsForValue();
-			guessQuestion = (GuessQuestion) valueOperations.get(id);
-		}
-		
-		if(guessQuestion==null){
-			guessQuestion=guessQuestionService.selectByPrimaryKey(id);
-			if(valueOperations != null ){
-				valueOperations.set(id, guessQuestion);
-			}
-		}
-		
+
+//	@RequiresPermissions("system:guessQuestion:view")
+	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
+	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		GuessQuestion guessQuestion = guessQuestionService.selectByPrimaryKey(id);
+
 		uiModel.addAttribute("guessQuestion", guessQuestion);
 		uiModel.addAttribute("operation", "edit");
-		return basePath+"guessQuestion_edit";
+		return basePath + "guessQuestion_edit";
 	}
 	
-	@RequestMapping(value = {"test"},method=RequestMethod.GET)
-	public String test(Model uiModel,HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		uiModel.addAttribute("rawData", 123456);
-		return "test";
+//	@RequiresPermissions("system:guessQuestion:create")
+	@RequestMapping(value = "create", method = RequestMethod.POST)
+	public String create(@Valid GuessQuestion tbguessQuestion, BindingResult result, Model uiModel,
+			RedirectAttributes redirectAttributes,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		if (result.hasErrors()) {
+
+		}
+		
+		int res = guessQuestionService.insertSelective(tbguessQuestion);
+		if(res==1){
+			redirectAttributes.addFlashAttribute("guessQuestion", tbguessQuestion);
+			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+		}
+		
+		return "redirect:/guessQuestion/create";
+	}
+	 
+//	@RequiresPermissions("system:guessQuestion:edit")
+	@RequestMapping(value = "update", method = RequestMethod.POST)
+	public String update(@Valid GuessQuestion guessQuestion, BindingResult result, Model uiModel,
+			RedirectAttributes redirectAttributes,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		if (result.hasErrors()) {
+			
+		}
+		
+		int res = this.guessQuestionService.updateByPrimaryKeySelective(guessQuestion);
+		if(res==1){
+			redirectAttributes.addFlashAttribute("guessQuestion", guessQuestion);
+			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+		}
+		uiModel.addAttribute("guessQuestion", guessQuestion);
+		uiModel.addAttribute("operation", "edit");
+		return basePath + "guessQuestion_edit";
 	}
 }

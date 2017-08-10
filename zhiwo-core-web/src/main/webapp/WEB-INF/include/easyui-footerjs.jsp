@@ -129,7 +129,7 @@
 
 	// 编辑；
 	function update(id, module) {
-		window.location.href = '${ctx}/' + module + '/update/' + id;
+		window.location.href = '${ctx}/' + module + '/edit/' + id;
 	}
 	
 	//查询

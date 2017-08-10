@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,30 +47,16 @@ public class ShopController extends BaseController<Shop> {
 	}
 
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
-	public String tocreate(@Valid Shop shop, BindingResult result, Model uiModel,
+	public String tocreate(@Valid ShopWithBLOBs shop, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		uiModel.addAttribute("shop", shop);
 		return basePath + "shop_edit";
 	}
 
-	@RequestMapping(value = "edit", method = RequestMethod.GET)
-	public String edit(@RequestParam("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
+	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
+	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		Shop shop = null;
-		/*
-		 * ValueOperations<String, Object> valueOperations = null;
-		 * if(redisTemplate!=null){ valueOperations
-		 * =redisTemplate.opsForValue(); shop = (Shop)
-		 * valueOperations.get(id); }
-		 */
-
-		if (shop == null) {
-			shop = shopService.selectByPrimaryKey(id);
-			/*
-			 * if(valueOperations != null ){ valueOperations.set(id, shop);
-			 * }
-			 */
-		}
+		ShopWithBLOBs shop = shopService.selectByPrimKey(id);
 
 		uiModel.addAttribute("shop", shop);
 		uiModel.addAttribute("operation", "edit");
@@ -87,24 +74,30 @@ public class ShopController extends BaseController<Shop> {
 		
 		int res = shopService.insertSelective(tbshop);
 		if(res==1){
+			redirectAttributes.addFlashAttribute("shop", tbshop);
 			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
 		}
 		
 		return "redirect:/shop/create";
 	}
-	
-	
+	 
 	@RequestMapping(value = "update", method = RequestMethod.POST)
-	@ResponseBody
 	public String update(@Valid ShopWithBLOBs shop, BindingResult result, Model uiModel,
-			RedirectAttributes attr,
+			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
 			
 		}
 		
-		String res = ""+this.shopService.updateByPrimaryKeySelective(shop);
-		return res;
+		int res = this.shopService.updateByPrimaryKeySelective(shop);
+		if(res==1){
+			redirectAttributes.addFlashAttribute("shop", shop);
+			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+		}
+		uiModel.addAttribute("shop", shop);
+		uiModel.addAttribute("operation", "edit");
+		return basePath + "shop_edit";
 	}
 
+	
 }

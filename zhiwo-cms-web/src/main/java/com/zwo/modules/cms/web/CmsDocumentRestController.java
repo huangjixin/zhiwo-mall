@@ -108,40 +108,4 @@ public class CmsDocumentRestController extends BaseController<CmsDocument> {
 		pageInfo = cmsDocumentService.selectByPageInfo(tbcmsDocumentCriteria, pageInfo);
 		return super.setPage(pageInfo);
 	}
-	
-
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String create(@Valid CmsDocument tbcmsDocument, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-
-		}
-		
-		String res = ""+cmsDocumentService.insertSelective(tbcmsDocument);
-		return res;
-	}
-	
-	@RequestMapping(value = "/testcreate", method = RequestMethod.GET)
-	public String testcreate(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		CmsDocument tbcmsDocument = new CmsDocument();
-		tbcmsDocument.setId(System.currentTimeMillis()+"");
-		String res = ""+cmsDocumentService.insertSelective(tbcmsDocument);
-		return res;
-	}
-	
-	@RequestMapping(value = "/sendCreatProductTopic", method = RequestMethod.GET)
-	public void sendCreatProductTopic(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-//		prductService.sendCreateProductTopic("创建一个Topic成功。");
-	}
-	
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(@Valid CmsDocument cmsDocument, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-			
-		}
-		
-		String res = ""+this.cmsDocumentService.updateByPrimaryKeySelective(cmsDocument);
-		return res;
-	}
 }

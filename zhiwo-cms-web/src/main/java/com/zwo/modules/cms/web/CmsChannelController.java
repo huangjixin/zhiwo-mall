@@ -6,17 +6,16 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.zwo.modules.cms.domain.CmsChannel;
 import com.zwo.modules.cms.service.ICmsChannelService;
-import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
 @Controller
@@ -25,15 +24,7 @@ import com.zwotech.common.web.BaseController;
 public class CmsChannelController extends BaseController<CmsChannel> {
 	@Autowired
 	@Lazy(true)
-	private ICmsChannelService cmsChannelService;
-
-	/*
-	 * @Autowired
-	 * 
-	 * @Lazy(true)
-	 */
-	@SuppressWarnings("rawtypes")
-	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
+	private ICmsChannelService channelService;
 
 	private static final String basePath = "views/cms/channel/";
 
@@ -42,40 +33,60 @@ public class CmsChannelController extends BaseController<CmsChannel> {
 		return basePath + "channel_list";
 	}
 
+	
+//	@RequiresPermissions("system:channel:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
-	public String create(@Valid CmsChannel cmsChannel, BindingResult result, Model uiModel,
+	public String tocreate(@Valid CmsChannel channel, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		uiModel.addAttribute("cmsChannel", cmsChannel);
-		return basePath + "cmsChannel_edit";
+		uiModel.addAttribute("channel", channel);
+		return basePath + "channel_edit";
 	}
 
-	@RequestMapping(value = "edit", method = RequestMethod.GET)
-	public String edit(@RequestParam("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
+//	@RequiresPermissions("system:channel:view")
+	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
+	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		CmsChannel cmsChannel = null;
-		/*
-		 * ValueOperations<String, Object> valueOperations = null;
-		 * if(redisTemplate!=null){ valueOperations
-		 * =redisTemplate.opsForValue(); cmsChannel = (CmsChannel)
-		 * valueOperations.get(id); }
-		 */
+		CmsChannel channel = channelService.selectByPrimaryKey(id);
 
-		if (cmsChannel == null) {
-			cmsChannel = cmsChannelService.selectByPrimaryKey(id);
-			/*
-			 * if(valueOperations != null ){ valueOperations.set(id, cmsChannel);
-			 * }
-			 */
-		}
-
-		uiModel.addAttribute("cmsChannel", cmsChannel);
+		uiModel.addAttribute("channel", channel);
 		uiModel.addAttribute("operation", "edit");
-		return basePath + "cmsChannel_edit";
+		return basePath + "channel_edit";
 	}
+	
+//	@RequiresPermissions("system:channel:create")
+	@RequestMapping(value = "create", method = RequestMethod.POST)
+	public String create(@Valid CmsChannel tbchannel, BindingResult result, Model uiModel,
+			RedirectAttributes redirectAttributes,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		if (result.hasErrors()) {
 
-	@RequestMapping(value = { "test" }, method = RequestMethod.GET)
-	public String test(Model uiModel, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		uiModel.addAttribute("rawData", 123456);
-		return "test";
+		}
+		
+		int res = channelService.insertSelective(tbchannel);
+		if(res==1){
+			redirectAttributes.addFlashAttribute("channel", tbchannel);
+			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+		}
+		
+		return "redirect:/channel/create";
+	}
+	 
+//	@RequiresPermissions("system:channel:edit")
+	@RequestMapping(value = "update", method = RequestMethod.POST)
+	public String update(@Valid CmsChannel channel, BindingResult result, Model uiModel,
+			RedirectAttributes redirectAttributes,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		if (result.hasErrors()) {
+			
+		}
+		
+		int res = this.channelService.updateByPrimaryKeySelective(channel);
+		if(res==1){
+			redirectAttributes.addFlashAttribute("channel", channel);
+			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+		}
+		uiModel.addAttribute("channel", channel);
+		uiModel.addAttribute("operation", "edit");
+		return basePath + "channel_edit";
 	}
 }

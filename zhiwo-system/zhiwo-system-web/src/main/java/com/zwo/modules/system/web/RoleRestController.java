@@ -109,40 +109,4 @@ public class RoleRestController extends BaseController<TbRole> {
 		pageInfo = roleService.selectByPageInfo(tbroleCriteria, pageInfo);
 		return super.setPage(pageInfo);
 	}
-	
-
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String create(@Valid TbRole tbrole, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-
-		}
-		
-		String res = ""+roleService.insertSelective(tbrole);
-		return res;
-	}
-	
-	@RequestMapping(value = "/testcreate", method = RequestMethod.GET)
-	public String testcreate(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		TbRole tbrole = new TbRole();
-		tbrole.setId(System.currentTimeMillis()+"");
-		String res = ""+roleService.insertSelective(tbrole);
-		return res;
-	}
-	
-	@RequestMapping(value = "/sendCreatProductTopic", method = RequestMethod.GET)
-	public void sendCreatProductTopic(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-//		prductService.sendCreateProductTopic("创建一个Topic成功。");
-	}
-	
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(@Valid TbRole role, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-			
-		}
-		
-		String res = ""+this.roleService.updateByPrimaryKeySelective(role);
-		return res;
-	}
 }

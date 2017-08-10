@@ -108,27 +108,4 @@ public class ShopCategoryRestController extends BaseController<ShopCategory> {
 		pageInfo = shopCategoryService.selectByPageInfo(tbshopCategoryCriteria, pageInfo);
 		return super.setPage(pageInfo);
 	}
-	
-
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String create(@Valid ShopCategory tbshopCategory, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-
-		}
-		
-		String res = ""+shopCategoryService.insertSelective(tbshopCategory);
-		return res;
-	}
-	
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(@Valid ShopCategory shopCategory, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-			
-		}
-		
-		String res = ""+this.shopCategoryService.updateByPrimaryKeySelective(shopCategory);
-		return res;
-	}
 }

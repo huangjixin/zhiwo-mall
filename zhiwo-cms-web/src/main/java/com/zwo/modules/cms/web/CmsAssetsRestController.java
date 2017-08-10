@@ -108,40 +108,4 @@ public class CmsAssetsRestController extends BaseController<CmsAssets> {
 		pageInfo = cmsAssetsService.selectByPageInfo(tbcmsAssetsCriteria, pageInfo);
 		return super.setPage(pageInfo);
 	}
-	
-
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String create(@Valid CmsAssets tbcmsAssets, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-
-		}
-		
-		String res = ""+cmsAssetsService.insertSelective(tbcmsAssets);
-		return res;
-	}
-	
-	@RequestMapping(value = "/testcreate", method = RequestMethod.GET)
-	public String testcreate(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		CmsAssets tbcmsAssets = new CmsAssets();
-		tbcmsAssets.setId(System.currentTimeMillis()+"");
-		String res = ""+cmsAssetsService.insertSelective(tbcmsAssets);
-		return res;
-	}
-	
-	@RequestMapping(value = "/sendCreatProductTopic", method = RequestMethod.GET)
-	public void sendCreatProductTopic(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-//		prductService.sendCreateProductTopic("创建一个Topic成功。");
-	}
-	
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(@Valid CmsAssets cmsAssets, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-			
-		}
-		
-		String res = ""+this.cmsAssetsService.updateByPrimaryKeySelective(cmsAssets);
-		return res;
-	}
 }
