@@ -59,35 +59,6 @@
 				backToList('order');
 			});
 		});
-
-		function fileUploadToServer() {
-			var fileValue = $('#file').val();
-			if (fileValue == '') {
-				$('#message').html('请选择一个文件')
-				return;
-			}
-			$('#message').html('正在上传……');
-			var url = '${ctx}/fileupload/userAssets';
-			$.ajaxFileUpload({
-				url : url, //用于文件上传的服务器端请求地址
-				secureuri : false, //是否需要安全协议，一般设置为false
-				fileElementId : 'file', //文件上传域的ID
-				dataType : 'json', //返回值类型 一般设置为json
-				success : function(data, status) //服务器成功响应处理函数
-				{
-					if (data.assets.length > 0) {
-						var assets = data.assets[0];
-						$("#iconImg").attr('src', '${ctx}/' + assets.url);
-						$("#icon").val(assets.url);
-					}
-					$('#message').html('');
-				},
-				error : function(data, status, e)//服务器响应失败处理函数
-				{
-					alert("上传失败");
-				}
-			})
-		}
 	</script>
 	<%@ include file="/WEB-INF/include/easyui-footerjs.jsp"%>
 </body>
