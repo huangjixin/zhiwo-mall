@@ -106,28 +106,4 @@ public class GuessCategoryRestController extends BaseController<GuessCategory> {
 		pageInfo = guessCategoryService.selectByPageInfo(guessCategoryCriteria, pageInfo);
 		return super.setPage(pageInfo);
 	}
-	
-
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String create(@Valid GuessCategory guessCategory, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-
-		}
-		
-		String res = ""+guessCategoryService.insertSelective(guessCategory);
-		return res;
-	}
-	
-	
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(@Valid GuessCategory guessCategory, BindingResult result, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-			
-		}
-		
-		String res = ""+this.guessCategoryService.updateByPrimaryKeySelective(guessCategory);
-		return res;
-	}
 }

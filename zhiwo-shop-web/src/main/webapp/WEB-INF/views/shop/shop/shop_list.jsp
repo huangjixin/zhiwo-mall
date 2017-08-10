@@ -15,14 +15,14 @@
 		<nav class="navbar navbar-default" role="navigation">
             <div class="container-fluid"> 
            
-            <form class="navbar-form navbar-left" role="search">
+            <div class="navbar-form navbar-left" role="search">
                 <div class="form-group">
                     <%@ include file="/WEB-INF/include/easyui-buttonGroup.jsp"%>
                 	&nbsp;&nbsp;&nbsp;&nbsp;
                		<input id="nameInput"  class="form-control" placeholder="名称">
                 </div>
                 <button id="queryBtn" class="btn btn-default">查询</button>
-            </form>
+            </div>
             </div>
         </nav>
 	</div>
@@ -34,7 +34,8 @@
 		rownumbers="true"
 		fitColumns="true" 
 		fit="true" 
-		singleSelect="false">
+		singleSelect="false"
+        pagination="true">
 		<thead>
 			<tr>
 				<th data-options="field:'ck',checkbox:true"></th>
@@ -54,12 +55,12 @@
 		$().ready(function() {
 			init("shop","tgrid");
 			
-			$('#nameInput').bind('keypress',function(event){
+			/* $('#nameInput').bind('keypress',function(event){
 			  if(event.keyCode == "13")    
 			  {
 				    doResearch();
 			  }
-			});
+			}); */
 			
 			$("#queryBtn").bind("click", function() {
 				doResearch();
@@ -94,7 +95,7 @@
 //			<%
 //				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:shop:edit")){
 //				%> 
-				btn += '<button type="button" class="btn btn-info" id="validateBtn" onclick="update(\''
+				btn += '<button type="button" class="btn btn-info btn-sm" onclick="update(\''
 					+ rec.id + '\',\'shop\')"><i class="fa fa-edit fa-lg"></i>&nbsp;&nbsp;编辑</button>';
 //				 <%
 //				}

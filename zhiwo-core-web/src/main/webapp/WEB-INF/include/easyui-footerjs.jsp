@@ -134,9 +134,10 @@
 	
 	//查询
 	function query(grid,queryParams){
-		$('#'+grid).datagrid('options').pageNumber=1;//设置页码初始值为1
-		$('#'+grid).datagrid('options').queryParams = queryParams;  
-		$('#'+grid).datagrid('reload'); // 重新加载;
+		//$('#'+grid).datagrid('options').pageNumber=1;//设置页码初始值为1
+// 		$('#'+grid).datagrid('options').queryParams = queryParams;  
+// 		$('#'+grid).datagrid('load'); // 重新加载;
+		$('#'+grid).datagrid('reload', queryParams);
 	}
 	
 	//格式化菜单

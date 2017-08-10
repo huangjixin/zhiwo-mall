@@ -26,7 +26,7 @@ public class CmsAssetsController extends BaseController<CmsAssets> {
 	@Lazy(true)
 	private ICmsAssetsService assetsService;
 
-	private static final String basePath = "views/system/cmsAssets/";
+	private static final String basePath = "views/cms/cmsAssets/";
 
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {

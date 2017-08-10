@@ -31,14 +31,6 @@ public class ShopController extends BaseController<Shop> {
 	@Lazy(true)
 	private IShopService shopService;
 
-	/*
-	 * @Autowired
-	 * 
-	 * @Lazy(true)
-	 */
-	@SuppressWarnings("rawtypes")
-	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
-
 	private static final String basePath = "views/shop/shop/";
 
 	@RequestMapping(value = { "", "list" })
@@ -63,21 +55,20 @@ public class ShopController extends BaseController<Shop> {
 		return basePath + "shop_edit";
 	}
 	
-
 	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public String create(@Valid ShopWithBLOBs tbshop, BindingResult result, Model uiModel,
+	public String create(@Valid ShopWithBLOBs shop, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
 
 		}
 		
-		int res = shopService.insertSelective(tbshop);
+		int res = shopService.insertSelective(shop);
 		if(res==1){
-			redirectAttributes.addFlashAttribute("shop", tbshop);
+			redirectAttributes.addFlashAttribute("shop", shop);
 			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
 		}
-		
+		uiModel.addAttribute("shop", shop);
 		return "redirect:/shop/create";
 	}
 	 
@@ -86,7 +77,9 @@ public class ShopController extends BaseController<Shop> {
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-			
+			redirectAttributes.addFlashAttribute("shop", shop);
+			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
+			return "redirect:/shop/edit/"+shop.getId();
 		}
 		
 		int res = this.shopService.updateByPrimaryKeySelective(shop);
@@ -94,10 +87,7 @@ public class ShopController extends BaseController<Shop> {
 			redirectAttributes.addFlashAttribute("shop", shop);
 			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
 		}
-		uiModel.addAttribute("shop", shop);
-		uiModel.addAttribute("operation", "edit");
-		return basePath + "shop_edit";
+		return "redirect:/shop/edit/"+shop.getId();
 	}
-
 	
 }

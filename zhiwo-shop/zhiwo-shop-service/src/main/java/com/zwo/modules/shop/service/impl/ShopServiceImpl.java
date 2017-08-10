@@ -318,7 +318,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 		return result;
 	}
 
-	@Cacheable(key = "#id", value = "Shop")
+	@Cacheable(key = "#id+''", value = "Shop")
 	@Transactional(readOnly = true)
 	@Override
 	public ShopWithBLOBs selectByPrimKey(String id) {
