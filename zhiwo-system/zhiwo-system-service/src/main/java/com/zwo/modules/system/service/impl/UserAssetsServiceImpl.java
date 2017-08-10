@@ -120,7 +120,7 @@ public class UserAssetsServiceImpl extends BaseService<TbUserAssets> implements 
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "TbUserAssets", key = "#id")
+	@CacheEvict(value = "TbUserAssets", key = "#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -209,7 +209,7 @@ public class UserAssetsServiceImpl extends BaseService<TbUserAssets> implements 
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id", value = "TbUserAssets")
+	@Cacheable(key = "#id+''", value = "TbUserAssets")
 	@Transactional(readOnly = true)
 	public TbUserAssets selectByPrimaryKey(String id) {
 		// 日志记录

@@ -120,7 +120,7 @@ public class PayTradePaymentOrderServiceImpl extends BaseService<PayTradePayment
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "PayTradePaymentOrder", key="#id")
+	@CacheEvict(value = "PayTradePaymentOrder", key="#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -209,7 +209,7 @@ public class PayTradePaymentOrderServiceImpl extends BaseService<PayTradePayment
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id", value = "PayTradePaymentOrder")
+	@Cacheable(key = "#id+''", value = "PayTradePaymentOrder")
 	@Transactional(readOnly = true)
 	public PayTradePaymentOrder selectByPrimaryKey(String id) {
 		// 日志记录

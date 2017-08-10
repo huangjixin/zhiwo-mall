@@ -119,7 +119,7 @@ public class CmsAssetsServiceImpl extends BaseService<CmsAssets> implements ICms
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "CmsAssets", key="#id")
+	@CacheEvict(value = "CmsAssets", key="#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -208,7 +208,7 @@ public class CmsAssetsServiceImpl extends BaseService<CmsAssets> implements ICms
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id", value = "CmsAssets")
+	@Cacheable(key = "#id+''", value = "CmsAssets")
 	@Transactional(readOnly = true)
 	public CmsAssets selectByPrimaryKey(String id) {
 		// 日志记录

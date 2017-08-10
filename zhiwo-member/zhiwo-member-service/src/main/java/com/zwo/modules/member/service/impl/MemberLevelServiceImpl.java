@@ -119,7 +119,7 @@ public class MemberLevelServiceImpl extends BaseService<MemberLevel> implements 
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "MemberLevel", key = "#id")
+	@CacheEvict(value = "MemberLevel", key = "#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -208,7 +208,7 @@ public class MemberLevelServiceImpl extends BaseService<MemberLevel> implements 
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id", value = "MemberLevel")
+	@Cacheable(key = "#id+''", value = "MemberLevel")
 	@Transactional(readOnly = true)
 	public MemberLevel selectByPrimaryKey(String id) {
 		// 日志记录

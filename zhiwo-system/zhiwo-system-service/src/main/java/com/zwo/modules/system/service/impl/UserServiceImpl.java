@@ -143,7 +143,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "TbUser", key = "#id")
+	@CacheEvict(value = "TbUser", key = "#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -239,7 +239,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id", value = "TbUser")
+	@Cacheable(key = "#id+''", value = "TbUser")
 	@Transactional(readOnly = true)
 	public TbUser selectByPrimaryKey(String id) {
 		// 日志记录

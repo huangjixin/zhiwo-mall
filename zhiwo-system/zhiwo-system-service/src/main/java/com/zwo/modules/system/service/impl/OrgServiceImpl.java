@@ -119,7 +119,7 @@ public class OrgServiceImpl extends BaseService<TbOrg> implements ITbOrgService 
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "TbOrg", key="#id")
+	@CacheEvict(value = "TbOrg", key="#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -208,7 +208,7 @@ public class OrgServiceImpl extends BaseService<TbOrg> implements ITbOrgService 
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id", value = "TbOrg")
+	@Cacheable(key = "#id+''", value = "TbOrg")
 	@Transactional(readOnly = true)
 	public TbOrg selectByPrimaryKey(String id) {
 		// 日志记录

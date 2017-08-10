@@ -119,7 +119,7 @@ public class CmsChannelServiceImpl extends BaseService<CmsChannel> implements IC
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "CmsChannel", key="#id")
+	@CacheEvict(value = "CmsChannel", key="#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -208,7 +208,7 @@ public class CmsChannelServiceImpl extends BaseService<CmsChannel> implements IC
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id", value = "CmsChannel")
+	@Cacheable(key = "#id+''", value = "CmsChannel")
 	@Transactional(readOnly = true)
 	public CmsChannel selectByPrimaryKey(String id) {
 		// 日志记录

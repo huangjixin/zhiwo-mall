@@ -134,7 +134,7 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "TbRole", key="#id")
+	@CacheEvict(value = "TbRole", key="#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -223,7 +223,7 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id", value = "TbRole")
+	@Cacheable(key = "#id+''", value = "TbRole")
 	@Transactional(readOnly = true)
 	public TbRole selectByPrimaryKey(String id) {
 		// 日志记录

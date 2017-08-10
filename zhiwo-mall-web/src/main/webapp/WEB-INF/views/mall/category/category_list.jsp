@@ -5,136 +5,117 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>分类列表</title>
+<title>商品分类列表</title>
 <%@ include file="/WEB-INF/include/easyui-css.jsp"%>
 <%@ include file="/WEB-INF/include/easyui-js.jsp"%>
-<style type="text/css">
-#fm {
-	margin: 0;
-	padding: 10px 30px;
-}
-
-.ftitle {
-	font-size: 14px;
-	font-weight: bold;
-	color: #666;
-	padding: 5px 0;
-	margin-bottom: 10px;
-	border-bottom: 1px solid #ccc;
-}
-
-.fitem {
-	margin-bottom: 5px;
-}
-
-.fitem label {
-	display: inline-block;
-	width: 80px;
-}
-</style>
 </head>
 <body>
+	<%@ include file="/WEB-INF/include/easyui-toolbar.jsp"%>
 	<div id="toolbar">
-		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-			onclick="createCategory()">新增</a> <a href="#" class="easyui-linkbutton"
-			iconCls="icon-edit" plain="true" onclick="editCategory()">编辑</a> <a href="#"
-			class="easyui-linkbutton" iconCls="icon-remove" plain="true"
-			onclick="destroy()">删除</a>
+		<nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid"> 
+           
+            <div class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <%@ include file="/WEB-INF/include/easyui-buttonGroup.jsp"%>
+                	&nbsp;&nbsp;&nbsp;&nbsp;
+               		<input id="nameInput"  class="form-control" placeholder="名称">
+                </div>
+                <button id="queryBtn" class="btn btn-default">查询</button>
+            </div>
+            </div>
+        </nav>
 	</div>
-	<table id="dg" title="分类列表" class="easyui-datagrid"
-		url="${ctx}/category/select" toolbar="#toolbar" rownumbers="true"
-		fitColumns="true" fit="true" singleSelect="true">
+	<table id="tgrid" 
+		title="商品分类列表" 
+		class="easyui-datagrid"
+		url="${ctx}/prCategory/select" 
+		toolbar="#toolbar" 
+		rownumbers="true"
+		fitColumns="true" 
+		fit="true" 
+		singleSelect="false"
+        pagination="true">
 		<thead>
 			<tr>
 				<th data-options="field:'ck',checkbox:true"></th>
-				<th data-options="field:'id',align:'center'">id</th>
-				<th data-options="field:'name',align:'center'">商品分类名称</th>
-				<th data-options="field:'createDate',align:'center',width:100">创建日期</th>
-				<th data-options="field:'updateDate',align:'center',width:100">更新日期</th>
+				<th data-options="field:'id',align:'center',hidden:true">id</th>
+				<th data-options="field:'name',align:'center',width:100">商品分类名称</th>
+                <th data-options="field:'code',align:'center',width:100">代码</th>
+				<th data-options="field:'createDate',align:'center',width:100,formatter:formatTime">创建日期</th>
+				<th data-options="field:'updateDate',align:'center',width:100,formatter:formatTime">更新日期</th>
 				<!-- <th data-options="field:'By',align:'center',width:100">创建人</th>
 				<th data-options="field:'updateBy',align:'center',width:100">更新人</th> -->
-				<th data-options="field:'opt',align:'center'">操作</th>
+				<th data-options="field:'opt',align:'center',width:100,formatter:formatOpt">操作</th>
 			</tr>
 		</thead>
 	</table>
-	<div id="dlg" class="easyui-dialog"
-		style="width: 600px; height: 400px; padding: 10px 20px" closed="true"
-		buttons="#dlg-buttons">
-		<div class="ftitle">商品分类信息</div>
-		<form id="fm" method="post">
-			<input id="id" name="id" type="hidden">
-			<input id="parentids" name="parentids" type="hidden">
-			<div class="fitem">
-				<label>父类名称:</label> <input id="parentId" name="parentId"/>
-			</div>
-			<div class="fitem">
-				<label>类目名称:</label> <input name="name" class="easyui-validatebox"
-					required="true">
-			</div>
-			<div class="fitem">
-				<label>类目英文名称:</label> <input name="enName"
-					class="easyui-validatebox" required="true">
-			</div>
-		</form>
-	</div>
-	<div id="dlg-buttons">
-		<a href="#" class="easyui-linkbutton" iconCls="icon-ok"
-			onclick="save()">保存</a> <a href="#" class="easyui-linkbutton"
-			iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">取消</a>
-	</div>
-	<script>
+	<script type="text/javascript">
+		// 初始化按钮等工作。
 		$().ready(function() {
-			createCategoryTree('parentId','${ctx}/category/getTreeCategory');
-		});	
-		
-		var url= '${ctx}/category/create';
-		function createCategory() {
-			$('#dlg').dialog('open').dialog('setTitle', '新增商品分类');
-			$('#fm').form('clear');
-			url = '${ctx}/category/create';
+			init("prCategory","tgrid");
 			
-		}
-
-		function editCategory() {
-			var row = $('#dg').datagrid('getSelected');
-			if (row) {
-				$('#dlg').dialog('open').dialog('setTitle', '商品分类信息编辑');
-				$('#fm').form('load', row);
-				url = '${ctx}/category/update';
-			}
-		}
-
-		function save() {
-			$('#fm').form('submit', {
-				url : url,
-				onSubmit : function() {
-					return $(this).form('validate');
-				},
-				success : function(result) {
-					if (result > 0) {
-						$('#parentId').combotree('reload');
-						$('#dlg').dialog('close'); 
-						$('#dg').datagrid('reload'); 
-					} else {
-						$.messager.show({
-							title : '保存错误',
-							msg : result
-						});
-					}
-				}
+			$('#nameInput').bind('keypress',function(event){
+			  if(event.keyCode == "13")    
+			  {
+				    doResearch();
+			  }
 			});
+			
+			$("#queryBtn").bind("click", function() {
+				doResearch();
+			});
+	
+			$("#removeBatchBtn").bind("click", function() {
+				deleteRows('tgrid','prCategory');
+			});
+		})
+		
+		
+		//查询
+		function doResearch(){
+			var parameters = {};
+			parameters.name = $('#nameInput').val();
+			query('tgrid',parameters);
+		}
+		
+		//格式化操作，添加删除和编辑按钮。
+		function formatOpt(value, rec) {
+			var btn = '<div style="padding: 5px;">';
+//			<%
+//				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:prCategory:delete")){
+//				%>
+				btn += '<button type="button" class="btn btn-danger btn-sm" onclick="deleteById(\'tgrid\',\''
+					+ rec.id + '\',\'prCategory\')"><i class="fa fa-trash fa-lg"></i>&nbsp;&nbsp;删除 </button>';
+					btn += "&nbsp;&nbsp;";
+					btn += ''
+//				<%
+//				}
+//			%>
+//			<%
+//				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:prCategory:edit")){
+//				%> 
+				btn += '<button type="button" class="btn btn-info btn-sm" onclick="update(\''
+					+ rec.id + '\',\'prCategory\')"><i class="fa fa-edit fa-lg"></i>&nbsp;&nbsp;编辑</button>';
+//				 <%
+//				}
+//							%> 
+			
+			btn += '</div>';
+			return btn;
 		}
 
+		// 删除
 		function destroy() {
-			var row = $('#dg').datagrid('getSelected');
+			var row = $('#tgrid').datagrid('getSelected');
 			if (row) {
 				$.messager.confirm('确定', '确定删除？', function(r) {
 					if (r) {
-						$.post('${ctx}/category/delete', {
+						$.post('${ctx}/prCategory/delete', {
 							id : row.id
 						}, function(result) {
 							if (result > 0) {
-								$('#dg').datagrid('reload'); // reload the user data
+								$('#tgrid').datagrid('reload'); // reload the prCategory data
 							} else {
 								$.messager.show({ // show error message
 									title : 'Error',
@@ -147,41 +128,6 @@
 			}
 		}
 		
-		
-		//创建栏目树。
-		function createCategoryTree(id,url) {
-			$('#' + id).combotree({
-				url : url,
-				valuefield : 'id',
-				width : 220,
-				textfield : 'name',
-				required : false,
-				editable : false,
-				onClick : function(node) {
-
-				}, //全部折叠
-				onLoadSuccess : function(node, data) {
-					$('#' + id).combotree('tree').tree("collapseAll");
-				},
-				onSelect: function (item) { 
-					var parent = item; 
-					var tree = $('#' + id).combotree('tree'); 
-					var path = new Array(); 
-					do { 
-					   path.unshift(parent.id); 
-					   var parent = tree.tree('getParent', parent.target); 
-					} while (parent); 
-					var pathStr = ''; 
-					for (var i = 0; i < path.length; i++) { 
-					   pathStr += path[i]; 
-					if (i < path.length - 1) { 
-					   	pathStr += ','; 
-					   } 
-					} 
-					$('#parentids').val(pathStr); 
-				}
-			});
-		}
 	</script>
 	
 	<%@ include file="/WEB-INF/include/easyui-footerjs.jsp"%>

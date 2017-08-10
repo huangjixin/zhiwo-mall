@@ -119,7 +119,7 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "PrImage",key="#id")
+	@CacheEvict(value = "PrImage",key="#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -208,7 +208,7 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id", value = "PrImage")
+	@Cacheable(key = "#id+''", value = "PrImage")
 	@Transactional(readOnly = true)
 	public PrImage selectByPrimaryKey(String id) {
 		// 日志记录

@@ -119,7 +119,7 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "Order",key="#id")
+	@CacheEvict(value = "Order",key="#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -208,7 +208,7 @@ public class OrderServiceImpl extends BaseService<Order> implements IOrderServic
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id", value = "Order")
+	@Cacheable(key = "#id+''", value = "Order")
 	@Transactional(readOnly = true)
 	public Order selectByPrimaryKey(String id) {
 		// 日志记录

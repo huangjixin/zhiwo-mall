@@ -38,9 +38,9 @@ public class PrCategoryController extends BaseController<PrCategory> {
 	public String tocreate(@Valid PrCategory prCategory, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		uiModel.addAttribute("prCategory", prCategory);
-		return basePath + "prCategory_edit";
+		return basePath + "category_edit";
 	}
-
+	
 //	@RequiresPermissions("system:prCategory:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
@@ -49,22 +49,24 @@ public class PrCategoryController extends BaseController<PrCategory> {
 
 		uiModel.addAttribute("prCategory", prCategory);
 		uiModel.addAttribute("operation", "edit");
-		return basePath + "prCategory_edit";
+		return basePath + "category_edit";
 	}
 	
 //	@RequiresPermissions("system:prCategory:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public String create(@Valid PrCategory tbprCategory, BindingResult result, Model uiModel,
+	public String create(@Valid PrCategory prCategory, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-
+			redirectAttributes.addFlashAttribute("prCategory", prCategory);
+			redirectAttributes.addFlashAttribute("message", "数据绑定有误！");
+			return "redirect:/prCategory/create";
 		}
 		
-		int res = prCategoryService.insertSelective(tbprCategory);
-		if(res==1){
-			redirectAttributes.addFlashAttribute("prCategory", tbprCategory);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+		int res = prCategoryService.insertSelective(prCategory);
+		if(res!=0){
+			redirectAttributes.addFlashAttribute("prCategory", prCategory);
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
 		
 		return "redirect:/prCategory/create";
@@ -76,16 +78,16 @@ public class PrCategoryController extends BaseController<PrCategory> {
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-			
+			redirectAttributes.addFlashAttribute("prCategory", prCategory);
+			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
 		}
 		
 		int res = this.prCategoryService.updateByPrimaryKeySelective(prCategory);
 		if(res==1){
 			redirectAttributes.addFlashAttribute("prCategory", prCategory);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
-		uiModel.addAttribute("prCategory", prCategory);
-		uiModel.addAttribute("operation", "edit");
-		return basePath + "prCategory_edit";
+		redirectAttributes.addAttribute("operation", "edit");
+		return "redirect:/prCategory/edit/"+prCategory.getId();
 	}
 }

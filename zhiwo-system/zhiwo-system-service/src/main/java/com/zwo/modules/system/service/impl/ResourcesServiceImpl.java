@@ -120,7 +120,7 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "TbResources", key="#id")
+	@CacheEvict(value = "TbResources", key="#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -213,7 +213,7 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id", value = "TbResources")
+	@Cacheable(key = "#id+''", value = "TbResources")
 	@Transactional(readOnly = true)
 	public TbResources selectByPrimaryKey(String id) {
 		// 日志记录

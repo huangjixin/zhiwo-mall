@@ -55,17 +55,19 @@ public class ProductController extends BaseController<PrProduct> {
 	
 //	@RequiresPermissions("system:product:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public String create(@Valid PrProductWithBLOBs tbproduct, BindingResult result, Model uiModel,
+	public String create(@Valid PrProductWithBLOBs product, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-
+			redirectAttributes.addFlashAttribute("product", product);
+			redirectAttributes.addFlashAttribute("message", "数据绑定有误！");
+			return "redirect:/product/create";
 		}
 		
-		int res = productService.insertSelective(tbproduct);
-		if(res==1){
-			redirectAttributes.addFlashAttribute("product", tbproduct);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+		int res = productService.insertSelective(product);
+		if(res!=0){
+			redirectAttributes.addFlashAttribute("product", product);
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
 		
 		return "redirect:/product/create";
@@ -77,16 +79,16 @@ public class ProductController extends BaseController<PrProduct> {
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-			
+			redirectAttributes.addFlashAttribute("product", product);
+			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
 		}
 		
 		int res = this.productService.updateByPrimaryKeySelective(product);
 		if(res==1){
 			redirectAttributes.addFlashAttribute("product", product);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
-		uiModel.addAttribute("product", product);
-		uiModel.addAttribute("operation", "edit");
-		return basePath + "product_edit";
+		redirectAttributes.addAttribute("operation", "edit");
+		return "redirect:/product/edit/"+product.getId();
 	}
 }

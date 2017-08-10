@@ -119,7 +119,7 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "MemberAddress", key = "#id")
+	@CacheEvict(value = "MemberAddress", key = "#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -208,7 +208,7 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id", value = "MemberAddress")
+	@Cacheable(key = "#id+''", value = "MemberAddress")
 	@Transactional(readOnly = true)
 	public MemberAddress selectByPrimaryKey(String id) {
 		// 日志记录

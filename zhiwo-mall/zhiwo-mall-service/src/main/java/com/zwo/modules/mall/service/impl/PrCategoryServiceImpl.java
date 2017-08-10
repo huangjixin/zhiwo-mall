@@ -216,7 +216,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id", value = "PrCategory")
+	@Cacheable(key = "#id+''", value = "PrCategory")
 	@Transactional(readOnly = true)
 	public PrCategory selectByPrimaryKey(String id) {
 		// 日志记录

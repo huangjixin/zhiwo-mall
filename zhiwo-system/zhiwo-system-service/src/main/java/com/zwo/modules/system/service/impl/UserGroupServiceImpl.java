@@ -119,7 +119,7 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "TbUserGroup", key="#id")
+	@CacheEvict(value = "TbUserGroup", key="#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -209,7 +209,7 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id", value = "TbUserGroup")
+	@Cacheable(key = "#id+''", value = "TbUserGroup")
 	@Transactional(readOnly = true)
 	public TbUserGroup selectByPrimaryKey(String id) {
 		// 日志记录

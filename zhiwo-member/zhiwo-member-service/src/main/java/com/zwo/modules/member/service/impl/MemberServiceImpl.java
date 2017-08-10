@@ -178,7 +178,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "Member", key="#id")
+	@CacheEvict(value = "Member", key="#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -267,7 +267,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id", value = "Member")
+	@Cacheable(key = "#id+''", value = "Member")
 	@Transactional(readOnly = true)
 	public Member selectByPrimaryKey(String id) {
 		// 日志记录

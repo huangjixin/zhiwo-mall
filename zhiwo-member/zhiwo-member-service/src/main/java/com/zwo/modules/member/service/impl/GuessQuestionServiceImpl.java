@@ -119,7 +119,7 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion> impleme
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "GuessQuestion", key = "#id")
+	@CacheEvict(value = "GuessQuestion", key = "#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -208,7 +208,7 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion> impleme
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id", value = "GuessQuestion")
+	@Cacheable(key = "#id+''", value = "GuessQuestion")
 	@Transactional(readOnly = true)
 	public GuessQuestion selectByPrimaryKey(String id) {
 		// 日志记录

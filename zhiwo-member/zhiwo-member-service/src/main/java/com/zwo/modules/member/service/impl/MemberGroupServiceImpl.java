@@ -119,7 +119,7 @@ public class MemberGroupServiceImpl extends BaseService<MemberGroup> implements 
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "MemberGroup", key = "#id")
+	@CacheEvict(value = "MemberGroup", key = "#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -208,7 +208,7 @@ public class MemberGroupServiceImpl extends BaseService<MemberGroup> implements 
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id", value = "MemberGroup")
+	@Cacheable(key = "#id+''", value = "MemberGroup")
 	@Transactional(readOnly = true)
 	public MemberGroup selectByPrimaryKey(String id) {
 		// 日志记录

@@ -287,7 +287,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 			logger.info(BASE_MESSAGE + "insert插入开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-		if(null!=record.getContent() && "".equals(record.getContent())){
+		if(null!=record.getContent() && !"".equals(record.getContent())){
 			String content = record.getContent();
 			content = HtmlUtils.htmlEscape(content);
 			record.setContent(content);
@@ -309,7 +309,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 			logger.info(BASE_MESSAGE + "insert插入开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-		if(null!=record.getContent() && "".equals(record.getContent())){
+		if(null!=record.getContent() && !"".equals(record.getContent())){
 			String content = record.getContent();
 			content = HtmlUtils.htmlEscape(content);
 			record.setContent(content);
@@ -324,7 +324,8 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 		return result;
 	}
 
-	@Cacheable(key = "#id", value = "PrProduct")
+	
+	@Cacheable(key = "#id+''", value = "PrProduct")
 	@Transactional(readOnly = true)
 	public PrProductWithBLOBs selectByPrimKey(String id) {
 		// 日志记录
@@ -352,7 +353,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
-		if(null!=record.getContent() && "".equals(record.getContent())){
+		if(null!=record.getContent() && !"".equals(record.getContent())){
 			String content = record.getContent();
 			content = HtmlUtils.htmlEscape(content);
 			record.setContent(content);
@@ -372,7 +373,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 			logger.info(BASE_MESSAGE + "updateByExampleWithBLOBs更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleWithBLOBs更新条件对象为：" + record.toString());
-		if(null!=record.getContent() && "".equals(record.getContent())){
+		if(null!=record.getContent() && !"".equals(record.getContent())){
 			String content = record.getContent();
 			content = HtmlUtils.htmlEscape(content);
 			record.setContent(content);
@@ -392,7 +393,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 			logger.info(BASE_MESSAGE + "updateByExample更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExample更新对象为：" + record.toString());
-//		if(null!=record.getContent() && "".equals(record.getContent())){
+//		if(null!=record.getContent() && !"".equals(record.getContent())){
 //			String content = record.getContent();
 //			content = HtmlUtils.htmlEscape(content);
 //			record.setContent(content);
@@ -412,7 +413,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
-		if(null!=record.getContent() && "".equals(record.getContent())){
+		if(null!=record.getContent() && !"".equals(record.getContent())){
 			String content = record.getContent();
 			content = HtmlUtils.htmlEscape(content);
 			record.setContent(content);
@@ -431,7 +432,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeyWithBLOBs更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeyWithBLOBs更新对象为：" + record.toString());
-		if(null!=record.getContent() && "".equals(record.getContent())){
+		if(null!=record.getContent() && !"".equals(record.getContent())){
 			String content = record.getContent();
 			content = HtmlUtils.htmlEscape(content);
 			record.setContent(content);

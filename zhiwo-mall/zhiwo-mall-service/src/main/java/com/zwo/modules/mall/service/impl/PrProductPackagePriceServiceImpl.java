@@ -119,7 +119,7 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "PrProductPackagePrice",key="#id")
+	@CacheEvict(value = "PrProductPackagePrice",key="#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -208,7 +208,7 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id", value = "PrProductPackagePrice")
+	@Cacheable(key = "#id+''", value = "PrProductPackagePrice")
 	@Transactional(readOnly = true)
 	public PrProductPackagePrice selectByPrimaryKey(String id) {
 		// 日志记录

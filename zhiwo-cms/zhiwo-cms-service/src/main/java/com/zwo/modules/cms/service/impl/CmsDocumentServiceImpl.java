@@ -121,7 +121,7 @@ public class CmsDocumentServiceImpl extends BaseService<CmsDocument> implements 
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "CmsDocument", key = "#id")
+	@CacheEvict(value = "CmsDocument", key = "#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -333,7 +333,7 @@ public class CmsDocumentServiceImpl extends BaseService<CmsDocument> implements 
 		return cmsDocumentMapper.selectByExample((CmsDocumentCriteria) example);
 	}
 
-	@Cacheable(key = "#id", value = "CmsDocument")
+	@Cacheable(key = "#id+''", value = "CmsDocument")
 	@Transactional(readOnly = true)
 	public CmsDocumentWithBLOBs selectByPrimKey(String id) {
 		// 日志记录

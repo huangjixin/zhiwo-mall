@@ -119,7 +119,7 @@ public class UserApplyServiceImpl extends BaseService<TbUserApply> implements IT
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "TbUserApply", key="#id")
+	@CacheEvict(value = "TbUserApply", key="#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -208,7 +208,7 @@ public class UserApplyServiceImpl extends BaseService<TbUserApply> implements IT
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id", value = "TbUserApply")
+	@Cacheable(key = "#id+''", value = "TbUserApply")
 	@Transactional(readOnly = true)
 	public TbUserApply selectByPrimaryKey(String id) {
 		// 日志记录
