@@ -34,6 +34,7 @@
 		rownumbers="true"
 		fitColumns="true" 
 		fit="true" 
+		pagination="true"
 		singleSelect="false">
 		<thead>
 			<tr>

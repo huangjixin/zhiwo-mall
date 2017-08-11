@@ -24,6 +24,7 @@ import com.github.pagehelper.DatagridPage;
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.system.domain.TbRole;
 import com.zwo.modules.system.domain.TbRoleCriteria;
+import com.zwo.modules.system.domain.TbUserGroup;
 import com.zwo.modules.system.service.ITbRoleService;
 import com.zwotech.common.web.BaseController;
 
@@ -108,5 +109,11 @@ public class RoleRestController extends BaseController<TbRole> {
 		
 		pageInfo = roleService.selectByPageInfo(tbroleCriteria, pageInfo);
 		return super.setPage(pageInfo);
+	}
+	
+	@RequestMapping(value = "listAll")
+	public List<TbRole> listAll(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		List<TbRole> list  = roleService.selectByExample(null);
+		return list;
 	}
 }

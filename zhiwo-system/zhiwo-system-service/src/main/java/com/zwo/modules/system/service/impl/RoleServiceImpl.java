@@ -212,7 +212,7 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	@Override
 	@Transactional(readOnly = true)
 	public List<TbRole> selectByExample(Object example) {
-		return null;
+		return super.selectByExample(example);
 	}
 
 	/*

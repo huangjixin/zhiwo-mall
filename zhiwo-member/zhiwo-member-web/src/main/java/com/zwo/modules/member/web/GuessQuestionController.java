@@ -26,7 +26,7 @@ public class GuessQuestionController extends BaseController<GuessQuestion> {
 	@Lazy(true)
 	private IGuessQuestionService guessQuestionService;
 	
-	private static final String basePath = "views/mall/guessQuestion/";
+	private static final String basePath = "views/member/guess/";
 	
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {

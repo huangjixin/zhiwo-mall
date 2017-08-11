@@ -305,7 +305,6 @@ public class CmsDocumentServiceImpl extends BaseService<CmsDocument> implements 
 	}
 
 	@CachePut(value = "CmsDocument", key = "#record.id")
-	@CacheEvict(value = "CmsDocument", allEntries = true)
 	public int insertSelective(CmsDocumentWithBLOBs record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

@@ -34,7 +34,8 @@
 		rownumbers="true"
 		fitColumns="true" 
 		fit="true" 
-		singleSelect="false">
+		pagination="true"
+		singleSelect="true">
 		<thead>
 			<tr>
 				<th data-options="field:'ck',checkbox:true"></th>

@@ -4,62 +4,50 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>用户编辑</title>
+<title>文章编辑</title>
 <%@ include file="/WEB-INF/include/easyui-css.jsp"%>
 <%@ include file="/WEB-INF/include/easyui-js.jsp"%>
 <script type="text/javascript"
 	src="${ctx}/js/jquery-easyui/ajaxfileupload.js"></script>
+<%--<script type="text/javascript" src="http://cdn.bootcss.com/blueimp-file-upload/9.17.0/js/vendor/jquery.ui.widget.min.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/blueimp-file-upload/9.17.0/js/jquery.fileupload.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/blueimp-file-upload/9.17.0/js/jquery.iframe-transport.min.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/blueimp-file-upload/9.17.0/js/jquery.fileupload-process.min.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/blueimp-file-upload/9.17.0/js/jquery.fileupload-image.min.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/blueimp-file-upload/9.17.0/js/jquery.fileupload-audio.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/blueimp-file-upload/9.17.0/js/jquery.fileupload-video.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/blueimp-file-upload/9.17.0/js/jquery.fileupload-validate.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/blueimp-file-upload/9.17.0/js/jquery.fileupload-ui.js"></script>--%>
 </head>
 <body>
 	<form class="form-horizontal" role="form"
 		<c:if test="${operation=='edit'}">
- action="${ctx}/user/update"
+ action="${ctx}/document/update"
 		</c:if>
 		<c:if test="${operation==null}">
- action="${ctx}/user/create"
+ action="${ctx}/document/create"
 		</c:if>
 		method="post">
         <c:if test="${operation=='edit'}">
-        <input id="id" name="id" value="${user.id}" type="hidden"/>
+        <input id="id" name="id" value="${document.id}" type="hidden"/>
 		</c:if>
-        <input id="icon" name="icon" value="${user.icon}" type="hidden"/>
-        <div class="form-group">
-			<label for="usergroupId" class="col-sm-1 control-label">用户组</label>
+        <input id="icon" name="icon" value="${document.icon}" type="hidden"/>
+		<div class="form-group">
+			<label for="name" class="col-sm-1 control-label">文章名称</label>
 			<div class="col-sm-4">
-				<input class="easyui-combobox" id="usergroupId" name="usergroupId"
-					data-options="valueField:'id',textField:'text',url:'${ctx}/userGroup/listAll',value:'${user.usergroupId}'">
+				<input type="text" class="form-control" id="name" name="name"
+					placeholder="请输入文章名称" value="${document.name}">
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="username" class="col-sm-1 control-label">用户名称</label>
+			<label for="code" class="col-sm-1 control-label">文章代码</label>
 			<div class="col-sm-4">
-				<input type="text" class="form-control" id="username" name="username"
-					placeholder="请输入用户名称" value="${user.username}">
+				<input type="text" class="form-control" id="code" name="code"
+					placeholder="请输入文章代码(文章拼音)" value="${document.code}">
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="email" class="col-sm-1 control-label">用户邮箱</label>
-			<div class="col-sm-4">
-				<input type="text" class="form-control" id="email" name="email"
-					placeholder="请输入用户代码(用户拼音)" value="${user.email}">
-			</div>
-		</div>
-		<div class="form-group">
-			<label for="mobilPhone" class="col-sm-1 control-label">手机</label>
-			<div class="col-sm-4">
-				<input type="text" class="form-control" id="mobilPhone" name="mobilPhone"
-					placeholder="" value="${user.mobilPhone}">
-			</div>
-		</div>
-        <div class="form-group">
-			<label for="weixin" class="col-sm-1 control-label">微信</label>
-			<div class="col-sm-4">
-				<input type="text" class="form-control" id="weixin" name="weixin"
-					placeholder="请输入微信号" value="${user.weixin}">
-			</div>
-		</div>
-		<div class="form-group">
-			<label for="file" class="col-sm-1 control-label">用户头像</label>
+			<label for="file" class="col-sm-1 control-label">头像上传</label>
 			<div class="col-sm-4">
 				<input type="file" id="file" name="file" style="display: none;"
 					accept="image/*" onChange="$('#message').html($('#file').val())" />
@@ -71,39 +59,43 @@
 					onclick="fileUploadToServer();">
 					<i class="fa fa-upload"></i> <span>&nbsp;&nbsp;开始上传</span>
 				</button>
-                <label id="message">${message}</label>
+				<%@ include file="/WEB-INF/include/easyui-buttonForm.jsp"%>
+				<label id="message">${message}</label>
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="file" class="col-sm-1 control-label"></label>
 			<div class="col-sm-4">
-				<img id="iconImg" src="${ctx}/${user.icon}" 	class=".img-responsive"
+				<img id="iconImg" name="icon" <c:if test="{document.icon!=null}">src="${ctx}/${document.icon}"</c:if> 	   class=".img-responsive"
 					style="width: 100px;">
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="description" class="col-sm-1 control-label">分类描述</label>
-			<div class="col-sm-4">
-				<textarea name="description" class="form-control" rows="4" >${user.description}</textarea>
-			</div>
-		</div>
-        <div class="form-group">
-			<label  class="col-sm-1 control-label"></label>
-			<div class="col-sm-4">
-				<%@ include file="/WEB-INF/include/easyui-buttonForm.jsp"%>
-				
+			<label for="file" class="col-sm-1 control-label">文章内容</label>
+			<div class="col-sm-10">
+				<script id="container" name="content" type="text/plain">${document.content}</script>
 			</div>
 		</div>
 	</form>
+	<!-- 配置文件 -->
+	<script type="text/javascript"
+		src="${ctx}/js/ueditor/ueditor.config.js"></script>
+	<!-- 编辑器源码文件 -->
+	<script type="text/javascript" src="${ctx}/js/ueditor/ueditor.all.js"></script>
+	<!-- 实例化编辑器 -->
 
 	<script type="text/javascript">
-		
+		var ue = UE.getEditor('container', {
+			autoHeightEnabled : true,
+			autoFloatEnabled : true,
+			initialFrameHeight : 483
+		});
 		// 初始化按钮等工作。
 		$().ready(function() {
 
 			//返回列表。
 			$("#returnBtn").bind("click", function() {
-				backToList('user');
+				backToList('document');
 			});
 		});
 

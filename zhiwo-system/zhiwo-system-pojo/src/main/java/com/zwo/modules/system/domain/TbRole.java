@@ -243,4 +243,8 @@ public class TbRole implements Serializable {
     public void setCode(String code) {
         this.code = code == null ? null : code.trim();
     }
+    
+    public String getText() {
+        return this.name;
+    }
 }

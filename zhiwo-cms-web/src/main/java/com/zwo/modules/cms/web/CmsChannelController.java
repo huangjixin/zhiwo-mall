@@ -19,7 +19,7 @@ import com.zwo.modules.cms.service.ICmsChannelService;
 import com.zwotech.common.web.BaseController;
 
 @Controller
-@RequestMapping("cmsChannel")
+@RequestMapping("channel")
 @Lazy(true)
 public class CmsChannelController extends BaseController<CmsChannel> {
 	@Autowired
@@ -33,8 +33,8 @@ public class CmsChannelController extends BaseController<CmsChannel> {
 		return basePath + "channel_list";
 	}
 
-	
-//	@RequiresPermissions("system:channel:create")
+
+//	@RequiresPermissions("cms:channel:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid CmsChannel channel, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -42,7 +42,7 @@ public class CmsChannelController extends BaseController<CmsChannel> {
 		return basePath + "channel_edit";
 	}
 
-//	@RequiresPermissions("system:channel:view")
+//	@RequiresPermissions("cms:channel:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -53,40 +53,42 @@ public class CmsChannelController extends BaseController<CmsChannel> {
 		return basePath + "channel_edit";
 	}
 	
-//	@RequiresPermissions("system:channel:create")
+//	@RequiresPermissions("cms:channel:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public String create(@Valid CmsChannel tbchannel, BindingResult result, Model uiModel,
+	public String create(@Valid CmsChannel channel, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-
+			redirectAttributes.addFlashAttribute("channel", channel);
+			redirectAttributes.addFlashAttribute("message", "数据绑定有误！");
+			return "redirect:/channel/create";
 		}
 		
-		int res = channelService.insertSelective(tbchannel);
-		if(res==1){
-			redirectAttributes.addFlashAttribute("channel", tbchannel);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+		int res = channelService.insertSelective(channel);
+		if(res!=0){
+			redirectAttributes.addFlashAttribute("channel", channel);
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
 		
 		return "redirect:/channel/create";
 	}
 	 
-//	@RequiresPermissions("system:channel:edit")
+//	@RequiresPermissions("cms:channel:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid CmsChannel channel, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-			
+			redirectAttributes.addFlashAttribute("channel", channel);
+			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
 		}
 		
 		int res = this.channelService.updateByPrimaryKeySelective(channel);
 		if(res==1){
 			redirectAttributes.addFlashAttribute("channel", channel);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
-		uiModel.addAttribute("channel", channel);
-		uiModel.addAttribute("operation", "edit");
-		return basePath + "channel_edit";
+		redirectAttributes.addAttribute("operation", "edit");
+		return "redirect:/channel/edit/"+channel.getId();
 	}
 }

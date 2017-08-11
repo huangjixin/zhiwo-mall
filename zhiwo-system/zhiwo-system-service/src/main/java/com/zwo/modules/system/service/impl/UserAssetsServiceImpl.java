@@ -3,13 +3,16 @@
  */
 package com.zwo.modules.system.service.impl;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
@@ -79,12 +82,25 @@ public class UserAssetsServiceImpl extends BaseService<TbUserAssets> implements 
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbUserAssets", allEntries = true)
+//	@CacheEvict(value = "TbUserAssets", allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
-
+		List<TbUserAssets> userAssets = userAssetsMapper.selectByExample(example);
+		
+		for (TbUserAssets tbUserAssets : userAssets) {
+			if(tbUserAssets.getPath()!=null){
+				Path path = Paths.get(tbUserAssets.getPath()); 
+				try {
+		            if(Files.exists(path)){
+		            	Files.delete(path);
+		            }
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		        }
+			}
+		}
 		// 逻辑操作
 		int result = userAssetsMapper.deleteByExample(example);
 
@@ -93,7 +109,7 @@ public class UserAssetsServiceImpl extends BaseService<TbUserAssets> implements 
 		return result;
 	}
 
-	@CacheEvict(value = "TbUserAssets", allEntries = true)
+//	@CacheEvict(value = "TbUserAssets", allEntries = true)
 	// @Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
@@ -105,6 +121,21 @@ public class UserAssetsServiceImpl extends BaseService<TbUserAssets> implements 
 		// 逻辑操作
 		TbUserAssetsCriteria userAssetsCriteria = new TbUserAssetsCriteria();
 		userAssetsCriteria.createCriteria().andIdIn(list);
+		
+		List<TbUserAssets> userAssets = userAssetsMapper.selectByExample(userAssetsCriteria);
+		
+		for (TbUserAssets tbUserAssets : userAssets) {
+			if(tbUserAssets.getPath()!=null){
+				Path path = Paths.get(tbUserAssets.getPath()); 
+				try {
+		            if(Files.exists(path)){
+		            	Files.delete(path);
+		            }
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		        }
+			}
+		}
 		int result = userAssetsMapper.deleteByExample(userAssetsCriteria);
 
 		if (logger.isInfoEnabled())
@@ -127,7 +158,17 @@ public class UserAssetsServiceImpl extends BaseService<TbUserAssets> implements 
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为：" + id.toString());
-
+		TbUserAssets tbUserAssets = this.selectByPrimaryKey(id);
+		if(tbUserAssets.getPath()!=null){
+			Path path = Paths.get(tbUserAssets.getPath()); 
+			try {
+	            if(Files.exists(path)){
+	            	Files.delete(path);
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+		}
 		// 逻辑操作
 		int result = super.deleteByPrimaryKey(id);
 
@@ -143,7 +184,7 @@ public class UserAssetsServiceImpl extends BaseService<TbUserAssets> implements 
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "TbUserAssets", key = "#record.id")
+//	@CachePut(value = "TbUserAssets", key = "#record.id")
 	public int insert(TbUserAssets record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -170,7 +211,7 @@ public class UserAssetsServiceImpl extends BaseService<TbUserAssets> implements 
 	 */
 
 	@Override
-	@CachePut(value = "TbUserAssets", key = "#record.id")
+//	@CachePut(value = "TbUserAssets", key = "#record.id")
 	public int insertSelective(TbUserAssets record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -232,7 +273,7 @@ public class UserAssetsServiceImpl extends BaseService<TbUserAssets> implements 
 	 * com.zwotech.modules.core.service.IBaseService#updateByExampleSelective(
 	 * java.lang.Object, java.lang.Object)
 	 */
-	@CacheEvict(value = "TbUserAssets", allEntries = true)
+//	@CacheEvict(value = "TbUserAssets", allEntries = true)
 	@Override
 	public int updateByExampleSelective(TbUserAssets record, Object example) {
 		// 日志记录
@@ -257,7 +298,7 @@ public class UserAssetsServiceImpl extends BaseService<TbUserAssets> implements 
 	 * Object, java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbUserAssets", allEntries = true)
+//	@CacheEvict(value = "TbUserAssets", allEntries = true)
 	public int updateByExample(TbUserAssets record, Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -281,7 +322,7 @@ public class UserAssetsServiceImpl extends BaseService<TbUserAssets> implements 
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "TbUserAssets", key = "#record.id")
+//	@CachePut(value = "TbUserAssets", key = "#record.id")
 	public int updateByPrimaryKeySelective(TbUserAssets record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -304,7 +345,7 @@ public class UserAssetsServiceImpl extends BaseService<TbUserAssets> implements 
 	 * lang.Object)
 	 */
 	@Override
-	@CachePut(value = "TbUserAssets", key = "#record.id")
+//	@CachePut(value = "TbUserAssets", key = "#record.id")
 	public int updateByPrimaryKey(TbUserAssets record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

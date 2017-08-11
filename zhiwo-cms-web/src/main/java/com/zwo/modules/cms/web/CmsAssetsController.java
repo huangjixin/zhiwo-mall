@@ -33,60 +33,62 @@ public class CmsAssetsController extends BaseController<CmsAssets> {
 		return basePath + "cmsAssets_list";
 	}
 
-	
-//	@RequiresPermissions("system:assets:create")
+
+//	@RequiresPermissions("cms:assets:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
-	public String tocreate(@Valid CmsAssets assets, BindingResult result, Model uiModel,
+	public String tocreate(@Valid CmsAssets cmsAssets, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		uiModel.addAttribute("assets", assets);
-		return basePath + "assets_edit";
+		uiModel.addAttribute("cmsAssets", cmsAssets);
+		return basePath + "cmsAssets_edit";
 	}
 
-//	@RequiresPermissions("system:assets:view")
+//	@RequiresPermissions("cms:assets:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		CmsAssets assets = assetsService.selectByPrimaryKey(id);
+		CmsAssets cmsAssets = assetsService.selectByPrimaryKey(id);
 
-		uiModel.addAttribute("assets", assets);
+		uiModel.addAttribute("cmsAssets", cmsAssets);
 		uiModel.addAttribute("operation", "edit");
-		return basePath + "assets_edit";
+		return basePath + "cmsAssets_edit";
 	}
 	
-//	@RequiresPermissions("system:assets:create")
+//	@RequiresPermissions("cms:assets:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public String create(@Valid CmsAssets tbassets, BindingResult result, Model uiModel,
+	public String create(@Valid CmsAssets cmsAssets, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-
+			redirectAttributes.addFlashAttribute("cmsAssets", cmsAssets);
+			redirectAttributes.addFlashAttribute("message", "数据绑定有误！");
+			return "redirect:/cmsAssets/create";
 		}
 		
-		int res = assetsService.insertSelective(tbassets);
-		if(res==1){
-			redirectAttributes.addFlashAttribute("assets", tbassets);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+		int res = assetsService.insertSelective(cmsAssets);
+		if(res!=0){
+			redirectAttributes.addFlashAttribute("cmsAssets", cmsAssets);
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
 		
-		return "redirect:/assets/create";
+		return "redirect:/cmsAssets/create";
 	}
 	 
-//	@RequiresPermissions("system:assets:edit")
+//	@RequiresPermissions("cms:assets:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
-	public String update(@Valid CmsAssets assets, BindingResult result, Model uiModel,
+	public String update(@Valid CmsAssets cmsAssets, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-			
+			redirectAttributes.addFlashAttribute("cmsAssets", cmsAssets);
+			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
 		}
 		
-		int res = this.assetsService.updateByPrimaryKeySelective(assets);
+		int res = assetsService.updateByPrimaryKeySelective(cmsAssets);
 		if(res==1){
-			redirectAttributes.addFlashAttribute("assets", assets);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+			redirectAttributes.addFlashAttribute("cmsAssets", cmsAssets);
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
-		uiModel.addAttribute("assets", assets);
-		uiModel.addAttribute("operation", "edit");
-		return basePath + "assets_edit";
+		redirectAttributes.addAttribute("operation", "edit");
+		return "redirect:/cmsAssets/edit/"+cmsAssets.getId();
 	}
 }

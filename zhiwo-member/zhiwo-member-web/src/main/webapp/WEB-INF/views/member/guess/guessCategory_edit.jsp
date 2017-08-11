@@ -50,6 +50,7 @@
 					onclick="fileUploadToServer();">
 					<i class="fa fa-upload"></i> <span>&nbsp;&nbsp;开始上传</span>
 				</button>
+				<label id="message">${message}</label>
 			</div>
 		</div>
 		<div class="form-group">
@@ -69,7 +70,7 @@
 			<label  class="col-sm-1 control-label"></label>
 			<div class="col-sm-4">
 				<%@ include file="/WEB-INF/include/easyui-buttonForm.jsp"%>
-				<label id="message">${message}</label>
+				
 			</div>
 		</div>
 	</form>

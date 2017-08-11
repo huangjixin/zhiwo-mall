@@ -143,7 +143,7 @@ public class GuessCategoryServiceImpl extends BaseService<GuessCategory> impleme
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "GuessCategory", key = "#record.id")
+//	@Cacheable(value = "GuessCategory", key = "#record.id")
 	public int insert(GuessCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -168,9 +168,8 @@ public class GuessCategoryServiceImpl extends BaseService<GuessCategory> impleme
 	 * com.zwotech.modules.core.service.IBaseService#insertSelective(java.lang.
 	 * Object)
 	 */
-
 	@Override
-	@CachePut(value = "GuessCategory", key = "#record.id")
+//	@CachePut(value = "GuessCategory", key = "#record.id")
 	public int insertSelective(GuessCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -281,7 +280,7 @@ public class GuessCategoryServiceImpl extends BaseService<GuessCategory> impleme
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "GuessCategory", key = "#record.id")
+	@CacheEvict(value = "GuessCategory", key = "#record.id")
 	public int updateByPrimaryKeySelective(GuessCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -304,7 +303,7 @@ public class GuessCategoryServiceImpl extends BaseService<GuessCategory> impleme
 	 * lang.Object)
 	 */
 	@Override
-	@CachePut(value = "GuessCategory", key = "#record.id")
+	@CacheEvict(value = "GuessCategory", key = "#record.id")
 	public int updateByPrimaryKey(GuessCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

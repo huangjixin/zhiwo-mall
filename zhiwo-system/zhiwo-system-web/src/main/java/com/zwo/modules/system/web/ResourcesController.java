@@ -54,38 +54,41 @@ public class ResourcesController extends BaseController<TbResources> {
 	
 //	@RequiresPermissions("system:resources:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public String create(@Valid TbResources tbresources, BindingResult result, Model uiModel,
+	public String create(@Valid TbResources resources, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-
+			redirectAttributes.addFlashAttribute("resources", resources);
+			redirectAttributes.addFlashAttribute("message", "数据绑定有误！");
+			return "redirect:/resources/create";
 		}
 		
-		int res = resourcesService.insertSelective(tbresources);
-		if(res==1){
-			redirectAttributes.addFlashAttribute("resources", tbresources);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+		int res = resourcesService.insertSelective(resources);
+		if(res!=0){
+			redirectAttributes.addFlashAttribute("resources", resources);
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
 		
 		return "redirect:/resources/create";
 	}
 	 
+
 //	@RequiresPermissions("system:resources:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid TbResources resources, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-			
+			redirectAttributes.addFlashAttribute("resources", resources);
+			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
 		}
 		
 		int res = this.resourcesService.updateByPrimaryKeySelective(resources);
 		if(res==1){
 			redirectAttributes.addFlashAttribute("resources", resources);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
-		uiModel.addAttribute("resources", resources);
-		uiModel.addAttribute("operation", "edit");
-		return basePath + "resources_edit";
+		redirectAttributes.addAttribute("operation", "edit");
+		return "redirect:/resources/edit/"+resources.getId();
 	}
 }

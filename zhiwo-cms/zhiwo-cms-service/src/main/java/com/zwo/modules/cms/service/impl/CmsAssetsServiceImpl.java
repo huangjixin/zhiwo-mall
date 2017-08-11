@@ -3,6 +3,10 @@
  */
 package com.zwo.modules.cms.service.impl;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -83,7 +87,20 @@ public class CmsAssetsServiceImpl extends BaseService<CmsAssets> implements ICms
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
-
+		List<CmsAssets> assets = cmsAssetsMapper.selectByExample(example);
+		
+		for (CmsAssets tbUserAssets : assets) {
+			if(tbUserAssets.getPath()!=null){
+				Path path = Paths.get(tbUserAssets.getPath()); 
+				try {
+		            if(Files.exists(path)){
+		            	Files.delete(path);
+		            }
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		        }
+			}
+		}
 		// 逻辑操作
 		int result = cmsAssetsMapper.deleteByExample(example);
 
@@ -104,6 +121,20 @@ public class CmsAssetsServiceImpl extends BaseService<CmsAssets> implements ICms
 		// 逻辑操作
 		CmsAssetsCriteria cmsAssetsCriteria = new CmsAssetsCriteria();
 		cmsAssetsCriteria.createCriteria().andIdIn(list);
+		List<CmsAssets> assets = cmsAssetsMapper.selectByExample(cmsAssetsCriteria);
+		
+		for (CmsAssets tbUserAssets : assets) {
+			if(tbUserAssets.getPath()!=null){
+				Path path = Paths.get(tbUserAssets.getPath()); 
+				try {
+		            if(Files.exists(path)){
+		            	Files.delete(path);
+		            }
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		        }
+			}
+		}
 		int result = cmsAssetsMapper.deleteByExample(cmsAssetsCriteria);
 
 		if (logger.isInfoEnabled())
@@ -126,7 +157,17 @@ public class CmsAssetsServiceImpl extends BaseService<CmsAssets> implements ICms
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为：" + id.toString());
-
+		CmsAssets cmsAssets = this.selectByPrimaryKey(id);
+		if(cmsAssets.getPath()!=null){
+			Path path = Paths.get(cmsAssets.getPath()); 
+			try {
+	            if(Files.exists(path)){
+	            	Files.delete(path);
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+		}
 		// 逻辑操作
 		int result = super.deleteByPrimaryKey(id);
 

@@ -142,7 +142,7 @@ public class GuessQuestionOptionsServiceImpl extends BaseService<GuessQuestionOp
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "GuessQuestionOptions", key = "#record.id")
+//	@CachePut(value = "GuessQuestionOptions", key = "#record.id")
 	public int insert(GuessQuestionOptions record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -169,7 +169,7 @@ public class GuessQuestionOptionsServiceImpl extends BaseService<GuessQuestionOp
 	 */
 
 	@Override
-	@CachePut(value = "GuessQuestionOptions", key = "#record.id")
+//	@CachePut(value = "GuessQuestionOptions", key = "#record.id")
 	public int insertSelective(GuessQuestionOptions record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

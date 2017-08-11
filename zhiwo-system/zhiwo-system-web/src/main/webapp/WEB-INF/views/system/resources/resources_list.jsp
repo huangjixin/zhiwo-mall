@@ -5,37 +5,46 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>用户列表</title>
+<title>资源列表</title>
 <%@ include file="/WEB-INF/include/easyui-css.jsp"%>
 <%@ include file="/WEB-INF/include/easyui-js.jsp"%>
 
 </head>
 <body>
+	<%@ include file="/WEB-INF/include/easyui-toolbar.jsp"%>
 	<div id="toolbar">
-		<%@ include file="/WEB-INF/include/easyui-buttonGroup.jsp"%>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-		<label>名称：</label>&nbsp;<input id="userGroupnameInput" class="input" style="width:100px;"/>&nbsp;
-		<%@ include file="/WEB-INF/include/easyui-queryButton.jsp"%>
-		<!-- <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-			onclick="create('userGroup')">新增</a> <a href="#" class="easyui-linkbutton"
-			iconCls="icon-edit" plain="true" onclick="editCategory()">编辑</a> <a href="#"
-			class="easyui-linkbutton" iconCls="icon-remove" plain="true"
-			onclick="destroy()">删除</a> -->
+		<nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid"> 
+           
+            <div class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <%@ include file="/WEB-INF/include/easyui-buttonGroup.jsp"%>
+                	&nbsp;&nbsp;&nbsp;&nbsp;
+               		<input id="nameInput"  class="form-control" placeholder="名称">
+                </div>
+                <button id="queryBtn" class="btn btn-default">查询</button>
+            </div>
+            </div>
+        </nav>
 	</div>
 	<table id="tgrid" 
-		title="用户列表" 
+		title="资源列表" 
 		class="easyui-datagrid"
-		url="${ctx}/userGroup/select" 
+		url="${ctx}/resources/select" 
 		toolbar="#toolbar" 
 		rownumbers="true"
 		fitColumns="true" 
 		fit="true" 
-		singleSelect="true">
+		pagination="true"
+		singleSelect="false">
 		<thead>
 			<tr>
 				<th data-options="field:'ck',checkbox:true"></th>
 				<th data-options="field:'id',align:'center'">id</th>
-				<th data-options="field:'userGroupname',align:'center'">账户名称</th>
+				<th data-options="field:'name',align:'center',width:100">名称</th>
+				<th data-options="field:'code',align:'center',width:100">代码</th>
+				<th data-options="field:'authName',align:'center',width:100,formatter:formatType">权限名</th>
+				<th data-options="field:'type',align:'center',width:100">类型</th>
 				<th data-options="field:'createDate',align:'center',width:100">创建日期</th>
 				<th data-options="field:'updateDate',align:'center',width:100">更新日期</th>
 				<!-- <th data-options="field:'By',align:'center',width:100">创建人</th>
@@ -47,27 +56,38 @@
 	<script type="text/javascript">
 		// 初始化按钮等工作。
 		$().ready(function() {
-			init("userGroup","tgrid");
+			init("resources","tgrid");
 		})
 		
+		//格式化类型
+		function formatType(value, rec) {
+			var result = "菜单";
+			if(rec.type=='button'){
+				result = "按钮";
+			}else if(rec.type=='menu'){
+				result = "菜单";
+			}
+			return result;
+		}
+
 		//格式化操作，添加删除和编辑按钮。
 		function formatOpt(value, rec) {
 			var btn = '<div style="padding: 5px;">';
 //			<%
-//				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:userGroup:delete")){
+//				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:product:delete")){
 //				%>
-				btn += '<a href="#" class="easyui-linkbutton button-red"  onclick="deleteById(\'tgrid\',\''
-					+ rec.id + '\',\'userGroup\')"><i class="icon-trash"></i>&nbsp;&nbsp;删除 </a>';
+				btn += '<button type="button" class="btn btn-danger btn-sm" onclick="deleteById(\'tgrid\',\''
+					+ rec.id + '\',\'resources\')"><i class="fa fa-trash fa-lg"></i>&nbsp;&nbsp;删除 </button>';
 					btn += "&nbsp;&nbsp;";
 					btn += ''
 //				<%
 //				}
 //			%>
 //			<%
-//				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:userGroup:edit")){
+//				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:product:edit")){
 //				%> 
-				btn += '<a href="#" class="easyui-linkbutton button-green"  onclick="update(\''
-					+ rec.id + '\',\'userGroup\')"><i class="icon-edit"></i>&nbsp;&nbsp;编辑 </a>';
+				btn += '<button type="button" class="btn btn-info btn-sm" onclick="update(\''
+					+ rec.id + '\',\'resources\')"><i class="fa fa-edit fa-lg"></i>&nbsp;&nbsp;编辑</button>';
 //				 <%
 //				}
 //							%> 
@@ -82,11 +102,11 @@
 			if (row) {
 				$.messager.confirm('确定', '确定删除？', function(r) {
 					if (r) {
-						$.post('${ctx}/userGroup/delete', {
+						$.post('${ctx}/resources/delete', {
 							id : row.id
 						}, function(result) {
 							if (result > 0) {
-								$('#dg').datagrid('reload'); // reload the userGroup data
+								$('#dg').datagrid('reload'); // reload the resources data
 							} else {
 								$.messager.show({ // show error message
 									title : 'Error',
