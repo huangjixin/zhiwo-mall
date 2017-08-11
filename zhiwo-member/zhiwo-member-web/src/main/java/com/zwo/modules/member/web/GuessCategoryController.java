@@ -26,14 +26,15 @@ public class GuessCategoryController extends BaseController<GuessCategory> {
 	@Lazy(true)
 	private IGuessCategoryService guessCategoryService;
 	
-	private static final String basePath = "views/mall/guessCategory/";
+	private static final String basePath = "views/member/guess/";
+	
 	
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath+"guessCategory_list";
 	}
 	
-//	@RequiresPermissions("system:guessCategory:create")
+//	@RequiresPermissions("member:guessCategory:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid GuessCategory guessCategory, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -41,7 +42,7 @@ public class GuessCategoryController extends BaseController<GuessCategory> {
 		return basePath + "guessCategory_edit";
 	}
 
-//	@RequiresPermissions("system:guessCategory:view")
+//	@RequiresPermissions("member:guessCategory:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -52,41 +53,43 @@ public class GuessCategoryController extends BaseController<GuessCategory> {
 		return basePath + "guessCategory_edit";
 	}
 	
-//	@RequiresPermissions("system:guessCategory:create")
+//	@RequiresPermissions("member:guessCategory:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public String create(@Valid GuessCategory tbguessCategory, BindingResult result, Model uiModel,
+	public String create(@Valid GuessCategory guessCategory, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-
+			redirectAttributes.addFlashAttribute("guessCategory", guessCategory);
+			redirectAttributes.addFlashAttribute("message", "数据绑定有误！");
+			return "redirect:/guessCategory/create";
 		}
 		
-		int res = guessCategoryService.insertSelective(tbguessCategory);
-		if(res==1){
-			redirectAttributes.addFlashAttribute("guessCategory", tbguessCategory);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+		int res = guessCategoryService.insertSelective(guessCategory);
+		if(res!=0){
+			redirectAttributes.addFlashAttribute("guessCategory", guessCategory);
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
 		
 		return "redirect:/guessCategory/create";
 	}
 	 
-//	@RequiresPermissions("system:guessCategory:edit")
+//	@RequiresPermissions("member:guessCategory:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid GuessCategory guessCategory, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-			
+			redirectAttributes.addFlashAttribute("guessCategory", guessCategory);
+			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
 		}
 		
 		int res = this.guessCategoryService.updateByPrimaryKeySelective(guessCategory);
 		if(res==1){
 			redirectAttributes.addFlashAttribute("guessCategory", guessCategory);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
-		uiModel.addAttribute("guessCategory", guessCategory);
-		uiModel.addAttribute("operation", "edit");
-		return basePath + "guessCategory_edit";
+		redirectAttributes.addAttribute("operation", "edit");
+		return "redirect:/guessCategory/edit/"+guessCategory.getId();
 	}
 	
 }

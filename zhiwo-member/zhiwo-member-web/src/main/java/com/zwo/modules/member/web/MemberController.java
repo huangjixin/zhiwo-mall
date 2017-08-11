@@ -27,7 +27,7 @@ public class MemberController extends BaseController<Member> {
 	@Lazy(true)
 	private IMemberService memberService;
 	
-	private static final String basePath = "views/mall/member/";
+	private static final String basePath = "views/member/member/";
 	
 	@RequestMapping(value = { "", "list" })
 	@RequiresPermissions("member:member:view")
@@ -35,7 +35,7 @@ public class MemberController extends BaseController<Member> {
 		return basePath+"member_list";
 	}
 	
-//	@RequiresPermissions("system:member:create")
+//	@RequiresPermissions("member:member:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid Member member, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -43,7 +43,7 @@ public class MemberController extends BaseController<Member> {
 		return basePath + "member_edit";
 	}
 
-//	@RequiresPermissions("system:member:view")
+//	@RequiresPermissions("member:member:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -54,40 +54,42 @@ public class MemberController extends BaseController<Member> {
 		return basePath + "member_edit";
 	}
 	
-//	@RequiresPermissions("system:member:create")
+//	@RequiresPermissions("member:member:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public String create(@Valid Member tbmember, BindingResult result, Model uiModel,
+	public String create(@Valid Member member, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-
+			redirectAttributes.addFlashAttribute("member", member);
+			redirectAttributes.addFlashAttribute("message", "数据绑定有误！");
+			return "redirect:/member/create";
 		}
 		
-		int res = memberService.insertSelective(tbmember);
-		if(res==1){
-			redirectAttributes.addFlashAttribute("member", tbmember);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+		int res = memberService.insertSelective(member);
+		if(res!=0){
+			redirectAttributes.addFlashAttribute("member", member);
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
 		
 		return "redirect:/member/create";
 	}
 	 
-//	@RequiresPermissions("system:member:edit")
+//	@RequiresPermissions("member:member:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid Member member, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-			
+			redirectAttributes.addFlashAttribute("member", member);
+			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
 		}
 		
 		int res = this.memberService.updateByPrimaryKeySelective(member);
 		if(res==1){
 			redirectAttributes.addFlashAttribute("member", member);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
-		uiModel.addAttribute("member", member);
-		uiModel.addAttribute("operation", "edit");
-		return basePath + "member_edit";
+		redirectAttributes.addAttribute("operation", "edit");
+		return "redirect:/member/edit/"+member.getId();
 	}
 }

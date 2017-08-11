@@ -32,8 +32,8 @@ public class GuessQuestionController extends BaseController<GuessQuestion> {
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath+"guessQuestion_list";
 	}
-	
-//	@RequiresPermissions("system:guessQuestion:create")
+
+//	@RequiresPermissions("member:guessQuestion:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid GuessQuestion guessQuestion, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -41,7 +41,7 @@ public class GuessQuestionController extends BaseController<GuessQuestion> {
 		return basePath + "guessQuestion_edit";
 	}
 
-//	@RequiresPermissions("system:guessQuestion:view")
+//	@RequiresPermissions("member:guessQuestion:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -52,40 +52,42 @@ public class GuessQuestionController extends BaseController<GuessQuestion> {
 		return basePath + "guessQuestion_edit";
 	}
 	
-//	@RequiresPermissions("system:guessQuestion:create")
+//	@RequiresPermissions("member:guessQuestion:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public String create(@Valid GuessQuestion tbguessQuestion, BindingResult result, Model uiModel,
+	public String create(@Valid GuessQuestion guessQuestion, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-
+			redirectAttributes.addFlashAttribute("guessQuestion", guessQuestion);
+			redirectAttributes.addFlashAttribute("message", "数据绑定有误！");
+			return "redirect:/guessQuestion/create";
 		}
 		
-		int res = guessQuestionService.insertSelective(tbguessQuestion);
-		if(res==1){
-			redirectAttributes.addFlashAttribute("guessQuestion", tbguessQuestion);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+		int res = guessQuestionService.insertSelective(guessQuestion);
+		if(res!=0){
+			redirectAttributes.addFlashAttribute("guessQuestion", guessQuestion);
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
 		
 		return "redirect:/guessQuestion/create";
 	}
 	 
-//	@RequiresPermissions("system:guessQuestion:edit")
+//	@RequiresPermissions("member:guessQuestion:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid GuessQuestion guessQuestion, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-			
+			redirectAttributes.addFlashAttribute("guessQuestion", guessQuestion);
+			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
 		}
 		
 		int res = this.guessQuestionService.updateByPrimaryKeySelective(guessQuestion);
 		if(res==1){
 			redirectAttributes.addFlashAttribute("guessQuestion", guessQuestion);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
-		uiModel.addAttribute("guessQuestion", guessQuestion);
-		uiModel.addAttribute("operation", "edit");
-		return basePath + "guessQuestion_edit";
+		redirectAttributes.addAttribute("operation", "edit");
+		return "redirect:/guessQuestion/edit/"+guessQuestion.getId();
 	}
 }

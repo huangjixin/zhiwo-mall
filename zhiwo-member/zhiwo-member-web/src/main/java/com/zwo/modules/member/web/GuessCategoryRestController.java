@@ -6,16 +6,13 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,19 +30,15 @@ public class GuessCategoryRestController extends BaseController<GuessCategory> {
 	@Autowired
 	@Lazy(true)
 	private IGuessCategoryService guessCategoryService;
-	
-	/** 
-	 * @Title: deleteById 
-	 * @Description: 批量删除 
-	 * @param idstring
-	 * @param httpServletRequest
-	 * @param httpServletResponse
-	 * @return String    返回类型 
-	 * @throws 
+
+	/**
+	 * @Title: deleteById @Description: 批量删除 @param idstring @param
+	 * httpServletRequest @param httpServletResponse @return String 返回类型 @throws
 	 */
-	@RequestMapping(value = "/deleteById")
-	public String deleteById(@RequestParam(value = "idstring",required=true) String idstring, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) throws IOException {
+	// @RequiresPermissions("member:guessCategory:delete")
+	@RequestMapping(value = "deleteById")
+	public String deleteById(@RequestParam(value = "idstring", required = true) String idstring,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
 
 		String[] ids = idstring.split(",");
 		List<String> list = new ArrayList<String>();
@@ -53,48 +46,47 @@ public class GuessCategoryRestController extends BaseController<GuessCategory> {
 			list.add(idstr);
 		}
 		int result = guessCategoryService.deleteBatch(list);
-		return result+"";
+		return result + "";
 	}
-	
-	/** 
-	 * @Title: deleteById 
-	 * @Description: 批量删除 
-	 * @param idstring
-	 * @param httpServletRequest
-	 * @param httpServletResponse
-	 * @return String    返回类型 
-	 * @throws 
-	 */
-	@RequestMapping(value = "/delete")
-	public String delete(@RequestParam(value = "id",required=true) String id, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) throws IOException {
-		
-		int result = guessCategoryService.deleteByPrimaryKey(id);
-		return result+"";
-	}
-	 
+
 	/**
-	 * @Description: 查看详情 
+	 * @Title: deleteById @Description: 批量删除 @param idstring @param
+	 * httpServletRequest @param httpServletResponse @return String 返回类型 @throws
+	 */
+	// @RequiresPermissions("member:guessCategory:delete")
+	@RequestMapping(value = "delete")
+	public String delete(@RequestParam(value = "id", required = true) String id, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) throws IOException {
+
+		int result = guessCategoryService.deleteByPrimaryKey(id);
+		return result + "";
+	}
+
+	/**
+	 * @Description: 查看详情
 	 * @param id
 	 * @param uiModel
 	 * @param httpServletRequest
 	 * @param httpServletResponse
 	 * @return
 	 */
+	// @RequiresPermissions("member:guessCategory:view")
 	@RequestMapping(value = "/show/{id}")
-	public GuessCategory getGuessCategory(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
+	public GuessCategory getGuessCategory(@PathVariable("id") String id, Model uiModel,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		GuessCategory guessCategory = guessCategoryService.selectByPrimaryKey(id);
-		
+
 		return guessCategory;
 	}
-	
+
+	// @RequiresPermissions("member:guessCategory:view")
 	@RequestMapping(value = "/select")
-	public DatagridPage<GuessCategory> select(@ModelAttribute PageInfo<GuessCategory> pageInfo, @ModelAttribute GuessCategory guessCategory, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+	public DatagridPage<GuessCategory> select(@ModelAttribute PageInfo<GuessCategory> pageInfo,
+			@ModelAttribute GuessCategory guessCategory, Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
 
 		super.select(pageInfo, uiModel, httpServletRequest, httpServletResponse);
- 
+
 		GuessCategoryCriteria guessCategoryCriteria = null;
 		guessCategoryCriteria = new GuessCategoryCriteria();
 		GuessCategoryCriteria.Criteria criteria = guessCategoryCriteria.createCriteria();
@@ -102,7 +94,7 @@ public class GuessCategoryRestController extends BaseController<GuessCategory> {
 		if (null != guessCategory.getName() && !"".equals(guessCategory.getName())) {
 			criteria.andNameLike("%" + guessCategory.getName() + "%");
 		}
-		
+
 		pageInfo = guessCategoryService.selectByPageInfo(guessCategoryCriteria, pageInfo);
 		return super.setPage(pageInfo);
 	}
