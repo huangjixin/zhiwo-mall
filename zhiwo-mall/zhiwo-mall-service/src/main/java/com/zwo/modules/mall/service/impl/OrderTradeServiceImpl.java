@@ -143,7 +143,7 @@ public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements IO
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "OrderTrade", key = "#record.id")
+//	@CachePut(value = "OrderTrade", key = "#record.id")
 	public int insert(OrderTrade record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -170,7 +170,7 @@ public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements IO
 	 */
 
 	@Override
-	@CachePut(value = "OrderTrade", key = "#record.id")
+//	@CachePut(value = "OrderTrade", key = "#record.id")
 	public int insertSelective(OrderTrade record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

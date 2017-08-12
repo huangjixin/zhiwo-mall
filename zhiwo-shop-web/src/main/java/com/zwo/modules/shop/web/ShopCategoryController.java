@@ -77,8 +77,15 @@ public class ShopCategoryController extends BaseController<ShopCategory> {
 		if (result.hasErrors()) {
 			redirectAttributes.addFlashAttribute("shopCategory", shopCategory);
 			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
+			redirectAttributes.addAttribute("operation", "edit");
+			return "redirect:/shopCategory/edit/"+shopCategory.getId();
 		}
-		
+		if(shopCategory.getId().equals(shopCategory.getParentId())){
+			redirectAttributes.addFlashAttribute("shopCategory", shopCategory);
+			redirectAttributes.addFlashAttribute("message", "请另选父亲节点！");
+			redirectAttributes.addAttribute("operation", "edit");
+			return "redirect:/shopCategory/edit/"+shopCategory.getId();
+		}
 		int res = this.shopCategoryService.updateByPrimaryKeySelective(shopCategory);
 		if(res==1){
 			redirectAttributes.addFlashAttribute("shopCategory", shopCategory);

@@ -280,7 +280,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 		return this.shopMapper.countByExample(example);
 	}
 
-	@CachePut(value = "Shop", key = "#record.id")
+//	@CachePut(value = "Shop", key = "#record.id")
 	@Override
 	public int insert(ShopWithBLOBs record) {
 		// 日志记录
@@ -299,7 +299,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 		return result;
 	}
 
-	@CachePut(value = "Shop", key = "#record.id")
+//	@CachePut(value = "Shop", key = "#record.id")
 	@Override
 	public int insertSelective(ShopWithBLOBs record) {
 		// 日志记录

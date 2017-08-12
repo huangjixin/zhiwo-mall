@@ -142,7 +142,7 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "OrderDelivery", key = "#record.id")
+//	@CachePut(value = "OrderDelivery", key = "#record.id")
 	public int insert(OrderDelivery record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -169,7 +169,7 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 	 */
 
 	@Override
-	@CachePut(value = "OrderDelivery", key = "#record.id")
+//	@CachePut(value = "OrderDelivery", key = "#record.id")
 	public int insertSelective(OrderDelivery record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

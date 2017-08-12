@@ -7,8 +7,6 @@
 <title>资源编辑</title>
 <%@ include file="/WEB-INF/include/easyui-css.jsp"%>
 <%@ include file="/WEB-INF/include/easyui-js.jsp"%>
-<script type="text/javascript"
-	src="${ctx}/js/jquery-easyui/ajaxfileupload.js"></script>
 </head>
 <body>
 	<form class="form-horizontal" role="form"
@@ -25,8 +23,8 @@
         <input id="parentId" name="parentId" value="${resources.parentId}" type="hidden"/>
         <div class="form-group">
 			<label for="type" class="col-sm-1 control-label">资源父类</label>
-            <button class="btn btn-default" onClick="$('#treegrid').treegrid('clear');$('#parentId').val('');">
-                <i class="fa fa-floppy-o" aria-hidden="true"></i>&nbsp;&nbsp;清除
+            <button type="button" class="btn btn-danger btn-sm"  onClick="$('#treegrid').treegrid('unselectAll');$('#parentId').val('');">
+                清除
             </button>
 			<div class="col-sm-4">
 				<table id="treegrid" title="资源树" class="easyui-treegrid"
@@ -45,6 +43,13 @@
                                     fitColumns:true,
                                     onSelect: function (item) {
                                     	$('#parentId').val(item.id);
+                                    },
+                                    onLoadSuccess:function(row,data){
+                                    	var ope = '${operation}';
+                                        var pid = '${resources.parentId}';
+                                        if(pid!=''){
+                                        	$('#treegrid').treegrid('select',pid);
+                                        }
                                     }
                                 ">
                     <thead>

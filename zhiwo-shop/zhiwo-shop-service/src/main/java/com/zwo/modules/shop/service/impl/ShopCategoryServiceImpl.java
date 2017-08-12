@@ -145,14 +145,16 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "ShopCategory", key = "#record.id")
+//	@CachePut(value = "ShopCategory", key = "#record.id")
 	public int insert(ShopCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
@@ -172,14 +174,16 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 	 */
 
 	@Override
-	@CachePut(value = "ShopCategory", key = "#record.id")
+//	@CachePut(value = "ShopCategory", key = "#record.id")
 	public int insertSelective(ShopCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
@@ -242,7 +246,9 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
-
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}
 		// 逻辑操作
 		int result = this.shopCategoryMapper.updateByExampleSelective(record,(ShopCategoryCriteria) example);
 		// 日志记录
@@ -266,7 +272,9 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 			logger.info(BASE_MESSAGE+"updateByExample更新开始");
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
-										
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}								
 		//逻辑操作		
 		int result = this.shopCategoryMapper.updateByExample(record, (ShopCategoryCriteria)example);
 		//日志记录
@@ -290,7 +298,9 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
-
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}
 		// 逻辑操作
 		int result = this.shopCategoryMapper.updateByPrimaryKeySelective(record);
 		if (logger.isInfoEnabled())
@@ -313,7 +323,9 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为：" + record.toString());
-
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}
 		// 逻辑操作
 		int result = this.shopCategoryMapper.updateByPrimaryKey(record);
 		if (logger.isInfoEnabled())
@@ -347,6 +359,7 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 		return pageInfo;
 	}
 
+	
 	public static void main(String[] args) {
 		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
 		IShopCategoryService shopCategoryServiceImpl = (IShopCategoryService) context.getBean("shopCategoryServiceImpl");
@@ -355,5 +368,4 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 		int result = shopCategoryServiceImpl.insertSelective(shopCategory);
 		logger.info(result + "");
 	}
-
 }

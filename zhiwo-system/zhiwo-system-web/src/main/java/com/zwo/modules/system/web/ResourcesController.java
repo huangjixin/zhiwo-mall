@@ -78,17 +78,23 @@ public class ResourcesController extends BaseController<TbResources> {
 	public String update(@Valid TbResources resources, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		redirectAttributes.addAttribute("operation", "edit");
 		if (result.hasErrors()) {
 			redirectAttributes.addFlashAttribute("resources", resources);
 			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
+			return "redirect:/resources/edit/"+resources.getId();
 		}
-		
+		if(resources.getId().equals(resources.getParentId())){
+			redirectAttributes.addFlashAttribute("resources", resources);
+			redirectAttributes.addFlashAttribute("message", "请另选父亲节点！");
+			return "redirect:/resources/edit/"+resources.getId();
+		}
 		int res = this.resourcesService.updateByPrimaryKeySelective(resources);
 		if(res==1){
 			redirectAttributes.addFlashAttribute("resources", resources);
 			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
-		redirectAttributes.addAttribute("operation", "edit");
+		
 		return "redirect:/resources/edit/"+resources.getId();
 	}
 }

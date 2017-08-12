@@ -22,6 +22,8 @@ import com.github.pagehelper.PageInfo;
 import com.zwo.modules.shop.domain.ShopCategory;
 import com.zwo.modules.shop.domain.ShopCategoryCriteria;
 import com.zwo.modules.shop.service.IShopCategoryService;
+import com.zwo.modules.system.domain.TbResources;
+import com.zwotech.common.utils.TreeBuilder;
 import com.zwotech.common.web.BaseController;
 
 @RestController
@@ -104,5 +106,14 @@ public class ShopCategoryRestController extends BaseController<ShopCategory> {
 		
 		pageInfo = shopCategoryService.selectByPageInfo(tbshopCategoryCriteria, pageInfo);
 		return super.setPage(pageInfo);
+	}
+	
+	@RequestMapping(value = "getShopCategoryTree")
+	public List<ShopCategory> getShopCategoryTree(Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		TreeBuilder<ShopCategory> tb = new TreeBuilder<ShopCategory>();
+		List<ShopCategory> list = shopCategoryService.selectByExample(null);
+		list = tb.buildListToTree(list, false);
+		return list;
 	}
 }

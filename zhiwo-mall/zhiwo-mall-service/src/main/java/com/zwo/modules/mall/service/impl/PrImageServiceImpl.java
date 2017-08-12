@@ -142,7 +142,7 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "PrImage", key = "#record.id")
+//	@CachePut(value = "PrImage", key = "#record.id")
 	public int insert(PrImage record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -169,7 +169,7 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 	 */
 
 	@Override
-	@CachePut(value = "PrImage", key = "#record.id")
+//	@CachePut(value = "PrImage", key = "#record.id")
 	public int insertSelective(PrImage record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

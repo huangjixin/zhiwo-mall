@@ -21,39 +21,12 @@
                     <button type="button"   class="btn btn-success btn-sm" id="addBtn"><i class="fa fa-plus fa-lg"></i>&nbsp;&nbsp;添加</button>
 					<button type="button"  class="btn btn-info btn-sm" id="refreshBtn"><i class="fa fa-refresh fa-lg"></i>&nbsp;&nbsp;刷新</button>
 					<button type="button" class="btn btn-primary btn-sm" id="unselectBtn"><i class="fa fa-remove fa-lg"></i>&nbsp;&nbsp;取消选中</button>
-                	<!--&nbsp;&nbsp;&nbsp;&nbsp;
-               		<input id="nameInput"  class="form-control" placeholder="名称">-->
                 </div>
-                <!--<button id="queryBtn" class="btn btn-default">查询</button>-->
             </div>
             </div>
         </nav>
 	</div>
-	<!--<table id="tgrid" 
-		title="资源列表" 
-		class="easyui-datagrid"
-		url="${ctx}/resources/select" 
-		toolbar="#toolbar" 
-		rownumbers="true"
-		fitColumns="true" 
-		fit="false" 
-		pagination="true"
-		singleSelect="false">
-		<thead>
-			<tr>
-				<th data-options="field:'ck',checkbox:true"></th>
-				<th data-options="field:'id',align:'center'">id</th>
-				<th data-options="field:'name',align:'center',width:100">名称</th>
-				<th data-options="field:'code',align:'center',width:100">代码</th>
-				<th data-options="field:'authName',align:'center',width:100,formatter:formatType">权限名</th>
-				<th data-options="field:'type',align:'center',width:100">类型</th>
-				<th data-options="field:'path',align:'center',width:100">链接</th>
-				<th data-options="field:'createDate',align:'center',width:100">创建日期</th>
-				<th data-options="field:'updateDate',align:'center',width:100">更新日期</th>
-				<th data-options="field:'opt',align:'center',formatter:formatOpt">操作</th>
-			</tr>
-		</thead>
-	</table>-->
+	
 	<table id="treegrid" title="资源树" class="easyui-treegrid" toolbar="#toolbar" 
 				data-options="
 								url: '${ctx}/resources/getResourcesCheckboxTree',
@@ -67,11 +40,14 @@
 								showHeader: true,
 								lines: true,
 								singleSelect : false,
-								fitColumns:true
+								fitColumns:true,
+                                onLoadSuccess:function(row,data){
+                                 	$('#treegrid').treegrid('collapseAll');
+                                 }
 							">
 				<thead>
 					<tr>
-						<!--<th data-options="field:'ck',checkbox:true"></th>-->
+						<th data-options="field:'ck',checkbox:true"></th>
 						<th data-options="field:'id',align:'center',hidden:true">id</th>
 						<th data-options="field:'name',align:'left',width:100">名称</th>
 						<th data-options="field:'authName',align:'center',width:100">权限名称</th>
@@ -84,7 +60,6 @@
 	<script type="text/javascript">
 		// 初始化按钮等工作。
 		$().ready(function() {
-			//init("resources","tgrid");
 			$("#addBtn").click(function(){
 				create("resources");
 			});

@@ -147,7 +147,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "PrCategory", key = "#record.id")
+//	@CachePut(value = "PrCategory", key = "#record.id")
 	public int insert(PrCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -174,7 +174,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 	 */
 
 	@Override
-	@CachePut(value = "PrCategory", key = "#record.id")
+//	@CachePut(value = "PrCategory", key = "#record.id")
 	public int insertSelective(PrCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

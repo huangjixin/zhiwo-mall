@@ -280,7 +280,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 		return this.productMapper.countByExample(example);
 	}
 
-	@CachePut(value = "PrProduct", key = "#record.id")
+//	@CachePut(value = "PrProduct", key = "#record.id")
 	public int insert(PrProductWithBLOBs record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -302,7 +302,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 		return result;
 	}
 
-	@CachePut(value = "PrProduct", key = "#record.id")
+//	@CachePut(value = "PrProduct", key = "#record.id")
 	public int insertSelective(PrProductWithBLOBs record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

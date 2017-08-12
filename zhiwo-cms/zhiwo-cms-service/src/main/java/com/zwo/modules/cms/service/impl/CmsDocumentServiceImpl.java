@@ -286,7 +286,7 @@ public class CmsDocumentServiceImpl extends BaseService<CmsDocument> implements 
 		logger.info(result + "");
 	}
 
-	@CachePut(value = "CmsDocument", key = "#record.id")
+//	@CachePut(value = "CmsDocument", key = "#record.id")
 	public int insert(CmsDocumentWithBLOBs record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -304,7 +304,7 @@ public class CmsDocumentServiceImpl extends BaseService<CmsDocument> implements 
 		return result;
 	}
 
-	@CachePut(value = "CmsDocument", key = "#record.id")
+//	@CachePut(value = "CmsDocument", key = "#record.id")
 	public int insertSelective(CmsDocumentWithBLOBs record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

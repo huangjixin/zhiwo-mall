@@ -183,7 +183,7 @@ public class CmsAssetsServiceImpl extends BaseService<CmsAssets> implements ICms
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "CmsAssets", key = "#record.id")
+//	@CachePut(value = "CmsAssets", key = "#record.id")
 	public int insert(CmsAssets record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -210,7 +210,7 @@ public class CmsAssetsServiceImpl extends BaseService<CmsAssets> implements ICms
 	 */
 
 	@Override
-	@CachePut(value = "CmsAssets", key = "#record.id")
+//	@CachePut(value = "CmsAssets", key = "#record.id")
 	public int insertSelective(CmsAssets record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

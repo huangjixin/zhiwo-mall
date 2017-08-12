@@ -142,7 +142,7 @@ public class CmsChannelServiceImpl extends BaseService<CmsChannel> implements IC
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "CmsChannel", key = "#record.id")
+//	@CachePut(value = "CmsChannel", key = "#record.id")
 	public int insert(CmsChannel record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -169,7 +169,7 @@ public class CmsChannelServiceImpl extends BaseService<CmsChannel> implements IC
 	 */
 
 	@Override
-	@CachePut(value = "CmsChannel", key = "#record.id")
+//	@CachePut(value = "CmsChannel", key = "#record.id")
 	public int insertSelective(CmsChannel record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

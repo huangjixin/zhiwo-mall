@@ -142,7 +142,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "PrProductPropertyValue", key = "#record.id")
+//	@CachePut(value = "PrProductPropertyValue", key = "#record.id")
 	public int insert(PrProductPropertyValue record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -169,7 +169,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 	 */
 
 	@Override
-	@CachePut(value = "PrProductPropertyValue", key = "#record.id")
+//	@CachePut(value = "PrProductPropertyValue", key = "#record.id")
 	public int insertSelective(PrProductPropertyValue record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
