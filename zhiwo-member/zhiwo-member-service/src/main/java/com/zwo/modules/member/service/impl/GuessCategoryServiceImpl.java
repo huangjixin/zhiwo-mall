@@ -356,14 +356,4 @@ public class GuessCategoryServiceImpl extends BaseService<GuessCategory> impleme
 		return pageInfo;
 	}
 
-	public static void main(String[] args) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
-		IGuessCategoryService guessCategoryServiceImpl = (IGuessCategoryService) context
-				.getBean("guessCategoryServiceImpl");
-		GuessCategory guessCategory = new GuessCategory();
-		guessCategory.setId(System.currentTimeMillis() + "");
-		int result = guessCategoryServiceImpl.insertSelective(guessCategory);
-		logger.info(result + "");
-	}
-
 }

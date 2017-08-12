@@ -11,7 +11,7 @@
 	src="${ctx}/js/jquery-easyui/ajaxfileupload.js"></script>
 </head>
 <body>
-	<form class="form-horizontal" guessCategory="form"
+	<form class="form-horizontal" role="form"
 		<c:if test="${operation=='edit'}">
  action="${ctx}/guessCategory/update"
 		</c:if>
@@ -22,7 +22,50 @@
         <c:if test="${operation=='edit'}">
         <input id="id" name="id" value="${guessCategory.id}" type="hidden"/>
 		</c:if>
-		 <input id="icon" name="icon" value="${guessCategory.icon}" type="hidden"/>
+        <input id="parentId" name="parentId" value="${guessCategory.parentId}" type="hidden"/>
+        <input id="icon" name="icon" value="${guessCategory.icon}" type="hidden"/>
+        <div class="form-group">
+			<label for="type" class="col-sm-1 control-label">竞猜父类</label>
+            <button type="button" class="btn btn-danger btn-sm"  onClick="$('#treegrid').treegrid('unselectAll');$('#parentId').val('');">
+                清除
+            </button>
+			<div class="col-sm-4">
+				<table id="treegrid" title="竞猜分类" class="easyui-treegrid"
+                    data-options="
+                                    url: '${ctx}/guessCategory/getGuessCategoryTree',
+                                    collapsed:true,
+                                    fit:false,
+                                    method: 'get',
+                                    rownumbers: false,
+                                    idField: 'id',
+                                    collapsible:true,
+                                    treeField: 'name',
+                                    showHeader: true,
+                                    lines: true,
+                                    singleSelect : true,
+                                    fitColumns:true,
+                                    onSelect: function (item) {
+                                    	$('#parentId').val(item.id);
+                                    },
+                                    onLoadSuccess:function(row,data){
+                                    	var ope = '${operation}';
+                                        var pid = '${guessCategory.parentId}';
+                                        if(pid!=''){
+                                        	$('#treegrid').treegrid('select',pid);
+                                        }
+                                    }
+                                ">
+                    <thead>
+                        <tr>
+                            <th data-options="field:'ck',checkbox:true"></th>
+                            <th data-options="field:'id',align:'center',hidden:true">id</th>
+                            <th data-options="field:'name',align:'left',width:100">名称</th>
+                            <th data-options="field:'code',align:'center',width:100">代码</th>
+                        </tr>
+                    </thead>
+                </table>
+			</div>
+		</div>
 		<div class="form-group">
 			<label for="name" class="col-sm-1 control-label">竞猜分类名称</label>
 			<div class="col-sm-4">
@@ -31,14 +74,14 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="code" class="col-sm-1 control-label">代码</label>
+			<label for="code" class="col-sm-1 control-label">竞猜分类代码</label>
 			<div class="col-sm-4">
 				<input type="text" class="form-control" id="code" name="code"
-					placeholder="请输入代码(拼音)" value="${guessCategory.code}">
+					placeholder="请输入竞猜分类代码(竞猜分类拼音)" value="${guessCategory.code}">
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="file" class="col-sm-1 control-label">分类图片</label>
+			<label for="file" class="col-sm-1 control-label">竞猜分类缩略图</label>
 			<div class="col-sm-4">
 				<input type="file" id="file" name="file" style="display: none;"
 					accept="image/*" onChange="$('#message').html($('#file').val())" />
@@ -50,6 +93,7 @@
 					onclick="fileUploadToServer();">
 					<i class="fa fa-upload"></i> <span>&nbsp;&nbsp;开始上传</span>
 				</button>
+				<%@ include file="/WEB-INF/include/easyui-buttonForm.jsp"%>
 				<label id="message">${message}</label>
 			</div>
 		</div>
@@ -66,19 +110,13 @@
 				<textarea name="description" class="form-control" rows="4" >${guessCategory.description}</textarea>
 			</div>
 		</div>
-        <div class="form-group">
-			<label  class="col-sm-1 control-label"></label>
-			<div class="col-sm-4">
-				<%@ include file="/WEB-INF/include/easyui-buttonForm.jsp"%>
-				
-			</div>
-		</div>
 	</form>
 
 	<script type="text/javascript">
 		
 		// 初始化按钮等工作。
 		$().ready(function() {
+
 			//返回列表。
 			$("#returnBtn").bind("click", function() {
 				backToList('guessCategory');

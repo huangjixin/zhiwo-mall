@@ -63,9 +63,11 @@ public class ProductController extends BaseController<PrProduct> {
 			redirectAttributes.addFlashAttribute("message", "数据绑定有误！");
 			return "redirect:/product/create";
 		}
-		
+		if("".equals(product.getCategoryId())){
+			product.setCategoryId(null);
+		}
 		int res = productService.insertSelective(product);
-		if(res!=0){
+		if(res==1){
 			redirectAttributes.addFlashAttribute("product", product);
 			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}

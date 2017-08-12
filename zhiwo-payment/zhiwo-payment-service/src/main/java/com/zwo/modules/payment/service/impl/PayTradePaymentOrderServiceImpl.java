@@ -143,7 +143,7 @@ public class PayTradePaymentOrderServiceImpl extends BaseService<PayTradePayment
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "PayTradePaymentOrder", key = "#record.id")
+//	@CachePut(value = "PayTradePaymentOrder", key = "#record.id")
 	public int insert(PayTradePaymentOrder record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -170,7 +170,7 @@ public class PayTradePaymentOrderServiceImpl extends BaseService<PayTradePayment
 	 */
 
 	@Override
-	@CachePut(value = "PayTradePaymentOrder", key = "#record.id")
+//	@CachePut(value = "PayTradePaymentOrder", key = "#record.id")
 	public int insertSelective(PayTradePaymentOrder record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
