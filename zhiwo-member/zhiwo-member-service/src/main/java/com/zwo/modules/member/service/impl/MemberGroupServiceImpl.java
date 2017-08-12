@@ -142,7 +142,7 @@ public class MemberGroupServiceImpl extends BaseService<MemberGroup> implements 
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "MemberGroup", key = "#record.id")
+//	@CachePut(value = "MemberGroup", key = "#record.id")
 	public int insert(MemberGroup record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -169,7 +169,7 @@ public class MemberGroupServiceImpl extends BaseService<MemberGroup> implements 
 	 */
 
 	@Override
-	@CachePut(value = "MemberGroup", key = "#record.id")
+//	@CachePut(value = "MemberGroup", key = "#record.id")
 	public int insertSelective(MemberGroup record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

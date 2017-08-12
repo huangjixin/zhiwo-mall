@@ -63,7 +63,7 @@ public class PrCategoryController extends BaseController<PrCategory> {
 			redirectAttributes.addFlashAttribute("message", "数据绑定有误！");
 			return "redirect:/prCategory/create";
 		}
-
+		
 		int res = prCategoryService.insertSelective(prCategory);
 		if (res != 0) {
 			redirectAttributes.addFlashAttribute("prCategory", prCategory);
@@ -80,12 +80,12 @@ public class PrCategoryController extends BaseController<PrCategory> {
 			HttpServletResponse httpServletResponse) {
 		if (prCategory.getId() == null || "".equals(prCategory.getId())) {
 			redirectAttributes.addFlashAttribute("message", "请不要编辑不存在的对象！");
-			return "redirect:/prCategory/create";
+			return "redirect:/prCategory/edit/" + prCategory.getId();
 		}
 		if (result.hasErrors()) {
 			redirectAttributes.addFlashAttribute("prCategory", prCategory);
 			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
-			return "redirect:/prCategory/create";
+			return "redirect:/prCategory/edit/" + prCategory.getId();
 		}
 
 		int res = this.prCategoryService.updateByPrimaryKeySelective(prCategory);

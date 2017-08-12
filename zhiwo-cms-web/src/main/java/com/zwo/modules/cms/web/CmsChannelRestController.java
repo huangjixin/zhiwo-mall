@@ -22,6 +22,7 @@ import com.github.pagehelper.PageInfo;
 import com.zwo.modules.cms.domain.CmsChannel;
 import com.zwo.modules.cms.domain.CmsChannelCriteria;
 import com.zwo.modules.cms.service.ICmsChannelService;
+import com.zwotech.common.utils.TreeBuilder;
 import com.zwotech.common.web.BaseController;
 
 @RestController
@@ -104,5 +105,14 @@ public class CmsChannelRestController extends BaseController<CmsChannel> {
 		
 		pageInfo = cmsChannelService.selectByPageInfo(tbcmsChannelCriteria, pageInfo);
 		return super.setPage(pageInfo);
+	}
+	
+	@RequestMapping(value = "getChannelTree")
+	public List<CmsChannel> getResourcesCheckboxTree(Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		TreeBuilder<CmsChannel> tb = new TreeBuilder<CmsChannel>();
+		List<CmsChannel> list = cmsChannelService.selectByExample(null);
+		list = tb.buildListToTree(list, false);
+		return list;
 	}
 }

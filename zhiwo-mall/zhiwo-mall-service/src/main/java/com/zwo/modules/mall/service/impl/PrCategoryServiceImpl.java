@@ -154,7 +154,9 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 			logger.info(BASE_MESSAGE + "insert插入开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
@@ -181,7 +183,9 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 			logger.info(BASE_MESSAGE + "insert插入开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
@@ -205,7 +209,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 	@Override
 	@Transactional(readOnly = true)
 	public List<PrCategory> selectByExample(Object example) {
-		return null;
+		return this.prCategoryMapper.selectByExample((PrCategoryCriteria)example);
 	}
 
 	/*
@@ -295,7 +299,9 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
-
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}
 		// 逻辑操作
 		int result = prCategoryMapper.updateByPrimaryKeySelective(record);
 		if (logger.isInfoEnabled())
@@ -318,7 +324,9 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为：" + record.toString());
-
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}
 		// 逻辑操作
 		int result = prCategoryMapper.updateByPrimaryKey(record);
 		if (logger.isInfoEnabled())

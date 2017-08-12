@@ -142,7 +142,7 @@ public class MemberLevelServiceImpl extends BaseService<MemberLevel> implements 
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "MemberLevel", key = "#record.id")
+//	@CachePut(value = "MemberLevel", key = "#record.id")
 	public int insert(MemberLevel record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -169,7 +169,7 @@ public class MemberLevelServiceImpl extends BaseService<MemberLevel> implements 
 	 */
 
 	@Override
-	@CachePut(value = "MemberLevel", key = "#record.id")
+//	@CachePut(value = "MemberLevel", key = "#record.id")
 	public int insertSelective(MemberLevel record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

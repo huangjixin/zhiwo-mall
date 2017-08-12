@@ -22,7 +22,50 @@
         <c:if test="${operation=='edit'}">
         <input id="id" name="id" value="${prCategory.id}" type="hidden"/>
 		</c:if>
+        <input id="parentId" name="parentId" value="${prCategory.parentId}" type="hidden"/>
         <input id="icon" name="icon" value="${prCategory.icon}" type="hidden"/>
+        <div class="form-group">
+			<label for="type" class="col-sm-1 control-label">商品父类</label>
+            <button type="button" class="btn btn-danger btn-sm"  onClick="$('#treegrid').treegrid('unselectAll');$('#parentId').val('');">
+                清除
+            </button>
+			<div class="col-sm-4">
+				<table id="treegrid" title="商品分类" class="easyui-treegrid"
+                    data-options="
+                                    url: '${ctx}/prCategory/getPrCategoryTree',
+                                    collapsed:true,
+                                    fit:false,
+                                    method: 'get',
+                                    rownumbers: false,
+                                    idField: 'id',
+                                    collapsible:true,
+                                    treeField: 'name',
+                                    showHeader: true,
+                                    lines: true,
+                                    singleSelect : true,
+                                    fitColumns:true,
+                                    onSelect: function (item) {
+                                    	$('#parentId').val(item.id);
+                                    },
+                                    onLoadSuccess:function(row,data){
+                                    	var ope = '${operation}';
+                                        var pid = '${prCategory.parentId}';
+                                        if(pid!=''){
+                                        	$('#treegrid').treegrid('select',pid);
+                                        }
+                                    }
+                                ">
+                    <thead>
+                        <tr>
+                            <th data-options="field:'ck',checkbox:true"></th>
+                            <th data-options="field:'id',align:'center',hidden:true">id</th>
+                            <th data-options="field:'name',align:'left',width:100">名称</th>
+                            <th data-options="field:'code',align:'center',width:100">代码</th>
+                        </tr>
+                    </thead>
+                </table>
+			</div>
+		</div>
 		<div class="form-group">
 			<label for="name" class="col-sm-1 control-label">商品分类名称</label>
 			<div class="col-sm-4">

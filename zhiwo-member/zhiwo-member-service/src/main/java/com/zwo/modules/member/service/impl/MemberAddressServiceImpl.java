@@ -142,7 +142,7 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "MemberAddress", key = "#record.id")
+//	@CachePut(value = "MemberAddress", key = "#record.id")
 	public int insert(MemberAddress record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -169,7 +169,7 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 	 */
 
 	@Override
-	@CachePut(value = "MemberAddress", key = "#record.id")
+//	@CachePut(value = "MemberAddress", key = "#record.id")
 	public int insertSelective(MemberAddress record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

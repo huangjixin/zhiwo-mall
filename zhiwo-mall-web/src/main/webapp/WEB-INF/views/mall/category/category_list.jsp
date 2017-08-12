@@ -17,35 +17,42 @@
            
             <div class="navbar-form navbar-left" role="search">
                 <div class="form-group">
-                    <%@ include file="/WEB-INF/include/easyui-buttonGroup.jsp"%>
-                	&nbsp;&nbsp;&nbsp;&nbsp;
-               		<input id="nameInput"  class="form-control" placeholder="名称">
+                    <button type="button"   class="btn btn-success btn-sm" id="addBtn"><i class="fa fa-plus fa-lg"></i>&nbsp;&nbsp;添加</button>
+					<button type="button"  class="btn btn-info btn-sm" id="refreshBtn"><i class="fa fa-refresh fa-lg"></i>&nbsp;&nbsp;刷新</button>
+					<button type="button" class="btn btn-primary btn-sm" id="unselectBtn"><i class="fa fa-remove fa-lg"></i>&nbsp;&nbsp;取消选中</button>
                 </div>
-                <button id="queryBtn" class="btn btn-default">查询</button>
             </div>
             </div>
         </nav>
 	</div>
-	<table id="tgrid" 
-		title="商品分类列表" 
-		class="easyui-datagrid"
-		url="${ctx}/prCategory/select" 
-		toolbar="#toolbar" 
-		rownumbers="true"
-		fitColumns="true" 
-		fit="true" 
-		singleSelect="false"
-        pagination="true">
-		<thead>
+	
+	<table id="treegrid" title="商品分类树形展示" class="easyui-treegrid" toolbar="#toolbar" 
+				data-options="
+								url: '${ctx}/prCategory/getPrCategoryTree',
+                                
+								fit:true,
+								method: 'get',
+								rownumbers: false,
+								idField: 'id',
+								collapsible:true,
+								treeField: 'name',
+								showHeader: true,
+								lines: true,
+								singleSelect : false,
+								fitColumns:true,
+                                onLoadSuccess:function(row,data){
+                                 	$('#treegrid').treegrid('collapseAll');
+                                 }
+							">
+				<thead>
 			<tr>
 				<th data-options="field:'ck',checkbox:true"></th>
 				<th data-options="field:'id',align:'center',hidden:true">id</th>
 				<th data-options="field:'name',align:'center',width:100">商品分类名称</th>
                 <th data-options="field:'code',align:'center',width:100">代码</th>
+                <th data-options="field:'icon',align:'center',width:100,formatter:formatIcon">分类头像</th>
 				<th data-options="field:'createDate',align:'center',width:100,formatter:formatTime">创建日期</th>
 				<th data-options="field:'updateDate',align:'center',width:100,formatter:formatTime">更新日期</th>
-				<!-- <th data-options="field:'By',align:'center',width:100">创建人</th>
-				<th data-options="field:'updateBy',align:'center',width:100">更新人</th> -->
 				<th data-options="field:'opt',align:'center',width:100,formatter:formatOpt">操作</th>
 			</tr>
 		</thead>
@@ -53,30 +60,42 @@
 	<script type="text/javascript">
 		// 初始化按钮等工作。
 		$().ready(function() {
-			init("prCategory","tgrid");
-			
-			$('#nameInput').bind('keypress',function(event){
-			  if(event.keyCode == "13")    
-			  {
-				    doResearch();
-			  }
+			$("#addBtn").click(function(){
+				create("prCategory");
 			});
-			
-			$("#queryBtn").bind("click", function() {
-				doResearch();
+		
+			$("#refreshBtn").click(function(){
+				$("#treegrid").treegrid('reload'); // 重新加载;
 			});
-	
-			$("#removeBatchBtn").bind("click", function() {
-				deleteRows('tgrid','prCategory');
+			$("#unselectBtn").click(function(){
+				$("#treegrid").treegrid('unselectAll'); // 取消选中;
 			});
 		})
 		
 		
-		//查询
-		function doResearch(){
-			var parameters = {};
-			parameters.name = $('#nameInput').val();
-			query('tgrid',parameters);
+		function deleteTreeById(grid,id, module) {
+			var url = '${ctx}/' + module + '/deleteById';
+			var pamameter = {};
+			pamameter.idstring = id;
+			$.ajax({
+				type : "POST",
+				url : url,
+				data : pamameter,
+				error : function(request) {
+					alert("连接失败");
+				},
+				success : function(data) {
+					$('#'+grid).treegrid('reload'); // 重新加载;
+				}
+			});
+		}
+		
+		function formatIcon(value, rec) {
+			if(rec.icon==''){
+				return;
+			}
+			var result = '<img id="iconImg" src="${ctx}/'+rec.icon+'" class=".img-responsive" style="width: 100px;">';
+			return result;
 		}
 		
 		//格式化操作，添加删除和编辑按钮。
@@ -85,7 +104,7 @@
 //			<%
 //				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:prCategory:delete")){
 //				%>
-				btn += '<button type="button" class="btn btn-danger btn-sm" onclick="deleteById(\'tgrid\',\''
+				btn += '<button type="button" class="btn btn-danger btn-sm" onclick="deleteTreeById(\'treegrid\',\''
 					+ rec.id + '\',\'prCategory\')"><i class="fa fa-trash fa-lg"></i>&nbsp;&nbsp;删除 </button>';
 					btn += "&nbsp;&nbsp;";
 					btn += ''
@@ -115,7 +134,7 @@
 							id : row.id
 						}, function(result) {
 							if (result > 0) {
-								$('#tgrid').datagrid('reload'); // reload the prCategory data
+								$('#treegrid').datagrid('reload'); // reload the prCategory data
 							} else {
 								$.messager.show({ // show error message
 									title : 'Error',

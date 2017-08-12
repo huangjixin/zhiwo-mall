@@ -6,19 +6,13 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,7 +21,7 @@ import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.domain.PrCategory;
 import com.zwo.modules.mall.domain.PrCategoryCriteria;
 import com.zwo.modules.mall.service.IPrCategoryService;
-import com.zwo.modules.system.domain.TbUser;
+import com.zwotech.common.utils.TreeBuilder;
 import com.zwotech.common.web.BaseController;
 
 @RestController
@@ -115,5 +109,15 @@ public class PrCategoryRestController extends BaseController<PrCategory> {
 
 		pageInfo = categoryService.selectByPageInfo(productCriteria, pageInfo);
 		return super.setPage(pageInfo);
+	}
+	
+
+	@RequestMapping(value = "getPrCategoryTree")
+	public List<PrCategory> getPrCategoryTree(Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		TreeBuilder<PrCategory> tb = new TreeBuilder<PrCategory>();
+		List<PrCategory> list = categoryService.selectByExample(null);
+		list = tb.buildListToTree(list, false);
+		return list;
 	}
 }

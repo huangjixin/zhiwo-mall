@@ -149,7 +149,9 @@ public class CmsChannelServiceImpl extends BaseService<CmsChannel> implements IC
 			logger.info(BASE_MESSAGE + "insert插入开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
@@ -176,7 +178,9 @@ public class CmsChannelServiceImpl extends BaseService<CmsChannel> implements IC
 			logger.info(BASE_MESSAGE + "insert插入开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
@@ -239,7 +243,9 @@ public class CmsChannelServiceImpl extends BaseService<CmsChannel> implements IC
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
-
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}
 		// 逻辑操作
 		int result = super.updateByExampleSelective(record, example);
 		// 日志记录
@@ -263,7 +269,9 @@ public class CmsChannelServiceImpl extends BaseService<CmsChannel> implements IC
 			logger.info(BASE_MESSAGE+"updateByExample更新开始");
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
-										
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}					
 		//逻辑操作		
 		int result = super.updateByExample(record, example);
 		//日志记录
@@ -287,7 +295,9 @@ public class CmsChannelServiceImpl extends BaseService<CmsChannel> implements IC
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
-
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}
 		// 逻辑操作
 		int result = super.updateByPrimaryKeySelective(record);
 		if (logger.isInfoEnabled())
@@ -310,7 +320,9 @@ public class CmsChannelServiceImpl extends BaseService<CmsChannel> implements IC
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为：" + record.toString());
-
+		if ("".equals(record.getParentId())) {
+			record.setParentId(null);
+		}
 		// 逻辑操作
 		int result = super.updateByPrimaryKey(record);
 		if (logger.isInfoEnabled())

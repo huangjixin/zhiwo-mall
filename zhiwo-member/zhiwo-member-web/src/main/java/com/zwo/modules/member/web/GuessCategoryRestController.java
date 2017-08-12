@@ -21,6 +21,7 @@ import com.github.pagehelper.PageInfo;
 import com.zwo.modules.member.domain.GuessCategory;
 import com.zwo.modules.member.domain.GuessCategoryCriteria;
 import com.zwo.modules.member.service.IGuessCategoryService;
+import com.zwotech.common.utils.TreeBuilder;
 import com.zwotech.common.web.BaseController;
 
 @RestController
@@ -97,5 +98,15 @@ public class GuessCategoryRestController extends BaseController<GuessCategory> {
 
 		pageInfo = guessCategoryService.selectByPageInfo(guessCategoryCriteria, pageInfo);
 		return super.setPage(pageInfo);
+	}
+	
+
+	@RequestMapping(value = "getGuessCategoryTree")
+	public List<GuessCategory> getGuessCategoryTree(Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		TreeBuilder<GuessCategory> tb = new TreeBuilder<GuessCategory>();
+		List<GuessCategory> list = guessCategoryService.selectByExample(null);
+		list = tb.buildListToTree(list, false);
+		return list;
 	}
 }
