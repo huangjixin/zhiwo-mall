@@ -13,4 +13,11 @@ public interface TbRoleMapper extends Mapper<TbRole> {
 	 * @return
 	 */
 	List<TbRole> selectByUsernameOrPhone(String usernameOrPhone);
+	
+	/**
+	 * 根据用户组Id查询角色。
+	 * @param usergroupId
+	 * @return
+	 */
+	List<TbRole> findByUserGroupId(String usergroupId);
 }

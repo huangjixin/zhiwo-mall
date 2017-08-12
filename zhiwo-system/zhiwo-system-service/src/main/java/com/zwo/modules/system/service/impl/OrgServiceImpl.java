@@ -142,7 +142,7 @@ public class OrgServiceImpl extends BaseService<TbOrg> implements ITbOrgService 
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "TbOrg", key = "#record.id")
+//	@CachePut(value = "TbOrg", key = "#record.id")
 	public int insert(TbOrg record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -169,7 +169,7 @@ public class OrgServiceImpl extends BaseService<TbOrg> implements ITbOrgService 
 	 */
 
 	@Override
-	@CachePut(value = "TbOrg", key = "#record.id")
+//	@CachePut(value = "TbOrg", key = "#record.id")
 	public int insertSelective(TbOrg record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

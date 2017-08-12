@@ -143,7 +143,7 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "TbResources", key = "#record.id")
+//	@CachePut(value = "TbResources", key = "#record.id")
 	public int insert(TbResources record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -172,7 +172,7 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 	 */
 
 	@Override
-	@CachePut(value = "TbResources", key = "#record.id")
+//	@CachePut(value = "TbResources", key = "#record.id")
 	public int insertSelective(TbResources record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

@@ -1,5 +1,8 @@
 package com.zwo.modules.system.web;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -14,17 +17,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.zwo.modules.system.domain.TbRole;
 import com.zwo.modules.system.domain.TbUserGroup;
+import com.zwo.modules.system.service.ITbRoleService;
 import com.zwo.modules.system.service.ITbUserGroupService;
+import com.zwo.modules.system.service.ITbUserService;
 import com.zwotech.common.web.BaseController;
 
 @Controller
-@RequestMapping("userGroup")
+@RequestMapping(value={"userGroup","userGroup/"})
 @Lazy(true)
 public class UserGroupController extends BaseController<TbUserGroup> {
 	@Autowired
 	@Lazy(true)
 	private ITbUserGroupService userGroupService;
+	@Autowired
+	@Lazy(true)
+	private ITbUserService userService;
+	@Autowired
+	@Lazy(true)
+	private ITbRoleService roleService;
 	
 	private static final String basePath = "views/system/userGroup/";
 	
@@ -37,6 +49,8 @@ public class UserGroupController extends BaseController<TbUserGroup> {
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid TbUserGroup userGroup, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		List<TbRole> roles = roleService.selectByExample(null);
+		uiModel.addAttribute("roles", roles);
 		uiModel.addAttribute("userGroup", userGroup);
 		return basePath + "userGroup_edit";
 	}
@@ -45,7 +59,17 @@ public class UserGroupController extends BaseController<TbUserGroup> {
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		TbUserGroup userGroup = userGroupService.selectByPrimaryKey(id);
-
+		List<TbRole> roles = roleService.selectByExample(null);
+		List<TbRole> rolesAuth = userGroupService.findByUserGroupId(id);
+		for (TbRole tbRole : roles) {
+			for (TbRole role : rolesAuth) {
+				if(tbRole.getId().equals(role.getId())){
+					tbRole.setSelected(true);
+					break;
+				}
+			}
+		}
+		uiModel.addAttribute("roles", roles);
 		uiModel.addAttribute("userGroup", userGroup);
 		uiModel.addAttribute("operation", "edit");
 		return basePath + "userGroup_edit";
@@ -53,7 +77,7 @@ public class UserGroupController extends BaseController<TbUserGroup> {
 	
 
 	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public String create(@Valid TbUserGroup tbuserGroup, BindingResult result, Model uiModel,
+	public String create(@Valid TbUserGroup tbuserGroup,@Valid String roles, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
@@ -66,11 +90,17 @@ public class UserGroupController extends BaseController<TbUserGroup> {
 			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
 		}
 		
+		if(!"".equals(roles)){
+			String[] roleIds = roles.split(",");
+			userGroupService.batchConnectUserGroupRole(Arrays.asList(roleIds), tbuserGroup.getId());
+		}
+		
 		return "redirect:/userGroup/create";
 	}
 	 
+	
 	@RequestMapping(value = "update", method = RequestMethod.POST)
-	public String update(@Valid TbUserGroup userGroup, BindingResult result, Model uiModel,
+	public String update(@Valid TbUserGroup userGroup,@Valid String roles, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
@@ -80,10 +110,18 @@ public class UserGroupController extends BaseController<TbUserGroup> {
 		int res = this.userGroupService.updateByPrimaryKeySelective(userGroup);
 		if(res==1){
 			redirectAttributes.addFlashAttribute("userGroup", userGroup);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
+		}
+		
+		//删除用户组关联的角色。
+		userGroupService.batchUnconnectUserGroupRole(userGroup.getId());
+
+		if(!"".equals(roles)){
+			String[] roleIds = roles.split(",");
+			userGroupService.batchConnectUserGroupRole(Arrays.asList(roleIds), userGroup.getId());
 		}
 		uiModel.addAttribute("userGroup", userGroup);
 		uiModel.addAttribute("operation", "edit");
-		return basePath + "userGroup_edit";
+		return "redirect:/userGroup/edit/"+userGroup.getId();
 	}
 }

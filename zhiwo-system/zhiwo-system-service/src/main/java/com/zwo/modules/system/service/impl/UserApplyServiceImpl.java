@@ -142,7 +142,7 @@ public class UserApplyServiceImpl extends BaseService<TbUserApply> implements IT
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "TbUserApply", key = "#record.id")
+//	@CachePut(value = "TbUserApply", key = "#record.id")
 	public int insert(TbUserApply record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -169,7 +169,7 @@ public class UserApplyServiceImpl extends BaseService<TbUserApply> implements IT
 	 */
 
 	@Override
-	@CachePut(value = "TbUserApply", key = "#record.id")
+//	@CachePut(value = "TbUserApply", key = "#record.id")
 	public int insertSelective(TbUserApply record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

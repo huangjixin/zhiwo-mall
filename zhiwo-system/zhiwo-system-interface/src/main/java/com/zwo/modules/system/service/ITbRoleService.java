@@ -31,7 +31,7 @@ public interface ITbRoleService extends IBaseService<TbRole> {
 	 * @param userGroupId
 	 * @param roleId
 	 */
-	void batchUnconnectRoleResources(List<TbRoleResources> roleResources, String roleId);
+	void batchUnconnectRoleResources(String roleId);
 	
 	/**
 	 * 解除用户组角色的关联关系。

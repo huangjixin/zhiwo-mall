@@ -7,8 +7,6 @@
 <title>用户组编辑</title>
 <%@ include file="/WEB-INF/include/easyui-css.jsp"%>
 <%@ include file="/WEB-INF/include/easyui-js.jsp"%>
-<script type="text/javascript"
-	src="${ctx}/js/jquery-easyui/ajaxfileupload.js"></script>
 </head>
 <body>
 	<form class="form-horizontal" userGroup="form"
@@ -23,6 +21,16 @@
         <input id="id" name="id" value="${userGroup.id}" type="hidden"/>
 		</c:if>
 		<div class="form-group">
+			<label for="roles" class="col-sm-1 control-label">角色</label>
+			<div class="col-sm-4">     	
+		<select class="easyui-combobox" name="roles" data-options="multiple:true" style="width:250px;">
+    	<c:forEach var="role" items="${roles}">
+        	<option value="${role.id}" <c:if test="${role.selected==true}">selected=true</c:if> >${role.name}</option>
+        </c:forEach>
+        </select>
+			</div>
+		</div>
+        <div class="form-group">
 			<label for="name" class="col-sm-1 control-label">用户组名称</label>
 			<div class="col-sm-4">
 				<input type="text" class="form-control" id="name" name="name"

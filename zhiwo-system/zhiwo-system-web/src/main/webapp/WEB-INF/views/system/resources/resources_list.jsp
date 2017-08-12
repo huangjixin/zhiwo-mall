@@ -18,23 +18,25 @@
            
             <div class="navbar-form navbar-left" role="search">
                 <div class="form-group">
-                    <%@ include file="/WEB-INF/include/easyui-buttonGroup.jsp"%>
-                	&nbsp;&nbsp;&nbsp;&nbsp;
-               		<input id="nameInput"  class="form-control" placeholder="名称">
+                    <button type="button"   class="btn btn-success btn-sm" id="addBtn"><i class="fa fa-plus fa-lg"></i>&nbsp;&nbsp;添加</button>
+					<button type="button"  class="btn btn-info btn-sm" id="refreshBtn"><i class="fa fa-refresh fa-lg"></i>&nbsp;&nbsp;刷新</button>
+					<button type="button" class="btn btn-primary btn-sm" id="unselectBtn"><i class="fa fa-remove fa-lg"></i>&nbsp;&nbsp;取消选中</button>
+                	<!--&nbsp;&nbsp;&nbsp;&nbsp;
+               		<input id="nameInput"  class="form-control" placeholder="名称">-->
                 </div>
-                <button id="queryBtn" class="btn btn-default">查询</button>
+                <!--<button id="queryBtn" class="btn btn-default">查询</button>-->
             </div>
             </div>
         </nav>
 	</div>
-	<table id="tgrid" 
+	<!--<table id="tgrid" 
 		title="资源列表" 
 		class="easyui-datagrid"
 		url="${ctx}/resources/select" 
 		toolbar="#toolbar" 
 		rownumbers="true"
 		fitColumns="true" 
-		fit="true" 
+		fit="false" 
 		pagination="true"
 		singleSelect="false">
 		<thead>
@@ -45,20 +47,74 @@
 				<th data-options="field:'code',align:'center',width:100">代码</th>
 				<th data-options="field:'authName',align:'center',width:100,formatter:formatType">权限名</th>
 				<th data-options="field:'type',align:'center',width:100">类型</th>
+				<th data-options="field:'path',align:'center',width:100">链接</th>
 				<th data-options="field:'createDate',align:'center',width:100">创建日期</th>
 				<th data-options="field:'updateDate',align:'center',width:100">更新日期</th>
-				<!-- <th data-options="field:'By',align:'center',width:100">创建人</th>
-				<th data-options="field:'updateBy',align:'center',width:100">更新人</th> -->
 				<th data-options="field:'opt',align:'center',formatter:formatOpt">操作</th>
 			</tr>
 		</thead>
-	</table>
+	</table>-->
+	<table id="treegrid" title="资源树" class="easyui-treegrid" toolbar="#toolbar" 
+				data-options="
+								url: '${ctx}/resources/getResourcesCheckboxTree',
+                                
+								fit:true,
+								method: 'get',
+								rownumbers: false,
+								idField: 'id',
+								collapsible:true,
+								treeField: 'name',
+								showHeader: true,
+								lines: true,
+								singleSelect : false,
+								fitColumns:true
+							">
+				<thead>
+					<tr>
+						<!--<th data-options="field:'ck',checkbox:true"></th>-->
+						<th data-options="field:'id',align:'center',hidden:true">id</th>
+						<th data-options="field:'name',align:'left',width:100">名称</th>
+						<th data-options="field:'authName',align:'center',width:100">权限名称</th>
+						<th data-options="field:'path',align:'center',width:100">链接</th>
+						<th data-options="field:'type',align:'center',width:100,formatter:formatType">类型</th>
+                        <th data-options="field:'opt',align:'center',formatter:formatOpt">操作</th>
+					</tr>
+				</thead>
+			</table>
 	<script type="text/javascript">
 		// 初始化按钮等工作。
 		$().ready(function() {
-			init("resources","tgrid");
+			//init("resources","tgrid");
+			$("#addBtn").click(function(){
+				create("resources");
+			});
+		
+			$("#refreshBtn").click(function(){
+				$("#treegrid").treegrid('reload'); // 重新加载;
+			});
+			$("#unselectBtn").click(function(){
+				$("#treegrid").treegrid('unselectAll'); // 取消选中;
+			});
 		})
 		
+		
+	function deleteTreeById(grid,id, module) {
+		var url = '${ctx}/' + module + '/deleteById';
+		var pamameter = {};
+		pamameter.idstring = id;
+		$.ajax({
+			type : "POST",
+			url : url,
+			data : pamameter,
+			error : function(request) {
+				alert("连接失败");
+			},
+			success : function(data) {
+				$('#'+grid).treegrid('reload'); // 重新加载;
+			}
+		});
+	}
+	
 		//格式化类型
 		function formatType(value, rec) {
 			var result = "菜单";
@@ -76,7 +132,7 @@
 //			<%
 //				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:product:delete")){
 //				%>
-				btn += '<button type="button" class="btn btn-danger btn-sm" onclick="deleteById(\'tgrid\',\''
+				btn += '<button type="button" class="btn btn-danger btn-sm" onclick="deleteTreeById(\'treegrid\',\''
 					+ rec.id + '\',\'resources\')"><i class="fa fa-trash fa-lg"></i>&nbsp;&nbsp;删除 </button>';
 					btn += "&nbsp;&nbsp;";
 					btn += ''

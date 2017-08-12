@@ -20,17 +20,23 @@ public class Node implements java.io.Serializable {
 
 	private String parentId;
 
+	@Transient
 	private Node parent;
 	
+	@Transient
 	private List children;
 
 	private String name;
+	@Transient
 	private int level;
 
 	private Integer sort;
+	
+	@Transient
 	private String rootId;
 
 //	private String type;
+	@Transient
 	private boolean isLeaf;
 
 	private String description;

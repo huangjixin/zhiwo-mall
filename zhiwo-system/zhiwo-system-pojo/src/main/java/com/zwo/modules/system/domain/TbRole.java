@@ -247,4 +247,15 @@ public class TbRole implements Serializable {
     public String getText() {
         return this.name;
     }
+    
+    public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
+	
+	@Transient
+	private boolean selected;
 }

@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.DatagridPage;
 import com.github.pagehelper.PageInfo;
+import com.zwo.modules.mall.domain.PrCategory;
 import com.zwo.modules.system.domain.TbResources;
 import com.zwo.modules.system.domain.TbResourcesCriteria;
 import com.zwo.modules.system.service.ITbResourcesService;
+import com.zwotech.common.utils.TreeBuilder;
 import com.zwotech.common.web.BaseController;
 
 @RestController
@@ -103,4 +105,14 @@ public class ResourcesRestController extends BaseController<TbResources> {
 		pageInfo = resourcesService.selectByPageInfo(tbresourcesCriteria, pageInfo);
 		return super.setPage(pageInfo);
 	}
+	
+	@RequestMapping(value = "getResourcesCheckboxTree")
+	public List<TbResources> getResourcesCheckboxTree(Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		TreeBuilder<TbResources> tb = new TreeBuilder<TbResources>();
+		List<TbResources> list = resourcesService.selectByExample(null);
+		list = tb.buildListToTree(list, false);
+		return list;
+	}
+	
 }

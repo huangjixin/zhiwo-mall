@@ -75,7 +75,7 @@
 		//查询
 		function doResearch(){
 			var parameters = {};
-			parameters.userGroupname = $('#nameInput').val();
+			parameters.name = $('#nameInput').val();
 			query('tgrid',parameters);
 		}
 		

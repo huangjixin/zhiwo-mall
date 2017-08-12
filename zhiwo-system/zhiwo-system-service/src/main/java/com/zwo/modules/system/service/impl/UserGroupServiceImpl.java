@@ -3,6 +3,8 @@
  */
 package com.zwo.modules.system.service.impl;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -14,13 +16,19 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageInfo;
+import com.zwo.modules.system.dao.TbRoleMapper;
 import com.zwo.modules.system.dao.TbUserGroupMapper;
+import com.zwo.modules.system.dao.TbUserGroupRoleMapper;
+import com.zwo.modules.system.domain.TbRole;
 import com.zwo.modules.system.domain.TbUserGroup;
 import com.zwo.modules.system.domain.TbUserGroupCriteria;
+import com.zwo.modules.system.domain.TbUserGroupRoleCriteria;
 import com.zwo.modules.system.service.ITbUserGroupService;
 import com.zwotech.modules.core.service.impl.BaseService;
 
@@ -40,7 +48,19 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 
 	@Autowired
 	@Lazy(true)
+	private JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	@Lazy(true)
+	private TbUserGroupRoleMapper userGroupRoleMapper;
+	
+	@Autowired
+	@Lazy(true)
 	private TbUserGroupMapper tbUserGroupMapper;
+	
+	@Autowired
+	@Lazy(true)
+	private TbRoleMapper roleMapper;
 
 	@Override
 	public Mapper<TbUserGroup> getBaseMapper() {
@@ -142,7 +162,7 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "TbUserGroup", key = "#record.id")
+//	@CachePut(value = "TbUserGroup", key = "#record.id")
 	public int insert(TbUserGroup record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -169,7 +189,7 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 	 */
 
 	@Override
-	@CachePut(value = "TbUserGroup", key = "#record.id")
+//	@Cacheable(value = "TbUserGroup", key = "#record.id")
 	public int insertSelective(TbUserGroup record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -346,6 +366,43 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 		tbUserGroup.setId(System.currentTimeMillis() + "");
 		int result = tbUserGroupServiceImpl.insertSelective(tbUserGroup);
 		logger.info(result + "");
+	}
+
+	@Override
+	public List<TbRole> findByUserGroupId(String usergroupId) {
+		return roleMapper.findByUserGroupId(usergroupId);
+	}
+
+	@Override
+	public void batchConnectUserGroupRole(List<String> roleIds, String usergroupId) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "批量关联用户组角色开始");
+		String sql = " INSERT INTO tb_user_group_role (id,role_id,usergroup_id) VALUES (?,?,?)";
+		this.jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+			@Override
+			public void setValues(PreparedStatement ps, int i) throws SQLException {
+				ps.setString(1, System.currentTimeMillis() + "" + Math.round(Math.random() * 9999));
+				ps.setString(2, roleIds.get(i));
+				ps.setString(3, usergroupId);
+			}
+			@Override
+			public int getBatchSize() {
+				return roleIds.size();
+			}
+		});
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "批量关联用户组角色结束");
+	}
+
+	@Override
+	public void batchUnconnectUserGroupRole(String usergroupId) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "批量关联用户组角色开始");
+		TbUserGroupRoleCriteria userGroupRoleCriteria = new TbUserGroupRoleCriteria(); 
+		userGroupRoleCriteria.createCriteria().andUsergroupIdEqualTo(usergroupId);
+		userGroupRoleMapper.deleteByExample(userGroupRoleCriteria);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "批量关联用户组角色结束");
 	}
 
 }

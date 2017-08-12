@@ -157,7 +157,7 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "TbRole", key = "#record.id")
+//	@CachePut(value = "TbRole", key = "#record.id")
 	public int insert(TbRole record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -184,7 +184,7 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	 */
 
 	@Override
-	@CachePut(value = "TbRole", key = "#record.id")
+//	@CachePut(value = "TbRole", key = "#record.id")
 	public int insertSelective(TbRole record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -403,21 +403,12 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	}
 
 	@Override
-	public void batchUnconnectRoleResources(List<TbRoleResources> roleResources, String roleId) {
+	public void batchUnconnectRoleResources(String roleId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "批量解除角色资源开始");
-		String sql = " delete from tb_role_resources where resources_id=? and role_id=? ";
-		this.jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-			@Override
-			public void setValues(PreparedStatement ps, int i) throws SQLException {
-				ps.setString(1, roleResources.get(i).getResourcesId());
-				ps.setString(2, roleId);
-			}
-			@Override
-			public int getBatchSize() {
-				return roleResources.size();
-			}
-		});
+		TbRoleResourcesCriteria roleResourcesCriteria = new TbRoleResourcesCriteria();
+		roleResourcesCriteria.createCriteria().andRoleIdEqualTo(roleId);
+		roleResourcesMapper.deleteByExample(roleResourcesCriteria);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "批量解除角色资源结束");
 	}
