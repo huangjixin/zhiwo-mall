@@ -21,7 +21,85 @@
 		method="post">
         <c:if test="${operation=='edit'}">
         <input id="id" name="id" value="${role.id}" type="hidden"/>
-		</c:if>
+        </c:if>
+         <input id="resourcesString" name="resources" value="${resources}" type="hidden"/>
+        <div class="form-group">
+			<label for="type" class="col-sm-1 control-label">资源授权</label>
+            <button type="button" class="btn btn-danger btn-sm"  onClick="$('#treegrid').treegrid('unselectAll');$('#resourcesString').val('');">
+                清除
+            </button>
+			<div class="col-sm-4">
+				<table id="treegrid" title="资源树" class="easyui-treegrid"
+                    data-options="
+                                    url: '${ctx}/resources/getResourcesCheckboxTree',
+                                    
+                                    selectOnCheck:true,
+                                    checkOnSelect:true,
+                                    collapsed:true,
+                                    fit:false,
+                                    method: 'get',
+                                    rownumbers: false,
+                                    idField: 'id',
+                                    collapsible:true,
+                                    treeField: 'name',
+                                    showHeader: true,
+                                    lines: true,
+                                    singleSelect : false,
+                                    fitColumns:true,
+                                    onClickRow: function (item) {
+                                    	var resString = $('#resourcesString').val();
+                                        var resArray = resString.split(',');
+                                        var id = item.id;
+                                        if (!Array.indexOf) {  
+                                            Array.prototype.indexOf = function (obj) {  
+                                                for (var i = 0; i < this.length; i++) {  
+                                                    if (this[i] == obj) {  
+                                                        return i;  
+                                                    }  
+                                                }  
+                                                return -1;  
+                                            }  
+                                        }  
+                                        var index = resArray.indexOf(id);
+                                        if(index !=-1){
+                                        	resArray.splice(index,1);
+                                            resString  =  JSON.stringify(resArray); 
+                                        	$('#resourcesString').val(resString);
+                                        }
+                                        alert(resString);
+                                    },
+                                    onUnselect: function (item) {
+                                    	
+                                    },
+                                    onLoadSuccess:function(row,data){
+                                    	$('#treegrid').treegrid('collapseAll');
+                                    	var resString = ${resources}+'';
+                                        if(resString == ''){
+                                        	return;
+                                        }
+                                        var resArray = resString.split(',');
+                                        var length = resArray.length;
+                                        if(length>0){
+                                        	for(var i = 0;i<length;i++){
+                                            	$('#treegrid').treegrid('select',resArray[i]);
+                                            }
+                                        }
+                                    }
+                                ">
+                    <thead>
+                        <tr>
+                            <th data-options="field:'ck',checkbox:true"></th>
+                            <th data-options="field:'id',align:'center',hidden:true">id</th>
+                            <th data-options="field:'name',align:'left',width:100">名称</th>
+                            <th data-options="field:'authName',align:'center',width:100">权限名称</th>
+                            <!--<th data-options="field:'path',align:'center',width:100">链接</th>-->
+                            <th data-options="field:'type',align:'center',width:100,formatter:formatType">类型</th>
+                        </tr>
+                    </thead>
+                </table>
+			</div>
+		</div>
+		
 		<div class="form-group">
 			<label for="name" class="col-sm-1 control-label">角色名称</label>
 			<div class="col-sm-4">
@@ -55,34 +133,15 @@
 				backToList('role');
 			});
 		});
-
-		function fileUploadToServer() {
-			var fileValue = $('#file').val();
-			if (fileValue == '') {
-				$('#message').html('请选择一个文件')
-				return;
+		//格式化类型
+		function formatType(value, rec) {
+			var result = "菜单";
+			if(rec.type=='button'){
+				result = "按钮";
+			}else if(rec.type=='menu'){
+				result = "菜单";
 			}
-			$('#message').html('正在上传……');
-			var url = '${ctx}/fileupload/roleAssets';
-			$.ajaxFileUpload({
-				url : url, //用于文件上传的服务器端请求地址
-				secureuri : false, //是否需要安全协议，一般设置为false
-				fileElementId : 'file', //文件上传域的ID
-				dataType : 'json', //返回值类型 一般设置为json
-				success : function(data, status) //服务器成功响应处理函数
-				{
-					if (data.assets.length > 0) {
-						var assets = data.assets[0];
-						$("#iconImg").attr('src', '${ctx}/' + assets.url);
-						$("#icon").val(assets.url);
-					}
-					$('#message').html('');
-				},
-				error : function(data, status, e)//服务器响应失败处理函数
-				{
-					alert("上传失败");
-				}
-			})
+			return result;
 		}
 	</script>
 	<%@ include file="/WEB-INF/include/easyui-footerjs.jsp"%>

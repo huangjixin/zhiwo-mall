@@ -116,4 +116,11 @@ public interface TbResourcesMapper {
      * @return
      */
     List<TbResources> selectByRolename(String rolename);
+    
+    /**
+     * 根据角色名进行查询。
+     * @param Groupname
+     * @return
+     */
+    List<TbResources> selectByRoleId(String roleId);
 }

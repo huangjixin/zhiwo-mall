@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
@@ -22,8 +21,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageInfo;
+import com.zwo.modules.system.dao.TbResourcesMapper;
 import com.zwo.modules.system.dao.TbRoleMapper;
 import com.zwo.modules.system.dao.TbRoleResourcesMapper;
+import com.zwo.modules.system.domain.TbResources;
 import com.zwo.modules.system.domain.TbRole;
 import com.zwo.modules.system.domain.TbRoleCriteria;
 import com.zwo.modules.system.domain.TbRoleResources;
@@ -52,6 +53,10 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	@Autowired
 	@Lazy(true)
 	private TbRoleMapper roleMapper;
+	
+	@Autowired
+	@Lazy(true)
+	private TbResourcesMapper resourcesMapper;
 	
 	@Autowired
 	@Lazy(true)
@@ -411,6 +416,26 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 		roleResourcesMapper.deleteByExample(roleResourcesCriteria);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "批量解除角色资源结束");
+	}
+
+	@Override
+	public List<TbResources> selectByRolename(String rolename) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "根据角色名进行查询资源开始");
+		List<TbResources> list = resourcesMapper.selectByRolename(rolename);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "根据角色名进行查询资源结束,結果条目数为："+list.size());
+		return list;
+	}
+
+	@Override
+	public List<TbResources> selectByRoleId(String roleId) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "根据角色ID进行查询资源开始");
+		List<TbResources> list = resourcesMapper.selectByRoleId(roleId);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "根据角色ID进行查询资源结束,結果条目数为："+list.size());
+		return list;
 	}
 
 }

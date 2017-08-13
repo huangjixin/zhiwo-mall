@@ -1,5 +1,8 @@
 package com.zwo.modules.system.web;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -14,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.zwo.modules.system.domain.TbResources;
 import com.zwo.modules.system.domain.TbRole;
+import com.zwo.modules.system.service.ITbResourcesService;
 import com.zwo.modules.system.service.ITbRoleService;
 import com.zwotech.common.web.BaseController;
 
@@ -25,6 +30,9 @@ public class RoleController extends BaseController<TbRole> {
 	@Autowired
 	@Lazy(true)
 	private ITbRoleService roleService;
+	@Autowired
+	@Lazy(true)
+	private ITbResourcesService resourcesService;
 	
 	private static final String basePath = "views/system/role/";
 	
@@ -33,20 +41,28 @@ public class RoleController extends BaseController<TbRole> {
 		return basePath+"role_list";
 	}
 
+	
 //	@RequiresPermissions("system:role:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid TbRole role, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		uiModel.addAttribute("resources", null);
 		uiModel.addAttribute("role", role);
 		return basePath + "role_edit";
 	}
 
+	
 //	@RequiresPermissions("system:role:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		TbRole role = roleService.selectByPrimaryKey(id);
-
+		List<TbResources> list = this.roleService.selectByRoleId(role.getId());
+		List<String> resources = new ArrayList<String>();
+		for (TbResources tbResources : list) {
+			resources.add(tbResources.getId());
+		}
+		uiModel.addAttribute("resources", resources);
 		uiModel.addAttribute("role", role);
 		uiModel.addAttribute("operation", "edit");
 		return basePath + "role_edit";
@@ -54,7 +70,7 @@ public class RoleController extends BaseController<TbRole> {
 	
 //	@RequiresPermissions("system:role:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public String create(@Valid TbRole role, BindingResult result, Model uiModel,
+	public String create(@Valid TbRole role,@Valid String resources, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {

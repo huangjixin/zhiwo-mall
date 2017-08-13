@@ -520,4 +520,16 @@
     
     where role.NAME=#{rolename}
   </select>
+  <select id="selectByRoleId" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	SELECT 
+    	resources.*
+	FROM
+    tb_role role
+        LEFT JOIN
+    tb_role_resources rr ON rr.ROLE_ID = role.id
+        LEFT JOIN
+    tb_resources resources ON rr.RESOURCES_ID = resources.id
+    
+    where role.id=#{roleId}
+  </select>
 </mapper>

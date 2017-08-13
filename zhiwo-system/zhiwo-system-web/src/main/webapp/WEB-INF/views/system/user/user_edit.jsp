@@ -77,12 +77,14 @@
 		<div class="form-group">
 			<label for="file" class="col-sm-1 control-label"></label>
 			<div class="col-sm-4">
-				<img id="iconImg" src="${ctx}/${user.icon}" 	class=".img-responsive"
+				<img id="iconImg" <c:if test="${!empty user.icon}">
+                 src="${ctx}/${user.icon}" 
+                </c:if>	class=".img-responsive"
 					style="width: 100px;">
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="description" class="col-sm-1 control-label">分类描述</label>
+			<label for="description" class="col-sm-1 control-label">描述</label>
 			<div class="col-sm-4">
 				<textarea name="description" class="form-control" rows="4" >${user.description}</textarea>
 			</div>

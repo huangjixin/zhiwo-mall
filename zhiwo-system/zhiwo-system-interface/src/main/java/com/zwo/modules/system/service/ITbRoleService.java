@@ -5,6 +5,7 @@ package com.zwo.modules.system.service;
 
 import java.util.List;
 
+import com.zwo.modules.system.domain.TbResources;
 import com.zwo.modules.system.domain.TbRole;
 import com.zwo.modules.system.domain.TbRoleResources;
 import com.zwotech.modules.core.service.IBaseService;
@@ -14,6 +15,19 @@ import com.zwotech.modules.core.service.IBaseService;
  *
  */
 public interface ITbRoleService extends IBaseService<TbRole> {
+	/**
+     * 根据角色名进行查询。
+     * @param Groupname
+     * @return
+     */
+    List<TbResources> selectByRolename(String rolename);
+    
+    /**
+     * 根据角色名进行查询。
+     * @param Groupname
+     * @return
+     */
+    List<TbResources> selectByRoleId(String roleId);
 	/**
 	 * 关联角色资源。
 	 * @param userGroupId
