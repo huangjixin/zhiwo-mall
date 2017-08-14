@@ -36,6 +36,17 @@ public interface IMemberService extends IBaseService<Member> {
 	MemberAccount selectMemberAccountByMId(String memberId);
 	
 	/**
+	 * 修改会员账户。
+	 * @param memberAccount
+	 */
+	int updateByPrimaryKeySelective(MemberAccount memberAccount);
+	
+	/**
+	 * 修改会员智惠豆账户。
+	 * @param memberAccount
+	 */
+	int updateByPrimaryKeySelective(MemberPlayAccount playAccount);
+	/**
      * 查询会员分销的商品。
      * @param memberId
      * @return

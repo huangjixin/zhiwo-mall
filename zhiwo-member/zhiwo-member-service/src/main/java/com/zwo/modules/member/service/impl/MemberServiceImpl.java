@@ -3,8 +3,10 @@
  */
 package com.zwo.modules.member.service.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ import com.zwo.modules.mall.domain.OrderTrade;
 import com.zwo.modules.mall.domain.OrderTradeCriteria;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.member.dao.GuessQuestionMapper;
+import com.zwo.modules.member.dao.MemberAccountHisMapper;
 import com.zwo.modules.member.dao.MemberAccountMapper;
 import com.zwo.modules.member.dao.MemberAddressMapper;
 import com.zwo.modules.member.dao.MemberMapper;
@@ -36,6 +39,7 @@ import com.zwo.modules.member.domain.GuessQuestion;
 import com.zwo.modules.member.domain.Member;
 import com.zwo.modules.member.domain.MemberAccount;
 import com.zwo.modules.member.domain.MemberAccountCriteria;
+import com.zwo.modules.member.domain.MemberAccountHis;
 import com.zwo.modules.member.domain.MemberAddress;
 import com.zwo.modules.member.domain.MemberAddressCriteria;
 import com.zwo.modules.member.domain.MemberCriteria;
@@ -86,6 +90,13 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	@Autowired
 	@Lazy(true)
 	private MemberAccountMapper memberAccountMapper;
+	
+	/**
+	 * 会员流水账户接口。
+	 */
+	@Autowired
+	@Lazy(true)
+	private MemberAccountHisMapper memberAccountHisMapper;
 	
 	@Autowired
 	@Lazy(true)
@@ -258,6 +269,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入结束");
 		createMemberAccount(record);
+		createMemberPlayAccount(record);
 		return result;
 	}
 
@@ -267,6 +279,15 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		memberAccount.setId(record.getId());
 		memberAccount.setMemberId(record.getId());
 		int result = memberAccountMapper.insertSelective(memberAccount);
+		return result;
+	}
+	
+	@Async
+	private int createMemberPlayAccount(Member record){
+		MemberPlayAccount memberAccount = new MemberPlayAccount();
+		memberAccount.setId(record.getId());
+		memberAccount.setMemberId(record.getId());
+		int result = memberPlayAccountMapper.insertSelective(memberAccount);
 		return result;
 	}
 	
@@ -627,11 +648,63 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	public MemberAccount selectMemberAccountByMId(String memberId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "根据会员ID查询会员账户,会员id为"+memberId+"开始");
-		MemberAccountCriteria memberAccountCriteria = new MemberAccountCriteria();
+		/*MemberAccountCriteria memberAccountCriteria = new MemberAccountCriteria();
 		memberAccountCriteria.createCriteria().andMemberIdEqualTo(memberId);
-		List<MemberAccount>list = memberAccountMapper.selectByExample(memberAccountCriteria);
+		List<MemberAccount>list = memberAccountMapper.selectByExample(memberAccountCriteria);*/
+		
+		MemberAccount memberAccount = memberAccountMapper.selectByPrimaryKey(memberId);
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "根据会员ID查询会员账户,会员id为"+memberId+"结束，结果为："+list.size());
-		return list.isEmpty()?null:list.get(0);
+			logger.info(BASE_MESSAGE + "根据会员ID查询会员账户,会员id为"+memberId+"结束，结果为："+memberAccount);
+		return memberAccount;
+	}
+
+	@Override
+	public int updateByPrimaryKeySelective(MemberAccount memberAccount) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "修改会员账户对象为"+memberAccount+"开始");
+		int result = memberAccountMapper.updateByPrimaryKeySelective(memberAccount);
+		MemberAccountHis accountHis = new MemberAccountHis();
+		try {
+			BeanUtils.copyProperties(accountHis, memberAccount);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "修改会员账户，对象为"+memberAccount+"结束，结果为："+result);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "新增会员流水账户，对象为"+accountHis+"开始");
+		accountHis.setId(null);
+		memberAccountHisMapper.insertSelective(accountHis);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "新增会员流水账户，对象为"+accountHis+"结束，结果为："+result);
+		return result;
+	}
+
+	@Override
+	public int updateByPrimaryKeySelective(MemberPlayAccount playAccount) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "修改会员账户对象为"+playAccount+"开始");
+		int result = memberPlayAccountMapper.updateByPrimaryKeySelective(playAccount);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "修改会员账户，对象为"+playAccount+"结束，结果为(1为成功，0为失败)："+result);
+		MemberPlayHisAccount accountHis = new MemberPlayHisAccount();
+		try {
+			BeanUtils.copyProperties(accountHis, playAccount);
+			if (logger.isInfoEnabled())
+				logger.info(BASE_MESSAGE + "新增会员流水账户，对象为"+accountHis+"开始");
+			accountHis.setId(null);
+			memberPlayHisAccountMapper.insertSelective(accountHis);
+			if (logger.isInfoEnabled())
+				logger.info(BASE_MESSAGE + "新增会员流水账户，对象为"+accountHis+"结束，结果为："+result);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 }
