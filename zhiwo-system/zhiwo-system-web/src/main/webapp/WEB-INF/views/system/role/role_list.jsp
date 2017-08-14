@@ -35,7 +35,7 @@
 		fitColumns="true" 
 		fit="true" 
 		pagination="true"
-		singleSelect="true">
+		singleSelect="false">
 		<thead>
 			<tr>
 				<th data-options="field:'ck',checkbox:true"></th>

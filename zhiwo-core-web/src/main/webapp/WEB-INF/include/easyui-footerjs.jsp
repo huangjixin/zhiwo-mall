@@ -61,17 +61,20 @@
 		var url = '${ctx}/' + module + '/deleteById';
 		var pamameter = {};
 		pamameter.idstring = id;
-		$.ajax({
-			type : "POST",
-			url : url,
-			data : pamameter,
-			error : function(request) {
-				alert("连接失败");
-			},
-			success : function(data) {
-				$('#'+grid).datagrid('reload'); // 重新加载;
-			}
-		});
+		$.messager.confirm('确定', '确定删除？', function(r) {
+					if (r) {
+						$.ajax({
+							type : "POST",
+							url : url,
+							data : pamameter,
+							error : function(request) {
+								alert("连接失败");
+							},
+							success : function(data) {
+								$('#'+grid).datagrid('reload'); // 重新加载;
+							}
+						});
+					}})
 	}
 
 	// 删除；
@@ -79,37 +82,40 @@
 		var url = '${ctx}/' + module + '/deleteById';
 		var pamameter = null;
 		//多行删除。
-		var row = $('#'+grid).datagrid('getSelections');
-		if (row == null || row.length == 0) {
+		var rows = $('#'+grid).datagrid('getSelections');
+		if (rows == null || rows.length == 0) {
 			return;
 		}
-		var i = 0;
-		var string = "";
-		for (i; i < row.length; i++) {
-			string += row[i].id;
-			if (i < row.length - 1) {
-				string += ',';
-			} else {
-				break;
-			}
+		
+		var list = [];
+		for(var i=0;i<rows.length;i++){
+			list[i]=rows[i].id;
 		}
+		var resString = list.join();
+			
+		var string = resString;
+		
 		pamameter = {};
-		pamameter.idstring = string;
+		pamameter.idstring = resString;
 
 		if (pamameter == null) {
 			return;
 		}
-		$.ajax({
-			type : "POST",
-			url : url,
-			data : pamameter,
-			error : function(request) {
-				alert("连接失败");
-			},
-			success : function(data) {
-				$("#"+grid).datagrid('reload'); // 重新加载;
-			}
-		});
+		
+		$.messager.confirm('确定', '确定删除？', function(r) {
+					if (r) {
+						$.ajax({
+							type : "POST",
+							url : url,
+							data : pamameter,
+							error : function(request) {
+								alert("连接失败");
+							},
+							success : function(data) {
+								$("#"+grid).datagrid('reload'); // 重新加载;
+							}
+						});
+					}})
 	}
 
 	//取消选中；
