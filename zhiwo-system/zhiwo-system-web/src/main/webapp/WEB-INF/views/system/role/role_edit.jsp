@@ -32,7 +32,6 @@
 				<table id="treegrid" title="资源树" class="easyui-treegrid"
                     data-options="
                                     url: '${ctx}/resources/getResourcesCheckboxTree',
-                                    
                                     selectOnCheck:true,
                                     checkOnSelect:true,
                                     collapsed:true,
@@ -46,8 +45,11 @@
                                     lines: true,
                                     singleSelect : false,
                                     fitColumns:true,
+                                    onCheck:function (index,row){
+                                    	
+                                    },
                                     onLoadSuccess:function(row,data){
-                                    	$('#treegrid').treegrid('collapseAll');
+                                    	//$('#treegrid').treegrid('collapseAll');
                                     	var resString = ${resources}+'';
                                         if(resString == ''){
                                         	return;
