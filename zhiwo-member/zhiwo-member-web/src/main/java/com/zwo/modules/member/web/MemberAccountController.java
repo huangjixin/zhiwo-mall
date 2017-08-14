@@ -56,7 +56,7 @@ public class MemberAccountController extends BaseController<MemberAccount> {
 			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
 		}
 		
-		int res = memberService.updateByPrimaryKeySelective(memberAccount);
+		int res = memberService.updateMemberAccountByPrimaryKeySelective(memberAccount);
 		if(res==1){
 			redirectAttributes.addFlashAttribute("memberAccount", memberAccount);
 			redirectAttributes.addFlashAttribute("message", "保存成功！");
@@ -64,4 +64,5 @@ public class MemberAccountController extends BaseController<MemberAccount> {
 		redirectAttributes.addAttribute("operation", "edit");
 		return "redirect:/memberAccount/edit/"+memberAccount.getId();
 	}
+	
 }

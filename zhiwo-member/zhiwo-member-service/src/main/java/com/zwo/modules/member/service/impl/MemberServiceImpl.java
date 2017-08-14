@@ -471,7 +471,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	@Override
 	@Transactional(readOnly = true)
 	@Cacheable(value = "MemberAddress", key="''+#memberId")
-	public List<MemberAddress> selectByMId(String memberId) {
+	public List<MemberAddress> selectMemberAddressByMId(String memberId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "会员查询地址开始");
 		MemberAddressCriteria memberAddressCriteria = new MemberAddressCriteria();
@@ -600,7 +600,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 
 	@Override
 	@Transactional(readOnly = true)
-	@Cacheable(value = "MemberPlayAccount", key="''+#memberId")
+	@Cacheable(value = "MemberPlayAccount", key="#root.methodName+#memberId")
 	public MemberPlayAccount selectMemberPlayAccountByMemberId(String memberId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "根据会员ID查询会员智慧豆账户记录,会员id为"+memberId+"开始");
@@ -648,7 +648,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	}
 
 	@Override
-	@Cacheable(value = "MemberAccount", key="''+#memberId")
+	@Cacheable(value = "MemberAccount", key="#root.method.name+#memberId")
 	public MemberAccount selectMemberAccountByMId(String memberId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "根据会员ID查询会员账户,会员id为"+memberId+"开始");
@@ -663,8 +663,8 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	}
 	
 	@Override
-	@CacheEvict(value = "MemberAccount", key="''+#memberAccount.id")
-	public int updateByPrimaryKeySelective(MemberAccount memberAccount) {
+	@CacheEvict(value = "MemberAccount", key="#root.methodName+#memberAccount.id")
+	public int updateMemberAccountByPrimaryKeySelective(MemberAccount memberAccount) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "修改会员账户对象为"+memberAccount+"开始");
 		int result = memberAccountMapper.updateByPrimaryKeySelective(memberAccount);
@@ -689,8 +689,8 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	}
 
 	@Override
-	@CacheEvict(value = "MemberAccount", key="''+#memberAccount.id")
-	public int updateByPrimaryKeySelective(MemberPlayAccount playAccount) {
+	@CacheEvict(value = "MemberAccount", key="#root.methodName+#memberAccount.id")
+	public int updateMemberPlayAccountByPrimaryKeySelective(MemberPlayAccount playAccount) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "修改会员账户对象为"+playAccount+"开始");
 		int result = memberPlayAccountMapper.updateByPrimaryKeySelective(playAccount);
