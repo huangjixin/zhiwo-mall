@@ -14,6 +14,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -256,9 +257,19 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		int result = super.insertSelective(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入结束");
+		createMemberAccount(record);
 		return result;
 	}
 
+	@Async
+	private int createMemberAccount(Member record){
+		MemberAccount memberAccount = new MemberAccount();
+		memberAccount.setId(record.getId());
+		memberAccount.setMemberId(record.getId());
+		int result = memberAccountMapper.insertSelective(memberAccount);
+		return result;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
