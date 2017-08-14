@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -28,12 +29,13 @@ public class OrderDeliveryController extends BaseController<OrderDelivery> {
 
 	private static final String basePath = "views/mall/orderDelivery/";
 	
+	@RequiresPermissions("mall:orderDelivery:view")
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath+"orderDelivery_list";
 	}
 	
-//	@RequiresPermissions("system:orderDelivery:create")
+	@RequiresPermissions("mall:orderDelivery:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid OrderDelivery orderDelivery, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -41,7 +43,7 @@ public class OrderDeliveryController extends BaseController<OrderDelivery> {
 		return basePath + "orderDelivery_edit";
 	}
 
-//	@RequiresPermissions("system:orderDelivery:view")
+	@RequiresPermissions("mall:orderDelivery:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -52,7 +54,7 @@ public class OrderDeliveryController extends BaseController<OrderDelivery> {
 		return basePath + "orderDelivery_edit";
 	}
 	
-//	@RequiresPermissions("system:orderDelivery:create")
+	@RequiresPermissions("mall:orderDelivery:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid OrderDelivery tborderDelivery, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
@@ -70,7 +72,7 @@ public class OrderDeliveryController extends BaseController<OrderDelivery> {
 		return "redirect:/orderDelivery/create";
 	}
 	 
-//	@RequiresPermissions("system:orderDelivery:edit")
+	@RequiresPermissions("mall:orderDelivery:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid OrderDelivery orderDelivery, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,

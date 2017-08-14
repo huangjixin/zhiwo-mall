@@ -6,18 +6,15 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.DatagridPage;
@@ -44,6 +41,7 @@ public class OrderDeliveryRestController extends BaseController<OrderDelivery> {
 	 * @return String    返回类型 
 	 * @throws 
 	 */
+	@RequiresPermissions("mall:orderDelivery:delete")
 	@RequestMapping(value = "/deleteById")
 	public String deleteById(@RequestParam(value = "idstring",required=true) String idstring, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
@@ -66,6 +64,7 @@ public class OrderDeliveryRestController extends BaseController<OrderDelivery> {
 	 * @return String    返回类型 
 	 * @throws 
 	 */
+	@RequiresPermissions("mall:orderDelivery:delete")
 	@RequestMapping(value = "/delete")
 	public String delete(@RequestParam(value = "id",required=true) String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
@@ -82,6 +81,7 @@ public class OrderDeliveryRestController extends BaseController<OrderDelivery> {
 	 * @param httpServletResponse
 	 * @return
 	 */
+	@RequiresPermissions("mall:orderDelivery:view")
 	@RequestMapping(value = "/show/{id}")
 	public OrderDelivery getOrderDelivery(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -90,8 +90,8 @@ public class OrderDeliveryRestController extends BaseController<OrderDelivery> {
 		return orderDelivery;
 	}
 	
+	@RequiresPermissions("mall:orderDelivery:view")
 	@RequestMapping(value = "/select")
-	@ResponseBody
 	public DatagridPage<OrderDelivery> select(@ModelAttribute PageInfo<OrderDelivery> pageInfo, @ModelAttribute OrderDelivery orderDelivery, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 

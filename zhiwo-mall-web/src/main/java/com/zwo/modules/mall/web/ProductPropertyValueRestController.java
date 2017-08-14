@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
@@ -43,7 +44,8 @@ public class ProductPropertyValueRestController extends BaseController<PrProduct
 	 * @return String    返回类型 
 	 * @throws 
 	 */
-	@RequestMapping(value = "/deleteById")
+	@RequiresPermissions("mall:productPropertyValue:delete")
+	@RequestMapping(value = "deleteById")
 	public String deleteById(@RequestParam(value = "idstring",required=true) String idstring, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
 
@@ -65,7 +67,8 @@ public class ProductPropertyValueRestController extends BaseController<PrProduct
 	 * @return String    返回类型 
 	 * @throws 
 	 */
-	@RequestMapping(value = "/delete")
+	@RequiresPermissions("mall:productPropertyValue:delete")
+	@RequestMapping(value = "delete")
 	public String delete(@RequestParam(value = "id",required=true) String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
 		
@@ -81,6 +84,7 @@ public class ProductPropertyValueRestController extends BaseController<PrProduct
 	 * @param httpServletResponse
 	 * @return
 	 */
+	@RequiresPermissions("mall:productPropertyValue:view")
 	@RequestMapping(value = "/show/{id}")
 	public PrProductPropertyValue getPrProductPropertyValue(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -89,6 +93,7 @@ public class ProductPropertyValueRestController extends BaseController<PrProduct
 		return product;
 	}
 	
+	@RequiresPermissions("mall:productPropertyValue:view")
 	@RequestMapping(value = "/select")
 	public DatagridPage<PrProductPropertyValue> select(@ModelAttribute PageInfo<PrProductPropertyValue> pageInfo, @ModelAttribute PrProductPropertyValue product, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {

@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -29,12 +30,13 @@ public class ProductController extends BaseController<PrProduct> {
 	
 	private static final String basePath = "views/mall/product/";
 	
+	@RequiresPermissions("mall:product:view")
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath+"product_list";
 	}
 	
-//	@RequiresPermissions("mall:product:create")
+	@RequiresPermissions("mall:product:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid PrProductWithBLOBs product, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -42,7 +44,7 @@ public class ProductController extends BaseController<PrProduct> {
 		return basePath + "product_edit";
 	}
 
-//	@RequiresPermissions("mall:product:view")
+	@RequiresPermissions("mall:product:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -53,7 +55,7 @@ public class ProductController extends BaseController<PrProduct> {
 		return basePath + "product_edit";
 	}
 	
-//	@RequiresPermissions("mall:product:create")
+	@RequiresPermissions("mall:product:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid PrProductWithBLOBs product, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
@@ -75,7 +77,7 @@ public class ProductController extends BaseController<PrProduct> {
 		return "redirect:/product/create";
 	}
 	 
-//	@RequiresPermissions("mall:product:edit")
+	@RequiresPermissions("mall:product:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid PrProductWithBLOBs product, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,

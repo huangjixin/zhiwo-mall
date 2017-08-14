@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -28,12 +29,13 @@ public class OrderController extends BaseController<OrderTrade> {
 	
 	private static final String basePath = "views/mall/order/";
 	
+	@RequiresPermissions("mall:order:view")
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath+"order_list";
 	}
 
-	// @RequiresPermissions("mall:order:create")
+	 @RequiresPermissions("mall:order:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid OrderTrade order, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -41,7 +43,7 @@ public class OrderController extends BaseController<OrderTrade> {
 		return basePath + "order_edit";
 	}
 	
-	// @RequiresPermissions("mall:order:view")
+	 @RequiresPermissions("mall:order:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -52,7 +54,7 @@ public class OrderController extends BaseController<OrderTrade> {
 		return basePath + "order_edit";
 	}
 
-	// @RequiresPermissions("mall:order:create")
+	 @RequiresPermissions("mall:order:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid OrderTrade order, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes, HttpServletRequest httpServletRequest,
@@ -72,7 +74,7 @@ public class OrderController extends BaseController<OrderTrade> {
 		return "redirect:/order/create";
 	}
 
-	// @RequiresPermissions("mall:order:edit")
+	 @RequiresPermissions("mall:order:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid OrderTrade order, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes, HttpServletRequest httpServletRequest,

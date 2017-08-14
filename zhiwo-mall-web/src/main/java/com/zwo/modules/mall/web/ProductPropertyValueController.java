@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -28,12 +29,13 @@ public class ProductPropertyValueController extends BaseController<PrProductProp
 	
 	private static final String basePath = "views/mall/productPropertyValue/";
 	
+	@RequiresPermissions("mall:productPropertyValue:view")
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath+"productPropertyValue_list";
 	}
 	
-//	@RequiresPermissions("system:productPropertyValue:create")
+	@RequiresPermissions("mall:productPropertyValue:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid PrProductPropertyValue productPropertyValue, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -41,7 +43,7 @@ public class ProductPropertyValueController extends BaseController<PrProductProp
 		return basePath + "productPropertyValue_edit";
 	}
 
-//	@RequiresPermissions("system:productPropertyValue:view")
+	@RequiresPermissions("mall:productPropertyValue:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -52,7 +54,7 @@ public class ProductPropertyValueController extends BaseController<PrProductProp
 		return basePath + "productPropertyValue_edit";
 	}
 	
-//	@RequiresPermissions("system:productPropertyValue:create")
+	@RequiresPermissions("mall:productPropertyValue:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid PrProductPropertyValue tbproductPropertyValue, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
@@ -70,7 +72,7 @@ public class ProductPropertyValueController extends BaseController<PrProductProp
 		return "redirect:/productPropertyValue/create";
 	}
 	 
-//	@RequiresPermissions("system:productPropertyValue:edit")
+	@RequiresPermissions("mall:productPropertyValue:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid PrProductPropertyValue productPropertyValue, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,

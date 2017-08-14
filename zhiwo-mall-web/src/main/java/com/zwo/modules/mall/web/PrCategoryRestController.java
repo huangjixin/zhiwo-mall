@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
@@ -42,7 +43,8 @@ public class PrCategoryRestController extends BaseController<PrCategory> {
 	 * @return String 返回类型
 	 * @throws
 	 */
-	@RequestMapping(value = "/deleteById")
+	@RequiresPermissions("mall:prCategory:delete")
+	@RequestMapping(value = "deleteById")
 	public String deleteById(@RequestParam(value = "idstring", required = true) String ids,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
 
@@ -54,8 +56,9 @@ public class PrCategoryRestController extends BaseController<PrCategory> {
 		int result = categoryService.deleteBatch(list);
 		return result + "";
 	}
-
-	@RequestMapping(value = "/delete")
+	
+	@RequiresPermissions("mall:prCategory:delete")
+	@RequestMapping(value = "delete")
 	public String delete(@RequestParam(value = "id", required = true) String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		int result = categoryService.deleteByPrimaryKey(id);
@@ -70,6 +73,7 @@ public class PrCategoryRestController extends BaseController<PrCategory> {
 	 * @param httpServletResponse
 	 * @return
 	 */
+	@RequiresPermissions("mall:prCategory:view")
 	@RequestMapping(value = "/show/{id}")
 	public PrCategory getPrCategory(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -85,13 +89,15 @@ public class PrCategoryRestController extends BaseController<PrCategory> {
 	 * @param httpServletResponse
 	 * @return
 	 */
+	@RequiresPermissions("mall:prCategory:view")
 	@RequestMapping(value = "getTreeCategory")
 	public List<PrCategory> getTreeCategory(Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		List<PrCategory> list = categoryService.getTreeCategory(null);
 		return list;
 	}
-
+	
+	@RequiresPermissions("mall:prCategory:view")
 	@RequestMapping(value = "select")
 	public DatagridPage<PrCategory> select(@ModelAttribute PageInfo<PrCategory> pageInfo,
 			@ModelAttribute PrCategory category, Model uiModel, HttpServletRequest httpServletRequest,
@@ -111,7 +117,7 @@ public class PrCategoryRestController extends BaseController<PrCategory> {
 		return super.setPage(pageInfo);
 	}
 	
-
+	@RequiresPermissions("mall:prCategory:view")
 	@RequestMapping(value = "getPrCategoryTree")
 	public List<PrCategory> getPrCategoryTree(Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
