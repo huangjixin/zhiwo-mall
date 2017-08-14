@@ -1,12 +1,13 @@
 package com.zwo.modules.member.web;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
@@ -41,14 +42,15 @@ public class GuessQuestionRestController extends BaseController<GuessQuestion> {
 	 * @throws 
 	 */
 	@RequestMapping(value = "/deleteById")
+	@RequiresPermissions("member:guessQuestion:delete")
 	public String deleteById(@RequestParam(value = "idstring",required=true) String idstring, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
 
-		String[] ids = idstring.split(",");
-		List<String> list = new ArrayList<String>();
-		for (String idstr : ids) {
-			list.add(idstr);
+		if("".equals(idstring)){
+			return "0";
 		}
+		String[] ids = idstring.split(",");
+		List<String> list = Arrays.asList(ids);
 		int result = guessQuestionService.deleteBatch(list);
 		return result+"";
 	}
@@ -63,6 +65,7 @@ public class GuessQuestionRestController extends BaseController<GuessQuestion> {
 	 * @throws 
 	 */
 	@RequestMapping(value = "/delete")
+	@RequiresPermissions("member:guessQuestion:delete")
 	public String delete(@RequestParam(value = "id",required=true) String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
 		
@@ -79,6 +82,7 @@ public class GuessQuestionRestController extends BaseController<GuessQuestion> {
 	 * @return
 	 */
 	@RequestMapping(value = "/show/{id}")
+	@RequiresPermissions("member:guessQuestion:view")
 	public GuessQuestion getGuessQuestion(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		GuessQuestion guessQuestion = guessQuestionService.selectByPrimaryKey(id);
@@ -87,6 +91,7 @@ public class GuessQuestionRestController extends BaseController<GuessQuestion> {
 	}
 	
 	@RequestMapping(value = "/select")
+	@RequiresPermissions("member:guessQuestion:view")
 	public DatagridPage<GuessQuestion> select(@ModelAttribute PageInfo<GuessQuestion> pageInfo, @ModelAttribute GuessQuestion guessQuestion, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 

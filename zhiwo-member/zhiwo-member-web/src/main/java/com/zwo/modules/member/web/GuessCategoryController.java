@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -34,7 +35,7 @@ public class GuessCategoryController extends BaseController<GuessCategory> {
 		return basePath+"guessCategory_list";
 	}
 	
-//	@RequiresPermissions("member:guessCategory:create")
+	@RequiresPermissions("member:guessCategory:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid GuessCategory guessCategory, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -42,7 +43,7 @@ public class GuessCategoryController extends BaseController<GuessCategory> {
 		return basePath + "guessCategory_edit";
 	}
 
-//	@RequiresPermissions("member:guessCategory:view")
+	@RequiresPermissions("member:guessCategory:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -53,7 +54,7 @@ public class GuessCategoryController extends BaseController<GuessCategory> {
 		return basePath + "guessCategory_edit";
 	}
 	
-//	@RequiresPermissions("member:guessCategory:create")
+	@RequiresPermissions("member:guessCategory:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid GuessCategory guessCategory, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
@@ -73,7 +74,7 @@ public class GuessCategoryController extends BaseController<GuessCategory> {
 		return "redirect:/guessCategory/create";
 	}
 	 
-//	@RequiresPermissions("member:guessCategory:edit")
+	@RequiresPermissions("member:guessCategory:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid GuessCategory guessCategory, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,

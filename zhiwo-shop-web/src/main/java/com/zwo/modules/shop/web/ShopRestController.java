@@ -1,23 +1,20 @@
 package com.zwo.modules.shop.web;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.DatagridPage;
@@ -44,15 +41,16 @@ public class ShopRestController extends BaseController<Shop> {
 	 * @return String    返回类型 
 	 * @throws 
 	 */
+	@RequiresPermissions("shop:shop:delete")
 	@RequestMapping(value = "/deleteById")
 	public String deleteById(@RequestParam(value = "idstring",required=true) String idstring, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
 
-		String[] ids = idstring.split(",");
-		List<String> list = new ArrayList<String>();
-		for (String idstr : ids) {
-			list.add(idstr);
+		if("".equals(idstring)){
+			return "0";
 		}
+		String[] ids = idstring.split(",");
+		List<String> list = Arrays.asList(ids);
 		int result = shopService.deleteBatch(list);
 		return result+"";
 	}
@@ -66,6 +64,7 @@ public class ShopRestController extends BaseController<Shop> {
 	 * @return String    返回类型 
 	 * @throws 
 	 */
+	@RequiresPermissions("shop:shop:delete")
 	@RequestMapping(value = "/delete")
 	public String delete(@RequestParam(value = "id",required=true) String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
@@ -82,6 +81,7 @@ public class ShopRestController extends BaseController<Shop> {
 	 * @param httpServletResponse
 	 * @return
 	 */
+	@RequiresPermissions("shop:shop:view")
 	@RequestMapping(value = "/show/{id}")
 	public Shop getShop(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -90,6 +90,7 @@ public class ShopRestController extends BaseController<Shop> {
 		return tbshop;
 	}
 	
+	@RequiresPermissions("shop:shop:view")
 	@RequestMapping(value = "/select")
 	public DatagridPage<Shop> select(@ModelAttribute PageInfo<Shop> pageInfo, @ModelAttribute Shop tbshop, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {

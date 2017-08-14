@@ -32,6 +32,7 @@
     <result column="PARENTIDS" property="parentids" jdbcType="VARCHAR" />
     <result column="MEMBER_GROUP_ID" property="memberGroupId" jdbcType="VARCHAR" />
     <result column="NICKNAME" property="nickname" jdbcType="VARCHAR" />
+    <result column="OPEN_ID" property="openId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <!--

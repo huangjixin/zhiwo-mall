@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,7 @@ public class ShopCategoryController extends BaseController<ShopCategory> {
 		return basePath + "shopCategory_list";
 	}
 
+	@RequiresPermissions("shop:shopCategory:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid ShopCategory shopCategory, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -40,6 +42,7 @@ public class ShopCategoryController extends BaseController<ShopCategory> {
 		return basePath + "shopCategory_edit";
 	}
 
+	@RequiresPermissions("shop:shopCategory:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -50,7 +53,7 @@ public class ShopCategoryController extends BaseController<ShopCategory> {
 		return basePath + "shopCategory_edit";
 	}
 	
-
+	@RequiresPermissions("shop:shopCategory:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid ShopCategory shopCategory, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
@@ -70,6 +73,7 @@ public class ShopCategoryController extends BaseController<ShopCategory> {
 		return "redirect:/shopCategory/create";
 	}
 	 
+	@RequiresPermissions("shop:shopCategory:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid ShopCategory shopCategory, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,

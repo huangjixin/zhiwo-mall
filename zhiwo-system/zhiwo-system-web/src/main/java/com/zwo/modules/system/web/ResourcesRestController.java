@@ -2,11 +2,13 @@ package com.zwo.modules.system.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
@@ -18,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.DatagridPage;
 import com.github.pagehelper.PageInfo;
-import com.zwo.modules.mall.domain.PrCategory;
 import com.zwo.modules.system.domain.TbResources;
 import com.zwo.modules.system.domain.TbResourcesCriteria;
 import com.zwo.modules.system.service.ITbResourcesService;
@@ -42,15 +43,16 @@ public class ResourcesRestController extends BaseController<TbResources> {
 	 * @return String    返回类型 
 	 * @throws 
 	 */
+	@RequiresPermissions("system:resources:delete")
 	@RequestMapping(value = "/deleteById")
 	public String deleteById(@RequestParam(value = "idstring",required=true) String idstring, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
 
-		String[] ids = idstring.split(",");
-		List<String> list = new ArrayList<String>();
-		for (String idstr : ids) {
-			list.add(idstr);
+		if("".equals(idstring)){
+			return "0";
 		}
+		String[] ids = idstring.split(",");
+		List<String> list = Arrays.asList(ids);
 		int result = resourcesService.deleteBatch(list);
 		return result+"";
 	}
@@ -64,6 +66,7 @@ public class ResourcesRestController extends BaseController<TbResources> {
 	 * @return String    返回类型 
 	 * @throws 
 	 */
+	@RequiresPermissions("system:resources:delete")
 	@RequestMapping(value = "/delete")
 	public String delete(@RequestParam(value = "id",required=true) String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
@@ -80,6 +83,7 @@ public class ResourcesRestController extends BaseController<TbResources> {
 	 * @param httpServletResponse
 	 * @return
 	 */
+	@RequiresPermissions("system:resources:view")
 	@RequestMapping(value = "/show/{id}")
 	public TbResources getTbResources(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -88,6 +92,7 @@ public class ResourcesRestController extends BaseController<TbResources> {
 		return tbresources;
 	}
 	
+	@RequiresPermissions("system:resources:view")
 	@RequestMapping(value = "/select")
 	public DatagridPage<TbResources> select(@ModelAttribute PageInfo<TbResources> pageInfo, @ModelAttribute TbResources tbresources, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -106,6 +111,7 @@ public class ResourcesRestController extends BaseController<TbResources> {
 		return super.setPage(pageInfo);
 	}
 	
+	@RequiresPermissions("system:resources:view")
 	@RequestMapping(value = "getResourcesCheckboxTree")
 	public List<TbResources> getResourcesCheckboxTree(Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {

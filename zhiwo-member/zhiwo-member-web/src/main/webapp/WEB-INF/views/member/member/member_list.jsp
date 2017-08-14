@@ -103,10 +103,12 @@
 //				%> 
 				btn += '<button type="button" class="btn btn-info btn-sm" onclick="update(\''
 					+ rec.id + '\',\'member\')"><i class="fa fa-edit fa-lg"></i>&nbsp;&nbsp;编辑</button>';
+					btn += "&nbsp;&nbsp;";
 //				 <%
 //				}
 //							%> 
-			
+				btn += '<button type="button" class="btn btn-info btn-sm" onclick="update(\''
+					+ rec.id + '\',\'memberAccount\')"><i class="fa fa-jpy fa-lg"></i>&nbsp;&nbsp;查看会员账户</button>';
 			btn += '</div>';
 			return btn;
 		}

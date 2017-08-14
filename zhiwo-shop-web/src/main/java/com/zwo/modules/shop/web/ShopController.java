@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -37,7 +38,8 @@ public class ShopController extends BaseController<Shop> {
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath + "shop_list";
 	}
-
+	
+	@RequiresPermissions("shop:shop:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid ShopWithBLOBs shop, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -45,6 +47,7 @@ public class ShopController extends BaseController<Shop> {
 		return basePath + "shop_edit";
 	}
 
+	@RequiresPermissions("shop:shop:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -55,6 +58,7 @@ public class ShopController extends BaseController<Shop> {
 		return basePath + "shop_edit";
 	}
 	
+	@RequiresPermissions("shop:shop:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid ShopWithBLOBs shop, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
@@ -72,7 +76,8 @@ public class ShopController extends BaseController<Shop> {
 		}
 		return "redirect:/shop/create";
 	}
-	 
+	
+	@RequiresPermissions("shop:shop:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid ShopWithBLOBs shop, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,

@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -28,12 +29,13 @@ public class OrgController extends BaseController<TbOrg> {
 	
 	private static final String basePath = "views/system/org/";
 	
+	@RequiresPermissions("system:org:view")
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath+"org_list";
 	}
 	
-//	@RequiresPermissions("system:org:create")
+	@RequiresPermissions("system:org:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid TbOrg org, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -41,7 +43,7 @@ public class OrgController extends BaseController<TbOrg> {
 		return basePath + "org_edit";
 	}
 
-//	@RequiresPermissions("system:org:view")
+	@RequiresPermissions("system:org:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -52,7 +54,7 @@ public class OrgController extends BaseController<TbOrg> {
 		return basePath + "org_edit";
 	}
 	
-//	@RequiresPermissions("system:org:create")
+	@RequiresPermissions("system:org:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid TbOrg tborg, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
@@ -70,7 +72,7 @@ public class OrgController extends BaseController<TbOrg> {
 		return "redirect:/org/create";
 	}
 	 
-//	@RequiresPermissions("system:org:edit")
+	@RequiresPermissions("system:org:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid TbOrg org, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,

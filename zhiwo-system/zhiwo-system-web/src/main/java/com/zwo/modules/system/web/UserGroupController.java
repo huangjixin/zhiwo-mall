@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -40,12 +41,13 @@ public class UserGroupController extends BaseController<TbUserGroup> {
 	
 	private static final String basePath = "views/system/userGroup/";
 	
+	@RequiresPermissions("system:userGroup:view")
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath+"userGroup_list";
 	}
 	
-
+	@RequiresPermissions("system:userGroup:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid TbUserGroup userGroup, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -55,6 +57,7 @@ public class UserGroupController extends BaseController<TbUserGroup> {
 		return basePath + "userGroup_edit";
 	}
 
+	@RequiresPermissions("system:userGroup:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -75,7 +78,7 @@ public class UserGroupController extends BaseController<TbUserGroup> {
 		return basePath + "userGroup_edit";
 	}
 	
-
+	@RequiresPermissions("system:userGroup:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid TbUserGroup tbuserGroup,@Valid String roles, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
@@ -98,7 +101,7 @@ public class UserGroupController extends BaseController<TbUserGroup> {
 		return "redirect:/userGroup/create";
 	}
 	 
-	
+	@RequiresPermissions("system:userGroup:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid TbUserGroup userGroup,@Valid String roles, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,

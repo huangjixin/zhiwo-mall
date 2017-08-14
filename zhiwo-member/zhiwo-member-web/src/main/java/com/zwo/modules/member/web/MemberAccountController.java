@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.zwo.modules.member.domain.Member;
 import com.zwo.modules.member.domain.MemberAccount;
 import com.zwo.modules.member.service.IMemberService;
 import com.zwotech.common.web.BaseController;
@@ -40,9 +39,9 @@ public class MemberAccountController extends BaseController<MemberAccount> {
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		Member member = memberService.selectByPrimaryKey(id);
+		MemberAccount memberAccount = memberService.selectMemberAccountByMId(id);
 
-		uiModel.addAttribute("member", member);
+		uiModel.addAttribute("memberAccount", memberAccount);
 		uiModel.addAttribute("operation", "edit");
 		return basePath + "memberAccount_edit";
 	}
@@ -57,7 +56,7 @@ public class MemberAccountController extends BaseController<MemberAccount> {
 			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
 		}
 		
-		int res = this.memberService.updateByPrimaryKeySelective(memberAccount);
+		int res = memberService.updateByPrimaryKeySelective(memberAccount);
 		if(res==1){
 			redirectAttributes.addFlashAttribute("memberAccount", memberAccount);
 			redirectAttributes.addFlashAttribute("message", "保存成功！");

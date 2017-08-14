@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -36,13 +37,14 @@ public class RoleController extends BaseController<TbRole> {
 	private ITbResourcesService resourcesService;
 
 	private static final String basePath = "views/system/role/";
-
+	
+	@RequiresPermissions("system:role:view")
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath + "role_list";
 	}
 
-	// @RequiresPermissions("system:role:create")
+	@RequiresPermissions("system:role:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid TbRole role, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -51,7 +53,7 @@ public class RoleController extends BaseController<TbRole> {
 		return basePath + "role_edit";
 	}
 
-	// @RequiresPermissions("system:role:view")
+	@RequiresPermissions("system:role:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -68,7 +70,7 @@ public class RoleController extends BaseController<TbRole> {
 	}
 
 	
-	// @RequiresPermissions("system:role:create")
+	@RequiresPermissions("system:role:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid TbRole role, @Valid String resources, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes, HttpServletRequest httpServletRequest,
@@ -102,7 +104,7 @@ public class RoleController extends BaseController<TbRole> {
 	}
 	
 
-	// @RequiresPermissions("system:role:edit")
+	@RequiresPermissions("system:role:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid TbRole role, @Valid String resources, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes, HttpServletRequest httpServletRequest,

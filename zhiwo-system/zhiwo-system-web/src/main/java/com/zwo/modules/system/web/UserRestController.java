@@ -2,20 +2,19 @@ package com.zwo.modules.system.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,15 +44,14 @@ public class UserRestController extends BaseController<TbUser> {
 	 * @throws 
 	 */
 	@RequestMapping(value = "/deleteById")
-//	@RequiresPermissions("system:user:delete")
+	@RequiresPermissions("system:user:delete")
 	public String deleteById(@RequestParam(value = "idstring",required=true) String idstring, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
-
-		String[] ids = idstring.split(",");
-		List<String> list = new ArrayList<String>();
-		for (String idstr : ids) {
-			list.add(idstr);
+		if("".equals(idstring)){
+			return "0";
 		}
+		String[] ids = idstring.split(",");
+		List<String> list = Arrays.asList(ids);
 		int result = userService.deleteBatch(list);
 		return result+"";
 	}
@@ -68,7 +66,7 @@ public class UserRestController extends BaseController<TbUser> {
 	 * @throws 
 	 */
 	@RequestMapping(value = "/delete")
-//	@RequiresPermissions("system:user:delete")
+	@RequiresPermissions("system:user:delete")
 	public String delete(@RequestParam(value = "id",required=true) String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
 		
@@ -84,7 +82,7 @@ public class UserRestController extends BaseController<TbUser> {
 	 * @param httpServletResponse
 	 * @return
 	 */
-//	@RequiresPermissions("system:user:view")
+	@RequiresPermissions("system:user:view")
 	@RequestMapping(value = "/show/{id}")
 	public TbUser getTbUser(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -93,7 +91,7 @@ public class UserRestController extends BaseController<TbUser> {
 		return tbuser;
 	}
 	
-//	@RequiresPermissions("system:user:view")
+	@RequiresPermissions("system:user:view")
 	@RequestMapping(value = "/select")
 	@ResponseBody
 	public DatagridPage<TbUser> select(@ModelAttribute PageInfo<TbUser> pageInfo, @ModelAttribute TbUser tbuser, Model uiModel,

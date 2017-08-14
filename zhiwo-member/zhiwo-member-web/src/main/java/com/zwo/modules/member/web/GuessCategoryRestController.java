@@ -2,11 +2,13 @@ package com.zwo.modules.member.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
@@ -36,16 +38,16 @@ public class GuessCategoryRestController extends BaseController<GuessCategory> {
 	 * @Title: deleteById @Description: 批量删除 @param idstring @param
 	 * httpServletRequest @param httpServletResponse @return String 返回类型 @throws
 	 */
-	// @RequiresPermissions("member:guessCategory:delete")
+	@RequiresPermissions("member:guessCategory:delete")
 	@RequestMapping(value = "deleteById")
 	public String deleteById(@RequestParam(value = "idstring", required = true) String idstring,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
 
-		String[] ids = idstring.split(",");
-		List<String> list = new ArrayList<String>();
-		for (String idstr : ids) {
-			list.add(idstr);
+		if("".equals(idstring)){
+			return "0";
 		}
+		String[] ids = idstring.split(",");
+		List<String> list = Arrays.asList(ids);
 		int result = guessCategoryService.deleteBatch(list);
 		return result + "";
 	}
@@ -54,7 +56,7 @@ public class GuessCategoryRestController extends BaseController<GuessCategory> {
 	 * @Title: deleteById @Description: 批量删除 @param idstring @param
 	 * httpServletRequest @param httpServletResponse @return String 返回类型 @throws
 	 */
-	// @RequiresPermissions("member:guessCategory:delete")
+	@RequiresPermissions("member:guessCategory:delete")
 	@RequestMapping(value = "delete")
 	public String delete(@RequestParam(value = "id", required = true) String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
@@ -80,7 +82,7 @@ public class GuessCategoryRestController extends BaseController<GuessCategory> {
 		return guessCategory;
 	}
 
-	// @RequiresPermissions("member:guessCategory:view")
+	@RequiresPermissions("member:guessCategory:view")
 	@RequestMapping(value = "/select")
 	public DatagridPage<GuessCategory> select(@ModelAttribute PageInfo<GuessCategory> pageInfo,
 			@ModelAttribute GuessCategory guessCategory, Model uiModel, HttpServletRequest httpServletRequest,

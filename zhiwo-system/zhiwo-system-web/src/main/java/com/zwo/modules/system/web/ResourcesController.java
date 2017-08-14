@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -28,12 +29,13 @@ public class ResourcesController extends BaseController<TbResources> {
 	
 	private static final String basePath = "views/system/resources/";
 	
+	@RequiresPermissions("system:resources:view")
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath+"resources_list";
 	}
 	
-//	@RequiresPermissions("system:resources:create")
+	@RequiresPermissions("system:resources:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid TbResources resources, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -41,7 +43,7 @@ public class ResourcesController extends BaseController<TbResources> {
 		return basePath + "resources_edit";
 	}
 
-//	@RequiresPermissions("system:resources:view")
+	@RequiresPermissions("system:resources:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -52,7 +54,7 @@ public class ResourcesController extends BaseController<TbResources> {
 		return basePath + "resources_edit";
 	}
 	
-//	@RequiresPermissions("system:resources:create")
+	@RequiresPermissions("system:resources:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid TbResources resources, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
@@ -73,7 +75,7 @@ public class ResourcesController extends BaseController<TbResources> {
 	}
 	 
 
-//	@RequiresPermissions("system:resources:edit")
+	@RequiresPermissions("system:resources:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid TbResources resources, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,

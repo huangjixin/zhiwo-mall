@@ -68,6 +68,12 @@ public class MemberAccount implements Serializable {
      */
     @Column(name = "BALANCE")
     private Double balance;
+    
+    /**
+     * 存款金额
+     */
+    @Column(name = "DEPOSIT")
+    private Double deposit;
 
     private static final long serialVersionUID = 1L;
 
@@ -260,4 +266,12 @@ public class MemberAccount implements Serializable {
     public void setBalance(Double balance) {
         this.balance = balance;
     }
+
+	public Double getDeposit() {
+		return deposit;
+	}
+
+	public void setDeposit(Double deposit) {
+		this.deposit = deposit;
+	}
 }

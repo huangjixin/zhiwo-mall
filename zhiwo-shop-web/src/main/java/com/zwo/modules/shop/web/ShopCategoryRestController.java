@@ -2,11 +2,13 @@ package com.zwo.modules.shop.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
@@ -43,15 +45,16 @@ public class ShopCategoryRestController extends BaseController<ShopCategory> {
 	 * @return String    返回类型 
 	 * @throws 
 	 */
+	@RequiresPermissions("shop:shopCategory:delete")
 	@RequestMapping(value = "/deleteById")
 	public String deleteById(@RequestParam(value = "idstring",required=true) String idstring, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
 
-		String[] ids = idstring.split(",");
-		List<String> list = new ArrayList<String>();
-		for (String idstr : ids) {
-			list.add(idstr);
+		if("".equals(idstring)){
+			return "0";
 		}
+		String[] ids = idstring.split(",");
+		List<String> list = Arrays.asList(ids);
 		int result = shopCategoryService.deleteBatch(list);
 		return result+"";
 	}
@@ -65,6 +68,7 @@ public class ShopCategoryRestController extends BaseController<ShopCategory> {
 	 * @return String    返回类型 
 	 * @throws 
 	 */
+	@RequiresPermissions("shop:shopCategory:delete")
 	@RequestMapping(value = "/delete")
 	public String delete(@RequestParam(value = "id",required=true) String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
@@ -81,6 +85,7 @@ public class ShopCategoryRestController extends BaseController<ShopCategory> {
 	 * @param httpServletResponse
 	 * @return
 	 */
+	@RequiresPermissions("shop:shopCategory:view")
 	@RequestMapping(value = "/show/{id}")
 	public ShopCategory getShopCategory(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -89,6 +94,7 @@ public class ShopCategoryRestController extends BaseController<ShopCategory> {
 		return tbshopCategory;
 	}
 	
+	@RequiresPermissions("shop:shopCategory:view")
 	@RequestMapping(value = "/select")
 	@ResponseBody
 	public DatagridPage<ShopCategory> select(@ModelAttribute PageInfo<ShopCategory> pageInfo, @ModelAttribute ShopCategory tbshopCategory, Model uiModel,
@@ -108,6 +114,7 @@ public class ShopCategoryRestController extends BaseController<ShopCategory> {
 		return super.setPage(pageInfo);
 	}
 	
+	@RequiresPermissions("shop:shopCategory:view")
 	@RequestMapping(value = "getShopCategoryTree")
 	public List<ShopCategory> getShopCategoryTree(Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {

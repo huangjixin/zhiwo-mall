@@ -2,11 +2,13 @@ package com.zwo.modules.system.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
@@ -40,15 +42,16 @@ public class OrgRestController extends BaseController<TbOrg> {
 	 * @return String    返回类型 
 	 * @throws 
 	 */
+	@RequiresPermissions("system:org:delete")
 	@RequestMapping(value = "/deleteById")
 	public String deleteById(@RequestParam(value = "idstring",required=true) String idstring, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
 
-		String[] ids = idstring.split(",");
-		List<String> list = new ArrayList<String>();
-		for (String idstr : ids) {
-			list.add(idstr);
+		if("".equals(idstring)){
+			return "0";
 		}
+		String[] ids = idstring.split(",");
+		List<String> list = Arrays.asList(ids);
 		int result = orgService.deleteBatch(list);
 		return result+"";
 	}
@@ -62,6 +65,7 @@ public class OrgRestController extends BaseController<TbOrg> {
 	 * @return String    返回类型 
 	 * @throws 
 	 */
+	@RequiresPermissions("system:org:delete")
 	@RequestMapping(value = "/delete")
 	public String delete(@RequestParam(value = "id",required=true) String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
@@ -78,6 +82,7 @@ public class OrgRestController extends BaseController<TbOrg> {
 	 * @param httpServletResponse
 	 * @return
 	 */
+	@RequiresPermissions("system:org:view")
 	@RequestMapping(value = "/show/{id}")
 	public TbOrg getTbOrg(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -86,6 +91,7 @@ public class OrgRestController extends BaseController<TbOrg> {
 		return tborg;
 	}
 	
+	@RequiresPermissions("system:org:view")
 	@RequestMapping(value = "/select")
 	public DatagridPage<TbOrg> select(@ModelAttribute PageInfo<TbOrg> pageInfo, @ModelAttribute TbOrg tborg, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {

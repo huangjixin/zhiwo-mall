@@ -470,6 +470,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 
 	@Override
 	@Transactional(readOnly = true)
+	@Cacheable(value = "MemberAddress", key="''+#memberId")
 	public List<MemberAddress> selectByMId(String memberId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "会员查询地址开始");
@@ -599,15 +600,17 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 
 	@Override
 	@Transactional(readOnly = true)
+	@Cacheable(value = "MemberPlayAccount", key="''+#memberId")
 	public MemberPlayAccount selectMemberPlayAccountByMemberId(String memberId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "根据会员ID查询会员智慧豆账户记录,会员id为"+memberId+"开始");
-		MemberPlayAccountCriteria memberPlayAccountCriteria = new MemberPlayAccountCriteria();
-		memberPlayAccountCriteria.createCriteria().andMemberIdEqualTo(memberId);
-		List<MemberPlayAccount>list = memberPlayAccountMapper.selectByExample(memberPlayAccountCriteria);
+//		MemberPlayAccountCriteria memberPlayAccountCriteria = new MemberPlayAccountCriteria();
+//		memberPlayAccountCriteria.createCriteria().andMemberIdEqualTo(memberId);
+//		List<MemberPlayAccount>list = memberPlayAccountMapper.selectByExample(memberPlayAccountCriteria);
+		MemberPlayAccount memberPlayAccount = memberPlayAccountMapper.selectByPrimaryKey(memberId);
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "根据会员ID查询会员智慧豆账户记录,会员id为"+memberId+"结束，结果为："+list.size());
-		return list.isEmpty()?null:list.get(0);
+			logger.info(BASE_MESSAGE + "根据会员ID查询会员智慧豆账户记录,会员id为"+memberId+"结束，结果为：");
+		return memberPlayAccount;
 	}
 
 	@Override
@@ -645,6 +648,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	}
 
 	@Override
+	@Cacheable(value = "MemberAccount", key="''+#memberId")
 	public MemberAccount selectMemberAccountByMId(String memberId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "根据会员ID查询会员账户,会员id为"+memberId+"开始");
@@ -657,33 +661,35 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 			logger.info(BASE_MESSAGE + "根据会员ID查询会员账户,会员id为"+memberId+"结束，结果为："+memberAccount);
 		return memberAccount;
 	}
-
+	
 	@Override
+	@CacheEvict(value = "MemberAccount", key="''+#memberAccount.id")
 	public int updateByPrimaryKeySelective(MemberAccount memberAccount) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "修改会员账户对象为"+memberAccount+"开始");
 		int result = memberAccountMapper.updateByPrimaryKeySelective(memberAccount);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "修改会员账户，对象为"+memberAccount+"结束，结果为(1为成功，0为失败)："+result);
 		MemberAccountHis accountHis = new MemberAccountHis();
 		try {
 			BeanUtils.copyProperties(accountHis, memberAccount);
+			if (logger.isInfoEnabled())
+				logger.info(BASE_MESSAGE + "新增会员流水账户，对象为"+accountHis+"开始");
+			accountHis.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
+			memberAccountHisMapper.insertSelective(accountHis);
+			if (logger.isInfoEnabled())
+				logger.info(BASE_MESSAGE + "新增会员流水账户，对象为"+accountHis+"结束，结果为："+result);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
 		
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "修改会员账户，对象为"+memberAccount+"结束，结果为："+result);
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "新增会员流水账户，对象为"+accountHis+"开始");
-		accountHis.setId(null);
-		memberAccountHisMapper.insertSelective(accountHis);
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "新增会员流水账户，对象为"+accountHis+"结束，结果为："+result);
 		return result;
 	}
 
 	@Override
+	@CacheEvict(value = "MemberAccount", key="''+#memberAccount.id")
 	public int updateByPrimaryKeySelective(MemberPlayAccount playAccount) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "修改会员账户对象为"+playAccount+"开始");
@@ -695,7 +701,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 			BeanUtils.copyProperties(accountHis, playAccount);
 			if (logger.isInfoEnabled())
 				logger.info(BASE_MESSAGE + "新增会员流水账户，对象为"+accountHis+"开始");
-			accountHis.setId(null);
+			accountHis.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
 			memberPlayHisAccountMapper.insertSelective(accountHis);
 			if (logger.isInfoEnabled())
 				logger.info(BASE_MESSAGE + "新增会员流水账户，对象为"+accountHis+"结束，结果为："+result);

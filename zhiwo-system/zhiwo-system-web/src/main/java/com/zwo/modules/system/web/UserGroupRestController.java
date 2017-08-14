@@ -2,6 +2,7 @@ package com.zwo.modules.system.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,15 +49,16 @@ public class UserGroupRestController extends BaseController<TbUserGroup> {
 	 * @return String    返回类型 
 	 * @throws 
 	 */
+	@RequiresPermissions("system:userGroup:delete")
 	@RequestMapping(value = "/deleteById")
 	public String deleteById(@RequestParam(value = "idstring",required=true) String idstring, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
 
-		String[] ids = idstring.split(",");
-		List<String> list = new ArrayList<String>();
-		for (String idstr : ids) {
-			list.add(idstr);
+		if("".equals(idstring)){
+			return "0";
 		}
+		String[] ids = idstring.split(",");
+		List<String> list = Arrays.asList(ids);
 		int result = userGroupService.deleteBatch(list);
 		return result+"";
 	}
@@ -69,6 +72,7 @@ public class UserGroupRestController extends BaseController<TbUserGroup> {
 	 * @return String    返回类型 
 	 * @throws 
 	 */
+	@RequiresPermissions("system:userGroup:delete")
 	@RequestMapping(value = "/delete")
 	public String delete(@RequestParam(value = "id",required=true) String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
@@ -85,6 +89,7 @@ public class UserGroupRestController extends BaseController<TbUserGroup> {
 	 * @param httpServletResponse
 	 * @return
 	 */
+	@RequiresPermissions("system:userGroup:view")
 	@RequestMapping(value = "/show/{id}")
 	public TbUserGroup getTbUserGroup(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -93,6 +98,7 @@ public class UserGroupRestController extends BaseController<TbUserGroup> {
 		return tbuserGroup;
 	}
 	
+	@RequiresPermissions("system:userGroup:view")
 	@RequestMapping(value = "/select")
 	public DatagridPage<TbUserGroup> select(@ModelAttribute PageInfo<TbUserGroup> pageInfo, @ModelAttribute TbUserGroup tbuserGroup, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {

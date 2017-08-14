@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -28,13 +29,13 @@ public class UserController extends BaseController<TbUser> {
 	
 	private static final String basePath = "views/system/user/";
 	
-//	@RequiresPermissions("system:user:view")
+	@RequiresPermissions("system:user:view")
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath+"user_list";
 	}
 	
-//	@RequiresPermissions("system:user:create")
+	@RequiresPermissions("system:user:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid TbUser user, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -42,7 +43,7 @@ public class UserController extends BaseController<TbUser> {
 		return basePath + "user_edit";
 	}
 
-//	@RequiresPermissions("system:user:view")
+	@RequiresPermissions("system:user:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -53,7 +54,7 @@ public class UserController extends BaseController<TbUser> {
 		return basePath + "user_edit";
 	}
 	
-//	@RequiresPermissions("system:user:create")
+	@RequiresPermissions("system:user:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid TbUser user, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
@@ -73,7 +74,7 @@ public class UserController extends BaseController<TbUser> {
 		return "redirect:/user/create";
 	}
 	 
-//	@RequiresPermissions("system:user:edit")
+	@RequiresPermissions("system:user:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid TbUser user, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,

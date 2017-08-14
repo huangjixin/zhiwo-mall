@@ -164,6 +164,12 @@ public class Member implements Serializable {
      */
     @Column(name = "NICKNAME")
     private String nickname;
+    
+    /**
+     * 微信的Open_id
+     */
+    @Column(name = "OPEN_ID")
+    private String openId;
 
     private static final long serialVersionUID = 1L;
 
@@ -644,4 +650,12 @@ public class Member implements Serializable {
     public void setNickname(String nickname) {
         this.nickname = nickname == null ? null : nickname.trim();
     }
+
+	public String getOpenId() {
+		return openId;
+	}
+
+	public void setOpenId(String openId) {
+		this.openId = openId;
+	}
 }

@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -33,7 +34,7 @@ public class GuessQuestionController extends BaseController<GuessQuestion> {
 		return basePath+"guessQuestion_list";
 	}
 
-//	@RequiresPermissions("member:guessQuestion:create")
+	@RequiresPermissions("member:guessQuestion:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid GuessQuestion guessQuestion, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -41,7 +42,7 @@ public class GuessQuestionController extends BaseController<GuessQuestion> {
 		return basePath + "guessQuestion_edit";
 	}
 
-//	@RequiresPermissions("member:guessQuestion:view")
+	@RequiresPermissions("member:guessQuestion:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -52,7 +53,7 @@ public class GuessQuestionController extends BaseController<GuessQuestion> {
 		return basePath + "guessQuestion_edit";
 	}
 	
-//	@RequiresPermissions("member:guessQuestion:create")
+	@RequiresPermissions("member:guessQuestion:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid GuessQuestion guessQuestion, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
@@ -72,7 +73,7 @@ public class GuessQuestionController extends BaseController<GuessQuestion> {
 		return "redirect:/guessQuestion/create";
 	}
 	 
-//	@RequiresPermissions("member:guessQuestion:edit")
+	@RequiresPermissions("member:guessQuestion:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid GuessQuestion guessQuestion, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,

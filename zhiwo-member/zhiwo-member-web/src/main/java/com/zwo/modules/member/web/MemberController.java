@@ -35,7 +35,7 @@ public class MemberController extends BaseController<Member> {
 		return basePath+"member_list";
 	}
 	
-//	@RequiresPermissions("member:member:create")
+	@RequiresPermissions("member:member:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid Member member, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -43,7 +43,7 @@ public class MemberController extends BaseController<Member> {
 		return basePath + "member_edit";
 	}
 
-//	@RequiresPermissions("member:member:view")
+	@RequiresPermissions("member:member:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -54,7 +54,7 @@ public class MemberController extends BaseController<Member> {
 		return basePath + "member_edit";
 	}
 	
-//	@RequiresPermissions("member:member:create")
+	@RequiresPermissions("member:member:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid Member member, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
@@ -74,7 +74,7 @@ public class MemberController extends BaseController<Member> {
 		return "redirect:/member/create";
 	}
 	 
-//	@RequiresPermissions("member:member:edit")
+	@RequiresPermissions("member:member:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid Member member, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
