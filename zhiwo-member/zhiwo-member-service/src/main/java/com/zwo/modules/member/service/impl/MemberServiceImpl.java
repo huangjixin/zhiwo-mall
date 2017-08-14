@@ -43,6 +43,7 @@ import com.zwo.modules.member.domain.MemberPlayAccountCriteria;
 import com.zwo.modules.member.domain.MemberPlayHisAccount;
 import com.zwo.modules.member.domain.MemberPlayHisAccountCriteria;
 import com.zwo.modules.member.service.IMemberService;
+import com.zwotech.common.utils.PasswordHelper;
 import com.zwotech.modules.core.service.impl.BaseService;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -201,7 +202,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@CachePut(value = "Member", key = "#record.id")
+	//@CachePut(value = "Member", key = "#record.id")
 	public int insert(Member record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -211,6 +212,10 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		if ("".equals(record.getParentId())) {
 			record.setParentId(null);
 		}
+		// 逻辑操作
+				if (record.getPassword() != null) {
+					record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
+				}		
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
@@ -230,7 +235,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	 */
 
 	@Override
-	@CachePut(value = "Member", key = "#record.id")
+	//@CachePut(value = "Member", key = "#record.id")
 	public int insertSelective(Member record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -243,6 +248,10 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
+		}
+		// 逻辑操作
+		if (record.getPassword() != null) {
+			record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
 		}
 		int result = super.insertSelective(record);
 		if (logger.isInfoEnabled())
@@ -330,7 +339,10 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
 		if ("".equals(record.getParentId())) {
 			record.setParentId(null);
-		}								
+		}
+		if (record.getPassword() != null) {
+			record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
+		}
 		//逻辑操作		
 		int result = super.updateByExample(record, example);
 		//日志记录
@@ -357,6 +369,9 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		if ("".equals(record.getParentId())) {
 			record.setParentId(null);
 		}
+		if (record.getPassword() != null) {
+			record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
+		}
 		// 逻辑操作
 		int result = super.updateByPrimaryKeySelective(record);
 		if (logger.isInfoEnabled())
@@ -381,6 +396,9 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为：" + record.toString());
 		if ("".equals(record.getParentId())) {
 			record.setParentId(null);
+		}
+		if (record.getPassword() != null) {
+			record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
 		}
 		// 逻辑操作
 		int result = super.updateByPrimaryKey(record);

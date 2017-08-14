@@ -4,7 +4,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>会员编辑</title>
+<title>会员智惠豆</title>
 <%@ include file="/WEB-INF/include/easyui-css.jsp"%>
 <%@ include file="/WEB-INF/include/easyui-js.jsp"%>
 <script type="text/javascript" src="${ctx}/js/jquery-easyui/ajaxfileupload.js"></script>
@@ -97,7 +97,6 @@
 			<label  class="col-sm-1 control-label"></label>
 			<div class="col-sm-4">
 				<%@ include file="/WEB-INF/include/easyui-buttonForm.jsp"%>
-				
 			</div>
 		</div>
 	</form>
