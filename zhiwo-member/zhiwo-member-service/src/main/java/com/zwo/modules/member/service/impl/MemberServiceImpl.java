@@ -600,7 +600,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 
 	@Override
 	@Transactional(readOnly = true)
-	@Cacheable(value = "MemberPlayAccount", key="#root.methodName+#memberId")
+	@Cacheable(value = "MemberPlayAccount", key="#root.method.name+#memberId")
 	public MemberPlayAccount selectMemberPlayAccountByMemberId(String memberId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "根据会员ID查询会员智慧豆账户记录,会员id为"+memberId+"开始");
@@ -663,7 +663,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	}
 	
 	@Override
-	@CacheEvict(value = "MemberAccount", key="#root.methodName+#memberAccount.id")
+	@CacheEvict(value = "MemberAccount", key="#root.method.name+#memberAccount.id")
 	public int updateMemberAccountByPrimaryKeySelective(MemberAccount memberAccount) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "修改会员账户对象为"+memberAccount+"开始");
@@ -689,7 +689,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	}
 
 	@Override
-	@CacheEvict(value = "MemberAccount", key="#root.methodName+#memberAccount.id")
+	@CacheEvict(value = "MemberAccount", key="#root.method.name+#memberAccount.id")
 	public int updateMemberPlayAccountByPrimaryKeySelective(MemberPlayAccount playAccount) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "修改会员账户对象为"+playAccount+"开始");
