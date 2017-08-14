@@ -475,19 +475,19 @@
   
   <select id="selectByUsernameOrMPhone" resultMap="BaseResultMap" parameterType="java.lang.String">
   	SELECT 
-    	resources.*
-	FROM
-    tb_user user
-        LEFT JOIN
-    tb_user_group usergroup ON user.USERGROUP_ID = usergroup.id
-        LEFT JOIN
-    tb_user_group_role ugr ON usergroup.id = ugr.USERGROUP_ID
-        LEFT JOIN
-    tb_role role ON ugr.ROLE_ID = role.id
-        LEFT JOIN
-    tb_role_resources rr ON rr.ROLE_ID = role.id
-        LEFT JOIN
-    tb_resources resources ON rr.RESOURCES_ID = resources.id
+    resources.*
+FROM
+    tb_resources resources
+        INNER JOIN
+    tb_role_resources rr ON rr.RESOURCES_ID = resources.id
+        INNER JOIN
+    tb_role role ON rr.ROLE_ID = role.id
+        INNER JOIN
+    tb_user_group_role ugr ON ugr.ROLE_ID = role.id
+        INNER JOIN
+    tb_user_group usergroup ON usergroup.id = ugr.USERGROUP_ID
+        INNER JOIN
+    tb_user user ON user.USERGROUP_ID = usergroup.id
     
     where user.USERNAME=#{usernameOrMPhone} or user.MOBIL_PHONE=#{usernameOrMPhone}
     	   or user.EMAIL=#{usernameOrMPhone}
@@ -496,40 +496,37 @@
   	SELECT 
     	resources.*
 	FROM
-    tb_user_group usergroup
-        LEFT JOIN
-    tb_user_group_role ugr ON usergroup.id = ugr.USERGROUP_ID
-        LEFT JOIN
-    tb_role role ON ugr.ROLE_ID = role.id
-        LEFT JOIN
-    tb_role_resources rr ON rr.ROLE_ID = role.id
-        LEFT JOIN
-    tb_resources resources ON rr.RESOURCES_ID = resources.id
-    
+    tb_resources resources
+        INNER JOIN
+    tb_role_resources rr ON rr.RESOURCES_ID = resources.id
+        INNER JOIN
+    tb_role role ON rr.ROLE_ID = role.id
+        INNER JOIN
+    tb_user_group_role ugr ON ugr.ROLE_ID = role.id
+        INNER JOIN
+    tb_user_group usergroup ON usergroup.id = ugr.USERGROUP_ID
     where usergroup.NAME=#{groupname}
   </select>
   <select id="selectByRolename" resultMap="BaseResultMap" parameterType="java.lang.String">
   	SELECT 
-    	resources.*
+	    resources.*
 	FROM
-    tb_role role
-        LEFT JOIN
-    tb_role_resources rr ON rr.ROLE_ID = role.id
-        LEFT JOIN
-    tb_resources resources ON rr.RESOURCES_ID = resources.id
-    
+	    tb_resources resources
+	        LEFT JOIN
+	    tb_role_resources rr ON rr.RESOURCES_ID = resources.id
+	        LEFT JOIN
+	    tb_role role ON rr.ROLE_ID = role.id
     where role.NAME=#{rolename}
   </select>
   <select id="selectByRoleId" resultMap="BaseResultMap" parameterType="java.lang.String">
   	SELECT 
-    	resources.*
+	    resources.*
 	FROM
-    tb_role role
-        LEFT JOIN
-    tb_role_resources rr ON rr.ROLE_ID = role.id
-        LEFT JOIN
-    tb_resources resources ON rr.RESOURCES_ID = resources.id
-    
+	    tb_resources resources
+	        LEFT JOIN
+	    tb_role_resources rr ON rr.RESOURCES_ID = resources.id
+	        LEFT JOIN
+	    tb_role role ON rr.ROLE_ID = role.id
     where role.id=#{roleId}
   </select>
 </mapper>

@@ -11,7 +11,7 @@
 	src="${ctx}/js/jquery-easyui/ajaxfileupload.js"></script>
 </head>
 <body>
-	<form class="form-horizontal" role="form"
+	<form class="form-horizontal" role="form" onSubmit="onSubmitHandler();"
 		<c:if test="${operation=='edit'}">
  action="${ctx}/role/update"
 		</c:if>
@@ -46,31 +46,6 @@
                                     lines: true,
                                     singleSelect : false,
                                     fitColumns:true,
-                                    onClickRow: function (item) {
-                                    	var resString = $('#resourcesString').val();
-                                        var resArray = resString.split(',');
-                                        var id = item.id;
-                                        if (!Array.indexOf) {  
-                                            Array.prototype.indexOf = function (obj) {  
-                                                for (var i = 0; i < this.length; i++) {  
-                                                    if (this[i] == obj) {  
-                                                        return i;  
-                                                    }  
-                                                }  
-                                                return -1;  
-                                            }  
-                                        }  
-                                        var index = resArray.indexOf(id);
-                                        if(index !=-1){
-                                        	resArray.splice(index,1);
-                                            resString  =  JSON.stringify(resArray); 
-                                        	$('#resourcesString').val(resString);
-                                        }
-                                        alert(resString);
-                                    },
-                                    onUnselect: function (item) {
-                                    	
-                                    },
                                     onLoadSuccess:function(row,data){
                                     	$('#treegrid').treegrid('collapseAll');
                                     	var resString = ${resources}+'';
@@ -133,6 +108,16 @@
 				backToList('role');
 			});
 		});
+		
+		function onSubmitHandler(){
+			var rows = $('#treegrid').treegrid('getSelections');
+			var list = [];
+			for(var i=0;i<rows.length;i++){
+				list[i]=rows[i].id;
+			}
+			var resString = list.join();
+			$('#resourcesString').val(resString);
+		}
 		//格式化类型
 		function formatType(value, rec) {
 			var result = "菜单";
