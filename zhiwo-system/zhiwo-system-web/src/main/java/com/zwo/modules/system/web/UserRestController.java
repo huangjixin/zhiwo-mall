@@ -1,7 +1,6 @@
 package com.zwo.modules.system.web;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
@@ -43,6 +43,7 @@ public class UserRestController extends BaseController<TbUser> {
 	 * @return String    返回类型 
 	 * @throws 
 	 */
+	@RequiresRoles("adminRole")
 	@RequestMapping(value = "/deleteById")
 	@RequiresPermissions("system:user:delete")
 	public String deleteById(@RequestParam(value = "idstring",required=true) String idstring, HttpServletRequest httpServletRequest,
@@ -65,6 +66,7 @@ public class UserRestController extends BaseController<TbUser> {
 	 * @return String    返回类型 
 	 * @throws 
 	 */
+	@RequiresRoles("adminRole")
 	@RequestMapping(value = "/delete")
 	@RequiresPermissions("system:user:delete")
 	public String delete(@RequestParam(value = "id",required=true) String id, HttpServletRequest httpServletRequest,

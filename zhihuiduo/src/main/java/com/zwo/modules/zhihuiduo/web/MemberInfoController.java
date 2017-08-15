@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
@@ -51,7 +51,7 @@ public class MemberInfoController extends BaseController<TbUser> {
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = {"info"})
-//	@RequiresPermissions("system:user:view")
+	@RequiresAuthentication
 	public String getMemInfo(Model uiModel,HttpServletRequest httpServletRequest) {
 		String memberInfoString = null; // 会员的结果存储为JSON字符串
 		MemberInfo memberInfo = null;   //会员信息。
@@ -79,7 +79,7 @@ public class MemberInfoController extends BaseController<TbUser> {
 							memberAddresses = (List<MemberAddress>) valueOperations.get(memberAddresskey);
 							// 如果会员的地址没有，则查询数据库，加入缓存。
 							if(memberAddresses ==null){
-								memberAddresses = memberService.selectByMId(member.getId());
+								memberAddresses = memberService.selectMemberAddressByMId(member.getId());
 								valueOperations.set(memberAddresskey, memberAddresses);
 							}
 							
@@ -114,7 +114,7 @@ public class MemberInfoController extends BaseController<TbUser> {
 				}else{
 					memberInfo = new MemberInfo();
 					//会员的地址，账户
-					memberAddresses = memberService.selectByMId(member.getId());
+					memberAddresses = memberService.selectMemberAddressByMId(member.getId());
 					memberInfo.setMemberAddress(memberAddresses);
 					memberAccount = memberService.selectMemberAccountByMId(member.getId());
 					memberInfo.setMemberAccount(memberAccount);
@@ -135,7 +135,7 @@ public class MemberInfoController extends BaseController<TbUser> {
 		return basePath+"info";
 	}
 	
-//	@RequiresPermissions("system:user:create")
+	@RequiresAuthentication 
 	@RequestMapping(value = {"address"})
 	@ResponseBody
 	public List<MemberAddress> selectAddress(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -143,7 +143,7 @@ public class MemberInfoController extends BaseController<TbUser> {
 		if(subject!=null){
 			Member member = (Member) subject.getSession().getAttribute("member");
 			if(member!=null){
-				List<MemberAddress> list = memberService.selectByMId(member.getId());
+				List<MemberAddress> list = memberService.selectMemberAddressByMId(member.getId());
 				return list;
 			}
 		}else{

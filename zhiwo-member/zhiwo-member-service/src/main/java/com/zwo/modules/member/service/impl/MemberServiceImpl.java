@@ -470,7 +470,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 
 	@Override
 	@Transactional(readOnly = true)
-	@Cacheable(value = "MemberAddress", key="''+#memberId")
+	@Cacheable(value = "MemberAddress", key="#root.method.name+#memberId")
 	public List<MemberAddress> selectMemberAddressByMId(String memberId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "会员查询地址开始");

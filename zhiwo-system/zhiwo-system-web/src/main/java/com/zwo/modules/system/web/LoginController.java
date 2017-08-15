@@ -25,13 +25,12 @@ import com.zwotech.common.web.BaseController;
  * 登录控制器。
  */
 @Controller
-@RequestMapping(value = "login")
 @Lazy(true)
 public class LoginController extends BaseController<TbUser> {
 	
 	private static final String basePath = "views/login/";
 	
-	@RequestMapping(value = {"","toLogin"},method=RequestMethod.GET)
+	@RequestMapping(value = {"login"},method=RequestMethod.GET)
 	public String login(HttpServletRequest httpServletRequest) {
 		return basePath+"login";
 	}

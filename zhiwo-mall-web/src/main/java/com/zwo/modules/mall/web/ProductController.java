@@ -4,7 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductWithBLOBs;
 import com.zwo.modules.mall.service.IPrductService;
+import com.zwo.modules.system.domain.TbUser;
 import com.zwotech.common.web.BaseController;
 
 @Controller
@@ -68,6 +71,15 @@ public class ProductController extends BaseController<PrProduct> {
 		if("".equals(product.getCategoryId())){
 			product.setCategoryId(null);
 		}
+		
+		Subject currentUser = SecurityUtils.getSubject(); 
+		if(currentUser!=null){
+			TbUser user =  (TbUser) currentUser.getSession().getAttribute("user");
+			if(user!=null){
+				product.setUpdater(user.getUsername());
+				product.setUserId(user.getId());
+			}
+		}
 		int res = productService.insertSelective(product);
 		if(res==1){
 			redirectAttributes.addFlashAttribute("product", product);
@@ -85,6 +97,14 @@ public class ProductController extends BaseController<PrProduct> {
 		if (result.hasErrors()) {
 			redirectAttributes.addFlashAttribute("product", product);
 			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
+		}
+		Subject currentUser = SecurityUtils.getSubject(); 
+		if(currentUser!=null){
+			TbUser user =  (TbUser) currentUser.getSession().getAttribute("user");
+			if(user!=null){
+				product.setUpdater(user.getUsername());
+				product.setUserId(user.getId());
+			}
 		}
 		
 		int res = this.productService.updateByPrimaryKeySelective(product);
