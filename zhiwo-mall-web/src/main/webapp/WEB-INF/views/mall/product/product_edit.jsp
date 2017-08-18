@@ -146,7 +146,8 @@
         <div class="form-group">
                <label for="propertySetting" class="col-sm-2 control-label">属性设置</label>
                <div class="col-sm-4">
-                    <select id="propertySetting" class="easyui-combobox" name="propertySetting" style="width:200px;">   
+               		<input id="propertySetting" class="easyui-combobox" name="propertySetting"  style="width:200px;"  data-options="valueField:'id',textField:'name',url:'${ctx}/productProperty/listAll'" editable="false" /> 
+                    <!--<select id="propertySetting" class="easyui-combobox" name="propertySetting" style="width:200px;">   
                          				<option value="style">款式</option> 
                                         <option value="specification">规格</option>
                                         <option value="size">尺寸</option>
@@ -154,7 +155,7 @@
                                         <option value="capacity">容量</option>
                                         <option value="combo">套餐</option>
                                         <option value="other">其它</option>
-                     </select>
+                     </select>-->
                      &nbsp;&nbsp;
                      <button type="button" class="btn btn-success fileinput-button" data-toggle="modal" data-target="#propertyModal">
                         <i class="fa fa-plus"></i>&nbsp;&nbsp;新增
@@ -276,13 +277,47 @@
 		//保存属性数组
 		var propertyArray = [];
 		//保存属性值数组
-		var propertyValueArray = [];
+		//var propertyValueArray = [];
+		var pVauleJsonArray = [];
 		//保存属性值组合价数组
 		var propertyValuePackPriceArray = [];
 		// 插入属性值。
 		function appendProperty(){
 			var protext = $('#propertySetting').combobox('getText');
+			if(''==protext){
+				return;
+			}
 			var proValue = $('#propertySetting').combobox('getValue');
+
+			var proValueIndex = $.inArray(proValue,propertyArray);
+			if(proValueIndex==-1){
+				propertyArray.push(proValue);
+			}
+			var propertyValueJson = {};
+			var date = new Date(); 
+			propertyValueJson.propertyId = proValue;
+			propertyValueJson.name = $('#propertyValue').val();
+			propertyValueJson.id   = date.getTime()+"";
+			
+			//propertyValueArray.push(propertyValueJson);
+			var object = {};
+			object.id = proValue;
+			object.name = protext;
+			//
+			var index = searchElement(pVauleJsonArray,proValue);
+			if(index==-1){
+				var propertyValueArray = [];
+				propertyValueArray.push(propertyValueJson);
+				object.propertyValueArray = propertyValueArray;
+				pVauleJsonArray.push(object);
+			}else{
+				var obj = pVauleJsonArray[index];
+				var propertyValueArray = obj.propertyValueArray;
+				propertyValueArray.push(propertyValueJson);
+				pVauleJsonArray.splice(index,1,obj);
+			}
+			
+			//界面添加控件
 			var pro = $('#propertySetting').combobox('getValue');
 			pro+='ProValueDiv';
 			var proDivs = $('#proValueDiv').find($('#'+pro));
@@ -299,10 +334,55 @@
 				$(proDiv).append(labelCheckBox);
 			}
 			
+			if(pVauleJsonArray.length>3){
+				return;
+			}
+			
+			$('#proValuePriceDiv').empty();
+			
+			for(var i=0;i<pVauleJsonArray.length;i++){
+				var o1 = pVauleJsonArray[i];
+				var array1 = o1.propertyValueArray;
+				for(var k=0;k<array1.length;k++){
+					var pVJson1 = array1[k];
+					var toBeAppendPara = '<div class="col-sm-12" ><label  class="checkbox-inline">'+o1.name+'：'+pVJson1.name+'</label><input type="text" class="form-control" placeholder="'+pVJson1.name+'组合拼团价(元)"><input type="text" class="form-control" placeholder="'+pVJson1.name+'组合单独购买价(元)"></div>';
+					if(pVauleJsonArray.length==1){
+						$('#proValuePriceDiv').append(toBeAppendPara);
+					}	
+					for(var j=1;j<pVauleJsonArray.length;j++){
+						$('#proValuePriceDiv').empty();
+						var o2 = pVauleJsonArray[j];
+						var array2 = o2.propertyValueArray;
+						for(var p=0;p<array2.length;p++){
+							var pVJson2 = array2[p];
+							
+							var toBeAppendPara = '<div class="col-sm-12" ><label  class="checkbox-inline">'+o1.name+'：'+pVJson1.name+'</label><label class="checkbox-inline">'+o2.name+'：'+pVJson2.name+'</label><input type="text" class="form-control" placeholder="'+pVJson1.name+'+'+pVJson2.name+'组合拼团价(元)"><input type="text" class="form-control" placeholder="'+pVJson1.name+'+'+pVJson2.name+'组合单独购买价(元)"></div>';
+							if(pVauleJsonArray.length==2){
+								$('#proValuePriceDiv').append(toBeAppendPara);
+							}
+							
+						}
+					}
+				}
+			}
+			
 			//propertyValueGroup = '<div class="col-sm-9" id="specificationProValueDiv"><label class="checkbox-inline">规格</label><label class="checkbox-inline"><input type="checkbox" id="inlineCheckbox1" value="option1"> 选项1</label><label class="checkbox-inline"><input type="checkbox" id="inlineCheckbox2" value="option1"> 选项2</label><label class="checkbox-inline"><input type="checkbox" id="inlineCheckbox3" value="option1"> 选项3</label></div>';
-//			$('#proValueDiv').append(propertyValueGroup);
+			//$('#proValueDiv').append(propertyValueGroup);
 		}
 		
+		//查找属性值对象。
+		function searchElement(array,value){
+			var flag = -1;
+			for(var i=0;i<array.length;i++){
+				var obj = array[i];
+				if(obj.id == value){
+					flag=i;
+					break;
+				}
+			}
+			
+			return flag;
+		}
 		
 		//上传到服务器。
 		function fileUploadToServer() {

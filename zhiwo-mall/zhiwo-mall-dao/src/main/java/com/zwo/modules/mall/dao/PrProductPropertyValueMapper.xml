@@ -12,6 +12,7 @@
     <result column="PROPERTY_ID" property="propertyId" jdbcType="VARCHAR" />
     <result column="IMAGE_ID" property="imageId" jdbcType="VARCHAR" />
     <result column="DISABLE" property="disable" jdbcType="BIT" />
+    <result column="PRODUCT_ID" property="productId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <!--
@@ -81,7 +82,7 @@
     <!--
       WARNING - @mbg.generated
     -->
-    ID, NAME, CODE, DESCRIPTION, PROPERTY_ID, IMAGE_ID, DISABLE
+    ID, NAME, CODE, DESCRIPTION, PROPERTY_ID, IMAGE_ID, DISABLE,PRODUCT_ID
   </sql>
  
 </mapper>

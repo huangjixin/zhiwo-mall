@@ -27,7 +27,7 @@ public class ProductPropertyController extends BaseController<PrProductProperty>
 	@Lazy(true)
 	private IPrProductPropertyService productPropertyService;
 	
-	private static final String basePath = "views/mall/productProperty/";
+	private static final String basePath = "views/mall/product/";
 	
 	@RequiresPermissions("mall:productProperty:view")
 	@RequestMapping(value = { "", "list" })
@@ -56,17 +56,19 @@ public class ProductPropertyController extends BaseController<PrProductProperty>
 	
 	@RequiresPermissions("mall:productProperty:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public String create(@Valid PrProductProperty tbproductProperty, BindingResult result, Model uiModel,
+	public String create(@Valid PrProductProperty productProperty, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-
+			redirectAttributes.addFlashAttribute("productProperty", productProperty);
+			redirectAttributes.addFlashAttribute("message", "数据绑定有误！");
+			return "redirect:/productProperty/create";
 		}
 		
-		int res = productPropertyService.insertSelective(tbproductProperty);
+		int res = productPropertyService.insertSelective(productProperty);
 		if(res==1){
-			redirectAttributes.addFlashAttribute("productProperty", tbproductProperty);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+			redirectAttributes.addFlashAttribute("productProperty", productProperty);
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
 		
 		return "redirect:/productProperty/create";
@@ -78,16 +80,17 @@ public class ProductPropertyController extends BaseController<PrProductProperty>
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-			
+			redirectAttributes.addFlashAttribute("productProperty", productProperty);
+			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
 		}
+		
 		
 		int res = this.productPropertyService.updateByPrimaryKeySelective(productProperty);
 		if(res==1){
 			redirectAttributes.addFlashAttribute("productProperty", productProperty);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
-		uiModel.addAttribute("productProperty", productProperty);
-		uiModel.addAttribute("operation", "edit");
-		return basePath + "productProperty_edit";
+		redirectAttributes.addAttribute("operation", "edit");
+		return "redirect:/productProperty/edit/"+productProperty.getId();
 	}
 }

@@ -22,18 +22,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.DatagridPage;
 import com.github.pagehelper.PageInfo;
-import com.zwo.modules.mall.domain.PrProductPropertyValue;
-import com.zwo.modules.mall.domain.PrProductPropertyValueCriteria;
-import com.zwo.modules.mall.service.IPrProductPropertyValueService;
+import com.zwo.modules.mall.domain.PrProductProperty;
+import com.zwo.modules.mall.domain.PrProductPropertyCriteria;
+import com.zwo.modules.mall.service.IPrProductPropertyService;
 import com.zwotech.common.web.BaseController;
 
 @RestController
-@RequestMapping("productPropertyValue")
+@RequestMapping("productProperty")
 @Lazy(true)
-public class ProductPropertyValueRestController extends BaseController<PrProductPropertyValue> {
+public class ProductPropertyRestController extends BaseController<PrProductProperty> {
 	@Autowired
 	@Lazy(true)
-	private IPrProductPropertyValueService productPropertyValueService;
+	private IPrProductPropertyService productPropertyService;
 	
 	/** 
 	 * @Title: deleteById 
@@ -44,7 +44,7 @@ public class ProductPropertyValueRestController extends BaseController<PrProduct
 	 * @return String    返回类型 
 	 * @throws 
 	 */
-	@RequiresPermissions("mall:productPropertyValue:delete")
+	@RequiresPermissions("mall:productProperty:delete")
 	@RequestMapping(value = "deleteById")
 	public String deleteById(@RequestParam(value = "idstring",required=true) String idstring, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
@@ -54,7 +54,7 @@ public class ProductPropertyValueRestController extends BaseController<PrProduct
 		for (String idstr : ids) {
 			list.add(idstr);
 		}
-		int result = productPropertyValueService.deleteBatch(list);
+		int result = productPropertyService.deleteBatch(list);
 		return result+"";
 	}
 	
@@ -67,12 +67,12 @@ public class ProductPropertyValueRestController extends BaseController<PrProduct
 	 * @return String    返回类型 
 	 * @throws 
 	 */
-	@RequiresPermissions("mall:productPropertyValue:delete")
+	@RequiresPermissions("mall:productProperty:delete")
 	@RequestMapping(value = "delete")
 	public String delete(@RequestParam(value = "id",required=true) String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
 		
-		int result = productPropertyValueService.deleteByPrimaryKey(id);
+		int result = productPropertyService.deleteByPrimaryKey(id);
 		return result+"";
 	}
 	 
@@ -84,32 +84,41 @@ public class ProductPropertyValueRestController extends BaseController<PrProduct
 	 * @param httpServletResponse
 	 * @return
 	 */
-	@RequiresPermissions("mall:productPropertyValue:view")
+	@RequiresPermissions("mall:productProperty:view")
 	@RequestMapping(value = "/show/{id}")
-	public PrProductPropertyValue getPrProductPropertyValue(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
+	public PrProductProperty getPrProductProperty(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		PrProductPropertyValue product = productPropertyValueService.selectByPrimaryKey(id);
+		PrProductProperty product = productPropertyService.selectByPrimaryKey(id);
 		
 		return product;
 	}
 	
-	@RequiresPermissions("mall:productPropertyValue:view")
+	@RequiresPermissions("mall:productProperty:view")
 	@RequestMapping(value = "/select")
-	public DatagridPage<PrProductPropertyValue> select(@ModelAttribute PageInfo<PrProductPropertyValue> pageInfo, @ModelAttribute PrProductPropertyValue product, Model uiModel,
+	public DatagridPage<PrProductProperty> select(@ModelAttribute PageInfo<PrProductProperty> pageInfo, @ModelAttribute PrProductProperty product, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
 		super.select(pageInfo, uiModel, httpServletRequest, httpServletResponse);
  
-		PrProductPropertyValueCriteria productCriteria = null;
-		productCriteria = new PrProductPropertyValueCriteria();
-		PrProductPropertyValueCriteria.Criteria criteria = productCriteria.createCriteria();
+		PrProductPropertyCriteria productCriteria = null;
+		productCriteria = new PrProductPropertyCriteria();
+		PrProductPropertyCriteria.Criteria criteria = productCriteria.createCriteria();
 		productCriteria.setOrderByClause("id desc");
 		if (null != product.getName() && !"".equals(product.getName())) {
 			criteria.andNameLike("%" + product.getName() + "%");
 		}
 		
-		pageInfo = productPropertyValueService.selectByPageInfo(productCriteria, pageInfo);
+		pageInfo = productPropertyService.selectByPageInfo(productCriteria, pageInfo);
 		return super.setPage(pageInfo);
 	}
 	
+	@RequiresPermissions("mall:productProperty:view")
+	@RequestMapping(value = "listAll")
+	public List<PrProductProperty> listAll(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse){
+		PrProductPropertyCriteria productCriteria = null;
+		productCriteria = new PrProductPropertyCriteria();
+		productCriteria.setOrderByClause("id asc");
+		List<PrProductProperty> list = productPropertyService.selectByExample(productCriteria);
+		return list;
+	}
 }

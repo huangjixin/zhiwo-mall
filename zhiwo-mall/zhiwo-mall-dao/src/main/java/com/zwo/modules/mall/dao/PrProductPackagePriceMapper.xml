@@ -10,6 +10,8 @@
     <result column="INDEPENDENT_PRICE" property="independentPrice" jdbcType="DOUBLE" />
     <result column="PRODUCT_ID" property="productId" jdbcType="VARCHAR" />
     <result column="GOURP_PRICE" property="gourpPrice" jdbcType="VARCHAR" />
+    <result column="PROPERTY_ID" property="propertyId" jdbcType="VARCHAR" />
+    <result column="PROPERTY_VAlUE_ID" property="propertyValueId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <!--
@@ -79,7 +81,7 @@
     <!--
       WARNING - @mbg.generated
     -->
-    ID, PROPERTIES, INDEPENDENT_PRICE, PRODUCT_ID, GOURP_PRICE
+    ID, PROPERTIES, INDEPENDENT_PRICE, PRODUCT_ID, GOURP_PRICE,PROPERTY_ID,PROPERTY_VAlUE_ID
   </sql>
  
 </mapper>
