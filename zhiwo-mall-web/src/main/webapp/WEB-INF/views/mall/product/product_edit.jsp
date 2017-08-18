@@ -11,7 +11,7 @@
 	src="${ctx}/js/jquery-easyui/ajaxfileupload.js"></script>
 </head>
 <body>
-	<form class="form-horizontal" role="form"
+	<form class="form-horizontal" role="form" onSubmit="onSubmitHandler();"
 		<c:if test="${operation=='edit'}">
  action="${ctx}/product/update"
 		</c:if>
@@ -174,12 +174,12 @@
         <div class="form-group">
 			<label for="independentPrice" class="col-sm-2 control-label">属性组合价格设定</label>
 			<div class="col-sm-4" id="proValuePriceDiv">
-				<div class="col-sm-12" id="specificationProValueDiv">
+				<!--<div class="col-sm-12" id="specificationProValueDiv">
                 	<label  class="checkbox-inline">款式：108黑底【男款】</label>
 					<label  class="checkbox-inline">尺寸：39</label>
                     <input type="text" class="form-control" placeholder="108黑底【男款】+39组合拼团价(元)">
                     <input type="text" class="form-control" placeholder="108黑底【男款】+39组合单独购买价(元)">
-				</div>
+				</div>-->
 			</div>
 		</div>
 		<div class="form-group">
@@ -225,6 +225,12 @@
                                	<input type="hidden" class="form-control" id="propertyValueImg" name="propertyValueImg"
 									placeholder="属性值图片" value=""、>
                                     
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label"></label>
+                            <div class="col-sm-9">
+                            	<label id="messageLabel"></label>                                   
                             </div>
                         </div>
                         <div class="form-group">
@@ -281,11 +287,25 @@
 		var pVauleJsonArray = [];
 		//保存属性值组合价数组
 		var propertyValuePackPriceArray = [];
+		
 		// 插入属性值。
 		function appendProperty(){
+			onSubmitHandler();
+			
+			//判断属性个数
+			if(pVauleJsonArray.length>3){
+				$('#messageLabel').html('属性个数不得超过3个');
+				return;
+			}else{
+				$('#messageLabel').html('');
+			}
+			
 			var protext = $('#propertySetting').combobox('getText');
 			if(''==protext){
+				$('#messageLabel').html('请在下拉框选择属性');
 				return;
+			}else{
+				$('#messageLabel').html('');
 			}
 			var proValue = $('#propertySetting').combobox('getValue');
 
@@ -293,12 +313,15 @@
 			if(proValueIndex==-1){
 				propertyArray.push(proValue);
 			}
+			
+			propertyValuePackPriceArray = [];
+			
 			var propertyValueJson = {};
 			var date = new Date(); 
 			propertyValueJson.propertyId = proValue;
 			propertyValueJson.name = $('#propertyValue').val();
-			propertyValueJson.id   = date.getTime()+"";
-			
+			propertyValueJson.id   = date.getTime()+""+Math.round(Math.random()*1000);
+							
 			//propertyValueArray.push(propertyValueJson);
 			var object = {};
 			object.id = proValue;
@@ -333,37 +356,74 @@
 				proDiv = proDivs[0];
 				$(proDiv).append(labelCheckBox);
 			}
-			
-			if(pVauleJsonArray.length>3){
-				return;
-			}
-			
+						
 			$('#proValuePriceDiv').empty();
+			
 			
 			for(var i=0;i<pVauleJsonArray.length;i++){
 				var o1 = pVauleJsonArray[i];
 				var array1 = o1.propertyValueArray;
+				var para = '';
 				for(var k=0;k<array1.length;k++){
 					var pVJson1 = array1[k];
-					var toBeAppendPara = '<div class="col-sm-12" ><label  class="checkbox-inline">'+o1.name+'：'+pVJson1.name+'</label><input type="text" class="form-control" placeholder="'+pVJson1.name+'组合拼团价(元)"><input type="text" class="form-control" placeholder="'+pVJson1.name+'组合单独购买价(元)"></div>';
+					para = '<div class="col-sm-12" ><label  class="checkbox-inline">'+o1.name+'：'+pVJson1.name+'</label><input  id="'+pVJson1.id+'_GroupInput" type="text" class="form-control" placeholder="'+pVJson1.name+'拼团价(元)"><input id="'+pVJson1.id+'_IndependInput" type="text" class="form-control" placeholder="'+pVJson1.name+'单独购买价(元)"></div>';
+					
+					
+					
 					if(pVauleJsonArray.length==1){
-						$('#proValuePriceDiv').append(toBeAppendPara);
-					}	
+						$('#proValuePriceDiv').append(para);
+						//设置属性
+						var propertyValuePriceJson1 = {};
+						propertyValuePriceJson1.propertyValueId = pVJson1.id;
+						propertyValuePackPriceArray.push(propertyValuePriceJson1);
+					}
+					
 					for(var j=1;j<pVauleJsonArray.length;j++){
-						$('#proValuePriceDiv').empty();
 						var o2 = pVauleJsonArray[j];
+						if(o1.id==o2.id){
+							continue;
+						}
 						var array2 = o2.propertyValueArray;
 						for(var p=0;p<array2.length;p++){
 							var pVJson2 = array2[p];
 							
-							var toBeAppendPara = '<div class="col-sm-12" ><label  class="checkbox-inline">'+o1.name+'：'+pVJson1.name+'</label><label class="checkbox-inline">'+o2.name+'：'+pVJson2.name+'</label><input type="text" class="form-control" placeholder="'+pVJson1.name+'+'+pVJson2.name+'组合拼团价(元)"><input type="text" class="form-control" placeholder="'+pVJson1.name+'+'+pVJson2.name+'组合单独购买价(元)"></div>';
+							para = '<div class="col-sm-12" ><label  class="checkbox-inline">'+o1.name+'：'+pVJson1.name+'</label><label class="checkbox-inline">'+o2.name+'：'+pVJson2.name+'</label><input id="'+pVJson1.id+'_'+pVJson2.id+'_GroupInput" type="text" class="form-control" placeholder="'+pVJson1.name+'和'+pVJson2.name+'组合拼团价(元)"><input id="'+pVJson1.id+'_'+pVJson2.id+'_IndependInput"  type="text" class="form-control" placeholder="'+pVJson1.name+'和'+pVJson2.name+'组合单独购买价(元)"></div>';
+							console.log(para);
 							if(pVauleJsonArray.length==2){
-								$('#proValuePriceDiv').append(toBeAppendPara);
+								$('#proValuePriceDiv').append(para);
+								
+								//设置属性
+								var propertyValuePriceJson2 = {};
+								propertyValuePriceJson2.propertyValueId = pVJson1.id+"_"+pVJson2.id;
+								propertyValuePackPriceArray.push(propertyValuePriceJson2);
 							}
 							
+							
+							for(j=1;j<pVauleJsonArray.length;j++){
+								var o3 = pVauleJsonArray[j];
+								if(o1.id==o3.id || o2.id==o3.id ){
+									continue;
+								}
+								
+								var array3 = o3.propertyValueArray;
+								for(p=0;p<array3.length;p++){
+									var pVJson3 = array3[p];
+									para = '<div class="col-sm-12" ><label  class="checkbox-inline">'+o1.name+'：'+pVJson1.name+'</label><label class="checkbox-inline">'+o2.name+'：'+pVJson2.name+'</label><label class="checkbox-inline">'+o3.name+'：'+pVJson3.name+'</label><input id="'+pVJson1.id+'_'+pVJson2.id+'_'+pVJson3.id+'_GroupInput" type="text" class="form-control" placeholder="'+pVJson1.name+'和'+pVJson2.name+'和'+pVJson3.name+'组合拼团价(元)"><input id="'+pVJson1.id+'_'+pVJson2.id+'_'+pVJson3.id+'_IndependInput"  type="text" class="form-control" placeholder="'+pVJson1.name+'和'+pVJson2.name+'和'+pVJson3.name+'组合单独购买价(元)"></div>';
+									console.log(para);
+									if(pVauleJsonArray.length==3){
+										$('#proValuePriceDiv').append(para);
+										
+										var propertyValuePriceJson3 = {};
+										propertyValuePriceJson3.propertyValueId = pVJson1.id+"_"+pVJson2.id+"_"+pVJson3.id;
+										propertyValuePackPriceArray.push(propertyValuePriceJson3);
+									}
+								}
+							}
 						}
 					}
 				}
+				
+				
 			}
 			
 			//propertyValueGroup = '<div class="col-sm-9" id="specificationProValueDiv"><label class="checkbox-inline">规格</label><label class="checkbox-inline"><input type="checkbox" id="inlineCheckbox1" value="option1"> 选项1</label><label class="checkbox-inline"><input type="checkbox" id="inlineCheckbox2" value="option1"> 选项2</label><label class="checkbox-inline"><input type="checkbox" id="inlineCheckbox3" value="option1"> 选项3</label></div>';
@@ -382,6 +442,23 @@
 			}
 			
 			return flag;
+		}
+		
+		function onSubmitHandler(){
+			var s = JSON.stringify(pVauleJsonArray);
+			//alert(s);
+			var length = pVauleJsonArray.length;
+			var inputs = $('#proValuePriceDiv').find('input');
+			for(var i=0;i<inputs.length;i++){
+				var obj = inputs[i];
+				
+				//alert($(obj).attr('id')+"------"+$(obj).val());
+			}
+			
+			for(var j=0;j<propertyValuePackPriceArray.length;j++){
+				var object = propertyValuePackPriceArray[j];
+				console.log($('#'+object.propertyValueId+"_IndependInput").val()+''+$('#'+object.propertyValueId+"_GroupInput").val());
+			}
 		}
 		
 		//上传到服务器。
