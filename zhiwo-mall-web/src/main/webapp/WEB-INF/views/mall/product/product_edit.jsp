@@ -285,6 +285,7 @@
 		//保存属性值数组
 		//var propertyValueArray = [];
 		var pVauleJsonArray = [];
+		var priceVauleJsonArray = [];
 		//保存属性值组合价数组
 		var propertyValuePackPriceArray = [];
 		
@@ -455,8 +456,15 @@
 				//alert($(obj).attr('id')+"------"+$(obj).val());
 			}
 			
+			priceVauleJsonArray = [];
 			for(var j=0;j<propertyValuePackPriceArray.length;j++){
 				var object = propertyValuePackPriceArray[j];
+				
+				var priceJson1 = {};
+				priceJson1.groupPrice = $('#'+object.propertyValueId+"_GroupInput").val();
+				priceJson1.indepentPrice = $('#'+object.propertyValueId+"_IndependInput").val();
+				priceJson1.propertyValueId = object.propertyValueId;
+				priceVauleJsonArray.push(priceJson1);
 				console.log($('#'+object.propertyValueId+"_IndependInput").val()+''+$('#'+object.propertyValueId+"_GroupInput").val());
 			}
 		}
