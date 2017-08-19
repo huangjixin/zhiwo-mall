@@ -197,7 +197,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 	@Override
 	@Transactional(readOnly = true)
 	public List<PrProductPropertyValue> selectByExample(Object example) {
-		return null;
+		return super.selectByExample(example);
 	}
 
 	/*

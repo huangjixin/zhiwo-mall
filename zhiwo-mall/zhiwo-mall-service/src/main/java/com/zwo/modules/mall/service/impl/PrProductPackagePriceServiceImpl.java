@@ -197,7 +197,7 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 	@Override
 	@Transactional(readOnly = true)
 	public List<PrProductPackagePrice> selectByExample(Object example) {
-		return null;
+		return super.selectByExample(example);
 	}
 
 	/*

@@ -1,12 +1,12 @@
 package com.zwo.modules.mall.web;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -18,19 +18,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductPackagePrice;
+import com.zwo.modules.mall.domain.PrProductPackagePriceCriteria;
 import com.zwo.modules.mall.domain.PrProductProperty;
+import com.zwo.modules.mall.domain.PrProductPropertyCriteria;
 import com.zwo.modules.mall.domain.PrProductPropertyValue;
+import com.zwo.modules.mall.domain.PrProductPropertyValueCriteria;
 import com.zwo.modules.mall.domain.PrProductWithBLOBs;
 import com.zwo.modules.mall.service.IPrProductPackagePriceService;
 import com.zwo.modules.mall.service.IPrProductPropertyService;
 import com.zwo.modules.mall.service.IPrProductPropertyValueService;
 import com.zwo.modules.mall.service.IPrductService;
-import com.zwo.modules.system.domain.TbUser;
 import com.zwotech.common.web.BaseController;
 
 @Controller
@@ -63,8 +64,14 @@ public class ProductController extends BaseController<PrProduct> {
 	public String tocreate(@Valid PrProductWithBLOBs product,@RequestParam(required=false) String propertyValues,
 			@RequestParam(required=false) String propertyPrices,BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		product.setId(System.currentTimeMillis()+""+Math.round(Math.random()*100));
 		uiModel.addAttribute("product", product);
+		product.setId(System.currentTimeMillis()+""+Math.round(Math.random()*100));
+		
+
+		PrProductPropertyValueCriteria valueCriteria = new PrProductPropertyValueCriteria();
+		valueCriteria.createCriteria().andProductIdEqualTo(product.getId());
+		List<PrProductPropertyValue> productPropertyValues = this.productPropertyValueService.selectByExample(valueCriteria);
+		uiModel.addAttribute("propertyValues",productPropertyValues);
 		return basePath + "product_edit";
 	}
 
@@ -74,11 +81,30 @@ public class ProductController extends BaseController<PrProduct> {
 			@RequestParam(required=false) String propertyPrices, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		PrProductWithBLOBs product = productService.selectByPrimKey(id);
-
+		
+		//商品属性。
+		PrProductPropertyCriteria productCriteria = null;
+		productCriteria = new PrProductPropertyCriteria();
+		productCriteria.setOrderByClause("id asc");
+		List<PrProductProperty> properties = productPropertyService.selectByExample(productCriteria);
+		uiModel.addAttribute("properties",properties);
+		
+		PrProductPackagePriceCriteria packagePriceCriteria = new PrProductPackagePriceCriteria();
+		packagePriceCriteria.createCriteria().andProductIdEqualTo(product.getId());
+		List<PrProductPackagePrice> packagePrices =  packagePriceService.selectByExample(packagePriceCriteria);
+		uiModel.addAttribute("packagePrices",packagePrices);
+		
+		PrProductPropertyValueCriteria valueCriteria = new PrProductPropertyValueCriteria();
+		valueCriteria.createCriteria().andProductIdEqualTo(product.getId());
+		List<PrProductPropertyValue> productPropertyValues = this.productPropertyValueService.selectByExample(valueCriteria);
+		uiModel.addAttribute("propertyValues",productPropertyValues);
+				
 		uiModel.addAttribute("product", product);
 		uiModel.addAttribute("operation", "edit");
+		
 		return basePath + "product_edit";
 	}
+	
 	
 	@RequiresPermissions("mall:product:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
@@ -105,8 +131,6 @@ public class ProductController extends BaseController<PrProduct> {
 		}*/
 		
 		
-		//[{"id":"15028412955799","name":"款式","propertyValueArray":[{"propertyId":"15028412955799","name":"白色","id":"1503100384366695"},{"propertyId":"15028412955799","name":"黑色","id":"1503100392023593"}]},{"id":"150284156334250","name":"套餐","propertyValueArray":[{"propertyId":"150284156334250","name":"买一送一","id":"15031004074012"}]}]
-		//[{"groupPrice":"23","indepentPrice":"23","propertyValueId":"1503100384366695_15031004074012"},{"groupPrice":"23","indepentPrice":"23","propertyValueId":"1503100392023593_15031004074012"}]
 		int res = productService.insertSelective(product);
 		if(res==1){
 			redirectAttributes.addFlashAttribute("product", product);
@@ -121,7 +145,8 @@ public class ProductController extends BaseController<PrProduct> {
 				for (Object object : perpertyValueArray) {
 					JSONObject jsonObject = (JSONObject) object;
 					PrProductPropertyValue productProperty = new PrProductPropertyValue();
-					productProperty.setId((String) jsonObject.get("id"));
+					String id = System.currentTimeMillis() + "" + Math.round(Math.random() * 1000);
+					productProperty.setId(id);
 					productProperty.setProductId(product.getId());
 					productProperty.setPropertyId(jsonObject.getString("propertyId"));
 					productProperty.setName((String) jsonObject.get("name"));
@@ -137,15 +162,21 @@ public class ProductController extends BaseController<PrProduct> {
 			for (Object obj : perPriceArray) {
 				JSONObject json = (JSONObject) obj;
 				PrProductPackagePrice packagePrice = new PrProductPackagePrice(); 
-				packagePrice.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
-				packagePrice.setGourpPrice((Double)json.get("groupPrice")+"");
-				packagePrice.setIndependentPrice((Double) json.get("indepentPrice"));
-				packagePrice.setProductId(product.getId());
-				packagePrice.setPropertyValueId(json.getString("propertyValueId"));
+				String id = System.currentTimeMillis() + "" + Math.round(Math.random() * 1000);
+				String groupPrice = json.getString("groupPrice");
+				Double indepentPrice = Double.valueOf(json.getString("indepentPrice"));
+				String pId = product.getId();
+				String pValueId = json.getString("propertyValueId");
+				packagePrice.setId(id);
+				packagePrice.setGourpPrice(groupPrice);
+				packagePrice.setIndependentPrice(indepentPrice);
+				packagePrice.setProductId(pId);
+				packagePrice.setPropertyValueId(pValueId);
 				packagePriceService.insertSelective(packagePrice);
 			}
 		}
-		
+		redirectAttributes.addFlashAttribute("propertyValues", propertyValues);
+		redirectAttributes.addFlashAttribute("propertyPrices", propertyPrices);
 		return "redirect:/product/create";
 	}
 	 
@@ -159,14 +190,14 @@ public class ProductController extends BaseController<PrProduct> {
 			redirectAttributes.addFlashAttribute("product", product);
 			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
 		}
-		Subject currentUser = SecurityUtils.getSubject(); 
+		/*Subject currentUser = SecurityUtils.getSubject(); 
 		if(currentUser!=null){
 			TbUser user =  (TbUser) currentUser.getSession().getAttribute("user");
 			if(user!=null){
 				product.setUpdater(user.getUsername());
 				product.setUserId(user.getId());
 			}
-		}
+		}*/
 		
 		int res = this.productService.updateByPrimaryKeySelective(product);
 		if(res==1){

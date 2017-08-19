@@ -118,7 +118,7 @@
 			<label for="distributionValue" class="col-sm-2 control-label">商品分销让利值(<i class="fa fa-jpy"></i>)</label>
 			<div class="col-sm-4">
 				<input type="text" class="form-control" id="distributionValue" name="distributionValue"
-					placeholder="请输入商品分销让利值" value="${product.distributionValue}">
+					placeholder="请输入商品分销让利值(元)" value="${product.distributionValue}">
                 <label>如果允许会员分销，销售出去的商品将扣除让利值给会员</label>
 			</div>
 		</div>
@@ -126,7 +126,7 @@
 			<label for="purchasingCost" class="col-sm-2 control-label">进货价(<i class="fa fa-jpy"></i>)</label>
 			<div class="col-sm-4">
 				<input type="text" class="form-control" id="purchasingCost" name="purchasingCost"
-					placeholder="请输入商品进货价" value="${product.purchasingCost}">
+					placeholder="请输入商品进货价(元)" value="${product.purchasingCost}">
                 <label>输入商品进货价有利于您统计商品的盈利情况</label>
 			</div>
 		</div>
@@ -134,14 +134,14 @@
 			<label for="gourpSalePrice" class="col-sm-2 control-label">团购价(<i class="fa fa-jpy"></i>)</label>
 			<div class="col-sm-4">
 				<input type="text" class="form-control" id="gourpSalePrice" name="gourpSalePrice"
-					placeholder="请输入商品团购价" value="${product.gourpSalePrice}">
+					placeholder="请输入商品团购价(元)" value="${product.gourpSalePrice}">
 			</div>
 		</div>
         <div class="form-group">
 			<label for="independentPrice" class="col-sm-2 control-label">单独购买价(<i class="fa fa-jpy"></i>)</label>
 			<div class="col-sm-4">
 				<input type="text" class="form-control" id="independentPrice" name="independentPrice"
-					placeholder="单独购买价" value="${product.independentPrice}">
+					placeholder="单独购买价(元)" value="${product.independentPrice}">
 			</div>
 		</div>
         <div class="form-group">
@@ -170,11 +170,47 @@
         <div class="form-group">
 			<label for="independentPrice" class="col-sm-2 control-label">属性组合</label>
 			<div class="col-sm-4" id="proValueDiv">
+            	
+                	<c:forEach var="property" items="${properties}" varStatus="status">
+                    	<div class="col-sm-12" id="${property.id}" >
+                        	<label class="checkbox-inline">${property.name}:</label>
+                            <c:forEach var="pValue" items="${propertyValues}" varStatus="pValueStatus">
+                                <c:if test="${property.id==pValue.propertyId}">
+                                		<c:if test="${pValueStatus.index==0}">
+                                        	
+                                        </c:if>
+                                        
+                                        <label class="checkbox-inline">${pValue.name}</label>
+                                </c:if>
+                            </c:forEach>
+                        </div>
+                    </c:forEach>
 			</div>
 		</div>
         <div class="form-group">
-			<label for="independentPrice" class="col-sm-2 control-label">属性组合价格设定</label>
+			<label for="independentPrice" class="col-sm-2 control-label">属性组合价格设定(元)</label>
 			<div class="col-sm-4" id="proValuePriceDiv">
+            	<c:forEach  var="packagePrice" items="${packagePrices}" varStatus="packagePriceStatus">
+                	<div class="col-sm-12" id="packagePrice.propertyValueId">
+                    	
+                    	<c:set value="${fn:split(packagePrice.propertyValueId, '_') }" var="proValueIds" />
+                        <c:forEach  var="proValueId" items="${proValueIds}">
+                        	<c:forEach var="propertyValue" items="${propertyValues}">
+                            	<c:if test="${proValueId==propertyValue.id}">
+                                	<c:forEach var="property" items="${properties}">
+                                    	<c:if test="${propertyValue.propertyId==property.id}">
+                                        	<label  class="checkbox-inline">${property.name}：${propertyValue.name}</label>
+                                        </c:if>
+                                    </c:forEach>
+                                	
+                                </c:if>
+                            </c:forEach>
+                        </c:forEach>
+                    	<input type="text" id="${packagePrice.propertyValueId}_GroupInput" value="${packagePrice.gourpPrice}" class="form-control" placeholder="组合拼团价(元)">
+                    	<input type="text" id="${packagePrice.propertyValueId}_IndependInput" value="${packagePrice.independentPrice}" class="form-control" placeholder="单独购买价(元)">
+                        <br>
+                    </div>
+                </c:forEach>
 				<!--<div class="col-sm-12" id="specificationProValueDiv">
                 	<label  class="checkbox-inline">款式：108黑底【男款】</label>
 					<label  class="checkbox-inline">尺寸：39</label>
@@ -288,6 +324,13 @@
 			$("#returnBtn").bind("click", function() {
 				backToList('product');
 			});
+			
+			//var propertyValuesString = $('#propertyValues').val();
+//			var propertyValuesJSONArray = JSON.parse(propertyValuesString);  
+//			console.log(propertyValuesString);
+//			var propertyPricesString = $('#propertyPrices').val();
+//			var propertyPricesJSONArray = JSON.parse(propertyPricesString);  
+//			console.log(propertyPricesString);
 		});
 		
 		//保存属性数组
