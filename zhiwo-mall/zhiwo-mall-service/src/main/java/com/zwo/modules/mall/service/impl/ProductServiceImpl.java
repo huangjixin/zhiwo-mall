@@ -18,12 +18,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.HtmlUtils;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.dao.PrProductMapper;
+import com.zwo.modules.mall.dao.PrProductPackagePriceMapper;
+import com.zwo.modules.mall.dao.PrProductPropertyValueMapper;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductCriteria;
+import com.zwo.modules.mall.domain.PrProductPackagePrice;
+import com.zwo.modules.mall.domain.PrProductPropertyValue;
 import com.zwo.modules.mall.domain.PrProductWithBLOBs;
+import com.zwo.modules.mall.service.IPrProductPackagePriceService;
+import com.zwo.modules.mall.service.IPrProductPropertyService;
+import com.zwo.modules.mall.service.IPrProductPropertyValueService;
 import com.zwo.modules.mall.service.IPrductService;
 import com.zwotech.modules.core.service.impl.BaseService;
 
@@ -44,6 +53,14 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 	@Autowired
 	@Lazy(true)
 	private PrProductMapper productMapper;
+	
+	@Autowired
+	@Lazy(true)
+	private PrProductPropertyValueMapper productPropertyValueMapper;
+	
+	@Autowired
+	@Lazy(true)
+	private PrProductPackagePriceMapper productPackagePriceMapper;
 
 	@Override
 	public Mapper<PrProduct> getBaseMapper() {
@@ -302,13 +319,14 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 		return result;
 	}
 
+	
 //	@CachePut(value = "PrProduct", key = "#record.id")
 	public int insertSelective(PrProductWithBLOBs record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "insert插入开始");
+			logger.info(BASE_MESSAGE + "insertSelective插入开始");
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
+			logger.info(BASE_MESSAGE + "insertSelective插入对象为：" + record.toString());
 		if(null!=record.getContent() && !"".equals(record.getContent())){
 			String content = record.getContent();
 			content = HtmlUtils.htmlEscape(content);
@@ -320,7 +338,9 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 		}
 		int result = this.productMapper.insertSelective(record);
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "insert插入结束");
+			logger.info(BASE_MESSAGE + "insertSelective插入结束");
+
+		
 		return result;
 	}
 

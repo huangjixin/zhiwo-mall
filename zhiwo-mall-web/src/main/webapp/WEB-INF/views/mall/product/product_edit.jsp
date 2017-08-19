@@ -22,6 +22,8 @@
         <c:if test="${operation=='edit'}">
         <input id="id" name="id" value="${product.id}" type="hidden"/>
 		</c:if>
+        <input id="propertyValues" name="propertyValues" value="${propertyValues}" type="hidden"/>
+        <input id="propertyPrices" name="propertyPrices" value="${propertyPrices}" type="hidden"/>
         <input id="icon" name="icon" value="${product.icon}" type="hidden"/>
         <input id="categoryId" name="categoryId" value="${product.categoryId}" type="hidden"/>
         <div class="form-group">
@@ -70,7 +72,7 @@
 			<label for="name" class="col-sm-2 control-label">商品名称</label>
 			<div class="col-sm-4">
 				<input type="text" class="form-control" id="name" name="name"
-					placeholder="请输入商品名称" value="${product.name}">
+					placeholder="请输入商品名称,开头关键字请用【】括号，否则审核不通过" value="${product.name}">
 			</div>
 		</div>
 		<div class="form-group">
@@ -93,8 +95,7 @@
 					onclick="fileUploadToServer();">
 					<i class="fa fa-upload"></i> <span>&nbsp;&nbsp;开始上传</span>
 				</button>
-				<%@ include file="/WEB-INF/include/easyui-buttonForm.jsp"%>
-				<label id="message">${message}</label>
+				
 			</div>
 		</div>
 		<div class="form-group">
@@ -182,6 +183,13 @@
 				</div>-->
 			</div>
 		</div>
+        <div class="form-group">
+            <label for="independentPrice" class="col-sm-2 control-label"></label>
+            <div class="col-sm-4">
+            	<%@ include file="/WEB-INF/include/easyui-buttonForm.jsp"%>
+            	<label id="message">${message}</label>
+            </div>
+        </div>
 		<div class="form-group">
 			<label for="file" class="col-sm-2 control-label">商品内容</label>
 			<div class="col-sm-9">
@@ -233,6 +241,7 @@
                             	<label id="messageLabel"></label>                                   
                             </div>
                         </div>
+                        
                         <div class="form-group">
                             <label  class="col-sm-2 control-label"></label>
                            	<div class="col-sm-9">
@@ -246,7 +255,6 @@
                             </div>
                         </div>
                     	
-                        
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭
@@ -257,7 +265,9 @@
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal -->
+           
         </div>
+        
 	</form>
 	<!-- 配置文件 -->
 	<script type="text/javascript"
@@ -291,7 +301,6 @@
 		
 		// 插入属性值。
 		function appendProperty(){
-			onSubmitHandler();
 			
 			//判断属性个数
 			if(pVauleJsonArray.length>3){
@@ -327,6 +336,7 @@
 			var object = {};
 			object.id = proValue;
 			object.name = protext;
+			object.productId = $('#id').val();
 			//
 			var index = searchElement(pVauleJsonArray,proValue);
 			if(index==-1){
@@ -447,15 +457,8 @@
 		
 		function onSubmitHandler(){
 			var s = JSON.stringify(pVauleJsonArray);
-			//alert(s);
-			var length = pVauleJsonArray.length;
-			var inputs = $('#proValuePriceDiv').find('input');
-			for(var i=0;i<inputs.length;i++){
-				var obj = inputs[i];
-				
-				//alert($(obj).attr('id')+"------"+$(obj).val());
-			}
-			
+			$('#propertyValues').val(s);
+						
 			priceVauleJsonArray = [];
 			for(var j=0;j<propertyValuePackPriceArray.length;j++){
 				var object = propertyValuePackPriceArray[j];
@@ -464,9 +467,12 @@
 				priceJson1.groupPrice = $('#'+object.propertyValueId+"_GroupInput").val();
 				priceJson1.indepentPrice = $('#'+object.propertyValueId+"_IndependInput").val();
 				priceJson1.propertyValueId = object.propertyValueId;
+				priceJson1.productId = $('#id').val();
 				priceVauleJsonArray.push(priceJson1);
-				console.log($('#'+object.propertyValueId+"_IndependInput").val()+''+$('#'+object.propertyValueId+"_GroupInput").val());
 			}
+			
+			var priceString = JSON.stringify(priceVauleJsonArray);
+			$('#propertyPrices').val(priceString);
 		}
 		
 		//上传到服务器。

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,7 @@ import com.zwo.modules.mall.service.IPrImageService;
 import com.zwo.modules.system.domain.TbUserAssets;
 import com.zwo.modules.system.service.ITbUserAssetsService;
 
+@Scope("prototype")
 @Controller
 @RequestMapping(value = "fileupload")
 @Lazy(true)
