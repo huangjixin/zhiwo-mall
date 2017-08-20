@@ -349,7 +349,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 
 	@Transactional(readOnly = true)
 	@Override
-	@Cacheable(value = "PrProductPropertys")
+	@Cacheable(value = "PrProductPropertys",key="#root.target+#root.method.name")
 	public List<PrProductProperty> listAll() {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "查询所有属性开始");

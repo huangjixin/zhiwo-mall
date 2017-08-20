@@ -351,7 +351,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 
 	@Override
 	@Transactional(readOnly = true)
-	@Cacheable(key = "#pId+''", value = "PrProductPropertyValues")
+	@Cacheable(key = "#root.target+#root.method.name+#pId", value = "PrProductPropertyValues")
 	public List<PrProductPropertyValue> selectByProductId(String pId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "根据商品Id查询商品属性开始");
@@ -364,7 +364,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 	}
 
 	@Override
-	@CacheEvict(value = {"PrProductPropertyValue","PrProductPropertyValues"},key="#pId+''")
+	@CacheEvict(value = {"PrProductPropertyValues"},key="#root.target+#root.method.name+#pId",allEntries=true)
 	public void deleteByProductId(String pId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "根据商品Id删除商品属性开始");

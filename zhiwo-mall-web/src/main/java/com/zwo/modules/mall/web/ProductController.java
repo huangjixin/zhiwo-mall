@@ -128,7 +128,7 @@ public class ProductController extends BaseController<PrProduct> {
 		
 		int res = productService.insertSelective(product);
 		if(res==1){
-			redirectAttributes.addFlashAttribute("product", product);
+//			redirectAttributes.addFlashAttribute("product", product);
 			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
 		JSONArray perpertyArray = null;
@@ -164,8 +164,8 @@ public class ProductController extends BaseController<PrProduct> {
 				packagePriceService.insertSelective(packagePrice);
 			}
 		}
-		redirectAttributes.addFlashAttribute("propertyValues", propertyValues);
-		redirectAttributes.addFlashAttribute("propertyPrices", propertyPrices);
+//		redirectAttributes.addFlashAttribute("propertyValues", propertyValues);
+//		redirectAttributes.addFlashAttribute("propertyPrices", propertyPrices);
 		return "redirect:/product/create";
 	}
 	 
@@ -196,6 +196,7 @@ public class ProductController extends BaseController<PrProduct> {
 		}
 		JSONArray perpertyArray = null;
 		if(null != propertyValues && !"".equals(propertyValues)){
+			productPropertyValueService.deleteByProductId(product.getId());
 			perpertyArray =  (JSONArray) JSONArray.parse(propertyValues);
 			for (Object object : perpertyArray) {
 				JSONObject jsonObject = (JSONObject) object;
@@ -210,6 +211,7 @@ public class ProductController extends BaseController<PrProduct> {
 		
 		JSONArray perPriceArray = null;
 		if(null != propertyPrices && !"".equals(propertyPrices)){
+			packagePriceService.deleteByProductId(product.getId());
 			perPriceArray =  (JSONArray) JSONArray.parse(propertyPrices);
 			for (Object obj : perPriceArray) {
 				JSONObject json = (JSONObject) obj;

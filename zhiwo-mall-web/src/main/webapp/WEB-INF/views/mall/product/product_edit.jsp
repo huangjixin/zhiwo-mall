@@ -513,9 +513,6 @@
 		}
 		
 		function onSubmitHandler(){
-		
-		//价格数组
-		var pricesArray = [];
 			var s = JSON.stringify(propertyValueArray);
 			$('#propertyValues').val(s);
 			
