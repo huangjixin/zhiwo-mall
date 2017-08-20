@@ -168,7 +168,7 @@ public class ProductController extends BaseController<PrProduct> {
 //		redirectAttributes.addFlashAttribute("propertyPrices", propertyPrices);
 		return "redirect:/product/create";
 	}
-	 
+	
 	@RequiresPermissions("mall:product:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid PrProductWithBLOBs product,@RequestParam String propertyValues,
@@ -218,7 +218,7 @@ public class ProductController extends BaseController<PrProduct> {
 				PrProductPackagePrice packagePrice = new PrProductPackagePrice(); 
 				String id = json.getString("id");
 				String groupPrice = json.getString("groupPrice");
-				Double indepentPrice = Double.valueOf(json.getString("indepentPrice"));
+				Double indepentPrice = Double.valueOf(json.getString("indepentPrice")==null||"".equals(json.getString("indepentPrice"))?"0":json.getString("indepentPrice"));
 				String pId = product.getId();
 				String pValueId = json.getString("propertyValueId");
 				packagePrice.setId(id);

@@ -349,15 +349,15 @@
 				backToList('product');
 			});
 			
-			if(propertiesString!=''){
+			if(propertiesString!='' && propertiesString!='[]'){
 				proArray = JSON.parse('${propertiesString}');
 			}
 			
-			if(packagePricesString!=''){
+			if(packagePricesString!='' && packagePricesString!='[]'){
 				pricesArray = JSON.parse('${packagePricesString}');
 			}
 			
-			if(propertyValuesString!=''){
+			if(propertyValuesString!='' && propertyValuesString!='[]'){
 				propertyValueArray = JSON.parse('${propertyValuesString}');
 			}
 			
@@ -396,7 +396,10 @@
 					}
 				}
 				
-				propertyValueArray.splice(flag,1);
+				if(propertyValueArray.length ==1){
+					propertyValueArray=[];
+				}else
+					propertyValueArray.splice(flag,1);
 			}
 			
 			var tempArray = [];
@@ -406,15 +409,6 @@
 				var index = propertyValueId.indexOf(pValueId);
 				if(index!=-1){
 					tempArray.push(pricesArray[i]);
-					//index = propertyValueId.indexOf(pValueId+"_");
-//					if(index!=-1){
-//						propertyValueId=propertyValueId.replace(pValueId+"_",'');
-//					}else{
-//						propertyValueId=propertyValueId.replace(pValueId,'');
-//					}
-//					
-//					pricesArray[i].propertyValueId = propertyValueId;
-					
 				}
 			}
 			
@@ -427,17 +421,21 @@
 						var propertyValueId = price.propertyValueId;
 						index = propertyValueId.indexOf(pValueId);
 						if(index!=-1){
-							propertyValueId=propertyValueId.replace(pValueId,'');
-							index=propertyValueId.indexOf('__');
-							if(index!=-1){
-								propertyValueId=propertyValueId.replace('__','_');
-							}
-							
-							if(propertyValueId.indexOf('_')==0){
-								propertyValueId = propertyValueId.substring(1);
-							}
-							if(propertyValueId.lastIndexOf('_')==propertyValueId.length-1){
-								propertyValueId = propertyValueId.substr(0,propertyValueId.length-1);
+							if(pValueId.length==propertyValueId.length){
+								pricesArray = [];
+							}else{
+								propertyValueId=propertyValueId.replace(pValueId,'');
+								index=propertyValueId.indexOf('__');
+								if(index!=-1){
+									propertyValueId=propertyValueId.replace('__','_');
+								}
+								
+								if(propertyValueId.indexOf('_')==0){
+									propertyValueId = propertyValueId.substring(1);
+								}
+								if(propertyValueId.lastIndexOf('_')==propertyValueId.length-1){
+									propertyValueId = propertyValueId.substr(0,propertyValueId.length-1);
+								}
 							}
 						}
 						
@@ -586,8 +584,12 @@
 						}
 					}
 				}
-				para+='<input id="'+price.propertyValueId+'_GroupInput" type="text" class="form-control" placeholder="'+pName+'合拼团价(元)"><input  id="'+price.propertyValueId+'_IndependInput" type="text" class="form-control" placeholder="'+pName+'合单独购买价(元)">';
-										$('#proValuePriceDiv').append(para);
+				
+				if(propertyValueArray.length>0){
+					para+='<input id="'+price.propertyValueId+'_GroupInput" type="text" class="form-control" placeholder="'+pName+'合拼团价(元)"><input  id="'+price.propertyValueId+'_IndependInput" type="text" class="form-control" placeholder="'+pName+'合单独购买价(元)">';
+					$('#proValuePriceDiv').append(para);
+				}
+										
 			}
 		}
 		
