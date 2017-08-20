@@ -1,3 +1,7 @@
+<%@page import="com.zwo.modules.mall.domain.PrProductProperty"%>
+<%@page import="com.zwo.modules.mall.domain.PrProductPackagePrice"%>
+<%@page import="com.zwo.modules.mall.domain.PrProductPropertyValue"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/include/taglib.jsp"%>
@@ -20,8 +24,9 @@
 		</c:if>
 		method="post">
         <c:if test="${operation=='edit'}">
-        <input id="id" name="id" value="${product.id}" type="hidden"/>
+        
 		</c:if>
+        <input id="id" name="id" value="${product.id}" type="hidden"/>
         <input id="propertyValues" name="propertyValues" value="${propertyValues}" type="hidden"/>
         <input id="propertyPrices" name="propertyPrices" value="${propertyPrices}" type="hidden"/>
         <input id="icon" name="icon" value="${product.icon}" type="hidden"/>
@@ -208,7 +213,7 @@
                         </c:forEach>
                     	<input type="text" id="${packagePrice.propertyValueId}_GroupInput" value="${packagePrice.gourpPrice}" class="form-control" placeholder="组合拼团价(元)">
                     	<input type="text" id="${packagePrice.propertyValueId}_IndependInput" value="${packagePrice.independentPrice}" class="form-control" placeholder="单独购买价(元)">
-                        <br>
+                        
                     </div>
                 </c:forEach>
 				<!--<div class="col-sm-12" id="specificationProValueDiv">
@@ -257,8 +262,8 @@
                             <label for="propertyValue" class="col-sm-2 control-label">是否禁用</label>
                             <div class="col-sm-9">
                                	<select id="propertyValueDisabled" class="easyui-combobox" style="width:200px;">
-                                    <option>否</option>
-                                    <option>是</option> 
+                                    <option value="false">否</option>
+                                    <option value="true">是</option> 
                                 </select>
                             </div>
                         </div>
@@ -313,11 +318,30 @@
 	<!-- 实例化编辑器 -->
 
 	<script type="text/javascript">
+		
+		
 		var ue = UE.getEditor('container', {
 			autoHeightEnabled : true,
 			autoFloatEnabled : true,
 			initialFrameHeight : 483
 		});
+		
+		var propertiesString =  '${propertiesString}';
+		
+		var propertyValuesString =  '${propertyValuesString}';
+		
+		var packagePricesString =  '${packagePricesString}';
+		
+		//保存属性数组
+		var propertyArray = [];
+		
+		//保存属性值数组
+		var proArray = [];
+		//保存属性值数组
+		var propertyValueArray = [];
+		//价格数组
+		var pricesArray = [];
+		
 		// 初始化按钮等工作。
 		$().ready(function() {
 			//返回列表。
@@ -325,25 +349,162 @@
 				backToList('product');
 			});
 			
-			//var propertyValuesString = $('#propertyValues').val();
-//			var propertyValuesJSONArray = JSON.parse(propertyValuesString);  
-//			console.log(propertyValuesString);
-//			var propertyPricesString = $('#propertyPrices').val();
-//			var propertyPricesJSONArray = JSON.parse(propertyPricesString);  
-//			console.log(propertyPricesString);
+			if(propertiesString!=''){
+				proArray = JSON.parse('${propertiesString}');
+			}
+			
+			if(packagePricesString!=''){
+				pricesArray = JSON.parse('${packagePricesString}');
+			}
+			
+			if(propertyValuesString!=''){
+				propertyValueArray = JSON.parse('${propertyValuesString}');
+			}
+			
+			for(var i=0;i<propertyValueArray.length;i++){
+				var proValue = propertyValueArray[i].propertyId;
+				var proValueIndex = $.inArray(proValue,propertyArray);
+				if(proValueIndex==-1){
+					propertyArray.push(proValue);
+				}		
+			}
+			
 		});
 		
-		//保存属性数组
-		var propertyArray = [];
-		//保存属性值数组
-		//var propertyValueArray = [];
+		// 插入属性值。
+		function appendProperty(){
+			//判断属性个数
+			if(propertyArray.length>3){
+				$('#messageLabel').html('属性个数不得超过3个');
+				return;
+			}else{
+				$('#messageLabel').html('');
+			}
+			
+			var protext = $('#propertySetting').combobox('getText');
+			if(''==protext){
+				$('#messageLabel').html('请在下拉框选择属性');
+				return;
+			}else{
+				$('#messageLabel').html('');
+			}
+			var proValue = $('#propertySetting').combobox('getValue');
+			var proValueIndex = $.inArray(proValue,propertyArray);
+			if(proValueIndex==-1){
+				propertyArray.push(proValue);
+			}
+			
+			var propertyValueJson = {};
+			
+			propertyValueJson.disable = $('#propertyValueDisabled').combobox('getValue');
+			propertyValueJson.propertyId = proValue;
+			propertyValueJson.name = $('#propertyValue').val();
+			propertyValueJson.id   = new Date().getTime()+""+Math.round(Math.random()*100);
+			propertyValueJson.imageId = $('#propertyValueImg').val();
+			propertyValueJson.productId= $('#id').val();
+			
+			propertyValueArray.push(propertyValueJson);
+			
+			pricesArray = [];
+			for(var i=0;i<propertyValueArray.length;i++){
+				//只有一种属性
+				if(propertyArray.length==1){
+					var price1 = {};
+						price1.gourpPrice="";
+						price1.independentPrice="";
+						price1.id = new Date().getTime()+""+Math.round(Math.random()*100);
+						price1.productId=$('#id').val();
+						price1.propertyValueId=propertyValueArray[i].propertyId;
+						
+						pricesArray.push(price1);
+
+				}
+					for(var j=0;j<propertyValueArray.length;j++){
+						//两种属性
+						if(propertyArray.length==2){
+							if(propertyArray[i].propertyId != propertyArray[j].propertyId){
+								var price2 = {};
+								price2.gourpPrice="";
+								price2.independentPrice="";
+								price2.id = new Date().getTime()+""+Math.round(Math.random()*100);
+								price2.productId=$('#id').val();
+								price2.propertyValueId=propertyValueArray[i].propertyId+"_"+propertyValueArray[j].propertyId;
+								
+								pricesArray.push(price2);
+							}
+						}
+						for(var p=0;p<propertyValueArray.length;p++){
+							//三种属性
+							if(propertyArray.length==3){
+								if(propertyArray[i].propertyId != propertyArray[j].propertyId&&propertyArray[i].propertyId != propertyArray[p].propertyId&&propertyArray[j].propertyId!= propertyArray[p].propertyId){
+									var price2 = {};
+									price2.gourpPrice="";
+									price2.independentPrice="";
+									price2.id = new Date().getTime()+""+Math.round(Math.random()*100);
+									price2.productId=$('#id').val();
+									price2.propertyValueId=propertyValueArray[i].propertyId+"_"+propertyValueArray[j].propertyId+"_"+propertyValueArray[p].propertyId;
+									
+									pricesArray.push(price2);
+								}
+							}
+						}
+											}
+				
+			}
+			
+			
+			refreshComponent();
+			refreshComponent1();
+		}
+		
+		//刷新界面控件。
+		function refreshComponent(){
+			for(var i=0;i<proArray.length;i++){
+				var pId = proArray[i].id;
+				//先清空。
+				$('#'+pId).empty();
+				var parm = '';
+				var label = '<label class="checkbox-inline">'+proArray[i].name+':</label>';
+				parm += label;
+				for(var j=0;j<propertyValueArray.length;j++){
+					var proId = propertyValueArray[j].propertyId;
+					if(pId == proId){
+				
+						var labelCheckBox = '<label class="checkbox-inline">'+propertyValueArray[j].name+'</label>';
+						parm += labelCheckBox;
+					}
+				}
+				parm += '';
+				$('#'+pId).append(parm);
+			}
+		}
+		
+		function refreshComponent1(){
+			$('#proValuePriceDiv').empty();
+			for(var i=0;i<pricesArray.length;i++){
+				var price = pricesArray[i];
+				var properValueIds = price.propertyValueId.split('_');
+				for(var j=0;j<propertyValueArray.length;j++){
+					var pValue = propertyValueArray[j];
+					for(var p=0;p<properValueIds.length;p++){
+						var pvalueId = properValueIds[p];
+						if(pValue.id != pvalueId){
+							var para=' <input id="'+price.propertyValueId+'_GroupInput" type="text" class="form-control" placeholder="合拼团价(元)"><input  id="'+price.propertyValueId+'_IndependInput" type="text" class="form-control" placeholder="合单独购买价(元)">';
+							$('#proValuePriceDiv').append(para);
+						}
+					}
+				}
+			}
+		}
+		
+		
 		var pVauleJsonArray = [];
 		var priceVauleJsonArray = [];
 		//保存属性值组合价数组
 		var propertyValuePackPriceArray = [];
 		
 		// 插入属性值。
-		function appendProperty(){
+		function appendProperty1(){
 			
 			//判断属性个数
 			if(pVauleJsonArray.length>3){

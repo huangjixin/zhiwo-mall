@@ -67,14 +67,17 @@ public class ProductController extends BaseController<PrProduct> {
 		uiModel.addAttribute("product", product);
 		product.setId(System.currentTimeMillis()+""+Math.round(Math.random()*100));
 		
-
-		PrProductPropertyValueCriteria valueCriteria = new PrProductPropertyValueCriteria();
-		valueCriteria.createCriteria().andProductIdEqualTo(product.getId());
-		List<PrProductPropertyValue> productPropertyValues = this.productPropertyValueService.selectByExample(valueCriteria);
-		uiModel.addAttribute("propertyValues",productPropertyValues);
+		//商品属性。
+		PrProductPropertyCriteria productCriteria = null;
+		productCriteria = new PrProductPropertyCriteria();
+		productCriteria.setOrderByClause("id asc");
+		List<PrProductProperty> properties = productPropertyService.selectByExample(productCriteria);
+		uiModel.addAttribute("properties",properties);
+		uiModel.addAttribute("propertiesString",JSONArray.toJSONString(properties));
+				
 		return basePath + "product_edit";
 	}
-
+	
 	@RequiresPermissions("mall:product:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id,@RequestParam(required=false) String propertyValues,
@@ -88,16 +91,19 @@ public class ProductController extends BaseController<PrProduct> {
 		productCriteria.setOrderByClause("id asc");
 		List<PrProductProperty> properties = productPropertyService.selectByExample(productCriteria);
 		uiModel.addAttribute("properties",properties);
+		uiModel.addAttribute("propertiesString",JSONArray.toJSONString(properties));
 		
 		PrProductPackagePriceCriteria packagePriceCriteria = new PrProductPackagePriceCriteria();
 		packagePriceCriteria.createCriteria().andProductIdEqualTo(product.getId());
 		List<PrProductPackagePrice> packagePrices =  packagePriceService.selectByExample(packagePriceCriteria);
 		uiModel.addAttribute("packagePrices",packagePrices);
+		uiModel.addAttribute("packagePricesString",JSONArray.toJSONString(packagePrices));
 		
 		PrProductPropertyValueCriteria valueCriteria = new PrProductPropertyValueCriteria();
 		valueCriteria.createCriteria().andProductIdEqualTo(product.getId());
 		List<PrProductPropertyValue> productPropertyValues = this.productPropertyValueService.selectByExample(valueCriteria);
 		uiModel.addAttribute("propertyValues",productPropertyValues);
+		uiModel.addAttribute("propertyValuesString",JSONArray.toJSONString(productPropertyValues));
 				
 		uiModel.addAttribute("product", product);
 		uiModel.addAttribute("operation", "edit");
