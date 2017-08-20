@@ -68,10 +68,7 @@ public class ProductController extends BaseController<PrProduct> {
 		product.setId(System.currentTimeMillis()+""+Math.round(Math.random()*100));
 		
 		//商品属性。
-		PrProductPropertyCriteria productCriteria = null;
-		productCriteria = new PrProductPropertyCriteria();
-		productCriteria.setOrderByClause("id asc");
-		List<PrProductProperty> properties = productPropertyService.selectByExample(productCriteria);
+		List<PrProductProperty> properties = productPropertyService.listAll();
 		uiModel.addAttribute("properties",properties);
 		uiModel.addAttribute("propertiesString",JSONArray.toJSONString(properties));
 				
@@ -86,22 +83,15 @@ public class ProductController extends BaseController<PrProduct> {
 		PrProductWithBLOBs product = productService.selectByPrimKey(id);
 		
 		//商品属性。
-		PrProductPropertyCriteria productCriteria = null;
-		productCriteria = new PrProductPropertyCriteria();
-		productCriteria.setOrderByClause("id asc");
-		List<PrProductProperty> properties = productPropertyService.selectByExample(productCriteria);
+		List<PrProductProperty> properties = productPropertyService.listAll();
 		uiModel.addAttribute("properties",properties);
 		uiModel.addAttribute("propertiesString",JSONArray.toJSONString(properties));
 		
-		PrProductPackagePriceCriteria packagePriceCriteria = new PrProductPackagePriceCriteria();
-		packagePriceCriteria.createCriteria().andProductIdEqualTo(product.getId());
-		List<PrProductPackagePrice> packagePrices =  packagePriceService.selectByExample(packagePriceCriteria);
+		List<PrProductPackagePrice> packagePrices =  packagePriceService.selectByProductId(product.getId());
 		uiModel.addAttribute("packagePrices",packagePrices);
 		uiModel.addAttribute("packagePricesString",JSONArray.toJSONString(packagePrices));
 		
-		PrProductPropertyValueCriteria valueCriteria = new PrProductPropertyValueCriteria();
-		valueCriteria.createCriteria().andProductIdEqualTo(product.getId());
-		List<PrProductPropertyValue> productPropertyValues = this.productPropertyValueService.selectByExample(valueCriteria);
+		List<PrProductPropertyValue> productPropertyValues = this.productPropertyValueService.selectByProductId(product.getId());
 		uiModel.addAttribute("propertyValues",productPropertyValues);
 		uiModel.addAttribute("propertyValuesString",JSONArray.toJSONString(productPropertyValues));
 				
@@ -110,8 +100,7 @@ public class ProductController extends BaseController<PrProduct> {
 		
 		return basePath + "product_edit";
 	}
-	
-	
+
 	@RequiresPermissions("mall:product:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid PrProductWithBLOBs product,@RequestParam String propertyValues,
@@ -145,20 +134,14 @@ public class ProductController extends BaseController<PrProduct> {
 		JSONArray perpertyArray = null;
 		if(null != propertyValues && !"".equals(propertyValues)){
 			perpertyArray =  (JSONArray) JSONArray.parse(propertyValues);
-			for (Object obj : perpertyArray) {
-				JSONObject json = (JSONObject) obj;
-				JSONArray perpertyValueArray = (JSONArray) json.get("propertyValueArray");
-				for (Object object : perpertyValueArray) {
-					JSONObject jsonObject = (JSONObject) object;
-					PrProductPropertyValue productProperty = new PrProductPropertyValue();
-					String id = System.currentTimeMillis() + "" + Math.round(Math.random() * 1000);
-					productProperty.setId(id);
-					productProperty.setProductId(product.getId());
-					productProperty.setPropertyId(jsonObject.getString("propertyId"));
-					productProperty.setName((String) jsonObject.get("name"));
-					productPropertyValueService.insertSelective(productProperty);
-				}
-				
+			for (Object object : perpertyArray) {
+				JSONObject jsonObject = (JSONObject) object;
+				PrProductPropertyValue productProperty = new PrProductPropertyValue();
+				productProperty.setId(jsonObject.getString("id"));
+				productProperty.setProductId(product.getId());
+				productProperty.setPropertyId(jsonObject.getString("propertyId"));
+				productProperty.setName((String) jsonObject.get("name"));
+				productPropertyValueService.insertSelective(productProperty);
 			}
 		}
 		
@@ -168,7 +151,7 @@ public class ProductController extends BaseController<PrProduct> {
 			for (Object obj : perPriceArray) {
 				JSONObject json = (JSONObject) obj;
 				PrProductPackagePrice packagePrice = new PrProductPackagePrice(); 
-				String id = System.currentTimeMillis() + "" + Math.round(Math.random() * 1000);
+				String id = json.getString("id");
 				String groupPrice = json.getString("groupPrice");
 				Double indepentPrice = Double.valueOf(json.getString("indepentPrice"));
 				String pId = product.getId();
@@ -196,6 +179,7 @@ public class ProductController extends BaseController<PrProduct> {
 			redirectAttributes.addFlashAttribute("product", product);
 			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
 		}
+		
 		/*Subject currentUser = SecurityUtils.getSubject(); 
 		if(currentUser!=null){
 			TbUser user =  (TbUser) currentUser.getSession().getAttribute("user");
@@ -210,6 +194,40 @@ public class ProductController extends BaseController<PrProduct> {
 			redirectAttributes.addFlashAttribute("product", product);
 			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
+		JSONArray perpertyArray = null;
+		if(null != propertyValues && !"".equals(propertyValues)){
+			perpertyArray =  (JSONArray) JSONArray.parse(propertyValues);
+			for (Object object : perpertyArray) {
+				JSONObject jsonObject = (JSONObject) object;
+				PrProductPropertyValue productProperty = new PrProductPropertyValue();
+				productProperty.setId(jsonObject.getString("id"));
+				productProperty.setProductId(product.getId());
+				productProperty.setPropertyId(jsonObject.getString("propertyId"));
+				productProperty.setName((String) jsonObject.get("name"));
+				productPropertyValueService.insertSelective(productProperty);
+			}
+		}
+		
+		JSONArray perPriceArray = null;
+		if(null != propertyPrices && !"".equals(propertyPrices)){
+			perPriceArray =  (JSONArray) JSONArray.parse(propertyPrices);
+			for (Object obj : perPriceArray) {
+				JSONObject json = (JSONObject) obj;
+				PrProductPackagePrice packagePrice = new PrProductPackagePrice(); 
+				String id = json.getString("id");
+				String groupPrice = json.getString("groupPrice");
+				Double indepentPrice = Double.valueOf(json.getString("indepentPrice"));
+				String pId = product.getId();
+				String pValueId = json.getString("propertyValueId");
+				packagePrice.setId(id);
+				packagePrice.setGourpPrice(groupPrice);
+				packagePrice.setIndependentPrice(indepentPrice);
+				packagePrice.setProductId(pId);
+				packagePrice.setPropertyValueId(pValueId);
+				packagePriceService.insertSelective(packagePrice);
+			}
+		}
+		
 		redirectAttributes.addAttribute("operation", "edit");
 		return "redirect:/product/edit/"+product.getId();
 	}

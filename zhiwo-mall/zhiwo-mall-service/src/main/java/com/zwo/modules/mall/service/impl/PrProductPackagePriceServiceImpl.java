@@ -78,7 +78,7 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrProductPackagePrice", allEntries = true)
+	@CacheEvict(value = {"PrProductPackagePrice","PrProductPackagePrices"}, allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -92,7 +92,7 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 		return result;
 	}
 
-	@CacheEvict(value = "PrProductPackagePrice", allEntries = true)
+	@CacheEvict(value = {"PrProductPackagePrice","PrProductPackagePrices"}, allEntries = true)
 //	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
@@ -119,7 +119,7 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "PrProductPackagePrice",key="#id+''")
+	@CacheEvict(value = {"PrProductPackagePrice","PrProductPackagePrices"},key="#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -142,7 +142,7 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "PrProductPackagePrice", key = "#record.id")
+//	@CachePut(value = {"PrProductPackagePrice","PrProductPackagePrices"}, key = "#record.id")
 	public int insert(PrProductPackagePrice record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -169,7 +169,7 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 	 */
 
 	@Override
-//	@CachePut(value = "PrProductPackagePrice", key = "#record.id")
+//	@CachePut(value = {"PrProductPackagePrice","PrProductPackagePrices"}, key = "#record.id")
 	public int insertSelective(PrProductPackagePrice record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -208,7 +208,7 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = "PrProductPackagePrice")
+	@Cacheable(key = "#id+''", value = {"PrProductPackagePrice","PrProductPackagePrices"})
 	@Transactional(readOnly = true)
 	public PrProductPackagePrice selectByPrimaryKey(String id) {
 		// 日志记录
@@ -231,7 +231,7 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 	 * com.zwotech.modules.core.service.IBaseService#updateByExampleSelective(
 	 * java.lang.Object, java.lang.Object)
 	 */
-	@CacheEvict(value = "PrProductPackagePrice", allEntries = true)
+	@CacheEvict(value = {"PrProductPackagePrice","PrProductPackagePrices"}, allEntries = true)
 	@Override
 	public int updateByExampleSelective(PrProductPackagePrice record, Object example) {
 		// 日志记录
@@ -256,7 +256,7 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 	 * Object, java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrProductPackagePrice", allEntries = true)
+	@CacheEvict(value = {"PrProductPackagePrice","PrProductPackagePrices"}, allEntries = true)
 	public int updateByExample(PrProductPackagePrice record, Object example) {
 		//日志记录
 		if(logger.isInfoEnabled())
@@ -280,7 +280,7 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrProductPackagePrice",key="#record.id")
+	@CacheEvict(value = {"PrProductPackagePrice","PrProductPackagePrices"},key="#record.id")
 	public int updateByPrimaryKeySelective(PrProductPackagePrice record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -303,7 +303,7 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrProductPackagePrice",key="#record.id")
+	@CacheEvict(value = {"PrProductPackagePrice","PrProductPackagePrices"},key="#record.id")
 	public int updateByPrimaryKey(PrProductPackagePrice record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -345,6 +345,32 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 		productPackagePrice.setId(System.currentTimeMillis() + "");
 		int result = productPackagePriceServiceImpl.insertSelective(productPackagePrice);
 		logger.info(result + "");
+	}
+
+	@Cacheable(key = "#pId+''", value = "PrProductPackagePrices")
+	@Transactional(readOnly = true)
+	@Override
+	public List<PrProductPackagePrice> selectByProductId(String pId) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "根据商品Id查询开始");
+		PrProductPackagePriceCriteria packagePriceCriteria = new PrProductPackagePriceCriteria();
+		packagePriceCriteria.createCriteria().andProductIdEqualTo(pId);
+		List<PrProductPackagePrice> packagePrices =  this.productPackagePriceMapper.selectByExample(packagePriceCriteria);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "根据商品Id查询结束，结果条目数为："+packagePrices.size());
+		return packagePrices;
+	}
+
+	@Override
+	@CacheEvict(value = {"PrProductPackagePrice","PrProductPackagePrices"},key="#record.id")
+	public void deleteByProductId(String pId) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "根据商品Id删除开始");
+		PrProductPackagePriceCriteria packagePriceCriteria = new PrProductPackagePriceCriteria();
+		packagePriceCriteria.createCriteria().andProductIdEqualTo(pId);
+		int result =  this.productPackagePriceMapper.deleteByExample(packagePriceCriteria);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "根据商品Id删除结束，结果条目数为："+result);
 	}
 
 }

@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.dao.PrProductPropertyValueMapper;
+import com.zwo.modules.mall.domain.PrProductPackagePrice;
+import com.zwo.modules.mall.domain.PrProductPackagePriceCriteria;
 import com.zwo.modules.mall.domain.PrProductPropertyValue;
 import com.zwo.modules.mall.domain.PrProductPropertyValueCriteria;
 import com.zwo.modules.mall.service.IPrProductPropertyValueService;
@@ -78,7 +80,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrProductPropertyValue", allEntries = true)
+	@CacheEvict(value = {"PrProductPropertyValue","PrProductPropertyValues"}, allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -92,7 +94,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 		return result;
 	}
 
-	@CacheEvict(value = "PrProductPropertyValue", allEntries = true)
+	@CacheEvict(value = {"PrProductPropertyValue","PrProductPropertyValues"}, allEntries = true)
 //	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
@@ -119,7 +121,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "PrProductPropertyValue",key="#id+''")
+	@CacheEvict(value = {"PrProductPropertyValue","PrProductPropertyValues"},key="#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -142,7 +144,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "PrProductPropertyValue", key = "#record.id")
+//	@CachePut(value = {"PrProductPropertyValue","PrProductPropertyValues"}, key = "#record.id")
 	public int insert(PrProductPropertyValue record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -169,7 +171,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 	 */
 
 	@Override
-//	@CachePut(value = "PrProductPropertyValue", key = "#record.id")
+//	@CachePut(value = {"PrProductPropertyValue","PrProductPropertyValues"}, key = "#record.id")
 	public int insertSelective(PrProductPropertyValue record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -208,7 +210,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = "PrProductPropertyValue")
+	@Cacheable(key = "#id+''", value = {"PrProductPropertyValue","PrProductPropertyValues"})
 	@Transactional(readOnly = true)
 	public PrProductPropertyValue selectByPrimaryKey(String id) {
 		// 日志记录
@@ -231,7 +233,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 	 * com.zwotech.modules.core.service.IBaseService#updateByExampleSelective(
 	 * java.lang.Object, java.lang.Object)
 	 */
-	@CacheEvict(value = "PrProductPropertyValue", allEntries = true)
+	@CacheEvict(value = {"PrProductPropertyValue","PrProductPropertyValues"}, allEntries = true)
 	@Override
 	public int updateByExampleSelective(PrProductPropertyValue record, Object example) {
 		// 日志记录
@@ -256,7 +258,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 	 * Object, java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrProductPropertyValue", allEntries = true)
+	@CacheEvict(value = {"PrProductPropertyValue","PrProductPropertyValues"}, allEntries = true)
 	public int updateByExample(PrProductPropertyValue record, Object example) {
 		//日志记录
 		if(logger.isInfoEnabled())
@@ -280,7 +282,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrProductPropertyValue",key="#record.id")
+	@CacheEvict(value = {"PrProductPropertyValue","PrProductPropertyValues"},key="#record.id")
 	public int updateByPrimaryKeySelective(PrProductPropertyValue record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -303,7 +305,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrProductPropertyValue",key="#record.id")
+	@CacheEvict(value = {"PrProductPropertyValue","PrProductPropertyValues"},key="#record.id")
 	public int updateByPrimaryKey(PrProductPropertyValue record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -345,6 +347,32 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 		productPropertyValue.setId(System.currentTimeMillis() + "");
 		int result = productPropertyValueServiceImpl.insertSelective(productPropertyValue);
 		logger.info(result + "");
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	@Cacheable(key = "#pId+''", value = "PrProductPropertyValues")
+	public List<PrProductPropertyValue> selectByProductId(String pId) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "根据商品Id查询商品属性开始");
+		PrProductPropertyValueCriteria propertyValueCriteria = new PrProductPropertyValueCriteria();
+		propertyValueCriteria.createCriteria().andProductIdEqualTo(pId);
+		List<PrProductPropertyValue> propertyValues =  this.productPropertyValueMapper.selectByExample(propertyValueCriteria);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "根据商品Id查询商品属性结束，结果条目数为："+propertyValues.size());
+		return propertyValues;
+	}
+
+	@Override
+	@CacheEvict(value = {"PrProductPropertyValue","PrProductPropertyValues"},key="#pId+''")
+	public void deleteByProductId(String pId) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "根据商品Id删除商品属性开始");
+		PrProductPropertyValueCriteria propertyValueCriteria = new PrProductPropertyValueCriteria();
+		propertyValueCriteria.createCriteria().andProductIdEqualTo(pId);
+		int result = this.productPropertyValueMapper.deleteByExample(propertyValueCriteria);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "根据商品Id删除商品属性结束，结果条目数为："+result);
 	}
 
 }

@@ -78,7 +78,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrProductProperty", allEntries = true)
+	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"}, allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -92,7 +92,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 		return result;
 	}
 
-	@CacheEvict(value = "PrProductProperty", allEntries = true)
+	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"}, allEntries = true)
 //	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
@@ -119,7 +119,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "PrProductProperty",key="#id+''")
+	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"},key="#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -142,7 +142,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "PrProductProperty", key = "#record.id")
+//	@CachePut(value = {"PrProductProperty","PrProductPropertys"}, key = "#record.id")
 	public int insert(PrProductProperty record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -169,7 +169,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 */
 
 	@Override
-//	@CachePut(value = "PrProductProperty", key = "#record.id")
+//	@CachePut(value = {"PrProductProperty","PrProductPropertys"}, key = "#record.id")
 	public int insertSelective(PrProductProperty record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -208,7 +208,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = "PrProductProperty")
+	@Cacheable(key = "#id+''", value = {"PrProductProperty","PrProductPropertys"})
 	@Transactional(readOnly = true)
 	public PrProductProperty selectByPrimaryKey(String id) {
 		// 日志记录
@@ -231,7 +231,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * com.zwotech.modules.core.service.IBaseService#updateByExampleSelective(
 	 * java.lang.Object, java.lang.Object)
 	 */
-	@CacheEvict(value = "PrProductProperty", allEntries = true)
+	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"}, allEntries = true)
 	@Override
 	public int updateByExampleSelective(PrProductProperty record, Object example) {
 		// 日志记录
@@ -256,7 +256,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * Object, java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrProductProperty", allEntries = true)
+	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"}, allEntries = true)
 	public int updateByExample(PrProductProperty record, Object example) {
 		//日志记录
 		if(logger.isInfoEnabled())
@@ -280,7 +280,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrProductProperty",key="#record.id")
+	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"},key="#record.id")
 	public int updateByPrimaryKeySelective(PrProductProperty record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -303,7 +303,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrProductProperty",key="#record.id")
+	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"},key="#record.id")
 	public int updateByPrimaryKey(PrProductProperty record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -345,6 +345,21 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 		productProperty.setId(System.currentTimeMillis() + "");
 		int result = productPropertyServiceImpl.insertSelective(productProperty);
 		logger.info(result + "");
+	}
+
+	@Transactional(readOnly = true)
+	@Override
+	@Cacheable(value = "PrProductPropertys")
+	public List<PrProductProperty> listAll() {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询所有属性开始");
+		PrProductPropertyCriteria productCriteria = null;
+		productCriteria = new PrProductPropertyCriteria();
+		productCriteria.setOrderByClause("id asc");
+		List<PrProductProperty> properties = this.productPropertyMapper.selectByExample(productCriteria);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询所有属性结束，结果条目数为："+properties.size());
+		return properties;
 	}
 
 }
