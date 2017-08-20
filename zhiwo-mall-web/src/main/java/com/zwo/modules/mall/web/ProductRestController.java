@@ -21,6 +21,9 @@ import com.github.pagehelper.DatagridPage;
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductCriteria;
+import com.zwo.modules.mall.service.IPrProductPackagePriceService;
+import com.zwo.modules.mall.service.IPrProductPropertyService;
+import com.zwo.modules.mall.service.IPrProductPropertyValueService;
 import com.zwo.modules.mall.service.IPrductService;
 import com.zwotech.common.web.BaseController;
 
@@ -31,6 +34,13 @@ public class ProductRestController extends BaseController<PrProduct> {
 	@Autowired
 	@Lazy(true)
 	private IPrductService prductService;
+	
+	@Autowired
+	@Lazy(true)
+	private IPrProductPropertyValueService productPropertyValueService;
+	@Autowired
+	@Lazy(true)
+	private IPrProductPackagePriceService packagePriceService;
 	
 	/** 
 	 * @Title: deleteById 
@@ -49,6 +59,8 @@ public class ProductRestController extends BaseController<PrProduct> {
 		String[] ids = idstring.split(",");
 		List<String> list = new ArrayList<String>();
 		for (String idstr : ids) {
+			packagePriceService.deleteByProductId(idstr);
+			productPropertyValueService.deleteByProductId(idstr);
 			list.add(idstr);
 		}
 		int result = prductService.deleteBatch(list);
@@ -68,7 +80,8 @@ public class ProductRestController extends BaseController<PrProduct> {
 	@RequestMapping(value = "delete")
 	public String delete(@RequestParam(value = "id",required=true) String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
-		
+		packagePriceService.deleteByProductId(id);
+		productPropertyValueService.deleteByProductId(id);
 		int result = prductService.deleteByPrimaryKey(id);
 		return result+"";
 	}

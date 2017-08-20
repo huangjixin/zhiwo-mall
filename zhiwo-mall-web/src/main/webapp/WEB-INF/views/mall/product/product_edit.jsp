@@ -168,10 +168,6 @@
                      <button type="button" class="btn btn-success fileinput-button" data-toggle="modal" data-target="#propertyModal">
                         <i class="fa fa-plus"></i>&nbsp;&nbsp;新增
                     </button>
-                    &nbsp;&nbsp;
-                     <button type="button" class="btn btn-success fileinput-button" data-toggle="modal" data-target="#propertyModal">
-                        <i class="fa fa-plus"></i>&nbsp;&nbsp;管理
-                    </button>
                 </div>
         </div>
         <div class="form-group">
@@ -180,14 +176,16 @@
             	
                 	<c:forEach var="property" items="${properties}" varStatus="status">
                     	<div class="col-sm-12" id="${property.id}" >
-                        	<label class="checkbox-inline">${property.name}:</label>
+                        	<label class="checkbox-inline"  id="${property.id}">${property.name}:</label>
                             <c:forEach var="pValue" items="${propertyValues}" varStatus="pValueStatus">
                                 <c:if test="${property.id==pValue.propertyId}">
                                 		<c:if test="${pValueStatus.index==0}">
                                         	
                                         </c:if>
                                         
-                                        <label class="checkbox-inline">${pValue.name}</label>
+                                        <label class="checkbox-inline"  id="${pValue.id}">${pValue.name}<label style="color:red;" onClick="removePropertyValue('${pValue.id}')">(删除)</label></label>
+                                        
+                                        
                                 </c:if>
                             </c:forEach>
                         </div>
@@ -206,7 +204,7 @@
                             	<c:if test="${proValueId==propertyValue.id}">
                                 	<c:forEach var="property" items="${properties}">
                                     	<c:if test="${propertyValue.propertyId==property.id}">
-                                        	<label  class="checkbox-inline">${property.name}：${propertyValue.name}</label>
+                                        	<label  class="checkbox-inline" >${property.name}：${propertyValue.name}</label>
                                         </c:if>
                                     </c:forEach>
                                 	
@@ -373,6 +371,87 @@
 			
 		});
 		
+		// 移除属性值。
+		function removePropertyValue(pValueId){
+			$('#'+pValueId).remove();
+			var flag = -1;
+			for(var i=0;i<propertyValueArray.length;i++){
+				if(pValueId==propertyValueArray[i].id){
+					flag =i;
+					break;
+				}
+			}
+			if(flag!=-1){
+				var num=0;
+				for(i=0;i<propertyValueArray.length;i++){
+					if(propertyValueArray[i].id==pValueId){
+						num+=1;
+					}
+				}
+				if(num==1){
+					var pId = propertyValueArray[flag].propertyId;
+					var posi = propertyArray.indexOf(pId);
+					if(posi!=-1){
+						propertyArray.splice(posi,1);
+					}
+				}
+				
+				propertyValueArray.splice(flag,1);
+			}
+			
+			var tempArray = [];
+			for(i=0;i<pricesArray.length;i++){
+				var price = pricesArray[i];
+				var propertyValueId = price.propertyValueId;
+				var index = propertyValueId.indexOf(pValueId);
+				if(index!=-1){
+					tempArray.push(pricesArray[i]);
+					//index = propertyValueId.indexOf(pValueId+"_");
+//					if(index!=-1){
+//						propertyValueId=propertyValueId.replace(pValueId+"_",'');
+//					}else{
+//						propertyValueId=propertyValueId.replace(pValueId,'');
+//					}
+//					
+//					pricesArray[i].propertyValueId = propertyValueId;
+					
+				}
+			}
+			
+			for(i=0;i<tempArray.length;i++){
+				var price = tempArray[i];
+				var index = $.inArray(price,pricesArray);
+				if(index!=-1){
+					if(pricesArray.length==1){
+						var price = pricesArray[i];
+						var propertyValueId = price.propertyValueId;
+						index = propertyValueId.indexOf(pValueId);
+						if(index!=-1){
+							propertyValueId=propertyValueId.replace(pValueId,'');
+							index=propertyValueId.indexOf('__');
+							if(index!=-1){
+								propertyValueId=propertyValueId.replace('__','_');
+							}
+							
+							if(propertyValueId.indexOf('_')==0){
+								propertyValueId = propertyValueId.substring(1);
+							}
+							if(propertyValueId.lastIndexOf('_')==propertyValueId.length-1){
+								propertyValueId = propertyValueId.substr(0,propertyValueId.length-1);
+							}
+						}
+						
+					}else{
+						pricesArray.splice(index,1);
+					}
+				}
+			}
+			
+			//刷新界面。
+			//refreshComponent();
+			refreshComponent1();
+		}
+		
 		// 插入属性值。
 		function appendProperty(){
 			//判断属性个数
@@ -442,7 +521,7 @@
 									var price3 = {};
 									price3.gourpPrice="";
 									price3.independentPrice="";
-									price3.id = new Date().getTime()+""+Math.round(Math.random()*100);
+									price3.id = (new Date().getTime()+""+Math.round(Math.random()*100));
 									price3.productId=$('#id').val();
 									price3.propertyValueId=propertyValueArray[i].id+"_"+propertyValueArray[j].id+"_"+propertyValueArray[p].id;
 									
@@ -468,13 +547,13 @@
 				//先清空。
 				$('#'+pId).empty();
 				var parm = '';
-				var label = '<label class="checkbox-inline">'+proArray[i].name+':</label>';
+				var label = '<label class="checkbox-inline" id="'+proArray[i].id+'">'+proArray[i].name+':</label>';
 				parm += label;
 				for(var j=0;j<propertyValueArray.length;j++){
-					var proId = propertyValueArray[j].propertyId;
+					var propertyValue = propertyValueArray[j];
+					var proId = propertyValue.propertyId;
 					if(pId == proId){
-				
-						var labelCheckBox = '<label class="checkbox-inline">'+propertyValueArray[j].name+'</label>';
+						var labelCheckBox = '<label class="checkbox-inline" id="'+propertyValueArray[j].id+'">'+propertyValueArray[j].name+'<label  style="color:red;" onClick="removePropertyValue(\''+propertyValue.id+'\')">(删除)</label></label>';
 						parm += labelCheckBox;
 					}
 				}
