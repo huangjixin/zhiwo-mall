@@ -280,7 +280,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"},key="#record.id")
+	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"},key="#record.id",allEntries=true)
 	public int updateByPrimaryKeySelective(PrProductProperty record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -303,7 +303,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"},key="#record.id")
+	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"},key="#record.id",allEntries=true)
 	public int updateByPrimaryKey(PrProductProperty record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

@@ -102,7 +102,7 @@
 					onclick="fileUploadToServer();">
 					<i class="fa fa-upload"></i> <span>&nbsp;&nbsp;开始上传</span>
 				</button>
-				
+				<label id="message">${message}</label>
 			</div>
 		</div>
 		<div class="form-group">
@@ -115,9 +115,9 @@
         <div class="form-group">
 			<label for="allowDistribution" class="col-sm-2 control-label">是否允许分销</label>
 			<div class="col-sm-4">
-				<select id="cc" class="easyui-combobox" name="allowDistribution" style="width:200px;">   
-                    <option value="true" <c:if test="${allowDistribution}">selected=true</c:if>>是</option> 
-                    <option value="false" <c:if test="${!allowDistribution}">selected=true</c:if>>否</option>
+				<select id="allowDistribution" class="easyui-combobox" name="allowDistribution" style="width:200px;">   
+                    <option value="false" <c:if test="${!product.allowDistribution}">selected=true</c:if>>否</option>
+                    <option value="true" <c:if test="${product.allowDistribution}">selected=true</c:if>>是</option> 
                 </select> 
 			</div>
 		</div>
@@ -154,7 +154,12 @@
         <div class="form-group">
                <label for="propertySetting" class="col-sm-2 control-label">属性设置</label>
                <div class="col-sm-4">
-               		<input id="propertySetting" class="easyui-combobox" name="propertySetting"  style="width:200px;"  data-options="valueField:'id',textField:'name',url:'${ctx}/productProperty/listAll'" editable="false" /> 
+               		<input id="propertySetting" class="easyui-combobox" name="propertySetting"  style="width:200px;"  data-options="valueField:'id',textField:'name',url:'${ctx}/productProperty/listAll',onLoadSuccess: function () { 
+ var data = $('#propertySetting').combobox('getData');
+             if (data.length > 0) {
+                 $('#propertySetting').combobox('select', data[0].id);
+             } 
+}" editable="false" /> 
                     <!--<select id="propertySetting" class="easyui-combobox" name="propertySetting" style="width:200px;">   
                          				<option value="style">款式</option> 
                                         <option value="specification">规格</option>
@@ -165,7 +170,7 @@
                                         <option value="other">其它</option>
                      </select>-->
                      &nbsp;&nbsp;
-                     <button type="button" class="btn btn-success fileinput-button" data-toggle="modal" data-target="#propertyModal">
+                     <button id="addPropertyBtn" onClick="setBtnStatus(false,true);" type="button" class="btn btn-success fileinput-button" data-toggle="modal" data-target="#propertyModal">
                         <i class="fa fa-plus"></i>&nbsp;&nbsp;新增
                     </button>
                 </div>
@@ -179,11 +184,8 @@
                         	<label class="checkbox-inline"  id="${property.id}">${property.name}:</label>
                             <c:forEach var="pValue" items="${propertyValues}" varStatus="pValueStatus">
                                 <c:if test="${property.id==pValue.propertyId}">
-                                		<c:if test="${pValueStatus.index==0}">
-                                        	
-                                        </c:if>
-                                        
-                                        <label class="checkbox-inline"  id="${pValue.id}">${pValue.name}<label style="color:red;" onClick="removePropertyValue('${pValue.id}')">(删除)</label></label>
+                                		
+                                        <label class="checkbox-inline"  id="${pValue.id}">${pValue.name}<label style="color:red;" onClick="removePropertyValue('${pValue.id}')">(删除)</label><label style="color:red;" onClick="modifyPropertyValue('${pValue.id}')">(修改)</label></label>
                                         
                                         
                                 </c:if>
@@ -228,7 +230,7 @@
             <label for="independentPrice" class="col-sm-2 control-label"></label>
             <div class="col-sm-4">
             	<%@ include file="/WEB-INF/include/easyui-buttonForm.jsp"%>
-            	<label id="message">${message}</label>
+            	
             </div>
         </div>
 		<div class="form-group">
@@ -250,6 +252,7 @@
                         </h4>
                     </div>
                     <div class="modal-body">
+                    	<input type="hidden" id="pValueId"/>
                     	<div class="form-group">
                             <label for="propertyValue" class="col-sm-2 control-label">属性值</label>
                             <div class="col-sm-9">
@@ -286,12 +289,22 @@
                         <div class="form-group">
                             <label  class="col-sm-2 control-label"></label>
                            	<div class="col-sm-9">
-                               	<button type="button" class="btn btn-success" onClick="appendProperty();">新增
+                               	<button id="addAppendPropertyBtn" type="button" class="btn btn-success" onClick="appendProperty();">新增
                         		</button>
                                 &nbsp;&nbsp;
+                                <button id="modifyAppendPropertyBtn" type="button" class="btn btn-success" onClick="updateData();">修改
+                        		</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label"></label>
+                           	<div class="col-sm-9">
                                     <button type="button" class="btn btn-success fileinput-button">从已上传的图片选择
                                     </button>&nbsp;&nbsp;
                                     <button type="button" class="btn btn-success fileinput-button">选择本地文件
+                                    </button>
+                                    <button type="button" class="btn btn-primary start">
+                                        <i class="fa fa-upload"></i> <span>&nbsp;&nbsp;开始上传</span>
                                     </button>
                             </div>
                         </div>
@@ -450,8 +463,79 @@
 			refreshComponent1();
 		}
 		
+		function setBtnStatus(addAppendPropertyBtnStatus,modifyAppendPropertyBtnStatus){
+			$('#addAppendPropertyBtn').attr("disabled",addAppendPropertyBtnStatus);
+			$('#modifyAppendPropertyBtn').attr("disabled",modifyAppendPropertyBtnStatus);	
+		}
+		
+		
+		//修改属性值。
+		function modifyPropertyValue(pValueId){
+			$('#addPropertyBtn').click();
+			setBtnStatus(true,false);
+			
+			var flag = -1;
+			var properValue;
+			for(var i=0;i<propertyValueArray.length;i++){
+				if(pValueId==propertyValueArray[i].id){
+					flag =i;
+					break;
+				}
+			}
+			if(flag!=-1){
+				properValue = propertyValueArray[flag];
+				$('#pValueId').val(properValue.id);
+				$('#propertyValue').val(properValue.name);
+			}
+		}
+		
+		function updateData(){
+			//找寻数组值元素。
+			var flag = -1;
+			var properValue;
+			var pValueId = $('#pValueId').val();
+			for(var i=0;i<propertyValueArray.length;i++){
+				if(pValueId==propertyValueArray[i].id){
+					flag =i;
+					break;
+				}
+			}
+			if(flag!=-1){
+				properValue = propertyValueArray[flag];
+				
+				if(properValue){
+					properValue.disable = $('#propertyValueDisabled').combobox('getValue');
+					properValue.name = $('#propertyValue').val();
+					properValue.imageId = $('#propertyValueImg').val();
+					
+					//propertyValueArray[flag] = properValue;
+					
+					
+					for(var j=0;j<pricesArray.length;j++){
+						var object = pricesArray[j];
+						
+						object.groupPrice = $('#'+object.propertyValueId+"_GroupInput").val();
+						object.indepentPrice = $('#'+object.propertyValueId+"_IndependInput").val();
+						object.propertyValueId = object.propertyValueId;
+						object.productId = $('#id').val();
+					}
+					
+					refreshComponent();
+					refreshComponent1();
+					for(j=0;j<pricesArray.length;j++){
+						var object = pricesArray[j];
+						$('#'+object.propertyValueId+"_GroupInput").val(object.groupPrice);
+						$('#'+object.propertyValueId+"_IndependInput").val(object.indepentPrice);
+					}
+				}
+			}
+			
+			
+		}
+		
 		// 插入属性值。
 		function appendProperty(){
+				
 			//判断属性个数
 			if(propertyArray.length>3){
 				$('#messageLabel').html('属性个数不得超过3个');
@@ -551,7 +635,7 @@
 					var propertyValue = propertyValueArray[j];
 					var proId = propertyValue.propertyId;
 					if(pId == proId){
-						var labelCheckBox = '<label class="checkbox-inline" id="'+propertyValueArray[j].id+'">'+propertyValueArray[j].name+'<label  style="color:red;" onClick="removePropertyValue(\''+propertyValue.id+'\')">(删除)</label></label>';
+						var labelCheckBox = '<label class="checkbox-inline" id="'+propertyValueArray[j].id+'">'+propertyValueArray[j].name+'<label  style="color:red;" onClick="removePropertyValue(\''+propertyValue.id+'\')">(删除)</label><label  style="color:red;" onClick="modifyPropertyValue(\''+propertyValue.id+'\')">(修改)</label></label>';
 						parm += labelCheckBox;
 					}
 				}
