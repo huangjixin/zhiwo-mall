@@ -213,8 +213,8 @@
                                 </c:if>
                             </c:forEach>
                         </c:forEach>
-                    	<input type="text" id="${packagePrice.propertyValueId}_GroupInput" value="${packagePrice.gourpPrice}" class="form-control" placeholder="组合拼团价(元)">
-                    	<input type="text" id="${packagePrice.propertyValueId}_IndependInput" value="${packagePrice.independentPrice}" class="form-control" placeholder="单独购买价(元)">
+                    	<input type="text" id="${packagePrice.propertyValueId}_GroupInput" value="${packagePrice.gourpPrice}" class="form-control" placeholder="组合拼团价(元)" onBlur="priceCallback()">
+                    	<input type="text" id="${packagePrice.propertyValueId}_IndependInput" value="${packagePrice.independentPrice}" class="form-control" placeholder="单独购买价(元)" onBlur="priceCallback()">
                         
                     </div>
                 </c:forEach>
@@ -383,6 +383,30 @@
 			}
 			
 		});
+		
+		//回填价格函数
+		function priceCallback(){
+				var maxGroupPrice=0;
+				var minGroupPrice=0;
+				var maxIndepentPrice=0;
+				var minIndepentPrice=0;
+				if(pricesArray.length>0){
+					var object = pricesArray[0];
+					minGroupPrice = $('#'+object.propertyValueId+"_GroupInput").val();
+					minIndepentPrice = $('#'+object.propertyValueId+"_IndependInput").val();
+					
+				}
+					for(var j=1;j<pricesArray.length;j++){
+						var object = pricesArray[j];
+						var groupPrice1 = $('#'+object.propertyValueId+"_GroupInput").val();
+						var indepentPrice1 = $('#'+object.propertyValueId+"_IndependInput").val();
+						minGroupPrice =groupPrice1<minGroupPrice?groupPrice1:minGroupPrice;
+						minIndepentPrice =indepentPrice1<minIndepentPrice?indepentPrice1:minIndepentPrice;
+					}
+					
+				$('#gourpSalePrice').val(minGroupPrice);
+				$('#independentPrice').val(minIndepentPrice);
+		}
 		
 		// 移除属性值。
 		function removePropertyValue(pValueId){
@@ -670,7 +694,7 @@
 				}
 				
 				if(propertyValueArray.length>0){
-					para+='<input id="'+price.propertyValueId+'_GroupInput" type="text" class="form-control" placeholder="'+pName+'合拼团价(元)"><input  id="'+price.propertyValueId+'_IndependInput" type="text" class="form-control" placeholder="'+pName+'合单独购买价(元)">';
+					para+='<input id="'+price.propertyValueId+'_GroupInput" type="text" class="form-control" placeholder="'+pName+'拼团价(元)"  onBlur="priceCallback()"><input  id="'+price.propertyValueId+'_IndependInput" type="text" class="form-control" placeholder="'+pName+'单独购买价(元)"  onBlur="priceCallback()">';
 					$('#proValuePriceDiv').append(para);
 				}
 										
