@@ -225,6 +225,7 @@
                     <input type="text" class="form-control" placeholder="108黑底【男款】+39组合单独购买价(元)">
 				</div>-->
 			</div>
+
 		</div>
         <div class="form-group">
             <label for="independentPrice" class="col-sm-2 control-label"></label>
@@ -274,9 +275,19 @@
                             <label for="propertyValueImg" class="col-sm-2 control-label">属性值图片</label>
                             <div class="col-sm-9">
                             	<img id="propertyValueImg" class=".img-responsive" style="width: 100px;">
-                               	<input type="hidden" class="form-control" id="propertyValueImg" name="propertyValueImg"
-									placeholder="属性值图片" value=""、>
-                                    
+                               	<input type="hidden"  id="propertyValueImg" name="propertyValueImg"
+									 value="">
+                                <input type="hidden"  id="selectedPropertyValueImg" name="propertyValueImg"
+									 value="">
+                                <div class="row" id="propertyValueImgRow">
+                                	<c:forEach var="prImage" items="${prImages}">
+                                    	 <div class="col-sm-3 col-md-3" id="${prImage.id}div">
+                                            <a href="#" class="thumbnail">
+                                                <img id="${prImage.id}" src="${ctx}/${prImage.url}" class="img-responsive" width="80" height="100" onClick="$('#propertyValueImg').val('${prImage.url}');$('#selectedPropertyValueImg').val('${prImage.id}')"><label style="color:red;" onClick="deleteProvalueImage('${prImage.id}')">删除</label>
+                                            </a>
+                                        </div>
+                                    </c:forEach>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -286,6 +297,28 @@
                             </div>
                         </div>
                         
+                        
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label"></label>
+                           	<div class="col-sm-9">
+                            		<input type="file" id="prImageFile" name="file" style="display: none;" multiple="multiple"
+										accept="image/*" onChange="$('#proImageMessage').html($('#prImageFile').val())" />
+                               
+                                    <button type="button" class="btn btn-success btn-sm" onclick="$('#prImageFile').click();">选择本地文件
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-sm" onClick="uploadProImageTOServer();">
+                                        <i class="fa fa-upload"></i> <span>&nbsp;&nbsp;开始上传</span>
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash fa-lg"></i>&nbsp;&nbsp;删除
+                                    </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label"></label>
+                            	<div class="col-sm-9">
+                                	<label id="proImageMessage">${proImageMessage}</label>
+                                </div>
+                         </div>
                         <div class="form-group">
                             <label  class="col-sm-2 control-label"></label>
                            	<div class="col-sm-9">
@@ -296,19 +329,7 @@
                         		</button>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label  class="col-sm-2 control-label"></label>
-                           	<div class="col-sm-9">
-                                    <button type="button" class="btn btn-success fileinput-button">从已上传的图片选择
-                                    </button>&nbsp;&nbsp;
-                                    <button type="button" class="btn btn-success fileinput-button">选择本地文件
-                                    </button>
-                                    <button type="button" class="btn btn-primary start">
-                                        <i class="fa fa-upload"></i> <span>&nbsp;&nbsp;开始上传</span>
-                                    </button>
-                            </div>
-                        </div>
-                    	
+                    	 
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭
@@ -392,16 +413,21 @@
 				var minIndepentPrice=0;
 				if(pricesArray.length>0){
 					var object = pricesArray[0];
-					minGroupPrice = $('#'+object.propertyValueId+"_GroupInput").val();
-					minIndepentPrice = $('#'+object.propertyValueId+"_IndependInput").val();
+					minGroupPrice = $('#'+object.propertyValueId+"_GroupInput").val()==''?0:$('#'+object.propertyValueId+"_GroupInput").val();
+					minIndepentPrice = $('#'+object.propertyValueId+"_IndependInput").val()==''?0:$('#'+object.propertyValueId+"_IndependInput").val();
 					
 				}
 					for(var j=1;j<pricesArray.length;j++){
 						var object = pricesArray[j];
 						var groupPrice1 = $('#'+object.propertyValueId+"_GroupInput").val();
 						var indepentPrice1 = $('#'+object.propertyValueId+"_IndependInput").val();
-						minGroupPrice =groupPrice1<minGroupPrice?groupPrice1:minGroupPrice;
-						minIndepentPrice =indepentPrice1<minIndepentPrice?indepentPrice1:minIndepentPrice;
+						if(groupPrice1!=''){
+							minGroupPrice =groupPrice1<minGroupPrice?groupPrice1:minGroupPrice;
+						}
+						if(indepentPrice1!=''){
+							minIndepentPrice =indepentPrice1<minIndepentPrice?indepentPrice1:minIndepentPrice;
+						}
+						
 					}
 					
 				$('#gourpSalePrice').val(minGroupPrice);
@@ -551,6 +577,8 @@
 						$('#'+object.propertyValueId+"_GroupInput").val(object.groupPrice);
 						$('#'+object.propertyValueId+"_IndependInput").val(object.indepentPrice);
 					}
+					
+					$('#prImagemessage').html('修改属性成功');
 				}
 			}
 			
@@ -644,6 +672,7 @@
 			refreshComponent1();
 		    //清空属性值文本框。
 			$('#propertyValue').val('');
+			$('#prImagemessage').html('新增属性成功');
 		}
 		
 		//刷新界面控件。
@@ -726,7 +755,7 @@
 				return;
 			}
 			$('#message').html('正在上传……');
-			var url = '${ctx}/fileupload/userAssets';
+			var url = '${ctx}/fileupload/prAssets?productId='+$('#id').val();
 			$.ajaxFileUpload({
 				url : url, //用于文件上传的服务器端请求地址
 				secureuri : false, //是否需要安全协议，一般设置为false
@@ -744,6 +773,54 @@
 				error : function(data, status, e)//服务器响应失败处理函数
 				{
 					alert("上传失败");
+				}
+			})
+		}
+		
+		//上传产品属性值图片
+		function uploadProImageTOServer(){
+			var fileValue = $('#prImageFile').val();
+			if (fileValue == '') {
+				$('#prImagemessage').html('请选择一个文件')
+				return;
+			}
+			$('#prImagemessage').html('正在上传……');
+			var url = '${ctx}/fileupload/prAssets?productId='+$('#id').val();
+			$.ajaxFileUpload({
+				url : url, //用于文件上传的服务器端请求地址
+				secureuri : false, //是否需要安全协议，一般设置为false
+				fileElementId : 'prImageFile', //文件上传域的ID
+				dataType : 'json', //返回值类型 一般设置为json
+				success : function(data, status) //服务器成功响应处理函数
+				{
+					if (data.assets.length > 0) {
+						var para = '<div class="col-sm-3 col-md-3"><a href="#" class="thumbnail"><img id="${prImage.id}" src="${ctx}/${prImage.url}"  class="img-responsive" width="100"></a></div>';
+						for(var i=0;i<data.assets.length;i++){
+							var assets = data.assets[i];
+							para = '<div class="col-sm-3 col-md-3"><a href="#" class="thumbnail"><img id="'+assets.id+'" src="${ctx}/'+assets.url+'"  class="img-responsive" width="100"  onClick="$(\'#propertyValueImg\').val(\''+assets.url+'\');$(\'#selectedPropertyValueImg\').val(\''+assets.id+'\')"><label style="color:red;" onClick="deleteProvalueImage(\''+assets.id+'\')">删除</label></a></div>';
+							$('#propertyValueImgRow').append(para);
+						}
+						
+					}
+					$('#prImagemessage').html('');
+				},
+				error : function(data, status, e)//服务器响应失败处理函数
+				{
+					$('#prImagemessage').html('上传失败');
+					//alert("上传失败");
+				}
+			})
+		}
+		
+		//删除图片。
+		function deleteProvalueImage(imageId){
+			var url = '${ctx}/prImage/delete?id='+imageId;
+			$.ajax({
+				url : url,
+				dataType : 'json', //返回值类型 一般设置为json
+				success : function(data) //服务器成功响应处理函数
+				{
+					$('#'+imageId+'div').remove();
 				}
 			})
 		}

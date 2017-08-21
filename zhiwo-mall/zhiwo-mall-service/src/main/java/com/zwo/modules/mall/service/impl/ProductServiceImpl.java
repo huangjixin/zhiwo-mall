@@ -22,9 +22,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.zwo.modules.mall.dao.PrImageMapper;
 import com.zwo.modules.mall.dao.PrProductMapper;
 import com.zwo.modules.mall.dao.PrProductPackagePriceMapper;
 import com.zwo.modules.mall.dao.PrProductPropertyValueMapper;
+import com.zwo.modules.mall.domain.PrImage;
+import com.zwo.modules.mall.domain.PrImageCriteria;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductCriteria;
 import com.zwo.modules.mall.domain.PrProductPackagePrice;
@@ -53,6 +56,10 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 	@Autowired
 	@Lazy(true)
 	private PrProductMapper productMapper;
+	
+	@Autowired
+	@Lazy(true)
+	private PrImageMapper imageMapper;
 	
 	@Autowired
 	@Lazy(true)
@@ -462,6 +469,22 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeyWithBLOBs更新结束");
 		return result;
+	}
+
+	@Transactional(readOnly = true)
+	@Override
+	public List<PrImage> selectByProductId(String productId) {
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "selectByProductId根据商品ID查询图片开始");	
+		
+		PrImageCriteria imageCriteria = new PrImageCriteria();
+		imageCriteria.createCriteria().andProductIdEqualTo(productId);
+		imageCriteria.setOrderByClause("id desc");
+		List<PrImage> list = imageMapper.selectByExample(imageCriteria);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "selectByProductId根据商品ID查询图片结束，结果条目数："+list.size());	
+		return list;
 	}
 
 }

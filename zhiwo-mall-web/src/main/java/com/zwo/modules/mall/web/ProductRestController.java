@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.DatagridPage;
 import com.github.pagehelper.PageInfo;
+import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductCriteria;
+import com.zwo.modules.mall.domain.PrProductWithBLOBs;
+import com.zwo.modules.mall.service.IPrImageService;
 import com.zwo.modules.mall.service.IPrProductPackagePriceService;
 import com.zwo.modules.mall.service.IPrProductPropertyService;
 import com.zwo.modules.mall.service.IPrProductPropertyValueService;
@@ -34,6 +37,9 @@ public class ProductRestController extends BaseController<PrProduct> {
 	@Autowired
 	@Lazy(true)
 	private IPrductService prductService;
+	@Autowired
+	@Lazy(true)
+	private IPrImageService imageService;
 	
 	@Autowired
 	@Lazy(true)
@@ -61,6 +67,7 @@ public class ProductRestController extends BaseController<PrProduct> {
 		for (String idstr : ids) {
 			packagePriceService.deleteByProductId(idstr);
 			productPropertyValueService.deleteByProductId(idstr);
+			imageService.deletePrImageByProductId(idstr);
 			list.add(idstr);
 		}
 		int result = prductService.deleteBatch(list);
@@ -82,7 +89,31 @@ public class ProductRestController extends BaseController<PrProduct> {
 			HttpServletResponse httpServletResponse) throws IOException {
 		packagePriceService.deleteByProductId(id);
 		productPropertyValueService.deleteByProductId(id);
+		imageService.deletePrImageByProductId(id);
 		int result = prductService.deleteByPrimaryKey(id);
+		return result+"";
+	}
+	
+	/**
+	 * 逻辑删除
+	 * @param id
+	 * @param httpServletRequest
+	 * @param httpServletResponse
+	 * @return
+	 * @throws IOException
+	 */
+	@RequiresPermissions("mall:product:delete")
+	@RequestMapping(value = "logicDelete")
+	public String logicDelete(@RequestParam(value = "id",required=true) String id, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) throws IOException {
+		int result = 0;
+		PrProductWithBLOBs product = prductService.selectByPrimKey(id);
+		if(product!=null){
+			PrProductWithBLOBs product1 =  new PrProductWithBLOBs();
+			product1.setId(product.getId());
+			product1.setDisable(false);
+			result = prductService.updateByPrimaryKeySelective(product1);
+		}
 		return result+"";
 	}
 	 
@@ -121,4 +152,10 @@ public class ProductRestController extends BaseController<PrProduct> {
 		return super.setPage(pageInfo);
 	}
 	
+	@RequestMapping(value = "selectByProductId")
+	public List<PrImage> selectByProductId(@RequestParam String productId,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		List<PrImage> list = prductService.selectByProductId(productId);
+		return list;
+	}
 }

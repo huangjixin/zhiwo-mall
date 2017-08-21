@@ -3,6 +3,9 @@
  */
 package com.zwo.modules.mall.service;
 
+import java.util.List;
+
+import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductCriteria;
 import com.zwo.modules.mall.domain.PrProductWithBLOBs;
@@ -36,4 +39,11 @@ public interface IPrductService extends IBaseService<PrProduct> {
     int updateByPrimaryKeySelective(PrProductWithBLOBs record);
 
     int updateByPrimaryKeyWithBLOBs(PrProductWithBLOBs record);
+    
+    /**
+     * 根据商品ID查询产品图片。
+     * @param productId
+     * @return
+     */
+    List<PrImage> selectByProductId(String productId);
 }

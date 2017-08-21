@@ -1,6 +1,9 @@
 package com.zwo.modules.mall.web;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +20,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.DatagridPage;
@@ -66,9 +68,19 @@ public class PrImageRestController extends BaseController<PrImage> {
 	 * @return String    返回类型 
 	 * @throws 
 	 */
-	@RequestMapping(value = "/delete")
+	@RequestMapping(value = "delete")
 	public String delete(@RequestParam(value = "id",required=true) String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
+		PrImage image = prImageService.selectByPrimaryKey(id);
+		if(image.getLocation()!=null && !"".equals(image.getLocation())){
+			 Path target = Paths.get(image.getLocation());
+			 try {
+		            if(Files.exists(target))
+		                Files.deleteIfExists(target);
+		     } catch (IOException e) {
+		            e.printStackTrace();
+		    }
+		}
 		
 		int result = prImageService.deleteByPrimaryKey(id);
 		return result+"";

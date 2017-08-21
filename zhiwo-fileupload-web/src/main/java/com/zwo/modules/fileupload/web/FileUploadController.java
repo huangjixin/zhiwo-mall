@@ -102,9 +102,10 @@ public class FileUploadController {
 	}
 	
 
-	@RequestMapping(value = "proAssets")
+	@RequestMapping(value = "prAssets")
 	@ResponseBody
-	public Map<String, Object> proAssetsUpload(
+	public String proAssetsUpload(
+			@RequestParam String productId,
 			@RequestParam(value = "file", required = false) CommonsMultipartFile[] files,
 			String HTTP_CONTENT_DISPOSITION, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse, Model uiModel) {
@@ -112,10 +113,10 @@ public class FileUploadController {
 		List<PrImage> proAssets = new ArrayList<PrImage>();
 		Calendar date = Calendar.getInstance();
 		String rootDir = httpServletRequest.getSession().getServletContext().getRealPath("/");
-		rootDir = "D:"+File.separator;
-		String url = "images/uassets/" + date.get(Calendar.YEAR) + "/" + (date.get(Calendar.MONTH) + 1) + "/"
+//		rootDir = "D:"+File.separator;
+		String url = "images/passets/" + date.get(Calendar.YEAR) + "/" + (date.get(Calendar.MONTH) + 1) + "/"
 				+ date.get(Calendar.DAY_OF_MONTH);
-		String uploadPath = rootDir + "images" + File.separator + "uassets";
+		String uploadPath = rootDir + "images" + File.separator + "passets";
 		uploadPath = uploadPath + File.separator + date.get(Calendar.YEAR) + File.separator
 				+ (date.get(Calendar.MONTH) + 1) + File.separator + date.get(Calendar.DAY_OF_MONTH);
 
@@ -140,6 +141,7 @@ public class FileUploadController {
 				}
 
 				PrImage assets = new PrImage();
+				assets.setProductId(productId);
 				assets.setName(name);
 				assets.setLocation(uploadPath + File.separator + name);
 				assets.setUrl(url + "/" + name);
@@ -148,9 +150,10 @@ public class FileUploadController {
 				proAssets.add(assets);
 			}
 		}
-
+		map.put("assets", proAssets);
+		String result = JSON.toJSONString(map);
 		// userAssetsService.batchInsert(userAssets);
-		return map;
+		return result;
 	}
 
 }

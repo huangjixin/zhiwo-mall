@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductPackagePrice;
 import com.zwo.modules.mall.domain.PrProductPackagePriceCriteria;
@@ -94,7 +95,10 @@ public class ProductController extends BaseController<PrProduct> {
 		List<PrProductPropertyValue> productPropertyValues = this.productPropertyValueService.selectByProductId(product.getId());
 		uiModel.addAttribute("propertyValues",productPropertyValues);
 		uiModel.addAttribute("propertyValuesString",JSONArray.toJSONString(productPropertyValues));
-				
+		
+		List<PrImage> list = productService.selectByProductId(id);
+		uiModel.addAttribute("prImages", list);
+		
 		uiModel.addAttribute("product", product);
 		uiModel.addAttribute("operation", "edit");
 		
@@ -203,6 +207,7 @@ public class ProductController extends BaseController<PrProduct> {
 				PrProductPropertyValue productProperty = new PrProductPropertyValue();
 				productProperty.setId(jsonObject.getString("id"));
 				productProperty.setProductId(product.getId());
+				productProperty.setImageId(jsonObject.getString("imageId"));
 				productProperty.setPropertyId(jsonObject.getString("propertyId"));
 				productProperty.setName((String) jsonObject.get("name"));
 				productPropertyValueService.insertSelective(productProperty);

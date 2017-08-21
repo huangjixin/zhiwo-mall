@@ -3,6 +3,10 @@
  */
 package com.zwo.modules.mall.service.impl;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -83,6 +87,18 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
+		List<PrImage> list = this.selectByExample(example);
+		for (PrImage image : list) {
+			if(image.getLocation()!=null && !"".equals(image.getLocation())){
+				 Path target = Paths.get(image.getLocation());
+				 try {
+			            if(Files.exists(target))
+			                Files.deleteIfExists(target);
+			     } catch (IOException e) {
+			            e.printStackTrace();
+			    }
+			}
+		}
 
 		// 逻辑操作
 		int result = prImageMapper.deleteByExample(example);
@@ -126,7 +142,16 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为：" + id.toString());
-
+		PrImage image = this.selectByPrimaryKey(id);
+		if(image.getLocation()!=null && !"".equals(image.getLocation())){
+			 Path target = Paths.get(image.getLocation());
+			 try {
+		            if(Files.exists(target))
+		                Files.deleteIfExists(target);
+		     } catch (IOException e) {
+		            e.printStackTrace();
+		    }
+		}
 		// 逻辑操作
 		int result = super.deleteByPrimaryKey(id);
 
@@ -345,6 +370,18 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 		prImage.setId(System.currentTimeMillis() + "");
 		int result = prImageServiceImpl.insertSelective(prImage);
 		logger.info(result + "");
+	}
+
+	@Override
+	public int deletePrImageByProductId(String productId) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "根据商品ID删除开始");
+		PrImageCriteria imageCriteria = new PrImageCriteria();
+		imageCriteria.createCriteria().andProductIdEqualTo(productId);
+		int result = this.deleteByExample(imageCriteria);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "根据商品ID删除结束，结果为"+result);
+		return result;
 	}
 
 }
