@@ -1,5 +1,6 @@
 package com.zwo.modules.fileupload.web;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -107,6 +109,8 @@ public class FileUploadController {
 	public String proAssetsUpload(
 			@RequestParam String productId,
 			@RequestParam(value = "file", required = false) CommonsMultipartFile[] files,
+			@RequestParam(value = "imgWidth", required = false)  String imgWidth,
+			@RequestParam(value = "imgHeight", required = false)  String imgHeight,
 			String HTTP_CONTENT_DISPOSITION, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse, Model uiModel) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -124,8 +128,8 @@ public class FileUploadController {
 			if (!files[i].isEmpty()) {
 				String name = files[i].getOriginalFilename();
 				int index = name.indexOf(".");
-
-				name = new Date().getTime() + ((int) Math.random() * 10000) + "" + name.substring(index, name.length());
+				String datetimeName = new Date().getTime() + ((int) Math.random() * 10000) + "";
+				name =  datetimeName + name.substring(index, name.length());
 				File file = new File(uploadPath, name);
 
 				if (!file.exists()) {// 目录不存在则直接创建
@@ -139,9 +143,76 @@ public class FileUploadController {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-
+				
+				PrImage assets = new PrImage();
+				assets.setIsDefault(false);
+				assets.setProductId(productId);
+				assets.setName(name);
+				assets.setLocation(uploadPath + File.separator + name);
+				assets.setUrl(url + "/" + name);
+				assets.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
+				imageService.insertSelective(assets);
+				proAssets.add(assets);
+			}
+		}
+		map.put("assets", proAssets);
+		String result = JSON.toJSONString(map);
+		// userAssetsService.batchInsert(userAssets);
+		return result;
+	}
+	
+	/**
+	 * 商品轮播图上传
+	 * @param productId
+	 * @param files
+	 * @param HTTP_CONTENT_DISPOSITION
+	 * @param httpServletRequest
+	 * @param httpServletResponse
+	 * @param uiModel
+	 * @return
+	 */
+	@RequestMapping(value = "prSwiperAssets")
+	@ResponseBody
+	public String proSwiperAssetsUpload(
+			@RequestParam String productId,
+			@RequestParam(value = "file", required = false) CommonsMultipartFile[] files,
+			String HTTP_CONTENT_DISPOSITION, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse, Model uiModel) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<PrImage> proAssets = new ArrayList<PrImage>();
+		Calendar date = Calendar.getInstance();
+		String rootDir = httpServletRequest.getSession().getServletContext().getRealPath("/");
+//		rootDir = "D:"+File.separator;
+		String url = "images/passets/" + date.get(Calendar.YEAR) + "/" + (date.get(Calendar.MONTH) + 1) + "/"
+				+ date.get(Calendar.DAY_OF_MONTH);
+		String uploadPath = rootDir + "images" + File.separator + "passets";
+		uploadPath = uploadPath + File.separator + date.get(Calendar.YEAR) + File.separator
+				+ (date.get(Calendar.MONTH) + 1) + File.separator + date.get(Calendar.DAY_OF_MONTH);
+		
+		for (int i = 0; i < files.length; i++) {
+			if (!files[i].isEmpty()) {
+				String name = files[i].getOriginalFilename();
+				int index = name.indexOf(".");
+				String datetimeName = new Date().getTime() + ((int) Math.random() * 10000) + "";
+				name =  datetimeName + name.substring(index, name.length());
+				File file = new File(uploadPath, name);
+				
+				if (!file.exists()) {// 目录不存在则直接创建
+					file.mkdirs();
+				}
+				CommonsMultipartFile commonsMultipartFile = files[i];
+				try {
+					commonsMultipartFile.transferTo(file);
+				} catch (IllegalStateException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
 				PrImage assets = new PrImage();
 				assets.setProductId(productId);
+				//true为轮播图。
+				assets.setIsDefault(true);
 				assets.setName(name);
 				assets.setLocation(uploadPath + File.separator + name);
 				assets.setUrl(url + "/" + name);

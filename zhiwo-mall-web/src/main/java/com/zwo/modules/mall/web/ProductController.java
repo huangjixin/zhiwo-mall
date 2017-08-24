@@ -96,8 +96,11 @@ public class ProductController extends BaseController<PrProduct> {
 		uiModel.addAttribute("propertyValues",productPropertyValues);
 		uiModel.addAttribute("propertyValuesString",JSONArray.toJSONString(productPropertyValues));
 		
-		List<PrImage> list = productService.selectByProductId(id);
+		List<PrImage> list = productService.selectByProductId(id,false);
 		uiModel.addAttribute("prImages", list);
+		
+		List<PrImage> listSwipers = productService.selectByProductId(id,true);
+		uiModel.addAttribute("swiperImages", listSwipers);
 		
 		uiModel.addAttribute("product", product);
 		uiModel.addAttribute("operation", "edit");

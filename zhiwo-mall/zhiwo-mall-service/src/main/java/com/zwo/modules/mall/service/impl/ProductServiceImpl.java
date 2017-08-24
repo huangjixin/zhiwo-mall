@@ -473,13 +473,13 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<PrImage> selectByProductId(String productId) {
+	public List<PrImage> selectByProductId(String productId,boolean isDefault) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "selectByProductId根据商品ID查询图片开始");	
 		
 		PrImageCriteria imageCriteria = new PrImageCriteria();
-		imageCriteria.createCriteria().andProductIdEqualTo(productId);
+		imageCriteria.createCriteria().andProductIdEqualTo(productId).andIsDefaultEqualTo(isDefault);
 		imageCriteria.setOrderByClause("id desc");
 		List<PrImage> list = imageMapper.selectByExample(imageCriteria);
 		if (logger.isInfoEnabled())

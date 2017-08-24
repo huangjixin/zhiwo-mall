@@ -38,7 +38,7 @@ import com.zwotech.common.web.BaseController;
  */
 @Controller
 @Lazy(true)
-public class MemberController extends BaseController<TbUser> {
+public class GoodsController extends BaseController<TbUser> {
 	@Autowired
 	@Lazy(true)
 	private IMemberService memberService;
@@ -49,16 +49,16 @@ public class MemberController extends BaseController<TbUser> {
 	@SuppressWarnings("rawtypes")
 	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
 	
-	private static final String basePath = "views/member/";
+	private static final String basePath = "views/goods/";
 	
-	  
-	public String index(Model uiModel,HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+	@RequestMapping(value = {"goodsDetail"},method=RequestMethod.GET)  
+	public String goodsDetail(Model uiModel,HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		
 		if(redisTemplate!= null){
 			ListOperations<String, List> listOpe =  redisTemplate.opsForList();
 		}
 		uiModel.addAttribute("rawData", 123456);
-		return basePath+"index";
+		return basePath+"goodsDetail";
 	}
 	
 }
