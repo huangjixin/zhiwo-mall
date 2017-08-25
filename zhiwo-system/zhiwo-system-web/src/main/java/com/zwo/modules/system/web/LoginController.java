@@ -35,6 +35,23 @@ public class LoginController extends BaseController<TbUser> {
 		return basePath+"login";
 	}
 	
+	@RequestMapping(value ="/login",method=RequestMethod.POST)
+    public String loginForm(@ModelAttribute TbUser tbuser,HttpServletRequest request) throws Exception{
+		String password = PasswordHelper.encryptPassword(tbuser.getPassword());
+    	String username = tbuser.getUsername();
+        UsernamePasswordToken token = new UsernamePasswordToken(username, password);  
+        Subject currentUser = SecurityUtils.getSubject();  
+        try{
+        	
+            if (!currentUser.isAuthenticated()){
+                token.setRememberMe(true);  
+                currentUser.login(token);//验证角色和权限  
+            } 
+        }catch(Exception ex){
+            throw new Exception("用户名或者密码错误");
+        }
+        return "";
+    }
 	
 	@RequestMapping(value = "/checkLogin",method=RequestMethod.POST)
 	@ResponseBody
