@@ -9,21 +9,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.shop.dao.ShopCategoryMapper;
-import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.domain.ShopCategory;
 import com.zwo.modules.shop.domain.ShopCategoryCriteria;
-import com.zwo.modules.shop.domain.ShopCriteria;
 import com.zwo.modules.shop.service.IShopCategoryService;
 import com.zwotech.modules.core.service.impl.BaseService;
 
@@ -122,7 +117,7 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "ShopCategory", key="#id+''+''")
+	@CacheEvict(value = "ShopCategory", key="#id+'_shopCategory'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -145,7 +140,7 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "ShopCategory", key = "#record.id")
+//	@CachePut(value = "ShopCategory", key = "#record.id+'_shopCategory'")
 	public int insert(ShopCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -174,7 +169,7 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 	 */
 
 	@Override
-//	@CachePut(value = "ShopCategory", key = "#record.id")
+//	@CachePut(value = "ShopCategory", key = "#record.id+'_shopCategory'")
 	public int insertSelective(ShopCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -215,7 +210,7 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = "ShopCategory")
+	@Cacheable(key = "#id+'_shopCategory'", value = "ShopCategory")
 	@Transactional(readOnly = true)
 	public ShopCategory selectByPrimaryKey(String id) {
 		// 日志记录
@@ -291,7 +286,7 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "ShopCategory", key="#record.id")
+	@CacheEvict(value = "ShopCategory", key="#record.id+'_shopCategory'")
 	public int updateByPrimaryKeySelective(ShopCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -316,7 +311,7 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "ShopCategory", key="#record.id")
+	@CacheEvict(value = "ShopCategory", key="#record.id+'_shopCategory'")
 	public int updateByPrimaryKey(ShopCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -359,13 +354,4 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 		return pageInfo;
 	}
 
-	
-	public static void main(String[] args) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
-		IShopCategoryService shopCategoryServiceImpl = (IShopCategoryService) context.getBean("shopCategoryServiceImpl");
-		ShopCategory shopCategory = new ShopCategory();
-		shopCategory.setId(System.currentTimeMillis() + "");
-		int result = shopCategoryServiceImpl.insertSelective(shopCategory);
-		logger.info(result + "");
-	}
 }

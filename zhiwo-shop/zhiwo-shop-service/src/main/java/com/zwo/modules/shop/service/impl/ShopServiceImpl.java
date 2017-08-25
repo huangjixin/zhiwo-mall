@@ -109,7 +109,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "Shop", key = "#id+''")
+	@CacheEvict(value = "Shop", key = "#id+'_shop'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -225,7 +225,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "Shop", key = "#record.id")
+	@CacheEvict(value = "Shop", key = "#record.id+'_shop'")
 	public int updateByPrimaryKey(Shop record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -266,21 +266,13 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 		return pageInfo;
 	}
 
-	public static void main(String[] args) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
-		IShopService shopServiceImpl = (IShopService) context.getBean("shopServiceImpl");
-		Shop shop = new Shop();
-		shop.setId(System.currentTimeMillis() + "");
-		int result = shopServiceImpl.insertSelective(shop);
-		logger.info(result + "");
-	}
 
 	@Override
 	public int countByExample(ShopCriteria example) {
 		return this.shopMapper.countByExample(example);
 	}
 
-//	@CachePut(value = "Shop", key = "#record.id")
+//	@CachePut(value = "Shop", key = "#record.id+'_shop'")
 	@Override
 	public int insert(ShopWithBLOBs record) {
 		// 日志记录
@@ -299,7 +291,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 		return result;
 	}
 
-//	@CachePut(value = "Shop", key = "#record.id")
+//	@CachePut(value = "Shop", key = "#record.id+'_shop'")
 	@Override
 	public int insertSelective(ShopWithBLOBs record) {
 		// 日志记录
@@ -318,7 +310,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 		return result;
 	}
 
-	@Cacheable(key = "#id+''", value = "Shop")
+	@Cacheable(key = "#id+'_shop'", value = "Shop")
 	@Transactional(readOnly = true)
 	@Override
 	public ShopWithBLOBs selectByPrimKey(String id) {
@@ -386,7 +378,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 		return result;
 	}
 
-	@CacheEvict(value = "Shop", key = "#record.id")
+	@CacheEvict(value = "Shop", key = "#record.id+'_shop'")
 	@Override
 	public int updateByPrimaryKeySelective(ShopWithBLOBs record) {
 		// 日志记录
@@ -402,7 +394,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 		return result;
 	}
 
-	@CacheEvict(value = "Shop", key = "#record.id")
+	@CacheEvict(value = "Shop", key = "#record.id+'_shop'")
 	@Override
 	public int updateByPrimaryKeyWithBLOBs(ShopWithBLOBs record) {
 		// 日志记录
@@ -416,6 +408,19 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeyWithBLOBs更新结束");
 		return result;
+	}
+
+	@Override
+	@Cacheable(value = "Shop", key = "#id+'_shop'")
+	public ShopWithBLOBs selectByUserId(String id) {
+		ShopCriteria shopCriteria = new ShopCriteria();
+		shopCriteria.createCriteria().andUserIdEqualTo(id);
+		List<Shop> list = this.shopMapper.selectByExample(shopCriteria);
+		if(!list.isEmpty()){
+			ShopWithBLOBs ShopWithBLOBs = this.selectByPrimKey(list.get(0).getId());
+			return ShopWithBLOBs;
+		}
+		return null;
 	}
 
 }

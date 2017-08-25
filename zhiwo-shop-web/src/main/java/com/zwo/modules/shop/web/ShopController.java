@@ -4,7 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -21,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.domain.ShopWithBLOBs;
 import com.zwo.modules.shop.service.IShopService;
+import com.zwo.modules.system.domain.TbUser;
 import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
@@ -37,6 +40,26 @@ public class ShopController extends BaseController<Shop> {
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath + "shop_list";
+	}
+	
+
+	/**
+	 * 跳转到我的商铺。
+	 * @param httpServletRequest
+	 * @return
+	 */
+	@RequestMapping(value = { "myshop"})
+	public String gotoMyShop(Model uiModel,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		Subject currentUser = SecurityUtils.getSubject(); 
+		if(currentUser!=null){
+			TbUser user =  (TbUser) currentUser.getSession().getAttribute("user");
+			if(user!=null){
+				ShopWithBLOBs shop = shopService.selectByUserId(user.getId());
+				uiModel.addAttribute("shop", shop);
+			}
+		}
+		return basePath + "myshop";
 	}
 	
 	@RequiresPermissions("shop:shop:create")

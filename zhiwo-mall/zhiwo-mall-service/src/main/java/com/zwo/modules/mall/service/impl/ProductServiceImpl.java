@@ -134,7 +134,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "PrProduct", key = "#id")
+	@CacheEvict(value = "PrProduct", key = "#id+'_product'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -250,7 +250,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrProduct", key = "#record.id")
+	@CacheEvict(value = "PrProduct", key = "#record.id+'_product'")
 	public int updateByPrimaryKey(PrProduct record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -352,7 +352,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 	}
 
 	
-	@Cacheable(key = "#id+''", value = "PrProduct")
+	@Cacheable(key = "#id+'_product'", value = "PrProduct")
 	@Transactional(readOnly = true)
 	public PrProductWithBLOBs selectByPrimKey(String id) {
 		// 日志记录
@@ -433,7 +433,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 		return result;
 	}
 
-	@CacheEvict(value = "PrProduct", key = "#record.id")
+	@CacheEvict(value = "PrProduct", key = "#record.id+'_product'")
 	public int updateByPrimaryKeySelective(PrProductWithBLOBs record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -452,7 +452,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 		return result;
 	}
 
-	@CacheEvict(value = "PrProduct", key = "#record.id")
+	@CacheEvict(value = "PrProduct", key = "#record.id+'_product'")
 	public int updateByPrimaryKeyWithBLOBs(PrProductWithBLOBs record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

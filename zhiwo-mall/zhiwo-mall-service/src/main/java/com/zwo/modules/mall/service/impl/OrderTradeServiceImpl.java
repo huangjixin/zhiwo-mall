@@ -120,7 +120,7 @@ public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements IO
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "OrderTrade",key="#id+''")
+	@CacheEvict(value = "OrderTrade",key="#id+'_orderTrade'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -143,7 +143,7 @@ public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements IO
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "OrderTrade", key = "#record.id")
+//	@CachePut(value = "OrderTrade", key = "#record.id+'_orderTrade'")
 	public int insert(OrderTrade record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -170,7 +170,7 @@ public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements IO
 	 */
 
 	@Override
-//	@CachePut(value = "OrderTrade", key = "#record.id")
+//	@CachePut(value = "OrderTrade", key = "#record.id+'_orderTrade'")
 	public int insertSelective(OrderTrade record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -209,7 +209,7 @@ public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements IO
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = "OrderTrade")
+	@Cacheable(key = "#id+'_orderTrade'", value = "OrderTrade")
 	@Transactional(readOnly = true)
 	public OrderTrade selectByPrimaryKey(String id) {
 		// 日志记录
@@ -281,7 +281,7 @@ public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements IO
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "OrderTrade",key="#record.id")
+	@CacheEvict(value = "OrderTrade",key="#record.id+'_orderTrade'")
 	public int updateByPrimaryKeySelective(OrderTrade record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -304,7 +304,7 @@ public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements IO
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "OrderTrade",key="#record.id")
+	@CacheEvict(value = "OrderTrade",key="#record.id+'_orderTrade'")
 	public int updateByPrimaryKey(OrderTrade record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -343,15 +343,6 @@ public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements IO
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页结束");
 		return pageInfo;
-	}
-
-	public static void main(String[] args) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
-		IOrderTradeService orderServiceImpl = (IOrderTradeService) context.getBean("orderServiceImpl");
-		OrderTrade order = new OrderTrade();
-		order.setId(System.currentTimeMillis() + "");
-		int result = orderServiceImpl.insertSelective(order);
-		logger.info(result + "");
 	}
 
 }

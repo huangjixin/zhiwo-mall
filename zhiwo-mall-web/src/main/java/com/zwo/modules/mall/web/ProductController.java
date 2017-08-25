@@ -6,7 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -23,16 +25,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductPackagePrice;
-import com.zwo.modules.mall.domain.PrProductPackagePriceCriteria;
 import com.zwo.modules.mall.domain.PrProductProperty;
-import com.zwo.modules.mall.domain.PrProductPropertyCriteria;
 import com.zwo.modules.mall.domain.PrProductPropertyValue;
-import com.zwo.modules.mall.domain.PrProductPropertyValueCriteria;
 import com.zwo.modules.mall.domain.PrProductWithBLOBs;
 import com.zwo.modules.mall.service.IPrProductPackagePriceService;
 import com.zwo.modules.mall.service.IPrProductPropertyService;
 import com.zwo.modules.mall.service.IPrProductPropertyValueService;
 import com.zwo.modules.mall.service.IPrductService;
+import com.zwo.modules.system.domain.TbUser;
 import com.zwotech.common.web.BaseController;
 
 @Controller
@@ -123,14 +123,14 @@ public class ProductController extends BaseController<PrProduct> {
 			product.setCategoryId(null);
 		}
 		
-		/*Subject currentUser = SecurityUtils.getSubject(); 
+		Subject currentUser = SecurityUtils.getSubject(); 
 		if(currentUser!=null){
 			TbUser user =  (TbUser) currentUser.getSession().getAttribute("user");
 			if(user!=null){
-				product.setUpdater(user.getUsername());
+				product.setCreator(user.getUsername());
 				product.setUserId(user.getId());
 			}
-		}*/
+		}
 		
 		
 		int res = productService.insertSelective(product);
@@ -187,14 +187,14 @@ public class ProductController extends BaseController<PrProduct> {
 			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
 		}
 		
-		/*Subject currentUser = SecurityUtils.getSubject(); 
+		Subject currentUser = SecurityUtils.getSubject(); 
 		if(currentUser!=null){
 			TbUser user =  (TbUser) currentUser.getSession().getAttribute("user");
 			if(user!=null){
 				product.setUpdater(user.getUsername());
 				product.setUserId(user.getId());
 			}
-		}*/
+		}
 		
 		int res = this.productService.updateByPrimaryKeySelective(product);
 		if(res==1){

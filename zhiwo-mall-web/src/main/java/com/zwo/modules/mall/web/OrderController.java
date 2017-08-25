@@ -4,7 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.zwo.modules.mall.domain.OrderTrade;
 import com.zwo.modules.mall.service.IOrderTradeService;
+import com.zwo.modules.system.domain.TbUser;
 import com.zwotech.common.web.BaseController;
 
 @Controller
@@ -65,6 +68,15 @@ public class OrderController extends BaseController<OrderTrade> {
 			return "redirect:/order/create";
 		}
 
+		Subject currentUser = SecurityUtils.getSubject(); 
+		if(currentUser!=null){
+			TbUser user =  (TbUser) currentUser.getSession().getAttribute("user");
+			if(user!=null){
+				order.setCreator(user.getUsername());
+			}
+		}
+		
+		
 		int res = orderService.insertSelective(order);
 		if (res != 0) {
 			redirectAttributes.addFlashAttribute("order", order);
@@ -89,6 +101,14 @@ public class OrderController extends BaseController<OrderTrade> {
 			return "redirect:/order/create";
 		}
 
+		Subject currentUser = SecurityUtils.getSubject(); 
+		if(currentUser!=null){
+			TbUser user =  (TbUser) currentUser.getSession().getAttribute("user");
+			if(user!=null){
+				order.setUpdater(user.getUsername());
+			}
+		}
+		
 		int res = this.orderService.updateByPrimaryKeySelective(order);
 		if (res == 1) {
 			redirectAttributes.addFlashAttribute("order", order);

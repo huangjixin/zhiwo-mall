@@ -9,11 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -119,7 +116,7 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "OrderDelivery",key="#id+''")
+	@CacheEvict(value = "OrderDelivery",key="#id+'_orderDelivery'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -142,7 +139,7 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "OrderDelivery", key = "#record.id")
+//	@CachePut(value = "OrderDelivery", key = "#record.id+'_orderDelivery'")
 	public int insert(OrderDelivery record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -169,7 +166,7 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 	 */
 
 	@Override
-//	@CachePut(value = "OrderDelivery", key = "#record.id")
+//	@CachePut(value = "OrderDelivery", key = "#record.id+'_orderDelivery'")
 	public int insertSelective(OrderDelivery record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -208,7 +205,7 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = "OrderDelivery")
+	@Cacheable(key = "#id+'_orderDelivery'", value = "OrderDelivery")
 	@Transactional(readOnly = true)
 	public OrderDelivery selectByPrimaryKey(String id) {
 		// 日志记录
@@ -280,7 +277,7 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "OrderDelivery",key="#record.id")
+	@CacheEvict(value = "OrderDelivery",key="#record.id+'_orderDelivery'")
 	public int updateByPrimaryKeySelective(OrderDelivery record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -303,7 +300,7 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "OrderDelivery",key="#record.id")
+	@CacheEvict(value = "OrderDelivery",key="#record.id+'_orderDelivery'")
 	public int updateByPrimaryKey(OrderDelivery record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -338,13 +335,5 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 		return pageInfo;
 	}
 
-	public static void main(String[] args) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
-		IOrderDeliveryService orderDeliveryServiceImpl = (IOrderDeliveryService) context.getBean("orderDeliveryServiceImpl");
-		OrderDelivery orderDelivery = new OrderDelivery();
-		orderDelivery.setId(System.currentTimeMillis() + "");
-		int result = orderDeliveryServiceImpl.insertSelective(orderDelivery);
-		logger.info(result + "");
-	}
 
 }

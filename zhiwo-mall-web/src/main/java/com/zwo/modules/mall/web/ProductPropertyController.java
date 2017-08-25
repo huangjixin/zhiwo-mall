@@ -4,7 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.zwo.modules.mall.domain.PrProductProperty;
 import com.zwo.modules.mall.service.IPrProductPropertyService;
+import com.zwo.modules.system.domain.TbUser;
 import com.zwotech.common.web.BaseController;
 
 @Controller
@@ -83,7 +86,6 @@ public class ProductPropertyController extends BaseController<PrProductProperty>
 			redirectAttributes.addFlashAttribute("productProperty", productProperty);
 			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
 		}
-		
 		
 		int res = this.productPropertyService.updateByPrimaryKeySelective(productProperty);
 		if(res==1){

@@ -120,7 +120,7 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "TbResources", key="#id+''")
+	@CacheEvict(value = "TbResources", key="#id+'_resources'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -143,7 +143,7 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "TbResources", key = "#record.id")
+//	@CachePut(value = "TbResources", key = "#record.id+'_resources'")
 	public int insert(TbResources record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -172,7 +172,7 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 	 */
 
 	@Override
-//	@CachePut(value = "TbResources", key = "#record.id")
+//	@CachePut(value = "TbResources", key = "#record.id+'_resources'")
 	public int insertSelective(TbResources record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -213,7 +213,7 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = "TbResources")
+	@Cacheable(key = "#id+'_resources'", value = "TbResources")
 	@Transactional(readOnly = true)
 	public TbResources selectByPrimaryKey(String id) {
 		// 日志记录
@@ -289,7 +289,7 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbResources", key="#record.id")
+	@CacheEvict(value = "TbResources", key="#record.id+'_resources'")
 	public int updateByPrimaryKeySelective(TbResources record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -314,7 +314,7 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbResources", key="#record.id")
+	@CacheEvict(value = "TbResources", key="#record.id+'_resources'")
 	public int updateByPrimaryKey(TbResources record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -355,15 +355,6 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页结束");
 		return pageInfo;
-	}
-
-	public static void main(String[] args) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
-		ITbResourcesService roleServiceImpl = (ITbResourcesService) context.getBean("roleServiceImpl");
-		TbResources role = new TbResources();
-		role.setId(System.currentTimeMillis() + "");
-		int result = roleServiceImpl.insertSelective(role);
-		logger.info(result + "");
 	}
 
 }

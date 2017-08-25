@@ -14,7 +14,7 @@
 <style>
 .swiper-container {
 	width: 400px;
-	height: 200px;
+	height: auto;
 	margin: 20px auto;
 }
 
@@ -172,8 +172,11 @@
 				<div class="swiper-container">
 					<div class="swiper-wrapper" id="proImagesWrapper">
                     	<c:forEach var="swiperImage" items="${swiperImages}">
-                        	<div class="swiper-slide">
-								<img class=".img-responsive" src="${ctx}/${swiperImage.url}" width="400px;">
+                        	<div class="swiper-slide" id="${swiperImage.id}swiper-slide">
+                            	<div>
+                                	<img id="${swiperImage.id}" class=".img-responsive" src="${ctx}/${swiperImage.url}" width="400px;">
+                               		<button type="button" class="btn btn-danger btn-sm" onClick="deleteSwiperImage('${swiperImage.id}')">删除</button>
+                                </div>
 							</div>
                         </c:forEach>
 					</div>
@@ -1005,11 +1008,9 @@
 						{
 							if (data.assets.length > 0) {
 								var para = '';
-								
 								for (var i = 0; i < data.assets.length; i++) {
 									var assets = data.assets[i];
-									
-									para = '<div class="swiper-slide"><img class=".img-responsive" src="${ctx}/'+assets.url+'"></div>';
+									para = '<div><div class="swiper-slide" id="'+assets.id+'swiper-slide"><img class=".img-responsive" src="${ctx}/'+assets.url+'" width="400px;"><button type="button" class="btn btn-danger btn-sm"  onClick="deleteSwiperImage(\''+assets.id+'\')">删除</button></div></div>';
 									$('#proImagesWrapper').append(para);
 								}
 
@@ -1033,6 +1034,20 @@
 				success : function(data) //服务器成功响应处理函数
 				{
 					$('#' + imageId + 'div').remove();
+				}
+			})
+		}
+		
+		
+		//删除轮播图片。
+		function deleteSwiperImage(imageId) {
+			var url = '${ctx}/prImage/delete?id=' + imageId;
+			$.ajax({
+				url : url,
+				dataType : 'json', //返回值类型 一般设置为json
+				success : function(data) //服务器成功响应处理函数
+				{
+					$('#' + imageId + 'swiper-slide').remove();
 				}
 			})
 		}

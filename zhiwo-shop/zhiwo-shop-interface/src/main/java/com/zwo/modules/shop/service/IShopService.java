@@ -35,5 +35,13 @@ public interface IShopService extends IBaseService<Shop> {
     int updateByPrimaryKeySelective(ShopWithBLOBs record);
 
     int updateByPrimaryKeyWithBLOBs(ShopWithBLOBs record);
+    
+    
+    /**
+     * 查找“我的店铺”。
+     * @param id
+     * @return
+     */
+    ShopWithBLOBs selectByUserId(String id);
 
 }

@@ -139,7 +139,7 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "TbRole", key="#id+''")
+	@CacheEvict(value = "TbRole", key="#id+'_role'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -162,7 +162,7 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "TbRole", key = "#record.id")
+//	@CachePut(value = "TbRole", key = "#record.id+'_role'")
 	public int insert(TbRole record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -189,7 +189,7 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	 */
 
 	@Override
-//	@CachePut(value = "TbRole", key = "#record.id")
+//	@CachePut(value = "TbRole", key = "#record.id+'_role'")
 	public int insertSelective(TbRole record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -228,7 +228,7 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = "TbRole")
+	@Cacheable(key = "#id+'_role'", value = "TbRole")
 	@Transactional(readOnly = true)
 	public TbRole selectByPrimaryKey(String id) {
 		// 日志记录
@@ -300,7 +300,7 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbRole", key="#record.id")
+	@CacheEvict(value = "TbRole", key="#record.id+'_role'")
 	public int updateByPrimaryKeySelective(TbRole record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -323,7 +323,7 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbRole", key="#record.id")
+	@CacheEvict(value = "TbRole", key="#record.id+'_role'")
 	public int updateByPrimaryKey(TbRole record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -356,15 +356,6 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页结束");
 		return pageInfo;
-	}
-
-	public static void main(String[] args) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
-		ITbRoleService roleServiceImpl = (ITbRoleService) context.getBean("roleServiceImpl");
-		TbRole role = new TbRole();
-		role.setId(System.currentTimeMillis() + "");
-		int result = roleServiceImpl.insertSelective(role);
-		logger.info(result + "");
 	}
 
 	@Override

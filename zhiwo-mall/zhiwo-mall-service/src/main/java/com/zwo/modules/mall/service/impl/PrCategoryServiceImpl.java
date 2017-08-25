@@ -124,7 +124,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "PrCategory",key="#id")
+	@CacheEvict(value = "PrCategory",key="#id+'_prCategory'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -147,7 +147,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "PrCategory", key = "#record.id")
+//	@CachePut(value = "PrCategory", key = "#record.id+'_prCategory'")
 	public int insert(PrCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -176,7 +176,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 	 */
 
 	@Override
-//	@CachePut(value = "PrCategory", key = "#record.id")
+//	@CachePut(value = "PrCategory", key = "#record.id+'_prCategory'")
 	public int insertSelective(PrCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -220,7 +220,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = "PrCategory")
+	@Cacheable(key = "#id+'_prCategory'", value = "PrCategory")
 	@Transactional(readOnly = true)
 	public PrCategory selectByPrimaryKey(String id) {
 		// 日志记录
@@ -292,7 +292,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrCategory",key="#record.id")
+	@CacheEvict(value = "PrCategory",key="#record.id+'_prCategory'")
 	public int updateByPrimaryKeySelective(PrCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -317,7 +317,7 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrCategory",key="#record.id")
+	@CacheEvict(value = "PrCategory",key="#record.id+'_prCategory'")
 	public int updateByPrimaryKey(PrCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -417,18 +417,6 @@ public class PrCategoryServiceImpl extends BaseService<PrCategory> implements IP
 			logger.info(BASE_MESSAGE + "getOrgCheckboxTree结束");
 
 		return null == parentId ? categories : list;
-	}
-
-	public static void main(String[] args) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
-		IPrCategoryService prductService = (IPrCategoryService) context.getBean("prCategoryServiceImpl");
-		// PrCategory product = new PrCategory();
-		// product.setId(System.currentTimeMillis() + "");
-		// int result = prductService.insertSelective(product);
-		// logger.info(result + "");
-
-		List<PrCategory> list = prductService.getTreeCategory(null);
-		logger.info("");
 	}
 
 }

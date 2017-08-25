@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.zwo.modules.shop.domain.ShopWithBLOBs;
+import com.zwo.modules.shop.service.IShopService;
 import com.zwo.modules.system.domain.TbUser;
 import com.zwo.modules.system.service.ITbUserService;
 import com.zwotech.common.web.BaseController;
@@ -30,6 +32,9 @@ public class UserController extends BaseController<TbUser> {
 	@Autowired
 	@Lazy(true)
 	private ITbUserService userService;
+	@Autowired
+	@Lazy(true)
+	private IShopService shopService;
 
 	private static final String basePath = "views/system/user/";
 
@@ -71,7 +76,7 @@ public class UserController extends BaseController<TbUser> {
 	@RequestMapping(value = "changePass", method = RequestMethod.GET)
 	public String toChangePass(@Valid TbUser user, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		/*if (SecurityUtils.getSecurityManager() != null) {
+		if (SecurityUtils.getSecurityManager() != null) {
 			Subject currentUser = SecurityUtils.getSubject();
 			if (currentUser != null) {
 				TbUser tbuser = (TbUser) currentUser.getSession().getAttribute("user");
@@ -80,7 +85,7 @@ public class UserController extends BaseController<TbUser> {
 					uiModel.addAttribute("user", user);
 				}
 			}
-		}*/
+		}
 		return basePath + "user_changePass";
 	}
 
@@ -98,7 +103,7 @@ public class UserController extends BaseController<TbUser> {
 	public String changePass(@Valid TbUser tbUser, @RequestParam String newPassword, Model uiModel,
 			RedirectAttributes redirectAttributes, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		/*Subject currentUser = SecurityUtils.getSubject();
+		Subject currentUser = SecurityUtils.getSubject();
 		if (currentUser != null) {
 			TbUser user = (TbUser) currentUser.getSession().getAttribute("user");
 			if (user != null) {
@@ -108,7 +113,7 @@ public class UserController extends BaseController<TbUser> {
 					return "redirect:/user/changePass";
 				}
 			}
-		}*/
+		}
 		tbUser.setPassword(newPassword);
 		userService.updateByPrimaryKey(tbUser);
 		redirectAttributes.addAttribute("user", tbUser);
@@ -129,8 +134,16 @@ public class UserController extends BaseController<TbUser> {
 
 		int res = userService.insertSelective(user);
 		if (res != 0) {
+			//默认给系统用户创建一个商铺。
 			redirectAttributes.addFlashAttribute("user", user);
 			redirectAttributes.addFlashAttribute("message", "保存成功！");
+			ShopWithBLOBs record = new ShopWithBLOBs();
+			record.setCategoryId(null);
+			record.setUserId(user.getId());
+			record.setEmail(user.getEmail());
+			record.setAdminName(user.getMobilPhone());
+			record.setContactTelephone(user.getMobilPhone());
+			shopService.insertSelective(record);
 		}
 
 		return "redirect:/user/create";

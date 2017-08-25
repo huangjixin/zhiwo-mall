@@ -12,11 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -143,7 +140,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "TbUser", key = "#id+''")
+	@CacheEvict(value = "TbUser", key = "#id+'_user'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -166,7 +163,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "TbUser", key = "#record.id")
+//	@CachePut(value = "TbUser", key = "#record.id+'_user'")
 	public int insert(TbUser record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -197,7 +194,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	 */
 
 	@Override
-//	@CachePut(value = "TbUser", key = "#record.id")
+//	@CachePut(value = "TbUser", key = "#record.id+'_user'")
 	public int insertSelective(TbUser record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -239,7 +236,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = "TbUser")
+	@Cacheable(key = "#id+'_user'", value = "TbUser")
 	@Transactional(readOnly = true)
 	public TbUser selectByPrimaryKey(String id) {
 		// 日志记录
@@ -317,7 +314,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbUser", key = "#record.id")
+	@CacheEvict(value = "TbUser", key = "#record.id+'_user'")
 	public int updateByPrimaryKeySelective(TbUser record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -343,7 +340,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbUser", key = "#record.id")
+	@CacheEvict(value = "TbUser", key = "#record.id+'_user'")
 	public int updateByPrimaryKey(TbUser record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -383,14 +380,6 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 		return pageInfo;
 	}
 
-	public static void main(String[] args) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
-		ITbUserService tbUserServiceImpl = (ITbUserService) context.getBean("tbUserServiceImpl");
-		TbUser tbUser = new TbUser();
-		tbUser.setId(System.currentTimeMillis() + "");
-		int result = tbUserServiceImpl.insertSelective(tbUser);
-		logger.info(result + "");
-	}
 
 	@Override
 	public TbUser findByUsername(String username) {

@@ -139,7 +139,7 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "TbUserGroup", key="#id+''")
+	@CacheEvict(value = "TbUserGroup", key="#id+'_userGroup'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -162,7 +162,7 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "TbUserGroup", key = "#record.id")
+//	@CachePut(value = "TbUserGroup", key = "#record.id+'_userGroup'")
 	public int insert(TbUserGroup record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -189,7 +189,7 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 	 */
 
 	@Override
-//	@Cacheable(value = "TbUserGroup", key = "#record.id")
+//	@Cacheable(value = "TbUserGroup", key = "#record.id+'_userGroup'")
 	public int insertSelective(TbUserGroup record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -229,7 +229,7 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = "TbUserGroup")
+	@Cacheable(key = "#id+'_userGroup'", value = "TbUserGroup")
 	@Transactional(readOnly = true)
 	public TbUserGroup selectByPrimaryKey(String id) {
 		// 日志记录
@@ -301,7 +301,7 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbUserGroup", key="#record.id")
+	@CacheEvict(value = "TbUserGroup", key="#record.id+'_userGroup'")
 	public int updateByPrimaryKeySelective(TbUserGroup record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -324,7 +324,7 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbUserGroup", key="#record.id")
+	@CacheEvict(value = "TbUserGroup", key="#record.id+'_userGroup'")
 	public int updateByPrimaryKey(TbUserGroup record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -357,15 +357,6 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页结束");
 		return pageInfo;
-	}
-
-	public static void main(String[] args) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
-		ITbUserGroupService tbUserGroupServiceImpl = (ITbUserGroupService) context.getBean("tbUserGroupServiceImpl");
-		TbUserGroup tbUserGroup = new TbUserGroup();
-		tbUserGroup.setId(System.currentTimeMillis() + "");
-		int result = tbUserGroupServiceImpl.insertSelective(tbUserGroup);
-		logger.info(result + "");
 	}
 
 	@Override

@@ -26,6 +26,8 @@ import com.zwo.modules.member.domain.MemberAccount;
 import com.zwo.modules.member.domain.MemberAddress;
 import com.zwo.modules.member.domain.MemberPlayAccount;
 import com.zwo.modules.member.service.IMemberService;
+import com.zwo.modules.shop.service.IShopCategoryService;
+import com.zwo.modules.shop.service.IShopService;
 import com.zwo.modules.system.domain.TbUser;
 import com.zwo.modules.zhihuiduo.dto.MemberInfo;
 import com.zwotech.common.utils.SpringContextHolder;
@@ -45,6 +47,12 @@ public class GoodsController extends BaseController<TbUser> {
 	@Autowired
 	@Lazy(true)
 	private IPrductService prductService;
+	@Autowired
+	@Lazy(true)
+	private IShopService shopService;
+	@Autowired
+	@Lazy(true)
+	private IShopCategoryService shopCategoryService;
 	
 	@SuppressWarnings("rawtypes")
 	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
