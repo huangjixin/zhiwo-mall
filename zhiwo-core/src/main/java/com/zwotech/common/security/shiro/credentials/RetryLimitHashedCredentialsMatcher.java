@@ -27,7 +27,7 @@ public class RetryLimitHashedCredentialsMatcher extends
 		UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) token;
 		String username = usernamePasswordToken.getUsername();
 		// retry count + 1
-		if(null != cacheManager){
+		/*if(null != cacheManager){
 			if(passwordRetryCache!=null){
 				AtomicInteger retryCount = passwordRetryCache.get(username);
 				if (retryCount == null) {
@@ -38,7 +38,7 @@ public class RetryLimitHashedCredentialsMatcher extends
 					 throw new ExcessiveAttemptsException();
 				}
 			}
-		}
+		}*/
 
 //		boolean matches = super.doCredentialsMatch(token, info);
 		boolean matches = false;
@@ -48,15 +48,14 @@ public class RetryLimitHashedCredentialsMatcher extends
 			matches = true;
 		}
 
-		matches = PasswordHelper.validatePassword(password, dbPassword);
+		//matches = PasswordHelper.validatePassword(password, dbPassword);
 
-		if (matches) {
+		/*if (matches) {
 			if(null != cacheManager){
-				// clear retry count
 				if(passwordRetryCache!=null)
 					passwordRetryCache.remove(username);
 			}
-		}
+		}*/
 		return matches;
 	}
 

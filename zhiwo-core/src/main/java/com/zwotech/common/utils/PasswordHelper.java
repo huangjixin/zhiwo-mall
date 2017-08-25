@@ -42,7 +42,7 @@ public class PasswordHelper {
 	}
 	
 	public static void main(String[] args) {
-		String _123456Password = PasswordHelper.encryptPassword("1");
+		String _123456Password = PasswordHelper.encryptPassword("123456");
 		System.out.println(_123456Password);
 	}
 }

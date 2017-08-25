@@ -10,6 +10,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,7 +37,7 @@ public class LoginController extends BaseController<TbUser> {
 	}
 	
 	@RequestMapping(value ="/login",method=RequestMethod.POST)
-    public String loginForm(@ModelAttribute TbUser tbuser,HttpServletRequest request) throws Exception{
+    public String loginForm(@ModelAttribute TbUser tbuser,Model model,HttpServletRequest request) throws Exception{
 		String password = PasswordHelper.encryptPassword(tbuser.getPassword());
     	String username = tbuser.getUsername();
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);  
@@ -48,9 +49,11 @@ public class LoginController extends BaseController<TbUser> {
                 currentUser.login(token);//验证角色和权限  
             } 
         }catch(Exception ex){
-            throw new Exception("用户名或者密码错误");
+//            throw new Exception("用户名或者密码错误");
+        	model.addAttribute("message", "用户名或者密码错误");
+            return "login";
         }
-        return "";
+        return "/user";
     }
 	
 	@RequestMapping(value = "/checkLogin",method=RequestMethod.POST)

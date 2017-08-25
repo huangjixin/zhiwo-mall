@@ -38,6 +38,13 @@
 			</div>
 		</div>
 		<div class="form-group">
+			<label for="password" class="col-sm-1 control-label">密码</label>
+			<div class="col-sm-4">
+				<input type="password" class="form-control" id="password" name="password"
+					placeholder="请输入用户密码" value="">
+			</div>
+		</div>
+		<div class="form-group">
 			<label for="email" class="col-sm-1 control-label">用户邮箱</label>
 			<div class="col-sm-4">
 				<input type="text" class="form-control" id="email" name="email"

@@ -72,5 +72,5 @@
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 
-	<import resource="springMVC-shiro.xml" />
+	<!-- <import resource="springMVC-shiro.xml" /> -->
 </beans>
