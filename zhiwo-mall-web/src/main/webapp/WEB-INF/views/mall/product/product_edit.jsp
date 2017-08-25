@@ -13,8 +13,8 @@
 	src="https://cdn.bootcss.com/jquery-jcrop/2.0.4/js/Jcrop.min.js"></script>
 <style>
 .swiper-container {
-	width: 500px;
-	height: 300px;
+	width: 400px;
+	height: 200px;
 	margin: 20px auto;
 }
 
@@ -151,11 +151,11 @@
 			<label class="col-sm-2 control-label">设置商品轮播图</label>
 
 			<div class="col-sm-4">
-				<input type="file" id="swiperfile" name="file"
+				<input type="file" id="swiperFile" name="file"
 					style="display: none;" accept="image/*"
-					onChange="$('#swiperMessage').html($('#swiperfile').val());preImg(this.id,'swiperImg');" />
+					onChange="$('#swiperMessage').html($('#swiperFile').val());preImg(this.id,'swiperImg');" />
 				<button type="button" class="btn btn-success fileinput-button"
-					onclick="$('#swiperfile').click();">
+					onclick="$('#swiperFile').click();">
 					<i class="fa fa-plus"></i>&nbsp;&nbsp;选择文件
 				</button>
 				<button type="button" class="btn btn-primary start"
@@ -173,7 +173,7 @@
 					<div class="swiper-wrapper" id="proImagesWrapper">
                     	<c:forEach var="swiperImage" items="${swiperImages}">
                         	<div class="swiper-slide">
-								<img class=".img-responsive" src="${ctx}/${swiperImage.url}">
+								<img class=".img-responsive" src="${ctx}/${swiperImage.url}" width="400px;">
 							</div>
                         </c:forEach>
 					</div>
@@ -990,10 +990,10 @@
 		function uploadSwiperImageTOServer() {
 			var fileValue = $('#swiperFile').val();
 			if (fileValue == '') {
-				$('#prImagemessage').html('请选择一个文件')
+				$('#swiperMessage').html('请选择一个文件')
 				return;
 			}
-			$('#prImagemessage').html('正在上传……');
+			$('#swiperMessage').html('正在上传……');
 			var url = '${ctx}/fileupload/prSwiperAssets?productId=' + $('#id').val();
 			$
 					.ajaxFileUpload({
@@ -1014,11 +1014,11 @@
 								}
 
 							}
-							//$('#prImagemessage').html('');
+							$('#swiperMessage').html('');
 						},
 						error : function(data, status, e)//服务器响应失败处理函数
 						{
-							//$('#prImagemessage').html('上传失败');
+							$('#swiperMessage').html('上传失败');
 							//alert("上传失败");
 						}
 					})
