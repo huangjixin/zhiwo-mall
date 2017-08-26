@@ -31,32 +31,40 @@ import com.zwotech.common.web.BaseController;
 
 /**
  * 会员登录控制器。
+ * 
  * @author 黄记新 2017.8.8
  *
  */
 @Controller
 @Lazy(true)
-@RequestMapping(value = {"memberLogin"})
+@RequestMapping(value = { "memberLogin" })
 public class MemberLoginController extends BaseController<TbUser> {
 	@Autowired
 	@Lazy(true)
 	private IMemberService memberService;
-	
+
 	@SuppressWarnings("rawtypes")
 	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
-	
+
 	private static final String basePath = "views/member/";
-	
-	  
-	@RequestMapping(value = {"login"},method=RequestMethod.GET)
-	public String login(Model uiModel,HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+
+	@RequestMapping(value = { "login" }, method = RequestMethod.GET)
+	public String login(Model uiModel, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		uiModel.addAttribute("rawData", 123456);
-		return basePath+"login";
+		return basePath + "login";
 	}
-	
-	@RequestMapping(value = {"register"},method=RequestMethod.GET)
-	public String register(Model uiModel,HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+
+	@RequestMapping(value = { "login" }, method = RequestMethod.POST)
+	public String loginForm(Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
 		uiModel.addAttribute("rawData", 123456);
-		return basePath+"register";
+		return basePath + "login";
+	}
+
+	@RequestMapping(value = { "register" }, method = RequestMethod.GET)
+	public String register(Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		uiModel.addAttribute("rawData", 123456);
+		return basePath + "register";
 	}
 }

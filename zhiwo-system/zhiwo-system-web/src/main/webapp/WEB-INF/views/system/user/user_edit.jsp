@@ -45,7 +45,7 @@
 			</div>
 		</div>
         <div class="form-group">
-			<label for="disable" class="col-sm-2 control-label">禁用</label>
+			<label for="disable" class="col-sm-1 control-label">禁用</label>
 			<div class="col-sm-4">
 				<select id="disable" class="easyui-combobox"
 					name="disable" style="width: 200px;">
@@ -123,7 +123,7 @@
 			</div>
 		</div>
          <div class="form-group">
-			<label for="type" class="col-sm-2 control-label">类型</label>
+			<label for="type" class="col-sm-1 control-label">类型</label>
 			<div class="col-sm-4">
 				<select id="type" class="easyui-combobox"
 					name="type" style="width: 200px;">

@@ -32,6 +32,8 @@ import com.zwo.modules.mall.service.IPrProductPackagePriceService;
 import com.zwo.modules.mall.service.IPrProductPropertyService;
 import com.zwo.modules.mall.service.IPrProductPropertyValueService;
 import com.zwo.modules.mall.service.IPrductService;
+import com.zwo.modules.shop.domain.ShopWithBLOBs;
+import com.zwo.modules.shop.service.IShopService;
 import com.zwo.modules.system.domain.TbUser;
 import com.zwotech.common.web.BaseController;
 
@@ -39,6 +41,10 @@ import com.zwotech.common.web.BaseController;
 @RequestMapping("product")
 @Lazy(true)
 public class ProductController extends BaseController<PrProduct> {
+	
+	@Autowired
+	@Lazy(true)
+	private IShopService shopService;
 	@Autowired
 	@Lazy(true)
 	private IPrductService productService;
@@ -129,13 +135,15 @@ public class ProductController extends BaseController<PrProduct> {
 			if(user!=null){
 				product.setCreator(user.getUsername());
 				product.setUserId(user.getId());
+				ShopWithBLOBs shop = shopService.selectByUserId(user.getId());
+				product.setShopId(shop.getId());
 			}
 		}
 		
 		
 		int res = productService.insertSelective(product);
 		if(res==1){
-//			redirectAttributes.addFlashAttribute("product", product);
+			redirectAttributes.addFlashAttribute("product", product);
 			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
 		JSONArray perpertyArray = null;

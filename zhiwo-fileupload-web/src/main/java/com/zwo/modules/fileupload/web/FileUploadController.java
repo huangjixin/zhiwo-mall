@@ -1,6 +1,5 @@
 package com.zwo.modules.fileupload.web;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -60,9 +58,9 @@ public class FileUploadController {
 		List<TbUserAssets> userAssets = new ArrayList<TbUserAssets>();
 		Calendar date = Calendar.getInstance();
 		String rootDir = httpServletRequest.getSession().getServletContext().getRealPath("/");
-//		rootDir = "D:"+File.separator;
+		rootDir = "D:"+File.separator;
 		
-		String url = "images/uassets/" + date.get(Calendar.YEAR) + "/" + (date.get(Calendar.MONTH) + 1) + "/"
+		String url = "uassets/" + date.get(Calendar.YEAR) + "/" + (date.get(Calendar.MONTH) + 1) + "/"
 				+ date.get(Calendar.DAY_OF_MONTH);
 		String uploadPath = rootDir + "images" + File.separator + "uassets";
 		uploadPath = uploadPath + File.separator + date.get(Calendar.YEAR) + File.separator
@@ -117,8 +115,8 @@ public class FileUploadController {
 		List<PrImage> proAssets = new ArrayList<PrImage>();
 		Calendar date = Calendar.getInstance();
 		String rootDir = httpServletRequest.getSession().getServletContext().getRealPath("/");
-//		rootDir = "D:"+File.separator;
-		String url = "images/passets/" + date.get(Calendar.YEAR) + "/" + (date.get(Calendar.MONTH) + 1) + "/"
+		rootDir = "D:"+File.separator;
+		String url = "passets/" + date.get(Calendar.YEAR) + "/" + (date.get(Calendar.MONTH) + 1) + "/"
 				+ date.get(Calendar.DAY_OF_MONTH);
 		String uploadPath = rootDir + "images" + File.separator + "passets";
 		uploadPath = uploadPath + File.separator + date.get(Calendar.YEAR) + File.separator
@@ -182,8 +180,8 @@ public class FileUploadController {
 		List<PrImage> proAssets = new ArrayList<PrImage>();
 		Calendar date = Calendar.getInstance();
 		String rootDir = httpServletRequest.getSession().getServletContext().getRealPath("/");
-//		rootDir = "D:"+File.separator;
-		String url = "images/passets/" + date.get(Calendar.YEAR) + "/" + (date.get(Calendar.MONTH) + 1) + "/"
+		rootDir = "D:"+File.separator;
+		String url = "passets/" + date.get(Calendar.YEAR) + "/" + (date.get(Calendar.MONTH) + 1) + "/"
 				+ date.get(Calendar.DAY_OF_MONTH);
 		String uploadPath = rootDir + "images" + File.separator + "passets";
 		uploadPath = uploadPath + File.separator + date.get(Calendar.YEAR) + File.separator

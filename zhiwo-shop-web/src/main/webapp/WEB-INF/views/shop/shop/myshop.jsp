@@ -19,20 +19,27 @@
 			<label for="name" class="col-sm-2 control-label">商铺名称</label>
 			<div class="col-sm-4">
 				<input type="text" class="form-control" id="name" name="name"
-					placeholder="请输入商品名称,开头关键字请用【】括号，否则审核不通过" value="${product.name}">
+					placeholder="请输入商铺名称" value="${shop.name}">
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="code" class="col-sm-2 control-label">商品代码</label>
 			<div class="col-sm-4">
 				<input type="text" class="form-control" id="code" name="code"
-					placeholder="请输入商品代码(商品拼音)" value="${product.code}">
+					placeholder="请输入商品代码(商品拼音)" value="${shop.code}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="contactTelephone" class="col-sm-2 control-label">商品代码</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" id="contactTelephone" name="contactTelephone"
+					placeholder="请输入联系电话" value="${shop.contactTelephone}">
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="description" class="col-sm-2 control-label">描述</label>
 			<div class="col-sm-4">
-				<textarea name="description" class="form-control" rows="8">${product.description}</textarea>
+				<textarea name="description" class="form-control" rows="8">${shop.description}</textarea>
 			</div>
 		</div>
 		<div class="form-group">
@@ -57,10 +64,10 @@
 		<div class="form-group">
 			<label for="file" class="col-sm-2 control-label"></label>
 			<div class="col-sm-4">
-				<label style="color: red;">缩略图要求图片长宽比例为2:1，用工具将图片压缩成webp格式。(预览)</label>
+				<label style="color: red;">缩略图要求图片长宽比例为1:1，用工具将图片压缩成webp格式。(预览)</label>
 				<img id="iconImg"
-					<c:if test="${!empty product.icon}">src="${ctx}/${product.icon}"</c:if>
-					class=".img-responsive" width="200px;" height="100px;">
+					<c:if test="${!empty shop.icon}">src="${ctx}/${shop.icon}"</c:if>
+					class=".img-responsive" width="100px;" height="100px;">
 			</div>
 		</div>
 	</form>
