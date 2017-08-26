@@ -77,6 +77,13 @@
 			<version>1.0</version>
 			<type>war</type>
 		</dependency>
+		<dependency>
+			<groupId>com.zwo.zhihuiduo.web</groupId>
+			<artifactId>zhiwo-zhihuiduo-web</artifactId>
+			<version>1.0</version>
+			<type>war</type>
+		</dependency>
+		
 	</dependencies>
 	<build>
 		<finalName>${project.artifactId}</finalName>
@@ -134,6 +141,13 @@
 							<artifactId>zhiwo-fileupload-web</artifactId>
 							<excludes>
 								<exclude>WEB-INF/lib/*</exclude>
+								<exclude>WEB-INF/web.xml</exclude>
+							</excludes>
+						</overlay>
+						<overlay>
+							<groupId>com.zwo.zhihuiduo.web</groupId>
+							<artifactId>zhiwo-zhihuiduo-web</artifactId>
+							<excludes>
 								<exclude>WEB-INF/web.xml</exclude>
 							</excludes>
 						</overlay>

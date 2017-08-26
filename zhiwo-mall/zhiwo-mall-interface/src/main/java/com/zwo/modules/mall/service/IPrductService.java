@@ -46,4 +46,6 @@ public interface IPrductService extends IBaseService<PrProduct> {
      * @return
      */
     List<PrImage> selectByProductId(String productId,boolean isDefault);
+    
+    
 }

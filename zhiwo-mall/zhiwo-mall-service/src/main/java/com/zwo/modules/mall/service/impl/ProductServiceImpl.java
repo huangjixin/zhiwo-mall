@@ -52,7 +52,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 	private static Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
 	private static final String BASE_MESSAGE = "【PrProductServiceImpl服务类提供的基础操作增删改查等】";
-
+	
 	@Autowired
 	@Lazy(true)
 	private PrProductMapper productMapper;
@@ -291,20 +291,11 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 		return pageInfo;
 	}
 
-	public static void main(String[] args) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
-		IPrductService productServiceImpl = (IPrductService) context.getBean("productServiceImpl");
-		PrProduct product = new PrProduct();
-		product.setId(System.currentTimeMillis() + "");
-		int result = productServiceImpl.insertSelective(product);
-		logger.info(result + "");
-	}
-
 	public int countByExample(PrProductCriteria example) {
 		return this.productMapper.countByExample(example);
 	}
 
-//	@CachePut(value = "PrProduct", key = "#record.id")
+	@CachePut(value = "PrProduct", key = "#record.id+'_product'")
 	public int insert(PrProductWithBLOBs record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -327,7 +318,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 	}
 
 	
-//	@CachePut(value = "PrProduct", key = "#record.id")
+	@CachePut(value = "PrProduct", key = "#record.id+'_product'")
 	public int insertSelective(PrProductWithBLOBs record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -433,7 +424,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 		return result;
 	}
 
-	@CacheEvict(value = "PrProduct", key = "#record.id+'_product'")
+	@CachePut(value = "PrProduct", key = "#record.id+'_product'")
 	public int updateByPrimaryKeySelective(PrProductWithBLOBs record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -452,7 +443,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 		return result;
 	}
 
-	@CacheEvict(value = "PrProduct", key = "#record.id+'_product'")
+	@CachePut(value = "PrProduct", key = "#record.id+'_product'")
 	public int updateByPrimaryKeyWithBLOBs(PrProductWithBLOBs record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

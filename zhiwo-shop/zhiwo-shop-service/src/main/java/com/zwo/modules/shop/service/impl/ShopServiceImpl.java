@@ -11,14 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.zwo.modules.mall.dao.PrProductMapper;
+import com.zwo.modules.mall.domain.PrProduct;
+import com.zwo.modules.mall.domain.PrProductCriteria;
 import com.zwo.modules.shop.dao.ShopMapper;
 import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.domain.ShopCriteria;
@@ -43,6 +44,10 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 	@Autowired
 	@Lazy(true)
 	private ShopMapper shopMapper;
+	
+	@Autowired
+	@Lazy(true)
+	private PrProductMapper productMapper;
 
 	@Override
 	public Mapper<Shop> getBaseMapper() {
@@ -109,7 +114,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "Shop", key = "#id+'_shop'")
+	@CacheEvict(value = {"Shop","PrProducts"}, key = "#id+'_shop'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -225,7 +230,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "Shop", key = "#record.id+'_shop'")
+	@CacheEvict(value = {"Shop","PrProducts"}, key = "#record.id+'_shop'")
 	public int updateByPrimaryKey(Shop record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -272,7 +277,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 		return this.shopMapper.countByExample(example);
 	}
 
-//	@CachePut(value = "Shop", key = "#record.id+'_shop'")
+	@CachePut(value = "Shop", key = "#record.id+'_shop'")
 	@Override
 	public int insert(ShopWithBLOBs record) {
 		// 日志记录
@@ -291,7 +296,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 		return result;
 	}
 
-//	@CachePut(value = "Shop", key = "#record.id+'_shop'")
+	@CachePut(value = "Shop", key = "#record.id+'_shop'")
 	@Override
 	public int insertSelective(ShopWithBLOBs record) {
 		// 日志记录
@@ -328,7 +333,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 	}
 
 	@Override
-	@CacheEvict(value = "Shop", allEntries = true)
+	@CacheEvict(value = {"Shop","PrProducts"}, allEntries = true)
 	public int updateByExampleSelective(ShopWithBLOBs record, ShopCriteria example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -344,7 +349,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 		return result;
 	}
 
-	@CacheEvict(value = "Shop", allEntries = true)
+	@CacheEvict(value = {"Shop","PrProducts"}, allEntries = true)
 	@Override
 	public int updateByExampleWithBLOBs(ShopWithBLOBs record, ShopCriteria example) {
 		// 日志记录
@@ -361,7 +366,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 		return result;
 	}
 
-	@CacheEvict(value = "Shop", allEntries = true)
+	@CacheEvict(value = {"Shop","PrProducts"}, allEntries = true)
 	@Override
 	public int updateByExample(Shop record, ShopCriteria example) {
 		// 日志记录
@@ -378,7 +383,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 		return result;
 	}
 
-	@CacheEvict(value = "Shop", key = "#record.id+'_shop'")
+	@CacheEvict(value = {"Shop","PrProducts"}, key = "#record.id+'_shop'")
 	@Override
 	public int updateByPrimaryKeySelective(ShopWithBLOBs record) {
 		// 日志记录
@@ -423,4 +428,12 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 		return null;
 	}
 
+	@Override
+//	@Cacheable(value = "PrProducts")
+	public List<PrProduct> selectPrProductsByShopId(String shopId) {
+		PrProductCriteria productCriteria = new PrProductCriteria();
+		productCriteria.createCriteria().andShopIdEqualTo(shopId);
+		List<PrProduct> list = this.productMapper.selectByExample(productCriteria);
+		return list;
+	}
 }

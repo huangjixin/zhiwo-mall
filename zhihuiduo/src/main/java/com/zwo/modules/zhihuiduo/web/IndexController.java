@@ -38,6 +38,7 @@ import com.zwotech.common.web.BaseController;
  */
 @Controller
 @Lazy(true)
+@RequestMapping(value = {"mindex"})
 public class IndexController extends BaseController<TbUser> {
 	@Autowired
 	@Lazy(true)

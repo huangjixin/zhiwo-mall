@@ -215,6 +215,16 @@
 					value="${product.purchasingCost}"> <label>输入商品进货价有利于您统计商品的盈利情况</label>
 			</div>
 		</div>
+        <div class="form-group">
+			<label for="numberCount" class="col-sm-2 control-label">开团人数(<i
+				class="fa fa-jpy"></i>)
+			</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" id="numberCount"
+					name="numberCount" placeholder="请输入开团人数"
+					value="${product.numberCount}">
+			</div>
+		</div>
 		<div class="form-group">
 			<label for="gourpSalePrice" class="col-sm-2 control-label">团购价(<i
 				class="fa fa-jpy"></i>)

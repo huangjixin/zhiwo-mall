@@ -5,8 +5,7 @@ package com.zwo.modules.shop.service;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
+import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.domain.ShopCriteria;
 import com.zwo.modules.shop.domain.ShopWithBLOBs;
@@ -36,12 +35,18 @@ public interface IShopService extends IBaseService<Shop> {
 
     int updateByPrimaryKeyWithBLOBs(ShopWithBLOBs record);
     
-    
+
     /**
      * 查找“我的店铺”。
      * @param id
      * @return
      */
     ShopWithBLOBs selectByUserId(String id);
-
+    
+    /**
+     * 根据商铺ID查询商品。
+     * @param id
+     * @return
+     */
+    List<PrProduct> selectPrProductsByShopId(String shopId);
 }

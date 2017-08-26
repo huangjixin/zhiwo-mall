@@ -44,11 +44,23 @@
 					placeholder="请输入用户密码" value="">
 			</div>
 		</div>
+        <div class="form-group">
+			<label for="disable" class="col-sm-2 control-label">禁用</label>
+			<div class="col-sm-4">
+				<select id="disable" class="easyui-combobox"
+					name="disable" style="width: 200px;">
+					<option value="false"
+						<c:if test="${!user.disable}">selected=true</c:if>>否</option>
+					<option value="true"
+						<c:if test="${user.disable}">selected=true</c:if>>是</option>
+				</select>
+			</div>
+		</div>
 		<div class="form-group">
 			<label for="email" class="col-sm-1 control-label">用户邮箱</label>
 			<div class="col-sm-4">
 				<input type="text" class="form-control" id="email" name="email"
-					placeholder="请输入用户代码(用户拼音)" value="${user.email}">
+					placeholder="请输入邮箱" value="${user.email}">
 			</div>
 		</div>
 		<div class="form-group">
@@ -94,6 +106,32 @@
 			<label for="description" class="col-sm-1 control-label">描述</label>
 			<div class="col-sm-4">
 				<textarea name="description" class="form-control" rows="4" >${user.description}</textarea>
+			</div>
+		</div>
+        <div class="form-group">
+			<label for="qq" class="col-sm-1 control-label">QQ</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" id="qq" name="qq"
+					placeholder="qq" value="${user.qq}">
+			</div>
+		</div>
+         <div class="form-group">
+			<label for="idCard" class="col-sm-1 control-label">身份证号码</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" id="idCard" name="idCard"
+					placeholder="请输入身份证号码" value="${user.idCard}">
+			</div>
+		</div>
+         <div class="form-group">
+			<label for="type" class="col-sm-2 control-label">类型</label>
+			<div class="col-sm-4">
+				<select id="type" class="easyui-combobox"
+					name="type" style="width: 200px;">
+					<option value="cooperation"
+						<c:if test="${user.type=='cooperation'}">selected=true</c:if>>企业</option>
+					<option value="person"
+						<c:if test="${user.type=='person'}">selected=true</c:if>>个人</option>
+				</select>
 			</div>
 		</div>
         <div class="form-group">

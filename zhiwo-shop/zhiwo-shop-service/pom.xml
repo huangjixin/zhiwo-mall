@@ -27,5 +27,15 @@
 			<artifactId>zhiwo-shop-dao</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.zwo.mall.interface</groupId>
+			<artifactId>zhiwo-mall-interface</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.zwo.mall.dao</groupId>
+			<artifactId>zhiwo-mall-dao</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 </project>

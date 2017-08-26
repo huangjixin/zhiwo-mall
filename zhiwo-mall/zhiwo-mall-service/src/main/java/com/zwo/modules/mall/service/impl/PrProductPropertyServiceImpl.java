@@ -119,7 +119,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"},key="#id+''")
+	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"},key="#id+'productProperty'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -142,7 +142,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = {"PrProductProperty","PrProductPropertys"}, key = "#record.id")
+//	@CachePut(value = {"PrProductProperty","PrProductPropertys"}, key = "#record.id+'productProperty'")
 	public int insert(PrProductProperty record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -169,7 +169,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 */
 
 	@Override
-//	@CachePut(value = {"PrProductProperty","PrProductPropertys"}, key = "#record.id")
+//	@CachePut(value = {"PrProductProperty","PrProductPropertys"}, key = "#record.id+'productProperty'")
 	public int insertSelective(PrProductProperty record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -208,7 +208,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = {"PrProductProperty","PrProductPropertys"})
+	@Cacheable(key = "#id+'productProperty'", value = {"PrProductProperty","PrProductPropertys"})
 	@Transactional(readOnly = true)
 	public PrProductProperty selectByPrimaryKey(String id) {
 		// 日志记录
@@ -280,7 +280,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"},key="#record.id",allEntries=true)
+	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"},key="#record.id+'productProperty'",allEntries=true)
 	public int updateByPrimaryKeySelective(PrProductProperty record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -303,7 +303,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"},key="#record.id",allEntries=true)
+	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"},key="#record.id+'productProperty'",allEntries=true)
 	public int updateByPrimaryKey(PrProductProperty record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -349,7 +349,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 
 	@Transactional(readOnly = true)
 	@Override
-	@Cacheable(value = "PrProductPropertys",key="#root.target+#root.method.name")
+	@Cacheable(value = "PrProductPropertys",key="'productProperty'+#root.method.name")
 	public List<PrProductProperty> listAll() {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "查询所有属性开始");
