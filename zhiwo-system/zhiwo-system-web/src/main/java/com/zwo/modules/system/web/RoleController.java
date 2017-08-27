@@ -2,6 +2,7 @@ package com.zwo.modules.system.web;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,12 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fasterxml.jackson.annotation.ObjectIdGenerators.UUIDGenerator;
 import com.zwo.modules.system.domain.TbResources;
 import com.zwo.modules.system.domain.TbRole;
 import com.zwo.modules.system.domain.TbRoleResources;
@@ -139,9 +142,11 @@ public class RoleController extends BaseController<TbRole> {
 			if (!"".equals(resources)) {
 				String[] resArray = resources.split(",");
 				List<TbRoleResources> roleResources = new ArrayList<TbRoleResources>();
+				
 				for (int i = 0; i < resArray.length; i++) {
+					String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 					TbRoleResources tbRoleResources = new TbRoleResources();
-					tbRoleResources.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
+					tbRoleResources.setId(uuid);
 					tbRoleResources.setResourcesId(resArray[i]);
 					roleResources.add(tbRoleResources);
 				}

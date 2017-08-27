@@ -6,6 +6,7 @@ package com.zwo.modules.system.service.impl;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -379,7 +380,10 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "批量关联角色资源开始");
 		for (TbRoleResources tbRoleResources : roleResources) {
-			tbRoleResources.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
+			if(tbRoleResources.getId()==null){
+				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+				tbRoleResources.setId(uuid);
+			}
 		}
 		String sql = " INSERT INTO tb_role_resources (id,resources_id,role_id) VALUES (?,?,?)";
 		this.jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {

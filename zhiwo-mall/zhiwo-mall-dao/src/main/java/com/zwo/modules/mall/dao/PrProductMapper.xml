@@ -37,6 +37,8 @@
     <result column="INDEPENDENT_PRICE" property="independentPrice" jdbcType="DOUBLE" />
     <result column="NUMBER_COUNT" property="numberCount" jdbcType="INTEGER" />
     <result column="AUDIT_DESCRIPTION" property="auditDescription" jdbcType="VARCHAR" />
+    <result column="STORAGE" property="storage" jdbcType="INTEGER" />
+    
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.zwo.modules.mall.domain.PrProductWithBLOBs" extends="BaseResultMap" >
     <!--
@@ -124,7 +126,7 @@
     ID, CREATOR, ORG_ID, UPDATER, CREATE_DATE, UPDATE_DATE, DISABLE, START_TIME, END_TIME, 
     SORT, IS_DEFAULT, EN_NAME, NAME, DESCRIPTION, ICON, KEYWORDS, THUMBNAIL, CODE, CATEGORY_ID, 
     ALLOW_DISTRIBUTION, DISTRIBUTION_VALUE, SHOP_ID, USER_ID, PURCHASING_COST, DIST_INTRUEDUTION, 
-    SUPPLIER_ID, GOURP_SALE_PRICE, INDEPENDENT_PRICE, NUMBER_COUNT, AUDIT_DESCRIPTION
+    SUPPLIER_ID, GOURP_SALE_PRICE, INDEPENDENT_PRICE, NUMBER_COUNT, AUDIT_DESCRIPTION,STORAGE
   </sql>
   <sql id="Blob_Column_List" >
     <!--
@@ -222,7 +224,7 @@
       CATEGORY_ID, ALLOW_DISTRIBUTION, DISTRIBUTION_VALUE, 
       SHOP_ID, USER_ID, PURCHASING_COST, 
       DIST_INTRUEDUTION, SUPPLIER_ID, GOURP_SALE_PRICE, 
-      INDEPENDENT_PRICE, NUMBER_COUNT, AUDIT_DESCRIPTION, 
+      INDEPENDENT_PRICE, NUMBER_COUNT, AUDIT_DESCRIPTION,STORAGE 
       CONTENT, EN_CONTENT)
     values (#{id,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, 
       #{updater,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, 
@@ -233,7 +235,8 @@
       #{categoryId,jdbcType=VARCHAR}, #{allowDistribution,jdbcType=BIT}, #{distributionValue,jdbcType=DOUBLE}, 
       #{shopId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{purchasingCost,jdbcType=DOUBLE}, 
       #{distIntruedution,jdbcType=VARCHAR}, #{supplierId,jdbcType=VARCHAR}, #{gourpSalePrice,jdbcType=DOUBLE}, 
-      #{independentPrice,jdbcType=DOUBLE}, #{numberCount,jdbcType=INTEGER}, #{auditDescription,jdbcType=VARCHAR}, 
+      #{independentPrice,jdbcType=DOUBLE}, #{numberCount,jdbcType=INTEGER}, #{auditDescription,jdbcType=VARCHAR},
+      #{storage,jdbcType=INTEGER}, 
       #{content,jdbcType=LONGVARCHAR}, #{enContent,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zwo.modules.mall.domain.PrProductWithBLOBs" >
@@ -334,6 +337,9 @@
       <if test="auditDescription != null" >
         AUDIT_DESCRIPTION,
       </if>
+      <if test="storage != null" >
+        STORAGE,
+      </if>
       <if test="content != null" >
         CONTENT,
       </if>
@@ -431,6 +437,9 @@
       </if>
       <if test="auditDescription != null" >
         #{auditDescription,jdbcType=VARCHAR},
+      </if> 
+      <if test="storage != null" >
+        #{storage,jdbcType=INTEGER},
       </if>
       <if test="content != null" >
         #{content,jdbcType=LONGVARCHAR},
@@ -549,6 +558,9 @@
       <if test="record.auditDescription != null" >
         AUDIT_DESCRIPTION = #{record.auditDescription,jdbcType=VARCHAR},
       </if>
+      <if test="record.storage != null" >
+        STORAGE = #{record.storage,jdbcType=VARCHAR},
+      </if>
       <if test="record.content != null" >
         CONTENT = #{record.content,jdbcType=LONGVARCHAR},
       </if>
@@ -597,6 +609,7 @@
       INDEPENDENT_PRICE = #{record.independentPrice,jdbcType=DOUBLE},
       NUMBER_COUNT = #{record.numberCount,jdbcType=INTEGER},
       AUDIT_DESCRIPTION = #{record.auditDescription,jdbcType=VARCHAR},
+      STORAGE = #{storage,jdbcType=INTEGER},
       CONTENT = #{record.content,jdbcType=LONGVARCHAR},
       EN_CONTENT = #{record.enContent,jdbcType=LONGVARCHAR}
     <if test="_parameter != null" >
@@ -639,7 +652,8 @@
       GOURP_SALE_PRICE = #{record.gourpSalePrice,jdbcType=DOUBLE},
       INDEPENDENT_PRICE = #{record.independentPrice,jdbcType=DOUBLE},
       NUMBER_COUNT = #{record.numberCount,jdbcType=INTEGER},
-      AUDIT_DESCRIPTION = #{record.auditDescription,jdbcType=VARCHAR}
+      AUDIT_DESCRIPTION = #{record.auditDescription,jdbcType=VARCHAR},
+      STORAGE = #{storage,jdbcType=INTEGER},
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -739,6 +753,9 @@
       <if test="auditDescription != null" >
         AUDIT_DESCRIPTION = #{auditDescription,jdbcType=VARCHAR},
       </if>
+      <if test="storage != null" >
+       STORAGE = #{storage,jdbcType=INTEGER},
+      </if>
       <if test="content != null" >
         CONTENT = #{content,jdbcType=LONGVARCHAR},
       </if>
@@ -784,6 +801,7 @@
       INDEPENDENT_PRICE = #{independentPrice,jdbcType=DOUBLE},
       NUMBER_COUNT = #{numberCount,jdbcType=INTEGER},
       AUDIT_DESCRIPTION = #{auditDescription,jdbcType=VARCHAR},
+      STORAGE = #{storage,jdbcType=INTEGER},
       CONTENT = #{content,jdbcType=LONGVARCHAR},
       EN_CONTENT = #{enContent,jdbcType=LONGVARCHAR}
     where ID = #{id,jdbcType=VARCHAR}
@@ -823,7 +841,8 @@
       GOURP_SALE_PRICE = #{gourpSalePrice,jdbcType=DOUBLE},
       INDEPENDENT_PRICE = #{independentPrice,jdbcType=DOUBLE},
       NUMBER_COUNT = #{numberCount,jdbcType=INTEGER},
-      AUDIT_DESCRIPTION = #{auditDescription,jdbcType=VARCHAR}
+      AUDIT_DESCRIPTION = #{auditDescription,jdbcType=VARCHAR},
+      STORAGE = #{storage,jdbcType=INTEGER}
     where ID = #{id,jdbcType=VARCHAR}
   </update>
   

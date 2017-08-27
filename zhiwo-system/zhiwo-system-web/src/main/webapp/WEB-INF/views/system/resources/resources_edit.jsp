@@ -26,7 +26,7 @@
             <button type="button" class="btn btn-danger btn-sm"  onClick="$('#treegrid').treegrid('unselectAll');$('#parentId').val('');">
                 清除
             </button>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<table id="treegrid" title="资源树" class="easyui-treegrid"
                     data-options="
                                     url: '${ctx}/resources/getResourcesCheckboxTree',
@@ -67,28 +67,28 @@
 		</div>
 		<div class="form-group">
 			<label for="name" class="col-sm-1 control-label">资源名称</label>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<input type="text" class="form-control" id="name" name="name"
 					placeholder="请输入资源名称" value="${resources.name}">
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="authName" class="col-sm-1 control-label">权限名称</label>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<input type="text" class="form-control" id="authName" name="authName"
 					placeholder="请输入授权名称比如system:user:view" value="${resources.authName}">
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="code" class="col-sm-1 control-label">代码</label>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<input type="text" class="form-control" id="code" name="code"
 					placeholder="请输入资源代码(资源拼音)" value="${resources.code}">
 			</div>
 		</div>
         <div class="form-group">
 			<label for="type" class="col-sm-1 control-label">类型</label>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<select id="type" class="easyui-combobox" name="type" style="width:200px;">   
                     <option value="menu" <c:if test="${resources.type=='menu'}">selected=true</c:if>>菜单</option>   
                     <option value="button" <c:if test="${resources.type=='button'}">selected=true</c:if>>按钮</option> 
@@ -98,20 +98,20 @@
 		</div>
 		<div class="form-group">
 			<label for="path" class="col-sm-1 control-label">链接</label>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<input type="text" class="form-control" id="path" name="path"
 					placeholder="请输入链接" value="${resources.path}">
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="description" class="col-sm-1 control-label">描述</label>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<textarea name="description" class="form-control" rows="4" >${resources.description}</textarea>
 			</div>
 		</div>
         <div class="form-group">
 			<label  class="col-sm-1 control-label"></label>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<%@ include file="/WEB-INF/include/easyui-buttonForm.jsp"%>
 			</div>
 		</div>

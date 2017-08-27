@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,12 +38,13 @@ public class ResourcesController extends BaseController<TbResources> {
 	
 	@RequiresPermissions("system:resources:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
-	public String tocreate(@Valid TbResources resources, BindingResult result, Model uiModel,
+	public String tocreate(@ModelAttribute TbResources resources, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		uiModel.addAttribute("resources", resources);
+//		uiModel.addAttribute("resources", resources);
 		return basePath + "resources_edit";
 	}
 
+	
 	@RequiresPermissions("system:resources:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
@@ -64,7 +66,9 @@ public class ResourcesController extends BaseController<TbResources> {
 			redirectAttributes.addFlashAttribute("message", "数据绑定有误！");
 			return "redirect:/resources/create";
 		}
-		
+		if("".equals(resources.getParentId())){
+			resources.setParentId(null);
+		}
 		int res = resourcesService.insertSelective(resources);
 		if(res!=0){
 			redirectAttributes.addFlashAttribute("resources", resources);
@@ -91,7 +95,10 @@ public class ResourcesController extends BaseController<TbResources> {
 			redirectAttributes.addFlashAttribute("message", "请另选父亲节点！");
 			return "redirect:/resources/edit/"+resources.getId();
 		}
-		int res = this.resourcesService.updateByPrimaryKeySelective(resources);
+		if("".equals(resources.getParentId())){
+			resources.setParentId(null);
+		}
+		int res = this.resourcesService.updateByPrimaryKey(resources);
 		if(res==1){
 			redirectAttributes.addFlashAttribute("resources", resources);
 			redirectAttributes.addFlashAttribute("message", "保存成功！");
