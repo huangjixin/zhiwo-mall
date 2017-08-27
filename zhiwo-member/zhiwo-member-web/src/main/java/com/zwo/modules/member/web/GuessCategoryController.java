@@ -85,6 +85,7 @@ public class GuessCategoryController extends BaseController<GuessCategory> {
 			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
 		}
 		
+		
 		int res = this.guessCategoryService.updateByPrimaryKeySelective(guessCategory);
 		if(res==1){
 			redirectAttributes.addFlashAttribute("guessCategory", guessCategory);

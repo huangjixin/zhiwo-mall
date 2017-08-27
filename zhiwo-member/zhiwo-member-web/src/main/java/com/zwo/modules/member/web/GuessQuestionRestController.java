@@ -1,6 +1,9 @@
 package com.zwo.modules.member.web;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,6 +25,9 @@ import com.github.pagehelper.PageInfo;
 import com.zwo.modules.member.domain.GuessQuestion;
 import com.zwo.modules.member.domain.GuessQuestionCriteria;
 import com.zwo.modules.member.service.IGuessQuestionService;
+import com.zwo.modules.system.domain.TbUserAssets;
+import com.zwo.modules.system.domain.TbUserAssetsCriteria;
+import com.zwo.modules.system.service.ITbUserAssetsService;
 import com.zwotech.common.web.BaseController;
 
 @RestController
@@ -31,6 +37,10 @@ public class GuessQuestionRestController extends BaseController<GuessQuestion> {
 	@Autowired
 	@Lazy(true)
 	private IGuessQuestionService guessQuestionService;
+	
+	@Autowired
+	@Lazy(true)
+	private ITbUserAssetsService userAssetsService;
 	
 	/** 
 	 * @Title: deleteById 
@@ -51,6 +61,16 @@ public class GuessQuestionRestController extends BaseController<GuessQuestion> {
 		}
 		String[] ids = idstring.split(",");
 		List<String> list = Arrays.asList(ids);
+		
+		TbUserAssetsCriteria assetsCriteria = new TbUserAssetsCriteria();
+		assetsCriteria.createCriteria().andOrgIdIn(list);
+		List<TbUserAssets> userAssets = userAssetsService.selectByExample(assetsCriteria);
+		for (TbUserAssets tbUserAssets : userAssets) {
+			//文件
+		    Path path = Paths.get(tbUserAssets.getPath());
+		    Files.deleteIfExists(path);
+		}
+		
 		int result = guessQuestionService.deleteBatch(list);
 		return result+"";
 	}
@@ -68,6 +88,14 @@ public class GuessQuestionRestController extends BaseController<GuessQuestion> {
 	@RequiresPermissions("member:guessQuestion:delete")
 	public String delete(@RequestParam(value = "id",required=true) String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
+		TbUserAssetsCriteria assetsCriteria = new TbUserAssetsCriteria();
+		assetsCriteria.createCriteria().andOrgIdEqualTo(id);
+		List<TbUserAssets> userAssets = userAssetsService.selectByExample(assetsCriteria);
+		for (TbUserAssets tbUserAssets : userAssets) {
+			//文件
+		    Path path = Paths.get(tbUserAssets.getPath());
+		    Files.deleteIfExists(path);
+		}
 		
 		int result = guessQuestionService.deleteByPrimaryKey(id);
 		return result+"";

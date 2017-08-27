@@ -338,13 +338,13 @@ public class GuessQuestionOptionsServiceImpl extends BaseService<GuessQuestionOp
 		return pageInfo;
 	}
 
-	public static void main(String[] args) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
-		IGuessQuestionOptionsService guessQuestionOptionsServiceImpl = (IGuessQuestionOptionsService) context.getBean("guessQuestionOptionsServiceImpl");
-		GuessQuestionOptions guessQuestionOptions = new GuessQuestionOptions();
-		guessQuestionOptions.setId(System.currentTimeMillis() + "");
-		int result = guessQuestionOptionsServiceImpl.insertSelective(guessQuestionOptions);
-		logger.info(result + "");
+
+	@Override
+	public List<GuessQuestionOptions> selectByQuestionId(String questionId) {
+		GuessQuestionOptionsCriteria optionsCriteria = new GuessQuestionOptionsCriteria();
+		optionsCriteria.createCriteria().andGuessQuestionIdEqualTo(questionId);
+		List<GuessQuestionOptions> list = guessQuestionOptionsMapper.selectByExample(optionsCriteria);
+		return list;
 	}
 
 }

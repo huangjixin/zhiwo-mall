@@ -1,5 +1,7 @@
 package com.zwo.modules.member.web;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.zwo.modules.member.domain.GuessQuestion;
+import com.zwo.modules.member.domain.GuessQuestionOptions;
+import com.zwo.modules.member.service.IGuessQuestionOptionsService;
 import com.zwo.modules.member.service.IGuessQuestionService;
 import com.zwotech.common.web.BaseController;
 
@@ -26,6 +30,9 @@ public class GuessQuestionController extends BaseController<GuessQuestion> {
 	@Autowired
 	@Lazy(true)
 	private IGuessQuestionService guessQuestionService;
+	@Autowired
+	@Lazy(true)
+	private IGuessQuestionOptionsService guessQuestionOptionsService;
 	
 	private static final String basePath = "views/member/guess/";
 	
@@ -47,7 +54,11 @@ public class GuessQuestionController extends BaseController<GuessQuestion> {
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		GuessQuestion guessQuestion = guessQuestionService.selectByPrimaryKey(id);
-
+		if(guessQuestion != null){
+			List<GuessQuestionOptions> list = guessQuestionOptionsService.selectByQuestionId(guessQuestion.getId());
+			uiModel.addAttribute("guessQuestionOptions", list);
+		}
+		
 		uiModel.addAttribute("guessQuestion", guessQuestion);
 		uiModel.addAttribute("operation", "edit");
 		return basePath + "guessQuestion_edit";

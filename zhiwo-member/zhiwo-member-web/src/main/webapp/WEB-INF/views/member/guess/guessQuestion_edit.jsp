@@ -20,8 +20,9 @@
 		</c:if>
 		method="post">
         <c:if test="${operation=='edit'}">
-        <input id="id" name="id" value="${guessQuestion.id}" type="hidden"/>
+        
 		</c:if>
+         <input id="id" name="id" value="${guessQuestion.id}" type="hidden"/>
 		 <input id="icon" name="icon" value="${guessQuestion.icon}" type="hidden"/>
 		<div class="form-group">
 			<label for="name" class="col-sm-1 control-label">竞猜问题名称</label>
@@ -56,7 +57,7 @@
 		<div class="form-group">
 			<label for="file" class="col-sm-1 control-label"></label>
 			<div class="col-sm-4">
-				<img id="iconImg" src="${ctx}/${guessQuestion.icon}" 	class=".img-responsive"
+				<img id="iconImg" <c:if test="${!empty guessQuestion.icon}">src="${ctx}/${guessQuestion.icon}"</c:if> 	class=".img-responsive"
 					style="width: 100px;">
 			</div>
 		</div>
@@ -91,7 +92,7 @@
 				return;
 			}
 			$('#message').html('正在上传……');
-			var url = '${ctx}/fileupload/userAssets';
+			var url = '${ctx}/fileupload/userAssets?orgId='+$('#id').val;
 			$.ajaxFileUpload({
 				url : url, //用于文件上传的服务器端请求地址
 				secureuri : false, //是否需要安全协议，一般设置为false

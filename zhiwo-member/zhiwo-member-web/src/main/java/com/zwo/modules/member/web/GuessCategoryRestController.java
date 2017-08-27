@@ -1,7 +1,9 @@
 package com.zwo.modules.member.web;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,6 +25,9 @@ import com.github.pagehelper.PageInfo;
 import com.zwo.modules.member.domain.GuessCategory;
 import com.zwo.modules.member.domain.GuessCategoryCriteria;
 import com.zwo.modules.member.service.IGuessCategoryService;
+import com.zwo.modules.system.domain.TbUserAssets;
+import com.zwo.modules.system.domain.TbUserAssetsCriteria;
+import com.zwo.modules.system.service.ITbUserAssetsService;
 import com.zwotech.common.utils.TreeBuilder;
 import com.zwotech.common.web.BaseController;
 
@@ -33,6 +38,9 @@ public class GuessCategoryRestController extends BaseController<GuessCategory> {
 	@Autowired
 	@Lazy(true)
 	private IGuessCategoryService guessCategoryService;
+	@Autowired
+	@Lazy(true)
+	private ITbUserAssetsService userAssetsService;
 
 	/**
 	 * @Title: deleteById @Description: 批量删除 @param idstring @param
@@ -48,6 +56,14 @@ public class GuessCategoryRestController extends BaseController<GuessCategory> {
 		}
 		String[] ids = idstring.split(",");
 		List<String> list = Arrays.asList(ids);
+		TbUserAssetsCriteria assetsCriteria = new TbUserAssetsCriteria();
+		assetsCriteria.createCriteria().andOrgIdIn(list);
+		List<TbUserAssets> userAssets = userAssetsService.selectByExample(assetsCriteria);
+		for (TbUserAssets tbUserAssets : userAssets) {
+			//文件
+		    Path path = Paths.get(tbUserAssets.getPath());
+		    Files.deleteIfExists(path);
+		}
 		int result = guessCategoryService.deleteBatch(list);
 		return result + "";
 	}

@@ -27,6 +27,7 @@ import com.zwo.modules.cms.service.ICmsAssetsService;
 import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.service.IPrImageService;
 import com.zwo.modules.system.domain.TbUserAssets;
+import com.zwo.modules.system.domain.TbUserAssetsCriteria;
 import com.zwo.modules.system.service.ITbUserAssetsService;
 
 @Scope("prototype")
@@ -87,15 +88,30 @@ public class FileUploadController {
 					e.printStackTrace();
 				}
 
-				TbUserAssets assets = new TbUserAssets();
-				assets.setName(name);
-				assets.setPath(uploadPath + File.separator + name);
-				assets.setUrl(url + "/" + name);
-				assets.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
+				TbUserAssets assets = null;
 				if(null!=orgId && !"".equals(orgId)){
-					assets.setOrgId(orgId);
+					TbUserAssetsCriteria assetsCriteria = new TbUserAssetsCriteria();
+					assetsCriteria.createCriteria().andOrgIdEqualTo(orgId);
+					List<TbUserAssets> list = userAssetsService.selectByExample(assetsCriteria);
+					if(!list.isEmpty()){
+						assets = list.get(0);
+						assets.setName(name);
+						assets.setPath(uploadPath + File.separator + name);
+						assets.setUrl(url + "/" + name);
+						userAssetsService.updateByPrimaryKeySelective(assets);
+					}
+				}else{
+					assets = new TbUserAssets();
+					assets.setName(name);
+					assets.setPath(uploadPath + File.separator + name);
+					assets.setUrl(url + "/" + name);
+					assets.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
+					if(null!=orgId && !"".equals(orgId)){
+						assets.setOrgId(orgId);
+					}
+					userAssetsService.insertSelective(assets);
 				}
-				userAssetsService.insertSelective(assets);
+				
 				userAssets.add(assets);
 			}
 		}

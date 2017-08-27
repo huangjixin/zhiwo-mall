@@ -20,8 +20,9 @@
 		</c:if>
 		method="post">
         <c:if test="${operation=='edit'}">
-        <input id="id" name="id" value="${guessCategory.id}" type="hidden"/>
+        
 		</c:if>
+        <input id="id" name="id" value="${guessCategory.id}" type="hidden"/>
         <input id="parentId" name="parentId" value="${guessCategory.parentId}" type="hidden"/>
         <input id="icon" name="icon" value="${guessCategory.icon}" type="hidden"/>
         <div class="form-group">
@@ -84,7 +85,7 @@
 			<label for="file" class="col-sm-1 control-label">竞猜分类缩略图</label>
 			<div class="col-sm-4">
 				<input type="file" id="file" name="file" style="display: none;"
-					accept="image/*" onChange="$('#message').html($('#file').val())" />
+					accept="image/*" onChange="$('#message').html($('#file').val());preImg(this.id,'iconImg');" />
 				<button type="button" class="btn btn-success fileinput-button"
 					onclick="$('#file').click();">
 					<i class="fa fa-plus"></i>&nbsp;&nbsp;选择文件
@@ -100,7 +101,7 @@
 		<div class="form-group">
 			<label for="file" class="col-sm-1 control-label"></label>
 			<div class="col-sm-4">
-				<img id="iconImg" src="${ctx}/${guessCategory.icon}" 	class=".img-responsive"
+				<img id="iconImg" <c:if test="${!empty guessCategory.icon}">src="${ctx}/${guessCategory.icon}"</c:if> 	class=".img-responsive"
 					style="width: 100px;">
 			</div>
 		</div>
@@ -130,7 +131,7 @@
 				return;
 			}
 			$('#message').html('正在上传……');
-			var url = '${ctx}/fileupload/userAssets';
+			var url = '${ctx}/fileupload/userAssets?orgId='+$('#id').val;
 			$.ajaxFileUpload({
 				url : url, //用于文件上传的服务器端请求地址
 				secureuri : false, //是否需要安全协议，一般设置为false
@@ -150,6 +151,33 @@
 					alert("上传失败");
 				}
 			})
+		}
+		
+
+		/** 
+		 * 从 file 域获取 本地图片 url 
+		 */
+		function getFileUrl(sourceId) {
+			var url;
+			if (navigator.userAgent.indexOf("MSIE") >= 1) { // IE 
+				url = document.getElementById(sourceId).value;
+			} else if (navigator.userAgent.indexOf("Firefox") > 0) { // Firefox 
+				url = window.URL.createObjectURL(document
+						.getElementById(sourceId).files.item(0));
+			} else if (navigator.userAgent.indexOf("Chrome") > 0) { // Chrome 
+				url = window.URL.createObjectURL(document
+						.getElementById(sourceId).files.item(0));
+			}
+			return url;
+		}
+
+		/** 
+		 * 将本地图片 显示到浏览器上 
+		 */
+		function preImg(sourceId, targetId) {
+			var url = getFileUrl(sourceId);
+			var imgPre = document.getElementById(targetId);
+			imgPre.src = url;
 		}
 	</script>
 	<%@ include file="/WEB-INF/include/easyui-footerjs.jsp"%>
