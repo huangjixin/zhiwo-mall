@@ -5,36 +5,27 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.redis.core.ListOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSON;
 import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.domain.PrProduct;
+import com.zwo.modules.mall.domain.PrProductPackagePrice;
+import com.zwo.modules.mall.domain.PrProductPropertyValue;
 import com.zwo.modules.mall.domain.PrProductWithBLOBs;
+import com.zwo.modules.mall.service.IPrProductPackagePriceService;
+import com.zwo.modules.mall.service.IPrProductPropertyValueService;
 import com.zwo.modules.mall.service.IPrductService;
-import com.zwo.modules.member.domain.Member;
-import com.zwo.modules.member.domain.MemberAccount;
-import com.zwo.modules.member.domain.MemberAddress;
-import com.zwo.modules.member.domain.MemberPlayAccount;
 import com.zwo.modules.member.service.IMemberService;
 import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.service.IShopCategoryService;
 import com.zwo.modules.shop.service.IShopService;
 import com.zwo.modules.system.domain.TbUser;
-import com.zwo.modules.zhihuiduo.dto.MemberInfo;
-import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
 /**
@@ -51,6 +42,12 @@ public class GoodsController extends BaseController<TbUser> {
 	@Autowired
 	@Lazy(true)
 	private IPrductService prductService;
+	@Autowired
+	@Lazy(true)
+	private IPrProductPackagePriceService packagePriceService;
+	@Autowired
+	@Lazy(true)
+	private IPrProductPropertyValueService propertyValueService;
 	@Autowired
 	@Lazy(true)
 	private IShopService shopService;
@@ -89,7 +86,14 @@ public class GoodsController extends BaseController<TbUser> {
 				
 			}
 			
-			//商品轮播图。
+			//商品属性值。
+			 List<PrProductPropertyValue> propertyValues = propertyValueService.selectByProductId(product.getId());
+			 uiModel.addAttribute("propertyValues", propertyValues);
+			 
+			 List<PrProductPackagePrice> packagePrices = packagePriceService.selectByProductId(product.getId());
+			 uiModel.addAttribute("packagePrices", packagePrices);
+			 
+			 //商品轮播图。
 			List<PrImage> prImages =  prductService.selectByProductId(product.getId(),true);
 			uiModel.addAttribute("swiperImages", prImages);
 		}

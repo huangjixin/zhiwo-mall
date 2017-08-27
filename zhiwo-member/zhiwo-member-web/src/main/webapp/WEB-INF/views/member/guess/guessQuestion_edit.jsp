@@ -11,6 +11,48 @@
 	src="${ctx}/js/jquery-easyui/ajaxfileupload.js"></script>
 </head>
 <body>
+	<!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        游戏竞猜问题选项新增与编辑
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+							<label for="propertyValue" class="col-sm-2 control-label">属性值</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="propertyValue"
+									name="propertyValue" placeholder="属性值" value="">
+
+							</div>
+						</div>
+                     <div class="form-group">
+							<label for="propertyValue" class="col-sm-2 control-label">属性值</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="propertyValue"
+									name="propertyValue" placeholder="属性值" value="">
+
+							</div>
+						</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary">
+                        保存
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    
+	
 	<form class="form-horizontal" guessQuestion="form"
 		<c:if test="${operation=='edit'}">
  action="${ctx}/guessQuestion/update"
@@ -24,6 +66,7 @@
 		</c:if>
          <input id="id" name="id" value="${guessQuestion.id}" type="hidden"/>
 		 <input id="icon" name="icon" value="${guessQuestion.icon}" type="hidden"/>
+         
 		<div class="form-group">
 			<label for="name" class="col-sm-1 control-label">竞猜问题名称</label>
 			<div class="col-sm-4">
@@ -38,6 +81,7 @@
 					placeholder="请输入代码(拼音)" value="${guessQuestion.code}">
 			</div>
 		</div>
+        
 		<div class="form-group">
 			<label for="file" class="col-sm-1 control-label">问题图片</label>
 			<div class="col-sm-4">
@@ -68,13 +112,29 @@
 			</div>
 		</div>
         <div class="form-group">
+			<label for="description" class="col-sm-1 control-label">问题选项</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" name="code"
+					placeholder="请输入代码(拼音)" value=""><button type="button" class="btn btn-danger btn-sm" onclick=""><i class="fa fa-trash fa-lg"></i>&nbsp;&nbsp;删除 </button>
+                    <button type="button" class="btn btn-danger btn-sm" onclick=""><i class="fa fa-trash fa-lg"></i>&nbsp;&nbsp;修改</button>
+			</div>
+		</div>
+        
+        <div class="form-group">
 			<label  class="col-sm-1 control-label"></label>
 			<div class="col-sm-4">
 				<%@ include file="/WEB-INF/include/easyui-buttonForm.jsp"%>
+                
 			</div>
 		</div>
 	</form>
-
+	<div class="form-group">
+			<label class="col-sm-1 control-label"></label>
+			<div class="col-sm-4">
+				<!-- 按钮触发模态框 -->
+                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">新增竞猜问题选项</button>
+			</div>
+		</div>
 	<script type="text/javascript">
 		
 		// 初始化按钮等工作。

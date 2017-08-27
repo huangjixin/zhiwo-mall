@@ -121,7 +121,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = {"PrProductPropertyValue","PrProductPropertyValues"},key="#id+''")
+	@CacheEvict(value = {"PrProductPropertyValue","PrProductPropertyValues"},key="#id+'_productPropertyValues'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -144,7 +144,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = {"PrProductPropertyValue","PrProductPropertyValues"}, key = "#record.id")
+//	@CachePut(value = {"PrProductPropertyValue","PrProductPropertyValues"}, key = "#record.id+'_productPropertyValues'")
 	public int insert(PrProductPropertyValue record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -171,7 +171,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 	 */
 
 	@Override
-//	@CachePut(value = {"PrProductPropertyValue","PrProductPropertyValues"}, key = "#record.id")
+	@CachePut(value = {"PrProductPropertyValue"}, key = "#record.id+'_productPropertyValues'")
 	public int insertSelective(PrProductPropertyValue record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -210,7 +210,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = {"PrProductPropertyValue","PrProductPropertyValues"})
+	@Cacheable(key = "#id+'_productPropertyValues'", value = {"PrProductPropertyValue","PrProductPropertyValues"})
 	@Transactional(readOnly = true)
 	public PrProductPropertyValue selectByPrimaryKey(String id) {
 		// 日志记录
@@ -282,7 +282,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = {"PrProductPropertyValue","PrProductPropertyValues"},key="#record.id")
+	@CacheEvict(value = {"PrProductPropertyValue","PrProductPropertyValues"},key="#record.id+'_productPropertyValues'")
 	public int updateByPrimaryKeySelective(PrProductPropertyValue record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -351,7 +351,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 
 	@Override
 	@Transactional(readOnly = true)
-	@Cacheable(key = "#root.target+#root.method.name+#pId", value = "PrProductPropertyValues")
+	@Cacheable(key = "#pId+'_productPropertyValues'", value = "PrProductPropertyValues")
 	public List<PrProductPropertyValue> selectByProductId(String pId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "根据商品Id查询商品属性开始");
@@ -364,7 +364,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 	}
 
 	@Override
-	@CacheEvict(value = {"PrProductPropertyValues"},key="#root.target+#root.method.name+#pId",allEntries=true)
+	@CacheEvict(value = {"PrProductPropertyValues"},key="#pId+'_productPropertyValues'",allEntries=true)
 	public void deleteByProductId(String pId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "根据商品Id删除商品属性开始");

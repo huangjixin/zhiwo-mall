@@ -88,18 +88,20 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements IPrImage
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
 		List<PrImage> list = this.selectByExample(example);
-		for (PrImage image : list) {
-			if(image.getLocation()!=null && !"".equals(image.getLocation())){
-				 Path target = Paths.get(image.getLocation());
-				 try {
-			            if(Files.exists(target))
-			                Files.deleteIfExists(target);
-			     } catch (IOException e) {
-			            e.printStackTrace();
-			    }
+		if(list!= null){
+			for (PrImage image : list) {
+				if(image.getLocation()!=null && !"".equals(image.getLocation())){
+					 Path target = Paths.get(image.getLocation());
+					 try {
+				            if(Files.exists(target))
+				                Files.deleteIfExists(target);
+				     } catch (IOException e) {
+				            e.printStackTrace();
+				    }
+				}
 			}
 		}
-
+		
 		// 逻辑操作
 		int result = prImageMapper.deleteByExample(example);
 

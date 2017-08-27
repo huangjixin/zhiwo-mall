@@ -168,7 +168,9 @@ public class ProductController extends BaseController<PrProduct> {
 				PrProductPackagePrice packagePrice = new PrProductPackagePrice(); 
 				String id = json.getString("id");
 				String groupPrice = json.getString("groupPrice");
-				Double indepentPrice = Double.valueOf(json.getString("indepentPrice"));
+				String indepentPriceString = json.getString("indepentPrice");
+				
+				Double indepentPrice = Double.valueOf(indepentPriceString==null||"".equals(indepentPriceString)?"0":indepentPriceString);
 				String pId = product.getId();
 				String pValueId = json.getString("propertyValueId");
 				packagePrice.setId(id);
