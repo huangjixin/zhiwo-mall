@@ -51,6 +51,7 @@ public class FileUploadController {
 	@RequestMapping(value = "userAssets")
 	@ResponseBody
 	public String userAssetsUpload(
+			@RequestParam(value = "orgId", required = false) String orgId,
 			@RequestParam(value = "file", required = false) CommonsMultipartFile[] files,
 			String HTTP_CONTENT_DISPOSITION, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse, Model uiModel) {
@@ -91,6 +92,9 @@ public class FileUploadController {
 				assets.setPath(uploadPath + File.separator + name);
 				assets.setUrl(url + "/" + name);
 				assets.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
+				if(null!=orgId && !"".equals(orgId)){
+					assets.setOrgId(orgId);
+				}
 				userAssetsService.insertSelective(assets);
 				userAssets.add(assets);
 			}

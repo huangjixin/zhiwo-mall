@@ -153,7 +153,7 @@ public class RoleController extends BaseController<TbRole> {
 				roleService.batchConnectRoleResources(roleResources, role.getId());
 			}
 		}
-		redirectAttributes.addAttribute("resources", resources);
+//		redirectAttributes.addAttribute("resources", resources);
 		redirectAttributes.addAttribute("operation", "edit");
 		return "redirect:/role/edit/" + role.getId();
 	}

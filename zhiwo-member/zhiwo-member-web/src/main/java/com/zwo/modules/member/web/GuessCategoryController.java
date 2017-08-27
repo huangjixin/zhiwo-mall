@@ -39,6 +39,7 @@ public class GuessCategoryController extends BaseController<GuessCategory> {
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid GuessCategory guessCategory, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		guessCategory.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
 		uiModel.addAttribute("guessCategory", guessCategory);
 		return basePath + "guessCategory_edit";
 	}

@@ -3,6 +3,10 @@
  */
 package com.zwo.modules.shop.service.impl;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -20,6 +24,9 @@ import com.zwo.modules.shop.dao.ShopCategoryMapper;
 import com.zwo.modules.shop.domain.ShopCategory;
 import com.zwo.modules.shop.domain.ShopCategoryCriteria;
 import com.zwo.modules.shop.service.IShopCategoryService;
+import com.zwo.modules.system.dao.TbUserAssetsMapper;
+import com.zwo.modules.system.domain.TbUserAssets;
+import com.zwo.modules.system.domain.TbUserAssetsCriteria;
 import com.zwotech.modules.core.service.impl.BaseService;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -36,6 +43,10 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 
 	private static final String BASE_MESSAGE = "【ShopCategoryServiceImpl服务类提供的基础操作增删改查等】";
 
+	@Autowired
+	@Lazy(true)
+	private TbUserAssetsMapper userAssetsMapper;
+	
 	@Autowired
 	@Lazy(true)
 	private ShopCategoryMapper shopCategoryMapper;
@@ -98,7 +109,20 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 			logger.info(BASE_MESSAGE + "deleteBatch批量删除开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteBatch批量删除ID为：" + list.toString());
-
+		TbUserAssetsCriteria userAssetsCriteria = new TbUserAssetsCriteria();
+		userAssetsCriteria.createCriteria().andOrgIdIn(list);
+		List<TbUserAssets> assets = userAssetsMapper.selectByExample(userAssetsCriteria);
+		for (TbUserAssets tbUserAssets : assets) {
+			//文件
+		    Path path = Paths.get(tbUserAssets.getPath());
+		    if(Files.exists(path)){
+		      try {
+				Files.deleteIfExists(path);
+		      } catch (IOException e) {
+				e.printStackTrace();
+		      }
+		    }
+		}
 		// 逻辑操作
 		ShopCategoryCriteria shopCategoryCriteria = new ShopCategoryCriteria();
 		shopCategoryCriteria.createCriteria().andIdIn(list);
