@@ -318,7 +318,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 	}
 
 	
-	@CachePut(value = "PrProduct", key = "#record.id+'_product'")
+//	@CachePut(value = "PrProduct", key = "#record.id+'_product'")
 	public int insertSelective(PrProductWithBLOBs record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -424,7 +424,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 		return result;
 	}
 
-	@CachePut(value = "PrProduct", key = "#record.id+'_product'")
+	@CacheEvict(value = "PrProduct", key = "#record.id+'_product'")
 	public int updateByPrimaryKeySelective(PrProductWithBLOBs record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -443,7 +443,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 		return result;
 	}
 
-	@CachePut(value = "PrProduct", key = "#record.id+'_product'")
+	@CacheEvict(value = "PrProduct", key = "#record.id+'_product'")
 	public int updateByPrimaryKeyWithBLOBs(PrProductWithBLOBs record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
