@@ -6,6 +6,7 @@ package com.zwo.modules.system.service.impl;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -372,6 +373,7 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 		this.jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 			@Override
 			public void setValues(PreparedStatement ps, int i) throws SQLException {
+				ps.setString(1,UUID.randomUUID().toString().replaceAll("-", ""));
 				ps.setString(1, System.currentTimeMillis() + "" + Math.round(Math.random() * 9999));
 				ps.setString(2, roleIds.get(i));
 				ps.setString(3, usergroupId);

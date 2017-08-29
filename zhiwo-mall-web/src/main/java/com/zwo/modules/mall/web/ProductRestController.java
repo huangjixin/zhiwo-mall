@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,9 +28,9 @@ import com.zwo.modules.mall.domain.PrProductCriteria;
 import com.zwo.modules.mall.domain.PrProductWithBLOBs;
 import com.zwo.modules.mall.service.IPrImageService;
 import com.zwo.modules.mall.service.IPrProductPackagePriceService;
-import com.zwo.modules.mall.service.IPrProductPropertyService;
 import com.zwo.modules.mall.service.IPrProductPropertyValueService;
 import com.zwo.modules.mall.service.IPrductService;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
 @RestController
@@ -48,6 +51,8 @@ public class ProductRestController extends BaseController<PrProduct> {
 	@Lazy(true)
 	private IPrProductPackagePriceService packagePriceService;
 	
+
+	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
 	/** 
 	 * @Title: deleteById 
 	 * @Description: 批量删除 
@@ -90,6 +95,13 @@ public class ProductRestController extends BaseController<PrProduct> {
 		packagePriceService.deleteByProductId(id);
 		productPropertyValueService.deleteByProductId(id);
 		imageService.deletePrImageByProductId(id);
+		
+		if(redisTemplate ==null){
+		}else{
+			redisTemplate.delete(id+"_productPackagePrices");  
+			redisTemplate.delete(id+"_productPropertyValues");
+		}
+		
 		int result = prductService.deleteByPrimaryKey(id);
 		return result+"";
 	}

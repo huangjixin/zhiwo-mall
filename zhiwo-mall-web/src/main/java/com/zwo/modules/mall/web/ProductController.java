@@ -1,6 +1,7 @@
 package com.zwo.modules.mall.web;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,6 +12,9 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,6 +39,7 @@ import com.zwo.modules.mall.service.IPrductService;
 import com.zwo.modules.shop.domain.ShopWithBLOBs;
 import com.zwo.modules.shop.service.IShopService;
 import com.zwo.modules.system.domain.TbUser;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
 @Controller
@@ -60,6 +65,8 @@ public class ProductController extends BaseController<PrProduct> {
 	
 	private static final String basePath = "views/mall/product/";
 	
+	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
+	
 	@RequiresPermissions("mall:product:view")
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {
@@ -82,6 +89,7 @@ public class ProductController extends BaseController<PrProduct> {
 		return basePath + "product_edit";
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequiresPermissions("mall:product:view")
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id,@RequestParam(required=false) String propertyValues,
@@ -94,11 +102,32 @@ public class ProductController extends BaseController<PrProduct> {
 		uiModel.addAttribute("properties",properties);
 		uiModel.addAttribute("propertiesString",JSONArray.toJSONString(properties));
 		
-		List<PrProductPackagePrice> packagePrices =  packagePriceService.selectByProductId(product.getId());
+		List<PrProductPackagePrice> packagePrices = null;
+		List<PrProductPropertyValue> productPropertyValues =null;
+		
+		if(redisTemplate ==null){
+			packagePrices = packagePriceService.selectByProductId(product.getId());
+			productPropertyValues = this.productPropertyValueService.selectByProductId(product.getId());
+		
+		}else{
+			 ValueOperations packagePricesList = redisTemplate.opsForValue();
+			 packagePrices = (List<PrProductPackagePrice>) packagePricesList.get(product.getId()+"_productPackagePrices");
+			 if(packagePrices == null){
+				 packagePrices = packagePriceService.selectByProductId(product.getId());
+				 packagePricesList.set(product.getId()+"_productPackagePrices", packagePrices);
+			 }
+			 
+			 ValueOperations productPropertyValuesList = redisTemplate.opsForValue();
+			 productPropertyValues = (List<PrProductPropertyValue>) productPropertyValuesList.get(product.getId()+"_productPropertyValues");
+			 if(productPropertyValues == null){
+				 productPropertyValues = productPropertyValueService.selectByProductId(product.getId());
+				 productPropertyValuesList.set(product.getId()+"_productPropertyValues", productPropertyValues);
+			 }
+		}
+		
 		uiModel.addAttribute("packagePrices",packagePrices);
 		uiModel.addAttribute("packagePricesString",JSONArray.toJSONString(packagePrices));
 		
-		List<PrProductPropertyValue> productPropertyValues = this.productPropertyValueService.selectByProductId(product.getId());
 		uiModel.addAttribute("propertyValues",productPropertyValues);
 		uiModel.addAttribute("propertyValuesString",JSONArray.toJSONString(productPropertyValues));
 		
@@ -186,6 +215,7 @@ public class ProductController extends BaseController<PrProduct> {
 		return "redirect:/product/create";
 	}
 	
+	@SuppressWarnings("unchecked")
 	@RequiresPermissions("mall:product:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid PrProductWithBLOBs product,@RequestParam String propertyValues,
@@ -213,6 +243,8 @@ public class ProductController extends BaseController<PrProduct> {
 		}
 		JSONArray perpertyArray = null;
 		if(null != propertyValues && !"".equals(propertyValues)){
+			if(redisTemplate!=null)
+			redisTemplate.delete(product.getId()+"_productPropertyValues");
 			productPropertyValueService.deleteByProductId(product.getId());
 			perpertyArray =  (JSONArray) JSONArray.parse(propertyValues);
 			for (Object object : perpertyArray) {
@@ -230,11 +262,15 @@ public class ProductController extends BaseController<PrProduct> {
 		JSONArray perPriceArray = null;
 		if(null != propertyPrices && !"".equals(propertyPrices)){
 			packagePriceService.deleteByProductId(product.getId());
+			if(redisTemplate!=null)
+			redisTemplate.delete(product.getId()+"_productPackagePrices"); 
 			perPriceArray =  (JSONArray) JSONArray.parse(propertyPrices);
 			for (Object obj : perPriceArray) {
 				JSONObject json = (JSONObject) obj;
 				PrProductPackagePrice packagePrice = new PrProductPackagePrice(); 
 				String id = json.getString("id");
+				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+				id = uuid;
 				String groupPrice = json.getString("groupPrice");
 				Double indepentPrice = Double.valueOf(json.getString("indepentPrice")==null||"".equals(json.getString("indepentPrice"))?"0":json.getString("indepentPrice"));
 				String pId = product.getId();

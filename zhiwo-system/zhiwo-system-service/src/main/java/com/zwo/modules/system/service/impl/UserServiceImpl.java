@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -460,7 +461,8 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	@Override
 	public void connectUserGroupRole(String userGroupId, String roleId) {
 		TbUserGroupRole record = new TbUserGroupRole();
-		record.setId(new Date().getTime() + "" + Math.round(Math.random() * 99));
+		String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+		record.setId(uuid);
 		record.setUsergroupId(userGroupId);
 		record.setRoleId(roleId);
 		userGroupRoleMapper.insert(record);

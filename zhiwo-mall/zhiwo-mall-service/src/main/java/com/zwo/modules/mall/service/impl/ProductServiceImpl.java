@@ -11,15 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.HtmlUtils;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.dao.PrImageMapper;
@@ -30,12 +26,7 @@ import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.domain.PrImageCriteria;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductCriteria;
-import com.zwo.modules.mall.domain.PrProductPackagePrice;
-import com.zwo.modules.mall.domain.PrProductPropertyValue;
 import com.zwo.modules.mall.domain.PrProductWithBLOBs;
-import com.zwo.modules.mall.service.IPrProductPackagePriceService;
-import com.zwo.modules.mall.service.IPrProductPropertyService;
-import com.zwo.modules.mall.service.IPrProductPropertyValueService;
 import com.zwo.modules.mall.service.IPrductService;
 import com.zwotech.modules.core.service.impl.BaseService;
 
@@ -295,7 +286,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 		return this.productMapper.countByExample(example);
 	}
 
-	@CachePut(value = "PrProduct", key = "#record.id+'_product'")
+//	@CachePut(value = "PrProduct", key = "#record.id+'_product'")
 	public int insert(PrProductWithBLOBs record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

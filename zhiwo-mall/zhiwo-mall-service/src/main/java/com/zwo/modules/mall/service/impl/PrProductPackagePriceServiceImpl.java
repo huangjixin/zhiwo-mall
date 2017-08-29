@@ -347,7 +347,7 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 		logger.info(result + "");
 	}
 
-	@Cacheable(key = "#root.target+#root.method.name+#pId", value = "PrProductPackagePrices")
+//	@Cacheable(key = "#root.target+#root.method.name+#pId", value = "PrProductPackagePrices")
 	@Transactional(readOnly = true)
 	@Override
 	public List<PrProductPackagePrice> selectByProductId(String pId) {
@@ -362,7 +362,7 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 	}
 
 	@Override
-	@CacheEvict(value = {"PrProductPackagePrice","PrProductPackagePrices"},key="#root.target+#root.method.name+#pId",allEntries=true)
+//	@CacheEvict(value = {"PrProductPackagePrice","PrProductPackagePrices"},key="#root.target+#root.method.name+#pId",allEntries=true)
 	public void deleteByProductId(String pId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "根据商品Id删除开始");
