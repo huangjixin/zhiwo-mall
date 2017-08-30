@@ -50,7 +50,7 @@
 				<th data-options="field:'id',align:'center',hidden:true">id</th>
 				<th data-options="field:'name',align:'center',width:100">商品分类名称</th>
                 <th data-options="field:'code',align:'center',width:100">代码</th>
-                <th data-options="field:'icon',align:'center',width:100,formatter:formatIcon">分类头像</th>
+                <!--<th data-options="field:'icon',align:'center',width:100,formatter:formatIcon">分类头像</th>-->
 				<th data-options="field:'createDate',align:'center',width:100,formatter:formatTime">创建日期</th>
 				<th data-options="field:'updateDate',align:'center',width:100,formatter:formatTime">更新日期</th>
 				<th data-options="field:'opt',align:'center',width:100,formatter:formatOpt">操作</th>

@@ -20,8 +20,9 @@
 		</c:if>
 		method="post">
         <c:if test="${operation=='edit'}">
-        <input id="id" name="id" value="${prCategory.id}" type="hidden"/>
+        
 		</c:if>
+        <input id="id" name="id" value="${prCategory.id}" type="hidden"/>
         <input id="parentId" name="parentId" value="${prCategory.parentId}" type="hidden"/>
         <input id="icon" name="icon" value="${prCategory.icon}" type="hidden"/>
         <div class="form-group">
@@ -29,11 +30,11 @@
             <button type="button" class="btn btn-danger btn-sm"  onClick="$('#treegrid').treegrid('unselectAll');$('#parentId').val('');">
                 清除
             </button>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<table id="treegrid" title="商品分类" class="easyui-treegrid"
                     data-options="
                                     url: '${ctx}/prCategory/getPrCategoryTree',
-                                    collapsed:true,
+                                    collapsed:false,
                                     fit:false,
                                     method: 'get',
                                     rownumbers: false,
@@ -53,6 +54,8 @@
                                         if(pid!=''){
                                         	$('#treegrid').treegrid('select',pid);
                                         }
+                                        
+                                        $('#treegrid').treegrid('collapseAll');
                                     }
                                 ">
                     <thead>
@@ -61,6 +64,7 @@
                             <th data-options="field:'id',align:'center',hidden:true">id</th>
                             <th data-options="field:'name',align:'left',width:100">名称</th>
                             <th data-options="field:'code',align:'center',width:100">代码</th>
+                            <th data-options="field:'disable',align:'center',width:100,formatter:formatDisable">是否禁用</th>
                         </tr>
                     </thead>
                 </table>
@@ -80,11 +84,21 @@
 					placeholder="请输入商品分类代码(商品分类拼音)" value="${prCategory.code}">
 			</div>
 		</div>
+        <div class="form-group">
+			<label for="code" class="col-sm-1 control-label">是否禁用</label>
+			<div class="col-sm-4">
+				<select id="disable" class="easyui-combobox"
+									style="width: 200px;">
+									<option value="false" <c:if test="${!prCategory.disable}">selected=true</c:if>>否</option>
+									<option value="true" <c:if test="${prCategory.disable}">selected=true</c:if>>是</option>
+								</select>
+			</div>
+		</div>
 		<div class="form-group">
 			<label for="file" class="col-sm-1 control-label">商品分类缩略图</label>
 			<div class="col-sm-4">
 				<input type="file" id="file" name="file" style="display: none;"
-					accept="image/*" onChange="$('#message').html($('#file').val())" />
+					accept="image/*" onChange="$('#message').html($('#file').val());preImg(this.id,'iconImg');" />
 				<button type="button" class="btn btn-success fileinput-button"
 					onclick="$('#file').click();">
 					<i class="fa fa-plus"></i>&nbsp;&nbsp;选择文件
@@ -100,7 +114,7 @@
 		<div class="form-group">
 			<label for="file" class="col-sm-1 control-label"></label>
 			<div class="col-sm-4">
-				<img id="iconImg" src="${ctx}/${prCategory.icon}" 	class=".img-responsive"
+				<img id="iconImg" <c:if test="${!empty prCategory.icon}">src="${ctx}/${prCategory.icon}" </c:if>	class=".img-responsive"
 					style="width: 100px;">
 			</div>
 		</div>
@@ -130,7 +144,7 @@
 				return;
 			}
 			$('#message').html('正在上传……');
-			var url = '${ctx}/fileupload/userAssets';
+			var url = '${ctx}/fileupload/userAssets?orgId='+$('#id').val();
 			$.ajaxFileUpload({
 				url : url, //用于文件上传的服务器端请求地址
 				secureuri : false, //是否需要安全协议，一般设置为false
@@ -150,6 +164,32 @@
 					alert("上传失败");
 				}
 			})
+		}
+		
+		/** 
+		 * 从 file 域获取 本地图片 url 
+		 */
+		function getFileUrl(sourceId) {
+			var url;
+			if (navigator.userAgent.indexOf("MSIE") >= 1) { // IE 
+				url = document.getElementById(sourceId).value;
+			} else if (navigator.userAgent.indexOf("Firefox") > 0) { // Firefox 
+				url = window.URL.createObjectURL(document
+						.getElementById(sourceId).files.item(0));
+			} else if (navigator.userAgent.indexOf("Chrome") > 0) { // Chrome 
+				url = window.URL.createObjectURL(document
+						.getElementById(sourceId).files.item(0));
+			}
+			return url;
+		}
+
+		/** 
+		 * 将本地图片 显示到浏览器上 
+		 */
+		function preImg(sourceId, targetId) {
+			var url = getFileUrl(sourceId);
+			var imgPre = document.getElementById(targetId);
+			imgPre.src = url;
 		}
 	</script>
 	<%@ include file="/WEB-INF/include/easyui-footerjs.jsp"%>

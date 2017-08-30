@@ -113,6 +113,13 @@
 					placeholder="请输入商品代码(商品拼音)" value="${product.code}">
 			</div>
 		</div>
+        <div class="form-group">
+			<label for="storage" class="col-sm-2 control-label">商品库存</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" id="storage" name="storage"
+					placeholder="请输入库存" value="${product.storage}">
+			</div>
+		</div>
 		<div class="form-group">
 			<label for="description" class="col-sm-2 control-label">描述</label>
 			<div class="col-sm-4">

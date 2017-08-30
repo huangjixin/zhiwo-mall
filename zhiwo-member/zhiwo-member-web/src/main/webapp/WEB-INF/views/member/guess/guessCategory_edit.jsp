@@ -34,7 +34,7 @@
 				<table id="treegrid" title="竞猜分类" class="easyui-treegrid"
                     data-options="
                                     url: '${ctx}/guessCategory/getGuessCategoryTree',
-                                    collapsed:true,
+                                    collapsed:false,
                                     fit:false,
                                     method: 'get',
                                     rownumbers: false,

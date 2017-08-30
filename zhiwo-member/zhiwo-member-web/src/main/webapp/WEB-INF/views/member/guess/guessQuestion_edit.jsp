@@ -9,6 +9,9 @@
 <%@ include file="/WEB-INF/include/easyui-js.jsp"%>
 <script type="text/javascript"
 	src="${ctx}/js/jquery-easyui/ajaxfileupload.js"></script>
+<script type="text/javascript"  
+    src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js">  
+</script> 
 </head>
 <body>
 	<!-- 模态框（Modal） -->
@@ -79,6 +82,12 @@
 			<div class="col-sm-4">
 				<input type="text" class="form-control" id="code" name="code"
 					placeholder="请输入代码(拼音)" value="${guessQuestion.code}">
+			</div>
+		</div>
+        <div class="form-group">
+			<label for="questionEndTime" class="col-sm-1 control-label">截止日期</label>
+			<div class="col-sm-4">
+				
 			</div>
 		</div>
         
