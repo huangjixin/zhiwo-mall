@@ -38,7 +38,6 @@ import com.zwotech.common.web.BaseController;
  */
 @Controller
 @Lazy(true)
-@RequestMapping(value = {"mindex"})
 public class IndexController extends BaseController<TbUser> {
 	@Autowired
 	@Lazy(true)
@@ -53,7 +52,7 @@ public class IndexController extends BaseController<TbUser> {
 	private static final String basePath = "views/member/";
 	
 	  
-	@RequestMapping(value = {"index"},method=RequestMethod.GET)
+	@RequestMapping(value = {"mindex"},method=RequestMethod.GET)
 	public String index(Model uiModel,HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		
 		if(redisTemplate!= null){

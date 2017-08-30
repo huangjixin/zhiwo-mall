@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +28,7 @@ import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.service.IShopCategoryService;
 import com.zwo.modules.shop.service.IShopService;
 import com.zwo.modules.system.domain.TbUser;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
 /**
@@ -55,8 +58,8 @@ public class GoodsController extends BaseController<TbUser> {
 	@Lazy(true)
 	private IShopCategoryService shopCategoryService;
 	
-//	@SuppressWarnings("rawtypes")
-//	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
+	@SuppressWarnings("rawtypes")
+	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
 	
 	private static final String basePath = "views/goods/";
 	
@@ -69,6 +72,7 @@ public class GoodsController extends BaseController<TbUser> {
 	 * @param httpServletResponse
 	 * @return
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = {"goodsDetail"},method=RequestMethod.GET)  
 	public String goodsDetail(@RequestParam String goodsId,Model uiModel,HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		
@@ -86,11 +90,31 @@ public class GoodsController extends BaseController<TbUser> {
 				
 			}
 			
+			List<PrProductPackagePrice> packagePrices = null;
+			List<PrProductPropertyValue> productPropertyValues =null;
+			
+			if(redisTemplate ==null){
+				packagePrices = packagePriceService.selectByProductId(product.getId());
+				productPropertyValues = this.propertyValueService.selectByProductId(product.getId());
+			
+			}else{
+				 ValueOperations packagePricesList = redisTemplate.opsForValue();
+				 packagePrices = (List<PrProductPackagePrice>) packagePricesList.get(product.getId()+"_productPackagePrices");
+				 if(packagePrices == null){
+					 packagePrices = packagePriceService.selectByProductId(product.getId());
+					 packagePricesList.set(product.getId()+"_productPackagePrices", packagePrices);
+				 }
+				 
+				 ValueOperations productPropertyValuesList = redisTemplate.opsForValue();
+				 productPropertyValues = (List<PrProductPropertyValue>) productPropertyValuesList.get(product.getId()+"_productPropertyValues");
+				 if(productPropertyValues == null){
+					 productPropertyValues = propertyValueService.selectByProductId(product.getId());
+					 productPropertyValuesList.set(product.getId()+"_productPropertyValues", productPropertyValues);
+				 }
+			}
+			
 			//商品属性值。
-			 List<PrProductPropertyValue> propertyValues = propertyValueService.selectByProductId(product.getId());
-			 uiModel.addAttribute("propertyValues", propertyValues);
-			 
-			 List<PrProductPackagePrice> packagePrices = packagePriceService.selectByProductId(product.getId());
+			 uiModel.addAttribute("propertyValues", productPropertyValues);
 			 uiModel.addAttribute("packagePrices", packagePrices);
 			 
 			 //商品轮播图。
@@ -98,9 +122,6 @@ public class GoodsController extends BaseController<TbUser> {
 			uiModel.addAttribute("swiperImages", prImages);
 		}
 		
-		/*if(redisTemplate!= null){
-			ListOperations<String, List> listOpe =  redisTemplate.opsForList();
-		}*/
 		uiModel.addAttribute("goods", product);
 		return basePath+"goodsDetail";
 	}

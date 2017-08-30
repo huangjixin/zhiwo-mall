@@ -53,7 +53,7 @@
 .hr1 {
 	height: 1px;
 	border: none;
-	border-top: 1px solid #ccc;
+	border-top: 1px solid #F0F0F0;
 }
 </style>
 </head>

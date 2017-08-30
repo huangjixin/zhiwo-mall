@@ -2,6 +2,9 @@ package com.zwo.modules.fileupload.web;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -95,10 +98,29 @@ public class FileUploadController {
 					List<TbUserAssets> list = userAssetsService.selectByExample(assetsCriteria);
 					if(!list.isEmpty()){
 						assets = list.get(0);
+						if(assets.getPath()!=null && !"".equals(assets.getPath())){
+							Path path = Paths.get(assets.getPath());
+							try {
+								Files.deleteIfExists(path);
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+						
 						assets.setName(name);
 						assets.setPath(uploadPath + File.separator + name);
 						assets.setUrl(url + "/" + name);
 						userAssetsService.updateByPrimaryKeySelective(assets);
+					}else{
+						assets = new TbUserAssets();
+						assets.setName(name);
+						assets.setPath(uploadPath + File.separator + name);
+						assets.setUrl(url + "/" + name);
+						assets.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
+						if(null!=orgId && !"".equals(orgId)){
+							assets.setOrgId(orgId);
+						}
+						userAssetsService.insertSelective(assets);
 					}
 				}else{
 					assets = new TbUserAssets();

@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,9 +37,10 @@ public class PrCategoryController extends BaseController<PrCategory> {
 
 	 @RequiresPermissions("mall:prCategory:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
-	public String tocreate(@Valid PrCategory prCategory, BindingResult result, Model uiModel,
+	public String tocreate(@ModelAttribute PrCategory prCategory, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		uiModel.addAttribute("prCategory", prCategory);
+		prCategory.setId(System.currentTimeMillis()+"");
+//		uiModel.addAttribute("prCategory", prCategory);
 		return basePath + "category_edit";
 	}
 	
@@ -66,7 +68,7 @@ public class PrCategoryController extends BaseController<PrCategory> {
 		
 		int res = prCategoryService.insertSelective(prCategory);
 		if (res != 0) {
-			redirectAttributes.addFlashAttribute("prCategory", prCategory);
+//			redirectAttributes.addFlashAttribute("prCategory", prCategory);
 			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
 
@@ -90,7 +92,7 @@ public class PrCategoryController extends BaseController<PrCategory> {
 
 		int res = this.prCategoryService.updateByPrimaryKeySelective(prCategory);
 		if (res == 1) {
-			redirectAttributes.addFlashAttribute("prCategory", prCategory);
+//			redirectAttributes.addFlashAttribute("prCategory", prCategory);
 			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
 		redirectAttributes.addAttribute("operation", "edit");
