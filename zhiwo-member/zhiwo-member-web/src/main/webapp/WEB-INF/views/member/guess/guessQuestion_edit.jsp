@@ -250,11 +250,9 @@
 		
 		//格式化操作，添加删除和编辑按钮。
 		function formatOpt(value, rec) {
-			var qId = '${guessQuestionAnswer.questionId}';
+			var qId = '${guessQuestionAnswer.questionOptionsId}';
 			var btn = '<div style="padding: 5px;">';
-				if(qId==rec.id){
-					btn += '<label>该项已经发布为正确答案</label>';
-				}
+				
 				btn += '<button type="button" class="btn btn-danger btn-sm" onclick="deleteById(\'datagrid\',\''
 					+ rec.id + '\',\'guessQuestionOptions\')"><i class="fa fa-trash fa-lg"></i>&nbsp;&nbsp;删除 </button>';
 					btn += "&nbsp;&nbsp;";
@@ -263,6 +261,9 @@
 					btn += "&nbsp;&nbsp;";
 				//btn += '<button type="button" class="btn btn-info btn-sm" onclick="updateSetting(\''+rec.name+'\',\''+rec.betRate+'\');"><i class="fa fa-edit fa-lg"></i>&nbsp;&nbsp;编辑</button>';
 			btn += '</div>';
+			if(qId==rec.id){
+					btn += '<label style="color:red;">该项已发布为答案</label>&nbsp;&nbsp;';
+			}
 			return btn;
 		}
 	</script>

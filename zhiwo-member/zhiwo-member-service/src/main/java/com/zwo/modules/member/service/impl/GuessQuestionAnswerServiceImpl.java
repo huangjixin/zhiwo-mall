@@ -118,7 +118,7 @@ public class GuessQuestionAnswerServiceImpl extends BaseService<GuessQuestionAns
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "GuessQuestionAnswer", key = "#id+''")
+	@CacheEvict(value = "GuessQuestionAnswer", key = "#id+'_GuessQuestionAnswer'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -207,7 +207,7 @@ public class GuessQuestionAnswerServiceImpl extends BaseService<GuessQuestionAns
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = "GuessQuestionAnswer")
+	@Cacheable(key = "#id+'_GuessQuestionAnswer'", value = "GuessQuestionAnswer")
 	@Transactional(readOnly = true)
 	public GuessQuestionAnswer selectByPrimaryKey(String id) {
 		// 日志记录
@@ -344,6 +344,26 @@ public class GuessQuestionAnswerServiceImpl extends BaseService<GuessQuestionAns
 		guessQuestion.setId(System.currentTimeMillis() + "");
 		int result = guessQuestionServiceImpl.insertSelective(guessQuestion);
 		logger.info(result + "");
+	}
+
+	/*update mpa set mpa.zhihuidou_count=mpa.zhihuidou_count+a.bet_rate*a.guess_account from member_play_account as mpa
+			left join
+			(SELECT 
+			    gqm.member_id, gqo.BET_RATE, mgq.GUESS_ACCOUNT
+			FROM
+			    guess_question_memanswer AS gqm
+			        INNER JOIN
+			    guess_question_answer AS gqa ON gqm.question_id = gqa.question_id
+			        AND gqm.question_options_id = gqa.question_options_id
+			        INNER JOIN
+			    guess_question_options gqo ON gqo.id = gqa.question_options_id
+			        INNER JOIN
+			    member_guess_question mgq ON mgq.MEMBER_ID = gqm.MEMBER_ID
+			        AND gqa.question_id = mgq.GUESS_QUESTION_ID) as a
+			         on mpa.MEMBER_ID = a.member_id*/
+	@Override
+	public void settleAccounts(GuessQuestionAnswer answer) {
+		
 	}
 
 }
