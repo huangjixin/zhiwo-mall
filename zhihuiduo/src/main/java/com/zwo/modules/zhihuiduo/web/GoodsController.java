@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductPackagePrice;
+import com.zwo.modules.mall.domain.PrProductProperty;
 import com.zwo.modules.mall.domain.PrProductPropertyValue;
 import com.zwo.modules.mall.domain.PrProductWithBLOBs;
 import com.zwo.modules.mall.service.IPrProductPackagePriceService;
+import com.zwo.modules.mall.service.IPrProductPropertyService;
 import com.zwo.modules.mall.service.IPrProductPropertyValueService;
 import com.zwo.modules.mall.service.IPrductService;
 import com.zwo.modules.member.service.IMemberService;
@@ -45,6 +47,11 @@ public class GoodsController extends BaseController<TbUser> {
 	@Autowired
 	@Lazy(true)
 	private IPrductService prductService;
+	
+	@Autowired
+	@Lazy(true)
+	private IPrProductPropertyService productPropertyService;
+	
 	@Autowired
 	@Lazy(true)
 	private IPrProductPackagePriceService packagePriceService;
@@ -121,7 +128,9 @@ public class GoodsController extends BaseController<TbUser> {
 			List<PrImage> prImages =  prductService.selectByProductId(product.getId(),true);
 			uiModel.addAttribute("swiperImages", prImages);
 		}
-		
+		//商品属性。
+		List<PrProductProperty> properties = productPropertyService.listAll();
+		uiModel.addAttribute("properties",properties);
 		uiModel.addAttribute("goods", product);
 		return basePath+"goodsDetail";
 	}

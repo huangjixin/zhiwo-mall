@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,10 @@ public class PrCategoryController extends BaseController<PrCategory> {
 	@Autowired
 	@Lazy(true)
 	private IPrCategoryService prCategoryService;
+	
+	@Autowired
+	@Lazy(true)
+	private RedisTemplate redisTemplate;
 
 	private static final String basePath = "views/mall/category/";
 
@@ -96,6 +101,7 @@ public class PrCategoryController extends BaseController<PrCategory> {
 			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
 		redirectAttributes.addAttribute("operation", "edit");
+		redisTemplate.convertAndSend("topic.PrCategory.channel", "hello world!");
 		return "redirect:/prCategory/edit/" + prCategory.getId();
 	}
 }

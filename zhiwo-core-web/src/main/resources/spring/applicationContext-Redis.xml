@@ -87,6 +87,25 @@
 		<property name="redisManager" ref="redisManager" />
 	</bean>
 	
+	<!-- <bean id="redisMessageListener" class="com.ljq.durian.common.listener.RedisMessageListener">  
+        <property name="redisTemplate" ref="redisTemplate"/>  
+    </bean> -->
+    
+	<bean id="redisContainer" class="org.springframework.data.redis.listener.RedisMessageListenerContainer">
+        <property name="connectionFactory" ref="jedisConnectionFactory" />
+        <property name="messageListeners">
+            <map>
+                <entry key-ref="prCategoryUpdateMessageListener">
+                    <list>
+                        <bean class="org.springframework.data.redis.listener.ChannelTopic">
+                            <constructor-arg value="topic.PrCategory.channel" />
+                        </bean>
+                    </list>
+                </entry>
+            </map>
+        </property>
+    </bean>
+    
 	<!-- <bean id="smsMessageListener"
         class="org.springframework.data.redis.listener.adapter.MessageListenerAdapter">
         <property name="delegate" ref="smsMessageDelegateListener" />
