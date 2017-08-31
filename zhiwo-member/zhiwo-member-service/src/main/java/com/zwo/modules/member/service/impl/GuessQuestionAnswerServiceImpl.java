@@ -3,7 +3,9 @@
 */
 package com.zwo.modules.member.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +41,9 @@ public class GuessQuestionAnswerServiceImpl extends BaseService<GuessQuestionAns
 
 	private static final String BASE_MESSAGE = "【GuessQuestionAnswerServiceImpl服务类提供的基础操作增删改查等】";
 
+	@Autowired
+	@Lazy(true)
+	private JdbcTemplate jdbcTemplate;
 	@Autowired
 	@Lazy(true)
 	private GuessQuestionAnswerMapper guessQuestionAnswerMapper;
@@ -346,24 +353,58 @@ public class GuessQuestionAnswerServiceImpl extends BaseService<GuessQuestionAns
 		logger.info(result + "");
 	}
 
-	/*update mpa set mpa.zhihuidou_count=mpa.zhihuidou_count+a.bet_rate*a.guess_account from member_play_account as mpa
-			left join
-			(SELECT 
-			    gqm.member_id, gqo.BET_RATE, mgq.GUESS_ACCOUNT
-			FROM
-			    guess_question_memanswer AS gqm
-			        INNER JOIN
-			    guess_question_answer AS gqa ON gqm.question_id = gqa.question_id
-			        AND gqm.question_options_id = gqa.question_options_id
-			        INNER JOIN
-			    guess_question_options gqo ON gqo.id = gqa.question_options_id
-			        INNER JOIN
-			    member_guess_question mgq ON mgq.MEMBER_ID = gqm.MEMBER_ID
-			        AND gqa.question_id = mgq.GUESS_QUESTION_ID) as a
-			         on mpa.MEMBER_ID = a.member_id*/
+	/*update member_play_account mpa 
+inner join
+(SELECT 
+    gqm.member_id, gqo.BET_RATE, mgq.GUESS_ACCOUNT
+FROM
+    guess_question_memanswer AS gqm
+        INNER JOIN
+    guess_question_answer AS gqa ON gqm.question_id = gqa.question_id
+        AND gqm.question_options_id = gqa.question_options_id
+        INNER JOIN
+    guess_question_options gqo ON gqo.id = gqa.question_options_id
+        INNER JOIN
+    member_guess_question mgq ON mgq.MEMBER_ID = gqm.MEMBER_ID
+        AND gqa.question_id = mgq.GUESS_QUESTION_ID where gqa.question_id=? and gqa.question_options_id=?) as a
+         on mpa.MEMBER_ID = a.member_id set mpa.zhihuidou_count=mpa.zhihuidou_count+a.bet_rate*a.guess_account 
+*/
 	@Override
 	public void settleAccounts(GuessQuestionAnswer answer) {
+		StringBuffer sbText  = new StringBuffer();
+		sbText.append("update member_play_account mpa ");
+		sbText.append("inner join");
+		sbText.append("(SELECT ");
+		sbText.append("    gqm.member_id, gqo.BET_RATE, mgq.GUESS_ACCOUNT");
+		sbText.append("FROM");
+		sbText.append("    guess_question_memanswer AS gqm");
+		sbText.append("        INNER JOIN");
+		sbText.append("    guess_question_answer AS gqa ON gqm.question_id = gqa.question_id");
+		sbText.append("        AND gqm.question_options_id = gqa.question_options_id");
+		sbText.append("        INNER JOIN");
+		sbText.append("    guess_question_options gqo ON gqo.id = gqa.question_options_id");
+		sbText.append("        INNER JOIN");
+		sbText.append("    member_guess_question mgq ON mgq.MEMBER_ID = gqm.MEMBER_ID");
+		sbText.append("        AND gqa.question_id = mgq.GUESS_QUESTION_ID where gqa.question_id=:question_id and gqa.question_options_id=:question_options_id) as a");
+		sbText.append("         on mpa.MEMBER_ID = a.member_id set mpa.zhihuidou_count=mpa.zhihuidou_count+a.bet_rate*a.guess_account ");
+		Map<String,Object> params=new HashMap<String,Object>();
+		params.put("question_id",answer.getQuestionId());
+		params.put("question_options_id",answer.getQuestionOptionsId());
+		new NamedParameterJdbcTemplate(jdbcTemplate).update(sbText.toString(),params);
 		
+		
+		sbText  = new StringBuffer();
+		sbText.append("    update guess_question_memanswer  gqm");
+		sbText.append("        INNER JOIN");
+		sbText.append("    guess_question_answer AS gqa ON gqm.question_id = gqa.question_id");
+		sbText.append("        AND gqm.question_options_id = gqa.question_options_id");
+		sbText.append("        INNER JOIN");
+		sbText.append("    guess_question_options gqo ON gqo.id = gqa.question_options_id");
+		sbText.append("        INNER JOIN");
+		sbText.append("    member_guess_question mgq ON mgq.MEMBER_ID = gqm.MEMBER_ID");
+		sbText.append("        AND gqa.question_id = mgq.GUESS_QUESTION_ID where gqm.payed=0 and gqa.question_id=:question_id and gqa.question_options_id=:question_options_id");
+		sbText.append("	set gqm.payed=1");
+		new NamedParameterJdbcTemplate(jdbcTemplate).update(sbText.toString(),params);
 	}
 
 }
