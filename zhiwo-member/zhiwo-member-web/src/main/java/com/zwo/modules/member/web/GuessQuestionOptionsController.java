@@ -53,41 +53,4 @@ public class GuessQuestionOptionsController extends BaseController<GuessQuestion
 		return basePath + "guessQuestionOptions_edit";
 	}
 	
-	@RequiresPermissions("member:guessQuestionOptions:create")
-	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public String create(@Valid GuessQuestionOptions tbguessQuestionOptions, BindingResult result, Model uiModel,
-			RedirectAttributes redirectAttributes,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-
-		}
-		
-		int res = guessQuestionOptionsService.insertSelective(tbguessQuestionOptions);
-		if(res==1){
-			redirectAttributes.addFlashAttribute("guessQuestionOptions", tbguessQuestionOptions);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
-		}
-		
-		return "redirect:/guessQuestionOptions/create";
-	}
-	 
-	@RequiresPermissions("member:guessQuestionOptions:edit")
-	@RequestMapping(value = "update", method = RequestMethod.POST)
-	public String update(@Valid GuessQuestionOptions guessQuestionOptions, BindingResult result, Model uiModel,
-			RedirectAttributes redirectAttributes,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		if (result.hasErrors()) {
-			
-		}
-		
-		int res = this.guessQuestionOptionsService.updateByPrimaryKeySelective(guessQuestionOptions);
-		if(res==1){
-			redirectAttributes.addFlashAttribute("guessQuestionOptions", guessQuestionOptions);
-			redirectAttributes.addFlashAttribute("message", "保存用户成功！");
-		}
-		uiModel.addAttribute("guessQuestionOptions", guessQuestionOptions);
-		uiModel.addAttribute("operation", "edit");
-		return basePath + "guessQuestionOptions_edit";
-	}
-	
 }

@@ -1,8 +1,11 @@
 package com.zwo.modules.member.domain;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Table;
 
 @Table(name = "guess_question_options")
 public class GuessQuestionOptions implements Serializable {

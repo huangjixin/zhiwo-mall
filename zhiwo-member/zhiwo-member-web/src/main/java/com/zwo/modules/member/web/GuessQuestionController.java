@@ -18,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.zwo.modules.member.domain.GuessQuestion;
+import com.zwo.modules.member.domain.GuessQuestionAnswer;
+import com.zwo.modules.member.domain.GuessQuestionAnswerCriteria;
 import com.zwo.modules.member.domain.GuessQuestionOptions;
+import com.zwo.modules.member.service.IGuessQuestionAnswerService;
 import com.zwo.modules.member.service.IGuessQuestionOptionsService;
 import com.zwo.modules.member.service.IGuessQuestionService;
 import com.zwotech.common.web.BaseController;
@@ -27,6 +30,10 @@ import com.zwotech.common.web.BaseController;
 @RequestMapping("guessQuestion")
 @Lazy(true)
 public class GuessQuestionController extends BaseController<GuessQuestion> {
+	@Autowired
+	@Lazy(true)
+	private IGuessQuestionAnswerService answerService;
+	
 	@Autowired
 	@Lazy(true)
 	private IGuessQuestionService guessQuestionService;
@@ -59,6 +66,12 @@ public class GuessQuestionController extends BaseController<GuessQuestion> {
 			uiModel.addAttribute("guessQuestionOptions", list);
 		}
 		
+		GuessQuestionAnswerCriteria answerCriteria = new GuessQuestionAnswerCriteria();
+		answerCriteria.createCriteria().andQuestionIdEqualTo(id);
+		List<GuessQuestionAnswer> list = answerService.selectByExample(answerCriteria);
+		if(!list.isEmpty()){
+			uiModel.addAttribute("guessQuestionAnswer", list.get(0));
+		}
 		uiModel.addAttribute("guessQuestion", guessQuestion);
 		uiModel.addAttribute("operation", "edit");
 		return basePath + "guessQuestion_edit";
@@ -96,7 +109,7 @@ public class GuessQuestionController extends BaseController<GuessQuestion> {
 		
 		int res = this.guessQuestionService.updateByPrimaryKeySelective(guessQuestion);
 		if(res==1){
-			redirectAttributes.addFlashAttribute("guessQuestion", guessQuestion);
+//			redirectAttributes.addFlashAttribute("guessQuestion", guessQuestion);
 			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
 		redirectAttributes.addAttribute("operation", "edit");

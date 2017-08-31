@@ -14,49 +14,10 @@
 </script> 
 </head>
 <body>
-	<!-- 模态框（Modal） -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        &times;
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel">
-                        游戏竞猜问题选项新增与编辑
-                    </h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-							<label for="propertyValue" class="col-sm-2 control-label">属性值</label>
-							<div class="col-sm-9">
-								<input type="text" class="form-control" id="propertyValue"
-									name="propertyValue" placeholder="属性值" value="">
-
-							</div>
-						</div>
-                     <div class="form-group">
-							<label for="propertyValue" class="col-sm-2 control-label">属性值</label>
-							<div class="col-sm-9">
-								<input type="text" class="form-control" id="propertyValue"
-									name="propertyValue" placeholder="属性值" value="">
-
-							</div>
-						</div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
-                    </button>
-                    <button type="button" class="btn btn-primary">
-                        保存
-                    </button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
-    </div>
+	
     
 	
-	<form class="form-horizontal" guessQuestion="form"
+	<form  class="form-horizontal" role="form"
 		<c:if test="${operation=='edit'}">
  action="${ctx}/guessQuestion/update"
 		</c:if>
@@ -86,8 +47,9 @@
 		</div>
         <div class="form-group">
 			<label for="questionEndTime" class="col-sm-1 control-label">截止日期</label>
+            
 			<div class="col-sm-4">
-				
+				<input type="text" id="questionEndTime"  name="questionEndTime" class="easyui-datetimebox" value="<fmt:formatDate value="${guessQuestion.questionEndTime}" pattern="yyyy-MM-dd HH:mm:ss"/>">  
 			</div>
 		</div>
         
@@ -122,10 +84,28 @@
 		</div>
         <div class="form-group">
 			<label for="description" class="col-sm-1 control-label">问题选项</label>
-			<div class="col-sm-4">
-				<input type="text" class="form-control" name="code"
+			<div class="col-sm-8">
+            	<table id="datagrid" 
+                    title="" 
+                    class="easyui-datagrid"
+                    url="${ctx}/guessQuestionOptions/selectByQuestionId?guessQuestionId=${guessQuestion.id}" 
+                    rownumbers="true"
+                    fitColumns="true" 
+                    fit="false" 
+                    pagination="false"
+                    singleSelect="true">
+                    <thead>
+                        <tr>
+                            <th data-options="field:'id',align:'center',hidden:true">id</th>
+                            <th data-options="field:'name',align:'center',width:50">名称</th>
+                            <th data-options="field:'betRate',align:'center',width:50">赔率</th>
+                            <th data-options="field:'opt',align:'center',width:50,formatter:formatOpt">操作</th>
+                        </tr>
+                    </thead>
+                </table>
+				<!--<input type="text" class="form-control" name="code"
 					placeholder="请输入代码(拼音)" value=""><button type="button" class="btn btn-danger btn-sm" onclick=""><i class="fa fa-trash fa-lg"></i>&nbsp;&nbsp;删除 </button>
-                    <button type="button" class="btn btn-danger btn-sm" onclick=""><i class="fa fa-trash fa-lg"></i>&nbsp;&nbsp;修改</button>
+                    <button type="button" class="btn btn-danger btn-sm" onclick=""><i class="fa fa-trash fa-lg"></i>&nbsp;&nbsp;修改</button>-->
 			</div>
 		</div>
         
@@ -136,24 +116,88 @@
                 
 			</div>
 		</div>
+        <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        游戏竞猜问题选项新增与编辑
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+							<label for="questionName" class="col-sm-2 control-label">名称</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="optionName"
+									placeholder="名称" value="">
+
+							</div>
+						</div>
+                     <div class="form-group">
+							<label for="betRate" class="col-sm-2 control-label">赔率</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="betRate"
+									name="betRate" placeholder="赔率" value="">
+
+							</div>
+						</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" onClick="saveOptions();">
+                        保存
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
 	</form>
-	<div class="form-group">
-			<label class="col-sm-1 control-label"></label>
+    <div class="form-group">
+			<label  class="col-sm-1 control-label"></label>
 			<div class="col-sm-4">
-				<!-- 按钮触发模态框 -->
-                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">新增竞猜问题选项</button>
+				 <button id="editOptionsBtn" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">新增竞猜问题选项</button> 
 			</div>
 		</div>
+   
 	<script type="text/javascript">
-		
+		var editOptions=false;
 		// 初始化按钮等工作。
 		$().ready(function() {
 			//返回列表。
 			$("#returnBtn").bind("click", function() {
 				backToList('guessQuestion');
 			});
+			//var unixTimestamp = new Date('${guessQuestion.questionEndTime}');  
+			//$("#questionEndTime").datetimebox('setValue', unixTimestamp);
 		});
 
+		
+		function saveOptions(){
+			var optionName = $('#optionName').val();
+			var betRate    = $('#betRate').val();	
+			var guessQuestionId    = $('#id').val();
+			var data = {};
+			data.name=optionName;
+			data.betRate = betRate;
+			data.guessQuestionId = guessQuestionId;
+			var url = '${ctx}/guessQuestionOptions/create';
+			if(editOptions){
+				data.id = $('#datagrid').datagrid('getSelected').id;
+				url = '${ctx}/guessQuestionOptions/update';
+			}
+			
+			$.ajax({url:url,method:"post",data:data,success:function(result){
+				$("#datagrid").datagrid('reload');
+			}});
+			
+			editOptions = false;
+		}
+		
 		function fileUploadToServer() {
 			var fileValue = $('#file').val();
 			if (fileValue == '') {
@@ -181,6 +225,45 @@
 					alert("上传失败");
 				}
 			})
+		}
+		
+		function updateSetting(name,betRate){
+			editOptions = true;
+			$('#editOptionsBtn').click();
+			
+			$('#optionName').val(name);
+			$('#betRate').val(betRate);
+		}
+		
+		function setRightAnswer(rowId){
+			var questionId    = $('#id').val();
+			var questionOptionsId = rowId;
+			var data = {};
+			data.questionId=questionId;
+			data.questionOptionsId = questionOptionsId;
+			var url = '${ctx}/guessQuestion/releaseAnswer';
+			$.ajax({url:url,method:"post",data:data,success:function(result){
+				$("#datagrid").datagrid('reload');
+			}});
+			
+		}
+		
+		//格式化操作，添加删除和编辑按钮。
+		function formatOpt(value, rec) {
+			var qId = '${guessQuestionAnswer.questionId}';
+			var btn = '<div style="padding: 5px;">';
+				if(qId==rec.id){
+					btn += '<label>该项已经发布为正确答案</label>';
+				}
+				btn += '<button type="button" class="btn btn-danger btn-sm" onclick="deleteById(\'datagrid\',\''
+					+ rec.id + '\',\'guessQuestionOptions\')"><i class="fa fa-trash fa-lg"></i>&nbsp;&nbsp;删除 </button>';
+					btn += "&nbsp;&nbsp;";
+				btn += '<button type="button" class="btn btn-danger btn-sm" onclick="setRightAnswer(\''
+					+ rec.id + '\')"><i class="fa fa-edit fa-lg"></i>&nbsp;&nbsp;设置为正确答案 </button>';
+					btn += "&nbsp;&nbsp;";
+				//btn += '<button type="button" class="btn btn-info btn-sm" onclick="updateSetting(\''+rec.name+'\',\''+rec.betRate+'\');"><i class="fa fa-edit fa-lg"></i>&nbsp;&nbsp;编辑</button>';
+			btn += '</div>';
+			return btn;
 		}
 	</script>
 	<%@ include file="/WEB-INF/include/easyui-footerjs.jsp"%>

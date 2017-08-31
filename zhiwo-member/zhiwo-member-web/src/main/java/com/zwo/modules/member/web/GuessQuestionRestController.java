@@ -23,7 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.pagehelper.DatagridPage;
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.member.domain.GuessQuestion;
+import com.zwo.modules.member.domain.GuessQuestionAnswer;
+import com.zwo.modules.member.domain.GuessQuestionAnswerCriteria;
 import com.zwo.modules.member.domain.GuessQuestionCriteria;
+import com.zwo.modules.member.service.IGuessQuestionAnswerService;
 import com.zwo.modules.member.service.IGuessQuestionService;
 import com.zwo.modules.system.domain.TbUserAssets;
 import com.zwo.modules.system.domain.TbUserAssetsCriteria;
@@ -34,6 +37,10 @@ import com.zwotech.common.web.BaseController;
 @RequestMapping("guessQuestion")
 @Lazy(true)
 public class GuessQuestionRestController extends BaseController<GuessQuestion> {
+	@Autowired
+	@Lazy(true)
+	private IGuessQuestionAnswerService answerService;
+	
 	@Autowired
 	@Lazy(true)
 	private IGuessQuestionService guessQuestionService;
@@ -137,4 +144,25 @@ public class GuessQuestionRestController extends BaseController<GuessQuestion> {
 		return super.setPage(pageInfo);
 	}
 	
+	 
+		/**
+		 * @Description: 查看详情 
+		 * @param id
+		 * @param uiModel
+		 * @param httpServletRequest
+		 * @param httpServletResponse
+		 * @return
+		 */
+		@RequestMapping(value = "releaseAnswer")
+		@RequiresPermissions("member:guessQuestionAnswer:edit")
+		public String releaseAnswer(@ModelAttribute GuessQuestionAnswer questionAnswer, Model uiModel, HttpServletRequest httpServletRequest,
+				HttpServletResponse httpServletResponse) {
+			GuessQuestionAnswerCriteria answerCriteria = new GuessQuestionAnswerCriteria();
+			answerCriteria.createCriteria().andQuestionIdEqualTo(questionAnswer.getQuestionId());
+			answerService.deleteByExample(answerCriteria);
+			
+			questionAnswer.setId(System.currentTimeMillis()+"");
+			int result = answerService.insert(questionAnswer);
+			return ""+result;
+		}
 }

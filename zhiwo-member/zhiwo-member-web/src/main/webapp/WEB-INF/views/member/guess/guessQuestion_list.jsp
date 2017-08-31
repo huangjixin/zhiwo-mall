@@ -42,7 +42,7 @@
                 <th data-options="field:'id',align:'center',hidden:true">id</th>
 				<th data-options="field:'name',align:'center',width:100">名称</th>
                 <th data-options="field:'code',align:'center',width:100">代码</th>
-                <th data-options="field:'icon',align:'center',width:100,formatter:formatIcon">头像</th>
+               <!-- <th data-options="field:'icon',align:'center',width:100,formatter:formatIcon">头像</th>-->
                 <th data-options="field:'description',align:'center',width:100">描述</th>
 				<th data-options="field:'createDate',align:'center',width:100,formatter:formatTime">创建日期</th>
 				<th data-options="field:'updateDate',align:'center',width:100,formatter:formatTime">更新日期</th>
