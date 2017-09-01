@@ -21,7 +21,7 @@
 .swiper-slide {
 	text-align: center;
 	font-size: 18px;
-	background: #ccc;
+	background: #ffffff;
 	/* Center slide text vertically */
 	display: -webkit-box;
 	display: -ms-flexbox;
@@ -151,7 +151,7 @@
 				<label style="color: red;">缩略图要求图片长宽比例为2:1，用工具将图片压缩成webp格式。(预览)</label>
 				<img id="iconImg"
 					<c:if test="${!empty product.icon}">src="${ctx}/${product.icon}"</c:if>
-					class=".img-responsive" width="200px;" height="100px;">
+					class=".img-responsive" width="200px;" >
 			</div>
 		</div>
 		<div class="form-group">
@@ -163,30 +163,35 @@
 					data-toggle="modal" data-target="#swiperImageModal">
 					<i class="fa fa-plus"></i>&nbsp;&nbsp;新增轮播图
 				</button>
-				
+				<button type="button" class="btn btn-primary" data-toggle="collapse" 
+                    data-target="#collapsePrImages">展开/折叠管理轮播图</button>
 			</div>
 		</div>
         <div class="form-group">
 			<label class="col-sm-2 control-label"></label>
 			<div class="col-sm-6">
-            	<table id="datagrid" 
-                    title="" 
-                    class="easyui-datagrid"
-                    url="${ctx}/product/selectSwiperImages?productId=${product.id}" 
-                    rownumbers="false"
-                    fitColumns="true" 
-                    fit="false" 
-                    pagination="false"
-                    singleSelect="true">
-                    <thead>
-                        <tr>
-                            <th data-options="field:'id',align:'center',hidden:true">id</th>
-                            <th data-options="field:'name',align:'center',width:50">名称</th>
-                            <th data-options="field:'url',align:'center',width:110,formatter:formatPrImage">图片</th>
-                            <th data-options="field:'opt',align:'center',width:50,formatter:formatOpt">操作</th>
-                        </tr>
-                    </thead>
-                </table>
+            	 <div class="collapse in" id="collapsePrImages">
+                      <table id="datagrid" 
+                        title="" 
+                        class="easyui-datagrid"
+                        url="${ctx}/product/selectSwiperImages?productId=${product.id}" 
+                        rownumbers="false"
+                        fitColumns="true" 
+                        collapsible:true,
+                        fit="false" 
+                        pagination="false"
+                        singleSelect="true">
+                        <thead>
+                            <tr>
+                                <th data-options="field:'id',align:'center',hidden:true">id</th>
+                                <th data-options="field:'name',align:'center',width:50">名称</th>
+                                <th data-options="field:'url',align:'center',width:110,formatter:formatPrImage">图片</th>
+                                <th data-options="field:'opt',align:'center',width:50,formatter:formatOpt">操作</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            	
             </div>
         </div>
 		<div class="form-group">
@@ -505,10 +510,10 @@
                                     onclick="uploadSwiperImageTOServer();">从已上传的图片当中选择</button>
                                 <br> <label id="swiperMessage"></label> <label
                                     style="color: red;">轮播图要求图片长宽比例为2:1，用工具将图片压缩成webp格式。(预览)</label>
-                                    <img id="swiperImg" class=".img-responsive" width="200px;" height="100px;">
+                                    <img id="swiperImg" class=".img-responsive" width="200px;">
 
 							</div>
-                            <label class="col-sm-2 control-label"></label>
+                            <label class="col-sm-2 control-label">轮播图预览</label>
 							<div class="col-sm-9">
                             	<!-- Swiper -->
                                     <div class="swiper-container">
@@ -516,8 +521,8 @@
                                             <c:forEach var="swiperImage" items="${swiperImages}">
                                                 <div class="swiper-slide" id="${swiperImage.id}swiper-slide">
                                                     <div>
-                                                        <img id="${swiperImage.id}" class=".img-responsive" src="${ctx}/${swiperImage.url}" width="400px;">
-                                                        <button type="button" class="btn btn-danger btn-sm" onClick="deleteSwiperImage('${swiperImage.id}')">删除</button>
+                                                        <img id="${swiperImage.id}" class=".img-responsive" src="${ctx}/${swiperImage.url}" width="200px;">
+                                                        
                                                     </div>
                                                 </div>
                                             </c:forEach>
@@ -1090,10 +1095,10 @@
 								var para = '';
 								for (var i = 0; i < data.assets.length; i++) {
 									var assets = data.assets[i];
-									para = '<div><div class="swiper-slide" id="'+assets.id+'swiper-slide"><img class=".img-responsive" src="${ctx}/'+assets.url+'" width="400px;"><button type="button" class="btn btn-danger btn-sm"  onClick="deleteSwiperImage(\''+assets.id+'\')">删除</button></div></div>';
+									para = '<div><div class="swiper-slide" id="'+assets.id+'swiper-slide"><img class=".img-responsive" src="${ctx}/'+assets.url+'" width="200px;"></div></div>';
 									$('#proImagesWrapper').append(para);
 								}
-
+								$('#datagrid').datagrid("reload");
 							}
 							$('#swiperMessage').html('');
 						},
@@ -1128,6 +1133,7 @@
 				success : function(data) //服务器成功响应处理函数
 				{
 					$('#datagrid').datagrid("reload");
+					$('#'+imageId+"swiper-slide").remove();
 				}
 			})
 		}

@@ -144,6 +144,19 @@ public class FileUploadController {
 	}
 	
 
+	/**
+	 * orgId为商品ID。
+	 * @param productId
+	 * @param orgId
+	 * @param files
+	 * @param imgWidth
+	 * @param imgHeight
+	 * @param HTTP_CONTENT_DISPOSITION
+	 * @param httpServletRequest
+	 * @param httpServletResponse
+	 * @param uiModel
+	 * @return
+	 */
 	@RequestMapping(value = "prAssets")
 	@ResponseBody
 	public String proAssetsUpload(
@@ -158,10 +171,10 @@ public class FileUploadController {
 		Calendar date = Calendar.getInstance();
 		String rootDir = httpServletRequest.getSession().getServletContext().getRealPath("/");
 		rootDir = "D:"+File.separator;
-		String url = "passets/" + date.get(Calendar.YEAR) + "/" + (date.get(Calendar.MONTH) + 1) + "/"
+		String url = "passets/"+productId+"/" + date.get(Calendar.YEAR) + "/" + (date.get(Calendar.MONTH) + 1) + "/"
 				+ date.get(Calendar.DAY_OF_MONTH);
 		String uploadPath = rootDir + "images" + File.separator + "passets";
-		uploadPath = uploadPath + File.separator + date.get(Calendar.YEAR) + File.separator
+		uploadPath = uploadPath+ File.separator+productId+ File.separator + date.get(Calendar.YEAR) + File.separator
 				+ (date.get(Calendar.MONTH) + 1) + File.separator + date.get(Calendar.DAY_OF_MONTH);
 
 		for (int i = 0; i < files.length; i++) {
