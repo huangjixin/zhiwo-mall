@@ -11,13 +11,14 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Service;
 
 import com.zwo.modules.mall.domain.PrCategory;
+import com.zwo.modules.mall.domain.PrProduct;
 
 /**
  * @author Administrator
  *
  */
 @Service
-public class PrCategoryUpdateMessageListener implements MessageListener {
+public class PrProductUpdateMessageListener implements MessageListener {
 	@Autowired
 	private RedisTemplate<String, String> redisTemplate;
 
@@ -34,10 +35,10 @@ public class PrCategoryUpdateMessageListener implements MessageListener {
 		RedisSerializer<?> valueSerializer = redisTemplate.getDefaultSerializer();
 		Object channel = stringSerializer.deserialize(message.getChannel());
 		Object body = valueSerializer.deserialize(message.getBody());
-		PrCategory category = null;
-		if(body instanceof PrCategory){
-			category = (PrCategory) body;
-			//更新顶部菜单；
+		PrProduct product = null;
+		if(body instanceof PrProduct){
+			product = (PrProduct) body;
+			//更新整个商品JSP；
 		}
 //		System.out.println("主题: " + channel);
 //		System.out.println("消息内容的类型是PrCategory？ " + (body instanceof PrCategory));

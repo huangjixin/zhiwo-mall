@@ -174,7 +174,7 @@ public class ProductRestController extends BaseController<PrProduct> {
 	@RequestMapping(value = "selectSwiperImages")
 	public List<PrImage> selectSwiperImages(@RequestParam String productId,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		List<PrImage> list = prductService.selectByProductId(productId,false);
+		List<PrImage> list = prductService.selectByProductId(productId,true);
 		return list;
 	}
 }

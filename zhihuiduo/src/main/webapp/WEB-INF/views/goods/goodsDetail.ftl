@@ -12,24 +12,24 @@
 	
 	/* 	background: #ccc; */
 	
-}
+}'}
 .row{
 	padding-left:8px;
 	padding-right:8px;
-}
+}'}
 .thumbnail {
 	padding: 0px;
 	margin-bottom: 5px;
 	line-height: 1.42857143;
 	border: 0px solid #ddd;
 	border-radius: 0px;
-}
+}'}
 
 .swiper-container {
 	text-align: center;
 	width: 100%;
 	margin: 0px auto;
-}
+}'}
 
 .swiper-slide {
 	text-align: center;
@@ -48,13 +48,13 @@
 	-ms-flex-align: center;
 	-webkit-align-items: center;
 	align-items: center;
-}
+}'}
 
 .hr1 {
 	height: 1px;
 	border: none;
 	border-top: 1px solid #F0F0F0;
-}
+}'}
 </style>
 </head>
 <body>
@@ -62,16 +62,21 @@
 		<div class="row">
 			<div class="swiper-container">
 				<div class="swiper-wrapper">
-					<!-- 轮播图设置 -->
-					<c:forEach var="prImage" items="${swiperImages}">
-						<div class="swiper-slide">
-							<img src="${ctx}/${prImage.url}" alt="智惠多月饼"
-								class="img-responsive">
-						</div>
-					</c:forEach>
+					<div class="swiper-slide">
+						<img src="${r'${ctx}'}/images/yuebing.png" alt="智惠多月饼"
+							class="img-responsive">
+					</div>
+					<div class="swiper-slide">
+						<img src="${r'${ctx}'}/images/yuebing.png" alt="智惠多月饼"
+							class="img-responsive">
+					</div>
+					<div class="swiper-slide">
+						<img src="${r'${ctx}'}/images/yuebing.png" alt="智惠多月饼"
+							class="img-responsive">
+					</div>
 				</div>
 			</div>
-			<br>
+
 			<div class="pull-left">
 				<label style="color: red; font-size: 1.5rem;"><i
 					class="fa fa-jpy"></i>88</label> <label
@@ -82,9 +87,9 @@
 			</div>
 
 			<div class="clearfix"></div>
-			<div style="text-align: left; font-size: 1.5rem; font-weight: bold;">${product.name}</div>
+			<div style="text-align: left; font-size: 1.5rem; font-weight: bold;">【四色五码S-XXL】【V领棉衬衫】【透气清凉】春夏新款韩版宽松V领竖条纹衬衫女休闲百搭五分袖清新棉衬衣</div>
 			<div>&nbsp;</div>
-			<div style="text-align: left; font-size: 1.4rem; color: #666">${product.description}</div>
+			<div style="text-align: left; font-size: 1.4rem; color: #666">优质高含棉料，透气不流汗，轻松透气无压力，清新百搭的四个颜色总有一款适合你，陪你度过整一个夏天，店家极力推荐！！！！S码（80斤-90斤）M码（90斤-100斤）L（101斤-110斤）XL（111斤-120斤），XXL(121-135斤）</div>
 
 			<hr class="hr1" />
 		</div>
@@ -118,16 +123,15 @@
                     	<label>&nbsp;</label>
 						<h4 class="media-heading">商品详情</h4>
 						<hr class="hr1" />
-                        ${product.content}
-						<!--<img
-							src="${ctx}/images/goods/user_13926205227/product_12365/02f8bc94495c5f6dde5e20f6e3e206c4.jpeg@750w_1l_50Q"
+						<img
+							src="${r'${ctx}'}/images/goods/user_13926205227/product_12365/02f8bc94495c5f6dde5e20f6e3e206c4.jpeg@750w_1l_50Q"
 							class="img-responsive"> <img
-							src="${ctx}/images/goods/user_13926205227/product_12365/0c4d438262012c7099a25f05958272ef.jpeg@750w_1l_50Q"
+							src="${r'${ctx}'}/images/goods/user_13926205227/product_12365/0c4d438262012c7099a25f05958272ef.jpeg@750w_1l_50Q"
 							class="img-responsive"> <img
-							src="${ctx}/images/goods/user_13926205227/product_12365/583052abadbe0b8daf936fd447ebe31c.jpeg@750w_1l_50Q"
+							src="${r'${ctx}'}/images/goods/user_13926205227/product_12365/583052abadbe0b8daf936fd447ebe31c.jpeg@750w_1l_50Q"
 							class="img-responsive"> <img
-							src="${ctx}/images/goods/user_13926205227/product_12365/b8863f414edab95ca9f41dc3a51d6176.jpeg@750w_1l_50Q"
-							class="img-responsive">-->
+							src="${r'${ctx}'}/images/goods/user_13926205227/product_12365/b8863f414edab95ca9f41dc3a51d6176.jpeg@750w_1l_50Q"
+							class="img-responsive">
 					</div>
 				</div>
 			</div>

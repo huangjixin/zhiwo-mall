@@ -1,5 +1,9 @@
 package com.zwo.modules.zhihuiduo.web;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -82,6 +86,14 @@ public class GoodsController extends BaseController<TbUser> {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = {"goodsDetail"},method=RequestMethod.GET)  
 	public String goodsDetail(@RequestParam String goodsId,Model uiModel,HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		String rootDir = httpServletRequest.getSession().getServletContext().getRealPath("/");
+		String goodsDetailJspUri = rootDir+"WEB-INF"+File.separator+"views"+File.separator+"goods"+goodsId+".jsp";
+		Path path = Paths.get(goodsDetailJspUri);
+		
+		if(Files.exists(path)){
+			return basePath+goodsId;
+		}
+		
 		
 		PrProductWithBLOBs product = prductService.selectByPrimKey(goodsId);
 		if(product!=null){
@@ -131,7 +143,7 @@ public class GoodsController extends BaseController<TbUser> {
 		//商品属性。
 		List<PrProductProperty> properties = productPropertyService.listAll();
 		uiModel.addAttribute("properties",properties);
-		uiModel.addAttribute("goods", product);
+		uiModel.addAttribute("product", product);
 		return basePath+"goodsDetail";
 	}
 	

@@ -102,6 +102,13 @@
                         </bean>
                     </list>
                 </entry>
+                <entry key-ref="prProductUpdateMessageListener">
+                    <list>
+                        <bean class="org.springframework.data.redis.listener.ChannelTopic">
+                            <constructor-arg value="topic.PrProduct.channel" />
+                        </bean>
+                    </list>
+                </entry>
             </map>
         </property>
     </bean>

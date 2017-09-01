@@ -142,7 +142,7 @@ public class ProductController extends BaseController<PrProduct> {
 		
 		return basePath + "product_edit";
 	}
-
+	
 	@RequiresPermissions("mall:product:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid PrProductWithBLOBs product,@RequestParam String propertyValues,

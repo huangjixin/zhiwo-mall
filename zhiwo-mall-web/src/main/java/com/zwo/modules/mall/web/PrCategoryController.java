@@ -101,7 +101,7 @@ public class PrCategoryController extends BaseController<PrCategory> {
 			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
 		redirectAttributes.addAttribute("operation", "edit");
-		redisTemplate.convertAndSend("topic.PrCategory.channel", "hello world!");
+		redisTemplate.convertAndSend("topic.PrCategory.channel", prCategory);
 		return "redirect:/prCategory/edit/" + prCategory.getId();
 	}
 }

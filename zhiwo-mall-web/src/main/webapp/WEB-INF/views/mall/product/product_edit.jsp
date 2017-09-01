@@ -51,7 +51,7 @@
 
 		</c:if>
 		<input id="id" name="id" value="${product.id}" type="hidden" /> <input
-			id="propertyValues" name="propertyValues" value="${propertyValues}"
+			id="propertyValues" name="propertyValues" value=""
 			type="hidden" /> <input id="propertyPrices" name="propertyPrices"
 			value="${propertyPrices}" type="hidden" /> <input id="icon"
 			name="icon" value="${product.icon}" type="hidden" /> <input
@@ -157,39 +157,38 @@
 		<div class="form-group">
 			<label class="col-sm-2 control-label">设置商品轮播图</label>
 
-			<div class="col-sm-4">
-				<input type="file" id="swiperFile" name="file"
-					style="display: none;" accept="image/*"
-					onChange="$('#swiperMessage').html($('#swiperFile').val());preImg(this.id,'swiperImg');" />
-				<button type="button" class="btn btn-success fileinput-button"
-					onclick="$('#swiperFile').click();">
-					<i class="fa fa-plus"></i>&nbsp;&nbsp;选择文件
+			<div class="col-sm-6">
+            	<button id="addPropertyBtn" onClick="setBtnStatus(false,true);"
+					type="button" class="btn btn-success fileinput-button"
+					data-toggle="modal" data-target="#swiperImageModal">
+					<i class="fa fa-plus"></i>&nbsp;&nbsp;新增轮播图
 				</button>
-				<button type="button" class="btn btn-primary start"
-					onclick="uploadSwiperImageTOServer();">
-					<i class="fa fa-upload"></i> <span>&nbsp;&nbsp;开始上传</span>
-				</button>
-				<button type="button" class="btn btn-primary start"
-					onclick="uploadSwiperImageTOServer();">从已上传的图片当中选择</button>
-				<br> <label id="swiperMessage"></label> <label
-					style="color: red;">轮播图要求图片长宽比例为2:1，用工具将图片压缩成webp格式。(预览)</label> <img
-					id="swiperImg" class=".img-responsive" width="200px;"
-					height="100px;">
-				<!-- Swiper -->
-				<div class="swiper-container">
-					<div class="swiper-wrapper" id="proImagesWrapper">
-                    	<c:forEach var="swiperImage" items="${swiperImages}">
-                        	<div class="swiper-slide" id="${swiperImage.id}swiper-slide">
-                            	<div>
-                                	<img id="${swiperImage.id}" class=".img-responsive" src="${ctx}/${swiperImage.url}" width="400px;">
-                               		<button type="button" class="btn btn-danger btn-sm" onClick="deleteSwiperImage('${swiperImage.id}')">删除</button>
-                                </div>
-							</div>
-                        </c:forEach>
-					</div>
-				</div>
+				
 			</div>
 		</div>
+        <div class="form-group">
+			<label class="col-sm-2 control-label"></label>
+			<div class="col-sm-6">
+            	<table id="datagrid" 
+                    title="" 
+                    class="easyui-datagrid"
+                    url="${ctx}/product/selectSwiperImages?productId=${product.id}" 
+                    rownumbers="false"
+                    fitColumns="true" 
+                    fit="false" 
+                    pagination="false"
+                    singleSelect="true">
+                    <thead>
+                        <tr>
+                            <th data-options="field:'id',align:'center',hidden:true">id</th>
+                            <th data-options="field:'name',align:'center',width:50">名称</th>
+                            <th data-options="field:'url',align:'center',width:110,formatter:formatPrImage">图片</th>
+                            <th data-options="field:'opt',align:'center',width:50,formatter:formatOpt">操作</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
 		<div class="form-group">
 			<label for="allowDistribution" class="col-sm-2 control-label">是否允许分销</label>
 			<div class="col-sm-4">
@@ -477,6 +476,70 @@
 
 		</div>
 
+		<!-- 轮播图设置模态框（Modal） -->
+		<div class="modal fade" id="swiperImageModal" tabindex="-2" role="dialog"
+			aria-labelledby="swiperImageModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="swiperImageModalLabel">轮播设置</h4>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="propertyValue" class="col-sm-2 control-label"></label>
+							<div class="col-sm-9">
+								<input type="file" id="swiperFile" name="file"
+                                    style="display: none;" accept="image/*"
+                                    onChange="$('#swiperMessage').html($('#swiperFile').val());preImg(this.id,'swiperImg');" />
+                                <button type="button" class="btn btn-success fileinput-button"
+                                    onclick="$('#swiperFile').click();">
+                                    <i class="fa fa-plus"></i>&nbsp;&nbsp;选择文件
+                                </button>
+                                <button type="button" class="btn btn-primary start"
+                                    onclick="uploadSwiperImageTOServer();">
+                                    <i class="fa fa-upload"></i> <span>&nbsp;&nbsp;开始上传</span>
+                                </button>
+                                <button type="button" class="btn btn-primary start"
+                                    onclick="uploadSwiperImageTOServer();">从已上传的图片当中选择</button>
+                                <br> <label id="swiperMessage"></label> <label
+                                    style="color: red;">轮播图要求图片长宽比例为2:1，用工具将图片压缩成webp格式。(预览)</label>
+                                    <img id="swiperImg" class=".img-responsive" width="200px;" height="100px;">
+
+							</div>
+                            <label class="col-sm-2 control-label"></label>
+							<div class="col-sm-9">
+                            	<!-- Swiper -->
+                                    <div class="swiper-container">
+                                        <div class="swiper-wrapper" id="proImagesWrapper">
+                                            <c:forEach var="swiperImage" items="${swiperImages}">
+                                                <div class="swiper-slide" id="${swiperImage.id}swiper-slide">
+                                                    <div>
+                                                        <img id="${swiperImage.id}" class=".img-responsive" src="${ctx}/${swiperImage.url}" width="400px;">
+                                                        <button type="button" class="btn btn-danger btn-sm" onClick="deleteSwiperImage('${swiperImage.id}')">删除</button>
+                                                    </div>
+                                                </div>
+                                            </c:forEach>
+                                        </div>
+                                    </div>
+                            </div>
+						</div>
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+						</button>
+						<button type="button" class="btn btn-primary">
+                            保存
+                        </button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal -->
+
+		</div>
 	</form>
 	<!-- 配置文件 -->
 	<script type="text/javascript"
@@ -1064,9 +1127,26 @@
 				dataType : 'json', //返回值类型 一般设置为json
 				success : function(data) //服务器成功响应处理函数
 				{
-					$('#' + imageId + 'swiper-slide').remove();
+					$('#datagrid').datagrid("reload");
 				}
 			})
+		}
+		
+		//格式化轮播图操作，添加删除和编辑按钮。
+		function formatOpt(value, rec) {
+			var btn = '<div style="padding: 5px;">';
+				
+				btn += '<button type="button" class="btn btn-danger btn-sm" onclick="deleteSwiperImage(\''
+					+ rec.id + '\')"><i class="fa fa-trash fa-lg"></i>&nbsp;&nbsp;删除 </button>';
+					btn += "&nbsp;&nbsp;";
+				//btn += '<button type="button" class="btn btn-info btn-sm" onclick="updateSetting(\''+rec.name+'\',\''+rec.betRate+'\');"><i class="fa fa-edit fa-lg"></i>&nbsp;&nbsp;编辑</button>';
+			btn += '</div>';
+			return btn;
+		}
+		
+		function formatPrImage(value, rec) {
+			var result = '<img id="iconImg" src="${ctx}/'+rec.url+'" class=".img-responsive" style="width: 100px;">';
+			return result;
 		}
 
 		/** 
