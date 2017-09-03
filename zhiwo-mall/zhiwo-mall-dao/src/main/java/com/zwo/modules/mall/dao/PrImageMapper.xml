@@ -5,23 +5,24 @@
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="ID" jdbcType="VARCHAR" property="id" />
-    <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
-    <result column="ORG_ID" jdbcType="VARCHAR" property="orgId" />
-    <result column="UPDATER" jdbcType="VARCHAR" property="updater" />
-    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
-    <result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate" />
-    <result column="DISABLE" jdbcType="BIT" property="disable" />
-    <result column="START_TIME" jdbcType="TIMESTAMP" property="startTime" />
-    <result column="END_TIME" jdbcType="TIMESTAMP" property="endTime" />
-    <result column="SORT" jdbcType="INTEGER" property="sort" />
-    <result column="IS_DEFAULT" jdbcType="BIT" property="isDefault" />
-    <result column="EN_NAME" jdbcType="VARCHAR" property="enName" />
-    <result column="NAME" jdbcType="VARCHAR" property="name" />
-    <result column="DESCRIPTION" jdbcType="VARCHAR" property="description" />
-    <result column="URL" jdbcType="VARCHAR" property="url" />
-    <result column="PRODUCT_ID" jdbcType="VARCHAR" property="productId" />
-    <result column="LOCATION" jdbcType="VARCHAR" property="location" />
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+    <result column="ORG_ID" property="orgId" jdbcType="VARCHAR" />
+    <result column="UPDATER" property="updater" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="DISABLE" property="disable" jdbcType="BIT" />
+    <result column="START_TIME" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="END_TIME" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="SORT" property="sort" jdbcType="INTEGER" />
+    <result column="IS_DEFAULT" property="isDefault" jdbcType="BIT" />
+    <result column="EN_NAME" property="enName" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+    <result column="URL" property="url" jdbcType="VARCHAR" />
+    <result column="PRODUCT_ID" property="productId" jdbcType="VARCHAR" />
+    <result column="LOCATION" property="location" jdbcType="VARCHAR" />
+    <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <!--

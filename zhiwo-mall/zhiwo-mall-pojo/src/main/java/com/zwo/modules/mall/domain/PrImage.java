@@ -108,6 +108,12 @@ public class PrImage implements Serializable {
     @Column(name = "LOCATION")
     private String location;
 
+    /**
+     * 用户ID
+     */
+    @Column(name = "USER_ID")
+    private String userId;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -410,5 +416,23 @@ public class PrImage implements Serializable {
      */
     public void setLocation(String location) {
         this.location = location == null ? null : location.trim();
+    }
+
+    /**
+     * 获取用户ID
+     *
+     * @return USER_ID - 用户ID
+     */
+    public String getUserId() {
+        return userId;
+    }
+
+    /**
+     * 设置用户ID
+     *
+     * @param userId 用户ID
+     */
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
     }
 }

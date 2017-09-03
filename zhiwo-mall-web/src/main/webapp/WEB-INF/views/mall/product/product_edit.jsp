@@ -62,7 +62,7 @@
 			<button type="button" class="btn btn-danger btn-sm"
 				onClick="$('#treegrid').treegrid('unselectAll');$('#categoryId').val('');">
 				清除</button>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<table id="treegrid" title="商品分类" class="easyui-treegrid"
 					data-options="
                                     url: '${ctx}/prCategory/getPrCategoryTree',
@@ -101,34 +101,34 @@
 		</div>
 		<div class="form-group">
 			<label for="name" class="col-sm-2 control-label">商品名称</label>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<input type="text" class="form-control" id="name" name="name"
 					placeholder="请输入商品名称,开头关键字请用【】括号，否则审核不通过" value="${product.name}">
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="code" class="col-sm-2 control-label">商品代码</label>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<input type="text" class="form-control" id="code" name="code"
 					placeholder="请输入商品代码(商品拼音)" value="${product.code}">
 			</div>
 		</div>
         <div class="form-group">
 			<label for="storage" class="col-sm-2 control-label">商品库存</label>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<input type="text" class="form-control" id="storage" name="storage"
 					placeholder="请输入库存" value="${product.storage}">
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="description" class="col-sm-2 control-label">描述</label>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<textarea name="description" class="form-control" rows="8">${product.description}</textarea>
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="file" class="col-sm-2 control-label">商品缩略图</label>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<input type="file" id="file" name="file" style="display: none;"
 					accept="image/*"
 					onChange="$('#message').html($('#file').val());preImg(this.id,'iconImg');" />
@@ -147,8 +147,9 @@
 		</div>
 		<div class="form-group">
 			<label for="file" class="col-sm-2 control-label"></label>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<label style="color: red;">缩略图要求图片长宽比例为2:1，用工具将图片压缩成webp格式。(预览)</label>
+                <br>
 				<img id="iconImg"
 					<c:if test="${!empty product.icon}">src="${ctx}/${product.icon}"</c:if>
 					class=".img-responsive" width="200px;" >
@@ -196,7 +197,7 @@
         </div>
 		<div class="form-group">
 			<label for="allowDistribution" class="col-sm-2 control-label">是否允许分销</label>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<select id="allowDistribution" class="easyui-combobox"
 					name="allowDistribution" style="width: 200px;">
 					<option value="false"
@@ -206,11 +207,23 @@
 				</select>
 			</div>
 		</div>
+        <div class="form-group">
+			<label for="status" class="col-sm-2 control-label">上架/下架</label>
+			<div class="col-sm-6">
+				<select id="status" class="easyui-combobox"
+					name="status" style="width: 200px;">
+					<option value="false"
+						<c:if test="${product.status=='online'}">selected=true</c:if>>上架</option>
+					<option value="true"
+						<c:if test="${product.status=='offline'}">selected=true</c:if>>下架</option>
+				</select>
+			</div>
+		</div>
 		<div class="form-group">
 			<label for="distributionValue" class="col-sm-2 control-label">商品分销让利值(<i
 				class="fa fa-jpy"></i>)
 			</label>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<input type="text" class="form-control" id="distributionValue"
 					name="distributionValue" placeholder="请输入商品分销让利值(元)"
 					value="${product.distributionValue}"> <label>如果允许会员分销，销售出去的商品将扣除让利值给会员</label>
@@ -220,7 +233,7 @@
 			<label for="purchasingCost" class="col-sm-2 control-label">进货价(<i
 				class="fa fa-jpy"></i>)
 			</label>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<input type="text" class="form-control" id="purchasingCost"
 					name="purchasingCost" placeholder="请输入商品进货价(元)"
 					value="${product.purchasingCost}"> <label>输入商品进货价有利于您统计商品的盈利情况</label>
@@ -230,7 +243,7 @@
 			<label for="numberCount" class="col-sm-2 control-label">开团人数(<i
 				class="fa fa-jpy"></i>)
 			</label>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<input type="text" class="form-control" id="numberCount"
 					name="numberCount" placeholder="请输入开团人数"
 					value="${product.numberCount}">
@@ -240,7 +253,7 @@
 			<label for="gourpSalePrice" class="col-sm-2 control-label">团购价(<i
 				class="fa fa-jpy"></i>)
 			</label>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<input type="text" class="form-control" id="gourpSalePrice"
 					name="gourpSalePrice" placeholder="请输入商品团购价(元)"
 					value="${product.gourpSalePrice}">
@@ -250,7 +263,7 @@
 			<label for="independentPrice" class="col-sm-2 control-label">单独购买价(<i
 				class="fa fa-jpy"></i>)
 			</label>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<input type="text" class="form-control" id="independentPrice"
 					name="independentPrice" placeholder="单独购买价(元)"
 					value="${product.independentPrice}">
@@ -258,7 +271,7 @@
 		</div>
 		<div class="form-group">
 			<label for="propertySetting" class="col-sm-2 control-label">属性设置</label>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<input id="propertySetting" class="easyui-combobox"
 					name="propertySetting" style="width: 200px;"
 					data-options="valueField:'id',textField:'name',url:'${ctx}/productProperty/listAll',onLoadSuccess: function () { 
@@ -287,7 +300,7 @@
 		</div>
 		<div class="form-group">
 			<label for="independentPrice" class="col-sm-2 control-label">属性组合</label>
-			<div class="col-sm-4" id="proValueDiv">
+			<div class="col-sm-6" id="proValueDiv">
 
 				<c:forEach var="property" items="${properties}" varStatus="status">
 					<div class="col-sm-12" id="${property.id}">
@@ -311,7 +324,7 @@
 		</div>
 		<div class="form-group">
 			<label for="independentPrice" class="col-sm-2 control-label">属性组合价格设定(元)</label>
-			<div class="col-sm-4" id="proValuePriceDiv">
+			<div class="col-sm-6" id="proValuePriceDiv">
 				<c:forEach var="packagePrice" items="${packagePrices}"
 					varStatus="packagePriceStatus">
 					<div class="col-sm-12" id="${packagePrice.propertyValueId}">
@@ -350,7 +363,7 @@
 		</div>
 		<div class="form-group">
 			<label for="independentPrice" class="col-sm-2 control-label"></label>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<%@ include file="/WEB-INF/include/easyui-buttonForm.jsp"%>
 
 			</div>
@@ -603,6 +616,7 @@
 				}
 			}
 
+			$('#collapsePrImages').collapse('hide');
 		});
 
 		//回填价格函数
@@ -736,7 +750,8 @@
 
 		//修改属性值。
 		function modifyPropertyValue(pValueId) {
-			$('#addPropertyBtn').click();
+			//$('#addPropertyBtn').click();
+			$('#propertyModal').modal('show')
 			setBtnStatus(true, false);
 
 			var flag = -1;

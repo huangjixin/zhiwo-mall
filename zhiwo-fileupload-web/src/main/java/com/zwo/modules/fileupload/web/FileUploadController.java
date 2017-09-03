@@ -15,6 +15,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
@@ -29,6 +31,7 @@ import com.alibaba.fastjson.JSON;
 import com.zwo.modules.cms.service.ICmsAssetsService;
 import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.service.IPrImageService;
+import com.zwo.modules.system.domain.TbUser;
 import com.zwo.modules.system.domain.TbUserAssets;
 import com.zwo.modules.system.domain.TbUserAssetsCriteria;
 import com.zwo.modules.system.service.ITbUserAssetsService;
@@ -166,6 +169,14 @@ public class FileUploadController {
 			@RequestParam(value = "imgHeight", required = false)  String imgHeight,
 			String HTTP_CONTENT_DISPOSITION, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse, Model uiModel) {
+		TbUser tbuser = null;
+		if (SecurityUtils.getSecurityManager() != null) {
+			Subject currentUser = SecurityUtils.getSubject();
+			if (currentUser != null) {
+				tbuser = (TbUser) currentUser.getSession().getAttribute("user");
+			}
+		}
+		
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<PrImage> proAssets = new ArrayList<PrImage>();
 		Calendar date = Calendar.getInstance();
@@ -198,6 +209,9 @@ public class FileUploadController {
 				}
 				
 				PrImage assets = new PrImage();
+				if(tbuser!=null){
+					assets.setUserId(tbuser.getId());
+				}
 				assets.setIsDefault(false);
 				assets.setProductId(productId);
 				assets.setName(name);
@@ -231,6 +245,14 @@ public class FileUploadController {
 			@RequestParam(value = "file", required = false) CommonsMultipartFile[] files,
 			String HTTP_CONTENT_DISPOSITION, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse, Model uiModel) {
+		TbUser tbuser = null;
+		if (SecurityUtils.getSecurityManager() != null) {
+			Subject currentUser = SecurityUtils.getSubject();
+			if (currentUser != null) {
+				tbuser = (TbUser) currentUser.getSession().getAttribute("user");
+			}
+		}
+		
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<PrImage> proAssets = new ArrayList<PrImage>();
 		Calendar date = Calendar.getInstance();
@@ -263,6 +285,9 @@ public class FileUploadController {
 				}
 				
 				PrImage assets = new PrImage();
+				if(tbuser!=null){
+					assets.setUserId(tbuser.getId());
+				}
 				assets.setProductId(productId);
 				//true为轮播图。
 				assets.setIsDefault(true);

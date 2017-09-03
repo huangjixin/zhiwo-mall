@@ -156,7 +156,7 @@
 						class="checkbox-inline">进店逛逛</label>
 				</div>
 				<div class="clearfix"></div>
-				<button id="addPropertyBtn" onClick="setBtnStatus(false,true);"
+				<button id="addPropertyBtn"
 					type="button" class="btn btn-success fileinput-button"
 					data-toggle="modal" data-target="#swiperImageModal">
 					<i class="fa fa-plus"></i>购买

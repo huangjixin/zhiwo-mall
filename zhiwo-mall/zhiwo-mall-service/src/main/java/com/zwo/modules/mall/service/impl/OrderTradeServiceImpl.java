@@ -345,4 +345,19 @@ public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements IO
 		return pageInfo;
 	}
 
+	/*SELECT 
+    ot.*
+FROM
+    order_trade ot
+        LEFT JOIN
+    pr_product product ON ot.PRODUCT_ID = product.id
+        LEFT JOIN
+    tb_user user ON product.USER_ID = user.ID
+        LEFT JOIN
+    tb_user_group userGroup ON user.USERGROUP_ID = userGroup.id
+    left join 
+    pr_supplier supplier on product.SUPPLIER_ID = supplier.id
+WHERE
+    userGroup.NAME = '管理员组'
+    order by product.id desc;*/
 }

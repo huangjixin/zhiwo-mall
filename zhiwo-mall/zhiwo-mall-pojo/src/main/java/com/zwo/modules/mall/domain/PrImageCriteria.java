@@ -1225,6 +1225,76 @@ public class PrImageCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andUserIdIsNull() {
+            addCriterion("USER_ID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdIsNotNull() {
+            addCriterion("USER_ID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdEqualTo(String value) {
+            addCriterion("USER_ID =", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdNotEqualTo(String value) {
+            addCriterion("USER_ID <>", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdGreaterThan(String value) {
+            addCriterion("USER_ID >", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdGreaterThanOrEqualTo(String value) {
+            addCriterion("USER_ID >=", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdLessThan(String value) {
+            addCriterion("USER_ID <", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdLessThanOrEqualTo(String value) {
+            addCriterion("USER_ID <=", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdLike(String value) {
+            addCriterion("USER_ID like", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdNotLike(String value) {
+            addCriterion("USER_ID not like", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdIn(List<String> values) {
+            addCriterion("USER_ID in", values, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdNotIn(List<String> values) {
+            addCriterion("USER_ID not in", values, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdBetween(String value1, String value2) {
+            addCriterion("USER_ID between", value1, value2, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdNotBetween(String value1, String value2) {
+            addCriterion("USER_ID not between", value1, value2, "userId");
+            return (Criteria) this;
+        }
+
         public Criteria andIdLikeInsensitive(String value) {
             addCriterion("upper(ID) like", value.toUpperCase(), "id");
             return (Criteria) this;
@@ -1272,6 +1342,11 @@ public class PrImageCriteria {
 
         public Criteria andLocationLikeInsensitive(String value) {
             addCriterion("upper(LOCATION) like", value.toUpperCase(), "location");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdLikeInsensitive(String value) {
+            addCriterion("upper(USER_ID) like", value.toUpperCase(), "userId");
             return (Criteria) this;
         }
     }
