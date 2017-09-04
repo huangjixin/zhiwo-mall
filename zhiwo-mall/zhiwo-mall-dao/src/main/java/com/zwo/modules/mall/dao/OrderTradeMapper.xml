@@ -632,4 +632,23 @@
       TRANSPORT_FEE = #{transportFee,jdbcType=DOUBLE}
     where ID = #{id,jdbcType=VARCHAR}
   </update>
+  
+  
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    	ot.*
+	FROM
+    order_trade ot
+        LEFT JOIN
+    pr_product product ON ot.PRODUCT_ID = product.id
+        LEFT JOIN
+    tb_user user ON product.USER_ID = user.ID
+    where 1=1 
+    <if test="userId != null" >
+    	and user.id = #{userId}
+    </if>
+    <if test="status != null" >
+    	and ot.status = #{status}
+    </if>
+  </select>
 </mapper>

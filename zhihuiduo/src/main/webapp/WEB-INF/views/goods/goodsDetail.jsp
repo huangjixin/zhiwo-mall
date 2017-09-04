@@ -228,7 +228,7 @@
 				</div>
 				<div class="media" style="position: absolute; top: -50px;">
 					<a class="media-left" href="#"> <img id="propertyValueImg"
-						class="media-object"
+						class="media-object img-rounded"
 						src="${ctx}/images/goods/user_13926205227/product_12365/02f8bc94495c5f6dde5e20f6e3e206c4.jpeg@750w_1l_50Q"
 						width="100px;" height="100px;">
 					</a>
@@ -237,7 +237,7 @@
 						<h4 class="media-heading" style="color: red; font-size: 1.8rem;">
 							<i class="fa fa-jpy"></i><label id="priceLabel">88</label>
 						</h4>
-						<label style="font-size: 1.2rem;">请选择属性</label>
+						<label style="font-size: 1.2rem;" id="propertyValueLabel">请选择属性</label>
 					</div>
 				</div>
 				<div style="height: 80px;"></div>
@@ -292,6 +292,7 @@
 			</div>
 		</div>
 	</div>
+    <%@ include file="/WEB-INF/member-include/bottomMenu.jsp"%>
 	<script>
 		var propertiesString = '${propertiesString}';
 		var propertyValuesString = '${propertyValuesString}';
@@ -331,6 +332,15 @@
 				  }
 				}
 				input.val(oldValue);
+			  });
+			  
+			  //单独开团
+			  $("#independBuyBtn").bind("click",function(){
+				   $("#swiperImageModal").modal('show');
+			  });
+			  //拼团开团
+			  $("#groupBuyBtn").bind("click",function(){
+				  $("#swiperImageModal").modal('show');
 			  });
 		});
 					
@@ -450,6 +460,11 @@
 				$('#priceLabel').html(groupvalue);
 				console.log("团购价是："+groupvalue);
 			}
+			var proValues = "已选 ";
+			for (var i = 0; i < selectedPValue.length; i++) {
+				proValues += selectedPValue[i].name+"  ";
+			}
+			$('#propertyValueLabel').html(proValues);
 		}
 	
 		var swiper = new Swiper('.swiper-container');

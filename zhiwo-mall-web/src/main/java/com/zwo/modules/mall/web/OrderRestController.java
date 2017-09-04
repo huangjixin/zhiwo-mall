@@ -108,4 +108,23 @@ public class OrderRestController extends BaseController<OrderTrade> {
 		pageInfo = orderService.selectByPageInfo(orderCriteria, pageInfo);
 		return super.setPage(pageInfo);
 	}
+	
+	@RequestMapping(value = "myOrder")
+	@ResponseBody
+	public DatagridPage<OrderTrade> myOrder(@ModelAttribute PageInfo<OrderTrade> pageInfo, @ModelAttribute OrderTrade order, Model uiModel,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		
+		super.select(pageInfo, uiModel, httpServletRequest, httpServletResponse);
+		
+		OrderTradeCriteria orderCriteria = null;
+		orderCriteria = new OrderTradeCriteria();
+		OrderTradeCriteria.Criteria criteria = orderCriteria.createCriteria();
+		orderCriteria.setOrderByClause("id desc");
+		/*if (null != order.getName() && !"".equals(order.getName())) {
+			criteria.andNameLike("%" + order.getName() + "%");
+		}*/
+		
+		pageInfo = orderService.selectByPageInfo(orderCriteria, pageInfo);
+		return super.setPage(pageInfo);
+	}
 }

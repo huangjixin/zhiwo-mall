@@ -131,9 +131,11 @@ public class ProductController extends BaseController<PrProduct> {
 		uiModel.addAttribute("propertyValues",productPropertyValues);
 		uiModel.addAttribute("propertyValuesString",JSONArray.toJSONString(productPropertyValues));
 		
+		//商品属性图。
 		List<PrImage> list = productService.selectByProductId(id,false);
 		uiModel.addAttribute("prImages", list);
 		
+		//轮播图
 		List<PrImage> listSwipers = productService.selectByProductId(id,true);
 		uiModel.addAttribute("swiperImages", listSwipers);
 		

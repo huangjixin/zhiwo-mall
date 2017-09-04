@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>订单列表</title>
+<title>我的订单列表</title>
 <%@ include file="/WEB-INF/include/easyui-css.jsp"%>
 <%@ include file="/WEB-INF/include/easyui-js.jsp"%>
 </head>

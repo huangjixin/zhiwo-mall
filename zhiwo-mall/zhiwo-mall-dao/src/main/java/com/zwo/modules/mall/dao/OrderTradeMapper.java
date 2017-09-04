@@ -93,4 +93,12 @@ public interface OrderTradeMapper {
      * @mbggenerated Thu Aug 10 16:35:55 CST 2017
      */
     int updateByPrimaryKey(OrderTrade record);
+    
+    /**
+     * 根据用户ID和订单状态查询订单。
+     * @param userId
+     * @param status
+     * @return
+     */
+    List<OrderTrade> selectByUserId(@Param("userId") String userId,@Param("status") String status);
 }

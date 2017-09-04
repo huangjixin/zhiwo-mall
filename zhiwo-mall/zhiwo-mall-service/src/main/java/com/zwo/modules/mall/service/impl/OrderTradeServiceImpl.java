@@ -198,7 +198,7 @@ public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements IO
 	@Override
 	@Transactional(readOnly = true)
 	public List<OrderTrade> selectByExample(Object example) {
-		return null;
+		return orderTradeMapper.selectByExample((OrderTradeCriteria) example);
 	}
 
 	/*
@@ -342,6 +342,23 @@ public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements IO
 		pageInfo.setStartRow(page.getStartRow());
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页结束");
+		return pageInfo;
+	}
+
+	@Override
+	public PageInfo<OrderTrade> selectByUserId(String userId, String status, PageInfo<OrderTrade> pageInfo) {
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询我的订单开始");
+		PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+		List<OrderTrade> list = orderTradeMapper.selectByUserId(userId, status);
+		PageInfo<OrderTrade> page = new PageInfo<OrderTrade>( list);
+		pageInfo.setList(list);
+		pageInfo.setTotal(page.getTotal());
+		pageInfo.setEndRow(page.getEndRow());
+		pageInfo.setStartRow(page.getStartRow());
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询我的订单结束");
 		return pageInfo;
 	}
 
