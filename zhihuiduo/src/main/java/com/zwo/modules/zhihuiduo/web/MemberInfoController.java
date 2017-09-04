@@ -51,7 +51,7 @@ public class MemberInfoController extends BaseController<TbUser> {
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = {"info"})
-	@RequiresAuthentication
+//	@RequiresAuthentication
 	public String getMemInfo(Model uiModel,HttpServletRequest httpServletRequest) {
 		String memberInfoString = null; // 会员的结果存储为JSON字符串
 		MemberInfo memberInfo = null;   //会员信息。
@@ -135,7 +135,7 @@ public class MemberInfoController extends BaseController<TbUser> {
 		return basePath+"info";
 	}
 	
-	@RequiresAuthentication 
+//	@RequiresAuthentication 
 	@RequestMapping(value = {"address"})
 	@ResponseBody
 	public List<MemberAddress> selectAddress(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {

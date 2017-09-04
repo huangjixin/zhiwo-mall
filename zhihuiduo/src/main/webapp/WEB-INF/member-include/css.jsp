@@ -86,10 +86,10 @@
 .menu {
 	position: relative;
 	float: left;
-	
-	height: 40px;
-	line-height: 40px;
-	background: #fff;
+	font-weight:normal;
+	height: 35px;
+	line-height: 35px;
+	background: #ffffff;
 	border-right: 0px solid #ebebeb;
 	box-sizing: border-box;
 	-webkit-box-sizing: border-box;
@@ -124,22 +124,24 @@
 
 .new-sub li a {
 	display: block;
-	height: 50px;
-	line-height: 50px;
+	height: 40px;
+	line-height: 40px;
 	text-align: left;
 	background: #fff;
 	color: #333;
 	border: none;
 	text-align: center;
-	font-size: 16px;
+	font-size: 1.5rem;
 }
 
 .bt-name {
-	font-size: 16px;
+	font-size: 1.5rem;
+	font-weight:normal;
 	color: #A0A0A0;
 }
 
 .bt-name a {
+	font-weight:normal;
 	display: block;
 	font-size: 16px;
 	color: #A0A0A0;
