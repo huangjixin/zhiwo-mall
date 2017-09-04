@@ -5,8 +5,11 @@
 <html>
 <head>
 <title>智惠多商品云购</title>
+<link href="${ctx}/css/bootstrap-spinner.css" rel="stylesheet" type="text/css">
 <%@ include file="/WEB-INF/member-include/css.jsp"%>
 <%@ include file="/WEB-INF/member-include/js.jsp"%>
+<script type="text/javascript" src="${ctx}/js/jquery.spinner.min.js"></script>
+
 <style>
 
 .container-fluid {
@@ -99,9 +102,15 @@
 	margin: 0px;
 	bottom: 0;
 }
+
 </style>
 </head>
 <body>
+	 <c:forEach var="packagePrice" items="${packagePrices}"
+					varStatus="packagePriceStatus">
+						<input id="${packagePrice.propertyValueId}_GroupInput" value="${packagePrice.gourpPrice}" type="hidden"> 
+                        <input id="${packagePrice.propertyValueId}_IndependInput" value="${packagePrice.independentPrice}"  type="hidden">
+				</c:forEach>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="swiper-container">
@@ -232,7 +241,7 @@
 					</div>
 				</div>
 				<div style="height: 80px;"></div>
-				<c:forEach var="property" items="${properties}" varStatus="status">
+				<c:forEach var="property" items="${properties}">
 					<c:set value="false" var="flag" />
 					<c:forEach var="pValue" items="${propertyValues}">
 						<c:if test="${property.id==pValue.propertyId}">
@@ -242,65 +251,208 @@
 					<c:if test="${flag==true}">
 						<div class="form-group">
 							<div class="col-sm-9">
-								<label for="propertyValue" class="col-sm-1 control-label"
-									style="font-size: 1.2rem;">${property.name}</label>
-								<c:forEach var="pValue" items="${propertyValues}">
-									<c:if test="${property.id==pValue.propertyId}">
-										<c:set value="true" var="flag" />
-										<label name="colorPro" class="ProperyValue">${pValue.name}</label>
+                            	<label for="propertyValue" class="col-sm-1 control-label"
+											style="font-size: 1.2rem;">${property.name}</label>
+								
+								<c:forEach var="pValue" items="${propertyValues}"  varStatus="status">
+                                	<c:if test="${property.id==pValue.propertyId}">
+										<label id="${pValue.id}" name="${property.code}" class="ProperyValue" onClick="settingProperyValueCla('${property.code}', '${pValue.id}')">${pValue.name}</label>
 									</c:if>
 								</c:forEach>
 							</div>
 						</div>
 					</c:if>
-
 				</c:forEach>
+                <div class="form-group">
+                		<div class="col-sm-9">
+						<label class="col-sm-1 control-label" style="font-size: 1.2rem;">数量</label>
+                        <div class="input-group number-spinner col-md-4">
+                                        <span class="input-group-btn" style="color:white;" >
+                                            <a class="btn btn-danger" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></a>
+                                        </span>
+                                        <input type="text" disabled name="numberCount" id="numberCount" style="height:28px;" class="form-control text-center" value="1" max=9999 min=1>
+                                        <span class="input-group-btn" style="color:white;" >
+                                            <a class="btn btn-info" data-dir="up"><span class="glyphicon glyphicon-plus"></span></a>
+                                        </span>
+                           </div>       
+                	 </div>
+				</div>
+                
 
-				<!--<div class="form-group">
-					<label for="propertyValue" class="col-sm-1 control-label"
-						style="font-size: 1.2rem;">颜色</label>
-					<div class="col-sm-9">
-						<label name="colorPro" class="activeProperyValue">红色</label> <label
-							name="colorPro" id="blackPro" class="ProperyValue"
-							onClick="settingProperyValueCla('colorPro','blackPro')">黑色</label>
-						<label name="colorPro" class="ProperyValue">蓝白相间</label> <label
-							name="colorPro" class="ProperyValue">蓝白相间</label> <label
-							name="colorPro" class="ProperyValue">蓝白相间</label> <label
-							name="colorPro" class="ProperyValue">蓝白相间</label> <label
-							name="colorPro" class="ProperyValue">蓝白相间</label>
-					</div>
-				</div>-->
+              	<div class="modal-body">
+
+				</div>
+				<div class="modal-footer">
+                	
+                </div>
+				
 				<button type="button" class="btn btn-danger"
 					style="width: 100%; margin: 0; position: fixed; bottom: 0; left: 0; right: 0; border-radius: 0px;">
 					确定</button>
-				<!--<div class="modal-header">
-						
-                       
-						<h4 class="modal-title" id="swiperImageModalLabel">轮播设置</h4>
-					</div>-->
-				<div class="modal-body">
-
-
-
-					<!--<div style="height:100px;"></div>-->
-				</div>
-				<div class="modal-footer"></div>
 			</div>
-			<!-- /.modal-content -->
 		</div>
-		<!-- /.modal -->
-
 	</div>
 	<script>
-		var swiper = new Swiper('.swiper-container');
+		var propertiesString = '${propertiesString}';
+		var propertyValuesString = '${propertyValuesString}';
+
+		//保存属性数组
+		var propertyValueArray = [];
+		var selectedPValue=[];
+		//保存属性值数组
+		var proArray = [];
+		
+		$().ready(function() {
+			
+			if (propertiesString != '' || propertiesString != '[]') {
+				proArray = JSON.parse('${propertiesString}');
+			}
+			
+			if (propertyValuesString != '' || propertyValuesString != '[]') {
+				propertyValueArray = JSON.parse('${propertyValuesString}');
+			}
+			
+			// spinner(+-btn to change value) & total to parent input 
+				$(document).on('click', '.number-spinner a', function () {
+					var btn = $(this),
+					input = btn.closest('.number-spinner').find('input'),
+					total = $('#passengers').val(),
+					oldValue = input.val().trim();
+			
+				if (btn.attr('data-dir') == 'up') {
+				  if(oldValue < input.attr('max')){
+					oldValue++;
+					total++;
+				  }
+				} else {
+				  if (oldValue > input.attr('min')) {
+					oldValue--;
+					total--;
+				  }
+				}
+				input.val(oldValue);
+			  });
+		});
+					
+	
 		function settingProperyValueCla(proName, proValueId) {
-			$("[name=colorPro]").removeClass("activeProperyValue");
-			$("[name=colorPro]").addClass("ProperyValue");
-			$('#blackPro').removeClass("ProperyValue");
-			$('#blackPro').addClass("activeProperyValue");
-			//$("[name='"+proName+"']").removeClass("ProperyValue");
-			//$('#'+proValueId+').addClass("activeProperyValue")
+			var obj;
+			for (var i = 0; i < propertyValueArray.length; i++) {
+				if(proValueId == propertyValueArray[i].id){
+					obj = propertyValueArray[i];
+					break;
+				}
+			}
+			
+			//找到属性
+			if(obj){
+				var flag = -1;
+				for (var i = 0; i < selectedPValue.length; i++) {
+					var object = selectedPValue[i];
+					if(object.propertyId == obj.propertyId){
+						flag = i;
+						break;
+					}
+				}
+				if(flag != -1){
+					selectedPValue.splice(flag,1);
+				}
+			}
+			
+			$("[name="+proName+"]").removeClass("activeProperyValue");
+			$("[name="+proName+"]").addClass("ProperyValue");
+			$("#"+proValueId).removeClass("ProperyValue");
+			$("#"+proValueId).addClass("activeProperyValue");
+			
+			for (var j = 0; j < propertyValueArray.length; j++) {
+				var object = propertyValueArray[j];
+				var id = object.id;
+				if (id == proValueId) {
+					var proValueIndex = $.inArray(object, selectedPValue);
+					if (proValueIndex == -1) {
+						selectedPValue.push(object);
+					}
+				}
+			}
+			
+			
+			
+			//打印调试
+			var groupId = "";
+			var groupInputId = "";
+			var groupIdExist = false;
+			
+			if(selectedPValue.length==1){
+				var object = selectedPValue[0];
+				groupId+=object.id+"_GroupInput";
+				if($('#'+groupId).length>0){
+					groupIdExist = true;
+				}
+			}
+			
+			//if(selectedPValue.length==2){
+				for (var i = 0; i < selectedPValue.length; i++) {
+					groupId = "";
+					var object = selectedPValue[i];
+					groupId+=object.id+"_";
+					var temp = groupId;
+					for (var j = 0; j < selectedPValue.length; j++) {
+						temp = groupId;
+						if(object==selectedPValue[j]){
+							continue;
+						}
+						
+						var obj= selectedPValue[j];
+						if(selectedPValue.length==2){
+							temp+=obj.id+"_GroupInput";
+						}else{
+							temp+=obj.id;
+						}
+						
+						if($('#'+temp).length>0){
+							groupIdExist = true;
+							break;
+						}
+						
+						if(selectedPValue.length==3){
+							var temp1 = temp;
+							for (var k = 0; k < selectedPValue.length; k++) {
+								var obj1= selectedPValue[k];
+								if(obj1==object || obj1==obj){
+									continue;
+								}
+								
+								temp1+="_"+obj1.id+"_GroupInput";
+								
+								if($('#'+temp1).length>0){
+									temp=temp1;
+									groupIdExist = true;
+									break;
+								}
+							}
+						}
+						
+						if(groupIdExist == true){
+							groupId = temp;
+							break;
+						}
+					}
+				
+					if(groupIdExist == true){
+						groupId = temp;
+						break;
+					}
+				}
+			//}
+			
+			if(groupIdExist == true){
+				var groupvalue = $('#'+groupId).val();
+				$('#priceLabel').html(groupvalue);
+				console.log("团购价是："+groupvalue);
+			}
 		}
+	
+		var swiper = new Swiper('.swiper-container');
 	</script>
 </body>
 </html>

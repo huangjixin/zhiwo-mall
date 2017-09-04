@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.alibaba.fastjson.JSONArray;
 import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductPackagePrice;
@@ -133,6 +134,7 @@ public class GoodsController extends BaseController<TbUser> {
 			}
 			
 			//商品属性值。
+			uiModel.addAttribute("propertyValuesString",JSONArray.toJSONString(productPropertyValues));
 			 uiModel.addAttribute("propertyValues", productPropertyValues);
 			 uiModel.addAttribute("packagePrices", packagePrices);
 			 
@@ -143,8 +145,10 @@ public class GoodsController extends BaseController<TbUser> {
 		//商品属性。
 		List<PrProductProperty> properties = productPropertyService.listAll();
 		uiModel.addAttribute("properties",properties);
+		uiModel.addAttribute("propertiesString",JSONArray.toJSONString(properties));
 		uiModel.addAttribute("product", product);
 		return basePath+"goodsDetail";
 	}
+	
 	
 }
