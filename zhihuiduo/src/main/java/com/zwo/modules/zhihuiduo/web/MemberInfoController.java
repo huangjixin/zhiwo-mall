@@ -263,9 +263,9 @@ public class MemberInfoController extends BaseController<TbUser> {
 				MemberAddressCriteria addressCriteria = new MemberAddressCriteria();
 				addressCriteria.createCriteria().andMemberIdEqualTo(member.getId());
 				MemberAddress record = new MemberAddress();
-//				record.setIsDefault(false);
+				record.setIsDefault("0");
 				addressService.updateByExampleSelective(record, addressCriteria);
-//				address.setIsDefault(true);
+				address.setIsDefault("1");
 				int result = addressService.updateByPrimaryKeySelective(address);
 				return result+"";
 			}

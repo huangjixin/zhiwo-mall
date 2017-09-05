@@ -259,7 +259,7 @@ $option.css({ "background-color": "#DEDEDE" });
                         <hr class="hr1"/>
                         <div class="pull-left">
                         	<div class="checkbox">
-                                <label>
+                                <label onClick="setDefaultMemberAddress('0b7e6a2a082e4ba4ade09fc245d95c2a')">
                                   <input type="checkbox">设为默认
                                 </label>
                               </div>
@@ -362,6 +362,25 @@ $option.css({ "background-color": "#DEDEDE" });
     </div><!-- /.modal -->
 </div>			
 <script type="text/javascript">
+	function setDefaultMemberAddress(addressId){
+		var url = "${ctx}/memberInfo/setDefaultMemberAddress";
+		var data = {};
+		data.id = addressId;
+		$.ajax({
+			 type: 'POST',
+			 url: url ,
+			data: data ,
+		    success: function (data){
+				if(data == '1'){
+					alert('设置成功');
+					location.reload();
+				}
+				
+			},
+		 	dataType: 'json'
+		});
+	}
+
 	function create(){
 		document.form.action="${ctx}/memberInfo/createMemberAddress";
 		$("#name").val('');
@@ -418,7 +437,9 @@ $option.css({ "background-color": "#DEDEDE" });
                             max: 12,
                             message: '电话长度应该为11位'
                         },digits:{
-							message: '请输入正确数字'
+							message: '请输入整数'
+						},integer:{
+							message: '请输入整数'
 						}
                     }
                 },
