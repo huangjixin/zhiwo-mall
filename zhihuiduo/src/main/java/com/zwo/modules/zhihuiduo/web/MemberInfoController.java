@@ -197,43 +197,42 @@ public class MemberInfoController extends BaseController<TbUser> {
 	}
 
 	@RequestMapping(value = { "createMemberAddress" })
-	@ResponseBody
+//	@ResponseBody
 	public String createAddress(@ModelAttribute MemberAddress address, BindingResult bindingResult, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
 			Member member = (Member) subject.getSession().getAttribute("member");
 			if (member != null) {
-				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-				address.setId(uuid);
 				address.setMemberId(member.getId());
-				int result = addressService.insertSelective(address);
-				return result+"";
 			}
 		} else {
 
 		}
-		return "0";
+		String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+		address.setId(uuid);
+//		
+		int result = addressService.insertSelective(address);
+		
+		return "redirect:/memberInfo/memberAddress";
 	}
 	
+	
 	@RequestMapping(value = { "updateMemberAddress" })
-	@ResponseBody
 	public String updateAddress(@ModelAttribute MemberAddress address, BindingResult bindingResult, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
 			Member member = (Member) subject.getSession().getAttribute("member");
 			if (member != null) {
-				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-				address.setId(uuid);
 				address.setMemberId(member.getId());
-				int result = addressService.updateByPrimaryKeySelective(address);
-				return result+"";
 			}
 		} else {
 			
 		}
-		return "0";
+		int result = addressService.updateByPrimaryKeySelective(address);
+		
+		return "redirect:/memberInfo/memberAddress";
 	}
 	
 	@RequestMapping(value = { "deleteMemberAddress" })
@@ -264,9 +263,9 @@ public class MemberInfoController extends BaseController<TbUser> {
 				MemberAddressCriteria addressCriteria = new MemberAddressCriteria();
 				addressCriteria.createCriteria().andMemberIdEqualTo(member.getId());
 				MemberAddress record = new MemberAddress();
-				record.setIsDefault(false);
+//				record.setIsDefault(false);
 				addressService.updateByExampleSelective(record, addressCriteria);
-				address.setIsDefault(true);
+//				address.setIsDefault(true);
 				int result = addressService.updateByPrimaryKeySelective(address);
 				return result+"";
 			}

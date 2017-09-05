@@ -1,43 +1,43 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zwo.modules.member.dao.MemberAddressMapper" >
-  <resultMap id="BaseResultMap" type="com.zwo.modules.member.domain.MemberAddress" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zwo.modules.member.dao.MemberAddressMapper">
+  <resultMap id="BaseResultMap" type="com.zwo.modules.member.domain.MemberAddress">
     <!--
       WARNING - @mbg.generated
     -->
-    <result column="ID" property="id" jdbcType="VARCHAR" />
-    <result column="PROVINCE" property="province" jdbcType="VARCHAR" />
-    <result column="CITY" property="city" jdbcType="VARCHAR" />
-    <result column="AREA" property="area" jdbcType="VARCHAR" />
-    <result column="NAME" property="name" jdbcType="VARCHAR" />
-    <result column="MOBIL_PHONE" property="mobilPhone" jdbcType="VARCHAR" />
-    <result column="DISABLE" property="disable" jdbcType="BIT" />
-    <result column="STREET" property="street" jdbcType="VARCHAR" />
-    <result column="MEMBER_ID" property="memberId" jdbcType="VARCHAR" />
-    <result column="IS_DEFAULT" property="isDefault" jdbcType="BIT" />
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="PROVINCE" jdbcType="VARCHAR" property="province" />
+    <result column="CITY" jdbcType="VARCHAR" property="city" />
+    <result column="AREA" jdbcType="VARCHAR" property="area" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="MOBIL_PHONE" jdbcType="VARCHAR" property="mobilPhone" />
+    <result column="STREET" jdbcType="VARCHAR" property="street" />
+    <result column="MEMBER_ID" jdbcType="VARCHAR" property="memberId" />
+    <result column="IS_DEFAULT" jdbcType="VARCHAR" property="isDefault" />
+    <result column="DISABLE" jdbcType="VARCHAR" property="disable" />
   </resultMap>
-  <sql id="Example_Where_Clause" >
+  <sql id="Example_Where_Clause">
     <!--
       WARNING - @mbg.generated
     -->
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -48,28 +48,28 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Update_By_Example_Where_Clause" >
+  <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - @mbg.generated
     -->
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -80,11 +80,11 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Base_Column_List" >
+  <sql id="Base_Column_List">
     <!--
       WARNING - @mbg.generated
     -->
-    ID, PROVINCE, CITY, AREA, NAME, MOBIL_PHONE, DISABLE, STREET, MEMBER_ID, IS_DEFAULT
+    ID, PROVINCE, CITY, AREA, NAME, MOBIL_PHONE, STREET, MEMBER_ID, IS_DEFAULT, DISABLE
   </sql>
   
 </mapper>

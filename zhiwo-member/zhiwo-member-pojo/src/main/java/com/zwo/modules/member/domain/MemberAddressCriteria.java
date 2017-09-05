@@ -395,62 +395,62 @@ public class MemberAddressCriteria {
         }
 
         public Criteria andNameEqualTo(String value) {
-            addCriterion("NAME =", value, "email");
+            addCriterion("NAME =", value, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameNotEqualTo(String value) {
-            addCriterion("NAME <>", value, "email");
+            addCriterion("NAME <>", value, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameGreaterThan(String value) {
-            addCriterion("NAME >", value, "email");
+            addCriterion("NAME >", value, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameGreaterThanOrEqualTo(String value) {
-            addCriterion("NAME >=", value, "email");
+            addCriterion("NAME >=", value, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameLessThan(String value) {
-            addCriterion("NAME <", value, "email");
+            addCriterion("NAME <", value, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameLessThanOrEqualTo(String value) {
-            addCriterion("NAME <=", value, "email");
+            addCriterion("NAME <=", value, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameLike(String value) {
-            addCriterion("NAME like", value, "email");
+            addCriterion("NAME like", value, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameNotLike(String value) {
-            addCriterion("NAME not like", value, "email");
+            addCriterion("NAME not like", value, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameIn(List<String> values) {
-            addCriterion("NAME in", values, "email");
+            addCriterion("NAME in", values, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameNotIn(List<String> values) {
-            addCriterion("NAME not in", values, "email");
+            addCriterion("NAME not in", values, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameBetween(String value1, String value2) {
-            addCriterion("NAME between", value1, value2, "email");
+            addCriterion("NAME between", value1, value2, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameNotBetween(String value1, String value2) {
-            addCriterion("NAME not between", value1, value2, "email");
+            addCriterion("NAME not between", value1, value2, "name");
             return (Criteria) this;
         }
 
@@ -521,66 +521,6 @@ public class MemberAddressCriteria {
 
         public Criteria andMobilPhoneNotBetween(String value1, String value2) {
             addCriterion("MOBIL_PHONE not between", value1, value2, "mobilPhone");
-            return (Criteria) this;
-        }
-
-        public Criteria andDisableIsNull() {
-            addCriterion("DISABLE is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDisableIsNotNull() {
-            addCriterion("DISABLE is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDisableEqualTo(Boolean value) {
-            addCriterion("DISABLE =", value, "disable");
-            return (Criteria) this;
-        }
-
-        public Criteria andDisableNotEqualTo(Boolean value) {
-            addCriterion("DISABLE <>", value, "disable");
-            return (Criteria) this;
-        }
-
-        public Criteria andDisableGreaterThan(Boolean value) {
-            addCriterion("DISABLE >", value, "disable");
-            return (Criteria) this;
-        }
-
-        public Criteria andDisableGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("DISABLE >=", value, "disable");
-            return (Criteria) this;
-        }
-
-        public Criteria andDisableLessThan(Boolean value) {
-            addCriterion("DISABLE <", value, "disable");
-            return (Criteria) this;
-        }
-
-        public Criteria andDisableLessThanOrEqualTo(Boolean value) {
-            addCriterion("DISABLE <=", value, "disable");
-            return (Criteria) this;
-        }
-
-        public Criteria andDisableIn(List<Boolean> values) {
-            addCriterion("DISABLE in", values, "disable");
-            return (Criteria) this;
-        }
-
-        public Criteria andDisableNotIn(List<Boolean> values) {
-            addCriterion("DISABLE not in", values, "disable");
-            return (Criteria) this;
-        }
-
-        public Criteria andDisableBetween(Boolean value1, Boolean value2) {
-            addCriterion("DISABLE between", value1, value2, "disable");
-            return (Criteria) this;
-        }
-
-        public Criteria andDisableNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("DISABLE not between", value1, value2, "disable");
             return (Criteria) this;
         }
 
@@ -734,53 +674,133 @@ public class MemberAddressCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultEqualTo(Boolean value) {
+        public Criteria andIsDefaultEqualTo(String value) {
             addCriterion("IS_DEFAULT =", value, "isDefault");
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultNotEqualTo(Boolean value) {
+        public Criteria andIsDefaultNotEqualTo(String value) {
             addCriterion("IS_DEFAULT <>", value, "isDefault");
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultGreaterThan(Boolean value) {
+        public Criteria andIsDefaultGreaterThan(String value) {
             addCriterion("IS_DEFAULT >", value, "isDefault");
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andIsDefaultGreaterThanOrEqualTo(String value) {
             addCriterion("IS_DEFAULT >=", value, "isDefault");
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultLessThan(Boolean value) {
+        public Criteria andIsDefaultLessThan(String value) {
             addCriterion("IS_DEFAULT <", value, "isDefault");
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultLessThanOrEqualTo(Boolean value) {
+        public Criteria andIsDefaultLessThanOrEqualTo(String value) {
             addCriterion("IS_DEFAULT <=", value, "isDefault");
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultIn(List<Boolean> values) {
+        public Criteria andIsDefaultLike(String value) {
+            addCriterion("IS_DEFAULT like", value, "isDefault");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDefaultNotLike(String value) {
+            addCriterion("IS_DEFAULT not like", value, "isDefault");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDefaultIn(List<String> values) {
             addCriterion("IS_DEFAULT in", values, "isDefault");
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultNotIn(List<Boolean> values) {
+        public Criteria andIsDefaultNotIn(List<String> values) {
             addCriterion("IS_DEFAULT not in", values, "isDefault");
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultBetween(Boolean value1, Boolean value2) {
+        public Criteria andIsDefaultBetween(String value1, String value2) {
             addCriterion("IS_DEFAULT between", value1, value2, "isDefault");
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andIsDefaultNotBetween(String value1, String value2) {
             addCriterion("IS_DEFAULT not between", value1, value2, "isDefault");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableIsNull() {
+            addCriterion("DISABLE is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableIsNotNull() {
+            addCriterion("DISABLE is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableEqualTo(String value) {
+            addCriterion("DISABLE =", value, "disable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableNotEqualTo(String value) {
+            addCriterion("DISABLE <>", value, "disable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableGreaterThan(String value) {
+            addCriterion("DISABLE >", value, "disable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableGreaterThanOrEqualTo(String value) {
+            addCriterion("DISABLE >=", value, "disable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableLessThan(String value) {
+            addCriterion("DISABLE <", value, "disable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableLessThanOrEqualTo(String value) {
+            addCriterion("DISABLE <=", value, "disable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableLike(String value) {
+            addCriterion("DISABLE like", value, "disable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableNotLike(String value) {
+            addCriterion("DISABLE not like", value, "disable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableIn(List<String> values) {
+            addCriterion("DISABLE in", values, "disable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableNotIn(List<String> values) {
+            addCriterion("DISABLE not in", values, "disable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableBetween(String value1, String value2) {
+            addCriterion("DISABLE between", value1, value2, "disable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableNotBetween(String value1, String value2) {
+            addCriterion("DISABLE not between", value1, value2, "disable");
             return (Criteria) this;
         }
 
@@ -805,7 +825,7 @@ public class MemberAddressCriteria {
         }
 
         public Criteria andNameLikeInsensitive(String value) {
-            addCriterion("upper(NAME) like", value.toUpperCase(), "email");
+            addCriterion("upper(NAME) like", value.toUpperCase(), "name");
             return (Criteria) this;
         }
 
@@ -821,6 +841,16 @@ public class MemberAddressCriteria {
 
         public Criteria andMemberIdLikeInsensitive(String value) {
             addCriterion("upper(MEMBER_ID) like", value.toUpperCase(), "memberId");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDefaultLikeInsensitive(String value) {
+            addCriterion("upper(IS_DEFAULT) like", value.toUpperCase(), "isDefault");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableLikeInsensitive(String value) {
+            addCriterion("upper(DISABLE) like", value.toUpperCase(), "disable");
             return (Criteria) this;
         }
     }

@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Table(name = "member_address")
 public class MemberAddress implements Serializable {
+    @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
@@ -29,7 +30,7 @@ public class MemberAddress implements Serializable {
     private String area;
 
     /**
-     * 邮箱
+     * 姓名
      */
     @Column(name = "NAME")
     private String name;
@@ -39,12 +40,6 @@ public class MemberAddress implements Serializable {
      */
     @Column(name = "MOBIL_PHONE")
     private String mobilPhone;
-
-    /**
-     * 是否禁用
-     */
-    @Column(name = "DISABLE")
-    private Boolean disable;
 
     /**
      * 街道
@@ -59,7 +54,10 @@ public class MemberAddress implements Serializable {
      * 是否设置为默认1为是,0为否
      */
     @Column(name = "IS_DEFAULT")
-    private Boolean isDefault;
+    private String isDefault;
+
+    @Column(name = "DISABLE")
+    private String disable;
 
     private static final long serialVersionUID = 1L;
 
@@ -132,18 +130,18 @@ public class MemberAddress implements Serializable {
     }
 
     /**
-     * 获取邮箱
+     * 获取姓名
      *
-     * @return EMAIL - 邮箱
+     * @return NAME - 姓名
      */
     public String getName() {
         return name;
     }
 
     /**
-     * 设置邮箱
+     * 设置姓名
      *
-     * @param email 邮箱
+     * @param name 姓名
      */
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
@@ -165,24 +163,6 @@ public class MemberAddress implements Serializable {
      */
     public void setMobilPhone(String mobilPhone) {
         this.mobilPhone = mobilPhone == null ? null : mobilPhone.trim();
-    }
-
-    /**
-     * 获取是否禁用
-     *
-     * @return DISABLE - 是否禁用
-     */
-    public Boolean getDisable() {
-        return disable;
-    }
-
-    /**
-     * 设置是否禁用
-     *
-     * @param disable 是否禁用
-     */
-    public void setDisable(Boolean disable) {
-        this.disable = disable;
     }
 
     /**
@@ -222,7 +202,7 @@ public class MemberAddress implements Serializable {
      *
      * @return IS_DEFAULT - 是否设置为默认1为是,0为否
      */
-    public Boolean getIsDefault() {
+    public String getIsDefault() {
         return isDefault;
     }
 
@@ -231,7 +211,21 @@ public class MemberAddress implements Serializable {
      *
      * @param isDefault 是否设置为默认1为是,0为否
      */
-    public void setIsDefault(Boolean isDefault) {
-        this.isDefault = isDefault;
+    public void setIsDefault(String isDefault) {
+        this.isDefault = isDefault == null ? null : isDefault.trim();
+    }
+
+    /**
+     * @return DISABLE
+     */
+    public String getDisable() {
+        return disable;
+    }
+
+    /**
+     * @param disable
+     */
+    public void setDisable(String disable) {
+        this.disable = disable == null ? null : disable.trim();
     }
 }

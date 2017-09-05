@@ -249,12 +249,13 @@ $option.css({ "background-color": "#DEDEDE" });
 </head>
 <body>
 	<div class="page-header" style="text-align:center;font-size:2rem; margin-top:20px; margin-bottom:10px;">
-    <b>收货地址</b>
+    <b>收货地址</b><a href="${ctx}/memberInfo/info"><small>&nbsp;&nbsp;返回</small></a>
 	</div>
     <div class="thumbnail">
                     <div class="caption">
-                        <p>黄记新,13926205227</p>
-                        <p>广东广州天河区天河北路889号信源大厦2018</p>
+                    	<input id="0b7e6a2a082e4ba4ade09fc245d95c2a" type="hidden" value="0b7e6a2a082e4ba4ade09fc245d95c2a"/>
+                        <p><span id="0b7e6a2a082e4ba4ade09fc245d95c2a_name">黄记新</span>,<span id="0b7e6a2a082e4ba4ade09fc245d95c2a_mobilPhone">13926205227</span></p>
+                        <p><span id="0b7e6a2a082e4ba4ade09fc245d95c2a_province">广东</span><span id="0b7e6a2a082e4ba4ade09fc245d95c2a_city">广州</span><span id="0b7e6a2a082e4ba4ade09fc245d95c2a_street">黄埔区茅岗路和贵新街4巷10号</span></p>
                         <hr class="hr1"/>
                         <div class="pull-left">
                         	<div class="checkbox">
@@ -264,7 +265,7 @@ $option.css({ "background-color": "#DEDEDE" });
                               </div>
                         </div>
                         <div class="pull-right" style="font-weight:normal;">
-                        	<span class="label label-info" style="padding-top:5px;">
+                        	<span class="label label-info" style="padding-top:5px;" onClick="edit('0b7e6a2a082e4ba4ade09fc245d95c2a')">
                         	<i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;编辑
                             </span>
                             &nbsp;&nbsp;
@@ -307,7 +308,7 @@ $option.css({ "background-color": "#DEDEDE" });
                 
 				<div style="text-align:center; margin-bottom:20px; margin-top:16px;">
                 <button  class="btn btn-danger"  data-toggle="modal" data-target="#myModal"
-					style="width: 80%; margin: 0;  border-radius: 0px; color:#ffffff;">
+					style="width: 80%; margin: 0;  border-radius: 0px; color:#ffffff;" onClick="create();">
 					新增地址</button>
                 </div>
 	
@@ -318,22 +319,23 @@ $option.css({ "background-color": "#DEDEDE" });
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">添加新收货地址</h4>
+                <h4 class="modal-title" id="myModalLabel">添加/编辑收货地址</h4>
             </div>
+            <form id="form" name="form" method="post" action="${ctx}/memberInfo/createMemberAddress"  role="form">
             <div class="modal-body" style="padding-top:2px;">
-            	<form  role="form">
+            		<input id="id" name="id"  type="hidden"/>
                 	<div class="form-group">
                     <input id="name" name="name"  class="form-control" placeholder="姓名" />
                     </div>
                     <div class="form-group">
-                    <input id="mobilePhone" name="mobilePhone"  class="form-control" placeholder="电话" />
+                    <input id="mobilPhone" name="mobilPhone"  class="form-control" placeholder="电话" />
                     </div>
                     
                     <div class="form-group">
-                    <label for="name">省 份：</label>
-                    <select id="selProvince" onchange="provinceChange();" class="form-control"></select> 
-                    <label for="name">市(区)：</label>
-                    <select id="selCity" class="form-control"></select> 
+                    <label>省 份：</label>
+                    <select id="selProvince" name="province" onchange="provinceChange();" class="form-control"></select> 
+                    <label>市(区)：</label>
+                    <select id="selCity" name="city" class="form-control"></select> 
                     </div>
                      
                     <!--<div class="form-group">
@@ -350,18 +352,90 @@ $option.css({ "background-color": "#DEDEDE" });
                    <div class="form-group">
                     <input id="street" name="street"  class="form-control" placeholder="请填写详细的区和街道地址" />
                     </div>
-                </form>
+                
             </div>
             <div class="modal-footer" style="text-align:center;">
-                <button type="button" class="btn btn-danger" style="width: 80%;color:#ffffff;">保存</button>
+                <button  type="submit"class="btn btn-danger" style="width: 80%;color:#ffffff;">保存</button>
             </div>
+            </form>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>			
 <script type="text/javascript">
-	$(document).ready(function() {
-       $("#ChinaArea").jChinaArea({aspnet:true});
-   });
+	function create(){
+		document.form.action="${ctx}/memberInfo/createMemberAddress";
+		$("#name").val('');
+		$("#mobilPhone").val('');
+		$("#street").val('');
+	}
+	
+	function edit(addressId){
+		document.form.action="${ctx}/memberInfo/updateMemberAddress"; 
+		
+		$('#myModal').modal('show');
+		
+		$("#id").val(addressId);
+		var name = $("#"+addressId+"_name").html();
+		$("#name").val(name);
+		var mobilPhone = $("#"+addressId+"_mobilPhone").html();
+		$("#mobilPhone").val(mobilPhone);
+		var province = $("#"+addressId+"_province").html();
+		$("#selProvince").val(province);
+		$('#selProvince').change();
+		var city = $("#"+addressId+"_city").html();
+		$("#selCity").val(city);
+		var street = $("#"+addressId+"_street").html();
+		$("#street").val(street);
+	}
+	
+	$(function () {
+        $('form').bootstrapValidator({
+　　　　　　　　message: 'This value is not valid',
+            　feedbackIcons: {
+                　　　　　　　　valid: 'glyphicon glyphicon-ok',
+                　　　　　　　　invalid: 'glyphicon glyphicon-remove',
+                　　　　　　　　validating: 'glyphicon glyphicon-refresh'
+            　　　　　　　　   },
+            fields: {
+                name: {
+                    message: '姓名验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '姓名不能为空'
+                        },stringLength: {
+                            min: 1,
+                            max: 18,
+                            message: '长度必须在4到18位之间'
+                        }
+                    }
+                },
+                mobilPhone: {
+                    validators: {
+                        notEmpty: {
+                            message: '电话不能为空'
+                        },stringLength: {
+                            min: 0,
+                            max: 12,
+                            message: '电话长度应该为11位'
+                        },digits:{
+							message: '请输入正确数字'
+						}
+                    }
+                },
+                street: {
+                    validators: {
+                        notEmpty: {
+                            message: '具体街道地址不能为空'
+                        },stringLength: {
+                            min: 0,
+                            max: 60,
+                            message: '字数最多为60个'
+                        }
+                    }
+                }
+            }
+        });
+    });
 </script>
 
 </body>
