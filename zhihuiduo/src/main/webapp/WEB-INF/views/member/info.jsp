@@ -20,9 +20,10 @@
 		<li class="list-group-item">我的优惠券<span class="badge"><i class="fa fa-angle-right" aria-hidden="true"></i></i></span><i class="fa fa-arrow-circle-right" aria-hidden="true"></i></li>
 		<li class="list-group-item">我的拼团<span class="badge"><i class="fa fa-angle-right" aria-hidden="true"></i></i></span></li>
 		<li class="list-group-item">我的竞猜<span class="badge"><i class="fa fa-angle-right" aria-hidden="true"></i></i></span></li>
-		<li class="list-group-item">我的竞猜豆账<span class="badge"><i class="fa fa-angle-right" aria-hidden="true"></i></i></span>户</li>
-		<li class="list-group-item">我的账户<span class="badge"><i class="fa fa-angle-right" aria-hidden="true"></i></i></span></li>
-		<li class="list-group-item">收货地址<span class="badge"><i class="fa fa-angle-right" aria-hidden="true"></i></i></span></li>
+		<a href="${ctx}/memberInfo/memberPlayAccount" class="list-group-item">我的竞猜豆账户<span class="badge"><i class="fa fa-angle-right" aria-hidden="true"></i></i></span></a>
+		<a href="${ctx}/memberInfo/memberAccount" class="list-group-item">我的账户<span class="badge"><i class="fa fa-angle-right" aria-hidden="true"></i></i></span></a>
+		<a href="${ctx}/memberInfo/memberAddress" class="list-group-item">收货地址<span class="badge"><i class="fa fa-angle-right" aria-hidden="true"></i></i></span></a>
+		
 	</ul>
 	<%@ include file="/WEB-INF/member-include/bottomIndex.jsp"%>
 </body>

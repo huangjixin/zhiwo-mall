@@ -18,11 +18,14 @@
 				<i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;
 			</div>
 		</div>
-		<div class="menu" style="width: 27.5%; background-color:#F3ABA7;"  id="independBuyBtn">
+		<div class="menu" style="width: 20%; background-color:#F3ABA7;"  id="independBuyBtn">
 			<div class="bt-name"><label style="color:#ffffff; font-weight:normal;">单独购买</label></div>
 		</div>
-		<div class="menu" style="width: 27.5%; background-color:#E02E24;color:#ffffff;" id="groupBuyBtn">
+		<div class="menu" style="width: 20%; background-color:#E02E24;color:#ffffff;" id="groupBuyBtn">
 			<div class="bt-name"><label style="color:#ffffff; font-weight:normal;">一键开团</label></div>
+		</div>
+		<div class="menu" style="width: 15%; background-color:#E02E24;color:#ffffff;" id="shareBuyBtn">
+			<div class="bt-name"><label style="color:#ffffff; font-weight:normal;">一键分销</label></div>
 		</div>
 	</div>	
 

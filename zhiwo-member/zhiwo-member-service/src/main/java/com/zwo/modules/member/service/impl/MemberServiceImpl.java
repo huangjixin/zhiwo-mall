@@ -191,7 +191,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "Member", key="#id+''")
+	@CacheEvict(value = "Member", key="#id+'_member'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -214,7 +214,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	//@CachePut(value = "Member", key = "#record.id")
+	//@CachePut(value = "Member", key = "#record.id+'_member'")
 	public int insert(Member record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -247,7 +247,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	 */
 
 	@Override
-	//@CachePut(value = "Member", key = "#record.id")
+	//@CachePut(value = "Member", key = "#record.id+'_member'")
 	public int insertSelective(Member record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -312,7 +312,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = "Member")
+	@Cacheable(key = "#id+'_member'", value = "Member")
 	@Transactional(readOnly = true)
 	public Member selectByPrimaryKey(String id) {
 		// 日志记录
@@ -391,7 +391,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "Member", key="#record.id")
+	@CacheEvict(value = "Member", key="#record.id+'_member'")
 	public int updateByPrimaryKeySelective(Member record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -419,7 +419,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "Member", key="#record.id")
+	@CacheEvict(value = "Member", key="#record.id+'_member'")
 	public int updateByPrimaryKey(Member record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
