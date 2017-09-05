@@ -9,7 +9,7 @@
 		<!--menu-->
 		<div class="menu" style="width:33.3%;background-color:#FFFFFF;">
 			<div class="bt-name" style="font-weight:normal;color:#C1C1C1;">
-				<i class="fa fa-star" aria-hidden="true"></i>新品
+				<i class="fa fa-star" aria-hidden="true"></i>趣味竞猜
 			</div>
 		</div>
 		<!--menu-->

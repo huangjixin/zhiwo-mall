@@ -14,6 +14,19 @@
 </style>
 </head>
 <body>
+	<div style="height:140px; background-color:#E02E24;color:#ffffff; padding-left:25px;">
+    	<div style="height:16px;"></div>
+    	<div class="media">
+            <a class="media-left" href="#">
+                <img id="wechatIcon" class="media-object img-circle" src="${ctx}/images/1671169078.jpg" style="width:80px;">
+            </a>
+            <div class="media-body">
+            	<div style="height:25px;"></div>
+                <h4 class="media-heading" id="wechatName">黄记新</h4>
+                已绑定微信
+            </div>
+        </div>
+    </div>
 	<ul class="list-group">
 		<li class="list-group-item">我的足迹<span class="badge"><i class="fa fa-angle-right" aria-hidden="true"></i></i></span><i class="fa fa-arrow-circle-right" aria-hidden="true"></i></li>
 		<li class="list-group-item">我的抽奖<span class="badge"><i class="fa fa-angle-right" aria-hidden="true"></i></i></span><i class="fa fa-arrow-circle-right" aria-hidden="true"></i></li>

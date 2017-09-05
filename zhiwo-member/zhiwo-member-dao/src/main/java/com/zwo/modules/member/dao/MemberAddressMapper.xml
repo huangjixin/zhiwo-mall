@@ -9,7 +9,7 @@
     <result column="PROVINCE" property="province" jdbcType="VARCHAR" />
     <result column="CITY" property="city" jdbcType="VARCHAR" />
     <result column="AREA" property="area" jdbcType="VARCHAR" />
-    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
     <result column="MOBIL_PHONE" property="mobilPhone" jdbcType="VARCHAR" />
     <result column="DISABLE" property="disable" jdbcType="BIT" />
     <result column="STREET" property="street" jdbcType="VARCHAR" />
@@ -84,7 +84,7 @@
     <!--
       WARNING - @mbg.generated
     -->
-    ID, PROVINCE, CITY, AREA, EMAIL, MOBIL_PHONE, DISABLE, STREET, MEMBER_ID, IS_DEFAULT
+    ID, PROVINCE, CITY, AREA, NAME, MOBIL_PHONE, DISABLE, STREET, MEMBER_ID, IS_DEFAULT
   </sql>
   
 </mapper>

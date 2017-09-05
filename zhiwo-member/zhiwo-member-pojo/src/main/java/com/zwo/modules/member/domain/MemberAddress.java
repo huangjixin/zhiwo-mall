@@ -31,8 +31,8 @@ public class MemberAddress implements Serializable {
     /**
      * 邮箱
      */
-    @Column(name = "EMAIL")
-    private String email;
+    @Column(name = "NAME")
+    private String name;
 
     /**
      * 手机
@@ -136,8 +136,8 @@ public class MemberAddress implements Serializable {
      *
      * @return EMAIL - 邮箱
      */
-    public String getEmail() {
-        return email;
+    public String getName() {
+        return name;
     }
 
     /**
@@ -145,8 +145,8 @@ public class MemberAddress implements Serializable {
      *
      * @param email 邮箱
      */
-    public void setEmail(String email) {
-        this.email = email == null ? null : email.trim();
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
     }
 
     /**
