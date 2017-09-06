@@ -285,7 +285,7 @@
 				<div class="modal-footer">
                 	
                 </div>
-				<form action="${ctx}/memberOrder/check" method="post"  onsubmit="checkOut()">
+				<form action="${ctx}/memberOrder/checkOut" method="post"  onsubmit="checkOut()">
 					<input id="packagePriceId" name="packagePriceId" type="hidden"> 
 					<input id="dealPrice" name="dealPrice" type="hidden"> 
 					<input id="buyNum" name="buyNum" type="hidden"> 
@@ -479,7 +479,7 @@
 		//去结算。
 		function checkOut(){
 			if(selectedProperyPackagePrice!=""){
-				var index = selectedProperyPackagePrice.indexOf("");
+				var index = selectedProperyPackagePrice.lastIndexOf("_");
 				if(index!=-1){
 					selectedProperyPackagePrice = selectedProperyPackagePrice.substring(0,index);
 				}

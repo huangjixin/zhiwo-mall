@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.zwo.modules.mall.domain.OrderStatus;
 import com.zwo.modules.mall.domain.OrderTrade;
@@ -56,6 +57,8 @@ public class MemberOrderController extends BaseController<TbUser> {
 
 	private static final String basePath = "views/member/";
 
+	
+	
 	/**
 	 * 跳转到下单页面
 	 * 
@@ -64,13 +67,14 @@ public class MemberOrderController extends BaseController<TbUser> {
 	 * @param httpServletResponse
 	 * @return
 	 */
-	@RequestMapping(value = "check_out")
+	@RequestMapping(value = "checkOut")
 	// @RequiresAuthentication
-	public String check_out(@RequestParam String goodsId,
+	public String checkOut(@RequestParam String goodsId,
 			@RequestParam String shopId, @RequestParam Integer buyNum,
 			@RequestParam String packagePriceId,
 			@RequestParam String proValues,
 			@RequestParam String dealPrice,
+			RedirectAttributes redirectAttributes,
 			Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		PrProduct product = prductService.selectByPrimaryKey(goodsId);
@@ -83,11 +87,13 @@ public class MemberOrderController extends BaseController<TbUser> {
 		orderTrade.setBuyNum(buyNum);
 		if (shop != null) {
 			uiModel.addAttribute("shop",shop);
-			orderTrade.setShopId(shopId);
+			
 		}
 		if (product != null) {
+			orderTrade.setShopId(product.getShopId());
 			uiModel.addAttribute("product",product);
 			orderTrade.setProductId(goodsId);
+//			redirectAttributes.addFlashAttribute("product",product);
 		}
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
@@ -107,7 +113,18 @@ public class MemberOrderController extends BaseController<TbUser> {
 		orderTradeService.insertSelective(orderTrade);
 		
 		uiModel.addAttribute("order", orderTrade);
-		return basePath + "memberOrder";
+//		return basePath +"checkOut";
+		return "redirect:/memberOrder/checkOut";
 	}
-
+	
+	@RequestMapping(value = "check")
+	public String check_out(RedirectAttributes redirectAttributes,
+			Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		PrProduct product = prductService.selectByPrimaryKey("150383670510593");
+		uiModel.addAttribute("product", product);
+		return basePath + "checkOut";
+	}
+	
+	
 }
