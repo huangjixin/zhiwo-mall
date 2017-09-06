@@ -89,8 +89,8 @@
 	position: relative;
 	float: left;
 	font-weight:normal;
-	height: 35px;
-	line-height: 35px;
+	height: 40px;
+	line-height: 40px;
 	background: #ffffff;
 	border-right: 0px solid #ebebeb;
 	box-sizing: border-box;
@@ -126,8 +126,8 @@
 
 .new-sub li a {
 	display: block;
-	height: 40px;
-	line-height: 40px;
+	height: 35px;
+	line-height: 35px;
 	text-align: left;
 	background: #fff;
 	color: #333;
