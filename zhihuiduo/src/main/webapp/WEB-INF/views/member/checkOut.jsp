@@ -60,7 +60,7 @@
     	<div style="float:right;background-color:red; color:#ffffff; width:40%; height:40px; text-align:center;line-height:40px;">
         	<span>立即支付</span>
         </div>
-        <div style="float:right;background-color:#ffffff; color:#151516; width:60%; height:40px; text-align:center;line-height:40px;">
+        <div style="float:right;background-color:#ffffff; color:#151516; width:60%; height:40px; text-align:right;line-height:40px; padding-right:30px;">
         	<span>实际付款：</span>&nbsp;&nbsp;<span style="color:red;font-size:2rem;"><i class="fa fa-jpy"></i>&nbsp;<label style="">88</label></span>
         </div>
     </div>
