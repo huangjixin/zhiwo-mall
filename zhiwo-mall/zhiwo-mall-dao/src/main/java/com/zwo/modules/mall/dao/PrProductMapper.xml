@@ -891,4 +891,11 @@
     pr_product prod ON prod.id = mpd.PRODUCT_ID
     where mem.id= #{memberId}
   </select>
+  
+  <select id="selectByKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from pr_product
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
 </mapper>

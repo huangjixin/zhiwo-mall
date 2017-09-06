@@ -3,8 +3,6 @@
  */
 package com.zwo.modules.member.service;
 
-import java.util.List;
-
 import com.zwo.modules.member.domain.MemberAddress;
 import com.zwotech.modules.core.service.IBaseService;
 
@@ -13,5 +11,5 @@ import com.zwotech.modules.core.service.IBaseService;
  *
  */
 public interface IMemberAddressService extends IBaseService<MemberAddress> {
-	
+	MemberAddress selectDefaultAddressByMemberId(String memberId);
 }

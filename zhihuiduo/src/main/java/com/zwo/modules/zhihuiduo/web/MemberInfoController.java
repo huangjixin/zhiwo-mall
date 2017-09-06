@@ -26,7 +26,6 @@ import com.zwo.modules.member.domain.MemberAddressCriteria;
 import com.zwo.modules.member.domain.MemberPlayAccount;
 import com.zwo.modules.member.service.IMemberAddressService;
 import com.zwo.modules.member.service.IMemberService;
-import com.zwo.modules.system.domain.TbUser;
 import com.zwo.modules.zhihuiduo.dto.MemberInfo;
 import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
@@ -34,7 +33,7 @@ import com.zwotech.common.web.BaseController;
 @Controller
 @RequestMapping(value = { "memberInfo" })
 @Lazy(true)
-public class MemberInfoController extends BaseController<TbUser> {
+public class MemberInfoController extends BaseController {
 	@Autowired
 	@Lazy(true)
 	private IMemberService memberService;
@@ -243,8 +242,13 @@ public class MemberInfoController extends BaseController<TbUser> {
 		if (subject != null) {
 			Member member = (Member) subject.getSession().getAttribute("member");
 			if (member != null) {
-				int result = addressService.deleteByPrimaryKey(address.getId());
-				return result+"";
+				MemberAddressCriteria memberAddressCriteria = new MemberAddressCriteria();
+				memberAddressCriteria.createCriteria().andMemberIdEqualTo(member.getId()).andIdEqualTo(address.getId());
+				List<MemberAddress> list = addressService.selectByExample(memberAddressCriteria);
+				if(!list.isEmpty()){
+					int result = addressService.deleteByPrimaryKey(address.getId());
+					return result+"";
+				}
 			}
 		} else {
 			

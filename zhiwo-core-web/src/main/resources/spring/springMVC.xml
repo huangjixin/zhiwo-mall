@@ -52,7 +52,7 @@
 		<!-- <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" 
 			/> -->
 		<property name="viewClass"
-			value="org.springframework.web.servlet.view.InternalResourceView" />
+			value="org.springframework.web.servlet.view.JstlView" />
 	</bean>
 
 	<!-- 拦截器配置 -->

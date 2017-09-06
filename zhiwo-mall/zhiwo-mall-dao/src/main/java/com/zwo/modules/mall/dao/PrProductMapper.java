@@ -125,4 +125,11 @@ public interface PrProductMapper {
      * @return
      */
     List<PrProduct> selectByMemberId(String memberId);
+    
+    /**
+     * 查询没有大文本数据的字段。
+     * @param id
+     * @return
+     */
+    PrProduct selectByKey(String id);
 }

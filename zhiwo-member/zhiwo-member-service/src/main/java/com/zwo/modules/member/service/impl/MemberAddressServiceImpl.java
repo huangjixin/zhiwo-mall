@@ -119,16 +119,16 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "MemberAddress", key = "#id+''")
+	@CacheEvict(value = "MemberAddress", key = "#id+'_MemberAddress'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为：" + id.toString());
-
+		MemberAddress address = this.selectByPrimaryKey(id);
 		// 逻辑操作
-		int result = super.deleteByPrimaryKey(id);
+		int result = deleteAddressByMemberId(id,address.getMemberId());
 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除结束");
@@ -142,7 +142,7 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "MemberAddress", key = "#record.id")
+//	@CachePut(value = "MemberAddress", key = "#record.id+'_MemberAddress'")
 	public int insert(MemberAddress record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -169,7 +169,7 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 	 */
 
 	@Override
-//	@CachePut(value = "MemberAddress", key = "#record.id")
+//	@CachePut(value = "MemberAddress", key = "#record.id+'_MemberAddress'")
 	public int insertSelective(MemberAddress record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -208,7 +208,7 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = "MemberAddress")
+	@Cacheable(key = "#id+'_MemberAddress'", value = "MemberAddress")
 	@Transactional(readOnly = true)
 	public MemberAddress selectByPrimaryKey(String id) {
 		// 日志记录
@@ -280,7 +280,7 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "MemberAddress", key = "#record.id")
+	@CacheEvict(value = "MemberAddress", key = "#record.id+'_MemberAddress'")
 	public int updateByPrimaryKeySelective(MemberAddress record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -289,7 +289,7 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
 
 		// 逻辑操作
-		int result = super.updateByPrimaryKeySelective(record);
+		int result = updateSelectiveAddressByMemberId(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新结束");
 		return result;
@@ -303,7 +303,7 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "MemberAddress", key = "#record.id")
+	@CacheEvict(value = "MemberAddress", key = "#record.id+'_MemberAddress'")
 	public int updateByPrimaryKey(MemberAddress record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -312,7 +312,7 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为：" + record.toString());
 
 		// 逻辑操作
-		int result = super.updateByPrimaryKey(record);
+		int result = updateAddressByMemberId(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新结束");
 		return result;
@@ -338,13 +338,29 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 		return pageInfo;
 	}
 
-	public static void main(String[] args) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
-		IMemberAddressService memberAddressServiceImpl = (IMemberAddressService) context.getBean("memberAddressServiceImpl");
-		MemberAddress memberAddress = new MemberAddress();
-		memberAddress.setId(System.currentTimeMillis() + "");
-		int result = memberAddressServiceImpl.insertSelective(memberAddress);
-		logger.info(result + "");
+	@Override
+	@Cacheable(value = "MemberAddress", key = "#memberId+'_DefaultMemberAddress'")
+	public MemberAddress selectDefaultAddressByMemberId(String memberId) {
+		MemberAddressCriteria addressCriteria = new MemberAddressCriteria();
+		addressCriteria.createCriteria().andMemberIdEqualTo(memberId).andIsDefaultEqualTo("1");
+		List<MemberAddress> list = this.memberAddressMapper.selectByExample(addressCriteria);
+		
+		return list== null||list.isEmpty()?null:list.get(0);
+	}
+	
+	@CacheEvict(value = "MemberAddress", key = "#memberId+'_DefaultMemberAddress'")
+	public int deleteAddressByMemberId(String id,String memberId) {
+		return this.memberAddressMapper.deleteByPrimaryKey(id);
+	}
+	
+	@CacheEvict(value = "MemberAddress", key = "#record.memberId+'_DefaultMemberAddress'")
+	public int updateSelectiveAddressByMemberId(MemberAddress record) {
+		return this.memberAddressMapper.updateByPrimaryKeySelective(record);
+	}
+	
+	@CacheEvict(value = "MemberAddress", key = "#record.memberId+'_DefaultMemberAddress'")
+	public int updateAddressByMemberId(MemberAddress record) {
+		return this.memberAddressMapper.updateByPrimaryKey(record);
 	}
 
 

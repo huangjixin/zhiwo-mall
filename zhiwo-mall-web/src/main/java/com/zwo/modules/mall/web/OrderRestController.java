@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
@@ -25,6 +27,8 @@ import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.domain.OrderTrade;
 import com.zwo.modules.mall.domain.OrderTradeCriteria;
 import com.zwo.modules.mall.service.IOrderTradeService;
+import com.zwo.modules.shop.domain.ShopWithBLOBs;
+import com.zwo.modules.system.domain.TbUser;
 import com.zwotech.common.web.BaseController;
 
 @RestController
@@ -111,20 +115,28 @@ public class OrderRestController extends BaseController<OrderTrade> {
 	
 	@RequestMapping(value = "myOrder")
 	@ResponseBody
-	public DatagridPage<OrderTrade> myOrder(@ModelAttribute PageInfo<OrderTrade> pageInfo, @ModelAttribute OrderTrade order, Model uiModel,
+	public DatagridPage<OrderTrade> myOrder(@RequestParam String status,@ModelAttribute PageInfo<OrderTrade> pageInfo, @ModelAttribute OrderTrade order, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		
 		super.select(pageInfo, uiModel, httpServletRequest, httpServletResponse);
 		
-		OrderTradeCriteria orderCriteria = null;
+		String userId = null;
+		Subject currentUser = SecurityUtils.getSubject(); 
+		if(currentUser!=null){
+			TbUser user =  (TbUser) currentUser.getSession().getAttribute("user");
+			if(user!=null){
+				userId = user.getId();
+			}
+		}
+		/*OrderTradeCriteria orderCriteria = null;
 		orderCriteria = new OrderTradeCriteria();
 		OrderTradeCriteria.Criteria criteria = orderCriteria.createCriteria();
 		orderCriteria.setOrderByClause("id desc");
-		/*if (null != order.getName() && !"".equals(order.getName())) {
+		if (null != order.getName() && !"".equals(order.getName())) {
 			criteria.andNameLike("%" + order.getName() + "%");
 		}*/
 		
-		pageInfo = orderService.selectByPageInfo(orderCriteria, pageInfo);
+		pageInfo = orderService.selectByUserId(userId, status, pageInfo);
 		return super.setPage(pageInfo);
 	}
 }

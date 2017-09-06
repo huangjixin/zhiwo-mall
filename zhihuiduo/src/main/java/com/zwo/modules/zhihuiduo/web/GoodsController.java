@@ -34,7 +34,6 @@ import com.zwo.modules.member.service.IMemberService;
 import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.service.IShopCategoryService;
 import com.zwo.modules.shop.service.IShopService;
-import com.zwo.modules.system.domain.TbUser;
 import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
@@ -45,7 +44,7 @@ import com.zwotech.common.web.BaseController;
  */
 @Controller
 @Lazy(true)
-public class GoodsController extends BaseController<TbUser> {
+public class GoodsController extends BaseController {
 	@Autowired
 	@Lazy(true)
 	private IMemberService memberService;

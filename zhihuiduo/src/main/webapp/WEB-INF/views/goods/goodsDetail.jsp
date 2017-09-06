@@ -285,10 +285,17 @@
 				<div class="modal-footer">
                 	
                 </div>
-				
-				<button type="button" class="btn btn-danger"
+				<form action="${ctx}/memberOrder/check" method="post"  onsubmit="checkOut()">
+					<input id="packagePriceId" name="packagePriceId" type="hidden"> 
+					<input id="dealPrice" name="dealPrice" type="hidden"> 
+					<input id="buyNum" name="buyNum" type="hidden"> 
+					<input id="shopId" name="shopId" value="${product.shopId}" type="hidden"> 
+					<input id="goodsId" name="goodsId" value="${product.id}" type="hidden"> 
+					<input id="proValues" name="proValues" type="hidden"> 
+				<button type="submit" class="btn btn-danger"
 					style="width: 100%; margin: 0; position: fixed; bottom: 0; left: 0; right: 0; border-radius: 0px;">
 					确定</button>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -343,7 +350,8 @@
 				  $("#swiperImageModal").modal('show');
 			  });
 		});
-					
+	
+		var selectedProperyPackagePrice="";
 	
 		function settingProperyValueCla(proName, proValueId) {
 			var obj;
@@ -459,6 +467,7 @@
 				var groupvalue = $('#'+groupId).val();
 				$('#priceLabel').html(groupvalue);
 				console.log("团购价是："+groupvalue);
+				selectedProperyPackagePrice = groupId;
 			}
 			var proValues = "已选 ";
 			for (var i = 0; i < selectedPValue.length; i++) {
@@ -467,6 +476,25 @@
 			$('#propertyValueLabel').html(proValues);
 		}
 	
+		//去结算。
+		function checkOut(){
+			if(selectedProperyPackagePrice!=""){
+				var index = selectedProperyPackagePrice.indexOf("");
+				if(index!=-1){
+					selectedProperyPackagePrice = selectedProperyPackagePrice.substring(0,index);
+				}
+			}
+			var packagePriceId = selectedProperyPackagePrice;
+			$("#packagePriceId").val(packagePriceId);
+			var dealPrice = $('#priceLabel').html();
+			$("#dealPrice").val(dealPrice);
+			var buyNum = $("#numberCount").val();
+			$("#buyNum").val(buyNum);
+			var proValues = JSON.stringify(selectedPValue);
+			$("#proValues").val(proValues);
+		}
+		
+		
 		var swiper = new Swiper('.swiper-container');
 	</script>
 </body>

@@ -27,7 +27,7 @@ import com.zwotech.common.web.BaseController;
  */
 @Controller
 @Lazy(true)
-public class IndexController extends BaseController<TbUser> {
+public class IndexController extends BaseController {
 	@Autowired
 	@Lazy(true)
 	private IMemberService memberService;

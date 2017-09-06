@@ -26,4 +26,11 @@ public interface IPrProductPackagePriceService extends IBaseService<PrProductPac
 	 * @return
 	 */
 	void deleteByProductId(String pId);
+	
+	/**
+	 * 根据valueId进行打包价查询。
+	 * @param pId
+	 * @return
+	 */
+	PrProductPackagePrice selectByPropertyValueId(String valueId);
 }

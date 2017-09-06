@@ -38,7 +38,7 @@ import com.zwotech.common.web.BaseController;
 @Controller
 @Lazy(true)
 @RequestMapping(value = { "memberLogin" })
-public class MemberLoginController extends BaseController<TbUser> {
+public class MemberLoginController extends BaseController {
 	@Autowired
 	@Lazy(true)
 	private IMemberService memberService;

@@ -189,9 +189,8 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	@Deprecated
 	public PrProduct selectByPrimaryKey(String id) {
-		return null;
+		return productMapper.selectByKey(id);
 	}
 
 	/*

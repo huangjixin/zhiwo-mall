@@ -27,9 +27,9 @@
         </nav>
 	</div>
 	<table id="tgrid" 
-		title="订单列表" 
+		title="我的订单" 
 		class="easyui-datagrid"
-		url="${ctx}/order/select" 
+		url="${ctx}/order/myOrder" 
 		toolbar="#toolbar" 
 		rownumbers="true"
 		fitColumns="true" 
@@ -85,17 +85,17 @@
 //			<%
 //				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:order:delete")){
 //				%>
-				btn += '<button type="button" class="btn btn-danger btn-sm" onclick="deleteById(\'tgrid\',\''
-					+ rec.id + '\',\'order\')"><i class="fa fa-trash fa-lg"></i>&nbsp;&nbsp;删除 </button>';
-					btn += "&nbsp;&nbsp;";
-					btn += ''
+//				btn += '<button type="button" class="btn btn-danger btn-sm" onclick="deleteById(\'tgrid\',\''
+//					+ rec.id + '\',\'order\')"><i class="fa fa-trash fa-lg"></i>&nbsp;&nbsp;删除 </button>';
+//					btn += "&nbsp;&nbsp;";
+//					btn += ''
 //				<%
 //				}
 //			%>
 //			<%
 //				if(SecurityUtils.getSubject()!=null&&SecurityUtils.getSubject().isPermitted("system:order:edit")){
 //				%> 
-				btn += '<button type="button" class="btn btn-info btn-sm" onclick="update(\''
+				btn += '<button type="button" class="btn btn-info btn-sm" onclick="updateMyOrder(\''
 					+ rec.id + '\',\'order\')"><i class="fa fa-edit fa-lg"></i>&nbsp;&nbsp;编辑</button>';
 //				 <%
 //				}
@@ -105,6 +105,11 @@
 			return btn;
 		}
 
+		// 编辑；
+		function updateMyOrder(id, module) {
+			window.location.href = '${ctx}/order/myOrderEdit/' + id;
+		}
+		
 		// 删除
 		function destroy() {
 			var row = $('#tgrid').datagrid('getSelected');
