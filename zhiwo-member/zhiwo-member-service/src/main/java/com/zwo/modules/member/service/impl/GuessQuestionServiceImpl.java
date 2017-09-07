@@ -4,6 +4,7 @@
 package com.zwo.modules.member.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -439,7 +440,7 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion> impleme
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "查询在用的竞猜问题开始");
 		GuessQuestionCriteria questionCriteria = new GuessQuestionCriteria();
-		questionCriteria.createCriteria().andDisableEqualTo(false);
+		questionCriteria.createCriteria().andDisableEqualTo(false).andQuestionEndTimeGreaterThanOrEqualTo(new Date());
 		List<GuessQuestion> list = this.guessQuestionMapper.selectByExample(questionCriteria);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "查询在用的竞猜问题结束，结果条目数为："+list.size());
