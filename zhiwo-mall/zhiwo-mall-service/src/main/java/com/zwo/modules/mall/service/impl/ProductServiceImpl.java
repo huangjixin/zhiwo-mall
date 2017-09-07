@@ -12,6 +12,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.HtmlUtils;
@@ -28,6 +29,7 @@ import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductCriteria;
 import com.zwo.modules.mall.domain.PrProductWithBLOBs;
 import com.zwo.modules.mall.service.IPrductService;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -60,6 +62,8 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 	@Lazy(true)
 	private PrProductPackagePriceMapper productPackagePriceMapper;
 
+	private RedisTemplate redisTemplate;
+	
 	@Override
 	public Mapper<PrProduct> getBaseMapper() {
 		return null;
@@ -454,6 +458,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 
 	@Transactional(readOnly = true)
 	@Override
+//	@Cacheable(key = "#id+'_product'", value = "PrProduct")
 	public List<PrImage> selectByProductId(String productId,boolean isDefault) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -467,5 +472,14 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements IPrduc
 			logger.info(BASE_MESSAGE + "selectByProductId根据商品ID查询图片结束，结果条目数："+list.size());	
 		return list;
 	}
-
+	
+	/*if(result != 0){
+		if(redisTemplate == null ){
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
+		
+		if(redisTemplate != null){
+			redisTemplate.delete("selectIneffectQuestion_guessQuestion");
+		}
+	}*/
 }

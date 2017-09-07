@@ -2,8 +2,12 @@ package com.zwo.modules.mall.domain;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
-import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Table(name = "pr_image")
 public class PrImage implements Serializable {
@@ -113,6 +117,19 @@ public class PrImage implements Serializable {
      */
     @Column(name = "USER_ID")
     private String userId;
+
+    /**
+     * 真正的外键ID
+     */
+    @Column(name = "REAL_PRODUCT_ID")
+    private String realProductId;
+
+    /**
+     * 商品的缩略图，也可能是商品属性图，也可能是商品详情描述图
+三种类型的值分别是：thumbnail，detail，prop
+     */
+    @Column(name = "TYPE")
+    private String type;
 
     private static final long serialVersionUID = 1L;
 
@@ -434,5 +451,45 @@ public class PrImage implements Serializable {
      */
     public void setUserId(String userId) {
         this.userId = userId == null ? null : userId.trim();
+    }
+
+    /**
+     * 获取真正的外键ID
+     *
+     * @return REAL_PRODUCT_ID - 真正的外键ID
+     */
+    public String getRealProductId() {
+        return realProductId;
+    }
+
+    /**
+     * 设置真正的外键ID
+     *
+     * @param realProductId 真正的外键ID
+     */
+    public void setRealProductId(String realProductId) {
+        this.realProductId = realProductId == null ? null : realProductId.trim();
+    }
+
+    /**
+     * 获取商品的缩略图，也可能是商品属性图，也可能是商品详情描述图
+三种类型的值分别是：thumbnail，detail，prop
+     *
+     * @return TYPE - 商品的缩略图，也可能是商品属性图，也可能是商品详情描述图
+三种类型的值分别是：thumbnail，detail，prop
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * 设置商品的缩略图，也可能是商品属性图，也可能是商品详情描述图
+三种类型的值分别是：thumbnail，detail，prop
+     *
+     * @param type 商品的缩略图，也可能是商品属性图，也可能是商品详情描述图
+三种类型的值分别是：thumbnail，detail，prop
+     */
+    public void setType(String type) {
+        this.type = type == null ? null : type.trim();
     }
 }

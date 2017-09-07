@@ -1295,6 +1295,146 @@ public class PrImageCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andRealProductIdIsNull() {
+            addCriterion("REAL_PRODUCT_ID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealProductIdIsNotNull() {
+            addCriterion("REAL_PRODUCT_ID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealProductIdEqualTo(String value) {
+            addCriterion("REAL_PRODUCT_ID =", value, "realProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealProductIdNotEqualTo(String value) {
+            addCriterion("REAL_PRODUCT_ID <>", value, "realProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealProductIdGreaterThan(String value) {
+            addCriterion("REAL_PRODUCT_ID >", value, "realProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealProductIdGreaterThanOrEqualTo(String value) {
+            addCriterion("REAL_PRODUCT_ID >=", value, "realProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealProductIdLessThan(String value) {
+            addCriterion("REAL_PRODUCT_ID <", value, "realProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealProductIdLessThanOrEqualTo(String value) {
+            addCriterion("REAL_PRODUCT_ID <=", value, "realProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealProductIdLike(String value) {
+            addCriterion("REAL_PRODUCT_ID like", value, "realProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealProductIdNotLike(String value) {
+            addCriterion("REAL_PRODUCT_ID not like", value, "realProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealProductIdIn(List<String> values) {
+            addCriterion("REAL_PRODUCT_ID in", values, "realProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealProductIdNotIn(List<String> values) {
+            addCriterion("REAL_PRODUCT_ID not in", values, "realProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealProductIdBetween(String value1, String value2) {
+            addCriterion("REAL_PRODUCT_ID between", value1, value2, "realProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealProductIdNotBetween(String value1, String value2) {
+            addCriterion("REAL_PRODUCT_ID not between", value1, value2, "realProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIsNull() {
+            addCriterion("TYPE is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIsNotNull() {
+            addCriterion("TYPE is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeEqualTo(String value) {
+            addCriterion("TYPE =", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotEqualTo(String value) {
+            addCriterion("TYPE <>", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeGreaterThan(String value) {
+            addCriterion("TYPE >", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("TYPE >=", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeLessThan(String value) {
+            addCriterion("TYPE <", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeLessThanOrEqualTo(String value) {
+            addCriterion("TYPE <=", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeLike(String value) {
+            addCriterion("TYPE like", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotLike(String value) {
+            addCriterion("TYPE not like", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIn(List<String> values) {
+            addCriterion("TYPE in", values, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotIn(List<String> values) {
+            addCriterion("TYPE not in", values, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeBetween(String value1, String value2) {
+            addCriterion("TYPE between", value1, value2, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotBetween(String value1, String value2) {
+            addCriterion("TYPE not between", value1, value2, "type");
+            return (Criteria) this;
+        }
+
         public Criteria andIdLikeInsensitive(String value) {
             addCriterion("upper(ID) like", value.toUpperCase(), "id");
             return (Criteria) this;
@@ -1347,6 +1487,16 @@ public class PrImageCriteria {
 
         public Criteria andUserIdLikeInsensitive(String value) {
             addCriterion("upper(USER_ID) like", value.toUpperCase(), "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealProductIdLikeInsensitive(String value) {
+            addCriterion("upper(REAL_PRODUCT_ID) like", value.toUpperCase(), "realProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeLikeInsensitive(String value) {
+            addCriterion("upper(TYPE) like", value.toUpperCase(), "type");
             return (Criteria) this;
         }
     }

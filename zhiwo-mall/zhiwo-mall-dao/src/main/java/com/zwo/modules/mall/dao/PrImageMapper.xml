@@ -23,6 +23,8 @@
     <result column="PRODUCT_ID" property="productId" jdbcType="VARCHAR" />
     <result column="LOCATION" property="location" jdbcType="VARCHAR" />
     <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="REAL_PRODUCT_ID" property="realProductId" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <!--
@@ -93,7 +95,8 @@
       WARNING - @mbg.generated
     -->
     ID, CREATOR, ORG_ID, UPDATER, CREATE_DATE, UPDATE_DATE, DISABLE, START_TIME, END_TIME, 
-    SORT, IS_DEFAULT, EN_NAME, NAME, DESCRIPTION, URL, PRODUCT_ID, LOCATION, USER_ID
+    SORT, IS_DEFAULT, EN_NAME, NAME, DESCRIPTION, URL, PRODUCT_ID, LOCATION, USER_ID, 
+    REAL_PRODUCT_ID, TYPE
   </sql>
   
 </mapper>
