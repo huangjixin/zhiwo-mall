@@ -139,7 +139,7 @@ public class GuessQuestionRestController extends BaseController<GuessQuestion> {
 		GuessQuestionCriteria guessQuestionCriteria = null;
 		guessQuestionCriteria = new GuessQuestionCriteria();
 		GuessQuestionCriteria.Criteria criteria = guessQuestionCriteria.createCriteria();
-		guessQuestionCriteria.setOrderByClause("id desc");
+		guessQuestionCriteria.setOrderByClause("create_date desc");
 		if (null != guessQuestion.getName() && !"".equals(guessQuestion.getName())) {
 			criteria.andNameLike("%" + guessQuestion.getName() + "%");
 		}

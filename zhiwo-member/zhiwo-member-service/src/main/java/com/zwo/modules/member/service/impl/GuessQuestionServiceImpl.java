@@ -355,7 +355,7 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion> impleme
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "GuessQuestion", key = "#record.id")
+	@CacheEvict(value = "GuessQuestion", key = "#record.id+'_guessQuestion'")
 	public int updateByPrimaryKeySelective(GuessQuestion record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -387,7 +387,7 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion> impleme
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "GuessQuestion", key = "#record.id")
+	@CacheEvict(value = "GuessQuestion", key = "#record.id+'_guessQuestion'")
 	public int updateByPrimaryKey(GuessQuestion record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

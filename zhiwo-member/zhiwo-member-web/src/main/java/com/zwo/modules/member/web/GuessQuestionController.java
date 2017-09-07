@@ -101,7 +101,7 @@ public class GuessQuestionController extends BaseController<GuessQuestion> {
 			guessQuestionOptions.setRealQuestionId(guessQuestion.getId());
 			guessQuestionOptionsService.updateByExampleSelective(guessQuestionOptions, criteria);
 			
-			redirectAttributes.addFlashAttribute("guessQuestion", guessQuestion);
+//			redirectAttributes.addFlashAttribute("guessQuestion", guessQuestion);
 			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
 		
