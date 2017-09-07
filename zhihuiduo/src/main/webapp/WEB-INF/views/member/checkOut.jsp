@@ -41,7 +41,7 @@
    
    
     <div style="background-color:#ffffff; padding-left:10px;padding-right:10px; padding-top:3px; padding-bottom:3px; margin-top:4px;">
-    	<span>南极人+穆卡专卖店</span>
+    	<span><c:if test="${shop==null}">${shop.name}</c:if></span>
     </div>
     <div style="background-color:#ffffff; padding-left:10px;padding-right:10px; padding-top:10px; padding-bottom:10px;margin-top:4px;">
 		<div class="media">

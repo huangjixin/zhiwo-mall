@@ -106,6 +106,8 @@
 </style>
 </head>
 <body>
+	<input id="gourpSalePrice" name="gourpSalePrice" type="hidden" value="${product.gourpSalePrice }">
+	<input id="independentPrice" name="independentPrice" type="hidden" value="${product.independentPrice }"> 
 	 <c:forEach var="packagePrice" items="${packagePrices}"
 					varStatus="packagePriceStatus">
 						<input id="${packagePrice.propertyValueId}_GroupInput" value="${packagePrice.gourpPrice}" type="hidden"> 
@@ -285,7 +287,7 @@
 				<div class="modal-footer">
                 	
                 </div>
-				<form action="${ctx}/memberOrder/checkOut" method="post"  onsubmit="checkOut()">
+				<form action="${ctx}/memberOrder/checkOut" method="post"  onsubmit="return checkOut();">
 					<input id="packagePriceId" name="packagePriceId" type="hidden"> 
 					<input id="dealPrice" name="dealPrice" type="hidden"> 
 					<input id="buyNum" name="buyNum" type="hidden"> 
@@ -309,7 +311,7 @@
 		var selectedPValue=[];
 		//保存属性值数组
 		var proArray = [];
-		
+		var mode = 'group';
 		$().ready(function() {
 			
 			if (propertiesString != '' || propertiesString != '[]') {
@@ -343,11 +345,31 @@
 			  
 			  //单独开团
 			  $("#independBuyBtn").bind("click",function(){
+				   mode = 'independ';
 				   $("#swiperImageModal").modal('show');
+				   $('#priceLabel').html("");
+				   for(var i=0;i<proArray.length;i++){
+					   $("[name="+proArray[i].code+"]").removeClass("activeProperyValue");
+					   $("[name="+proArray[i].code+"]").addClass("ProperyValue");
+				   }
+				   if(propertyValueArray.length == 0){
+					   $('#priceLabel').html($("#independentPrice").val());
+				   }
+				   
 			  });
 			  //拼团开团
 			  $("#groupBuyBtn").bind("click",function(){
+				  mode = 'group'
 				  $("#swiperImageModal").modal('show');
+				  for(var i=0;i<proArray.length;i++){
+					   $("[name="+proArray[i].code+"]").removeClass("activeProperyValue");
+					   $("[name="+proArray[i].code+"]").addClass("ProperyValue");
+				  }
+				  $('#priceLabel').html("");
+				  
+				  if(propertyValueArray.length == 0){
+					   $('#priceLabel').html($("#gourpSalePrice").val());
+				   }
 			  });
 		});
 	
@@ -402,7 +424,12 @@
 			
 			if(selectedPValue.length==1){
 				var object = selectedPValue[0];
-				groupId+=object.id+"_GroupInput";
+				if(mode == 'group'){
+					groupId+=object.id+"_GroupInput";
+				}else{
+					groupId+=object.id+"_IndependInput";
+				}
+				
 				if($('#'+groupId).length>0){
 					groupIdExist = true;
 				}
@@ -422,7 +449,12 @@
 						
 						var obj= selectedPValue[j];
 						if(selectedPValue.length==2){
-							temp+=obj.id+"_GroupInput";
+							if(mode == 'group'){
+								temp+=obj.id+"_GroupInput";
+							}else{
+								temp+=obj.id+"_IndependInput";
+							}
+							
 						}else{
 							temp+=obj.id;
 						}
@@ -439,8 +471,12 @@
 								if(obj1==object || obj1==obj){
 									continue;
 								}
+								if(mode == 'group'){
+									temp1+="_"+obj1.id+"_GroupInput";
+								}else{
+									temp1+="_"+obj1.id+"_IndependInput";
+								}
 								
-								temp1+="_"+obj1.id+"_GroupInput";
 								
 								if($('#'+temp1).length>0){
 									temp=temp1;
@@ -492,6 +528,11 @@
 			$("#buyNum").val(buyNum);
 			var proValues = JSON.stringify(selectedPValue);
 			$("#proValues").val(proValues);
+			if(dealPrice==""){
+				return false;
+			}else{
+				return true;
+			}
 		}
 		
 		

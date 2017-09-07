@@ -9,26 +9,27 @@
 <%@ include file="/WEB-INF/member-include/js.jsp"%>
 <!--<script type="text/javascript" src="${ctx}/js/location.js"></script> 
 <script type="text/javascript" src="${ctx}/js/YlChinaArea.js"></script> -->
-<style> 
-	body{
-	   font-size:1.5rem;
-	   background-color:#F2F2F2;
-	}
-	
-	.thumbnail {
-		padding: 1px;
-		margin-bottom: 5px;
-		line-height: 1.42857143;
-		border: 1px solid #ddd;
-		border-radius: 1px;
-	}
-	
-	.label label-info{
-		padding-top:5px;
-	}
-	.form-group{
-		 margin:3px;
-	}
+<style>
+body {
+	font-size: 1.5rem;
+	background-color: #F2F2F2;
+}
+
+.thumbnail {
+	padding: 1px;
+	margin-bottom: 5px;
+	line-height: 1.42857143;
+	border: 1px solid #ddd;
+	border-radius: 1px;
+}
+
+.label label-info {
+	padding-top: 5px;
+}
+
+.form-group {
+	margin: 3px;
+}
 </style>
 <script type="text/javascript" language="javascript"> 
 //定义数组，存储省份信息 
@@ -245,100 +246,113 @@ function setBgColor() {
 var $option = $("select option:odd"); 
 $option.css({ "background-color": "#DEDEDE" }); 
 } 
-</script> 
+</script>
 </head>
 <body>
-	<div class="page-header" style="text-align:center;font-size:2rem; margin-top:20px; margin-bottom:10px;">
-    <b>收货地址</b><a href="${ctx}/memberInfo/info"><small>&nbsp;&nbsp;返回</small></a>
+	<div class="page-header"
+		style="text-align: center; font-size: 2rem; margin-top: 20px; margin-bottom: 10px;">
+		<b>收货地址</b><a href="${ctx}/memberInfo/info"><small>&nbsp;&nbsp;返回</small></a>
 	</div>
-    <div class="thumbnail">
-                    <div class="caption">
-                    	<input id="0b7e6a2a082e4ba4ade09fc245d95c2a" type="hidden" value="0b7e6a2a082e4ba4ade09fc245d95c2a"/>
-                        <p><span id="0b7e6a2a082e4ba4ade09fc245d95c2a_name">黄记新</span>,<span id="0b7e6a2a082e4ba4ade09fc245d95c2a_mobilPhone">13926205227</span></p>
-                        <p><span id="0b7e6a2a082e4ba4ade09fc245d95c2a_province">广东</span><span id="0b7e6a2a082e4ba4ade09fc245d95c2a_city">广州</span><span id="0b7e6a2a082e4ba4ade09fc245d95c2a_street">黄埔区茅岗路和贵新街4巷10号</span></p>
-                        <hr class="hr1"/>
-                        <div class="pull-left">
-                        	<div class="checkbox">
-                                <label onClick="setDefaultMemberAddress('0b7e6a2a082e4ba4ade09fc245d95c2a')">
-                                  <input type="checkbox">设为默认
-                                </label>
-                              </div>
-                        </div>
-                        <div class="pull-right" style="font-weight:normal;">
-                        	<span class="label label-info" style="padding-top:5px;" onClick="edit('0b7e6a2a082e4ba4ade09fc245d95c2a')">
-                        	<i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;编辑
-                            </span>
-                            &nbsp;&nbsp;
-                           <span class="label label-danger" style="padding-top:5px;">
-                        	<i class="fa fa-trash-o" aria-hidden="true"></i>&nbsp;&nbsp;删除
-                            </span>
-                        </div>
-                        
-                        
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-                
-                <div class="thumbnail">
-                    <div class="caption">
-                        <p>黄记新,13926205227</p>
-                        <p>广东广州天河区天河北路889号信源大厦2018</p>
-                        <hr class="hr1"/>
-                        <div class="pull-left">
-                        	<div class="checkbox">
-                                <label>
-                                  <input type="checkbox">设为默认
-                                </label>
-                              </div>
-                        </div>
-                        <div class="pull-right" style="font-weight:normal;">
-                        	<span class="label label-info" style="padding-top:5px;">
-                        	<i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;编辑
-                            </span>
-                            &nbsp;&nbsp;
-                           <span class="label label-danger" style="padding-top:5px;">
-                        	<i class="fa fa-trash-o" aria-hidden="true"></i>&nbsp;&nbsp;删除
-                            </span>
-                        </div>
-                        
-                        
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-                
-				<div style="text-align:center; margin-bottom:20px; margin-top:16px;">
-                <button  class="btn btn-danger"  data-toggle="modal" data-target="#myModal"
-					style="width: 80%; margin: 0;  border-radius: 0px; color:#ffffff;" onClick="create();">
-					新增地址</button>
-                </div>
-	
-    
-    <!-- 模态框（Modal） -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">添加/编辑收货地址</h4>
-            </div>
-            <form id="form" name="form" method="post" action="${ctx}/memberInfo/createMemberAddress"  role="form">
-            <div class="modal-body" style="padding-top:2px;">
-            		<input id="id" name="id"  type="hidden"/>
-                	<div class="form-group">
-                    <input id="name" name="name"  class="form-control" placeholder="姓名" />
-                    </div>
-                    <div class="form-group">
-                    <input id="mobilPhone" name="mobilPhone"  class="form-control" placeholder="电话" />
-                    </div>
-                    
-                    <div class="form-group">
-                    <label>省 份：</label>
-                    <select id="selProvince" name="province" onchange="provinceChange();" class="form-control"></select> 
-                    <label>市(区)：</label>
-                    <select id="selCity" name="city" class="form-control"></select> 
-                    </div>
-                     
-                    <!--<div class="form-group">
+	<div class="thumbnail">
+		<div class="caption">
+			<input id="0b7e6a2a082e4ba4ade09fc245d95c2a" type="hidden"
+				value="0b7e6a2a082e4ba4ade09fc245d95c2a" />
+			<p>
+				<span id="0b7e6a2a082e4ba4ade09fc245d95c2a_name">黄记新</span>,<span
+					id="0b7e6a2a082e4ba4ade09fc245d95c2a_mobilPhone">13926205227</span>
+			</p>
+			<p>
+				<span id="0b7e6a2a082e4ba4ade09fc245d95c2a_province">广东</span><span
+					id="0b7e6a2a082e4ba4ade09fc245d95c2a_city">广州</span><span
+					id="0b7e6a2a082e4ba4ade09fc245d95c2a_street">黄埔区茅岗路和贵新街4巷10号</span>
+			</p>
+			<hr class="hr1" />
+			<div class="pull-left">
+				<div class="checkbox">
+					<label
+						onClick="setDefaultMemberAddress('0b7e6a2a082e4ba4ade09fc245d95c2a')">
+						<input type="checkbox">设为默认
+					</label>
+				</div>
+			</div>
+			<div class="pull-right" style="font-weight: normal;">
+				<span class="label label-info" style="padding-top: 5px;"
+					onClick="edit('0b7e6a2a082e4ba4ade09fc245d95c2a')"> <i
+					class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;编辑
+				</span> &nbsp;&nbsp; <span class="label label-danger"
+					style="padding-top: 5px;"> <i class="fa fa-trash-o"
+					aria-hidden="true"></i>&nbsp;&nbsp;删除
+				</span>
+			</div>
+
+
+			<div class="clearfix"></div>
+		</div>
+	</div>
+
+	<div class="thumbnail">
+		<div class="caption">
+			<p>黄记新,13926205227</p>
+			<p>广东广州天河区天河北路889号信源大厦2018</p>
+			<hr class="hr1" />
+			<div class="pull-left">
+				<div class="checkbox">
+					<label> <input type="checkbox">设为默认
+					</label>
+				</div>
+			</div>
+			<div class="pull-right" style="font-weight: normal;">
+				<span class="label label-info" style="padding-top: 5px;"> <i
+					class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;编辑
+				</span> &nbsp;&nbsp; <span class="label label-danger"
+					style="padding-top: 5px;"> <i class="fa fa-trash-o"
+					aria-hidden="true"></i>&nbsp;&nbsp;删除
+				</span>
+			</div>
+
+
+			<div class="clearfix"></div>
+		</div>
+	</div>
+
+	<div style="text-align: center; margin-bottom: 20px; margin-top: 16px;">
+		<button class="btn btn-danger" data-toggle="modal"
+			data-target="#myModal"
+			style="width: 80%; margin: 0; border-radius: 0px; color: #ffffff;"
+			onClick="create();">新增地址</button>
+	</div>
+
+
+	<!-- 模态框（Modal） -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">添加/编辑收货地址</h4>
+				</div>
+				<form id="form" name="form" method="post"
+					action="${ctx}/memberInfo/createMemberAddress" role="form">
+					<div class="modal-body" style="padding-top: 2px;">
+						<input id="id" name="id" type="hidden" />
+						<div class="form-group">
+							<input id="name" name="name" class="form-control"
+								placeholder="姓名" />
+						</div>
+						<div class="form-group">
+							<input id="mobilPhone" name="mobilPhone" class="form-control"
+								placeholder="电话" />
+						</div>
+
+						<div class="form-group">
+							<label>省 份：</label> <select id="selProvince" name="province"
+								onchange="provinceChange();" class="form-control"></select> <label>市(区)：</label>
+							<select id="selCity" name="city" class="form-control"></select>
+						</div>
+
+						<!--<div class="form-group">
                     	<div  id="ChinaArea">
                         <label for="name">省 份：</label>
                          <select id="province" name="province"  class="form-control"></select> 
@@ -349,19 +363,23 @@ $option.css({ "background-color": "#DEDEDE" });
                         </div>
                    
                     </div>-->
-                   <div class="form-group">
-                    <input id="street" name="street"  class="form-control" placeholder="请填写详细的区和街道地址" />
-                    </div>
-                
-            </div>
-            <div class="modal-footer" style="text-align:center;">
-                <button  type="submit"class="btn btn-danger" style="width: 80%;color:#ffffff;">保存</button>
-            </div>
-            </form>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
-</div>			
-<script type="text/javascript">
+						<div class="form-group">
+							<input id="street" name="street" class="form-control"
+								placeholder="请填写详细的区和街道地址" />
+						</div>
+
+					</div>
+					<div class="modal-footer" style="text-align: center;">
+						<button type="submit" class="btn btn-danger"
+							style="width: 80%; color: #ffffff;">保存</button>
+					</div>
+				</form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
+	</div>
+	<script type="text/javascript">
 	function setDefaultMemberAddress(addressId){
 		var url = "${ctx}/memberInfo/setDefaultMemberAddress";
 		var data = {};

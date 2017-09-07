@@ -113,12 +113,17 @@ public class MemberOrderController extends BaseController<TbUser> {
 		orderTradeService.insertSelective(orderTrade);
 		
 		uiModel.addAttribute("order", orderTrade);
-//		return basePath +"checkOut";
-		return "redirect:/memberOrder/checkOut";
+		return basePath +"checkOut";
+//		return "redirect:/memberOrder/checkOut";
 	}
 	
+	
 	@RequestMapping(value = "check")
-	public String check_out(RedirectAttributes redirectAttributes,
+	public String check_out(@RequestParam String goodsId,
+			@RequestParam String shopId, @RequestParam Integer buyNum,
+			@RequestParam String packagePriceId,
+			@RequestParam String proValues,
+			@RequestParam String dealPrice,RedirectAttributes redirectAttributes,
 			Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		PrProduct product = prductService.selectByPrimaryKey("150383670510593");
