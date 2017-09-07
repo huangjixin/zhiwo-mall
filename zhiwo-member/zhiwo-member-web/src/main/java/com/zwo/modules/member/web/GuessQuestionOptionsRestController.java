@@ -149,14 +149,12 @@ public class GuessQuestionOptionsRestController extends BaseController<GuessQues
 		guessQuestionOptionsCriteria = new GuessQuestionOptionsCriteria();
 		GuessQuestionOptionsCriteria.Criteria criteria = guessQuestionOptionsCriteria.createCriteria();
 		guessQuestionOptionsCriteria.setOrderByClause("id desc");
-		if (null != guessQuestionOptions.getName() && !"".equals(guessQuestionOptions.getName())) {
-			criteria.andNameLike("%" + guessQuestionOptions.getName() + "%");
-		}
+		
 		if (null != guessQuestionOptions.getGuessQuestionId() && !"".equals(guessQuestionOptions.getGuessQuestionId())) {
 			criteria.andGuessQuestionIdEqualTo(guessQuestionOptions.getGuessQuestionId());
+			pageInfo = guessQuestionOptionsService.selectByPageInfo(guessQuestionOptionsCriteria, pageInfo);
 		}
 		
-		pageInfo = guessQuestionOptionsService.selectByPageInfo(guessQuestionOptionsCriteria, pageInfo);
 		return super.setPage(pageInfo);
 	}
 	

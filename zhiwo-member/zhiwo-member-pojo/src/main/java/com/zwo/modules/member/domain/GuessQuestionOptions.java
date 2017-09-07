@@ -1,14 +1,12 @@
 package com.zwo.modules.member.domain;
 
 import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Table;
+import javax.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Table(name = "guess_question_options")
 public class GuessQuestionOptions implements Serializable {
+    @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
@@ -30,6 +28,12 @@ public class GuessQuestionOptions implements Serializable {
      */
     @Column(name = "GUESS_QUESTION_ID")
     private String guessQuestionId;
+
+    /**
+     * 正式的外键ID
+     */
+    @Column(name = "REAL_QUESTION_ID")
+    private String realQuestionId;
 
     private static final long serialVersionUID = 1L;
 
@@ -99,5 +103,23 @@ public class GuessQuestionOptions implements Serializable {
      */
     public void setGuessQuestionId(String guessQuestionId) {
         this.guessQuestionId = guessQuestionId == null ? null : guessQuestionId.trim();
+    }
+
+    /**
+     * 获取正式的外键ID
+     *
+     * @return REAL_QUESTION_ID - 正式的外键ID
+     */
+    public String getRealQuestionId() {
+        return realQuestionId;
+    }
+
+    /**
+     * 设置正式的外键ID
+     *
+     * @param realQuestionId 正式的外键ID
+     */
+    public void setRealQuestionId(String realQuestionId) {
+        this.realQuestionId = realQuestionId == null ? null : realQuestionId.trim();
     }
 }

@@ -3,28 +3,34 @@
 */
 package com.zwo.modules.member.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import tk.mybatis.mapper.common.Mapper;
+
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.member.dao.GuessQuestionMapper;
+import com.zwo.modules.member.dao.GuessQuestionOptionsMapper;
 import com.zwo.modules.member.domain.GuessQuestion;
 import com.zwo.modules.member.domain.GuessQuestionCriteria;
+import com.zwo.modules.member.domain.GuessQuestionOption;
+import com.zwo.modules.member.domain.GuessQuestionOptions;
+import com.zwo.modules.member.domain.GuessQuestionOptionsCriteria;
 import com.zwo.modules.member.service.IGuessQuestionService;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
-
-import tk.mybatis.mapper.common.Mapper;
 
 /**
  * @author hjx
@@ -38,9 +44,16 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion> impleme
 
 	private static final String BASE_MESSAGE = "【GuessQuestionServiceImpl服务类提供的基础操作增删改查等】";
 
+
+	private RedisTemplate redisTemplate;
+	
 	@Autowired
 	@Lazy(true)
 	private GuessQuestionMapper guessQuestionMapper;
+	
+	@Autowired
+	@Lazy(true)
+	private GuessQuestionOptionsMapper questionOptionsMapper;
 
 	@Override
 	public Mapper<GuessQuestion> getBaseMapper() {
@@ -118,8 +131,9 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion> impleme
 	 * com.zwotech.modules.core.service.IBaseService#deleteByPrimaryKey(java.
 	 * lang.String)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	@CacheEvict(value = "GuessQuestion", key = "#id+''")
+	@CacheEvict(value = "GuessQuestion", key = "#id+'_guessQuestion'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -129,7 +143,15 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion> impleme
 
 		// 逻辑操作
 		int result = super.deleteByPrimaryKey(id);
-
+		if(result == 1){
+			if(redisTemplate == null ){
+				redisTemplate = SpringContextHolder.getBean("redisTemplate");
+			}
+			
+			if(redisTemplate != null){
+				redisTemplate.delete("selectIneffectQuestion_guessQuestion");
+			}
+		}
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除结束");
 		return result;
@@ -155,6 +177,16 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion> impleme
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
 		}
 		int result = super.insert(record);
+		if(result == 1){
+			if(redisTemplate == null ){
+				redisTemplate = SpringContextHolder.getBean("redisTemplate");
+			}
+			
+			if(redisTemplate != null){
+				redisTemplate.delete("selectIneffectQuestion_guessQuestion");
+			}
+		}
+		
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入结束");
 		return result;
@@ -182,6 +214,15 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion> impleme
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
 		}
 		int result = super.insertSelective(record);
+		if(result == 1){
+			if(redisTemplate == null ){
+				redisTemplate = SpringContextHolder.getBean("redisTemplate");
+			}
+			
+			if(redisTemplate != null){
+				redisTemplate.delete("selectIneffectQuestion_guessQuestion");
+			}
+		}
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入结束");
 		return result;
@@ -208,7 +249,7 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion> impleme
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = "GuessQuestion")
+	@Cacheable(key = "#id+'_guessQuestion'", value = "GuessQuestion")
 	@Transactional(readOnly = true)
 	public GuessQuestion selectByPrimaryKey(String id) {
 		// 日志记录
@@ -242,6 +283,15 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion> impleme
 
 		// 逻辑操作
 		int result = super.updateByExampleSelective(record, example);
+		if(result == 1){
+			if(redisTemplate == null ){
+				redisTemplate = SpringContextHolder.getBean("redisTemplate");
+			}
+			
+			if(redisTemplate != null){
+				redisTemplate.delete("selectIneffectQuestion_guessQuestion");
+			}
+		}
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新结束");
@@ -346,5 +396,36 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion> impleme
 		int result = guessQuestionServiceImpl.insertSelective(guessQuestion);
 		logger.info(result + "");
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	@Cacheable(key = "'selectIneffectQuestion_guessQuestion'", value = "GuessQuestiones")
+	public List<GuessQuestionOption> selectIneffectQuestion() {
+		List<GuessQuestionOption> guessQuestionOptions= new ArrayList<GuessQuestionOption>();
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询在用的竞猜问题开始");
+		GuessQuestionCriteria questionCriteria = new GuessQuestionCriteria();
+		questionCriteria.createCriteria().andDisableEqualTo(false);
+		List<GuessQuestion> list = this.guessQuestionMapper.selectByExample(questionCriteria);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询在用的竞猜问题结束，结果条目数为："+list.size());
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询在用的竞猜问题循环查询设置问题开始");
+		for (GuessQuestion guessQuestion : list) {
+			GuessQuestionOptionsCriteria criteria = new GuessQuestionOptionsCriteria();
+			criteria.createCriteria().andGuessQuestionIdEqualTo(guessQuestion.getId());
+			List<GuessQuestionOptions> list2 = questionOptionsMapper.selectByExample(criteria);
+			GuessQuestionOption questionOption = new GuessQuestionOption ();
+			questionOption.setGuessQuestion(guessQuestion);
+			questionOption.setGuessQuestionOptions(list2);
+			
+			guessQuestionOptions.add(questionOption);
+		}
+		
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询在用的竞猜问题循环查询设置问题结束");
+		return guessQuestionOptions;
+	}
+	
 
 }

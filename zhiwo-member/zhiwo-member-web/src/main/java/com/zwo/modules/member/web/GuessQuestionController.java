@@ -1,6 +1,7 @@
 package com.zwo.modules.member.web;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,6 +53,8 @@ public class GuessQuestionController extends BaseController<GuessQuestion> {
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@Valid GuessQuestion guessQuestion, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		String id = UUID.randomUUID().toString().replaceAll("-", "");
+		guessQuestion.setId(id);
 		uiModel.addAttribute("guessQuestion", guessQuestion);
 		return basePath + "guessQuestion_edit";
 	}
@@ -83,11 +86,11 @@ public class GuessQuestionController extends BaseController<GuessQuestion> {
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		if (result.hasErrors()) {
-			redirectAttributes.addFlashAttribute("guessQuestion", guessQuestion);
+//			redirectAttributes.addFlashAttribute("guessQuestion", guessQuestion);
 			redirectAttributes.addFlashAttribute("message", "数据绑定有误！");
 			return "redirect:/guessQuestion/create";
 		}
-		
+		guessQuestion.setDisable(false);
 		int res = guessQuestionService.insertSelective(guessQuestion);
 		if(res!=0){
 			redirectAttributes.addFlashAttribute("guessQuestion", guessQuestion);

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,6 +50,9 @@ public class GuessQuestionRestController extends BaseController<GuessQuestion> {
 	@Lazy(true)
 	private ITbUserAssetsService userAssetsService;
 	
+	@Autowired
+	@Lazy(true)
+	RedisTemplate redisTemplate;
 	/** 
 	 * @Title: deleteById 
 	 * @Description: 批量删除 
@@ -160,9 +164,15 @@ public class GuessQuestionRestController extends BaseController<GuessQuestion> {
 			GuessQuestionAnswerCriteria answerCriteria = new GuessQuestionAnswerCriteria();
 			answerCriteria.createCriteria().andQuestionIdEqualTo(questionAnswer.getQuestionId());
 			answerService.deleteByExample(answerCriteria);
-			
+				
 			questionAnswer.setId(System.currentTimeMillis()+"");
 			int result = answerService.insert(questionAnswer);
+			GuessQuestion guessQuestion = this.guessQuestionService.selectByPrimaryKey(questionAnswer.getQuestionId());
+			guessQuestion.setDisable(true);
+			guessQuestionService.updateByPrimaryKeySelective(guessQuestion);
+			//此处应该发送Redis队列消息，异步结算会员账户，目前暂定在此处进行结算。
+			answerService.settleAccounts(questionAnswer);
+			redisTemplate.convertAndSend("queue.releaseAnswer.channel", questionAnswer);
 			return ""+result;
 		}
 }

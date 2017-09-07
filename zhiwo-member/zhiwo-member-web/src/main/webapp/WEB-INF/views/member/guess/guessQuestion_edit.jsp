@@ -25,9 +25,6 @@
  action="${ctx}/guessQuestion/create"
 		</c:if>
 		method="post">
-        <c:if test="${operation=='edit'}">
-        
-		</c:if>
          <input id="id" name="id" value="${guessQuestion.id}" type="hidden"/>
 		 <input id="icon" name="icon" value="${guessQuestion.icon}" type="hidden"/>
          
@@ -49,7 +46,7 @@
 			<label for="questionEndTime" class="col-sm-1 control-label">截止日期</label>
             
 			<div class="col-sm-4">
-				<input type="text" id="questionEndTime"  name="questionEndTime" class="easyui-datetimebox" value="<fmt:formatDate value="${guessQuestion.questionEndTime}" pattern="yyyy-MM-dd HH:mm:ss"/>">  
+				<input type="text" id="questionEndTime"  name="questionEndTime" class="easyui-datetimebox" value="<fmt:formatDate value="${guessQuestion.questionEndTime}" pattern="yyyy-MM-dd HH:mm:ss"/>">
 			</div>
 		</div>
         
@@ -152,6 +149,7 @@
                     <button type="button" class="btn btn-primary" onClick="saveOptions();">
                         保存
                     </button>
+                    <label id="message"></label>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
@@ -186,13 +184,16 @@
 			data.betRate = betRate;
 			data.guessQuestionId = guessQuestionId;
 			var url = '${ctx}/guessQuestionOptions/create';
-			if(editOptions){
+			/*if(editOptions){
 				data.id = $('#datagrid').datagrid('getSelected').id;
 				url = '${ctx}/guessQuestionOptions/update';
-			}
+			}*/
 			
 			$.ajax({url:url,method:"post",data:data,success:function(result){
-				$("#datagrid").datagrid('reload');
+				if(result=='1'){
+					$('#message').html("保存成功");
+					$("#datagrid").datagrid('reload');
+				}
 			}});
 			
 			editOptions = false;

@@ -65,62 +65,29 @@ body {
 		style="text-align: center; font-size: 2rem; margin-top: 20px; margin-bottom: 10px;">
 		<b>趣味竞猜</b><small onclick="javascript:history.back()">&nbsp;&nbsp;返回</small>
 	</div>
-	<div class="thumbnail">
-		<div class="caption">
-			<input id="0b7e6a2a082e4ba4ade09fc245d95c2a" type="hidden"
-				value="0b7e6a2a082e4ba4ade09fc245d95c2a" />
-			<p class="lead">
-				<span id="0b7e6a2a082e4ba4ade09fc245d95c2a_name">中超第24轮，广州恒大（主队） VS 长春亚泰（客队）</span>
-			</p>
-            
-			<p onClick="bet('0b7e6a2a082e4ba4ade09fc245d95c2a')">
-				<span id="0b7e6a2a082e4ba4ade09fc245d95c2a_province">A.广州恒大胜</span>
-                <span class="pull-right">赔率&nbsp;<span id="questionIdBetRate">1.26</span>&nbsp;<i class="fa fa-angle-right fa-lg"></i></span>
-			</p>
-			<p onClick="bet('0b7e6a2a082e4ba4ade09fc245d95c2a')">
-				<span id="0b7e6a2a082e4ba4ade09fc245d95c2a_province">B.平局</span>
-                <span class="pull-right">赔率&nbsp;<span id="questionIdBetRate">4.98</span>&nbsp;<i class="fa fa-angle-right fa-lg"></i></span>
-			</p>
-			<p onClick="bet('0b7e6a2a082e4ba4ade09fc245d95c2a')">
-				<span id="0b7e6a2a082e4ba4ade09fc245d95c2a_province">C.长春亚泰胜</span>
-                <span class="pull-right">赔率&nbsp;<span id="questionIdBetRate">9.17</span>&nbsp;<i class="fa fa-angle-right fa-lg"></i></span>
-			</p>
-			<hr class="hr1" />
-			<div class="pull-left">
-				<span class="label label-danger">投注截止时间：2017年09月09日 19:35</span>
-			</div>
-			<div class="clearfix"></div>
-		</div>
-	</div>
-
-<div class="thumbnail">
-		<div class="caption">
-			<input id="0b7e6a2a082e4ba4ade09fc245d95c2a" type="hidden"
-				value="0b7e6a2a082e4ba4ade09fc245d95c2a" />
-			<p class="lead">
-				<span id="0b7e6a2a082e4ba4ade09fc245d95c2a_name">中超第24轮，广州恒大（主队） VS 长春亚泰（客队）</span>
-			</p>
-            
-			<p onClick="bet('0b7e6a2a082e4ba4ade09fc245d95c2a')">
-				<span id="0b7e6a2a082e4ba4ade09fc245d95c2a_province">A.广州恒大胜</span>
-                <span class="pull-right">赔率&nbsp;<span id="questionIdBetRate">1.26</span>&nbsp;<i class="fa fa-angle-right fa-lg"></i></span>
-			</p>
-			<p onClick="bet('0b7e6a2a082e4ba4ade09fc245d95c2a')">
-				<span id="0b7e6a2a082e4ba4ade09fc245d95c2a_province">B.平局</span>
-                <span class="pull-right">赔率&nbsp;<span id="questionIdBetRate">4.98</span>&nbsp;<i class="fa fa-angle-right fa-lg"></i></span>
-			</p>
-			<p onClick="bet('0b7e6a2a082e4ba4ade09fc245d95c2a')">
-				<span id="0b7e6a2a082e4ba4ade09fc245d95c2a_province">C.长春亚泰胜</span>
-                <span class="pull-right">赔率&nbsp;<span id="questionIdBetRate">9.17</span>&nbsp;<i class="fa fa-angle-right fa-lg"></i></span>
-			</p>
-			<hr class="hr1" />
-			<div class="pull-left">
-				<span class="label label-danger">投注截止时间：2017年09月09日 19:35</span>
-			</div>
-			<div class="clearfix"></div>
-		</div>
-	</div>
-
+    <c:forEach var="guessQuestionOption" items="${list}">
+    	<div class="thumbnail">
+            <div class="caption">
+                <input id="${guessQuestionOption.guessQuestion.id}" type="hidden"
+                    value="${guessQuestionOption.guessQuestion.id}" />
+                <p class="lead">
+                    <span id="${guessQuestionOption.guessQuestion.id}_name">${guessQuestionOption.guessQuestion.name}</span>
+                </p>
+                <c:forEach var="options" items="${guessQuestionOption.guessQuestionOptions}">
+                	 <p onClick="bet('${options.id}')">
+                        <span id="${options.id}_name">${options.name}</span>
+                        <span class="pull-right">赔率&nbsp;<span id="${options.id}_betRate">${options.betRate}</span>&nbsp;<i class="fa fa-angle-right fa-lg"></i></span>
+                    </p>
+                </c:forEach>
+               
+                <hr class="hr1" />
+                <div class="pull-left">
+                    <span class="label label-danger">投注截止时间：<fmt:formatDate value="${guessQuestionOption.guessQuestion.questionEndTime}" type="both" pattern="yyyy年MM月dd日 HH:mm:ss"/></span>
+                </div>
+                <div class="clearfix" style="height:20px;"></div>
+            </div>
+        </div>
+    </c:forEach>
 
 	<!-- 模态框（Modal） -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"

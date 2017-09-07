@@ -374,6 +374,76 @@ public class GuessQuestionOptionsCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andRealQuestionIdIsNull() {
+            addCriterion("REAL_QUESTION_ID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealQuestionIdIsNotNull() {
+            addCriterion("REAL_QUESTION_ID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealQuestionIdEqualTo(String value) {
+            addCriterion("REAL_QUESTION_ID =", value, "realQuestionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealQuestionIdNotEqualTo(String value) {
+            addCriterion("REAL_QUESTION_ID <>", value, "realQuestionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealQuestionIdGreaterThan(String value) {
+            addCriterion("REAL_QUESTION_ID >", value, "realQuestionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealQuestionIdGreaterThanOrEqualTo(String value) {
+            addCriterion("REAL_QUESTION_ID >=", value, "realQuestionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealQuestionIdLessThan(String value) {
+            addCriterion("REAL_QUESTION_ID <", value, "realQuestionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealQuestionIdLessThanOrEqualTo(String value) {
+            addCriterion("REAL_QUESTION_ID <=", value, "realQuestionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealQuestionIdLike(String value) {
+            addCriterion("REAL_QUESTION_ID like", value, "realQuestionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealQuestionIdNotLike(String value) {
+            addCriterion("REAL_QUESTION_ID not like", value, "realQuestionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealQuestionIdIn(List<String> values) {
+            addCriterion("REAL_QUESTION_ID in", values, "realQuestionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealQuestionIdNotIn(List<String> values) {
+            addCriterion("REAL_QUESTION_ID not in", values, "realQuestionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealQuestionIdBetween(String value1, String value2) {
+            addCriterion("REAL_QUESTION_ID between", value1, value2, "realQuestionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealQuestionIdNotBetween(String value1, String value2) {
+            addCriterion("REAL_QUESTION_ID not between", value1, value2, "realQuestionId");
+            return (Criteria) this;
+        }
+
         public Criteria andIdLikeInsensitive(String value) {
             addCriterion("upper(ID) like", value.toUpperCase(), "id");
             return (Criteria) this;
@@ -386,6 +456,11 @@ public class GuessQuestionOptionsCriteria {
 
         public Criteria andGuessQuestionIdLikeInsensitive(String value) {
             addCriterion("upper(GUESS_QUESTION_ID) like", value.toUpperCase(), "guessQuestionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRealQuestionIdLikeInsensitive(String value) {
+            addCriterion("upper(REAL_QUESTION_ID) like", value.toUpperCase(), "realQuestionId");
             return (Criteria) this;
         }
     }
