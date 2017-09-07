@@ -22,6 +22,7 @@ import com.zwo.modules.member.domain.GuessQuestion;
 import com.zwo.modules.member.domain.GuessQuestionAnswer;
 import com.zwo.modules.member.domain.GuessQuestionAnswerCriteria;
 import com.zwo.modules.member.domain.GuessQuestionOptions;
+import com.zwo.modules.member.domain.GuessQuestionOptionsCriteria;
 import com.zwo.modules.member.service.IGuessQuestionAnswerService;
 import com.zwo.modules.member.service.IGuessQuestionOptionsService;
 import com.zwo.modules.member.service.IGuessQuestionService;
@@ -38,6 +39,7 @@ public class GuessQuestionController extends BaseController<GuessQuestion> {
 	@Autowired
 	@Lazy(true)
 	private IGuessQuestionService guessQuestionService;
+	
 	@Autowired
 	@Lazy(true)
 	private IGuessQuestionOptionsService guessQuestionOptionsService;
@@ -93,6 +95,12 @@ public class GuessQuestionController extends BaseController<GuessQuestion> {
 		guessQuestion.setDisable(false);
 		int res = guessQuestionService.insertSelective(guessQuestion);
 		if(res!=0){
+			GuessQuestionOptionsCriteria criteria = new GuessQuestionOptionsCriteria();
+			criteria.createCriteria().andGuessQuestionIdEqualTo(guessQuestion.getId());
+			GuessQuestionOptions guessQuestionOptions = new GuessQuestionOptions();
+			guessQuestionOptions.setRealQuestionId(guessQuestion.getId());
+			guessQuestionOptionsService.updateByExampleSelective(guessQuestionOptions, criteria);
+			
 			redirectAttributes.addFlashAttribute("guessQuestion", guessQuestion);
 			redirectAttributes.addFlashAttribute("message", "保存成功！");
 		}
