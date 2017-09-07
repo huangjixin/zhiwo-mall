@@ -99,7 +99,15 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion> impleme
 
 		// 逻辑操作
 		int result = guessQuestionMapper.deleteByExample(example);
-
+		if(result != 0){
+			if(redisTemplate == null ){
+				redisTemplate = SpringContextHolder.getBean("redisTemplate");
+			}
+			
+			if(redisTemplate != null){
+				redisTemplate.delete("selectIneffectQuestion_guessQuestion");
+			}
+		}
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除结束");
 		return result;
@@ -118,7 +126,15 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion> impleme
 		GuessQuestionCriteria guessQuestionCriteria = new GuessQuestionCriteria();
 		guessQuestionCriteria.createCriteria().andIdIn(list);
 		int result = guessQuestionMapper.deleteByExample(guessQuestionCriteria);
-
+		if(result != 0){
+			if(redisTemplate == null ){
+				redisTemplate = SpringContextHolder.getBean("redisTemplate");
+			}
+			
+			if(redisTemplate != null){
+				redisTemplate.delete("selectIneffectQuestion_guessQuestion");
+			}
+		}
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteBatch批量删除结束");
 		return result;
@@ -316,6 +332,15 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion> impleme
 
 		// 逻辑操作
 		int result = super.updateByExample(record, example);
+		if(result != 0){
+			if(redisTemplate == null ){
+				redisTemplate = SpringContextHolder.getBean("redisTemplate");
+			}
+			
+			if(redisTemplate != null){
+				redisTemplate.delete("selectIneffectQuestion_guessQuestion");
+			}
+		}
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExample更新结束");
@@ -340,6 +365,15 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion> impleme
 
 		// 逻辑操作
 		int result = super.updateByPrimaryKeySelective(record);
+		if(result != 0){
+			if(redisTemplate == null ){
+				redisTemplate = SpringContextHolder.getBean("redisTemplate");
+			}
+			
+			if(redisTemplate != null){
+				redisTemplate.delete("selectIneffectQuestion_guessQuestion");
+			}
+		}
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新结束");
 		return result;
