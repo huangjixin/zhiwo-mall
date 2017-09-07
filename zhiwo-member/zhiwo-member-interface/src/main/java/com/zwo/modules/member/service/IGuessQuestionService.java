@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.zwo.modules.member.domain.GuessQuestion;
 import com.zwo.modules.member.domain.GuessQuestionOption;
+import com.zwo.modules.member.domain.GuessQuestionOptions;
 import com.zwotech.modules.core.service.IBaseService;
 
 /**
@@ -19,4 +20,11 @@ public interface IGuessQuestionService extends IBaseService<GuessQuestion> {
 	 * @return
 	 */
 	List<GuessQuestionOption> selectIneffectQuestion();
+	
+	/**
+	 * 根据问题查询选项。
+	 * @param questionId
+	 * @return
+	 */
+	List<GuessQuestionOptions> selectByQuestionId(String questionId);
 }

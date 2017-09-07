@@ -13,10 +13,5 @@ import com.zwotech.modules.core.service.IBaseService;
  *
  */
 public interface IGuessQuestionOptionsService extends IBaseService<GuessQuestionOptions> {
-	/**
-	 * 根据问题查询选项。
-	 * @param questionId
-	 * @return
-	 */
-	List<GuessQuestionOptions> selectByQuestionId(String questionId);
+	
 }

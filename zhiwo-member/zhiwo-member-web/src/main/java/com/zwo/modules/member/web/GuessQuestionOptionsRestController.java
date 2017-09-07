@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,13 +22,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.github.pagehelper.DatagridPage;
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.member.domain.GuessQuestionOptions;
 import com.zwo.modules.member.domain.GuessQuestionOptionsCriteria;
 import com.zwo.modules.member.service.IGuessQuestionOptionsService;
+import com.zwo.modules.member.service.IGuessQuestionService;
 import com.zwo.modules.system.domain.TbUserAssets;
 import com.zwo.modules.system.domain.TbUserAssetsCriteria;
 import com.zwo.modules.system.service.ITbUserAssetsService;
@@ -42,6 +41,9 @@ public class GuessQuestionOptionsRestController extends BaseController<GuessQues
 	@Autowired
 	@Lazy(true)
 	private IGuessQuestionOptionsService guessQuestionOptionsService;
+	@Autowired
+	@Lazy(true)
+	private IGuessQuestionService questionOptionsService;
 	
 	@Autowired
 	@Lazy(true)
@@ -152,7 +154,10 @@ public class GuessQuestionOptionsRestController extends BaseController<GuessQues
 		
 		if (null != guessQuestionOptions.getGuessQuestionId() && !"".equals(guessQuestionOptions.getGuessQuestionId())) {
 			criteria.andGuessQuestionIdEqualTo(guessQuestionOptions.getGuessQuestionId());
-			pageInfo = guessQuestionOptionsService.selectByPageInfo(guessQuestionOptionsCriteria, pageInfo);
+//			pageInfo = guessQuestionOptionsService.selectByPageInfo(guessQuestionOptionsCriteria, pageInfo);
+			
+			 List<GuessQuestionOptions> list = questionOptionsService.selectByQuestionId(guessQuestionOptions.getGuessQuestionId());
+			 pageInfo.setList(list);
 		}
 		
 		return super.setPage(pageInfo);

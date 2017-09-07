@@ -67,8 +67,8 @@ public class GuessQuestionController extends BaseController<GuessQuestion> {
 			HttpServletResponse httpServletResponse) {
 		GuessQuestion guessQuestion = guessQuestionService.selectByPrimaryKey(id);
 		if(guessQuestion != null){
-			List<GuessQuestionOptions> list = guessQuestionOptionsService.selectByQuestionId(guessQuestion.getId());
-			uiModel.addAttribute("guessQuestionOptions", list);
+			//List<GuessQuestionOptions> list = guessQuestionOptionsService.selectByQuestionId(guessQuestion.getId());
+			//uiModel.addAttribute("guessQuestionOptions", list);
 		}
 		
 		GuessQuestionAnswerCriteria answerCriteria = new GuessQuestionAnswerCriteria();

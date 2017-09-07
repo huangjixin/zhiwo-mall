@@ -119,7 +119,7 @@ public class GuessQuestionOptionsServiceImpl extends BaseService<GuessQuestionOp
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "GuessQuestionOptions", key = "#id+''")
+	@CacheEvict(value = "GuessQuestionOptions", key = "#id+'_GuessQuestionOptions'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -142,7 +142,7 @@ public class GuessQuestionOptionsServiceImpl extends BaseService<GuessQuestionOp
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "GuessQuestionOptions", key = "#record.id")
+//	@CachePut(value = "GuessQuestionOptions", key = "#record.id+'_GuessQuestionOptions'")
 	public int insert(GuessQuestionOptions record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -169,7 +169,7 @@ public class GuessQuestionOptionsServiceImpl extends BaseService<GuessQuestionOp
 	 */
 
 	@Override
-//	@CachePut(value = "GuessQuestionOptions", key = "#record.id")
+//	@CachePut(value = "GuessQuestionOptions", key = "#record.id+'_GuessQuestionOptions'")
 	public int insertSelective(GuessQuestionOptions record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -208,7 +208,7 @@ public class GuessQuestionOptionsServiceImpl extends BaseService<GuessQuestionOp
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = "GuessQuestionOptions")
+	@Cacheable(key = "#id+'_GuessQuestionOptions'", value = "GuessQuestionOptions")
 	@Transactional(readOnly = true)
 	public GuessQuestionOptions selectByPrimaryKey(String id) {
 		// 日志记录
@@ -280,7 +280,7 @@ public class GuessQuestionOptionsServiceImpl extends BaseService<GuessQuestionOp
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "GuessQuestionOptions", key = "#record.id")
+	@CacheEvict(value = "GuessQuestionOptions", key = "#record.id+'_GuessQuestionOptions'")
 	public int updateByPrimaryKeySelective(GuessQuestionOptions record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -303,7 +303,7 @@ public class GuessQuestionOptionsServiceImpl extends BaseService<GuessQuestionOp
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "GuessQuestionOptions", key = "#record.id")
+	@CacheEvict(value = "GuessQuestionOptions", key = "#record.id+'_GuessQuestionOptions'")
 	public int updateByPrimaryKey(GuessQuestionOptions record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -339,12 +339,5 @@ public class GuessQuestionOptionsServiceImpl extends BaseService<GuessQuestionOp
 	}
 
 
-	@Override
-	public List<GuessQuestionOptions> selectByQuestionId(String questionId) {
-		GuessQuestionOptionsCriteria optionsCriteria = new GuessQuestionOptionsCriteria();
-		optionsCriteria.createCriteria().andGuessQuestionIdEqualTo(questionId);
-		List<GuessQuestionOptions> list = guessQuestionOptionsMapper.selectByExample(optionsCriteria);
-		return list;
-	}
 
 }
