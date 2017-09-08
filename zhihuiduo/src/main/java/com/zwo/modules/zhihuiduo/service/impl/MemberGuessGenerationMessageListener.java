@@ -4,6 +4,9 @@
 package com.zwo.modules.zhihuiduo.service.impl;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 import com.zwo.modules.member.domain.GuessQuestionOption;
 import com.zwo.modules.member.service.IGuessQuestionService;
 import com.zwotech.common.utils.FreeMarkerUtil;
+import com.zwotech.common.utils.PathUtil;
 import com.zwotech.common.utils.SpringContextHolder;
 
 /**
@@ -28,7 +32,7 @@ import com.zwotech.common.utils.SpringContextHolder;
 @Service
 @Lazy(true)
 public class MemberGuessGenerationMessageListener implements MessageListener {
-	
+
 	private RedisTemplate<String, String> redisTemplate;
 
 	@Autowired
@@ -44,38 +48,44 @@ public class MemberGuessGenerationMessageListener implements MessageListener {
 	 */
 	@Override
 	public void onMessage(final Message message, final byte[] pattern) {
-		if(redisTemplate == null ){ 
-			redisTemplate = SpringContextHolder.getBean("redisTemplate"); 
+		if (redisTemplate == null) {
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
 		}
-		
-		if(redisTemplate != null){
-			List<GuessQuestionOption> list = guessQuestionService.selectIneffectQuestion();
+
+		if (redisTemplate != null) {
+			List<GuessQuestionOption> list = guessQuestionService
+					.selectIneffectQuestion();
+			String rootPath = PathUtil.getWebroot();
 			
-			String path = System.getProperty("webapp.root");
-			path += File.separator+"WEB-INF" + File.separator+"views"+ File.separator+"member";
-			String templateName = "guess.ftl";
-			String fileName = "guess.htm";
-			Map root = new HashMap<>();
-			root.put("", list);
+			String fileNamePath = rootPath +  "resources";
+			
+			String path = rootPath+"WEB-INF"+ "/views" + "/member/";
+			String templateName = path + "guess.ftl";
+			
+			String fileName = fileNamePath + File.separator + "guess.htm";
+			Map<String, Object> root = new HashMap<String, Object>();
+			root.put("list", list);
 			FreeMarkerUtil.analysisTemplate(path, templateName, fileName, root);
-			
-			RedisSerializer<?> stringSerializer = redisTemplate.getStringSerializer();
-			RedisSerializer<?> valueSerializer = redisTemplate.getDefaultSerializer();
+
+			RedisSerializer<?> stringSerializer = redisTemplate
+					.getStringSerializer();
+			RedisSerializer<?> valueSerializer = redisTemplate
+					.getDefaultSerializer();
 			Object channel = stringSerializer.deserialize(message.getChannel());
 			Object body = valueSerializer.deserialize(message.getBody());
-			
+
 		}
-		
-		
+
 	}
 
 	public static void main(String[] args) {
-		String path = MemberGuessGenerationMessageListener.class.getResource("/").getPath();
+		String path = MemberGuessGenerationMessageListener.class.getResource(
+				"/").getPath();
 		System.out.println(path);
 		path = System.getProperty("user.dir");
 		System.out.println(path);
 		path = System.getProperty("webapp.root");
 		System.out.println(path);
-		
+
 	}
 }

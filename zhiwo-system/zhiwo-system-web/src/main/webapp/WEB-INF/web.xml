@@ -7,7 +7,7 @@
 	<display-name>zhiwo-system-web</display-name>
 	<context-param>
 		<param-name>webAppRootKey</param-name>
-		<param-value>web.root</param-value>
+		<param-value>zhiwo-system-web.root</param-value>
 	</context-param>
 	<context-param>
 		<param-name>log4jConfigLocation</param-name>
