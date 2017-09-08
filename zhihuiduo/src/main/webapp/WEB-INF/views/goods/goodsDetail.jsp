@@ -237,7 +237,7 @@
 					<div class="media-body">
 						<div style="height: 55px;"></div>
 						<h4 class="media-heading" style="color: red; font-size: 1.8rem;">
-							<i class="fa fa-jpy"></i><label id="priceLabel">88</label>
+							<i class="fa fa-jpy"></i><label id="priceLabel">${product.gourpSalePrice}</label>
 						</h4>
 						<label style="font-size: 1.2rem;" id="propertyValueLabel">请选择属性</label>
 					</div>
@@ -314,11 +314,11 @@
 		var mode = 'group';
 		$().ready(function() {
 			
-			if (propertiesString != '' || propertiesString != '[]') {
+			if (propertiesString != '') {
 				proArray = JSON.parse('${propertiesString}');
 			}
 			
-			if (propertyValuesString != '' || propertyValuesString != '[]') {
+			if (propertyValuesString != '') {
 				propertyValueArray = JSON.parse('${propertyValuesString}');
 			}
 			

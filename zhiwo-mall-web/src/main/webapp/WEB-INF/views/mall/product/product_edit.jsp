@@ -244,6 +244,26 @@
 					value="${product.numberCount}">
 			</div>
 		</div>
+        <div class="form-group">
+			<label for="marketPrice" class="col-sm-2 control-label">市价(<i
+				class="fa fa-jpy"></i>)
+			</label>
+			<div class="col-sm-6">
+				<input type="text" class="form-control" id="marketPrice"
+					name="marketPrice" placeholder="请输入商品市价(市价为划线价一般比真实售价高)"
+					value="${product.marketPrice}">
+			</div>
+		</div>
+        <div class="form-group">
+			<label for="transportFee" class="col-sm-2 control-label">运费(<i
+				class="fa fa-jpy"></i>)
+			</label>
+			<div class="col-sm-6">
+				<input type="text" class="form-control" id="transportFee"
+					name="transportFee" placeholder="请输入运费(0或者不填为包邮)"
+					value="${product.transportFee}">
+			</div>
+		</div>
 		<div class="form-group">
 			<label for="gourpSalePrice" class="col-sm-2 control-label">团购价(<i
 				class="fa fa-jpy"></i>)
@@ -360,7 +380,14 @@
 			<label for="independentPrice" class="col-sm-2 control-label"></label>
 			<div class="col-sm-6">
 				<%@ include file="/WEB-INF/include/easyui-buttonForm.jsp"%>
-
+                <c:if test="${operation=='edit'}">
+                	<a href="${ctx}/goodsDetail?goodsId=${product.id}" target="_blank">
+                    	<button type="button" id="previewBtn" class="btn btn-default">
+                   		 <i class="fa fa-floppy-o" aria-hidden="true"></i>&nbsp;&nbsp;预览
+                	</button> 
+                    </a>
+				</c:if>
+				
 			</div>
 		</div>
 		<div class="form-group">
@@ -515,10 +542,10 @@
 									onclick="uploadSwiperImageTOServer();">
 									<i class="fa fa-upload"></i> <span>&nbsp;&nbsp;开始上传</span>
 								</button>
-								<button type="button" class="btn btn-primary start"
-									onclick="uploadSwiperImageTOServer();">从已上传的图片当中选择</button>
-								<br> <label id="swiperMessage"></label> <label
-									style="color: red;">轮播图要求图片长宽比例为2:1，用工具将图片压缩成webp格式。(预览)</label>
+								<!--<button type="button" class="btn btn-primary start"
+									onclick="uploadSwiperImageTOServer();">从已上传的图片当中选择</button>-->
+								<br> <label id="swiperMessage"></label> <!--<label
+									style="color: red;">轮播图要求图片长宽比例为2:1，用工具将图片压缩成webp格式。(预览)</label>-->
 								<img id="swiperImg" class=".img-responsive" width="200px;">
 
 							</div>
@@ -612,6 +639,8 @@
 			}
 
 			$('#collapsePrImages').collapse('hide');
+			
+			validateForm();
 		});
 
 		//回填价格函数
@@ -1109,6 +1138,8 @@
 									$('#proImagesWrapper').append(para);
 								}
 								$('#datagrid').datagrid("reload");
+								
+								$('#swiperImg').attr("src","");
 							}
 							$('#swiperMessage').html('');
 						},
@@ -1189,6 +1220,105 @@
 			var url = getFileUrl(sourceId);
 			var imgPre = document.getElementById(targetId);
 			imgPre.src = url;
+		}
+		
+		var operationMode = "${operation}";
+		
+		function createMode(){
+			document.form.action="${ctx}/product/create";
+			document.form.submit();
+		}	
+	
+		function createAndToEditMode(){
+			document.form.action="${ctx}/product/update";
+			document.form.submit();
+		}
+		
+		
+		///验证函数
+		function validateForm(){
+			$('form').bootstrapValidator({
+	　　　　　　　　message: 'This value is not valid',
+				　feedbackIcons: {
+					　　　　　　　　valid: 'glyphicon glyphicon-ok',
+					　　　　　　　　invalid: 'glyphicon glyphicon-remove',
+					　　　　　　　　validating: 'glyphicon glyphicon-refresh'
+				　　　　　　　　   },
+				fields: {
+					name: {
+						message: '标题验证失败',
+						validators: {
+							notEmpty: {
+								message: '标题不能为空'
+							},stringLength: {
+								min: 1,
+								max: 120,
+								message: '长度必须在1到120之间'
+							}
+						}
+					},
+					description: {
+						message: '标题验证失败',
+						validators: {
+							notEmpty: {
+								message: '标题不能为空'
+							},stringLength: {
+								min: 1,
+								max: 1200,
+								message: '长度必须在1到1200之间'
+							}
+						}
+					},
+					purchasingCost: {
+						message: '进货价验证失败',
+						validators: {
+							notEmpty: {
+								message: '进货价不可以为空'
+							}
+						}
+					},
+					gourpSalePrice: {
+						message: '团购价验证失败',
+						validators: {
+							notEmpty: {
+								message: '团购价不可以为空'
+							}
+						}
+					},
+					independentPrice: {
+						message: '单独购买价验证失败',
+						validators: {
+							notEmpty: {
+								message: '单独购买不可以为空'
+							}
+						}
+					},
+					storage: {
+						message: '库存验证失败',
+						validators: {
+							notEmpty: {
+								message: '库存不可以为空'
+							}
+						}
+					},
+					marketPrice: {
+						message: '市价验证失败',
+						validators: {
+							notEmpty: {
+								message: '市价不可以为空'
+							}
+						}
+					},
+					marketPrice: {
+						message: '市价验证失败',
+						validators: {
+							notEmpty: {
+								message: '市价不可以为空'
+							}
+						}
+					}
+				}
+			});	
 		}
 	</script>
 	<%@ include file="/WEB-INF/include/easyui-footerjs.jsp"%>

@@ -99,11 +99,11 @@ public class GoodsController extends BaseController {
 				.getRealPath("/");
 		String goodsDetailJspUri = rootDir + "WEB-INF" + File.separator
 				+ "views" + File.separator + "goods" + goodsId + ".jsp";
-		Path path = Paths.get(goodsDetailJspUri);
+		/*Path path = Paths.get(goodsDetailJspUri);
 
 		if (Files.exists(path)) {
 			return basePath + goodsId;
-		}
+		}*/
 
 		PrProductWithBLOBs product = prductService.selectByPrimKey(goodsId);
 		if (product != null) {
