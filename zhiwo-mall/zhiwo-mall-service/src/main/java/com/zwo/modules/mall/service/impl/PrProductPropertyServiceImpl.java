@@ -14,6 +14,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ import com.zwo.modules.mall.dao.PrProductPropertyMapper;
 import com.zwo.modules.mall.domain.PrProductProperty;
 import com.zwo.modules.mall.domain.PrProductPropertyCriteria;
 import com.zwo.modules.mall.service.IPrProductPropertyService;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -37,7 +39,11 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	private static Logger logger = LoggerFactory.getLogger(PrProductPropertyServiceImpl.class);
 
 	private static final String BASE_MESSAGE = "【PrProductPropertyServiceImpl服务类提供的基础操作增删改查等】";
-
+	private static final String LIST_ALL_PRODUCT_PROPERTY =  "listAllProductProperty";
+	
+	@SuppressWarnings("rawtypes")
+	private RedisTemplate redisTemplate;
+	
 	@Autowired
 	@Lazy(true)
 	private PrProductPropertyMapper productPropertyMapper;
@@ -69,6 +75,8 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * @Override public int countByExample(Object example) { // TODO
 	 * Auto-generated method stub return 0; }
 	 */
+	
+	
 
 	/*
 	 * (non-Javadoc)
@@ -78,7 +86,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"}, allEntries = true)
+	@CacheEvict(value = {"PrProductProperty"}, allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -87,12 +95,14 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 		// 逻辑操作
 		int result = productPropertyMapper.deleteByExample(example);
 
+		removeRedisKey(LIST_ALL_PRODUCT_PROPERTY);
+		
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除结束");
 		return result;
 	}
 
-	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"}, allEntries = true)
+	@CacheEvict(value = {"PrProductProperty"}, allEntries = true)
 //	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
@@ -105,7 +115,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 		PrProductPropertyCriteria productPropertyCriteria = new PrProductPropertyCriteria();
 		productPropertyCriteria.createCriteria().andIdIn(list);
 		int result = productPropertyMapper.deleteByExample(productPropertyCriteria);
-
+		removeRedisKey(LIST_ALL_PRODUCT_PROPERTY);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteBatch批量删除结束");
 		return result;
@@ -119,14 +129,14 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"},key="#id+'productProperty'")
+	@CacheEvict(value = {"PrProductProperty"},key="#id+'productProperty'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为：" + id.toString());
-
+		removeRedisKey(LIST_ALL_PRODUCT_PROPERTY);
 		// 逻辑操作
 		int result = super.deleteByPrimaryKey(id);
 
@@ -142,14 +152,15 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = {"PrProductProperty","PrProductPropertys"}, key = "#record.id+'productProperty'")
+//	@CachePut(value = {"PrProductProperty"}, key = "#record.id+'productProperty'")
 	public int insert(PrProductProperty record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-
+		removeRedisKey(LIST_ALL_PRODUCT_PROPERTY);
+		
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
@@ -169,14 +180,14 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 */
 
 	@Override
-//	@CachePut(value = {"PrProductProperty","PrProductPropertys"}, key = "#record.id+'productProperty'")
+//	@CachePut(value = {"PrProductProperty"}, key = "#record.id+'productProperty'")
 	public int insertSelective(PrProductProperty record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-
+		removeRedisKey(LIST_ALL_PRODUCT_PROPERTY);
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
@@ -208,7 +219,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+'productProperty'", value = {"PrProductProperty","PrProductPropertys"})
+	@Cacheable(key = "#id+'productProperty'", value = {"PrProductProperty"})
 	@Transactional(readOnly = true)
 	public PrProductProperty selectByPrimaryKey(String id) {
 		// 日志记录
@@ -231,7 +242,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * com.zwotech.modules.core.service.IBaseService#updateByExampleSelective(
 	 * java.lang.Object, java.lang.Object)
 	 */
-	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"}, allEntries = true)
+	@CacheEvict(value = {"PrProductProperty"}, allEntries = true)
 	@Override
 	public int updateByExampleSelective(PrProductProperty record, Object example) {
 		// 日志记录
@@ -239,7 +250,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
-
+		removeRedisKey(LIST_ALL_PRODUCT_PROPERTY);
 		// 逻辑操作
 		int result = super.updateByExampleSelective(record, example);
 		// 日志记录
@@ -256,14 +267,14 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * Object, java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"}, allEntries = true)
+	@CacheEvict(value = {"PrProductProperty"}, allEntries = true)
 	public int updateByExample(PrProductProperty record, Object example) {
 		//日志记录
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新开始");
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
-										
+		removeRedisKey(LIST_ALL_PRODUCT_PROPERTY);								
 		//逻辑操作		
 		int result = super.updateByExample(record, example);
 		//日志记录
@@ -280,14 +291,14 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"},key="#record.id+'productProperty'",allEntries=true)
+	@CacheEvict(value = {"PrProductProperty"},key="#record.id+'productProperty'",allEntries=true)
 	public int updateByPrimaryKeySelective(PrProductProperty record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
-
+		removeRedisKey(LIST_ALL_PRODUCT_PROPERTY);
 		// 逻辑操作
 		int result = super.updateByPrimaryKeySelective(record);
 		if (logger.isInfoEnabled())
@@ -303,14 +314,14 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = {"PrProductProperty","PrProductPropertys"},key="#record.id+'productProperty'",allEntries=true)
+	@CacheEvict(value = {"PrProductProperty"},key="#record.id+'productProperty'",allEntries=true)
 	public int updateByPrimaryKey(PrProductProperty record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为：" + record.toString());
-
+		removeRedisKey(LIST_ALL_PRODUCT_PROPERTY);
 		// 逻辑操作
 		int result = super.updateByPrimaryKey(record);
 		if (logger.isInfoEnabled())
@@ -338,18 +349,9 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 		return pageInfo;
 	}
 
-	public static void main(String[] args) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
-		IPrProductPropertyService productPropertyServiceImpl = (IPrProductPropertyService) context.getBean("productPropertyServiceImpl");
-		PrProductProperty productProperty = new PrProductProperty();
-		productProperty.setId(System.currentTimeMillis() + "");
-		int result = productPropertyServiceImpl.insertSelective(productProperty);
-		logger.info(result + "");
-	}
-
 	@Transactional(readOnly = true)
 	@Override
-	@Cacheable(value = "PrProductPropertys",key="'productProperty'+#root.method.name")
+	@Cacheable(value = "PrProductPropertys",key="'listAllProductProperty'")
 	public List<PrProductProperty> listAll() {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "查询所有属性开始");
@@ -362,4 +364,22 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 		return properties;
 	}
 
+	/**
+	 * 移除key.
+	 * @param key
+	 */
+	@SuppressWarnings("unchecked")
+	private void removeRedisKey(String key){
+		if (redisTemplate == null) {
+			redisTemplate = SpringContextHolder
+					.getBean("redisTemplate");
+		}
+
+		if (redisTemplate != null) {
+			
+			if (redisTemplate.hasKey(key)) {
+				redisTemplate.delete(key);
+			}
+		}
+	}
 }

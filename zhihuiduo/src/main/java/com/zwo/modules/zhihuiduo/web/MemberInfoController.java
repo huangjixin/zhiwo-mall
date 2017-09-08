@@ -188,7 +188,7 @@ public class MemberInfoController extends BaseController {
 		if (subject != null) {
 			Member member = (Member) subject.getSession().getAttribute("member");
 			if (member != null) {
-				List<MemberAddress> list = memberService.selectMemberAddressByMId(member.getId());
+				List<MemberAddress> list = addressService.listAllByMemberId(member.getId());
 				uiModel.addAttribute("addresses", list);
 			}
 		} 
@@ -277,11 +277,5 @@ public class MemberInfoController extends BaseController {
 			
 		}
 		return "0";
-	}
-
-	@RequestMapping(value = { "test" }, method = RequestMethod.GET)
-	public String test(Model uiModel, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		uiModel.addAttribute("rawData", 123456);
-		return "test";
 	}
 }

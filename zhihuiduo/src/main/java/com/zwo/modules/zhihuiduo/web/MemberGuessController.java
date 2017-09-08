@@ -41,15 +41,16 @@ public class MemberGuessController extends BaseController {
 	@Autowired
 	@Lazy(true)
 	private IMemberAddressService addressService;
+	
 	@Autowired
 	@Lazy(true)
 	private IGuessQuestionService guessQuestionService;
 
 //	@Autowired
 //	@Lazy(true)
-	@SuppressWarnings("rawtypes")
-	private RedisTemplate redisTemplate = SpringContextHolder
-			.getBean("redisTemplate");
+//	@SuppressWarnings("rawtypes")
+//	private RedisTemplate redisTemplate = SpringContextHolder
+//			.getBean("redisTemplate");
 
 	private static final String basePath = "views/member/";
 

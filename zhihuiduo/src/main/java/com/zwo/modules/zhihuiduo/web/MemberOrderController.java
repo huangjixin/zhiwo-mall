@@ -51,14 +51,12 @@ public class MemberOrderController extends BaseController<TbUser> {
 	@Lazy(true)
 	private IMemberAddressService addressService;
 
-	@SuppressWarnings("rawtypes")
-	private RedisTemplate redisTemplate = SpringContextHolder
-			.getBean("redisTemplate");
+//	@SuppressWarnings("rawtypes")
+//	private RedisTemplate redisTemplate = SpringContextHolder
+//			.getBean("redisTemplate");
 
 	private static final String basePath = "views/member/";
 
-	
-	
 	/**
 	 * 跳转到下单页面
 	 * 
@@ -72,10 +70,9 @@ public class MemberOrderController extends BaseController<TbUser> {
 	public String checkOut(@RequestParam String goodsId,
 			@RequestParam String shopId, @RequestParam Integer buyNum,
 			@RequestParam String packagePriceId,
-			@RequestParam String proValues,
-			@RequestParam String dealPrice,
-			RedirectAttributes redirectAttributes,
-			Model uiModel, HttpServletRequest httpServletRequest,
+			@RequestParam String proValues, @RequestParam String dealPrice,
+			RedirectAttributes redirectAttributes, Model uiModel,
+			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		PrProduct product = prductService.selectByPrimaryKey(goodsId);
 		Shop shop = shopService.selectByPrimaryKey(shopId);
@@ -86,14 +83,14 @@ public class MemberOrderController extends BaseController<TbUser> {
 		orderTrade.setDisable(false);
 		orderTrade.setBuyNum(buyNum);
 		if (shop != null) {
-			uiModel.addAttribute("shop",shop);
-			
+			uiModel.addAttribute("shop", shop);
+
 		}
 		if (product != null) {
 			orderTrade.setShopId(product.getShopId());
-			uiModel.addAttribute("product",product);
+			uiModel.addAttribute("product", product);
 			orderTrade.setProductId(goodsId);
-//			redirectAttributes.addFlashAttribute("product",product);
+			// redirectAttributes.addFlashAttribute("product",product);
 		}
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
@@ -103,33 +100,31 @@ public class MemberOrderController extends BaseController<TbUser> {
 				orderTrade.setMemberId(member.getId());
 				MemberAddress address = addressService
 						.selectDefaultAddressByMemberId(member.getId());
-				uiModel.addAttribute("member",member);
+				uiModel.addAttribute("member", member);
 				uiModel.addAttribute("address", address);
 			}
 		} else {
 
 		}
-		
+
 		orderTradeService.insertSelective(orderTrade);
-		
+
 		uiModel.addAttribute("order", orderTrade);
-		return basePath +"checkOut";
-//		return "redirect:/memberOrder/checkOut";
+		return basePath + "checkOut";
+		// return "redirect:/memberOrder/checkOut";
 	}
-	
-	
+
 	@RequestMapping(value = "check")
 	public String check_out(@RequestParam String goodsId,
 			@RequestParam String shopId, @RequestParam Integer buyNum,
 			@RequestParam String packagePriceId,
-			@RequestParam String proValues,
-			@RequestParam String dealPrice,RedirectAttributes redirectAttributes,
-			Model uiModel, HttpServletRequest httpServletRequest,
+			@RequestParam String proValues, @RequestParam String dealPrice,
+			RedirectAttributes redirectAttributes, Model uiModel,
+			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		PrProduct product = prductService.selectByPrimaryKey("150383670510593");
 		uiModel.addAttribute("product", product);
 		return basePath + "checkOut";
 	}
-	
-	
+
 }

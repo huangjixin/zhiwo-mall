@@ -45,7 +45,7 @@ public interface IPrductService extends IBaseService<PrProduct> {
      * @param productId
      * @return
      */
-    List<PrImage> selectByProductId(String productId,boolean isDefault);
+//    List<PrImage> selectByProductId(String productId,boolean isDefault);
     
     
 }

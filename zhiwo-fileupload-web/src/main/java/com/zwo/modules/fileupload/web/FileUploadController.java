@@ -164,6 +164,7 @@ public class FileUploadController {
 	@ResponseBody
 	public String proAssetsUpload(
 			@RequestParam String productId,
+			@RequestParam String type,
 			@RequestParam(value = "file", required = false) CommonsMultipartFile[] files,
 			@RequestParam(value = "imgWidth", required = false)  String imgWidth,
 			@RequestParam(value = "imgHeight", required = false)  String imgHeight,
@@ -212,6 +213,7 @@ public class FileUploadController {
 				if(tbuser!=null){
 					assets.setUserId(tbuser.getId());
 				}
+				assets.setType(type);
 				assets.setIsDefault(false);
 				assets.setProductId(productId);
 				assets.setName(name);

@@ -14,4 +14,8 @@ public class PrImageType {
 	 * 商品属性图
 	 */
 	public static final String PROP ="prop";
+	/**
+	 * 商品轮播图
+	 */
+	public static final String SWIPER ="swiper";
 }

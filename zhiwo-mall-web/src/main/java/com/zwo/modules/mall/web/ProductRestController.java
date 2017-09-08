@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.pagehelper.DatagridPage;
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.domain.PrImage;
+import com.zwo.modules.mall.domain.PrImageType;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductCriteria;
 import com.zwo.modules.mall.domain.PrProductWithBLOBs;
@@ -52,7 +53,7 @@ public class ProductRestController extends BaseController<PrProduct> {
 	private IPrProductPackagePriceService packagePriceService;
 	
 
-	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
+//	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
 	/** 
 	 * @Title: deleteById 
 	 * @Description: 批量删除 
@@ -96,11 +97,11 @@ public class ProductRestController extends BaseController<PrProduct> {
 		productPropertyValueService.deleteByProductId(id);
 		imageService.deletePrImageByProductId(id);
 		
-		if(redisTemplate ==null){
-		}else{
-			redisTemplate.delete(id+"_productPackagePrices");  
-			redisTemplate.delete(id+"_productPropertyValues");
-		}
+//		if(redisTemplate ==null){
+//		}else{
+//			redisTemplate.delete(id+"_productPackagePrices");  
+//			redisTemplate.delete(id+"_productPropertyValues");
+//		}
 		
 		int result = prductService.deleteByPrimaryKey(id);
 		return result+"";
@@ -167,14 +168,17 @@ public class ProductRestController extends BaseController<PrProduct> {
 	@RequestMapping(value = "selectByProductId")
 	public List<PrImage> selectByProductId(@RequestParam String productId,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		List<PrImage> list = prductService.selectByProductId(productId,false);
+		
+//		List<PrImage> list = prductService.selectByProductId(productId,false);
+		List<PrImage> list = imageService.selectByProductId(productId,PrImageType.PROP);
 		return list;
 	}
 	
 	@RequestMapping(value = "selectSwiperImages")
 	public List<PrImage> selectSwiperImages(@RequestParam String productId,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		List<PrImage> list = prductService.selectByProductId(productId,true);
+//		List<PrImage> list = prductService.selectByProductId(productId,true);
+		List<PrImage> list = imageService.selectByProductId(productId,PrImageType.SWIPER);;
 		return list;
 	}
 }

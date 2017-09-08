@@ -14,6 +14,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ import com.zwo.modules.mall.domain.PrProductPackagePriceCriteria;
 import com.zwo.modules.mall.domain.PrProductPropertyValue;
 import com.zwo.modules.mall.domain.PrProductPropertyValueCriteria;
 import com.zwo.modules.mall.service.IPrProductPropertyValueService;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -40,10 +42,16 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 
 	private static final String BASE_MESSAGE = "【PrProductPropertyValueServiceImpl服务类提供的基础操作增删改查等】";
 
+	private static final String KEY_PROD_LAST_PRPRODUCT_PROPERTYVALUES = "_productPropertyValues";
+	
 	@Autowired
 	@Lazy(true)
 	private PrProductPropertyValueMapper productPropertyValueMapper;
 
+	@SuppressWarnings("rawtypes")
+	private RedisTemplate redisTemplate;
+	
+	
 	@Override
 	public Mapper<PrProductPropertyValue> getBaseMapper() {
 		return productPropertyValueMapper;
@@ -85,7 +93,11 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
-
+		List<PrProductPropertyValue>propertyValues = productPropertyValueMapper.selectByExample(example);
+		for (PrProductPropertyValue prProductPropertyValue : propertyValues) {
+			removeRedisKey(prProductPropertyValue.getProductId()+KEY_PROD_LAST_PRPRODUCT_PROPERTYVALUES);
+		}
+		
 		// 逻辑操作
 		int result = productPropertyValueMapper.deleteByExample(example);
 
@@ -106,6 +118,11 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 		// 逻辑操作
 		PrProductPropertyValueCriteria productPropertyValueCriteria = new PrProductPropertyValueCriteria();
 		productPropertyValueCriteria.createCriteria().andIdIn(list);
+		List<PrProductPropertyValue>propertyValues = productPropertyValueMapper.selectByExample(productPropertyValueCriteria);
+		for (PrProductPropertyValue prProductPropertyValue : propertyValues) {
+			removeRedisKey(prProductPropertyValue.getProductId()+KEY_PROD_LAST_PRPRODUCT_PROPERTYVALUES);
+		}
+		
 		int result = productPropertyValueMapper.deleteByExample(productPropertyValueCriteria);
 
 		if (logger.isInfoEnabled())
@@ -128,7 +145,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为：" + id.toString());
-
+		removeRedisKey(id+KEY_PROD_LAST_PRPRODUCT_PROPERTYVALUES);
 		// 逻辑操作
 		int result = super.deleteByPrimaryKey(id);
 
@@ -151,7 +168,9 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 			logger.info(BASE_MESSAGE + "insert插入开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-
+		
+		removeRedisKey(record.getProductId()+KEY_PROD_LAST_PRPRODUCT_PROPERTYVALUES);
+		
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
@@ -178,7 +197,8 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 			logger.info(BASE_MESSAGE + "insert插入开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-
+		removeRedisKey(record.getProductId()+KEY_PROD_LAST_PRPRODUCT_PROPERTYVALUES);
+		
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
@@ -241,7 +261,10 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
-
+		List<PrProductPropertyValue>propertyValues = productPropertyValueMapper.selectByExample(example);
+		for (PrProductPropertyValue prProductPropertyValue : propertyValues) {
+			removeRedisKey(prProductPropertyValue.getProductId()+KEY_PROD_LAST_PRPRODUCT_PROPERTYVALUES);
+		}
 		// 逻辑操作
 		int result = super.updateByExampleSelective(record, example);
 		// 日志记录
@@ -265,7 +288,10 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 			logger.info(BASE_MESSAGE+"updateByExample更新开始");
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
-										
+		List<PrProductPropertyValue>propertyValues = productPropertyValueMapper.selectByExample(example);
+		for (PrProductPropertyValue prProductPropertyValue : propertyValues) {
+			removeRedisKey(prProductPropertyValue.getProductId()+KEY_PROD_LAST_PRPRODUCT_PROPERTYVALUES);
+		}								
 		//逻辑操作		
 		int result = super.updateByExample(record, example);
 		//日志记录
@@ -289,7 +315,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
-
+		removeRedisKey(record.getProductId()+KEY_PROD_LAST_PRPRODUCT_PROPERTYVALUES);
 		// 逻辑操作
 		int result = super.updateByPrimaryKeySelective(record);
 		if (logger.isInfoEnabled())
@@ -312,7 +338,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为：" + record.toString());
-
+		removeRedisKey(record.getProductId()+KEY_PROD_LAST_PRPRODUCT_PROPERTYVALUES);
 		// 逻辑操作
 		int result = super.updateByPrimaryKey(record);
 		if (logger.isInfoEnabled())
@@ -351,7 +377,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 
 	@Override
 	@Transactional(readOnly = true)
-//	@Cacheable(key = "#pId+'_productPropertyValues'", value = "PrProductPropertyValues")
+	@Cacheable(key = "#pId+'_productPropertyValues'", value = "Product_PrProductPropertyValues")
 	public List<PrProductPropertyValue> selectByProductId(String pId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "根据商品Id查询商品属性开始");
@@ -364,7 +390,7 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 	}
 
 	@Override
-//	@CacheEvict(value = {"PrProductPropertyValues"},key="#pId+'_productPropertyValues'",allEntries=true)
+	@CacheEvict(value = {"Product_PrProductPropertyValues"},key="#pId+'_productPropertyValues'",allEntries=true)
 	public void deleteByProductId(String pId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "根据商品Id删除商品属性开始");
@@ -375,4 +401,22 @@ public class PrProductPropertyValueServiceImpl extends BaseService<PrProductProp
 			logger.info(BASE_MESSAGE + "根据商品Id删除商品属性结束，结果条目数为："+result);
 	}
 
+	/**
+	 * 移除key.
+	 * @param key
+	 */
+	@SuppressWarnings("unchecked")
+	private void removeRedisKey(String key){
+		if (redisTemplate == null) {
+			redisTemplate = SpringContextHolder
+					.getBean("redisTemplate");
+		}
+
+		if (redisTemplate != null) {
+			
+			if (redisTemplate.hasKey(key)) {
+				redisTemplate.delete(key);
+			}
+		}
+	}
 }

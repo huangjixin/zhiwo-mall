@@ -12,7 +12,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
@@ -27,11 +26,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zwo.modules.mall.domain.PrImage;
+import com.zwo.modules.mall.domain.PrImageType;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductPackagePrice;
 import com.zwo.modules.mall.domain.PrProductProperty;
 import com.zwo.modules.mall.domain.PrProductPropertyValue;
 import com.zwo.modules.mall.domain.PrProductWithBLOBs;
+import com.zwo.modules.mall.service.IPrImageService;
 import com.zwo.modules.mall.service.IPrProductPackagePriceService;
 import com.zwo.modules.mall.service.IPrProductPropertyService;
 import com.zwo.modules.mall.service.IPrProductPropertyValueService;
@@ -46,6 +47,10 @@ import com.zwotech.common.web.BaseController;
 @RequestMapping("product")
 @Lazy(true)
 public class ProductController extends BaseController<PrProduct> {
+	
+	@Autowired
+	@Lazy(true)
+	private IPrImageService imageService;
 	
 	@Autowired
 	@Lazy(true)
@@ -65,7 +70,7 @@ public class ProductController extends BaseController<PrProduct> {
 	
 	private static final String basePath = "views/mall/product/";
 	
-	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
+	private RedisTemplate redisTemplate;
 	
 	@RequiresPermissions("mall:product:view")
 	@RequestMapping(value = { "", "list" })
@@ -95,6 +100,10 @@ public class ProductController extends BaseController<PrProduct> {
 	public String edit(@PathVariable("id") String id,@RequestParam(required=false) String propertyValues,
 			@RequestParam(required=false) String propertyPrices, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
+		if(redisTemplate == null){
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
+		
 		PrProductWithBLOBs product = productService.selectByPrimKey(id);
 		
 		//商品属性。
@@ -105,26 +114,8 @@ public class ProductController extends BaseController<PrProduct> {
 		List<PrProductPackagePrice> packagePrices = null;
 		List<PrProductPropertyValue> productPropertyValues =null;
 		
-		if(redisTemplate ==null){
-			packagePrices = packagePriceService.selectByProductId(product.getId());
-			productPropertyValues = this.productPropertyValueService.selectByProductId(product.getId());
-		
-		}else{
-			 ValueOperations packagePricesList = redisTemplate.opsForValue();
-			 packagePrices = (List<PrProductPackagePrice>) packagePricesList.get(product.getId()+"_productPackagePrices");
-			 if(packagePrices == null){
-				 packagePrices = packagePriceService.selectByProductId(product.getId());
-				 packagePricesList.set(product.getId()+"_productPackagePrices", packagePrices);
-			 }
-			 
-			 ValueOperations productPropertyValuesList = redisTemplate.opsForValue();
-			 productPropertyValues = (List<PrProductPropertyValue>) productPropertyValuesList.get(product.getId()+"_productPropertyValues");
-			 if(productPropertyValues == null){
-				 productPropertyValues = productPropertyValueService.selectByProductId(product.getId());
-				 productPropertyValuesList.set(product.getId()+"_productPropertyValues", productPropertyValues);
-			 }
-		}
-		
+		packagePrices = packagePriceService.selectByProductId(product.getId());
+		productPropertyValues = this.productPropertyValueService.selectByProductId(product.getId());
 		uiModel.addAttribute("packagePrices",packagePrices);
 		uiModel.addAttribute("packagePricesString",JSONArray.toJSONString(packagePrices));
 		
@@ -132,11 +123,12 @@ public class ProductController extends BaseController<PrProduct> {
 		uiModel.addAttribute("propertyValuesString",JSONArray.toJSONString(productPropertyValues));
 		
 		//商品属性图。
-		List<PrImage> list = productService.selectByProductId(id,false);
+//		List<PrImage> list = productService.selectByProductId(id,false);
+		List<PrImage> list = imageService.selectByProductId(id,PrImageType.PROP);
 		uiModel.addAttribute("prImages", list);
 		
 		//轮播图
-		List<PrImage> listSwipers = productService.selectByProductId(id,true);
+		List<PrImage> listSwipers = imageService.selectByProductId(id,PrImageType.SWIPER);
 		uiModel.addAttribute("swiperImages", listSwipers);
 		
 		uiModel.addAttribute("product", product);
@@ -245,8 +237,6 @@ public class ProductController extends BaseController<PrProduct> {
 		}
 		JSONArray perpertyArray = null;
 		if(null != propertyValues && !"".equals(propertyValues)){
-			if(redisTemplate!=null)
-			redisTemplate.delete(product.getId()+"_productPropertyValues");
 			productPropertyValueService.deleteByProductId(product.getId());
 			perpertyArray =  (JSONArray) JSONArray.parse(propertyValues);
 			for (Object object : perpertyArray) {
@@ -264,8 +254,7 @@ public class ProductController extends BaseController<PrProduct> {
 		JSONArray perPriceArray = null;
 		if(null != propertyPrices && !"".equals(propertyPrices)){
 			packagePriceService.deleteByProductId(product.getId());
-			if(redisTemplate!=null)
-			redisTemplate.delete(product.getId()+"_productPackagePrices"); 
+			 
 			perPriceArray =  (JSONArray) JSONArray.parse(propertyPrices);
 			for (Object obj : perPriceArray) {
 				JSONObject json = (JSONObject) obj;

@@ -14,6 +14,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ import com.zwo.modules.member.dao.MemberAddressMapper;
 import com.zwo.modules.member.domain.MemberAddress;
 import com.zwo.modules.member.domain.MemberAddressCriteria;
 import com.zwo.modules.member.service.IMemberAddressService;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -38,10 +40,17 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 
 	private static final String BASE_MESSAGE = "【MemberAddressServiceImpl服务类提供的基础操作增删改查等】";
 
+	private static final String KEYLAST_LIST_ALL_BY_MEMBERID = "_key_list_all_by_memberid";
+	
+	private static final String KEYLAST_DEFAULT_MEMBER_ADDRESS = "_key_DefaultMemberAddress";
+	
 	@Autowired
 	@Lazy(true)
 	private MemberAddressMapper memberAddressMapper;
 
+	@SuppressWarnings("rawtypes")
+	private RedisTemplate redisTemplate;
+	
 	@Override
 	public Mapper<MemberAddress> getBaseMapper() {
 		return memberAddressMapper;
@@ -83,9 +92,16 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
-
+		List<MemberAddress> addresses  = this.selectByExample(example);
 		// 逻辑操作
 		int result = memberAddressMapper.deleteByExample(example);
+		if(result!=0){
+			for (MemberAddress memberAddress : addresses) {
+				removeRedisKey(memberAddress.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
+				removeRedisKey(memberAddress.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+			}
+		}
+		
 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除结束");
@@ -104,8 +120,14 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 		// 逻辑操作
 		MemberAddressCriteria memberAddressCriteria = new MemberAddressCriteria();
 		memberAddressCriteria.createCriteria().andIdIn(list);
+		List<MemberAddress> addresses  = this.selectByExample(memberAddressCriteria);
 		int result = memberAddressMapper.deleteByExample(memberAddressCriteria);
-
+		if(result!=0){
+			for (MemberAddress memberAddress : addresses) {
+				removeRedisKey(memberAddress.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
+				removeRedisKey(memberAddress.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+			}
+		}
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteBatch批量删除结束");
 		return result;
@@ -129,7 +151,10 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 		MemberAddress address = this.selectByPrimaryKey(id);
 		// 逻辑操作
 		int result = deleteAddressByMemberId(id,address.getMemberId());
-
+		if(result !=0){
+			removeRedisKey(address.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
+			removeRedisKey(address.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+		}
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除结束");
 		return result;
@@ -155,6 +180,12 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
 		}
 		int result = super.insert(record);
+		
+		if(result !=0){
+			removeRedisKey(record.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
+			removeRedisKey(record.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+		}
+		
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入结束");
 		return result;
@@ -182,6 +213,12 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
 		}
 		int result = super.insertSelective(record);
+		
+		if(result !=0){
+			removeRedisKey(record.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
+			removeRedisKey(record.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+		}
+		
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入结束");
 		return result;
@@ -289,7 +326,13 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
 
 		// 逻辑操作
-		int result = updateSelectiveAddressByMemberId(record);
+		int result = this.memberAddressMapper.updateByPrimaryKeySelective(record);
+		
+		if(result !=0){
+			removeRedisKey(record.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
+			removeRedisKey(record.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+		}
+		
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新结束");
 		return result;
@@ -310,9 +353,13 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为：" + record.toString());
-
+		
 		// 逻辑操作
-		int result = updateAddressByMemberId(record);
+		int result = this.memberAddressMapper.updateByPrimaryKey(record);
+		if(result !=0){
+			removeRedisKey(record.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
+			removeRedisKey(record.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+		}
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新结束");
 		return result;
@@ -339,7 +386,8 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 	}
 
 	@Override
-	@Cacheable(value = "MemberAddress", key = "#memberId+'_DefaultMemberAddress'")
+	@Transactional(readOnly = true)
+	@Cacheable(value = "MemberAddress", key = "#memberId+'_key_DefaultMemberAddress'")
 	public MemberAddress selectDefaultAddressByMemberId(String memberId) {
 		MemberAddressCriteria addressCriteria = new MemberAddressCriteria();
 		addressCriteria.createCriteria().andMemberIdEqualTo(memberId).andIsDefaultEqualTo("1");
@@ -348,20 +396,50 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 		return list== null||list.isEmpty()?null:list.get(0);
 	}
 	
-	@CacheEvict(value = "MemberAddress", key = "#memberId+'_DefaultMemberAddress'")
+	@CacheEvict(value = "MemberAddress", key = "#memberId+'_key_DefaultMemberAddress'")
 	public int deleteAddressByMemberId(String id,String memberId) {
-		return this.memberAddressMapper.deleteByPrimaryKey(id);
-	}
-	
-	@CacheEvict(value = "MemberAddress", key = "#record.memberId+'_DefaultMemberAddress'")
-	public int updateSelectiveAddressByMemberId(MemberAddress record) {
-		return this.memberAddressMapper.updateByPrimaryKeySelective(record);
-	}
-	
-	@CacheEvict(value = "MemberAddress", key = "#record.memberId+'_DefaultMemberAddress'")
-	public int updateAddressByMemberId(MemberAddress record) {
-		return this.memberAddressMapper.updateByPrimaryKey(record);
+		MemberAddressCriteria addressCriteria = new MemberAddressCriteria();
+		addressCriteria.createCriteria().andIdEqualTo(id).andMemberIdEqualTo(memberId);
+		int result = this.deleteByExample(addressCriteria);
+		if(result != 0){
+			removeRedisKey(memberId+KEYLAST_DEFAULT_MEMBER_ADDRESS);
+		}
+		
+		return result;
 	}
 
+
+	@Override
+	@Transactional(readOnly = true)
+	@Cacheable(value = "MemberAddresses", key = "#memberId+'_key_list_all_by_memberid'")
+	public List<MemberAddress> listAllByMemberId(String memberId) {
+		MemberAddressCriteria criteria = new MemberAddressCriteria();
+		criteria.createCriteria().andMemberIdEqualTo(memberId);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询会员地址开始");
+		List<MemberAddress> list = this.memberAddressMapper.selectByExample(criteria);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询会员地址结束，条目数为："+list.size());
+		return list;
+	}
+	
+	/**
+	 * 移除key.
+	 * @param key
+	 */
+	@SuppressWarnings("unchecked")
+	private void removeRedisKey(String key){
+		if (redisTemplate == null) {
+			redisTemplate = SpringContextHolder
+					.getBean("redisTemplate");
+		}
+
+		if (redisTemplate != null) {
+			
+			if (redisTemplate.hasKey(key)) {
+				redisTemplate.delete(key);
+			}
+		}
+	}
 
 }

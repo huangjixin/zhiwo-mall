@@ -21,11 +21,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.alibaba.fastjson.JSONArray;
 import com.zwo.modules.mall.domain.PrImage;
+import com.zwo.modules.mall.domain.PrImageType;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductPackagePrice;
 import com.zwo.modules.mall.domain.PrProductProperty;
 import com.zwo.modules.mall.domain.PrProductPropertyValue;
 import com.zwo.modules.mall.domain.PrProductWithBLOBs;
+import com.zwo.modules.mall.service.IPrImageService;
 import com.zwo.modules.mall.service.IPrProductPackagePriceService;
 import com.zwo.modules.mall.service.IPrProductPropertyService;
 import com.zwo.modules.mall.service.IPrProductPropertyValueService;
@@ -39,6 +41,7 @@ import com.zwotech.common.web.BaseController;
 
 /**
  * 会员登录控制器。
+ * 
  * @author 黄记新 2017.8.8
  *
  */
@@ -47,15 +50,19 @@ import com.zwotech.common.web.BaseController;
 public class GoodsController extends BaseController {
 	@Autowired
 	@Lazy(true)
+	private IPrImageService imageService;
+
+	@Autowired
+	@Lazy(true)
 	private IMemberService memberService;
 	@Autowired
 	@Lazy(true)
 	private IPrductService prductService;
-	
+
 	@Autowired
 	@Lazy(true)
 	private IPrProductPropertyService productPropertyService;
-	
+
 	@Autowired
 	@Lazy(true)
 	private IPrProductPackagePriceService packagePriceService;
@@ -68,86 +75,76 @@ public class GoodsController extends BaseController {
 	@Autowired
 	@Lazy(true)
 	private IShopCategoryService shopCategoryService;
-	
-	@SuppressWarnings("rawtypes")
-	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
-	
+
+//	@SuppressWarnings("rawtypes")
+//	private RedisTemplate redisTemplate = SpringContextHolder
+//			.getBean("redisTemplate");
+
 	private static final String basePath = "views/goods/";
-	
-	
+
 	/**
 	 * 商品具体信息。
+	 * 
 	 * @param goodsId
 	 * @param uiModel
 	 * @param httpServletRequest
 	 * @param httpServletResponse
 	 * @return
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@RequestMapping(value = {"goodsDetail"},method=RequestMethod.GET)  
-	public String goodsDetail(@RequestParam String goodsId,Model uiModel,HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		String rootDir = httpServletRequest.getSession().getServletContext().getRealPath("/");
-		String goodsDetailJspUri = rootDir+"WEB-INF"+File.separator+"views"+File.separator+"goods"+goodsId+".jsp";
+	@RequestMapping(value = { "goodsDetail" }, method = RequestMethod.GET)
+	public String goodsDetail(@RequestParam String goodsId, Model uiModel,
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		String rootDir = httpServletRequest.getSession().getServletContext()
+				.getRealPath("/");
+		String goodsDetailJspUri = rootDir + "WEB-INF" + File.separator
+				+ "views" + File.separator + "goods" + goodsId + ".jsp";
 		Path path = Paths.get(goodsDetailJspUri);
-		
-		if(Files.exists(path)){
-			return basePath+goodsId;
+
+		if (Files.exists(path)) {
+			return basePath + goodsId;
 		}
-		
-		
+
 		PrProductWithBLOBs product = prductService.selectByPrimKey(goodsId);
-		if(product!=null){
-			if(null != product.getUserId()){
-				//查询店铺信息。
+		if (product != null) {
+			if (null != product.getUserId()) {
+				// 查询店铺信息。
 				Shop shop = shopService.selectByUserId(product.getUserId());
 				uiModel.addAttribute("shop", shop);
-				if(shop != null){
-					//查询店铺所有的商品，统一用goods。
-					List<PrProduct> goodsList =  shopService.selectPrProductsByShopId(shop.getId());
+				if (shop != null) {
+					// 查询店铺所有的商品，统一用goods。
+					List<PrProduct> goodsList = shopService
+							.selectPrProductsByShopId(shop.getId());
 					uiModel.addAttribute("goodsList", goodsList);
 				}
-				
+
 			}
-			
+
 			List<PrProductPackagePrice> packagePrices = null;
-			List<PrProductPropertyValue> productPropertyValues =null;
-			
-			if(redisTemplate ==null){
-				packagePrices = packagePriceService.selectByProductId(product.getId());
-				productPropertyValues = this.propertyValueService.selectByProductId(product.getId());
-			
-			}else{
-				 ValueOperations packagePricesList = redisTemplate.opsForValue();
-				 packagePrices = (List<PrProductPackagePrice>) packagePricesList.get(product.getId()+"_productPackagePrices");
-				 if(packagePrices == null){
-					 packagePrices = packagePriceService.selectByProductId(product.getId());
-					 packagePricesList.set(product.getId()+"_productPackagePrices", packagePrices);
-				 }
-				 
-				 ValueOperations productPropertyValuesList = redisTemplate.opsForValue();
-				 productPropertyValues = (List<PrProductPropertyValue>) productPropertyValuesList.get(product.getId()+"_productPropertyValues");
-				 if(productPropertyValues == null){
-					 productPropertyValues = propertyValueService.selectByProductId(product.getId());
-					 productPropertyValuesList.set(product.getId()+"_productPropertyValues", productPropertyValues);
-				 }
-			}
-			
-			//商品属性值。
-			uiModel.addAttribute("propertyValuesString",JSONArray.toJSONString(productPropertyValues));
-			 uiModel.addAttribute("propertyValues", productPropertyValues);
-			 uiModel.addAttribute("packagePrices", packagePrices);
-			 
-			 //商品轮播图。
-			List<PrImage> prImages =  prductService.selectByProductId(product.getId(),true);
+			List<PrProductPropertyValue> productPropertyValues = null;
+			packagePrices = packagePriceService.selectByProductId(product
+					.getId());
+			productPropertyValues = this.propertyValueService
+					.selectByProductId(product.getId());
+
+			// 商品属性值。
+			uiModel.addAttribute("propertyValuesString",
+					JSONArray.toJSONString(productPropertyValues));
+			uiModel.addAttribute("propertyValues", productPropertyValues);
+			uiModel.addAttribute("packagePrices", packagePrices);
+
+			// 商品轮播图。
+			List<PrImage> prImages = imageService.selectByProductId(
+					product.getId(), PrImageType.SWIPER);
 			uiModel.addAttribute("swiperImages", prImages);
 		}
-		//商品属性。
+		// 商品属性。
 		List<PrProductProperty> properties = productPropertyService.listAll();
-		uiModel.addAttribute("properties",properties);
-		uiModel.addAttribute("propertiesString",JSONArray.toJSONString(properties));
+		uiModel.addAttribute("properties", properties);
+		uiModel.addAttribute("propertiesString",
+				JSONArray.toJSONString(properties));
 		uiModel.addAttribute("product", product);
-		return basePath+"goodsDetail";
+		return basePath + "goodsDetail";
 	}
-	
-	
+
 }
