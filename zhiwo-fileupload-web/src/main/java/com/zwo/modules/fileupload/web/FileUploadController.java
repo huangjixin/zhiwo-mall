@@ -244,6 +244,7 @@ public class FileUploadController {
 	@ResponseBody
 	public String proSwiperAssetsUpload(
 			@RequestParam String productId,
+			@RequestParam String type,
 			@RequestParam(value = "file", required = false) CommonsMultipartFile[] files,
 			String HTTP_CONTENT_DISPOSITION, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse, Model uiModel) {
@@ -293,6 +294,7 @@ public class FileUploadController {
 				assets.setProductId(productId);
 				//true为轮播图。
 				assets.setIsDefault(true);
+				assets.setType(type);
 				assets.setName(name);
 				assets.setLocation(uploadPath + File.separator + name);
 				assets.setUrl(url + "/" + name);
