@@ -21,7 +21,7 @@ public class PrProductPackagePrice implements Serializable {
      * 属性值组合价
      */
     @Column(name = "INDEPENDENT_PRICE")
-    private Double independentPrice;
+    private String independentPrice;
 
     /**
      * 产品ID，根据ID可以取出产品不同的组合价钱
@@ -83,7 +83,7 @@ public class PrProductPackagePrice implements Serializable {
      *
      * @return INDEPENDENT_PRICE - 属性值组合价
      */
-    public Double getIndependentPrice() {
+    public String getIndependentPrice() {
         return independentPrice;
     }
 
@@ -92,7 +92,7 @@ public class PrProductPackagePrice implements Serializable {
      *
      * @param independentPrice 属性值组合价
      */
-    public void setIndependentPrice(Double independentPrice) {
+    public void setIndependentPrice(String independentPrice) {
         this.independentPrice = independentPrice;
     }
 

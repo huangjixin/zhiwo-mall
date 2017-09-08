@@ -210,12 +210,7 @@ public class ProductController extends BaseController<PrProduct> {
 				PrProductPackagePrice packagePrice = new PrProductPackagePrice();
 				String id = json.getString("id");
 				String groupPrice = json.getString("groupPrice");
-				String indepentPriceString = json.getString("indepentPrice");
-
-				Double indepentPrice = Double
-						.valueOf(indepentPriceString == null
-								|| "".equals(indepentPriceString) ? "0"
-								: indepentPriceString);
+				String indepentPrice = json.getString("indepentPrice");
 				String pId = product.getId();
 				String pValueId = json.getString("propertyValueId");
 				packagePrice.setId(id);
@@ -242,6 +237,10 @@ public class ProductController extends BaseController<PrProduct> {
 			Model uiModel, RedirectAttributes redirectAttributes,
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
+		if ("".equals(product.getCategoryId())) {
+			product.setCategoryId(null);
+		}
+		
 		if (result.hasErrors()) {
 			redirectAttributes.addFlashAttribute("product", product);
 			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
@@ -257,14 +256,6 @@ public class ProductController extends BaseController<PrProduct> {
 			}
 		}
 
-		int res = this.productService.updateByPrimaryKeySelective(product);
-		if (res == 1) {
-			redirectAttributes.addFlashAttribute("message", "保存成功！");
-//			PrImageCriteria prImageCriteria = new PrImageCriteria();
-//			prImageCriteria.createCriteria().andProductIdEqualTo(product.getId()).andRealProductIdIsNull();
-			imageService.updatePrImageRealPId(product.getId());
-		}
-		
 		JSONArray perpertyArray = null;
 		if (null != propertyValues && !"".equals(propertyValues)) {
 			boolean reConnect = false;
@@ -332,8 +323,8 @@ public class ProductController extends BaseController<PrProduct> {
 			
 			//检查属性有没有改变。
 			if (reConnect == false) {
-				for (int i = 0; i < perpertyArray.size(); i++) {
-					JSONObject object = (JSONObject) perpertyArray.get(i);
+				for (int i = 0; i < perPriceArray.size(); i++) {
+					JSONObject object = (JSONObject) perPriceArray.get(i);
 					String id = object.getString("id");
 					for (PrProductPackagePrice prProductPackagePrice : packagePrices) {
 						if (id.equals(prProductPackagePrice.getId())) {
@@ -346,7 +337,7 @@ public class ProductController extends BaseController<PrProduct> {
 							}
 							if(!independentPrice.equals(prProductPackagePrice.getIndependentPrice().toString())){
 								changed=true;
-								prProductPackagePrice.setIndependentPrice(Double.valueOf(independentPrice));
+								prProductPackagePrice.setIndependentPrice(independentPrice);
 							}
 							if(changed==true){
 								packagePriceService.updateByPrimaryKey(prProductPackagePrice);
@@ -368,10 +359,7 @@ public class ProductController extends BaseController<PrProduct> {
 							.replaceAll("-", "");
 					id = uuid;
 					String groupPrice = json.getString("groupPrice");
-					Double indepentPrice = Double.valueOf(json
-							.getString("indepentPrice") == null
-							|| "".equals(json.getString("indepentPrice")) ? "0"
-							: json.getString("indepentPrice"));
+					String indepentPrice = json.getString("indepentPrice");
 					String pId = product.getId();
 					String pValueId = json.getString("propertyValueId");
 					packagePrice.setId(id);
@@ -384,6 +372,12 @@ public class ProductController extends BaseController<PrProduct> {
 			}
 		}
 
+		int res = this.productService.updateByPrimaryKeySelective(product);
+		if (res == 1) {
+			redirectAttributes.addFlashAttribute("message", "保存成功！");
+			imageService.updatePrImageRealPId(product.getId());
+		}
+		
 		redirectAttributes.addAttribute("operation", "edit");
 		return "redirect:/product/edit/" + product.getId();
 	}
