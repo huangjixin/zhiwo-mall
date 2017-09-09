@@ -17,7 +17,7 @@
 			style="font-size: 2rem; padding-top: 10px;"></i>
 		<h6 class="menuTitle">客服</h6>
 	</div>
-	<div class="menuItem" id="guessBtn"
+	<div class="menuItem"
 		style="width: 20%; background-color: #F3ABA7;" id="independBuyBtn">
 		<h4 class="menuTitle" style="color: #ffffff;">
 			<i class="fa fa-jpy"></i>87
@@ -25,7 +25,7 @@
 		<h5 style="color: #ffffff; font-weight: normal;">单独购买</h5>
 
 	</div>
-	<div class="menuItem" id="guessBtn"
+	<div class="menuItem"
 		style="width: 20%; background-color: #E02E24;" id="groupBuyBtn">
 		<h4 class="menuTitle" style="color: #ffffff;">
 			<i class="fa fa-jpy"></i>77
@@ -33,7 +33,7 @@
 		<h5 style="color: #ffffff; font-weight: normal;">一键开团</h5>
 
 	</div>
-	<div class="menuItem" id="guessBtn"
+	<div class="menuItem" 
 		style="width: 21%; background-color: #E02E24;" id="shareBuyBtn">
 		<h4 class="menuTitle" style="color: #ffffff;">
 			<i class="fa fa-jpy"></i>1
