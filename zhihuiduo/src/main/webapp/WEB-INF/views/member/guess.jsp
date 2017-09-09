@@ -137,7 +137,7 @@
 			$("#indexBtn").addClass("menuItem");
 			$("#guessBtn").addClass("menuItemActive");-->
 	<script type="text/javascript">
-		<%@ include file="/WEB-INF/member-include/encryptjs-guess.jsp"%>
+		<%@ include file="/WEB-INF/member-include/js-guess.jsp"%>
 	</script>
 
 </body>
