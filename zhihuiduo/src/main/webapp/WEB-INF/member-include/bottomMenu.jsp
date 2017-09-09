@@ -1,32 +1,44 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!--↓3列菜单开始↓-->
-<div class="btn3 clearfix">
-		<div class="menu" style="width: 13%; border-right:1px solid #ebebeb; background-color:#ffffff;">
-			<div class="bt-name" style="color: red;">
-				<i class="fa fa-home" aria-hidden="true"></i>&nbsp;
-			</div>
-		</div>
-		<!--menu-->
-		<div class="menu" style="width: 13%; border-right:1px solid #ebebeb; color:#58595B; background-color:#ffffff;">
-			<div class="bt-name">
-				<i class="fa fa-star" aria-hidden="true"></i>&nbsp;
-			</div>
-		</div>
-		<!--menu-->
-		<div class="menu" style="width: 13%; border-right:1px solid #ebebeb; color:#58595B; background-color:#ffffff;">
-			<div class="bt-name">
-				<i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;
-			</div>
-		</div>
-		<div class="menu" style="width: 20%; background-color:#F3ABA7;"  id="independBuyBtn">
-			<div class="bt-name"><label style="color:#ffffff; font-weight:normal;">单独购买</label></div>
-		</div>
-		<div class="menu" style="width: 20%; background-color:#E02E24;color:#ffffff;" id="groupBuyBtn">
-			<div class="bt-name"><label style="color:#ffffff; font-weight:normal;">一键开团</label></div>
-		</div>
-		<div class="menu" style="width: 21%; background-color:#E02E24;color:#ffffff;" id="shareBuyBtn">
-			<div class="bt-name"><label style="color:#ffffff; font-weight:normal;">一键分销</label></div>
-		</div>
-	</div>	
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<div class="menu">
+	<a href="${ctx}/mindex"><div class="menuItemActive" id="indexBtn"
+			style="width: 13%;">
+			<i class="fa fa-home fa-lg" aria-hidden="true"
+				style="font-size: 2rem; padding-top: 10px;"></i>
+			<h6 class="menuTitle">首页</h6>
+		</div> </a> <a href="${ctx}/memberGuess/guess"><div class="menuItem"
+			id="guessBtn" style="width: 13%;">
+			<i class="fa fa-money fa-lg" aria-hidden="true"
+				style="font-size: 2rem; padding-top: 10px;"></i>
+			<h6 class="menuTitle">趣猜</h6>
+		</div> </a>
+	<div class="menuItem" id="personalInfoBtn" style="width: 13%;">
+		<i class="fa fa-wechat fa-lg" aria-hidden="true"
+			style="font-size: 2rem; padding-top: 10px;"></i>
+		<h6 class="menuTitle">客服</h6>
+	</div>
+	<div class="menuItem" id="guessBtn"
+		style="width: 20%; background-color: #F3ABA7;" id="independBuyBtn">
+		<h4 class="menuTitle" style="color: #ffffff;">
+			<i class="fa fa-jpy"></i>87
+		</h4>
+		<h5 style="color: #ffffff; font-weight: normal;">单独购买</h5>
 
-	
+	</div>
+	<div class="menuItem" id="guessBtn"
+		style="width: 20%; background-color: #E02E24;" id="groupBuyBtn">
+		<h4 class="menuTitle" style="color: #ffffff;">
+			<i class="fa fa-jpy"></i>77
+		</h4>
+		<h5 style="color: #ffffff; font-weight: normal;">一键开团</h5>
+
+	</div>
+	<div class="menuItem" id="guessBtn"
+		style="width: 21%; background-color: #E02E24;" id="shareBuyBtn">
+		<h4 class="menuTitle" style="color: #ffffff;">
+			<i class="fa fa-jpy"></i>1
+		</h4>
+		<h5 style="color: #ffffff; font-weight: normal;">一键分销</h5>
+	</div>
+</div>
+

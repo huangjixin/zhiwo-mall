@@ -1,21 +1,47 @@
 <meta charset="utf-8">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <!-- <meta http-equiv="Cache-Control" content="max-age=86400" />  -->
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
 <meta name="renderer" content="webkit">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
 
-<link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-<link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
-<link href="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap-reboot.min.css" rel="stylesheet" type="text/css">
-<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-<link href="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css" rel="stylesheet" type="text/css">
+<link
+	href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	rel="stylesheet" type="text/css">
+<link
+	href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+	rel="stylesheet" type="text/css">
+<link
+	href="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap-reboot.min.css"
+	rel="stylesheet" type="text/css">
+<link
+	href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"
+	rel="stylesheet" type="text/css">
+<link
+	href="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css"
+	rel="stylesheet" type="text/css">
 
-<link href="http://cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css" rel="stylesheet" type="text/css">
+<link href="http://cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css"
+	rel="stylesheet" type="text/css">
 <style>
+body {
+	font-size: 1.5rem;
+	background-color: #F2F2F2;
+	color: #58595B;
+}
+
+a {
+	text-decoration: none;
+	color: #58595B;
+}
+
+a:hover {
+	color: #58595B;
+}
 
 .clearfix:after {
 	content: ".";
@@ -72,88 +98,79 @@
 	color: #fff;
 }
 
-.btn3 {
-	position: fixed;
-	z-index: 3;
-	bottom: 0px;
-	border-top: 1px solid #F0F0F0;
-	background: #e6e6e6;
-	width: 100%;
-	text-align: center;
-	box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-}
-
+/**底部菜单导航**/
 .menu {
-	position: relative;
-	float: left;
-	font-weight:normal;
-	height: 40px;
-	line-height: 40px;
-	background: #ffffff;
-	border-right: 0px solid #ebebeb;
-	box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-}
-
-.menu:last-child {
-	border-right: none;
-}
-
-.new-sub {
-	position: absolute;
-	bottom: 60px;
-	z-index: 10;
-	width: 100%;
-	padding: 0px 10px;
-	background: #fff;
-	box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	border: 1px solid #EEEEEE;
-	border-radius: 5px;
-	display: none;
-}
-
-.new-sub li {
-	width: 100%;
-	background: #fff;
-	float: none;
-	box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	border-top: 1px solid #f2f2f2;
-}
-
-.new-sub li a {
-	display: block;
-	height: 35px;
-	line-height: 35px;
-	text-align: left;
-	background: #fff;
-	color: #333;
-	border: none;
+	position: fixed;
+	z-index: 999;
+	bottom: 0px;
+	left: 0;
+	right: 0;
 	text-align: center;
-	font-size: 1.5rem;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	border-top: 1px solid #F0F0F0;
 }
 
-.bt-name {
-	font-size: 1.5rem;
-	font-weight:normal;
-	color: #A0A0A0;
+.menuItem {
+	float: left;
+	background-color: #FFFFFF;
+	position: relative;
+	height: 52px;
+	padding-top: 5px;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
 }
 
-.bt-name a {
-	font-weight:normal;
-	display: block;
-	font-size: 16px;
-	color: #A0A0A0;
-	text-decoration: none;
-}
-
-.bt-name .active {
-	display: block;
-	font-size: 16px;
+.menuItemActive {
+	width: 25%;
+	float: left;
+	background-color: #FFFFFF;
+	position: relative;
+	height: 52px;
+	padding-top: 5px;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
 	color: red;
-	text-decoration: none;
+}
+
+.menuTitle {
+	padding-top: 1px;
+}
+
+.thumbnail {
+	padding: 1px;
+	margin-bottom: 5px;
+	line-height: 1.42857143;
+	border: 1px solid #ddd;
+	border-radius: 0px;
+}
+
+/*属性按钮*/
+.activeProperyValue {
+	padding-left: 12px;
+	padding-right: 12px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	background-color: red;
+	font-size: 1.4rem;
+	color: white;
+	border-radius: 4px;
+	font-weight: normal;
+}
+
+.ProperyValue {
+	padding-left: 12px;
+	padding-right: 12px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	background-color: #F5F5F5;
+	font-size: 1.4rem;
+	color: #878787;
+	border-radius: 4px;
+	font-weight: normal;
+}
+
+.label-danger {
+	padding-top: 5px;
 }
 </style>
-	

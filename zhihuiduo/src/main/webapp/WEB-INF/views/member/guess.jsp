@@ -8,18 +8,6 @@
 <%@ include file="/WEB-INF/member-include/css.jsp"%>
 <%@ include file="/WEB-INF/member-include/js.jsp"%>
 <style>
-body {
-	font-size: 1.5rem;
-	background-color: #F2F2F2;
-}
-
-.thumbnail {
-	padding: 1px;
-	margin-bottom: 5px;
-	line-height: 1.42857143;
-	border: 1px solid #ddd;
-	border-radius: 1px;
-}
 
 .label label-info {
 	padding-top: 5px;
@@ -29,34 +17,6 @@ body {
 	margin: 3px;
 }
 
-.activeProperyValue {
-	padding-left: 12px;
-	padding-right: 12px;
-	padding-top: 6px;
-	padding-bottom: 6px;
-	background-color: red;
-	font-size: 1.4rem;
-	color: white;
-	border-radius: 4px;
-	font-weight: normal;
-}
-
-.ProperyValue {
-	padding-left: 12px;
-	padding-right: 12px;
-	padding-top: 6px;
-	padding-bottom: 6px;
-	background-color: #F5F5F5;
-	font-size: 1.4rem;
-	color: #878787;
-	border-radius: 4px;
-	font-weight: normal;
-}
-
-.label-danger{
-     padding-top:5px;
-
-}
 </style>
 
 </head>
@@ -132,7 +92,18 @@ body {
 		</div>
 		<!-- /.modal -->
 	</div>
+    
+    <%--<%@ include file="/WEB-INF/member-include/bottomIndex.jsp"%>--%>
+    
 	<script type="text/javascript">
+	$()
+				.ready(
+						function() {
+			/*$("#indexBtn").removeClass("menuItemActive");	
+			$("#indexBtn").addClass("menuItem");
+			$("#guessBtn").addClass("menuItemActive");*/				
+		})
+		
 	function setDefaultMemberAddress(addressId){
 		var url = "${ctx}/memberInfo/setDefaultMemberAddress";
 		var data = {};

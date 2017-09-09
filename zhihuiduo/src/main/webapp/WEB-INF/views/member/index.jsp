@@ -29,8 +29,7 @@
 .swiper-slide {
 	text-align: center;
 	/*font-size: 18px;*/
-	font-size: 1.6rem;
-	background: #ccc;
+	background: #F2F2F2;
 	/* Center slide text vertically */
 	display: -webkit-box;
 	display: -ms-flexbox;
@@ -45,7 +44,6 @@
 	-webkit-align-items: center;
 	align-items: center;
 }
-
 </style>
 </head>
 <body>
@@ -182,7 +180,13 @@
 							</div>
 						</div>
 					</div>
-					<div style="height: 60px; text-aling: center; font-size: 1.4rem;">没有数据了</div>
+
+					<div class="col-sm-12 col-md-12">
+						<div class="thumbnail">
+							<div style="height: 70px; text-aling: center; font-size: 1.4rem;">没有数据了</div>
+						</div>
+					</div>
+
 				</div>
 
 			</div>
@@ -199,7 +203,7 @@
 	</div>
 
 	<!--↓3列菜单开始↓-->
-    <%@ include file="/WEB-INF/member-include/bottomIndex.jsp"%>
+	<%@ include file="/WEB-INF/member-include/bottomIndex.jsp"%>
 	<script>
 		$(function() {
 			//通过lass调取，一句可以搞定，用于页面中可能有多个导航的情况
