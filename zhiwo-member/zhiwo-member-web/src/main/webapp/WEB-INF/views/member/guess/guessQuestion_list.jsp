@@ -41,9 +41,10 @@
 				<th data-options="field:'ck',checkbox:true"></th>
                 <th data-options="field:'id',align:'center',hidden:true">id</th>
 				<th data-options="field:'name',align:'center',width:100">名称</th>
-                <th data-options="field:'code',align:'center',width:100">代码</th>
+                <!-- <th data-options="field:'code',align:'center',width:100">代码</th> -->
                <!-- <th data-options="field:'icon',align:'center',width:100,formatter:formatIcon">头像</th>-->
-                <th data-options="field:'description',align:'center',width:100">描述</th>
+                <!-- <th data-options="field:'description',align:'center',width:100">描述</th> -->
+                <th data-options="field:'questionEndTime',align:'center',width:100,formatter:formatEndTime">截止日期</th>
 				<th data-options="field:'createDate',align:'center',width:100,formatter:formatTime">创建日期</th>
 				<th data-options="field:'updateDate',align:'center',width:100,formatter:formatTime">更新日期</th>
 				<!-- <th data-options="field:'By',align:'center',width:100">创建人</th>
@@ -53,6 +54,19 @@
 		</thead>
 	</table>
 	<script type="text/javascript">
+	//时间格式化函数
+	function formatEndTime(value,row){  
+		var timestamp = new Date().getTime();
+        var unixTimestamp = new Date(value);
+        if(unixTimestamp>timestamp){
+        	 return unixTimestamp.toLocaleString(); 
+        }else{
+        	var result = '<span style="color:red;">'+unixTimestamp.toLocaleString()+'</span>';
+        	return result;
+        }
+        
+    } 
+	
 		// 初始化按钮等工作。
 		$().ready(function() {
 			init("guessQuestion","tgrid");
