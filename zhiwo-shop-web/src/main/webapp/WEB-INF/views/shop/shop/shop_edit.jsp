@@ -71,25 +71,27 @@
 			</div>
 		</div>
 		<div class="form-group">
+			<label for="description" class="col-sm-2 control-label">描述</label>
+			<div class="col-sm-6">
+				<textarea name="description" class="form-control" rows="8">${shop.description}</textarea>
+			</div>
+		</div>
+		<!--<div class="form-group">
 			<label for="file" class="col-sm-1 control-label">店铺内容</label>
 			<div class="col-sm-10">
 				<script id="container" name="content" type="text/plain">${shop.content}</script>
 			</div>
-		</div>
+		</div>-->
 	</form>
-	<!-- 配置文件 -->
-	<script type="text/javascript"
-		src="${ctx}/js/ueditor/ueditor.config.js"></script>
-	<!-- 编辑器源码文件 -->
-	<script type="text/javascript" src="${ctx}/js/ueditor/ueditor.all.js"></script>
-	<!-- 实例化编辑器 -->
+	<%-- <script type="text/javascript" src="${ctx}/js/ueditor/ueditor.config.js"></script>
+	<script type="text/javascript" src="${ctx}/js/ueditor/ueditor.all.js"></script> --%>
 
 	<script type="text/javascript">
-		var ue = UE.getEditor('container', {
+		/* var ue = UE.getEditor('container', {
 			autoHeightEnabled : true,
 			autoFloatEnabled : true,
 			initialFrameHeight : 483
-		});
+		}); */
 		// 初始化按钮等工作。
 		$().ready(function() {
 
