@@ -19,26 +19,26 @@
 	</div>
 	<div class="menuItem"
 		style="width: 20%; background-color: #F3ABA7;" id="independBuyBtn">
-		<h4 class="menuTitle" style="color: #ffffff;">
-			<i class="fa fa-jpy"></i>87
-		</h4>
+		<h5 class="menuTitle" style="color: #ffffff;">
+			<i class="fa fa-jpy"></i><span id="independentPriceLabel">87</span>
+		</h5>
 		<h5 style="color: #ffffff; font-weight: normal;">单独购买</h5>
 
 	</div>
 	<div class="menuItem"
 		style="width: 20%; background-color: #E02E24;" id="groupBuyBtn">
-		<h4 class="menuTitle" style="color: #ffffff;">
-			<i class="fa fa-jpy"></i>77
-		</h4>
+		<h5 class="menuTitle" style="color: #ffffff;">
+			<i class="fa fa-jpy"></i><span id="gourpSalePriceLabel">77</span>
+		</h5>
 		<h5 style="color: #ffffff; font-weight: normal;">一键开团</h5>
 
 	</div>
 	<div class="menuItem" 
 		style="width: 21%; background-color: #E02E24;" id="shareBuyBtn">
-		<h4 class="menuTitle" style="color: #ffffff;">
-			<i class="fa fa-jpy"></i>1
-		</h4>
-		<h5 style="color: #ffffff; font-weight: normal;">一键分销</h5>
+		<h5 class="menuTitle" style="color: #ffffff;">
+			<i class="fa fa-jpy"></i><span id="distributionValueLabel">1</span>
+		</h5>
+		<h5 style="color: #ffffff; font-weight: normal;">分销获利</h5>
 	</div>
 </div>
 

@@ -381,7 +381,10 @@ body {
 												}
 												input.val(oldValue);
 											});
-
+							$("#independentPriceLabel").html("${product.independentPrice}");
+							$("#gourpSalePriceLabel").html("${product.gourpSalePrice}");
+							$("#distributionValueLabel").html("${product.distributionValue}");
+							
 							$("#indexBtn").removeClass("menuItemActive");
 							$("#indexBtn").addClass("menuItem");
 							//跳转到首页
