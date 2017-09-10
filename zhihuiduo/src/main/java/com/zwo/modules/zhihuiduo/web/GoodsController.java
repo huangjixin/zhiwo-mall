@@ -107,6 +107,8 @@ public class GoodsController extends BaseController {
 
 		PrProductWithBLOBs product = prductService.selectByPrimKey(goodsId);
 		if (product != null) {
+			int shopProductsCount = prductService.selectPrProductsCountByShopId(product.getShopId());
+			uiModel.addAttribute("shopProductsCount", shopProductsCount);
 			if (null != product.getUserId()) {
 				// 查询店铺信息。
 				Shop shop = shopService.selectByUserId(product.getUserId());

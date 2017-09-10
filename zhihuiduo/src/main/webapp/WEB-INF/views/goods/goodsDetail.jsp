@@ -139,7 +139,7 @@ body {
 
 			<div class="pull-left">
 				<label style="color: red; font-size: 2rem;"><i
-					class="fa fa-jpy"></i>88</label>&nbsp;&nbsp;<label
+					class="fa fa-jpy"></i>${product.gourpSalePrice}</label>&nbsp;&nbsp;<label
 					style="color: gray; font-size: 1.5rem;"><i
 					class="fa fa-jpy"></i><span style="text-decoration: line-through">${product.marketPrice}</span></label>
 			</div>
@@ -177,8 +177,8 @@ body {
 							style="width: 50px; height: 50px; border-radius: 4px;">
 					</div>
 					<div class="media-body">
-						<h5 class="media-heading" style="padding-top: 6px;">南极人+穆卡专卖店</h5>
-						<span style="color: gray; font-size: 1.4rem;">商品数量12.已团14万件</span>
+						<h5 class="media-heading" style="padding-top: 6px;">${shop.name}</h5>
+						<span style="color: gray; font-size: 1.4rem;">商品数量${fn:length(goodsList)}.已团${shopProductsCount}件</span>
 					</div>
 					<div class="media-right" style="padding-top: 10px;">
 						<img class="media-object"
