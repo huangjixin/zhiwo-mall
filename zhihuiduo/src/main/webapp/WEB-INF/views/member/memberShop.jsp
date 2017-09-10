@@ -44,8 +44,8 @@ body {
 						style="width: 60px; height: 60px; border-radius: 4px;">
 				</div>
 				<div class="media-body">
-					<h4 class="media-heading" style="padding-top: 6px;">${shop.name}南极人+穆卡专卖店</h4>
-					<span style="color: gray; font-size: 1.4rem;">商品数量${productsCount}12</span>
+					<h4 class="media-heading" style="padding-top: 6px;">${shop.name}</h4>
+					<span style="color: gray; font-size: 1.4rem;">商品数量${productsCount}</span>
 				</div>
 				<div class="media-right" style="padding-top: 10px;">
 					<i class="fa fa-wechat fa-lg" aria-hidden="true"
@@ -71,7 +71,7 @@ body {
 		<div class="thumbnail">
 			<img class="img-responsive" src="${ctx}/${prod.icon}">
 			<div class="caption" style="font-size: 1.3rem;">
-				<h6>${prod.description}</h6>
+				<h6>${prod.name}</h6>
 				<div class="pull-left">
 					<label style="color: red;"><i class="fa fa-jpy"></i>${prod.gourpSalePrice}</label> <span>已拼1222件</span>
 				</div>
