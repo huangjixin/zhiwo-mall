@@ -67,6 +67,7 @@ body {
 	</div>
 
 	<c:forEach var="prod" items="${products}">
+    <a href="${ctx}/goodsDetail?goodsId=${prod.id}">
 		<div class="col-xs-6">
 		<div class="thumbnail">
 			<img class="img-responsive" src="${ctx}/${prod.icon}">
@@ -86,7 +87,7 @@ body {
 			</div>
 
 		</div>
-	</div>
+	</div></a>
 	</c:forEach>
 	
 
