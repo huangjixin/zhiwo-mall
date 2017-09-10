@@ -36,6 +36,11 @@ body {
 
 </head>
 <body>
+	<div class="page-header"
+		style="text-align: center; font-size: 2rem; position:fixed; background-color:#fff; left:0;right:0; top:0; padding-top:10px; margin-top:0;">
+		<b>${shop.name}</b>&nbsp;&nbsp;<small  style="color:red;" onClick="javascript:history.back();">返回</small>
+	</div>
+    <div style="height:45px;"></div>
 	<div class="thumbnail">
 		<div class="caption">
 			<div class="media" style="padding-top: 4px; padding-bottom: 8px;">
@@ -49,7 +54,7 @@ body {
 				</div>
 				<div class="media-right" style="padding-top: 10px;">
 					<i class="fa fa-wechat fa-lg" aria-hidden="true"
-						style="font-size: 3rem; padding-top: 10px;"></i>
+						style="font-size: 3rem; padding-top: 10px; color:green;"></i>
 				</div>
 
 			</div>

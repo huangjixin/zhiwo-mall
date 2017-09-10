@@ -107,11 +107,14 @@ public class GoodsController extends BaseController {
 
 		PrProductWithBLOBs product = prductService.selectByPrimKey(goodsId);
 		if (product != null) {
-			int shopProductsCount = prductService.selectPrProductsCountByShopId(product.getShopId());
-			uiModel.addAttribute("shopProductsCount", shopProductsCount);
-			if (null != product.getUserId()) {
+			if(product.getShopId()!=null){
+				int shopProductsCount = prductService.selectPrProductsCountByShopId(product.getShopId());
+				uiModel.addAttribute("shopProductsCount", shopProductsCount);
+			}
+			
+			if (null != product.getShopId()) {
 				// 查询店铺信息。
-				Shop shop = shopService.selectByUserId(product.getUserId());
+				Shop shop = shopService.selectByPrimKey(product.getShopId());
 				uiModel.addAttribute("shop", shop);
 				if (shop != null) {
 					// 查询店铺所有的商品，统一用goods。

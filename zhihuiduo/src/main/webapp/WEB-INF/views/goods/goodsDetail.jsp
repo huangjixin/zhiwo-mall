@@ -168,6 +168,7 @@ body {
 		</div>
 	</div>
 
+	<a href="${ctx}/memberShop?shopId=${product.shopId}">
 	<div class="thumbnail">
 		<div class="caption">
 			<div class="pull-left">
@@ -192,7 +193,7 @@ body {
 			<div class="clearfix"></div>
 		</div>
 	</div>
-
+	</a>
 	<div class="thumbnail">
 		<div class="caption">
 			<div class="media">
