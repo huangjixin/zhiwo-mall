@@ -4,7 +4,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>智惠多商品云购.店铺</title>
+<title>智惠多商品云购.店铺.${shop.name}</title>
 <%@ include file="/WEB-INF/member-include/css.jsp"%>
 <%@ include file="/WEB-INF/member-include/js.jsp"%>
 <style>
@@ -44,8 +44,8 @@ body {
 						style="width: 60px; height: 60px; border-radius: 4px;">
 				</div>
 				<div class="media-body">
-					<h4 class="media-heading" style="padding-top: 6px;">南极人+穆卡专卖店</h4>
-					<span style="color: gray; font-size: 1.4rem;">商品数量12</span>
+					<h4 class="media-heading" style="padding-top: 6px;">${shop.name}南极人+穆卡专卖店</h4>
+					<span style="color: gray; font-size: 1.4rem;">商品数量${productsCount}12</span>
 				</div>
 				<div class="media-right" style="padding-top: 10px;">
 					<i class="fa fa-wechat fa-lg" aria-hidden="true"
@@ -66,68 +66,30 @@ body {
 		</div>
 	</div>
 
-	<div class="col-xs-6">
+	<c:forEach var="prod" items="${products}">
+		<div class="col-xs-6">
 		<div class="thumbnail">
-			<img class="img-responsive" src="${ctx}/${shop.icon}">
+			<img class="img-responsive" src="${ctx}/${prod.icon}">
 			<div class="caption" style="font-size: 1.3rem;">
-				<h6>【加大加宽款】儿童书桌儿童学习桌小学生写字桌椅套装书柜组</h6>
+				<h6>${prod.description}</h6>
 				<div class="pull-left">
-					<label style="color: red;"><i class="fa fa-jpy"></i>88</label> <span>已拼1222件</span>
+					<label style="color: red;"><i class="fa fa-jpy"></i>${prod.gourpSalePrice}</label> <span>已拼1222件</span>
 				</div>
-				<div class="pull-right">
+				<%-- <div class="pull-right">
 					<img class="img-circle" src="${ctx}/${shop.icon}"
 						style="width: 25px;"> <img class="img-circle"
 						src="${ctx}/${shop.icon}" style="width: 25px;">
-				</div>
+				</div> --%>
 
 
 				<div class="clearfix"></div>
 			</div>
+
 		</div>
 	</div>
-	</div>
+	</c:forEach>
+	
 
-	<div class="col-xs-6">
-		<div class="thumbnail">
-			<img class="img-responsive" src="${ctx}/${shop.icon}">
-			<div class="caption" style="font-size: 1.3rem;">
-				<h6>【加大加宽款】儿童书桌儿童学习桌小学生写字桌椅套装书柜组</h6>
-				<div class="pull-left">
-					<label style="color: red;"><i class="fa fa-jpy"></i>88</label> <span>已拼1222件</span>
-				</div>
-				<div class="pull-right">
-					<img class="img-circle" src="${ctx}/${shop.icon}"
-						style="width: 25px;"> <img class="img-circle"
-						src="${ctx}/${shop.icon}" style="width: 25px;">
-				</div>
-
-
-				<div class="clearfix"></div>
-			</div>
-		</div>
-	</div>
-	</div>
-
-	<div class="col-xs-6">
-		<div class="thumbnail">
-			<img class="img-responsive" src="${ctx}/${shop.icon}">
-			<div class="caption" style="font-size: 1.3rem;">
-				<h6>【加大加宽款】儿童书桌儿童学习桌小学生写字桌椅套装书柜组</h6>
-				<div class="pull-left">
-					<label style="color: red;"><i class="fa fa-jpy"></i>88</label> <span>已拼1222件</span>
-				</div>
-				<div class="pull-right">
-					<img class="img-circle" src="${ctx}/${shop.icon}"
-						style="width: 25px;"> <img class="img-circle"
-						src="${ctx}/${shop.icon}" style="width: 25px;">
-				</div>
-
-
-				<div class="clearfix"></div>
-			</div>
-		</div>
-	</div>
-	</div>
 
 </body>
 </html>

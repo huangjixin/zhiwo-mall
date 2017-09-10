@@ -48,6 +48,9 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 
 	private static final String BASE_MESSAGE = "【PrProductServiceImpl服务类提供的基础操作增删改查等】";
 
+	private static final String KEY_SHOPID_PRODUCT = "_key_shopId_product";
+	private static final String KEY_SHOPID_PRODUCT_COUNT = "_key_shopId_product_Count";
+
 	@Autowired
 	@Lazy(true)
 	private PrProductMapper productMapper;
@@ -64,6 +67,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	@Lazy(true)
 	private PrProductPackagePriceMapper productPackagePriceMapper;
 
+	@SuppressWarnings("rawtypes")
 	private RedisTemplate redisTemplate;
 
 	@Override
@@ -95,7 +99,12 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
-
+		List<PrProduct> list = this.productMapper
+				.selectByExample((PrProductCriteria) example);
+		for (PrProduct prProduct : list) {
+			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT);
+			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
+		}
 		// 逻辑操作
 		int result = productMapper.deleteByExample((PrProductCriteria) example);
 
@@ -117,29 +126,22 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		// 逻辑操作
 		PrProductCriteria productCriteria = new PrProductCriteria();
 		productCriteria.createCriteria().andIdIn(list);
-		
-		if(redisTemplate == null ){ 
-			redisTemplate = SpringContextHolder.getBean("redisTemplate"); 
+
+		List<PrProduct> products = this.productMapper
+				.selectByExample(productCriteria);
+		for (PrProduct prProduct : products) {
+			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT);
+			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
+
+			String key = prProduct.getId() + "_" + PrImageType.DETAIL
+					+ "_prImages";
+			removeRedisKey(key);
+			key = prProduct.getId() + "_" + PrImageType.PROP + "_prImages";
+			removeRedisKey(key);
+			key = prProduct.getId() + "_" + PrImageType.THUMBNAIL + "_prImages";
+			removeRedisKey(key);
 		}
-		
-		if(redisTemplate != null ){ 
-			List<PrProduct> products = this.selectByExample(productCriteria);
-			for (PrProduct prProduct : products) {
-				String key = prProduct.getId()+"_"+PrImageType.DETAIL+"_prImages";
-				if(redisTemplate.hasKey(key)){
-					redisTemplate.delete(key);
-				}
-				key = prProduct.getId()+"_"+PrImageType.PROP+"_prImages";
-				if(redisTemplate.hasKey(key)){
-					redisTemplate.delete(key);
-				}
-				key = prProduct.getId()+"_"+PrImageType.THUMBNAIL+"_prImages";
-				if(redisTemplate.hasKey(key)){
-					redisTemplate.delete(key);
-				}
-			}
-		}
-		
+
 		int result = productMapper.deleteByExample(productCriteria);
 
 		if (logger.isInfoEnabled())
@@ -164,25 +166,17 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为："
 					+ id.toString());
-		if(redisTemplate == null ){ 
-			redisTemplate = SpringContextHolder.getBean("redisTemplate"); 
-		}
-		
-		if(redisTemplate != null ){ 
-			String key = id+"_"+PrImageType.DETAIL+"_prImages";
-			if(redisTemplate.hasKey(key)){
-				redisTemplate.delete(key);
-			}
-			key = id+"_"+PrImageType.PROP+"_prImages";
-			if(redisTemplate.hasKey(key)){
-				redisTemplate.delete(key);
-			}
-			key = id+"_"+PrImageType.THUMBNAIL+"_prImages";
-			if(redisTemplate.hasKey(key)){
-				redisTemplate.delete(key);
-			}
-		}
-		
+		PrProduct prProduct = selectByPrimKey(id);
+		removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT);
+		removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
+
+		String key = prProduct.getId() + "_" + PrImageType.DETAIL + "_prImages";
+		removeRedisKey(key);
+		key = prProduct.getId() + "_" + PrImageType.PROP + "_prImages";
+		removeRedisKey(key);
+		key = prProduct.getId() + "_" + PrImageType.THUMBNAIL + "_prImages";
+		removeRedisKey(key);
+
 		// 逻辑操作
 		int result = this.productMapper.deleteByPrimaryKey(id);
 
@@ -345,6 +339,11 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 			logger.info(BASE_MESSAGE + "insert插入开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
+
+		PrProduct prProduct = record;
+		removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT);
+		removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
+
 		if (null != record.getContent() && !"".equals(record.getContent())) {
 			String content = record.getContent();
 			content = HtmlUtils.htmlEscape(content);
@@ -369,11 +368,16 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insertSelective插入对象为："
 					+ record.toString());
+		PrProduct prProduct = record;
+		removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT);
+		removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
+
 		if (null != record.getContent() && !"".equals(record.getContent())) {
 			String content = record.getContent();
 			content = HtmlUtils.htmlEscape(content);
 			record.setContent(content);
 		}
+
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + ""
@@ -417,6 +421,14 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为："
 					+ record.toString());
+
+		// 逻辑操作
+
+		List<PrProduct> products = this.productMapper.selectByExample(example);
+		for (PrProduct prProduct : products) {
+			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT);
+		}
+
 		if (null != record.getContent() && !"".equals(record.getContent())) {
 			String content = record.getContent();
 			content = HtmlUtils.htmlEscape(content);
@@ -440,6 +452,13 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleWithBLOBs更新条件对象为："
 					+ record.toString());
+
+		List<PrProduct> products = this.productMapper.selectByExample(example);
+		for (PrProduct prProduct : products) {
+			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT);
+			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
+		}
+
 		if (null != record.getContent() && !"".equals(record.getContent())) {
 			String content = record.getContent();
 			content = HtmlUtils.htmlEscape(content);
@@ -462,11 +481,13 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExample更新对象为："
 					+ record.toString());
-		// if(null!=record.getContent() && !"".equals(record.getContent())){
-		// String content = record.getContent();
-		// content = HtmlUtils.htmlEscape(content);
-		// record.setContent(content);
-		// }
+
+		List<PrProduct> products = this.productMapper.selectByExample(example);
+		for (PrProduct prProduct : products) {
+			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT);
+			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
+		}
+
 		// 逻辑操作
 		int result = this.productMapper.updateByExample(record, example);
 		// 日志记录
@@ -483,6 +504,10 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为："
 					+ record.toString());
+
+		removeRedisKey(record.getShopId() + KEY_SHOPID_PRODUCT);
+		removeRedisKey(record.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
+
 		if (null != record.getContent() && !"".equals(record.getContent())) {
 			String content = record.getContent();
 			content = HtmlUtils.htmlEscape(content);
@@ -503,6 +528,8 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeyWithBLOBs更新对象为："
 					+ record.toString());
+		removeRedisKey(record.getShopId() + KEY_SHOPID_PRODUCT);
+
 		if (null != record.getContent() && !"".equals(record.getContent())) {
 			String content = record.getContent();
 			content = HtmlUtils.htmlEscape(content);
@@ -515,26 +542,71 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		return result;
 	}
 
-	/*@Transactional(readOnly = true)
 	@Override
-	// @Cacheable(key = "#id+'_product'", value = "PrProduct")
-	public List<PrImage> selectByProductId(String productId, boolean isDefault) {
-		// 日志记录
+	@Cacheable(value = "ShopPrProducts", key = "#shopId+'_key_shopId_product'")
+	public List<PrProduct> selectPrProductsByShopId(String shopId) {
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "selectByProductId根据商品ID查询图片开始");
-
-		PrImageCriteria imageCriteria = new PrImageCriteria();
-		imageCriteria.createCriteria().andProductIdEqualTo(productId)
-				.andIsDefaultEqualTo(isDefault);
-		imageCriteria.setOrderByClause("id desc");
-		List<PrImage> list = imageMapper.selectByExample(imageCriteria);
+			logger.info(BASE_MESSAGE
+					+ "selectPrProductsByShopId根据商铺Id查询商品开始，商铺ID为：" + shopId);
+		PrProductCriteria productCriteria = new PrProductCriteria();
+		productCriteria.createCriteria().andShopIdEqualTo(shopId);
+		List<PrProduct> list = this.productMapper
+				.selectByExample(productCriteria);
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "selectByProductId根据商品ID查询图片结束，结果条目数："
-					+ list.size());
+			logger.info(BASE_MESSAGE
+					+ "selectPrProductsByShopId根据商铺Id查询商品结束，数量为：" + list.size());
 		return list;
-	}*/
+	}
 
-	
+	@Override
+	@Cacheable(value = "ShopPrProductsCount", key = "#shopId+'_key_shopId_product_Count'")
+	public Integer selectPrProductsCountByShopId(String shopId) {
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE
+					+ "selectPrProductsByShopId根据商铺Id查询商品数量开始，商铺ID为：" + shopId);
+		PrProductCriteria productCriteria = new PrProductCriteria();
+		productCriteria.createCriteria().andShopIdEqualTo(shopId);
+		int count = this.productMapper.countByExample(productCriteria);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE
+					+ "selectPrProductsByShopId根据商铺Id查询商品结束，数量为：" + count);
+		return count;
+	}
+
+	/**
+	 * 移除key.
+	 * 
+	 * @param key
+	 */
+	@SuppressWarnings("unchecked")
+	private void removeRedisKey(String key) {
+		if (redisTemplate == null) {
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
+
+		if (redisTemplate != null) {
+			if (redisTemplate.hasKey(key)) {
+				redisTemplate.delete(key);
+			}
+		}
+	}
+
+	/*
+	 * @Transactional(readOnly = true)
+	 * 
+	 * @Override // @Cacheable(key = "#id+'_product'", value = "PrProduct")
+	 * public List<PrImage> selectByProductId(String productId, boolean
+	 * isDefault) { // 日志记录 if (logger.isInfoEnabled()) logger.info(BASE_MESSAGE
+	 * + "selectByProductId根据商品ID查询图片开始");
+	 * 
+	 * PrImageCriteria imageCriteria = new PrImageCriteria();
+	 * imageCriteria.createCriteria().andProductIdEqualTo(productId)
+	 * .andIsDefaultEqualTo(isDefault);
+	 * imageCriteria.setOrderByClause("id desc"); List<PrImage> list =
+	 * imageMapper.selectByExample(imageCriteria); if (logger.isInfoEnabled())
+	 * logger.info(BASE_MESSAGE + "selectByProductId根据商品ID查询图片结束，结果条目数：" +
+	 * list.size()); return list; }
+	 */
 
 	/*
 	 * if(result != 0){ if(redisTemplate == null ){ redisTemplate =

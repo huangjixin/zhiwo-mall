@@ -12,12 +12,14 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.dao.PrProductMapper;
+import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductCriteria;
 import com.zwo.modules.shop.dao.ShopMapper;
@@ -25,6 +27,7 @@ import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.domain.ShopCriteria;
 import com.zwo.modules.shop.domain.ShopWithBLOBs;
 import com.zwo.modules.shop.service.IShopService;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -41,6 +44,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 
 	private static final String BASE_MESSAGE = "【ShopServiceImpl服务类提供的基础操作增删改查等】";
 
+	
 	@Autowired
 	@Lazy(true)
 	private ShopMapper shopMapper;
@@ -49,6 +53,9 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 	@Lazy(true)
 	private PrProductMapper productMapper;
 
+	@SuppressWarnings("rawtypes")
+	private RedisTemplate redisTemplate;
+	
 	@Override
 	public Mapper<Shop> getBaseMapper() {
 		return null;
@@ -78,7 +85,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
-
+		
 		// 逻辑操作
 		int result = shopMapper.deleteByExample((ShopCriteria) example);
 
@@ -230,7 +237,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = {"Shop","PrProducts"}, key = "#record.id+'_shop'")
+	@CacheEvict(value = {"Shop"}, key = "#record.id+'_shop'")
 	public int updateByPrimaryKey(Shop record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -349,7 +356,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 		return result;
 	}
 
-	@CacheEvict(value = {"Shop","PrProducts"}, allEntries = true)
+	@CacheEvict(value = {"Shop"}, allEntries = true)
 	@Override
 	public int updateByExampleWithBLOBs(ShopWithBLOBs record, ShopCriteria example) {
 		// 日志记录
@@ -366,7 +373,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 		return result;
 	}
 
-	@CacheEvict(value = {"Shop","PrProducts"}, allEntries = true)
+	@CacheEvict(value = {"Shop"}, allEntries = true)
 	@Override
 	public int updateByExample(Shop record, ShopCriteria example) {
 		// 日志记录
@@ -383,7 +390,7 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 		return result;
 	}
 
-	@CacheEvict(value = {"Shop","PrProducts"}, key = "#record.id+'_shop'")
+	@CacheEvict(value = {"Shop"}, key = "#record.id+'_shop'")
 	@Override
 	public int updateByPrimaryKeySelective(ShopWithBLOBs record) {
 		// 日志记录
@@ -427,13 +434,22 @@ public class ShopServiceImpl extends BaseService<Shop> implements IShopService {
 		}
 		return null;
 	}
-
-	@Override
-//	@Cacheable(value = "PrProducts")
-	public List<PrProduct> selectPrProductsByShopId(String shopId) {
-		PrProductCriteria productCriteria = new PrProductCriteria();
-		productCriteria.createCriteria().andShopIdEqualTo(shopId);
-		List<PrProduct> list = this.productMapper.selectByExample(productCriteria);
-		return list;
+	
+	/**
+	 * 移除key.
+	 * @param key
+	 */
+	@SuppressWarnings("unchecked")
+	private void removeRedisKey(String key){
+		if (redisTemplate == null) {
+			redisTemplate = SpringContextHolder
+					.getBean("redisTemplate");
+		}
+		
+		if (redisTemplate != null) {
+			if (redisTemplate.hasKey(key)) {
+				redisTemplate.delete(key);
+			}
+		}
 	}
 }

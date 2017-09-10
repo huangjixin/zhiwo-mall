@@ -43,10 +43,5 @@ public interface IShopService extends IBaseService<Shop> {
      */
     ShopWithBLOBs selectByUserId(String id);
     
-    /**
-     * 根据商铺ID查询商品。
-     * @param id
-     * @return
-     */
-    List<PrProduct> selectPrProductsByShopId(String shopId);
+    
 }

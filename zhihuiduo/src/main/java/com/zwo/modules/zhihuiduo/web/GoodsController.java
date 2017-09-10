@@ -113,8 +113,7 @@ public class GoodsController extends BaseController {
 				uiModel.addAttribute("shop", shop);
 				if (shop != null) {
 					// 查询店铺所有的商品，统一用goods。
-					List<PrProduct> goodsList = shopService
-							.selectPrProductsByShopId(shop.getId());
+					List<PrProduct> goodsList = prductService.selectPrProductsByShopId(shop.getId());
 					uiModel.addAttribute("goodsList", goodsList);
 				}
 

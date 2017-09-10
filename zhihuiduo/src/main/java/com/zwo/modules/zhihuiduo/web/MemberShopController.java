@@ -76,9 +76,9 @@ public class MemberShopController extends BaseController {
 	@Lazy(true)
 	private IShopCategoryService shopCategoryService;
 
-//	@SuppressWarnings("rawtypes")
-//	private RedisTemplate redisTemplate = SpringContextHolder
-//			.getBean("redisTemplate");
+	// @SuppressWarnings("rawtypes")
+	// private RedisTemplate redisTemplate = SpringContextHolder
+	// .getBean("redisTemplate");
 
 	private static final String basePath = "views/member/";
 
@@ -97,7 +97,13 @@ public class MemberShopController extends BaseController {
 			HttpServletResponse httpServletResponse) {
 
 		Shop shop = shopService.selectByPrimKey(shopId);
+		List<PrProduct> products = prductService
+				.selectPrProductsByShopId(shopId);
+		int productsCount = prductService.selectPrProductsCountByShopId(shopId);
+		
 		uiModel.addAttribute("shop", shop);
+		uiModel.addAttribute("products", products);
+		uiModel.addAttribute("productsCount", productsCount);
 		return basePath + "memberShop";
 	}
 

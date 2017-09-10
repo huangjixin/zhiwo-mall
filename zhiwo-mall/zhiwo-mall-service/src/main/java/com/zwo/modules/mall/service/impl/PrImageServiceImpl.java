@@ -49,7 +49,6 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements
 	private static final String KEY_TYPE_DETAIL = "_key_detail_prImages";
 	private static final String KEY_TYPE_PROP = "_key_prop_prImages";
 	private static final String KEY_TYPE_SWIPER = "_key_swiper_prImages";
-
 	@Autowired
 	@Lazy(true)
 	private PrImageMapper prImageMapper;

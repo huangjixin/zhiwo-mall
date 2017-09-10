@@ -48,4 +48,18 @@ public interface IPrductService extends IBaseService<PrProduct> {
 //    List<PrImage> selectByProductId(String productId,boolean isDefault);
     
     
+    /**
+     * 根据商铺ID查询商品。
+     * @param id
+     * @return
+     */
+    List<PrProduct> selectPrProductsByShopId(String shopId);
+    
+    /**
+     * 根据商铺ID查询商品数量。
+     * @param id
+     * @return
+     */
+    Integer selectPrProductsCountByShopId(String shopId);
+    
 }

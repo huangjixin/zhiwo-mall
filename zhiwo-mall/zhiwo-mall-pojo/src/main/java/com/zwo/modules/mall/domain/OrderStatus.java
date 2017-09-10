@@ -35,5 +35,8 @@ public class OrderStatus {
 	 */
 	public static final String TO_BE_COMMENT_UNPAYED = "toBeCommentUnpayed"; 
 	
-	
+	/**
+	 * 交易完成
+	 */
+	public static final String COMPLETE = "complete"; 
 }

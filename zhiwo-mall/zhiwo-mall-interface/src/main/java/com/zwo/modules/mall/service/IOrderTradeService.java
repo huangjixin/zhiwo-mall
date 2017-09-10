@@ -21,4 +21,21 @@ public interface IOrderTradeService extends IBaseService<OrderTrade> {
 	 * @return
 	 */
 	PageInfo<OrderTrade> selectByUserId(String userId,String status, PageInfo<OrderTrade> pageInfo);
+	
+	/**
+	 * 查询商品销售数量。
+	 * @param productId
+	 * @param status
+	 * @return
+	 */
+	Integer selectCountByProductId(String productId,String status);
+	
+	/**
+	 * 查询商铺交易的订单数量。
+	 * @param shopId
+	 * @param status
+	 * @return
+	 */
+	Integer selectCountByShopId(String shopId,String status);
+	
 }
