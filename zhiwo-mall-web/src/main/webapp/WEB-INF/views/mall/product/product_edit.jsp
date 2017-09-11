@@ -146,10 +146,10 @@
 		<div class="form-group">
 			<label for="file" class="col-sm-2 control-label"></label>
 			<div class="col-sm-6">
-				<label style="color: red;">缩略图要求图片长宽比例为2:1，用工具将图片压缩成webp格式。(预览)</label>
+				<label style="color: red;">缩略图要求白底长宽比例2:1且压缩为webp格式。(预览)</label>
 				<br> <img id="iconImg"
 					<c:if test="${!empty product.icon}">src="${ctx}/${product.icon}"</c:if>
-					class=".img-responsive" width="200px;">
+					class=".img-responsive" width="300px;">
 			</div>
 		</div>
 		<div class="form-group">
@@ -207,9 +207,9 @@
 			<div class="col-sm-6">
 				<select id="status" class="easyui-combobox" name="status"
 					style="width: 200px;">
-					<option value="false"
+					<option value="online"
 						<c:if test="${product.status=='online'}">selected=true</c:if>>上架</option>
-					<option value="true"
+					<option value="offline"
 						<c:if test="${product.status=='offline'}">selected=true</c:if>>下架</option>
 				</select>
 			</div>
@@ -582,13 +582,24 @@
 		</div>
 	</form>
 	<!-- 配置文件 -->
-	<script type="text/javascript"
-		src="${ctx}/js/ueditor/ueditor.config.js"></script>
+	<script type="text/javascript" src="${ctx}/ueditor/ueditor.config.js"></script>
 	<!-- 编辑器源码文件 -->
-	<script type="text/javascript" src="${ctx}/js/ueditor/ueditor.all.js"></script>
+	<script type="text/javascript" src="${ctx}/ueditor/ueditor.all.js"></script>
 	<!-- 实例化编辑器 -->
 
 	<script type="text/javascript">
+		/*UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;  
+    	UE.Editor.prototype.getActionUrl = function(action){  
+			//调用自己写的Controller  
+			if(action == 'uploadimage' || action == 'uploadfile'){  
+				return "${ctx}/fileupload/prDetailAssets"; 
+			}else if(action == "uploadvideo"){  
+					return "${ctx}/ueditor/videoUp";
+			}else{  
+					return this._bkGetActionUrl.call(this,action);//百度编辑器默认的action  
+			}  
+		}  */
+	
 		var ue = UE.getEditor('container', {
 			autoHeightEnabled : true,
 			autoFloatEnabled : true,
@@ -1298,14 +1309,6 @@
 						validators: {
 							notEmpty: {
 								message: '库存不可以为空'
-							}
-						}
-					},
-					marketPrice: {
-						message: '市价验证失败',
-						validators: {
-							notEmpty: {
-								message: '市价不可以为空'
 							}
 						}
 					},
