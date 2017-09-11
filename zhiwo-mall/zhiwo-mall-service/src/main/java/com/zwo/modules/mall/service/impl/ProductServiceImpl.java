@@ -591,6 +591,35 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		}
 	}
 
+	@Override
+	public PageInfo<PrProduct> selectByCategoryIdPageInfo(String categoryId,
+			PageInfo<PrProduct> pageInfo) {
+		PrProductCriteria productCriteria = new PrProductCriteria();
+		productCriteria.createCriteria().andCategoryIdEqualTo(categoryId);
+		productCriteria.setOrderByClause("create_date asc");
+		PageInfo<PrProduct> info = selectByPageInfo(productCriteria, pageInfo);
+		return info;
+	}
+
+	@Override
+	public List<PrProduct> selectAllByStatus(String status) {
+		PrProductCriteria productCriteria = new PrProductCriteria();
+		productCriteria.createCriteria().andStatusEqualTo(status);
+		productCriteria.setOrderByClause("create_date asc");
+		List<PrProduct> list = this.productMapper.selectByExample(productCriteria);
+		return list;
+	}
+
+	@Override
+	public PageInfo<PrProduct> selectAllByStatus(String status,
+			PageInfo<PrProduct> pageInfo) {
+		PrProductCriteria productCriteria = new PrProductCriteria();
+		productCriteria.createCriteria().andStatusEqualTo(status);
+		productCriteria.setOrderByClause("create_date asc");
+		PageInfo<PrProduct> info = selectByPageInfo(productCriteria, pageInfo);
+		return info;
+	}
+
 	/*
 	 * @Transactional(readOnly = true)
 	 * 

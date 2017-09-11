@@ -5,6 +5,7 @@ package com.zwo.modules.mall.service;
 
 import java.util.List;
 
+import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductCriteria;
@@ -62,4 +63,25 @@ public interface IPrductService extends IBaseService<PrProduct> {
      */
     Integer selectPrProductsCountByShopId(String shopId);
     
+    /**
+     * 根据种类进行商品分页查询。
+     * @param categoryId
+     * @param pageInfo
+     * @return
+     */
+    PageInfo<PrProduct> selectByCategoryIdPageInfo(String categoryId,PageInfo<PrProduct> pageInfo);
+    
+    /**
+     * 查询全部上架商品。
+     * @return
+     */
+    List<PrProduct> selectAllByStatus(String status);
+    
+    /**
+     * 根据上架商品分页查询。
+     * @param categoryId
+     * @param pageInfo
+     * @return
+     */
+    PageInfo<PrProduct> selectAllByStatus(String status,PageInfo<PrProduct> pageInfo);
 }
