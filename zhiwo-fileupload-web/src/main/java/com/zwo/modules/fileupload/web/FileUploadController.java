@@ -77,7 +77,7 @@ public class FileUploadController {
 		for (int i = 0; i < files.length; i++) {
 			if (!files[i].isEmpty()) {
 				String name = files[i].getOriginalFilename();
-				int index = name.indexOf(".");
+				int index = name.lastIndexOf(".");
 
 				name = new Date().getTime() + ((int) Math.random() * 10000) + "" + name.substring(index, name.length());
 				File file = new File(uploadPath, name);
@@ -192,7 +192,7 @@ public class FileUploadController {
 		for (int i = 0; i < files.length; i++) {
 			if (!files[i].isEmpty()) {
 				String name = files[i].getOriginalFilename();
-				int index = name.indexOf(".");
+				int index = name.lastIndexOf(".");
 				String datetimeName = new Date().getTime() + ((int) Math.random() * 10000) + "";
 				name =  datetimeName + name.substring(index, name.length());
 				File file = new File(uploadPath, name);
@@ -270,7 +270,7 @@ public class FileUploadController {
 		for (int i = 0; i < files.length; i++) {
 			if (!files[i].isEmpty()) {
 				String name = files[i].getOriginalFilename();
-				int index = name.indexOf(".");
+				int index = name.lastIndexOf(".");
 				String datetimeName = new Date().getTime() + ((int) Math.random() * 10000) + "";
 				name =  datetimeName + name.substring(index, name.length());
 				File file = new File(uploadPath, name);
@@ -308,5 +308,98 @@ public class FileUploadController {
 		// userAssetsService.batchInsert(userAssets);
 		return result;
 	}
+	
+	/**
+	 * 商品详情图上传
+	 * @param productId
+	 * @param files
+	 * @param HTTP_CONTENT_DISPOSITION
+	 * @param httpServletRequest
+	 * @param httpServletResponse
+	 * @param uiModel
+	 * @return
+	 */
+	@RequestMapping(value = "prDetailAssets")
+	@ResponseBody
+	public String proDetailAssetsUpload(
+			@RequestParam String productId,
+			@RequestParam String type,
+			@RequestParam(value = "file", required = false) CommonsMultipartFile[] files,
+			String HTTP_CONTENT_DISPOSITION, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse, Model uiModel) {
+		TbUser tbuser = null;
+		if (SecurityUtils.getSecurityManager() != null) {
+			Subject currentUser = SecurityUtils.getSubject();
+			if (currentUser != null) {
+				tbuser = (TbUser) currentUser.getSession().getAttribute("user");
+			}
+		}
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		PrImage assets = null;
+		
+		Calendar date = Calendar.getInstance();
+		String rootDir = httpServletRequest.getSession().getServletContext().getRealPath("/");
+		rootDir = "D:"+File.separator;
+		String url = "passets/" + date.get(Calendar.YEAR) + "/" + (date.get(Calendar.MONTH) + 1) + "/"
+				+ date.get(Calendar.DAY_OF_MONTH);
+		String uploadPath = rootDir + "images" + File.separator + "passets";
+		uploadPath = uploadPath + File.separator + date.get(Calendar.YEAR) + File.separator
+				+ (date.get(Calendar.MONTH) + 1) + File.separator + date.get(Calendar.DAY_OF_MONTH);
+		
+		String lastIndexName = "";
+		int index = -1;
+		CommonsMultipartFile commonsMultipartFile = null;
+		
+		if (!files[0].isEmpty()) {
+			commonsMultipartFile = files[0];
+			String name = files[0].getOriginalFilename();
+			index = name.lastIndexOf(".");
+			lastIndexName = name.substring(index, name.length());
+			String datetimeName = new Date().getTime() + ((int) Math.random() * 10000) + "";
+			name =  datetimeName + name.substring(index, name.length());
+			File file = new File(uploadPath, name);
+			
+			if (!file.exists()) {// 目录不存在则直接创建
+				file.mkdirs();
+			}
+			
+			try {
+				commonsMultipartFile.transferTo(file);
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			assets = new PrImage();
+			if(tbuser!=null){
+				assets.setUserId(tbuser.getId());
+			}
+			assets.setProductId(productId);
+			//true为轮播图。
+			assets.setIsDefault(true);
+			assets.setType(type);
+			assets.setName(name);
+			assets.setLocation(uploadPath + File.separator + name);
+			url+="/"+name;
+			assets.setUrl(url);
+			assets.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
+			imageService.insertSelective(assets);
+		}
+		
+		map.put("assets", assets);
+		map.put("state", "SUCCESS");// UEDITOR的规则:不为SUCCESS则显示state的内容  
+		map.put("url", url);  
+		map.put("title", commonsMultipartFile.getOriginalFilename());  
+		map.put("original", commonsMultipartFile.getOriginalFilename());  
+		map.put("size", commonsMultipartFile.getSize());  
+		map.put("type", lastIndexName);
+		String result = JSON.toJSONString(map);
+		
+		return result;
+	}
+	
+	
 
 }
