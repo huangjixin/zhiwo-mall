@@ -70,94 +70,32 @@
 		<div class="swiper-wrapper">
 			<div class="swiper-slide">
 				<div class="row">
-					<div class="col-sm-12 col-md-12">
-						<div class="thumbnail">
-							<img src="${ctx}/images/yuebing.png" alt="智惠多月饼">
-							<div class="caption" style="text-align: left;">
-								<p>【呆呆兔】 1000g500g 可选中秋月饼广式多口味水果味小月饼 独立包装散装33个左右传统糕点</p>
-								<div class="pull-right">
-									<img src="${ctx}/images/1671169078.jpg" class="img-circle"
-										width="30px" /> <img src="${ctx}/images/1671169078.jpg"
-										class="img-circle" width="30px" />
-									<button type="button" class="btn btn-danger">去开团 ></button>
-								</div>
-								<div class="pull-left">
-									<label style="color: red; font-size: 2rem;"><i
-										class="fa fa-jpy"></i>88</label> <label
-										style="color: gray; font-size: 1.4rem;"
-										class="checkbox-inline">已团14万件</label>
-								</div>
-
-								<div class="clearfix"></div>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-12 col-md-12">
-						<div class="thumbnail">
-							<img src="${ctx}/images/yuebing.png" alt="智惠多月饼">
-							<div class="caption" style="text-align: left;">
-								<p>【呆呆兔】 1000g500g 可选中秋月饼广式多口味水果味小月饼 独立包装散装33个左右传统糕点</p>
-								<div class="pull-right">
-									<img src="${ctx}/images/1671169078.jpg" class="img-circle"
-										width="30px" /> <img src="${ctx}/images/1671169078.jpg"
-										class="img-circle" width="30px" />
-									<button type="button" class="btn btn-danger">去开团 ></button>
-								</div>
-								<div class="pull-left">
-									<label style="color: red; font-size: 2rem;"><i
-										class="fa fa-jpy"></i>88</label> <label
-										style="color: gray; font-size: 1.4rem;"
-										class="checkbox-inline">已团14万件</label>
-								</div>
-
-								<div class="clearfix"></div>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-12 col-md-12">
-						<div class="thumbnail">
-							<img src="${ctx}/images/yuebing.png" alt="智惠多月饼">
-							<div class="caption" style="text-align: left;">
-								<p>【呆呆兔】 1000g500g 可选中秋月饼广式多口味水果味小月饼 独立包装散装33个左右传统糕点</p>
-								<div class="pull-right">
-									<img src="${ctx}/images/1671169078.jpg" class="img-circle"
-										width="30px" /> <img src="${ctx}/images/1671169078.jpg"
-										class="img-circle" width="30px" />
-									<button type="button" class="btn btn-danger">去开团 ></button>
-								</div>
-								<div class="pull-left">
-									<label style="color: red; font-size: 2rem;"><i
-										class="fa fa-jpy"></i>88</label> <label
-										style="color: gray; font-size: 1.4rem;"
-										class="checkbox-inline">已团14万件</label>
-								</div>
-
-								<div class="clearfix"></div>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-12 col-md-12">
-						<div class="thumbnail">
-							<img src="${ctx}/images/yuebing.png" alt="智惠多月饼">
-							<div class="caption" style="text-align: left;">
-								<p>【呆呆兔】 1000g500g 可选中秋月饼广式多口味水果味小月饼 独立包装散装33个左右传统糕点</p>
-								<div class="pull-right">
-									<img src="${ctx}/images/1671169078.jpg" class="img-circle"
-										width="30px" /> <img src="${ctx}/images/1671169078.jpg"
-										class="img-circle" width="30px" />
-									<button type="button" class="btn btn-danger">去开团 ></button>
-								</div>
-								<div class="pull-left">
-									<label style="color: red; font-size: 2rem;"><i
-										class="fa fa-jpy"></i>88</label> <label
-										style="color: gray; font-size: 1.4rem;"
-										class="checkbox-inline">已团14万件</label>
-								</div>
-
-								<div class="clearfix"></div>
-							</div>
-						</div>
-					</div>
+                	<c:forEach var="product" items="${list}">
+                    	<a href="${ctx}/goodsDetail?goodsId=${product.id}"><div class="col-sm-12 col-md-12">
+                            <div class="thumbnail">
+                                <img src="${ctx}/${product.icon}" alt="智惠多月饼">
+                                <div class="caption" style="text-align: left;">
+                                    <p>${product.name}</p>
+                                    <div class="pull-right">
+                                        <img src="${ctx}/images/1671169078.jpg" class="img-circle"
+                                            width="30px" /> <img src="${ctx}/images/1671169078.jpg"
+                                            class="img-circle" width="30px" />
+                                        <button type="button" class="btn btn-danger">去开团 ></button>
+                                    </div>
+                                    <div class="pull-left">
+                                        <label style="color: red; font-size: 2rem;"><i
+                                            class="fa fa-jpy"></i>${product.gourpSalePrice}</label> <label
+                                            style="color: gray; font-size: 1.4rem;"
+                                            class="checkbox-inline">已团14万件</label>
+                                    </div>
+    
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                        </a>
+                    </c:forEach>
+					
 					<div class="col-sm-12 col-md-12">
 						<div class="thumbnail">
 							<img src="${ctx}/images/yuebing.png" alt="智惠多月饼">
