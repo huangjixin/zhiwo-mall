@@ -78,7 +78,7 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 	 * @Override public int countByExample(Object example) { // TODO
 	 * Auto-generated method stub return 0; }
 	 */
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -150,11 +150,14 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为：" + id.toString());
 		MemberAddress address = this.selectByPrimaryKey(id);
 		// 逻辑操作
-		int result = deleteAddressByMemberId(id,address.getMemberId());
-		if(result !=0){
-			removeRedisKey(address.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
-			removeRedisKey(address.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+		int result = this.memberAddressMapper.deleteByPrimaryKey(id);
+		if(address.getMemberId()!=null){
+			if(result !=0){
+				removeRedisKey(address.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
+				removeRedisKey(address.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+			}
 		}
+		
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除结束");
 		return result;
@@ -207,7 +210,12 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 			logger.info(BASE_MESSAGE + "insert插入开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-
+		if(record.getMemberId()!=null){
+			int count = countByMemberId(record.getMemberId());
+			if(count == 0){
+				record.setIsDefault("1");
+			}
+		}
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
@@ -423,6 +431,16 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 		return list;
 	}
 	
+	private int countByMemberId(String memberId){
+		MemberAddressCriteria criteria = new MemberAddressCriteria();
+		criteria.createCriteria().andMemberIdEqualTo(memberId);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询会员地址数目开始");
+		int result = this.memberAddressMapper.selectCountByExample(criteria);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "查询会员地址数目结束，条目数为："+result);
+		return result;
+	}
 	/**
 	 * 移除key.
 	 * @param key

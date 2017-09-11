@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.zwo.modules.member.domain.Member;
 import com.zwo.modules.member.domain.MemberAccount;
 import com.zwo.modules.member.domain.MemberAddress;
@@ -40,9 +41,10 @@ public class MemberInfoController extends BaseController {
 	@Autowired
 	@Lazy(true)
 	private IMemberAddressService addressService;
-	
+
 	@SuppressWarnings("rawtypes")
-	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
+	private RedisTemplate redisTemplate = SpringContextHolder
+			.getBean("redisTemplate");
 
 	private static final String basePath = "views/member/";
 
@@ -56,7 +58,8 @@ public class MemberInfoController extends BaseController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = { "info" })
 	// @RequiresAuthentication
-	public String getMemInfo(Model uiModel, HttpServletRequest httpServletRequest) {
+	public String getMemInfo(Model uiModel,
+			HttpServletRequest httpServletRequest) {
 		String memberInfoString = null; // 会员的结果存储为JSON字符串
 		MemberInfo memberInfo = null; // 会员信息。
 		List<MemberAddress> memberAddresses = null; // 会员的地址集。
@@ -64,7 +67,8 @@ public class MemberInfoController extends BaseController {
 		MemberPlayAccount memberPlayAccount = null; // 会员的智慧豆账户。
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
-			Member member = (Member) subject.getSession().getAttribute("member");
+			Member member = (Member) subject.getSession()
+					.getAttribute("member");
 
 			if (member != null) {
 				/*
@@ -126,7 +130,7 @@ public class MemberInfoController extends BaseController {
 				 * uiModel.addAttribute("rawData",memberInfoString); }
 				 */
 
-				uiModel.addAttribute(member);
+				uiModel.addAttribute("member",member);
 			}
 		} else {
 
@@ -137,145 +141,199 @@ public class MemberInfoController extends BaseController {
 
 	/**
 	 * 跳转到会员账户页面。
+	 * 
 	 * @param uiModel
 	 * @param httpServletRequest
 	 * @param httpServletResponse
 	 * @return
 	 */
 	@RequestMapping(value = { "memberAccount" })
-	public String toMemberAccount(@ModelAttribute MemberAccount memberAccount, Model uiModel,HttpServletRequest httpServletRequest,
+	public String toMemberAccount(@ModelAttribute MemberAccount memberAccount,
+			Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		// 会员的智慧豆账户。
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
-			Member member = (Member) subject.getSession().getAttribute("member");
+			Member member = (Member) subject.getSession()
+					.getAttribute("member");
 			if (member != null) {
-				memberAccount = memberService.selectMemberAccountByMId(member.getId());
+				memberAccount = memberService.selectMemberAccountByMId(member
+						.getId());
 			}
 		}
 		uiModel.addAttribute(memberAccount);
 		return basePath + "memberAccount";
 	}
-	
+
 	/**
 	 * 跳转到会员的智惠豆账户页面。
+	 * 
 	 * @param uiModel
 	 * @param httpServletRequest
 	 * @param httpServletResponse
 	 * @return
 	 */
 	@RequestMapping(value = { "memberPlayAccount" })
-	public String toMemberPlayAccount(@ModelAttribute MemberPlayAccount memberPlayAccount,Model uiModel,HttpServletRequest httpServletRequest,
+	public String toMemberPlayAccount(
+			@ModelAttribute MemberPlayAccount memberPlayAccount, Model uiModel,
+			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		// 会员的智慧豆账户。
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
-			Member member = (Member) subject.getSession().getAttribute("member");
+			Member member = (Member) subject.getSession()
+					.getAttribute("member");
 			if (member != null) {
-				memberPlayAccount = memberService.selectMemberPlayAccountByMemberId(member.getId());
+				memberPlayAccount = memberService
+						.selectMemberPlayAccountByMemberId(member.getId());
 			}
 		}
 		uiModel.addAttribute(memberPlayAccount);
 		return basePath + "memberPlayAccount";
 	}
-	
-	
+
 	// @RequiresAuthentication
 	@RequestMapping(value = { "memberAddress" })
-	public String selectAddress(Model uiModel,HttpServletRequest httpServletRequest,
+	public String selectAddress(Model uiModel,
+			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
+		List<MemberAddress> list = null;
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
-			Member member = (Member) subject.getSession().getAttribute("member");
+			Member member = (Member) subject.getSession()
+					.getAttribute("member");
 			if (member != null) {
-				List<MemberAddress> list = addressService.listAllByMemberId(member.getId());
-				uiModel.addAttribute("addresses", list);
+				list = addressService.listAllByMemberId(member.getId());
 			}
-		} 
+		}
+
+		/*MemberAddressCriteria addressCriteria = new MemberAddressCriteria();
+		addressCriteria.setOrderByClause("create_date asc");
+		list = addressService.selectByExample(addressCriteria);*/
+		uiModel.addAttribute("addresses", list);
 		return basePath + "memberAddress";
 	}
 
-	@RequestMapping(value = { "createMemberAddress" })
-//	@ResponseBody
-	public String createAddress(@ModelAttribute MemberAddress address, BindingResult bindingResult, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+	@RequestMapping(value = { "createMemberAddress" }, method = RequestMethod.POST)
+	@ResponseBody
+	public String createAddress(@ModelAttribute MemberAddress address,
+			BindingResult bindingResult, Model uiModel,
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
-			Member member = (Member) subject.getSession().getAttribute("member");
+			Member member = (Member) subject.getSession()
+					.getAttribute("member");
 			if (member != null) {
+				if(address.getMemberId()!=null){
+					Member memb  = memberService.selectByPrimaryKey(address.getMemberId());
+					if(member.getId().equals(memb.getId())){
+						return "0";
+					}
+				}
+				
 				address.setMemberId(member.getId());
 			}
-		} else {
-
-		}
+		} 
+		
 		String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 		address.setId(uuid);
-//		
+		//
 		int result = addressService.insertSelective(address);
-		
-		return "redirect:/memberInfo/memberAddress";
+		String resultString = JSON.toJSONString(address);
+		return resultString;
+		// return "redirect:/memberInfo/memberAddress";
 	}
 	
-	
-	@RequestMapping(value = { "updateMemberAddress" })
-	public String updateAddress(@ModelAttribute MemberAddress address, BindingResult bindingResult, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+	@RequestMapping(value = { "updateMemberAddress" }, method = RequestMethod.POST)
+	@ResponseBody
+	public String updateAddress(@ModelAttribute MemberAddress address,
+			BindingResult bindingResult, Model uiModel,
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
-			Member member = (Member) subject.getSession().getAttribute("member");
+			Member member = (Member) subject.getSession()
+					.getAttribute("member");
 			if (member != null) {
+				if(address.getMemberId()!=null){
+					Member memb  = memberService.selectByPrimaryKey(address.getMemberId());
+					if(member.getId().equals(memb.getId())){
+						return "0";
+					}
+				}
+				
 				address.setMemberId(member.getId());
 			}
-		} else {
-			
-		}
-		int result = addressService.updateByPrimaryKeySelective(address);
+		} 
 		
-		return "redirect:/memberInfo/memberAddress";
+		int result = addressService.updateByPrimaryKeySelective(address);
+		String resultString = JSON.toJSONString(address);
+		return resultString;
 	}
-	
-	@RequestMapping(value = { "deleteMemberAddress" })
+
+	@RequestMapping(value = { "deleteMemberAddress" }, method = RequestMethod.POST)
 	@ResponseBody
-	public String deleteAddress(@ModelAttribute MemberAddress address, BindingResult bindingResult, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+	public String deleteAddress(@ModelAttribute MemberAddress address,
+			BindingResult bindingResult, Model uiModel,
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
-			Member member = (Member) subject.getSession().getAttribute("member");
+			Member member = (Member) subject.getSession()
+					.getAttribute("member");
 			if (member != null) {
-				MemberAddressCriteria memberAddressCriteria = new MemberAddressCriteria();
-				memberAddressCriteria.createCriteria().andMemberIdEqualTo(member.getId()).andIdEqualTo(address.getId());
-				List<MemberAddress> list = addressService.selectByExample(memberAddressCriteria);
-				if(!list.isEmpty()){
-					int result = addressService.deleteByPrimaryKey(address.getId());
-					return result+"";
+				if(address.getMemberId()!=null){
+					Member memb  = memberService.selectByPrimaryKey(address.getMemberId());
+					if(member.getId().equals(memb.getId())){
+						return "0";
+					}
 				}
 			}
-		} else {
-			
+		} 
+		
+		int result = addressService.deleteByPrimaryKey(address.getId());
+		if(result==1){
+			return result + "";
 		}
+		
 		return "0";
 	}
-	
+
 	@RequestMapping(value = { "setDefaultMemberAddress" })
 	@ResponseBody
-	public String setDefaultMemberAddress(@ModelAttribute MemberAddress address, BindingResult bindingResult, Model uiModel,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+	public String setDefaultMemberAddress(
+			@ModelAttribute MemberAddress address, BindingResult bindingResult,
+			Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
-			Member member = (Member) subject.getSession().getAttribute("member");
+			Member member = (Member) subject.getSession()
+					.getAttribute("member");
 			if (member != null) {
-				MemberAddressCriteria addressCriteria = new MemberAddressCriteria();
-				addressCriteria.createCriteria().andMemberIdEqualTo(member.getId());
-				MemberAddress record = new MemberAddress();
-				record.setIsDefault("0");
-				addressService.updateByExampleSelective(record, addressCriteria);
-				address.setIsDefault("1");
-				int result = addressService.updateByPrimaryKeySelective(address);
-				return result+"";
+				if(address.getMemberId()!=null){
+					Member memb  = memberService.selectByPrimaryKey(address.getMemberId());
+					if(member.getId().equals(memb.getId())){
+						return "0";
+					}
+				}
 			}
-		} else {
-			
+		} 
+		
+		MemberAddressCriteria addressCriteria = new MemberAddressCriteria();
+		if(address.getMemberId()!= null){
+			addressCriteria.createCriteria().andMemberIdEqualTo(
+					address.getMemberId());
+			MemberAddress record = new MemberAddress();
+			record.setIsDefault("0");
+			addressService.updateByExampleSelective(record, addressCriteria);
 		}
-		return "0";
+		
+		address.setIsDefault("1");
+		int result = addressService
+				.updateByPrimaryKeySelective(address);
+		return result + "";
 	}
 }

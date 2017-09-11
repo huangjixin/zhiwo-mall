@@ -249,38 +249,47 @@ $option.css({ "background-color": "#DEDEDE" });
 </script>
 </head>
 <body>
-	<div class="page-header"
-		style="text-align: center; font-size: 2rem; margin-top: 20px; margin-bottom: 10px;">
-		<b>收货地址</b><a href="${ctx}/memberInfo/info"><small>&nbsp;&nbsp;返回</small></a>
+    <div class="page-header"
+		style="text-align: center; font-size: 2rem; position:fixed; background-color:#fff; left:0;right:0; top:0; padding-top:10px; margin-top:0;">
+		<b>收货地址</b>&nbsp;&nbsp;<small  style="color:red;" onClick="javascript:history.back();">返回</small>
 	</div>
-	<div class="thumbnail">
+    <div style="height:45px;"></div>
+	<div id="addressDiv">
+    	<!--地址循环开始-->
+    <c:forEach var="addr" items="${addresses}">
+    	<div class="thumbnail" id="${addr.id}_thumbnail">
 		<div class="caption">
-			<input id="0b7e6a2a082e4ba4ade09fc245d95c2a" type="hidden"
-				value="0b7e6a2a082e4ba4ade09fc245d95c2a" />
+			<input id="${addr.id}" type="hidden"
+				value="${addr.id}" />
 			<p>
-				<span id="0b7e6a2a082e4ba4ade09fc245d95c2a_name">黄记新</span>,<span
-					id="0b7e6a2a082e4ba4ade09fc245d95c2a_mobilPhone">13926205227</span>
+				<span id="${addr.id}_name">${addr.name}</span>,<span
+					id="${addr.id}_mobilPhone">${addr.mobilPhone}</span>
 			</p>
 			<p>
-				<span id="0b7e6a2a082e4ba4ade09fc245d95c2a_province">广东</span><span
-					id="0b7e6a2a082e4ba4ade09fc245d95c2a_city">广州</span><span
-					id="0b7e6a2a082e4ba4ade09fc245d95c2a_street">黄埔区茅岗路和贵新街4巷10号</span>
+				<span id="${addr.id}_province">${addr.province}</span><span
+					id="${addr.id}_city">${addr.city}</span><span
+					id="${addr.id}_street">${addr.street}</span>
 			</p>
 			<hr class="hr1" />
 			<div class="pull-left">
 				<div class="checkbox">
-					<label
-						onClick="setDefaultMemberAddress('0b7e6a2a082e4ba4ade09fc245d95c2a')">
+                	<c:if test="${addr.isDefault=='0'}">
+					<label id="${addr.id}_defaultSettingLabel"
+						onClick="setDefaultMemberAddress('${addr.id}')">
 						<input type="checkbox">设为默认
 					</label>
+                    </c:if>
+                    <c:if test="${addr.isDefault=='1'}">
+					<span class="label label-danger" id="${addr.id}_defaultLabel">已为默认</span>
+                    </c:if>
 				</div>
 			</div>
 			<div class="pull-right" style="font-weight: normal;">
 				<span class="label label-info" style="padding-top: 5px;"
-					onClick="edit('0b7e6a2a082e4ba4ade09fc245d95c2a')"> <i
+					onClick="edit('${addr.id}')"> <i
 					class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;编辑
 				</span> &nbsp;&nbsp; <span class="label label-danger"
-					style="padding-top: 5px;"> <i class="fa fa-trash-o"
+					style="padding-top: 5px;" onClick="deleteMemberAddress('${addr.id}')"> <i class="fa fa-trash-o"
 					aria-hidden="true"></i>&nbsp;&nbsp;删除
 				</span>
 			</div>
@@ -289,32 +298,11 @@ $option.css({ "background-color": "#DEDEDE" });
 			<div class="clearfix"></div>
 		</div>
 	</div>
-
-	<div class="thumbnail">
-		<div class="caption">
-			<p>黄记新,13926205227</p>
-			<p>广东广州天河区天河北路889号信源大厦2018</p>
-			<hr class="hr1" />
-			<div class="pull-left">
-				<div class="checkbox">
-					<label> <input type="checkbox">设为默认
-					</label>
-				</div>
-			</div>
-			<div class="pull-right" style="font-weight: normal;">
-				<span class="label label-info" style="padding-top: 5px;"> <i
-					class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;编辑
-				</span> &nbsp;&nbsp; <span class="label label-danger"
-					style="padding-top: 5px;"> <i class="fa fa-trash-o"
-					aria-hidden="true"></i>&nbsp;&nbsp;删除
-				</span>
-			</div>
-
-
-			<div class="clearfix"></div>
-		</div>
-	</div>
-
+    </c:forEach>
+	
+    <!--地址循环结束-->
+    </div>
+    
 	<div style="text-align: center; margin-bottom: 20px; margin-top: 16px;">
 		<button class="btn btn-danger" data-toggle="modal"
 			data-target="#myModal"
@@ -351,18 +339,6 @@ $option.css({ "background-color": "#DEDEDE" });
 								onchange="provinceChange();" class="form-control"></select> <label>市(区)：</label>
 							<select id="selCity" name="city" class="form-control"></select>
 						</div>
-
-						<!--<div class="form-group">
-                    	<div  id="ChinaArea">
-                        <label for="name">省 份：</label>
-                         <select id="province" name="province"  class="form-control"></select> 
-                         <label for="name">市(区)：</label>
-      				<select id="city" name="city"  class="form-control"></select> 
-                    <label for="name">区：</label>
-					<select id="county"  name="county"  class="form-control"> </select>
-                        </div>
-                   
-                    </div>-->
 						<div class="form-group">
 							<input id="street" name="street" class="form-control"
 								placeholder="请填写详细的区和街道地址" />
@@ -370,8 +346,8 @@ $option.css({ "background-color": "#DEDEDE" });
 
 					</div>
 					<div class="modal-footer" style="text-align: center;">
-						<button type="submit" class="btn btn-danger"
-							style="width: 80%; color: #ffffff;">保存</button>
+						<button type="button" class="btn btn-danger"
+							style="width: 80%; color: #ffffff;" onClick="save();">保存</button>
 					</div>
 				</form>
 			</div>
@@ -380,6 +356,39 @@ $option.css({ "background-color": "#DEDEDE" });
 		<!-- /.modal -->
 	</div>
 	<script type="text/javascript">
+	
+	function save(){
+		var bootstrapValidator = $("#form").data('bootstrapValidator');
+		bootstrapValidator.validate();
+		var isValid = bootstrapValidator.isValid();
+		if(!isValid){
+			return;
+		}
+		
+		var url = $("#form").attr("action");
+		var data = $('#form').serialize();
+		data = decodeURIComponent(data, true);
+		 $.ajax({
+			 url:url,
+             type: "POST",
+             data: data,
+             success: function (result) {
+				 var obj =  JSON.parse(result);
+				var parameter = '<div class="thumbnail" id="'+obj.id+'_thumbnail"><div class="caption"><input id="'+obj.id+'" type="hidden" value="'+obj.id+'" /><p><span id="'+obj.id+'_name">'+obj.name+'</span>,<span id="'+obj.id+'_mobilPhone">'+obj.mobilPhone+'</span></p><p><span id="'+obj.id+'_province">'+obj.province+'</span><span id="'+obj.id+'_city">'+obj.city+'</span><span id="'+obj.id+'_street">'+obj.street+'</span></p><hr class="hr1" /><div class="pull-left"><div class="checkbox"><label onClick="setDefaultMemberAddress(\''+obj.id+'\')"><input type="checkbox">设为默认</label></div></div><div class="pull-right" style="font-weight: normal;"><span class="label label-info" style="padding-top: 5px;" onClick="edit(\''+obj.id+'\')"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;编辑</span> &nbsp;&nbsp; <span class="label label-danger" style="padding-top: 5px;" onClick="deleteMemberAddress(\''+obj.id+'\')"> <i class="fa fa-trash-o" aria-hidden="true"></i>&nbsp;&nbsp;删除</span></div><div class="clearfix"></div></div></div>';
+				$("#addressDiv").append(parameter);
+				
+				$('#myModal').modal('hide');
+				//表单重置。
+				$("#form").data('bootstrapValidator').destroy();
+				$('#form').data('bootstrapValidator', null);
+				formValidator();
+             },
+              error: function(data) {
+                       // alert("error:"+data.responseText);
+             }
+           });
+	}
+	
 	function setDefaultMemberAddress(addressId){
 		var url = "${ctx}/memberInfo/setDefaultMemberAddress";
 		var data = {};
@@ -390,7 +399,6 @@ $option.css({ "background-color": "#DEDEDE" });
 			data: data ,
 		    success: function (data){
 				if(data == '1'){
-					alert('设置成功');
 					location.reload();
 				}
 				
@@ -425,8 +433,27 @@ $option.css({ "background-color": "#DEDEDE" });
 		$("#street").val(street);
 	}
 	
+	function deleteMemberAddress(addressId ){
+		var url = "${ctx}/memberInfo/deleteMemberAddress?id="+addressId;
+		$.ajax({
+			 type: 'POST',
+			 url: url ,
+		    success: function (data){
+				if(data == '1'){
+					$("#"+addressId+"_thumbnail").remove();
+				}
+			},
+		 	dataType: 'json'
+		});
+	}
+	
 	$(function () {
-        $('form').bootstrapValidator({
+        formValidator();
+    });
+	
+	//form验证规则
+	function formValidator(){
+		$('#form').bootstrapValidator({
 　　　　　　　　message: 'This value is not valid',
             　feedbackIcons: {
                 　　　　　　　　valid: 'glyphicon glyphicon-ok',
@@ -451,14 +478,14 @@ $option.css({ "background-color": "#DEDEDE" });
                         notEmpty: {
                             message: '电话不能为空'
                         },stringLength: {
-                            min: 0,
-                            max: 12,
-                            message: '电话长度应该为11位'
-                        },digits:{
-							message: '请输入整数'
-						},integer:{
-							message: '请输入整数'
-						}
+                         min: 11,
+                         max: 11,
+                         message: '请输入11位手机号码'
+                     },
+                     regexp: {
+                         regexp: /^1[3|5|8]{1}[0-9]{9}$/,
+                         message: '请输入正确的手机号码'
+                     }
                     }
                 },
                 street: {
@@ -474,7 +501,7 @@ $option.css({ "background-color": "#DEDEDE" });
                 }
             }
         });
-    });
+	}
 </script>
 
 </body>

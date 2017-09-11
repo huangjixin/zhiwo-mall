@@ -16,9 +16,16 @@
    			   http://www.springframework.org/schema/websocket 
                http://www.springframework.org/schema/websocket/spring-websocket-4.0.xsd">
 
-	<mvc:annotation-driven />
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<constructor-arg value="UTF-8" />
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
 	<!-- 自动扫描的包名 -->
-	<context:component-scan base-package="com.zwo.modules.**.web" use-default-filters="false">
+	<context:component-scan base-package="com.zwo.modules.**.web"
+		use-default-filters="false">
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
