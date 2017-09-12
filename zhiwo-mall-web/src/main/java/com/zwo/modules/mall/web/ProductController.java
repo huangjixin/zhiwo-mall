@@ -1,5 +1,7 @@
 package com.zwo.modules.mall.web;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.HtmlUtils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -184,8 +187,26 @@ public class ProductController extends BaseController<PrProduct> {
 
 		int res = productService.insertSelective(product);
 		if (res == 1) {
+			//更新轮播图。
 			redirectAttributes.addFlashAttribute("message", "保存成功！");
 			imageService.updatePrImageRealPId(product.getId());
+			
+			if (null != product.getContent() && !"".equals(product.getContent())) {
+				String cont = product.getContent();
+				// 轮播图
+				List<PrImage> listDetails = imageService.selectByProductId(product.getId(),
+						PrImageType.DETAIL);
+				//不用的详情图找出来，并且要把它们删除。
+				List<String>idsNotInUse = new ArrayList<String>();
+				for (PrImage prImage : listDetails) {
+					if(cont.indexOf(prImage.getId())==-1){
+						idsNotInUse.add(prImage.getId());
+					}
+				}
+				if(idsNotInUse.size()>0){
+					this.imageService.deleteBatch(idsNotInUse);
+				}
+			}
 		}
 		JSONArray perpertyArray = null;
 		if (null != propertyValues && !"".equals(propertyValues)) {
@@ -227,7 +248,6 @@ public class ProductController extends BaseController<PrProduct> {
 		// propertyPrices);
 		return "redirect:/product/create";
 	}
-	
 	
 	@RequiresPermissions("mall:product:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
@@ -376,6 +396,24 @@ public class ProductController extends BaseController<PrProduct> {
 		if (res == 1) {
 			redirectAttributes.addFlashAttribute("message", "保存成功！");
 			imageService.updatePrImageRealPId(product.getId());
+
+			if (null != product.getContent() && !"".equals(product.getContent())) {
+				String cont = product.getContent();
+				// 轮播图
+				List<PrImage> listDetails = imageService.selectByProductId(product.getId(),
+						PrImageType.DETAIL);
+				//不用的详情图找出来，并且要把它们删除。
+				List<String>idsNotInUse = new ArrayList<String>();
+				for (PrImage prImage : listDetails) {
+					if(cont.indexOf(prImage.getId())==-1){
+						idsNotInUse.add(prImage.getId());
+					}
+				}
+				if(idsNotInUse.size()>0){
+					this.imageService.deleteBatch(idsNotInUse);
+				}
+				
+			}
 		}
 		
 		redirectAttributes.addAttribute("operation", "edit");
