@@ -1,9 +1,6 @@
 package com.zwo.modules.zhihuiduo.web;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,8 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,18 +31,18 @@ import com.zwo.modules.member.service.IMemberService;
 import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.service.IShopCategoryService;
 import com.zwo.modules.shop.service.IShopService;
-import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
 /**
+ * 会员登录控制器。
  * 
  * @author 黄记新 2017.8.8
  *
  */
 @Controller
 @Lazy(true)
-public class GoodsController extends BaseController {
-	/*@Autowired
+public class MemberGoodsController extends BaseController {
+	@Autowired
 	@Lazy(true)
 	private IPrImageService imageService;
 
@@ -81,7 +76,7 @@ public class GoodsController extends BaseController {
 
 	private static final String basePath = "views/goods/";
 
-	*//**
+	/**
 	 * 商品具体信息。
 	 * 
 	 * @param goodsId
@@ -89,7 +84,7 @@ public class GoodsController extends BaseController {
 	 * @param httpServletRequest
 	 * @param httpServletResponse
 	 * @return
-	 *//*
+	 */
 	@RequestMapping(value = { "goodsDetail" }, method = RequestMethod.GET)
 	public String goodsDetail(@RequestParam String goodsId, Model uiModel,
 			HttpServletRequest httpServletRequest,
@@ -98,20 +93,20 @@ public class GoodsController extends BaseController {
 				.getRealPath("/");
 		String goodsDetailJspUri = rootDir + "WEB-INF" + File.separator
 				+ "views" + File.separator + "goods" + goodsId + ".jsp";
-		Path path = Paths.get(goodsDetailJspUri);
+		/*Path path = Paths.get(goodsDetailJspUri);
 
 		if (Files.exists(path)) {
 			return basePath + goodsId;
-		}
+		}*/
 
 		PrProductWithBLOBs product = prductService.selectByPrimKey(goodsId);
-		if(!"".equals(product.getContent())){
+		/*if(!"".equals(product.getContent())){
 			String str="<img style=\"**\" alt=\"**\" src=\"**\">";
 			String cont = product.getContent();
 			String regex="(<img.*)src=";
 			cont.replaceAll(regex,"src=\"/images/heart.png\" $1 data-original=");
 			product.setContent(cont);
-		}
+		}*/
 		
 		if (product != null) {
 			if(product.getShopId()!=null){
@@ -156,6 +151,5 @@ public class GoodsController extends BaseController {
 				JSONArray.toJSONString(properties));
 		uiModel.addAttribute("product", product);
 		return basePath + "goodsDetail";
-	}*/
-
+	}
 }
