@@ -390,6 +390,33 @@
 				
 			</div>
 		</div>
+        <div class="form-group">
+			<label  class="col-sm-2 control-label">商品详情图</label>
+			<div class="col-sm-6">
+				<input type="file" id="detailFile" name="file" style="display: none;"
+					accept="image/*"
+					onChange="$('#detailMessage').html($('#detailFile').val());preImg(this.id,'detailImg');" />
+				<button type="button" class="btn btn-success fileinput-button"
+					onclick="$('#detailFile').click();">
+					<i class="fa fa-plus"></i>&nbsp;&nbsp;选择文件
+				</button>
+				<button type="button" class="btn btn-primary start"
+					onclick="uploadDetailImageTOServer();">
+					<i class="fa fa-upload"></i> <span>&nbsp;&nbsp;开始上传</span>
+				</button>
+				<label id="detailMessage"></label>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="" class="col-sm-2 control-label"></label>
+			<div class="col-sm-6">
+				<label style="color: red;">预览</label>
+				<br> <img id="detailImg" class=".img-responsive" width="200px;">
+                <br><div id="detailImgsDiv"></div>
+			</div>
+		</div>
+        
+        
 		<div class="form-group">
 			<label for="file" class="col-sm-2 control-label">商品内容</label>
 			<div class="col-sm-9">
@@ -588,17 +615,14 @@
 	<!-- 实例化编辑器 -->
 
 	<script type="text/javascript">
-		/*UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;  
-    	UE.Editor.prototype.getActionUrl = function(action){  
-			//调用自己写的Controller  
-			if(action == 'uploadimage' || action == 'uploadfile'){  
-				return "${ctx}/fileupload/prDetailAssets"; 
-			}else if(action == "uploadvideo"){  
-					return "${ctx}/ueditor/videoUp";
-			}else{  
-					return this._bkGetActionUrl.call(this,action);//百度编辑器默认的action  
-			}  
-		}  */
+		UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;  
+		UE.Editor.prototype.getActionUrl = function(action) {  
+			  if (action == 'uploadimage' || action == 'uploadscrawl' || action == 'uploadvideo') {  
+				  return '/fileupload/config/prDetailAssets';  
+			  } else {  
+				  return this._bkGetActionUrl.call(this, action);  
+			  }  
+		}  
 	
 		var ue = UE.getEditor('container', {
 			autoHeightEnabled : true,
@@ -1028,7 +1052,7 @@
 
 			}
 		}
-
+		
 		function onSubmitHandler() {
 			var s = JSON.stringify(propertyValueArray);
 			$('#propertyValues').val(s);
@@ -1131,6 +1155,7 @@
 				$('#swiperMessage').html('请选择一个文件')
 				return;
 			}
+			
 			$('#swiperMessage').html('正在上传……');
 			var url = '${ctx}/fileupload/prSwiperAssets?productId='+ $('#id').val()+"&type=swiper";
 			$
@@ -1162,6 +1187,51 @@
 					})
 		}
 
+		//上传商品详情图片
+		function uploadDetailImageTOServer() {
+			var fileValue = $('#detailFile').val();
+			if (fileValue == '') {
+				$('#detailMessage').html('请选择一个文件')
+				return;
+			}
+			
+			$('#detailMessage').html('正在上传……');
+			var url = '${ctx}/fileupload/prDetailAssets?productId='+ $('#id').val()+"&type=detail";
+			$
+					.ajaxFileUpload({
+						url : url, //用于文件上传的服务器端请求地址
+						secureuri : false, //是否需要安全协议，一般设置为false
+						fileElementId : 'detailFile', //文件上传域的ID
+						dataType : 'json', //返回值类型 一般设置为json
+						success : function(data, status) //服务器成功响应处理函数
+						{
+							if (data.assets.length > 0) {
+								var para = '';
+								for (var i = 0; i < data.assets.length; i++) {
+									var assets = data.assets[i];
+									para = '<div><img id="'+assets.id+'" src="${ctx}/'+assets.url+'" class=".img-responsive" width="50px;"/>&nbsp;&nbsp;<button type="button" class="btn btn-info" onClick="insertIntoUeditor(\''+assets.id+'\')">插入</button></div>';
+									$('#detailImgsDiv').append(para);
+								}
+								//$('#datagrid').datagrid("reload");
+								
+								$('#detailImg').attr("src","");
+							}
+							$('#detailMessage').html('');
+						},
+						error : function(data, status, e)//服务器响应失败处理函数
+						{
+							$('#detailMessage').html('上传失败');
+							//alert("上传失败");
+						}
+					})
+		}
+		
+		function insertIntoUeditor(imgId){
+			var source = $('#'+imgId).attr('src');
+			var para = '<img id="'+imgId+'" src="'+source+'" class="img-responsive"/>';
+			ue.setContent(para,true);
+		}
+		
 		//删除图片。
 		function deleteProvalueImage(imageId) {
 			var url = '${ctx}/prImage/delete?id=' + imageId;
