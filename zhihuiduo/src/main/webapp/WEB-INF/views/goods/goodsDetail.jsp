@@ -201,7 +201,9 @@ body {
 					<label>&nbsp;</label>
 					<h4 class="media-heading">商品详情</h4>
 					<hr class="hr1" />
-					${product.content} <img
+                    <div class="media-body">
+                    	${product.content} 
+                        <!--<img
 						src="${ctx}/images/goods/user_13926205227/product_12365/02f8bc94495c5f6dde5e20f6e3e206c4.jpeg@750w_1l_50Q"
 						class="img-responsive"> <img
 						src="${ctx}/images/goods/user_13926205227/product_12365/0c4d438262012c7099a25f05958272ef.jpeg@750w_1l_50Q"
@@ -209,7 +211,9 @@ body {
 						src="${ctx}/images/goods/user_13926205227/product_12365/583052abadbe0b8daf936fd447ebe31c.jpeg@750w_1l_50Q"
 						class="img-responsive"> <img
 						src="${ctx}/images/goods/user_13926205227/product_12365/b8863f414edab95ca9f41dc3a51d6176.jpeg@750w_1l_50Q"
-						class="img-responsive">
+						class="img-responsive">-->
+                    </div>
+					
 				</div>
 			</div>
 		</div>
