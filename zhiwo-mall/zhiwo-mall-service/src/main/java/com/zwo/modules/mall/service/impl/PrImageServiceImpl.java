@@ -29,6 +29,7 @@ import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.domain.PrImageCriteria;
 import com.zwo.modules.mall.domain.PrImageType;
 import com.zwo.modules.mall.service.IPrImageService;
+import com.zwotech.common.redis.channel.ChannelContance;
 import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
 
@@ -166,6 +167,10 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements
 						e.printStackTrace();
 					}
 				}
+				
+				if(redisTemplate!=null){
+					redisTemplate.convertAndSend(ChannelContance.PRIMAGE_DELETE_TOPIC_CHANNEL, image);
+				}
 			}
 		}
 
@@ -214,7 +219,10 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements
 		}
 		// 逻辑操作
 		int result = super.deleteByPrimaryKey(id);
-
+		if(redisTemplate!=null){
+			redisTemplate.convertAndSend(ChannelContance.PRIMAGE_DELETE_TOPIC_CHANNEL, image);
+		}
+		
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除结束");
 		return result;
