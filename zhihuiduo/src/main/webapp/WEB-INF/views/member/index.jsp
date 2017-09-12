@@ -73,7 +73,8 @@
                 	<c:forEach var="product" items="${list}">
                     	<a href="${ctx}/goodsDetail?goodsId=${product.id}"><div class="col-sm-12 col-md-12">
                             <div class="thumbnail">
-                                <img src="${ctx}/${product.icon}" alt="智惠多月饼">
+                                <!--<img class="lazy" src="${ctx}/images/heart.png" data-original="${ctx}/${product.icon}">-->
+                               <img src="${ctx}/${product.icon}" data-original="${ctx}/${product.icon}">
                                 <div class="caption" style="text-align: left;">
                                     <p>${product.name}</p>
                                     <div class="pull-right">
@@ -146,6 +147,13 @@
 		$(function() {
 			//通过lass调取，一句可以搞定，用于页面中可能有多个导航的情况
 			$('.wrapper').navbarscroll();
+			
+			$("img.lazy").lazyload({
+				threshold : 200,
+				placeholder : "${ctx}/imgages/heart.png",
+ 				event : "click",
+				effect : "fadeIn",	
+			});
 		});
 
 		var swiper = new Swiper('.swiper-container');

@@ -347,7 +347,15 @@ body {
 		$()
 				.ready(
 						function() {
-
+							//图片懒加载。
+							$("img").lazyload({
+								threshold : 200,
+								placeholder : "${ctx}/images/heart.png",
+								event : "click",
+								effect : "fadeIn",	
+							});
+							
+							
 							if (propertiesString != '') {
 								proArray = JSON.parse('${propertiesString}');
 							}

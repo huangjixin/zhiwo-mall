@@ -75,6 +75,7 @@ body {
     <a href="${ctx}/goodsDetail?goodsId=${prod.id}">
 		<div class="col-xs-6">
 		<div class="thumbnail">
+        	<!--<img class="lazy" src="${ctx}/images/heart.png" data-original="${ctx}/${prod.icon}">-->
 			<img class="img-responsive" src="${ctx}/${prod.icon}">
 			<div class="caption" style="font-size: 1.3rem;">
 				<h6>${prod.name}</h6>
@@ -95,7 +96,19 @@ body {
 	</div></a>
 	</c:forEach>
 	
-
+	<script>
+    	$()
+				.ready(
+						function() {
+							//图片懒加载。
+							$("img").lazyload({
+								threshold : 200,
+								placeholder : "${ctx}/images/heart.png",
+								event : "click",
+								effect : "fadeIn",	
+							});
+						})
+    </script>
 
 </body>
 </html>
