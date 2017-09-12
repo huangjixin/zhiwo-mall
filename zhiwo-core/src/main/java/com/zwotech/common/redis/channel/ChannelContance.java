@@ -17,4 +17,8 @@ public class ChannelContance {
 	 * 商品页面生成订阅频道。
 	 */
 	public static final String PRODUCT_GENERATION_TOPIC_CHANNEL = "product_generation.topic.channel";
+	/**
+	 * 商品图删除订阅频道。
+	 */
+	public static final String PRIMAGE_DELETE_TOPIC_CHANNEL = "primage_delete.topic.channel";
 }
