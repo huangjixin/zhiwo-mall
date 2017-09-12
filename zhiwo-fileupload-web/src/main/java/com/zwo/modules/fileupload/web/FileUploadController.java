@@ -2,6 +2,7 @@ package com.zwo.modules.fileupload.web;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.alibaba.fastjson.JSON;
+import com.baidu.ueditor.ActionEnter;
 import com.zwo.modules.cms.service.ICmsAssetsService;
 import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.service.IPrImageService;
@@ -54,6 +57,24 @@ public class FileUploadController {
 	@Lazy(true)
 	private ICmsAssetsService cmsAssetsService;
       
+	@RequestMapping(value="config")
+    public void config(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+ 
+        response.setContentType("application/json");
+        String rootPath = request.getSession()
+                .getServletContext().getRealPath("/");
+ 
+        try {
+            String exec = new ActionEnter(request, rootPath).exec();
+            PrintWriter writer = response.getWriter();
+            writer.write(exec);
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+	
 	
 	@RequestMapping(value = "userAssets")
 	@ResponseBody
@@ -321,8 +342,7 @@ public class FileUploadController {
 	 */
 	@RequestMapping(value = "prDetailAssets")
 	@ResponseBody
-	public String proDetailAssetsUpload(
-			@RequestParam String productId,
+	public String proDetailAssetsUpload(@RequestParam String productId,
 			@RequestParam String type,
 			@RequestParam(value = "file", required = false) CommonsMultipartFile[] files,
 			String HTTP_CONTENT_DISPOSITION, HttpServletRequest httpServletRequest,
@@ -336,8 +356,7 @@ public class FileUploadController {
 		}
 		
 		Map<String, Object> map = new HashMap<String, Object>();
-		PrImage assets = null;
-		
+		List<PrImage> proAssets = new ArrayList<PrImage>();
 		Calendar date = Calendar.getInstance();
 		String rootDir = httpServletRequest.getSession().getServletContext().getRealPath("/");
 		rootDir = "D:"+File.separator;
@@ -347,56 +366,45 @@ public class FileUploadController {
 		uploadPath = uploadPath + File.separator + date.get(Calendar.YEAR) + File.separator
 				+ (date.get(Calendar.MONTH) + 1) + File.separator + date.get(Calendar.DAY_OF_MONTH);
 		
-		String lastIndexName = "";
-		int index = -1;
-		CommonsMultipartFile commonsMultipartFile = null;
-		
-		if (!files[0].isEmpty()) {
-			commonsMultipartFile = files[0];
-			String name = files[0].getOriginalFilename();
-			index = name.lastIndexOf(".");
-			lastIndexName = name.substring(index, name.length());
-			String datetimeName = new Date().getTime() + ((int) Math.random() * 10000) + "";
-			name =  datetimeName + name.substring(index, name.length());
-			File file = new File(uploadPath, name);
-			
-			if (!file.exists()) {// 目录不存在则直接创建
-				file.mkdirs();
+		for (int i = 0; i < files.length; i++) {
+			if (!files[i].isEmpty()) {
+				String name = files[i].getOriginalFilename();
+				int index = name.lastIndexOf(".");
+				String datetimeName = new Date().getTime() + ((int) Math.random() * 10000) + "";
+				name =  datetimeName + name.substring(index, name.length());
+				File file = new File(uploadPath, name);
+				
+				if (!file.exists()) {// 目录不存在则直接创建
+					file.mkdirs();
+				}
+				CommonsMultipartFile commonsMultipartFile = files[i];
+				try {
+					commonsMultipartFile.transferTo(file);
+				} catch (IllegalStateException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				PrImage assets = new PrImage();
+				if(tbuser!=null){
+					assets.setUserId(tbuser.getId());
+				}
+				assets.setProductId(productId);
+				//true为轮播图。
+				assets.setIsDefault(true);
+				assets.setType(type);
+				assets.setName(name);
+				assets.setLocation(uploadPath + File.separator + name);
+				assets.setUrl(url + "/" + name);
+				assets.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
+				imageService.insertSelective(assets);
+				proAssets.add(assets);
 			}
-			
-			try {
-				commonsMultipartFile.transferTo(file);
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			assets = new PrImage();
-			if(tbuser!=null){
-				assets.setUserId(tbuser.getId());
-			}
-			assets.setProductId(productId);
-			//true为轮播图。
-			assets.setIsDefault(true);
-			assets.setType(type);
-			assets.setName(name);
-			assets.setLocation(uploadPath + File.separator + name);
-			url+="/"+name;
-			assets.setUrl(url);
-			assets.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
-			imageService.insertSelective(assets);
 		}
-		
-		map.put("assets", assets);
-		map.put("state", "SUCCESS");// UEDITOR的规则:不为SUCCESS则显示state的内容  
-		map.put("url", url);  
-		map.put("title", commonsMultipartFile.getOriginalFilename());  
-		map.put("original", commonsMultipartFile.getOriginalFilename());  
-		map.put("size", commonsMultipartFile.getSize());  
-		map.put("type", lastIndexName);
+		map.put("assets", proAssets);
 		String result = JSON.toJSONString(map);
-		
+		// userAssetsService.batchInsert(userAssets);
 		return result;
 	}
 	
