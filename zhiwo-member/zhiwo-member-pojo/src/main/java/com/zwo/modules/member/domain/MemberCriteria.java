@@ -1895,6 +1895,76 @@ public class MemberCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andOpenIdIsNull() {
+            addCriterion("OPEN_ID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenIdIsNotNull() {
+            addCriterion("OPEN_ID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenIdEqualTo(String value) {
+            addCriterion("OPEN_ID =", value, "openId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenIdNotEqualTo(String value) {
+            addCriterion("OPEN_ID <>", value, "openId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenIdGreaterThan(String value) {
+            addCriterion("OPEN_ID >", value, "openId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenIdGreaterThanOrEqualTo(String value) {
+            addCriterion("OPEN_ID >=", value, "openId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenIdLessThan(String value) {
+            addCriterion("OPEN_ID <", value, "openId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenIdLessThanOrEqualTo(String value) {
+            addCriterion("OPEN_ID <=", value, "openId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenIdLike(String value) {
+            addCriterion("OPEN_ID like", value, "openId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenIdNotLike(String value) {
+            addCriterion("OPEN_ID not like", value, "openId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenIdIn(List<String> values) {
+            addCriterion("OPEN_ID in", values, "openId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenIdNotIn(List<String> values) {
+            addCriterion("OPEN_ID not in", values, "openId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenIdBetween(String value1, String value2) {
+            addCriterion("OPEN_ID between", value1, value2, "openId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenIdNotBetween(String value1, String value2) {
+            addCriterion("OPEN_ID not between", value1, value2, "openId");
+            return (Criteria) this;
+        }
+
         public Criteria andIdLikeInsensitive(String value) {
             addCriterion("upper(ID) like", value.toUpperCase(), "id");
             return (Criteria) this;
@@ -1977,6 +2047,11 @@ public class MemberCriteria {
 
         public Criteria andNicknameLikeInsensitive(String value) {
             addCriterion("upper(NICKNAME) like", value.toUpperCase(), "nickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenIdLikeInsensitive(String value) {
+            addCriterion("upper(OPEN_ID) like", value.toUpperCase(), "openId");
             return (Criteria) this;
         }
     }

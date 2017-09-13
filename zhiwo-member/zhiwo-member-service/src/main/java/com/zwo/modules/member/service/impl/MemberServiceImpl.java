@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
@@ -19,6 +18,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import tk.mybatis.mapper.common.Mapper;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -38,20 +39,17 @@ import com.zwo.modules.member.dao.MemberProfitMapper;
 import com.zwo.modules.member.domain.GuessQuestion;
 import com.zwo.modules.member.domain.Member;
 import com.zwo.modules.member.domain.MemberAccount;
-import com.zwo.modules.member.domain.MemberAccountCriteria;
 import com.zwo.modules.member.domain.MemberAccountHis;
 import com.zwo.modules.member.domain.MemberAddress;
 import com.zwo.modules.member.domain.MemberAddressCriteria;
 import com.zwo.modules.member.domain.MemberCriteria;
+import com.zwo.modules.member.domain.MemberCriteria.Criteria;
 import com.zwo.modules.member.domain.MemberPlayAccount;
-import com.zwo.modules.member.domain.MemberPlayAccountCriteria;
 import com.zwo.modules.member.domain.MemberPlayHisAccount;
 import com.zwo.modules.member.domain.MemberPlayHisAccountCriteria;
 import com.zwo.modules.member.service.IMemberService;
 import com.zwotech.common.utils.PasswordHelper;
 import com.zwotech.modules.core.service.impl.BaseService;
-
-import tk.mybatis.mapper.common.Mapper;
 
 /**
  * @author hjx
@@ -712,5 +710,19 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		}
 		
 		return result;
+	}
+
+	@Override
+	public Member selectMember(String usernameOrMphoneOrEmail) {
+		MemberCriteria memberCriteria = new MemberCriteria();
+		com.zwo.modules.member.domain.MemberCriteria.Criteria nameCriteria = memberCriteria.createCriteria().andUsernameEqualTo(usernameOrMphoneOrEmail);
+		com.zwo.modules.member.domain.MemberCriteria.Criteria phoneCriteria = memberCriteria.createCriteria().andMobilPhoneEqualTo(usernameOrMphoneOrEmail);
+		com.zwo.modules.member.domain.MemberCriteria.Criteria emailCriteria = memberCriteria.createCriteria().andEmailEqualTo(usernameOrMphoneOrEmail);
+		memberCriteria.or(nameCriteria);
+		memberCriteria.or(phoneCriteria);
+		memberCriteria.or(emailCriteria);
+		List<Member>list = this.memberMapper.selectByExample(memberCriteria);
+
+		return list.isEmpty()?null:list.get(0);
 	}
 }

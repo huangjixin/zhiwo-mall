@@ -9,17 +9,17 @@
 <%@ include file="/WEB-INF/member-include/js.jsp"%>
 </head>
 <body>
-	<form class="form-horizontal" role="form">
+	<form class="form-horizontal" role="form" action="${ctx}/memberLogin/login" method="post">
   <div class="form-group">
     <label for="username" class="col-sm-2 control-label">账号</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="username" placeholder="请输入用户名/手机号">
+      <input type="text" class="form-control" id="username" name="username" placeholder="请输入用户名/手机号">
     </div>
   </div>
   <div class="form-group">
     <label for="password" class="col-sm-2 control-label">密码</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="password" placeholder="请输入密码">
+      <input type="text" class="form-control" id="password" name="password" placeholder="请输入密码">
     </div>
   </div>
   <div class="form-group">

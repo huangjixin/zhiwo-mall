@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task"  
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+               http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+               http://www.springframework.org/schema/context
+               http://www.springframework.org/schema/context/spring-context-4.0.xsd
+               http://www.springframework.org/schema/tx
+               http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+               http://www.springframework.org/schema/aop
+               http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+               http://www.springframework.org/schema/websocket 
+               http://www.springframework.org/schema/websocket/spring-websocket-4.0.xsd
+               http://www.springframework.org/schema/cache   
+        	   http://www.springframework.org/schema/cache/spring-cache.xsd
+        	   http://www.springframework.org/schema/task 
+        	   http://www.springframework.org/schema/task/spring-task-4.0.xsd">
+	
+	<context:property-placeholder location="classpath*:spring/*.properties" />
+	
+	<!-- 正式发布要替换成阿里巴巴的数据库连接org.springframework.jdbc.datasource.DriverManagerDataSource  -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="typeAliasesPackage" value="com.zwo.modules.*.dao" />
+		<property name="plugins">
+			<array>
+				<bean class="com.github.pagehelper.PageHelper">
+					<property name="properties">
+						<props>
+							<prop key="dialect">mysql</prop>
+							<prop key="offsetAsPageNum">true</prop>
+							<prop key="rowBoundsWithCount">true</prop>
+							<prop key="pageSizeZero">true</prop>
+							<prop key="reasonable">false</prop>
+							<prop key="supportMethodsArguments">false</prop>
+							<prop key="returnPageInfo">none</prop>
+						</props>
+					</property>
+				</bean>
+			</array>
+		</property>
+	</bean>
+
+	<!-- scan formappers andlet them beautowired org.mybatis.spring.mapper.MapperScannerConfigurer-->
+	<bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.zwo.modules.*.dao" />
+		<property name="properties">
+	        <value>
+	            mappers=tk.mybatis.mapper.common.Mapper
+	            IDENTITY=MYSQL
+	        </value>
+	    </property>
+	</bean>
+
+	<!-- 事务管理器配置：只支持单数据源事务 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- 声明式事务配置，transaction-manager属性值默认为 transactionManager -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	<task:annotation-driven />
+	
+	<context:annotation-config />
+
+	<aop:config></aop:config>
+
+	<aop:aspectj-autoproxy/>
+
+	<context:component-scan base-package="com.zwo.modules.*.service.**">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+	
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"
+		scope="prototype">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="namedParameterJdbcTemplate"
+		class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate"
+		scope="prototype">
+		<constructor-arg ref="dataSource" />
+	</bean>
+</beans>

@@ -6,10 +6,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +30,6 @@ import com.zwo.modules.member.service.IMemberService;
 import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.service.IShopService;
 import com.zwo.modules.system.domain.TbUser;
-import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
 @Controller
@@ -73,7 +72,7 @@ public class MemberOrderController extends BaseController<TbUser> {
 	 * @return
 	 */
 	@RequestMapping(value = "checkOut")
-	// @RequiresAuthentication
+	@RequiresAuthentication
 	public String checkOut(@RequestParam String goodsId,
 			@RequestParam String shopId, @RequestParam Integer buyNum,
 			@RequestParam String packagePriceId,
@@ -85,7 +84,7 @@ public class MemberOrderController extends BaseController<TbUser> {
 			HttpServletResponse httpServletResponse) {
 
 		PrProduct product = prductService.selectByPrimaryKey(goodsId);
-		Shop shop = shopService.selectByPrimaryKey(shopId);
+		Shop shop = shopService.selectByPrimaryKey(product.getShopId());
 		Member member = null;
 		
 		OrderTrade orderTrade = new OrderTrade();
@@ -139,12 +138,14 @@ public class MemberOrderController extends BaseController<TbUser> {
 			groupPurcse = new GroupPurcse();
 		}
 
-		groupPurcse.setProductId(goodsId);
-		if(member!=null){
-			groupPurcse.setMemeberId(member.getId());
-			groupPurcse.setMemberIcon(member.getIcon());
-			groupPurcse.setMemberName(member.getNickname());
-			groupPurcse.setMemberOpenId(member.getOpenId());
+		if(groupPurcse !=null){
+			groupPurcse.setProductId(goodsId);
+			if(member!=null){
+				groupPurcse.setMemeberId(member.getId());
+				groupPurcse.setMemberIcon(member.getIcon());
+				groupPurcse.setMemberName(member.getNickname());
+				groupPurcse.setMemberOpenId(member.getOpenId());
+			}
 		}
 		
 		orderTradeService.insertSelective(orderTrade);

@@ -2,8 +2,12 @@ package com.zwo.modules.member.domain;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
-import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Table(name = "member")
 public class Member implements Serializable {
@@ -164,9 +168,9 @@ public class Member implements Serializable {
      */
     @Column(name = "NICKNAME")
     private String nickname;
-    
+
     /**
-     * 微信的Open_id
+     * 微信的open_id
      */
     @Column(name = "OPEN_ID")
     private String openId;
@@ -651,11 +655,21 @@ public class Member implements Serializable {
         this.nickname = nickname == null ? null : nickname.trim();
     }
 
-	public String getOpenId() {
-		return openId;
-	}
+    /**
+     * 获取微信的open_id
+     *
+     * @return OPEN_ID - 微信的open_id
+     */
+    public String getOpenId() {
+        return openId;
+    }
 
-	public void setOpenId(String openId) {
-		this.openId = openId;
-	}
+    /**
+     * 设置微信的open_id
+     *
+     * @param openId 微信的open_id
+     */
+    public void setOpenId(String openId) {
+        this.openId = openId == null ? null : openId.trim();
+    }
 }

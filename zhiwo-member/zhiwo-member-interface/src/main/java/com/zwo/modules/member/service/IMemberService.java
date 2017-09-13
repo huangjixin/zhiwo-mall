@@ -124,4 +124,11 @@ public interface IMemberService extends IBaseService<Member> {
 	 * @return
 	 */
 	PageInfo<MemberPlayHisAccount> selectMemberPlayHisAccountByMemberId(String memberId,PageInfo<MemberPlayHisAccount> pageInfo);
+	
+	/**
+	 * 根据用户或者电话或者Email来查找会员。
+	 * @param usernameOrMphoneOrEmail
+	 * @return
+	 */
+	Member selectMember(String usernameOrMphoneOrEmail);
 }

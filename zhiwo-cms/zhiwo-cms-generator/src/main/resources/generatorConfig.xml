@@ -4,10 +4,10 @@
 	<classPathEntry
 		location="C:\Users\Administrator\.m2\repository\mysql\mysql-connector-java\5.1.25\mysql-connector-java-5.1.25.jar" />
 	<context id="context1">
-		<!-- <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+		<plugin type="tk.mybatis.mapper.generator.MapperPlugin">
 			<property name="mappers" value="tk.mybatis.mapper.common.Mapper" />
 			<property name="caseSensitive" value="true" />
-		</plugin> -->
+		</plugin>
 		<plugin type="org.mybatis.generator.plugins.CaseInsensitiveLikePlugin"></plugin>
 		<plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
 		<!-- 想要mybaits代码生成器生成Example类换个名字，是通过插件实现的，即下面的这个插件配置参数很关键。 -->
@@ -20,24 +20,24 @@
 			password="root">
 		</jdbcConnection>
 
-		<javaModelGenerator targetPackage="com.zwo.modules.mall.domain"
+		<javaModelGenerator targetPackage="com.zwo.modules.member.domain"
 			targetProject="src/main/java">
 			<property name="enableSubPackages" value="true" />
 			<property name="trimStrings" value="true" />
 		</javaModelGenerator>
 
-		<sqlMapGenerator targetPackage="com.zwo.modules.mall.dao"
+		<sqlMapGenerator targetPackage="com.zwo.modules.member.dao"
 			targetProject="src/main/java">
 			<property name="enableSubPackages" value="true" />
 		</sqlMapGenerator>
 
 		<javaClientGenerator type="XMLMAPPER"
-			targetPackage="com.zwo.modules.mall.dao" targetProject="src/main/java">
+			targetPackage="com.zwo.modules.member.dao" targetProject="src/main/java">
 			<property name="enableSubPackages" value="true" />
 		</javaClientGenerator>
 
-		<table tableName="pr_product">
-			<!-- <generatedKey column="id" sqlStatement="Mysql" identity="true" /> -->
+		<table tableName="member">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
 		</table>
 	</context>
 </generatorConfiguration>

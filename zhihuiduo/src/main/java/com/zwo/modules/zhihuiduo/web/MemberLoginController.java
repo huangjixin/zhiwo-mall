@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -26,6 +27,7 @@ import com.zwo.modules.member.domain.MemberPlayAccount;
 import com.zwo.modules.member.service.IMemberService;
 import com.zwo.modules.system.domain.TbUser;
 import com.zwo.modules.zhihuiduo.dto.MemberInfo;
+import com.zwotech.common.utils.PasswordHelper;
 import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
@@ -43,26 +45,48 @@ public class MemberLoginController extends BaseController {
 	@Lazy(true)
 	private IMemberService memberService;
 
-	@SuppressWarnings("rawtypes")
-	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
+	// @SuppressWarnings("rawtypes")
+	// private RedisTemplate redisTemplate =
+	// SpringContextHolder.getBean("redisTemplate");
 
 	private static final String basePath = "views/member/";
 
 	@RequestMapping(value = { "login" }, method = RequestMethod.GET)
-	public String login(Model uiModel, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		uiModel.addAttribute("rawData", 123456);
-		return basePath + "login";
-	}
-
-	@RequestMapping(value = { "login" }, method = RequestMethod.POST)
-	public String loginForm(Model uiModel, HttpServletRequest httpServletRequest,
+	public String login(Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		uiModel.addAttribute("rawData", 123456);
 		return basePath + "login";
 	}
 
+	@RequestMapping(value = { "login" }, method = RequestMethod.POST)
+	public String loginForm(Model uiModel,@RequestParam String username,
+			@RequestParam String password,
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		password = PasswordHelper.encryptPassword(password);
+		UsernamePasswordToken token = new UsernamePasswordToken(username,
+				password);
+		Subject currentUser = SecurityUtils.getSubject();
+		try {
+
+			if (!currentUser.isAuthenticated()) {
+				token.setRememberMe(true);
+				currentUser.login(token);// 验证角色和权限
+			}
+		} catch (Exception ex) {
+			// throw new Exception("用户名或者密码错误");
+			uiModel.addAttribute("message", "用户名或者密码错误");
+			return "login";
+		}
+		Member member = memberService.selectMember(username);
+		currentUser.getSession().setAttribute("member", member);
+//		uiModel.addAttribute("member", member);
+		return "redirect:/mindex";
+	}
+
 	@RequestMapping(value = { "register" }, method = RequestMethod.GET)
-	public String register(Model uiModel, HttpServletRequest httpServletRequest,
+	public String register(Model uiModel,
+			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		uiModel.addAttribute("rawData", 123456);
 		return basePath + "register";
