@@ -151,10 +151,42 @@ body {
 			<div style="text-align: left; font-size: 1.5rem; font-weight: bold;">${product.name}</div>
 			<div>&nbsp;</div>
 			<div style="text-align: left; font-size: 1.4rem; color: #666;">${product.description}</div>
-
+			<br>
+			<p style="text-align: left; font-size: 1.4rem; padding:4px; background-color:#FAFAFA">
+		        <small><i class="fa fa-check-square-o" aria-hidden="true" style="color:red;"></i>&nbsp;假一赔十</small>&nbsp;&nbsp;<small><i class="fa fa-check-square-o" aria-hidden="true" style="color:red;"></i>&nbsp;7天退换</small>&nbsp;&nbsp;<small><i class="fa fa-check-square-o" aria-hidden="true" style="color:red;"></i>&nbsp;48小时发货</small>
+		    </p>
 			<hr class="hr1" />
 		</div>
 	</div>
+    
+	<div class="thumbnail">
+		<div class="caption">
+        	<div class="page-header" style="padding-top:0px; margin-top:5px;">
+                <h4>看看谁在开团</h4>
+            </div>
+            <div class="media">
+            <div class="media-left">
+                    <img class="img-circle" src="${ctx}/${shop.icon}" style="width:50px;">
+                </div>
+				<div class="media-body">
+					<h5 class="media-heading" style="padding-top: 6px;">人生如戏，戏如人生</h5>
+                    <span style="color: gray; font-size: 1.4rem;">还差一人，剩余2小时</span>
+				</div>
+			</div>	
+			<c:forEach var="groupPurcse" items="${groupPurcses}">
+			<div class="media">
+            <div class="media-left">
+                    <img class="img-circle" src="${ctx}/${groupPurcse.memberIcon}">
+                </div>
+				<div class="media-body">
+                	<h5 class="media-heading" style="padding-top: 6px;">${groupPurcse.memberName}</h5>
+                    <span style="color: gray; font-size: 1.4rem;">还差1人，剩余2小时</span>
+				</div>
+			</div>		
+			</c:forEach>
+		</div>
+	</div>
+	
 	<div class="thumbnail">
 		<div class="caption">
 			<div class="media">

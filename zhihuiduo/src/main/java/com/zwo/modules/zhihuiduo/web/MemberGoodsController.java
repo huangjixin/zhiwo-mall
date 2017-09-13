@@ -27,6 +27,8 @@ import com.zwo.modules.mall.service.IPrProductPackagePriceService;
 import com.zwo.modules.mall.service.IPrProductPropertyService;
 import com.zwo.modules.mall.service.IPrProductPropertyValueService;
 import com.zwo.modules.mall.service.IPrductService;
+import com.zwo.modules.member.domain.GroupPurcse;
+import com.zwo.modules.member.service.IGroupPurcseService;
 import com.zwo.modules.member.service.IMemberService;
 import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.service.IShopCategoryService;
@@ -69,6 +71,9 @@ public class MemberGoodsController extends BaseController {
 	@Autowired
 	@Lazy(true)
 	private IShopCategoryService shopCategoryService;
+	@Autowired
+	@Lazy(true)
+	private IGroupPurcseService groupPurcseService;
 
 //	@SuppressWarnings("rawtypes")
 //	private RedisTemplate redisTemplate = SpringContextHolder
@@ -150,6 +155,8 @@ public class MemberGoodsController extends BaseController {
 		uiModel.addAttribute("propertiesString",
 				JSONArray.toJSONString(properties));
 		uiModel.addAttribute("product", product);
+		List<GroupPurcse> groupPurcses = groupPurcseService.selectUnFormByPId(goodsId);
+		uiModel.addAttribute("groupPurcses", groupPurcses);
 		return basePath + "goodsDetail";
 	}
 }

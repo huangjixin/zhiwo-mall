@@ -92,7 +92,7 @@ public class MemberGroupController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = { "memberGroup" }, method = RequestMethod.GET)
-	public String memberGroup(@RequestParam String goodsId, Model uiModel,
+	public String memberGroup(@RequestParam String goodsId,@RequestParam String groupPurcseId, Model uiModel,
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		PrProductWithBLOBs product = prductService.selectByPrimKey(goodsId);
