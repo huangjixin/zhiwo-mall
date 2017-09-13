@@ -32,6 +32,8 @@ import com.zwo.modules.mall.service.IPrProductPackagePriceService;
 import com.zwo.modules.mall.service.IPrProductPropertyService;
 import com.zwo.modules.mall.service.IPrProductPropertyValueService;
 import com.zwo.modules.mall.service.IPrductService;
+import com.zwo.modules.member.domain.GroupPurcse;
+import com.zwo.modules.member.service.IGroupPurcseService;
 import com.zwo.modules.member.service.IMemberService;
 import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.service.IShopCategoryService;
@@ -58,6 +60,9 @@ public class MemberGroupController extends BaseController {
 	@Autowired
 	@Lazy(true)
 	private IPrductService prductService;
+	@Autowired
+	@Lazy(true)
+	private IGroupPurcseService groupPurcseService;
 
 	@Autowired
 	@Lazy(true)
@@ -83,7 +88,7 @@ public class MemberGroupController extends BaseController {
 	private static final String basePath = "views/member/";
 
 	/**
-	 * 商铺具体信息。
+	 * 参团页面。
 	 * 
 	 * @param goodsId
 	 * @param uiModel
@@ -96,7 +101,9 @@ public class MemberGroupController extends BaseController {
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		PrProductWithBLOBs product = prductService.selectByPrimKey(goodsId);
+		GroupPurcse groupPurcse = groupPurcseService.selectByPrimaryKey(groupPurcseId);
 		uiModel.addAttribute("product", product);
+		uiModel.addAttribute("groupPurcse", groupPurcse);
 		return basePath + "memberGroup";
 	}
 

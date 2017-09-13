@@ -21,8 +21,10 @@ import com.zwo.modules.mall.domain.OrderTrade;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.service.IOrderTradeService;
 import com.zwo.modules.mall.service.IPrductService;
+import com.zwo.modules.member.domain.GroupPurcse;
 import com.zwo.modules.member.domain.Member;
 import com.zwo.modules.member.domain.MemberAddress;
+import com.zwo.modules.member.service.IGroupPurcseService;
 import com.zwo.modules.member.service.IMemberAddressService;
 import com.zwo.modules.member.service.IMemberService;
 import com.zwo.modules.shop.domain.Shop;
@@ -47,18 +49,23 @@ public class MemberOrderController extends BaseController<TbUser> {
 	@Autowired
 	@Lazy(true)
 	private IShopService shopService;
+
 	@Autowired
 	@Lazy(true)
 	private IMemberAddressService addressService;
 
-//	@SuppressWarnings("rawtypes")
-//	private RedisTemplate redisTemplate = SpringContextHolder
-//			.getBean("redisTemplate");
+	@Autowired
+	@Lazy(true)
+	private IGroupPurcseService groupPurcseService;
+
+	// @SuppressWarnings("rawtypes")
+	// private RedisTemplate redisTemplate = SpringContextHolder
+	// .getBean("redisTemplate");
 
 	private static final String basePath = "views/member/";
 
 	/**
-	 * 跳转到下单页面
+	 * 跳转到下单页面，mode是group的话，那表示该团是拼团。
 	 * 
 	 * @param uiModel
 	 * @param httpServletRequest
@@ -71,17 +78,30 @@ public class MemberOrderController extends BaseController<TbUser> {
 			@RequestParam String shopId, @RequestParam Integer buyNum,
 			@RequestParam String packagePriceId,
 			@RequestParam String proValues, @RequestParam String dealPrice,
+			@RequestParam(defaultValue = "group") String mode,
+			@RequestParam(required = false) String groupPurcseId,
 			RedirectAttributes redirectAttributes, Model uiModel,
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
+
 		PrProduct product = prductService.selectByPrimaryKey(goodsId);
 		Shop shop = shopService.selectByPrimaryKey(shopId);
+		Member member = null;
+		
 		OrderTrade orderTrade = new OrderTrade();
 		String orderuuid = UUID.randomUUID().toString().replaceAll("-", "");
 		orderTrade.setId(orderuuid);
 		orderTrade.setStatus(OrderStatus.TO_BE_PAYED);
 		orderTrade.setDisable(false);
 		orderTrade.setBuyNum(buyNum);
+
+		// 开拼团
+		if ("group".equals(mode)) {
+			orderTrade.setIsFormSccuess(false);
+		} else { // 独立团
+			orderTrade.setIsFormSccuess(true);
+		}
+
 		if (shop != null) {
 			uiModel.addAttribute("shop", shop);
 
@@ -90,11 +110,11 @@ public class MemberOrderController extends BaseController<TbUser> {
 			orderTrade.setShopId(product.getShopId());
 			uiModel.addAttribute("product", product);
 			orderTrade.setProductId(goodsId);
-			// redirectAttributes.addFlashAttribute("product",product);
 		}
+
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
-			Member member = (Member) subject.getSession()
+			member = (Member) subject.getSession()
 					.getAttribute("member");
 			if (member != null) {
 				orderTrade.setMemberId(member.getId());
@@ -107,6 +127,26 @@ public class MemberOrderController extends BaseController<TbUser> {
 
 		}
 
+		// groupPurcseId是不是为null表示是拼团还是开团
+		GroupPurcse groupPurcse = null;
+
+		if (null == groupPurcseId) {
+			groupPurcse = groupPurcseService.selectByPrimaryKey(groupPurcseId);
+			if (groupPurcse != null) {
+				groupPurcse.getNumberCount();
+			}
+		} else {
+			groupPurcse = new GroupPurcse();
+		}
+
+		groupPurcse.setProductId(goodsId);
+		if(member!=null){
+			groupPurcse.setMemeberId(member.getId());
+			groupPurcse.setMemberIcon(member.getIcon());
+			groupPurcse.setMemberName(member.getNickname());
+			groupPurcse.setMemberOpenId(member.getOpenId());
+		}
+		
 		orderTradeService.insertSelective(orderTrade);
 
 		uiModel.addAttribute("order", orderTrade);
@@ -114,12 +154,30 @@ public class MemberOrderController extends BaseController<TbUser> {
 		// return "redirect:/memberOrder/checkOut";
 	}
 
+	/**
+	 * 结算。
+	 * @param goodsId
+	 * @param shopId
+	 * @param buyNum
+	 * @param packagePriceId
+	 * @param proValues
+	 * @param dealPrice
+	 * @param redirectAttributes
+	 * @param uiModel
+	 * @param mode
+	 * @param groupPurcseId
+	 * @param httpServletRequest
+	 * @param httpServletResponse
+	 * @return
+	 */
 	@RequestMapping(value = "check")
 	public String check_out(@RequestParam String goodsId,
 			@RequestParam String shopId, @RequestParam Integer buyNum,
 			@RequestParam String packagePriceId,
 			@RequestParam String proValues, @RequestParam String dealPrice,
 			RedirectAttributes redirectAttributes, Model uiModel,
+			@RequestParam(defaultValue = "group") String mode,
+			@RequestParam(required = false) String groupPurcseId,
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		PrProduct product = prductService.selectByPrimaryKey("150383670510593");

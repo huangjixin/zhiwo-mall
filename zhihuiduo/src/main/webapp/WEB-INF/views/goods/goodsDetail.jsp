@@ -165,6 +165,23 @@ body {
                 <h4>看看谁在开团</h4>
             </div>
             <div class="media">
+            <div class="pull-right" style="padding-top:7px;">
+            	<button type="button" class="btn btn-danger">去参团</button>
+			</div>
+            <div class="media-left">
+                    <img class="img-circle" src="${ctx}/${shop.icon}" style="width:50px;">
+                </div>
+				<div class="media-body">
+					<h5 class="media-heading" style="padding-top: 6px;">人生如戏，戏如人生</h5>
+                    <span style="color: gray; font-size: 1.4rem;">还差一人，剩余2小时</span>
+                   
+				</div>
+                
+			</div>	
+            <div class="media">
+            <div class="pull-right" style="padding-top:7px;" >
+            	<button type="button" class="btn btn-danger">去参团</button>
+			</div>
             <div class="media-left">
                     <img class="img-circle" src="${ctx}/${shop.icon}" style="width:50px;">
                 </div>
@@ -174,7 +191,11 @@ body {
 				</div>
 			</div>	
 			<c:forEach var="groupPurcse" items="${groupPurcses}">
+            <a href="${ctx}/memberGroup?goodsId=${groupPurcse.productId}&groupPurcseId=${groupPurcse.id}">
 			<div class="media">
+             <div class="pull-right" style="padding-top:7px;">
+            	<button type="button" class="btn btn-danger">去参团</button>
+			</div>
             <div class="media-left">
                     <img class="img-circle" src="${ctx}/${groupPurcse.memberIcon}">
                 </div>
@@ -183,6 +204,7 @@ body {
                     <span style="color: gray; font-size: 1.4rem;">还差1人，剩余2小时</span>
 				</div>
 			</div>		
+            </a>
 			</c:forEach>
 		</div>
 	</div>
@@ -357,6 +379,7 @@ body {
 						id="shopId" name="shopId" value="${product.shopId}" type="hidden">
 					<input id="goodsId" name="goodsId" value="${product.id}"
 						type="hidden"> <input id="proValues" name="proValues"
+						type="hidden"><input id="mode" name="mode"
 						type="hidden">
 					<button type="submit" class="btn btn-danger"
 						style="width: 100%; margin: 0; position: fixed; bottom: 0; left: 0; right: 0; border-radius: 0px;">
@@ -654,6 +677,7 @@ body {
 			$("#buyNum").val(buyNum);
 			var proValues = JSON.stringify(selectedPValue);
 			$("#proValues").val(proValues);
+			$("#mode").val(mode);
 			if (dealPrice == "") {
 				return false;
 			} else {

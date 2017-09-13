@@ -50,7 +50,8 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 
 	private static final String KEY_SHOPID_PRODUCT = "_key_shopId_product";
 	private static final String KEY_SHOPID_PRODUCT_COUNT = "_key_shopId_product_Count";
-
+	private static final String KEY_GROUP_PURCSE = "_key_GroupPurcse";
+	
 	@Autowired
 	@Lazy(true)
 	private PrProductMapper productMapper;
@@ -104,6 +105,8 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		for (PrProduct prProduct : list) {
 			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT);
 			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
+			
+			removeRedisKey(prProduct.getId() + KEY_GROUP_PURCSE);
 		}
 		// 逻辑操作
 		int result = productMapper.deleteByExample((PrProductCriteria) example);
@@ -140,6 +143,8 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 			removeRedisKey(key);
 			key = prProduct.getId() + "_" + PrImageType.THUMBNAIL + "_prImages";
 			removeRedisKey(key);
+			
+			removeRedisKey(prProduct.getId() + KEY_GROUP_PURCSE);
 		}
 
 		int result = productMapper.deleteByExample(productCriteria);
@@ -177,6 +182,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		key = prProduct.getId() + "_" + PrImageType.THUMBNAIL + "_prImages";
 		removeRedisKey(key);
 
+		removeRedisKey(prProduct.getId() + KEY_GROUP_PURCSE);
 		// 逻辑操作
 		int result = this.productMapper.deleteByPrimaryKey(id);
 

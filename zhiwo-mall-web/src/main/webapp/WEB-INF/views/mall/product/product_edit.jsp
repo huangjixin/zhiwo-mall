@@ -191,6 +191,18 @@
 			</div>
 		</div>
 		<div class="form-group">
+			<label for="isSentUnpay" class="col-sm-2 control-label">是否支持货到付款</label>
+			<div class="col-sm-6">
+				<select id="isSentUnpay" class="easyui-combobox"
+					name="isSentUnpay" style="width: 200px;">
+					<option value="0"
+						<c:if test="${product.isSentUnpay=='0'}">selected=true</c:if>>否</option>
+					<option value="1"
+						<c:if test="${product.isSentUnpay=='1'}">selected=true</c:if>>是</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
 			<label for="allowDistribution" class="col-sm-2 control-label">是否允许分销</label>
 			<div class="col-sm-6">
 				<select id="allowDistribution" class="easyui-combobox"
