@@ -676,6 +676,13 @@
 			$('#collapsePrImages').collapse('hide');
 			
 			validateForm();
+			
+			$("img.lazy").lazyload({
+								threshold : 200,
+								placeholder : "${ctx}/images/heart.png",
+								event : "click",
+								effect : "fadeIn",	
+							});
 		});
 
 		//回填价格函数
@@ -1228,7 +1235,8 @@
 		
 		function insertIntoUeditor(imgId){
 			var source = $('#'+imgId).attr('src');
-			var para = '<img id="'+imgId+'" src="'+source+'" class="img-responsive"/>';
+			var para = '<img id="'+imgId+'" class="img-responsive" src="'+source+'"/>';
+			/*var para = '<img id="'+imgId+'" class="lazy" src="${ctx}/images/heart.png" data-original="'+source+'"/>';*/
 			ue.setContent(para,true);
 		}
 		
