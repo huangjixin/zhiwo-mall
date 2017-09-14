@@ -128,8 +128,7 @@ body {
 				<!-- 轮播图设置 -->
 				<c:forEach var="prImage" items="${swiperImages}">
 					<div class="swiper-slide">
-						<img src="${ctx}/${prImage.url}" alt="智惠多月饼"
-							class="img-responsive">
+						<img class="img-responsive" src="${ctx}/images/busy.gif" data-original="${ctx}/${prImage.url}">
 					</div>
 				</c:forEach>
 			</div>
@@ -169,7 +168,8 @@ body {
             	<button type="button" class="btn btn-danger">去参团</button>
 			</div>
             <div class="media-left">
-                    <img class="img-circle" src="${ctx}/${shop.icon}" style="width:50px;">
+            		<img class="img-circle" src="${ctx}/images/busy.gif"  data-original="${ctx}/${shop.icon}"  style="width:50px;">
+                    <!--<img class="img-circle" src="${ctx}/${shop.icon}" style="width:50px;">-->
                 </div>
 				<div class="media-body">
 					<h5 class="media-heading" style="padding-top: 6px;">人生如戏，戏如人生</h5>
@@ -197,7 +197,7 @@ body {
             	<button type="button" class="btn btn-danger">去参团</button>
 			</div>
             <div class="media-left">
-                    <img class="img-circle" src="${ctx}/${groupPurcse.memberIcon}">
+                    <img class="img-circle" src="${ctx}/images/busy.gif" data-original="${ctx}/${groupPurcse.memberIcon}">
                 </div>
 				<div class="media-body">
                 	<h5 class="media-heading" style="padding-top: 6px;">${groupPurcse.memberName}</h5>
@@ -237,8 +237,8 @@ body {
 					</div>
 					<div class="media-right" style="padding-top: 10px;">
 						<img class="media-object"
-							src="${ctx}/images/goodsDetail/gotoShop.png"
-							style="width: 75px; height: 25px;">
+                        	 src="${ctx}/images/busy.gif" data-original="${ctx}/images/goodsDetail/gotoShop.png"
+							 style="width: 75px; height: 25px;">
 					</div>
 				</div>
 			</div>
@@ -522,6 +522,8 @@ body {
 																			.val());
 												}
 											});
+											
+							 $("img").lazyload({effect: "fadeIn"});
 						});
 
 		var selectedProperyPackagePrice = "";

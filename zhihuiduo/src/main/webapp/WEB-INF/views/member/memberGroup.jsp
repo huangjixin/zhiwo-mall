@@ -33,7 +33,7 @@ body {
 		<div class="caption">
 			<div class="media">
 				<div class="media-left">
-					<img class="media-object" src="${ctx}/${product.icon}"
+					<img class="media-object" src="${ctx}/images/busy.gif" data-original="${ctx}/${product.icon}"
 						style="width: 120px; height: 120px; border-radius: 4px;">
 				</div>
 				<div class="media-body" style="padding-top:5px;">
@@ -65,6 +65,10 @@ body {
             </div>
 		</div>
 	</div>
-
+ 	<script>
+		$(function() {
+			$("img").lazyload({effect: "fadeIn"});
+		});
+	</script>
 </body>
 </html>

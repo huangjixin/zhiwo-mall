@@ -59,9 +59,9 @@
 	<!-- 会话管理器 -->
 	<bean id="sessionManager"
 		class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
-		<property name="globalSessionTimeout" value="-1000" />
-		<property name="deleteInvalidSessions" value="false" />
-		<property name="sessionValidationSchedulerEnabled" value="false" />
+		<property name="globalSessionTimeout" value="3600000" />
+		<property name="deleteInvalidSessions" value="true" />
+		<property name="sessionValidationSchedulerEnabled" value="true" />
 		<property name="sessionValidationScheduler" ref="sessionValidationScheduler" />
 		<!-- 此处必须严重注意，不要用Redis的话，要把下面的注释打开，把redisSessionDAO给注释 -->
 		<!-- <property name="sessionDAO" ref="sessionDAO" /> -->

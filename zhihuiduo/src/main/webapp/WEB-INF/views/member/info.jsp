@@ -14,8 +14,8 @@
 		<div style="height: 1px;"></div>
 		<div class="media">
 			<div class="media-left" href="#">
-				<img id="wechatIcon" class="media-object img-circle"
-					src="${ctx}/images/1671169078.jpg" style="width: 80px;">
+				<img id="wechatIcon" class="media-object img-circle" src="${ctx}/images/busy.gif" data-original="${ctx}/images/1671169078.jpg"
+					style="width: 80px;">
 			</div>
 			<div class="media-body">
 				<div style="height: 25px;"></div>
@@ -53,5 +53,10 @@
 		<label class="activeProperyValue">返回</label>
 	</div>
 	<%--<%@ include file="/WEB-INF/member-include/bottomIndex.jsp"%>--%>
+     <script>
+		$(function() {
+			$("img").lazyload({effect: "fadeIn"});
+		});
+	</script>
 </body>
 </html>

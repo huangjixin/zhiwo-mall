@@ -46,7 +46,7 @@
     <div style="background-color:#ffffff; padding-left:10px;padding-right:10px; padding-top:10px; padding-bottom:10px;margin-top:4px;">
 		<div class="media">
             <div class="media-left">
-                <img class="media-object" src="${ctx}/${product.icon}" width="120px"
+                <img class="media-object" src="${ctx}/images/busy.gif" data-original="${ctx}/${product.icon}" width="120px"
                      alt="媒体对象">
             </div>
             <div class="media-body">
@@ -64,5 +64,10 @@
         	<span>实际付款：</span>&nbsp;&nbsp;<span style="color:red;font-size:2rem;"><i class="fa fa-jpy"></i>&nbsp;<label style="">88</label></span>
         </div>
     </div>
+    <script>
+		$(function() {
+			$("img").lazyload({effect: "fadeIn"});
+		});
+	</script>
 </body>
 </html>

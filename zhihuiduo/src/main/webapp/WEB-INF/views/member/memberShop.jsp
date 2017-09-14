@@ -45,7 +45,7 @@ body {
 		<div class="caption">
 			<div class="media" style="padding-top: 4px; padding-bottom: 8px;">
 				<div class="media-left">
-					<img class="media-object" src="${ctx}/${shop.icon}"
+					<img class="media-object" src="${ctx}/images/busy.gif" data-original="${ctx}/${shop.icon}"
 						style="width: 60px; height: 60px; border-radius: 4px;">
 				</div>
 				<div class="media-body">
@@ -76,7 +76,7 @@ body {
 		<div class="col-xs-6">
 		<div class="thumbnail">
         	<!--<img class="lazy" src="${ctx}/images/heart.png" data-original="${ctx}/${prod.icon}">-->
-			<img class="img-responsive" src="${ctx}/${prod.icon}">
+			<img class="img-responsive" src="${ctx}/images/busy.gif" data-original="${ctx}/${prod.icon}">
 			<div class="caption" style="font-size: 1.3rem;">
 				<h6>${prod.name}</h6>
 				<div class="pull-left">
@@ -97,18 +97,10 @@ body {
 	</c:forEach>
 	
 	<script>
-    	$()
-				.ready(
-						function() {
-							//图片懒加载。
-							$("img").lazyload({
-								threshold : 200,
-								placeholder : "${ctx}/images/heart.png",
-								event : "click",
-								effect : "fadeIn",	
-							});
-						})
-    </script>
+		$(function() {
+			$("img").lazyload({effect: "fadeIn"});
+		});
+	</script>
 
 </body>
 </html>

@@ -65,7 +65,7 @@
 			</ul>
 		</div>
 	</div>
-	<div style="height: 10px; text-aling: center; font-size: 1.4rem;"></div>
+	<div style="height: 30px; text-aling: center; font-size: 1.4rem;"></div>
 	<div class="swiper-container">
 		<div class="swiper-wrapper">
 			<div class="swiper-slide">
@@ -73,8 +73,9 @@
                 	<c:forEach var="product" items="${list}">
                     	<a href="${ctx}/goodsDetail?goodsId=${product.id}"><div class="col-sm-12 col-md-12">
                             <div class="thumbnail">
-                                <!--<img class="lazy" src="${ctx}/images/heart.png" data-original="${ctx}/${product.icon}">-->
-                               <img src="${ctx}/${product.icon}" data-original="${ctx}/${product.icon}">
+                            	
+                                <img class="lazy" src="${ctx}/images/busy.gif"  data-original="${ctx}/${product.icon}">
+                               <!--<img src="${ctx}/${product.icon}" data-original="${ctx}/${product.icon}">-->
                                 <div class="caption" style="text-align: left;">
                                     <p>${product.name}</p>
                                     <div class="pull-right">
@@ -148,12 +149,7 @@
 			//通过lass调取，一句可以搞定，用于页面中可能有多个导航的情况
 			$('.wrapper').navbarscroll();
 			
-			$("img.lazy").lazyload({
-				threshold : 200,
-				placeholder : "${ctx}/imgages/heart.png",
- 				event : "click",
-				effect : "fadeIn",	
-			});
+			 $("img").lazyload({effect: "fadeIn"});
 		});
 
 		var swiper = new Swiper('.swiper-container');
