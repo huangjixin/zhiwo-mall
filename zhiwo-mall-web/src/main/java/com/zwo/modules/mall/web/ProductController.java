@@ -91,7 +91,7 @@ public class ProductController extends BaseController<PrProduct> {
 			BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		
+
 		String id = UUID.randomUUID().toString().replaceAll("-", "");
 		product.setId(id);
 		uiModel.addAttribute("product", product);
@@ -103,7 +103,6 @@ public class ProductController extends BaseController<PrProduct> {
 
 		return basePath + "product_edit";
 	}
-	
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequiresPermissions("mall:product:view")
@@ -141,12 +140,14 @@ public class ProductController extends BaseController<PrProduct> {
 
 		// 商品属性图。
 		// List<PrImage> list = productService.selectByProductId(id,false);
-		List<PrImage> list = imageService.selectByProductId(id,PrImageType.PROP);
+		List<PrImage> list = imageService.selectByProductId(id,
+				PrImageType.PROP);
 		uiModel.addAttribute("prImages", list);
 
 		// 轮播图
-		List<PrImage> listSwipers = imageService.selectByProductId(id,PrImageType.SWIPER);
-		
+		List<PrImage> listSwipers = imageService.selectByProductId(id,
+				PrImageType.SWIPER);
+
 		// 轮播图
 		List<PrImage> listDetails = imageService.selectByProductId(id,
 				PrImageType.DETAIL);
@@ -191,23 +192,23 @@ public class ProductController extends BaseController<PrProduct> {
 
 		int res = productService.insertSelective(product);
 		if (res == 1) {
-			//更新轮播图。
+			// 更新轮播图。
 			redirectAttributes.addFlashAttribute("message", "保存成功！");
 			imageService.updatePrImageRealPId(product.getId());
-			
+
 			if (null != product.getContent()) {
 				String cont = product.getContent();
 				// 详情图
-				List<PrImage> listDetails = imageService.selectByProductId(product.getId(),
-						PrImageType.DETAIL);
-				//不用的详情图找出来，并且要把它们删除。
-				List<String>idsNotInUse = new ArrayList<String>();
+				List<PrImage> listDetails = imageService.selectByProductId(
+						product.getId(), PrImageType.DETAIL);
+				// 不用的详情图找出来，并且要把它们删除。
+				List<String> idsNotInUse = new ArrayList<String>();
 				for (PrImage prImage : listDetails) {
-					if(cont.indexOf(prImage.getId())==-1){
+					if (cont.indexOf(prImage.getId()) == -1) {
 						idsNotInUse.add(prImage.getId());
 					}
 				}
-				if(idsNotInUse.size()>0){
+				if (idsNotInUse.size() > 0) {
 					this.imageService.deleteBatch(idsNotInUse);
 				}
 			}
@@ -252,7 +253,7 @@ public class ProductController extends BaseController<PrProduct> {
 		// propertyPrices);
 		return "redirect:/product/create";
 	}
-	
+
 	@RequiresPermissions("mall:product:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@ModelAttribute PrProductWithBLOBs product,
@@ -264,7 +265,7 @@ public class ProductController extends BaseController<PrProduct> {
 		if ("".equals(product.getCategoryId())) {
 			product.setCategoryId(null);
 		}
-		
+
 		if (result.hasErrors()) {
 			redirectAttributes.addFlashAttribute("product", product);
 			redirectAttributes.addFlashAttribute("message", "填入的数据有误！");
@@ -303,11 +304,11 @@ public class ProductController extends BaseController<PrProduct> {
 					break;
 				}
 			}
-
+			reConnect = true;
 			// 重新建立关联关系
 			if (reConnect == true) {
 				productPropertyValueService.deleteByProductId(product.getId());
-				
+
 				for (Object object : perpertyArray) {
 					JSONObject jsonObject = (JSONObject) object;
 					PrProductPropertyValue productProperty = new PrProductPropertyValue();
@@ -329,49 +330,73 @@ public class ProductController extends BaseController<PrProduct> {
 			perPriceArray = (JSONArray) JSONArray.parse(propertyPrices);
 			List<PrProductPackagePrice> packagePrices = packagePriceService
 					.selectByProductId(product.getId());
-			for (int i = 0; i < perPriceArray.size(); i++) {
-				JSONObject object = (JSONObject) perPriceArray.get(i);
-				String id = object.getString("id");
-				boolean flag = false;
-				for (PrProductPackagePrice prProductPackagePrice : packagePrices) {
-					if (id.equals(prProductPackagePrice.getId())) {
-						flag = true;
+			
+			if (perPriceArray.size() == packagePrices.size()) {
+				for (int i = 0; i < perPriceArray.size(); i++) {
+					JSONObject object = (JSONObject) perPriceArray.get(i);
+					String id = object.getString("id");
+					boolean flag = false;
+					for (PrProductPackagePrice prProductPackagePrice : packagePrices) {
+						if (id.equals(prProductPackagePrice.getId())) {
+							flag = true;
+							break;
+						}
+					}
+					if (flag == false) {
+						reConnect = true;
 						break;
 					}
 				}
-				if (flag == false) {
-					reConnect = true;
-					break;
-				}
+				if(reConnect == false){
+				for (PrProductPackagePrice prProductPackagePrice : packagePrices) {
+					boolean flag = false;
+					for(int i = 0; i < perPriceArray.size(); i++) {
+						JSONObject object = (JSONObject) perPriceArray.get(i);
+						String id = object.getString("id");
+						if (id.equals(prProductPackagePrice.getId())) {
+							flag = true;
+							break;
+						}
+					}
+					if (flag == false) {
+						reConnect = true;
+						break;
+					}
+				}}
 			}
-			
-			//检查属性有没有改变。
+
+			// 检查属性有没有改变。
 			if (reConnect == false) {
 				for (int i = 0; i < perPriceArray.size(); i++) {
 					JSONObject object = (JSONObject) perPriceArray.get(i);
 					String id = object.getString("id");
 					for (PrProductPackagePrice prProductPackagePrice : packagePrices) {
 						if (id.equals(prProductPackagePrice.getId())) {
-							boolean changed=false;
+							boolean changed = false;
 							String gourpPrice = object.getString("gourpPrice");
-							String independentPrice = object.getString("independentPrice");
-							if(!gourpPrice.equals(prProductPackagePrice.getGourpPrice())){
-								changed=true;
+							String independentPrice = object
+									.getString("independentPrice");
+							if (!gourpPrice.equals(prProductPackagePrice
+									.getGourpPrice())) {
+								changed = true;
 								prProductPackagePrice.setGourpPrice(gourpPrice);
 							}
-							if(!independentPrice.equals(prProductPackagePrice.getIndependentPrice().toString())){
-								changed=true;
-								prProductPackagePrice.setIndependentPrice(independentPrice);
+							if (!independentPrice.equals(prProductPackagePrice
+									.getIndependentPrice().toString())) {
+								changed = true;
+								prProductPackagePrice
+										.setIndependentPrice(independentPrice);
 							}
-							if(changed==true){
-								packagePriceService.updateByPrimaryKey(prProductPackagePrice);
+							if (changed == true) {
+								packagePriceService
+										.updateByPrimaryKey(prProductPackagePrice);
 							}
 							break;
 						}
 					}
 				}
 			}
-
+			reConnect = true;
 			// 重新建立关联关系
 			if (reConnect == true) {
 				packagePriceService.deleteByProductId(product.getId());
@@ -404,22 +429,22 @@ public class ProductController extends BaseController<PrProduct> {
 			if (null != product.getContent()) {
 				String cont = product.getContent();
 				// 轮播图
-				List<PrImage> listDetails = imageService.selectByProductId(product.getId(),
-						PrImageType.DETAIL);
-				//不用的详情图找出来，并且要把它们删除。
-				List<String>idsNotInUse = new ArrayList<String>();
+				List<PrImage> listDetails = imageService.selectByProductId(
+						product.getId(), PrImageType.DETAIL);
+				// 不用的详情图找出来，并且要把它们删除。
+				List<String> idsNotInUse = new ArrayList<String>();
 				for (PrImage prImage : listDetails) {
-					if(cont.indexOf(prImage.getId())==-1){
+					if (cont.indexOf(prImage.getId()) == -1) {
 						idsNotInUse.add(prImage.getId());
 					}
 				}
-				if(idsNotInUse.size()>0){
+				if (idsNotInUse.size() > 0) {
 					this.imageService.deleteBatch(idsNotInUse);
 				}
-				
+
 			}
 		}
-		
+
 		redirectAttributes.addAttribute("operation", "edit");
 		return "redirect:/product/edit/" + product.getId();
 	}

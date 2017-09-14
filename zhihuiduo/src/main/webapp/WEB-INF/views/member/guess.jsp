@@ -119,8 +119,13 @@
 					</form>
 					<!--required:true,number:true}-->
 					<div style="text-align: center">
-						<button type="submit" class="btn btn-danger"
+						<shiro:user>
+							<button type="submit" class="btn btn-danger"
 							style="width: 80%; color: #ffffff;">立即投注</button>
+						</shiro:user>
+						<shiro:notAuthenticated>
+							<span>你尚未登录</span>
+						</shiro:notAuthenticated>
 					</div>
 
 				</div>
@@ -131,7 +136,7 @@
 		</div>
 		<!-- /.modal -->
 	</div>
-
+	
 	<%--<%@ include file="/WEB-INF/member-include/bottomIndex.jsp"%>--%>
             <!--$("#indexBtn").removeClass("menuItemActive");	
 			$("#indexBtn").addClass("menuItem");

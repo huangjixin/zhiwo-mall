@@ -125,7 +125,7 @@ public class MemberAddressController extends BaseController {
 			}
 		}
 
-		int result = addressService.updateByPrimaryKeySelective(address);
+		int result = addressService.updateByPrimaryKey(address);
 		String resultString = JSON.toJSONString(address);
 		return resultString;
 	}

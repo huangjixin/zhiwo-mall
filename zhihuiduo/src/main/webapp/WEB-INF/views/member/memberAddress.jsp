@@ -356,7 +356,7 @@ $option.css({ "background-color": "#DEDEDE" });
 		<!-- /.modal -->
 	</div>
 	<script type="text/javascript">
-	
+	var mode = "create";
 	function save(){
 		var bootstrapValidator = $("#form").data('bootstrapValidator');
 		bootstrapValidator.validate();
@@ -374,8 +374,25 @@ $option.css({ "background-color": "#DEDEDE" });
              data: data,
              success: function (result) {
 				 var obj =  JSON.parse(result);
-				var parameter = '<div class="thumbnail" id="'+obj.id+'_thumbnail"><div class="caption"><input id="'+obj.id+'" type="hidden" value="'+obj.id+'" /><p><span id="'+obj.id+'_name">'+obj.name+'</span>,<span id="'+obj.id+'_mobilPhone">'+obj.mobilPhone+'</span></p><p><span id="'+obj.id+'_province">'+obj.province+'</span><span id="'+obj.id+'_city">'+obj.city+'</span><span id="'+obj.id+'_street">'+obj.street+'</span></p><hr class="hr1" /><div class="pull-left"><div class="checkbox"><label onClick="setDefaultMemberAddress(\''+obj.id+'\')"><input type="checkbox">设为默认</label></div></div><div class="pull-right" style="font-weight: normal;"><span class="label label-info" style="padding-top: 5px;" onClick="edit(\''+obj.id+'\')"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;编辑</span> &nbsp;&nbsp; <span class="label label-danger" style="padding-top: 5px;" onClick="deleteMemberAddress(\''+obj.id+'\')"> <i class="fa fa-trash-o" aria-hidden="true"></i>&nbsp;&nbsp;删除</span></div><div class="clearfix"></div></div></div>';
-				$("#addressDiv").append(parameter);
+				 
+				 if(mode == "create"){
+					 var defaultUi = "";
+					 if(obj.isDefault=='0'){
+						defaultUi = '<label id="'+obj.id+'_defaultSettingLabel" onClick="setDefaultMemberAddress(\''+obj.id+'\')"> <input type="checkbox">设为默认 </label>';
+					 }else if(obj.isDefault=='1'){
+						defaultUi = '<span class="label label-danger" id="'+obj.id+'_defaultLabel">已为默认</span>';
+					 }
+						
+					var parameter = '<div class="thumbnail" id="'+obj.id+'_thumbnail"><div class="caption"><input id="'+obj.id+'" type="hidden" value="'+obj.id+'" /><p><span id="'+obj.id+'_name">'+obj.name+'</span>,<span id="'+obj.id+'_mobilPhone">'+obj.mobilPhone+'</span></p><p><span id="'+obj.id+'_province">'+obj.province+'</span><span id="'+obj.id+'_city">'+obj.city+'</span><span id="'+obj.id+'_street">'+obj.street+'</span></p><hr class="hr1" /><div class="pull-left"><div class="checkbox">'+defaultUi+'</div></div><div class="pull-right" style="font-weight: normal;"><span class="label label-info" style="padding-top: 5px;" onClick="edit(\''+obj.id+'\')"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;编辑</span> &nbsp;&nbsp; <span class="label label-danger" style="padding-top: 5px;" onClick="deleteMemberAddress(\''+obj.id+'\')"> <i class="fa fa-trash-o" aria-hidden="true"></i>&nbsp;&nbsp;删除</span></div><div class="clearfix"></div></div></div>';
+					$("#addressDiv").append(parameter);
+				 }else{
+					
+					$("#"+obj.id+"_name").html(obj.name);
+					$("#"+obj.id+"_mobilPhone").html(obj.mobilPhone);
+					$("#"+obj.id+"_province").html(obj.province);
+					$("#"+obj.id+"_city").html(obj.city);
+					$("#"+obj.id+"_street").html(obj.street);
+				 }
 				
 				$('#myModal').modal('hide');
 				//表单重置。
@@ -408,6 +425,7 @@ $option.css({ "background-color": "#DEDEDE" });
 	}
 
 	function create(){
+		mode = "create";
 		document.form.action="${ctx}/memberInfo/createMemberAddress";
 		$("#name").val('');
 		$("#mobilPhone").val('');
@@ -415,6 +433,7 @@ $option.css({ "background-color": "#DEDEDE" });
 	}
 	
 	function edit(addressId){
+		mode = "edit";
 		document.form.action="${ctx}/memberInfo/updateMemberAddress"; 
 		
 		$('#myModal').modal('show');

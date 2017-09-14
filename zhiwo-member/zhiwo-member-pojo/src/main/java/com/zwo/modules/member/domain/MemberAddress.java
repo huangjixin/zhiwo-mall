@@ -55,7 +55,7 @@ public class MemberAddress implements Serializable {
      * 是否设置为默认1为是,0为否
      */
     @Column(name = "IS_DEFAULT")
-    private String isDefault;
+    private String isDefault="0";
 
     @Column(name = "DISABLE")
     private String disable;

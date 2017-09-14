@@ -77,7 +77,7 @@ body {
 	padding-top: 6px;
 	padding-bottom: 6px;
 	background-color: red;
-	font-size: 1.4rem;
+	font-size: 1.2rem;
 	color: white;
 	border-radius: 4px;
 	font-weight: normal;
@@ -89,7 +89,7 @@ body {
 	padding-top: 6px;
 	padding-bottom: 6px;
 	background-color: #F5F5F5;
-	font-size: 1.4rem;
+	font-size: 1.2rem;
 	color: #878787;
 	border-radius: 4px;
 	font-weight: normal;
@@ -326,8 +326,9 @@ body {
 						<label style="font-size: 1.2rem;" id="propertyValueLabel">请选择属性</label>
 					</div>
 				</div>
-				<div>
-					<div style="height: 80px;"></div>
+                <div style="height: 100px;"></div>
+				<div style="min-height: 200px; max-height:300px; overflow:scroll;">
+					
 					<c:forEach var="property" items="${properties}">
 						<c:set value="false" var="flag" />
 						<c:forEach var="pValue" items="${propertyValues}">
@@ -339,7 +340,7 @@ body {
 							<div class="form-group">
 								<div class="col-sm-9">
 									<label for="propertyValue" class="col-sm-1 control-label"
-										style="font-size: 1.2rem;">${property.name}</label>
+										style="font-size: 1rem;">${property.name}</label>
 
 									<c:forEach var="pValue" items="${propertyValues}"
 										varStatus="status">
@@ -584,8 +585,7 @@ body {
 				if ($('#' + groupId).length > 0) {
 					groupIdExist = true;
 				}
-			}
-			if (selectedPValue.length == 2) {
+			}else{
 				for (var i = 0; i < selectedPValue.length; i++) {
 					groupId = "";
 					var object = selectedPValue[i];
