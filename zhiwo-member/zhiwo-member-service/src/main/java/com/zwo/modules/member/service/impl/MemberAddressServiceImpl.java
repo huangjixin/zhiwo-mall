@@ -97,8 +97,13 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 		int result = memberAddressMapper.deleteByExample(example);
 		if(result!=0){
 			for (MemberAddress memberAddress : addresses) {
-				removeRedisKey(memberAddress.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
-				removeRedisKey(memberAddress.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+				if(memberAddress.getMemberId()!=null){
+					try {
+						removeRedisKey(memberAddress.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
+						removeRedisKey(memberAddress.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+					} catch (Exception e) {
+					}
+				}
 			}
 		}
 		
@@ -124,8 +129,14 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 		int result = memberAddressMapper.deleteByExample(memberAddressCriteria);
 		if(result!=0){
 			for (MemberAddress memberAddress : addresses) {
-				removeRedisKey(memberAddress.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
-				removeRedisKey(memberAddress.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+				try {
+					if(memberAddress.getMemberId()!=null){
+						removeRedisKey(memberAddress.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
+						removeRedisKey(memberAddress.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+					}
+				} catch (Exception e) {
+					
+				}
 			}
 		}
 		if (logger.isInfoEnabled())
@@ -153,8 +164,14 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 		int result = this.memberAddressMapper.deleteByPrimaryKey(id);
 		if(address.getMemberId()!=null){
 			if(result !=0){
-				removeRedisKey(address.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
-				removeRedisKey(address.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+				try {
+					if(address.getMemberId()!=null){
+						removeRedisKey(address.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
+						removeRedisKey(address.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+					}
+				} catch (Exception e) {
+					
+				}
 			}
 		}
 		
@@ -185,8 +202,14 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 		int result = super.insert(record);
 		
 		if(result !=0){
-			removeRedisKey(record.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
-			removeRedisKey(record.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+			try {
+				if(record.getMemberId()!=null){
+					removeRedisKey(record.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
+					removeRedisKey(record.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+				}
+			} catch (Exception e) {
+				
+			}
 		}
 		
 		if (logger.isInfoEnabled())
@@ -223,8 +246,14 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 		int result = super.insertSelective(record);
 		
 		if(result !=0){
-			removeRedisKey(record.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
-			removeRedisKey(record.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+			try {
+				if(record.getMemberId()!=null){
+					removeRedisKey(record.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
+					removeRedisKey(record.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+				}
+			} catch (Exception e) {
+				
+			}
 		}
 		
 		if (logger.isInfoEnabled())
@@ -337,8 +366,14 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 		int result = this.memberAddressMapper.updateByPrimaryKeySelective(record);
 		
 		if(result !=0){
-			removeRedisKey(record.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
-			removeRedisKey(record.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+			try {
+				if(record.getMemberId()!=null){
+					removeRedisKey(record.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
+					removeRedisKey(record.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+				}
+			} catch (Exception e) {
+				
+			}
 		}
 		
 		if (logger.isInfoEnabled())
@@ -365,8 +400,14 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 		// 逻辑操作
 		int result = this.memberAddressMapper.updateByPrimaryKey(record);
 		if(result !=0){
-			removeRedisKey(record.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
-			removeRedisKey(record.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+			try {
+				if(record.getMemberId()!=null){
+					removeRedisKey(record.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
+					removeRedisKey(record.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
+				}
+			} catch (Exception e) {
+				
+			}
 		}
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新结束");
@@ -410,7 +451,8 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 		addressCriteria.createCriteria().andIdEqualTo(id).andMemberIdEqualTo(memberId);
 		int result = this.deleteByExample(addressCriteria);
 		if(result != 0){
-			removeRedisKey(memberId+KEYLAST_DEFAULT_MEMBER_ADDRESS);
+			if(memberId!=null)
+				removeRedisKey(memberId+KEYLAST_DEFAULT_MEMBER_ADDRESS);
 		}
 		
 		return result;
@@ -423,6 +465,7 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 	public List<MemberAddress> listAllByMemberId(String memberId) {
 		MemberAddressCriteria criteria = new MemberAddressCriteria();
 		criteria.createCriteria().andMemberIdEqualTo(memberId);
+		criteria.setOrderByClause("is_default desc,create_date asc");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "查询会员地址开始");
 		List<MemberAddress> list = this.memberAddressMapper.selectByExample(criteria);
