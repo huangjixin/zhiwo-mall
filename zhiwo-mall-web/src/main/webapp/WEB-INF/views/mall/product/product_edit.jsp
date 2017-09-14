@@ -424,7 +424,12 @@
 			<div class="col-sm-6">
 				<label style="color: red;">预览</label>
 				<br> <img id="detailImg" class=".img-responsive" width="200px;">
-                <br><div id="detailImgsDiv"></div>
+                <br><div id="detailImgsDiv">
+                	<c:forEach var="detailImage" items="${detailImages}">
+                    	<div><img id="${detailImage.id}" src="${ctx}/${detailImage.url}" class=".img-responsive" width="50px;"/>&nbsp;&nbsp;<button type="button" class="btn btn-info" onClick="insertIntoUeditor('${detailImage.id}')">插入</button></div>
+                    
+                    </c:forEach>
+                </div>
 			</div>
 		</div>
         
@@ -689,12 +694,7 @@
 			
 			validateForm();
 			
-			$("img.lazy").lazyload({
-								threshold : 200,
-								placeholder : "${ctx}/images/heart.png",
-								event : "click",
-								effect : "fadeIn",	
-							});
+			//$("img").load({effect : "fadeIn"});
 		});
 
 		//回填价格函数
@@ -1248,8 +1248,9 @@
 		function insertIntoUeditor(imgId){
 			var source = $('#'+imgId).attr('src');
 			var para = '<img id="'+imgId+'" class="img-responsive" src="'+source+'"/>';
-			/*var para = '<img id="'+imgId+'" class="lazy" src="${ctx}/images/heart.png" data-original="'+source+'"/>';*/
-			ue.setContent(para,true);
+			/*var para = '<img id="'+imgId+'" class="img-responsive" src="/images/busy.gif" data-original="'+source+'"/>';*/
+			/*ue.setContent(para,true);*/
+			ue.execCommand('insertHtml', para);
 		}
 		
 		//删除图片。

@@ -103,6 +103,7 @@ public class ProductController extends BaseController<PrProduct> {
 
 		return basePath + "product_edit";
 	}
+	
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequiresPermissions("mall:product:view")
@@ -140,13 +141,16 @@ public class ProductController extends BaseController<PrProduct> {
 
 		// 商品属性图。
 		// List<PrImage> list = productService.selectByProductId(id,false);
-		List<PrImage> list = imageService.selectByProductId(id,
-				PrImageType.PROP);
+		List<PrImage> list = imageService.selectByProductId(id,PrImageType.PROP);
 		uiModel.addAttribute("prImages", list);
 
 		// 轮播图
-		List<PrImage> listSwipers = imageService.selectByProductId(id,
-				PrImageType.SWIPER);
+		List<PrImage> listSwipers = imageService.selectByProductId(id,PrImageType.SWIPER);
+		
+		// 轮播图
+		List<PrImage> listDetails = imageService.selectByProductId(id,
+				PrImageType.DETAIL);
+		uiModel.addAttribute("detailImages", listDetails);
 		uiModel.addAttribute("swiperImages", listSwipers);
 
 		uiModel.addAttribute("product", product);
@@ -191,9 +195,9 @@ public class ProductController extends BaseController<PrProduct> {
 			redirectAttributes.addFlashAttribute("message", "保存成功！");
 			imageService.updatePrImageRealPId(product.getId());
 			
-			if (null != product.getContent() && !"".equals(product.getContent())) {
+			if (null != product.getContent()) {
 				String cont = product.getContent();
-				// 轮播图
+				// 详情图
 				List<PrImage> listDetails = imageService.selectByProductId(product.getId(),
 						PrImageType.DETAIL);
 				//不用的详情图找出来，并且要把它们删除。
@@ -397,7 +401,7 @@ public class ProductController extends BaseController<PrProduct> {
 			redirectAttributes.addFlashAttribute("message", "保存成功！");
 			imageService.updatePrImageRealPId(product.getId());
 
-			if (null != product.getContent() && !"".equals(product.getContent())) {
+			if (null != product.getContent()) {
 				String cont = product.getContent();
 				// 轮播图
 				List<PrImage> listDetails = imageService.selectByProductId(product.getId(),
