@@ -98,9 +98,14 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
 		List<GroupPurcse> list = groupPurcseMapper.selectByExample((GroupPurcseCriteria)example);
-		for (GroupPurcse groupPurcse : list) {
-			RedisUtil.removeRedisKey(redisTemplate, groupPurcse.getId()+KEY_GROUP_PURCSE);
+		try {
+			for (GroupPurcse groupPurcse : list) {
+				RedisUtil.removeRedisKey(redisTemplate, groupPurcse.getId()+KEY_GROUP_PURCSE);
+			}
+		} catch (Exception e) {
+			
 		}
+		
 		// 逻辑操作
 		int result = groupPurcseMapper.deleteByExample((GroupPurcseCriteria) example);
 
@@ -121,8 +126,12 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements 
 		GroupPurcseCriteria GroupPurcseCriteria = new GroupPurcseCriteria();
 		GroupPurcseCriteria.createCriteria().andIdIn(list);
 		List<GroupPurcse> groupPurcses = groupPurcseMapper.selectByExample(GroupPurcseCriteria);
-		for (GroupPurcse groupPurcse : groupPurcses) {
-			RedisUtil.removeRedisKey(redisTemplate, groupPurcse.getId()+KEY_GROUP_PURCSE);
+		try {
+			for (GroupPurcse groupPurcse : groupPurcses) {
+				RedisUtil.removeRedisKey(redisTemplate, groupPurcse.getId()+KEY_GROUP_PURCSE);
+			}
+		} catch (Exception e) {
+			
 		}
 		
 		int result = groupPurcseMapper.deleteByExample(GroupPurcseCriteria);
