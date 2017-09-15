@@ -233,7 +233,7 @@ public class MemberPlayAccountServiceImpl extends BaseService<MemberPlayAccount>
 	 * lang.String)
 	 */
 	@Override
-//	@Cacheable(key = "#record.id+'_key_MemberPlayAccount'", value = "MemberPlayAccount")
+	@Cacheable(key = "#id+'_key_MemberPlayAccount'", value = "MemberPlayAccount")
 	@Transactional(readOnly = true)
 	public MemberPlayAccount selectByPrimaryKey(String id) {
 		// 日志记录
@@ -361,15 +361,6 @@ public class MemberPlayAccountServiceImpl extends BaseService<MemberPlayAccount>
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页结束");
 		return pageInfo;
-	}
-
-	public static void main(String[] args) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
-		IMemberPlayAccountService MemberPlayAccountServiceImpl = (IMemberPlayAccountService) context.getBean("MemberPlayAccountServiceImpl");
-		MemberPlayAccount MemberPlayAccount = new MemberPlayAccount();
-		MemberPlayAccount.setId(System.currentTimeMillis() + "");
-		int result = MemberPlayAccountServiceImpl.insertSelective(MemberPlayAccount);
-		logger.info(result + "");
 	}
 
 }
