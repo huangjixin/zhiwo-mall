@@ -222,7 +222,7 @@ body {
 		</div>
 	</div>
 
-	<a href="${ctx}/memberShop?shopId=${product.shopId}">
+	<a href="${ctx}/memberShop/${product.shopId}">
 	<div class="thumbnail">
 		<div class="caption">
 			<div class="pull-left">
