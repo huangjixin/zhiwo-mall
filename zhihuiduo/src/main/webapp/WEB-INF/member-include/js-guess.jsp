@@ -5,6 +5,29 @@
 		$().ready(function() {
 			
 		})
+        
+        function save(){
+            var url = $("#form").attr("action");
+            var data = $('#form').serialize();
+            $.ajax({
+			 url:url,
+             type: "POST",
+             data: data,
+             success: function (result) {
+				 var obj =  JSON.parse(result);
+				 if(obj.result=='1'){
+                 	alert("竞猜成功");
+                 }else{
+                 	alert(obj.message);
+                 }
+				
+				$('#myModal').modal('hide');
+             },
+              error: function(data) {
+                       // alert("error:"+data.responseText);
+             }
+           });
+        }
 
 		function setDefaultMemberAddress(addressId) {
 			var url = "${ctx}/memberInfo/setDefaultMemberAddress";
@@ -32,7 +55,7 @@
 			$("#street").val('');
 		}
 
-		function bet(optionsId) {
+		function bet(optionsId,qId) {
 			$('#myModal').modal('show');
 
 			var name = $('#' + optionsId + "_name").html();
@@ -41,6 +64,7 @@
 			$('#myModalLabel').html(title);
 			selectedOptions = optionsId;
 			$("#optionsId").val(selectedOptions);
+            $("#questionId").val(qId);
 		}
 
 		function setBetRateStyle(proName, proValueId) {
@@ -52,6 +76,10 @@
 			var bet = $("#" + proValueId).html();
 			var betRate = $('#' + selectedOptions + "_betRate").html();
 			var inAll = Math.round(bet * betRate);
+            $("#bet").val(inAll);
+            
 			$("#winLabel").html(inAll);
-			$("#bet").val(inAll);
+			$("#bet").val(bet);
+            
+            $("#submitBtn").attr("disabled",false);
 		}

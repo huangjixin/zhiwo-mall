@@ -38,7 +38,26 @@ import java.util.List;
 public class DatagridPage<E> implements Serializable{
 	
     private static final long serialVersionUID = 1L;
-    /**
+    private int current=1;
+    private int rowCount = 10;
+    
+    public int getCurrent() {
+		return current;
+	}
+
+	public void setCurrent(int current) {
+		this.current = current;
+	}
+
+	public int getRowCount() {
+		return rowCount;
+	}
+
+	public void setRowCount(int rowCount) {
+		this.rowCount = rowCount;
+	}
+
+	/**
      * 总数
      */
     private long total;

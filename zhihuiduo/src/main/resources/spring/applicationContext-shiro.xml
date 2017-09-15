@@ -128,7 +128,7 @@
 				/memberOrder/guessCheckOut = authc
 				/memberLogin/* = anon
 				/checkLogin = anon
-				/logout = logout
+				/memberLogin/logout = logout
 				/authenticated = authc
 				/css/* = anon
 				/images/* = anon

@@ -14,6 +14,11 @@
 		style="height: 110px; background-color: #E02E24; color: #ffffff; padding-left: 10px;">
 		<div style="height: 1px;"></div>
 		<div class="media">
+        	<shiro:user>
+        	<div class="pull-right">
+            	<span class="label label-warning" style="padding-top:5px;"  onClick="logout()">退出</span>
+            </div>
+            </shiro:user>
 			<div class="media-left" href="#">
 				<img id="wechatIcon" class="media-object img-circle" <c:if test="${member!=null}"><c:if test="${member.icon!=null}">src="${ctx}/${member.icon}"</c:if></c:if> 
 					style="width: 80px;">
@@ -58,6 +63,10 @@
 	</div>
 	<%--<%@ include file="/WEB-INF/member-include/bottomIndex.jsp"%>--%>
      <script>
+	 	function logout(){
+			window.loacation.href='${ctx}/memberLogin/logout';
+		}
+		
 		$(function() {
 			$("img").lazyload({effect: "fadeIn"});
 		});

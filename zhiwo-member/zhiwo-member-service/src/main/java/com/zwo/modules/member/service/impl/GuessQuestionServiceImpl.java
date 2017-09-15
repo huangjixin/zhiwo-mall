@@ -6,6 +6,7 @@ package com.zwo.modules.member.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,12 +24,20 @@ import tk.mybatis.mapper.common.Mapper;
 
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.member.dao.GuessQuestionMapper;
+import com.zwo.modules.member.dao.GuessQuestionMemanswerMapper;
 import com.zwo.modules.member.dao.GuessQuestionOptionsMapper;
+import com.zwo.modules.member.dao.MemberGuessQuestionMapper;
+import com.zwo.modules.member.dao.MemberPlayAccountMapper;
+import com.zwo.modules.member.dao.MemberPlayHisAccountMapper;
 import com.zwo.modules.member.domain.GuessQuestion;
 import com.zwo.modules.member.domain.GuessQuestionCriteria;
+import com.zwo.modules.member.domain.GuessQuestionMemanswer;
 import com.zwo.modules.member.domain.GuessQuestionOption;
 import com.zwo.modules.member.domain.GuessQuestionOptions;
 import com.zwo.modules.member.domain.GuessQuestionOptionsCriteria;
+import com.zwo.modules.member.domain.MemberGuessQuestion;
+import com.zwo.modules.member.domain.MemberPlayAccount;
+import com.zwo.modules.member.domain.MemberPlayHisAccount;
 import com.zwo.modules.member.service.IGuessQuestionService;
 import com.zwotech.common.redis.channel.ChannelContance;
 import com.zwotech.common.redis.channel.RedisPushMessage;
@@ -62,6 +71,18 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion>
 	@Autowired
 	@Lazy(true)
 	private GuessQuestionOptionsMapper questionOptionsMapper;
+	
+	@Autowired
+	@Lazy(true)
+	private MemberPlayAccountMapper memberPlayAccountMapper;
+	
+	@Autowired
+	@Lazy(true)
+	private MemberPlayHisAccountMapper memberPlayHisAccountMapper;
+	
+	@Autowired
+	@Lazy(true)
+	private GuessQuestionMemanswerMapper guessQuestionMemanswerMapper;
 
 	@Override
 	public Mapper<GuessQuestion> getBaseMapper() {
@@ -489,6 +510,38 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion>
 		return list;
 	}
 
+	@Override
+	public int bet(MemberPlayAccount memberPlayAccount,String memId,int betNum,GuessQuestion guessQuestion, String optionId) {
+		String id = UUID.randomUUID().toString().replaceAll("-", "");
+		//更新智慧豆账户
+		int zhihuidouAccount = memberPlayAccount.getZhihuidouCount();
+		int beforGuess = zhihuidouAccount;
+		zhihuidouAccount = zhihuidouAccount-betNum;
+		memberPlayAccount.setZhihuidouCount(zhihuidouAccount);
+		memberPlayAccountMapper.updateByPrimaryKey(memberPlayAccount);
+		
+		//新增会员智慧豆账户变动
+		MemberPlayHisAccount hisAccount = new MemberPlayHisAccount();
+		hisAccount.setCreateDate(new Date());
+		hisAccount.setId(id);
+		hisAccount.setMemberId(memId);
+		hisAccount.setName("竞猜"+betNum+"豆"+guessQuestion.getName());
+		hisAccount.setZhihuidouCount(zhihuidouAccount);
+		memberPlayHisAccountMapper.insert(hisAccount);
+		
+		//会员答案表
+		GuessQuestionMemanswer memberGuessQuestion = new GuessQuestionMemanswer();//会员竞猜中间表;
+		id = UUID.randomUUID().toString().replaceAll("-", "");
+		memberGuessQuestion.setPayed(0);
+		memberGuessQuestion.setBetNum(betNum);
+		memberGuessQuestion.setId(id);
+		memberGuessQuestion.setMemberId(memId);
+		memberGuessQuestion.setQuestionId(guessQuestion.getId());
+		memberGuessQuestion.setQuestionOptionsId(optionId);
+		guessQuestionMemanswerMapper.insert(memberGuessQuestion);
+		return 1;
+	}
+	
 	/**
 	 * 移除key.
 	 * 
@@ -507,4 +560,5 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion>
 			}
 		}
 	}
+
 }

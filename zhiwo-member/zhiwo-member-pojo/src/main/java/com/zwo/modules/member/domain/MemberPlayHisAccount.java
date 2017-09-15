@@ -21,12 +21,14 @@ public class MemberPlayHisAccount implements Serializable {
     /**
      * 创建日期
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "CREATE_DATE")
     private Date createDate;
 
     /**
      * 更新日期
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "UPDATE_DATE")
     private Date updateDate;
 

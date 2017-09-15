@@ -20,6 +20,17 @@ public class GuessQuestionMemanswer implements Serializable {
     @Column(name = "question_options_id")
     private String questionOptionsId;
 
+    /**
+     * 是否已经支付，默认为0为未结算，为1则已经结算。
+     */
+    private Integer payed;
+
+    /**
+     * 竞猜的智惠豆数量
+     */
+    @Column(name = "bet_num")
+    private Integer betNum;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -76,5 +87,41 @@ public class GuessQuestionMemanswer implements Serializable {
      */
     public void setQuestionOptionsId(String questionOptionsId) {
         this.questionOptionsId = questionOptionsId == null ? null : questionOptionsId.trim();
+    }
+
+    /**
+     * 获取是否已经支付，默认为0为未结算，为1则已经结算。
+     *
+     * @return payed - 是否已经支付，默认为0为未结算，为1则已经结算。
+     */
+    public Integer getPayed() {
+        return payed;
+    }
+
+    /**
+     * 设置是否已经支付，默认为0为未结算，为1则已经结算。
+     *
+     * @param payed 是否已经支付，默认为0为未结算，为1则已经结算。
+     */
+    public void setPayed(Integer payed) {
+        this.payed = payed;
+    }
+
+    /**
+     * 获取竞猜的智惠豆数量
+     *
+     * @return bet_num - 竞猜的智惠豆数量
+     */
+    public Integer getBetNum() {
+        return betNum;
+    }
+
+    /**
+     * 设置竞猜的智惠豆数量
+     *
+     * @param betNum 竞猜的智惠豆数量
+     */
+    public void setBetNum(Integer betNum) {
+        this.betNum = betNum;
     }
 }

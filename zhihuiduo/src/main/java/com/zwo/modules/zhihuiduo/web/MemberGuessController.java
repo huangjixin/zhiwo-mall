@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zwo.modules.mall.service.IOrderTradeService;
 import com.zwo.modules.mall.service.IPrductService;
+import com.zwo.modules.member.domain.GuessQuestion;
 import com.zwo.modules.member.domain.GuessQuestionOption;
 import com.zwo.modules.member.domain.Member;
 import com.zwo.modules.member.domain.MemberPlayAccount;
@@ -49,20 +51,20 @@ public class MemberGuessController extends BaseController {
 	@Autowired
 	@Lazy(true)
 	private IMemberAddressService addressService;
-	
+
 	@Autowired
 	@Lazy(true)
 	private IMemberPlayAccountService memberPlayAccountService;
-	
+
 	@Autowired
 	@Lazy(true)
 	private IGuessQuestionService guessQuestionService;
 
-//	@Autowired
-//	@Lazy(true)
-//	@SuppressWarnings("rawtypes")
-//	private RedisTemplate redisTemplate = SpringContextHolder
-//			.getBean("redisTemplate");
+	// @Autowired
+	// @Lazy(true)
+	// @SuppressWarnings("rawtypes")
+	// private RedisTemplate redisTemplate = SpringContextHolder
+	// .getBean("redisTemplate");
 
 	private static final String basePath = "views/member/";
 
@@ -78,11 +80,12 @@ public class MemberGuessController extends BaseController {
 	// @RequiresAuthentication
 	public String guess(Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		List<GuessQuestionOption> list = guessQuestionService.selectIneffectQuestion();
-		uiModel.addAttribute("list",list);
-		return basePath +"guess";
-	}	
-	
+		List<GuessQuestionOption> list = guessQuestionService
+				.selectIneffectQuestion();
+		uiModel.addAttribute("list", list);
+		return basePath + "guess";
+	}
+
 	/**
 	 * 跳转到竞猜结算页面
 	 * 
@@ -94,33 +97,51 @@ public class MemberGuessController extends BaseController {
 	@RequestMapping(value = "guessCheckOut", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresAuthentication
-	public String guessCheckOut(@RequestParam String bet,@RequestParam String optionId,Model uiModel, HttpServletRequest httpServletRequest,
+	public String guessCheckOut(@RequestParam String bet,
+			@RequestParam String questionId, @RequestParam String optionId,
+			Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
+		JSONObject jsonObject = new JSONObject();
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
 			Member member = (Member) subject.getSession()
 					.getAttribute("member");
 
 			if (member != null) {
-				MemberPlayAccountCriteria accountCriteria = new MemberPlayAccountCriteria();
-				accountCriteria.createCriteria().andMemberIdEqualTo(member.getId());
-				List<MemberPlayAccount>list = memberPlayAccountService.selectByExample(accountCriteria);
-				if(list.size()>0){
-					MemberPlayAccount memberPlayAccount = list.get(0);
+				MemberPlayAccount memberPlayAccount = memberPlayAccountService
+						.selectByPrimaryKey(member.getId());
+				if (memberPlayAccount != null) {
 					int account = memberPlayAccount.getZhihuidouCount();
 					int be = Integer.valueOf(bet);
-					if(account < be ){ //余额不足，应该返回余额不足的消息。
-						
+					if (account < be) { // 余额不足，应该返回余额不足的消息。
+						jsonObject.put("result", 0);
+						jsonObject.put("message", "余额不足，请返回个人中心充值");
+						return jsonObject.toJSONString();
+					}
+					try {
+						GuessQuestion question = this.guessQuestionService.selectByPrimaryKey(questionId);
+						int result = this.guessQuestionService.bet(memberPlayAccount, member.getId(), be, question,
+								optionId);
+						jsonObject.put("result", result);
+						jsonObject.put("message", "下注成功");
+						return jsonObject.toJSONString();
+					} catch (Exception e) {
+						return jsonObject.toJSONString();
 					}
 					
-					int leftAccount = account-be;//要更新账户。
-					memberPlayAccount.setZhihuidouCount(leftAccount);
-					memberPlayAccountService.updateByPrimaryKey(memberPlayAccount);
 				}
-				
+				jsonObject.put("result", 0);
+				jsonObject.put("message", "智慧豆账户没有创建，请联系管理人员");
+				return jsonObject.toJSONString();
 			}
+			
+			jsonObject.put("result", 0);
+			jsonObject.put("message", "请登录");
+			return jsonObject.toJSONString();
 		}
-		return basePath +"guessCheckOut";
-	}	
-	
+		jsonObject.put("result", 0);
+		jsonObject.put("message", "请登录");
+		return jsonObject.toJSONString();
+	}
+
 }

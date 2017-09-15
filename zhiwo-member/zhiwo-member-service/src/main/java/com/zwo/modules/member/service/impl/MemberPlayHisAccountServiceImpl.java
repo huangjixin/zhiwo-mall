@@ -19,10 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageInfo;
-import com.zwo.modules.member.dao.MemberPlayAccountMapper;
-import com.zwo.modules.member.domain.MemberPlayAccount;
-import com.zwo.modules.member.domain.MemberPlayAccountCriteria;
-import com.zwo.modules.member.service.IMemberPlayAccountService;
+import com.zwo.modules.member.dao.MemberPlayHisAccountMapper;
+import com.zwo.modules.member.domain.MemberPlayHisAccount;
+import com.zwo.modules.member.domain.MemberPlayHisAccountCriteria;
+import com.zwo.modules.member.service.IMemberPlayHisAccountService;
 import com.zwotech.common.utils.RedisUtil;
 import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
@@ -36,25 +36,25 @@ import tk.mybatis.mapper.common.Mapper;
 @Service
 @Lazy(true)
 @Transactional(readOnly = false)
-public class MemberPlayAccountServiceImpl extends BaseService<MemberPlayAccount> implements IMemberPlayAccountService {
-	private static Logger logger = LoggerFactory.getLogger(MemberPlayAccountServiceImpl.class);
+public class MemberPlayHisAccountServiceImpl extends BaseService<MemberPlayHisAccount> implements IMemberPlayHisAccountService {
+	private static Logger logger = LoggerFactory.getLogger(MemberPlayHisAccountServiceImpl.class);
 
-	private static final String BASE_MESSAGE = "【MemberPlayAccountServiceImpl服务类提供的基础操作增删改查等】";
+	private static final String BASE_MESSAGE = "【MemberPlayHisAccountServiceImpl服务类提供的基础操作增删改查等】";
 	
-	private static final String _KEY = "_key_MemberPlayAccount";
+	private static final String _KEY = "_key_MemberPlayHisAccount";
 
 	private RedisTemplate redisTemplate;
 	
 	@Autowired
 	@Lazy(true)
-	private MemberPlayAccountMapper MemberPlayAccountMapper;
+	private MemberPlayHisAccountMapper MemberPlayHisAccountMapper;
 
 	@Override
-	public Mapper<MemberPlayAccount> getBaseMapper() {
-		return MemberPlayAccountMapper;
+	public Mapper<MemberPlayHisAccount> getBaseMapper() {
+		return MemberPlayHisAccountMapper;
 	}
 
-	public MemberPlayAccountServiceImpl() {
+	public MemberPlayHisAccountServiceImpl() {
 		super();
 		if(redisTemplate== null){
 			redisTemplate = SpringContextHolder.getBean("redisTemplate");
@@ -68,7 +68,7 @@ public class MemberPlayAccountServiceImpl extends BaseService<MemberPlayAccount>
 	 * com.zwotech.modules.core.service.IBaseService#insertBatch(java.util.List)
 	 */
 	/*
-	 * @Override public int insertBatch(List<MemberPlayAccount> list) { // TODO
+	 * @Override public int insertBatch(List<MemberPlayHisAccount> list) { // TODO
 	 * Auto-generated method stub return 0; }
 	 */
 
@@ -92,25 +92,25 @@ public class MemberPlayAccountServiceImpl extends BaseService<MemberPlayAccount>
 	 * Object)
 	 */
 	@Override
-//	@CacheEvict(value = "MemberPlayAccount", allEntries = true)
+//	@CacheEvict(value = "MemberPlayHisAccount", allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
-		List<MemberPlayAccount> list = this.selectByExample(example);
-		for (MemberPlayAccount memberPlayAccount : list) {
-			RedisUtil.removeRedisKey(redisTemplate, memberPlayAccount.getId()+_KEY);
+		List<MemberPlayHisAccount> list = this.selectByExample(example);
+		for (MemberPlayHisAccount MemberPlayHisAccount : list) {
+			RedisUtil.removeRedisKey(redisTemplate, MemberPlayHisAccount.getId()+_KEY);
 		}
 		
 		// 逻辑操作
-		int result = MemberPlayAccountMapper.deleteByExample(example);
+		int result = MemberPlayHisAccountMapper.deleteByExample(example);
 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除结束");
 		return result;
 	}
 
-//	@CacheEvict(value = "MemberPlayAccount", allEntries = true)
+//	@CacheEvict(value = "MemberPlayHisAccount", allEntries = true)
 	// @Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
@@ -120,15 +120,15 @@ public class MemberPlayAccountServiceImpl extends BaseService<MemberPlayAccount>
 			logger.info(BASE_MESSAGE + "deleteBatch批量删除ID为：" + list.toString());
 
 		// 逻辑操作
-		MemberPlayAccountCriteria memberPlayAccountCriteria = new MemberPlayAccountCriteria();
-		memberPlayAccountCriteria.createCriteria().andIdIn(list);
+		MemberPlayHisAccountCriteria MemberPlayHisAccountCriteria = new MemberPlayHisAccountCriteria();
+		MemberPlayHisAccountCriteria.createCriteria().andIdIn(list);
 		
-		List<MemberPlayAccount> accounts = this.selectByExample(memberPlayAccountCriteria);
-		for (MemberPlayAccount memberPlayAccount : accounts) {
-			RedisUtil.removeRedisKey(redisTemplate, memberPlayAccount.getId()+_KEY);
+		List<MemberPlayHisAccount> accounts = this.selectByExample(MemberPlayHisAccountCriteria);
+		for (MemberPlayHisAccount MemberPlayHisAccount : accounts) {
+			RedisUtil.removeRedisKey(redisTemplate, MemberPlayHisAccount.getId()+_KEY);
 		}
 		
-		int result = MemberPlayAccountMapper.deleteByExample(memberPlayAccountCriteria);
+		int result = MemberPlayHisAccountMapper.deleteByExample(MemberPlayHisAccountCriteria);
 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteBatch批量删除结束");
@@ -144,7 +144,7 @@ public class MemberPlayAccountServiceImpl extends BaseService<MemberPlayAccount>
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "MemberPlayAccount", key = "#record.id+'_key_MemberPlayAccount'")
+	@CacheEvict(value = "MemberPlayHisAccount", key = "#record.id+'_key_MemberPlayHisAccount'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -167,8 +167,8 @@ public class MemberPlayAccountServiceImpl extends BaseService<MemberPlayAccount>
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "MemberPlayAccount", key = "#record.id+'_key_MemberPlayAccount'")
-	public int insert(MemberPlayAccount record) {
+//	@CachePut(value = "MemberPlayHisAccount", key = "#record.id+'_key_MemberPlayHisAccount'")
+	public int insert(MemberPlayHisAccount record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入开始");
@@ -194,8 +194,8 @@ public class MemberPlayAccountServiceImpl extends BaseService<MemberPlayAccount>
 	 */
 
 	@Override
-//	@CachePut(value = "MemberPlayAccount", key = "#record.id+'_key_MemberPlayAccount'")
-	public int insertSelective(MemberPlayAccount record) {
+//	@CachePut(value = "MemberPlayHisAccount", key = "#record.id+'_key_MemberPlayHisAccount'")
+	public int insertSelective(MemberPlayHisAccount record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入开始");
@@ -221,8 +221,8 @@ public class MemberPlayAccountServiceImpl extends BaseService<MemberPlayAccount>
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public List<MemberPlayAccount> selectByExample(Object example) {
-		return MemberPlayAccountMapper.selectByExample(example);
+	public List<MemberPlayHisAccount> selectByExample(Object example) {
+		return MemberPlayHisAccountMapper.selectByExample(example);
 	}
 
 	/*
@@ -233,9 +233,9 @@ public class MemberPlayAccountServiceImpl extends BaseService<MemberPlayAccount>
 	 * lang.String)
 	 */
 	@Override
-//	@Cacheable(key = "#record.id+'_key_MemberPlayAccount'", value = "MemberPlayAccount")
+//	@Cacheable(key = "#record.id+'_key_MemberPlayHisAccount'", value = "MemberPlayHisAccount")
 	@Transactional(readOnly = true)
-	public MemberPlayAccount selectByPrimaryKey(String id) {
+	public MemberPlayHisAccount selectByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询开始");
@@ -243,10 +243,10 @@ public class MemberPlayAccountServiceImpl extends BaseService<MemberPlayAccount>
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询参数为：" + id);
 
 		// 逻辑操作
-		MemberPlayAccount MemberPlayAccount = super.selectByPrimaryKey(id);
+		MemberPlayHisAccount MemberPlayHisAccount = super.selectByPrimaryKey(id);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询结束");
-		return MemberPlayAccount;
+		return MemberPlayHisAccount;
 	}
 
 	/*
@@ -256,9 +256,9 @@ public class MemberPlayAccountServiceImpl extends BaseService<MemberPlayAccount>
 	 * com.zwotech.modules.core.service.IBaseService#updateByExampleSelective(
 	 * java.lang.Object, java.lang.Object)
 	 */
-	@CacheEvict(value = "MemberPlayAccount", allEntries = true)
+	@CacheEvict(value = "MemberPlayHisAccount", allEntries = true)
 	@Override
-	public int updateByExampleSelective(MemberPlayAccount record, Object example) {
+	public int updateByExampleSelective(MemberPlayHisAccount record, Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新开始");
@@ -281,8 +281,8 @@ public class MemberPlayAccountServiceImpl extends BaseService<MemberPlayAccount>
 	 * Object, java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "MemberPlayAccount", allEntries = true)
-	public int updateByExample(MemberPlayAccount record, Object example) {
+	@CacheEvict(value = "MemberPlayHisAccount", allEntries = true)
+	public int updateByExample(MemberPlayHisAccount record, Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExample更新开始");
@@ -305,8 +305,8 @@ public class MemberPlayAccountServiceImpl extends BaseService<MemberPlayAccount>
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "MemberPlayAccount", key = "#record.id+'_key_MemberPlayAccount'")
-	public int updateByPrimaryKeySelective(MemberPlayAccount record) {
+	@CacheEvict(value = "MemberPlayHisAccount", key = "#record.id+'_key_MemberPlayHisAccount'")
+	public int updateByPrimaryKeySelective(MemberPlayHisAccount record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新开始");
@@ -328,8 +328,8 @@ public class MemberPlayAccountServiceImpl extends BaseService<MemberPlayAccount>
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "MemberPlayAccount", key = "#record.id+'_key_MemberPlayAccount'")
-	public int updateByPrimaryKey(MemberPlayAccount record) {
+	@CacheEvict(value = "MemberPlayHisAccount", key = "#record.id+'_key_MemberPlayHisAccount'")
+	public int updateByPrimaryKey(MemberPlayHisAccount record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新开始");
@@ -352,7 +352,7 @@ public class MemberPlayAccountServiceImpl extends BaseService<MemberPlayAccount>
 	 */
 	@Transactional(readOnly = true)
 	@Override
-	public PageInfo<MemberPlayAccount> selectByPageInfo(Object example, PageInfo<MemberPlayAccount> pageInfo) {
+	public PageInfo<MemberPlayHisAccount> selectByPageInfo(Object example, PageInfo<MemberPlayHisAccount> pageInfo) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页开始");
 		if (logger.isInfoEnabled())
@@ -361,15 +361,6 @@ public class MemberPlayAccountServiceImpl extends BaseService<MemberPlayAccount>
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页结束");
 		return pageInfo;
-	}
-
-	public static void main(String[] args) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
-		IMemberPlayAccountService MemberPlayAccountServiceImpl = (IMemberPlayAccountService) context.getBean("MemberPlayAccountServiceImpl");
-		MemberPlayAccount MemberPlayAccount = new MemberPlayAccount();
-		MemberPlayAccount.setId(System.currentTimeMillis() + "");
-		int result = MemberPlayAccountServiceImpl.insertSelective(MemberPlayAccount);
-		logger.info(result + "");
 	}
 
 }

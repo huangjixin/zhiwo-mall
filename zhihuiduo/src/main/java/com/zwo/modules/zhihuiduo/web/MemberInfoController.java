@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -12,11 +13,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.github.pagehelper.DatagridPage;
+import com.github.pagehelper.PageInfo;
 import com.zwo.modules.member.domain.Member;
 import com.zwo.modules.member.domain.MemberAccount;
+import com.zwo.modules.member.domain.MemberCriteria;
 import com.zwo.modules.member.domain.MemberPlayAccount;
+import com.zwo.modules.member.domain.MemberPlayHisAccount;
+import com.zwo.modules.member.domain.MemberPlayHisAccountCriteria;
 import com.zwo.modules.member.service.IMemberAddressService;
+import com.zwo.modules.member.service.IMemberPlayAccountService;
+import com.zwo.modules.member.service.IMemberPlayHisAccountService;
 import com.zwo.modules.member.service.IMemberService;
 import com.zwotech.common.web.BaseController;
 
@@ -31,6 +40,12 @@ public class MemberInfoController extends BaseController {
 	@Autowired
 	@Lazy(true)
 	private IMemberAddressService addressService;
+	@Autowired
+	@Lazy(true)
+	private IMemberPlayAccountService memberPlayAccountService;
+	@Autowired
+	@Lazy(true)
+	private IMemberPlayHisAccountService memberPlayHisAccountService;
 
 	// @SuppressWarnings("rawtypes")
 	// private RedisTemplate redisTemplate = SpringContextHolder
@@ -110,22 +125,71 @@ public class MemberInfoController extends BaseController {
 	 */
 	@RequiresAuthentication
 	@RequestMapping(value = { "memberPlayAccount" })
-	public String toMemberPlayAccount(
-			@ModelAttribute MemberPlayAccount memberPlayAccount, Model uiModel,
+	public String toMemberPlayAccount( Model uiModel,
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
+		
+		MemberPlayAccount memberPlayAccount = null;
 		// 会员的智慧豆账户。
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
 			Member member = (Member) subject.getSession()
 					.getAttribute("member");
 			if (member != null) {
-				memberPlayAccount = memberService
-						.selectMemberPlayAccountByMemberId(member.getId());
+//				memberPlayAccount = memberService
+//						.selectMemberPlayAccountByMemberId(member.getId());
+				memberPlayAccount = memberPlayAccountService.selectByPrimaryKey(member.getId());
 			}
 		}
-		uiModel.addAttribute(memberPlayAccount);
+		uiModel.addAttribute("memberPlayAccount",memberPlayAccount);
 		return basePath + "memberPlayAccount";
 	}
+	
+	
 
+	/**
+	 * 账户历史记录
+	 * @param pageInfo
+	 * @param member
+	 * @param uiModel
+	 * @param httpServletRequest
+	 * @param httpServletResponse
+	 * @return
+	 */
+	@RequestMapping(value = "selectMemberPlayHisAccount")
+	@ResponseBody
+	public DatagridPage<MemberPlayHisAccount> select(@ModelAttribute PageInfo<MemberPlayHisAccount> pageInfo, @ModelAttribute MemberPlayHisAccount memberPlayHisAccount, Model uiModel,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		
+		String p = httpServletRequest.getParameter("current");
+		String rows = httpServletRequest.getParameter("rowCount");
+		// 当前页 
+		int intPage = Integer.parseInt((p == null || p == "0") ? "1" : p);
+		// 每页显示条数 
+		int number = Integer.parseInt((rows == null || rows == "0") ? "10" : rows);
+
+		pageInfo.setPageNum(intPage);
+		pageInfo.setPageSize(number);
+ 
+		Subject subject = SecurityUtils.getSubject();
+		Member member = null;
+		if (subject != null) {
+			member = (Member) subject.getSession()
+					.getAttribute("member");
+		}
+		
+		MemberPlayHisAccountCriteria hisAccountCriteria = new MemberPlayHisAccountCriteria();
+		hisAccountCriteria.setOrderByClause("create_date desc");
+		if (member != null) {
+			hisAccountCriteria.createCriteria().andMemberIdEqualTo(member.getId());
+		}
+		
+		pageInfo = memberPlayHisAccountService.selectByPageInfo(hisAccountCriteria, pageInfo);
+		DatagridPage<MemberPlayHisAccount> page = new DatagridPage<MemberPlayHisAccount>();
+		page.setTotal(pageInfo.getTotal());
+		page.setRows(pageInfo.getList());
+		page.setCurrent(intPage);
+		page.setRowCount(number);
+		return page;
+	}
 }
