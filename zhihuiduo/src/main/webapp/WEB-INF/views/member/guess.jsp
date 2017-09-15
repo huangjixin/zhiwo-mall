@@ -124,7 +124,7 @@
 							style="width: 80%; color: #ffffff;">立即投注</button>
 						</shiro:user>
 						<shiro:notAuthenticated>
-							<span>你尚未登录</span>
+							<a href="${ctx}/memberLogin"><span>点击去登录</span></a>
 						</shiro:notAuthenticated>
 					</div>
 

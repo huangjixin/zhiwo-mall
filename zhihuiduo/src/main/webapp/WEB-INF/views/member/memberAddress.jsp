@@ -274,10 +274,9 @@ $option.css({ "background-color": "#DEDEDE" });
 			<div class="pull-left">
 				<div class="checkbox">
                 	<c:if test="${addr.isDefault=='0'}">
-					<label id="${addr.id}_defaultSettingLabel"
-						onClick="setDefaultMemberAddress('${addr.id}')">
-						<input type="checkbox">设为默认
-					</label>
+					<span class="label label-info" style="padding-top:5px;" id="${addr.id}_defaultSettingLabel"
+						onClick="setDefaultMemberAddress('${addr.id}')">设为默认
+					</span>
                     </c:if>
                     <c:if test="${addr.isDefault=='1'}">
 					<span class="label label-danger" id="${addr.id}_defaultLabel">已为默认</span>
@@ -378,7 +377,7 @@ $option.css({ "background-color": "#DEDEDE" });
 				 if(mode == "create"){
 					 var defaultUi = "";
 					 if(obj.isDefault=='0'){
-						defaultUi = '<label id="'+obj.id+'_defaultSettingLabel" onClick="setDefaultMemberAddress(\''+obj.id+'\')"> <input type="checkbox">设为默认 </label>';
+						defaultUi = '<span class="label label-info" style="padding-top:5px;"  id="'+obj.id+'_defaultSettingLabel" onClick="setDefaultMemberAddress(\''+obj.id+'\')">设为默认 </span>';
 					 }else if(obj.isDefault=='1'){
 						defaultUi = '<span class="label label-danger" id="'+obj.id+'_defaultLabel">已为默认</span>';
 					 }
@@ -407,6 +406,7 @@ $option.css({ "background-color": "#DEDEDE" });
 	}
 	
 	function setDefaultMemberAddress(addressId){
+		$("#"+addressId+"_defaultSettingLabel").html("正在设置……");
 		var url = "${ctx}/memberInfo/setDefaultMemberAddress";
 		var data = {};
 		data.id = addressId;

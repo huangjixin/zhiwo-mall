@@ -1,9 +1,5 @@
 package com.zwo.modules.zhihuiduo.web;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,22 +7,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import com.alibaba.fastjson.JSONArray;
-import com.zwo.modules.mall.domain.PrImage;
-import com.zwo.modules.mall.domain.PrImageType;
 import com.zwo.modules.mall.domain.PrProduct;
-import com.zwo.modules.mall.domain.PrProductPackagePrice;
-import com.zwo.modules.mall.domain.PrProductProperty;
-import com.zwo.modules.mall.domain.PrProductPropertyValue;
-import com.zwo.modules.mall.domain.PrProductWithBLOBs;
 import com.zwo.modules.mall.service.IPrImageService;
 import com.zwo.modules.mall.service.IPrProductPackagePriceService;
 import com.zwo.modules.mall.service.IPrProductPropertyService;
@@ -36,7 +23,6 @@ import com.zwo.modules.member.service.IMemberService;
 import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.service.IShopCategoryService;
 import com.zwo.modules.shop.service.IShopService;
-import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
 /**
@@ -91,8 +77,8 @@ public class MemberShopController extends BaseController {
 	 * @param httpServletResponse
 	 * @return
 	 */
-	@RequestMapping(value = { "memberShop" }, method = RequestMethod.GET)
-	public String memberShop(@RequestParam String shopId, Model uiModel,
+	@RequestMapping(value = "memberShop/{shopId:[0-9]+}", method = RequestMethod.GET)
+	public String memberShop(@PathVariable String shopId, Model uiModel,
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 
@@ -100,7 +86,7 @@ public class MemberShopController extends BaseController {
 		List<PrProduct> products = prductService
 				.selectPrProductsByShopId(shopId);
 		int productsCount = prductService.selectPrProductsCountByShopId(shopId);
-		
+
 		uiModel.addAttribute("shop", shop);
 		uiModel.addAttribute("products", products);
 		uiModel.addAttribute("productsCount", productsCount);

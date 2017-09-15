@@ -1,34 +1,23 @@
 package com.zwo.modules.zhihuiduo.web;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSON;
 import com.zwo.modules.member.domain.Member;
-import com.zwo.modules.member.domain.MemberAccount;
-import com.zwo.modules.member.domain.MemberAddress;
-import com.zwo.modules.member.domain.MemberPlayAccount;
 import com.zwo.modules.member.service.IMemberService;
-import com.zwo.modules.system.domain.TbUser;
-import com.zwo.modules.zhihuiduo.dto.MemberInfo;
 import com.zwotech.common.utils.PasswordHelper;
-import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
 /**
@@ -51,15 +40,27 @@ public class MemberLoginController extends BaseController {
 
 	private static final String basePath = "views/member/";
 
+	/**
+	 * 默认执行方法。
+	 * 
+	 * @param uiModel
+	 * @param httpServletRequest
+	 * @return
+	 */
+	@RequestMapping()
+	String defaultMethod(Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		return login(uiModel, httpServletRequest, httpServletResponse);
+	}
+
 	@RequestMapping(value = { "login" }, method = RequestMethod.GET)
 	public String login(Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		uiModel.addAttribute("rawData", 123456);
 		return basePath + "login";
 	}
 
 	@RequestMapping(value = { "login" }, method = RequestMethod.POST)
-	public String loginForm(Model uiModel,@RequestParam String username,
+	public String loginForm(Model uiModel, @RequestParam String username,
 			@RequestParam String password,
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -68,7 +69,6 @@ public class MemberLoginController extends BaseController {
 				password);
 		Subject currentUser = SecurityUtils.getSubject();
 		try {
-
 			if (!currentUser.isAuthenticated()) {
 				token.setRememberMe(true);
 				currentUser.login(token);// 验证角色和权限
@@ -80,8 +80,10 @@ public class MemberLoginController extends BaseController {
 		}
 		Member member = memberService.selectMember(username);
 		currentUser.getSession().setAttribute("member", member);
-//		uiModel.addAttribute("member", member);
-		return "redirect:/mindex";
+		// uiModel.addAttribute("member", member);
+		String url = WebUtils.getSavedRequest(httpServletRequest).getRequestUrl();
+		url=(url==null?"redirect:/mindex":url);
+		return url;
 	}
 
 	@RequestMapping(value = { "register" }, method = RequestMethod.GET)
