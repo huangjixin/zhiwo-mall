@@ -12,16 +12,16 @@
 </head>
 <body>
 	<div
-		style="height: 110px; background-color: #E02E24; color: #ffffff; padding-left: 10px;">
+		style="height: 80px; background-color: #E02E24; color: #ffffff; padding-left: 10px;">
 		<div style="height: 1px;"></div>
 		<div class="media">
         	<shiro:user>
 			<div class="media-left" href="#">
 				<img id="wechatIcon" class="media-object img-circle" <c:if test="${member!=null}"><c:if test="${member.icon!=null}">src="${ctx}/${member.icon}"</c:if></c:if> 
-					style="width: 80px;">
+					style="width: 60px;">
 			</div>
 			<div class="media-body">
-				<div style="height: 25px;"></div>
+				<div style="height: 15px;"></div>
 				<h4 class="media-heading" id="wechatName"><shiro:principal/></h4>
                 	余额: ${memberPlayAccount.zhihuidouCount} 智惠豆
 			</div>
@@ -32,7 +32,7 @@
         <thead>
             <tr>
             	<th data-column-id="id" data-identifier="true">ID</th>
-                <th data-column-id="createDate">时间</th>
+                <th data-column-id="createDate" data-formatter="createDate">时间</th>
                 <th data-column-id="zhihuidouCount">当时余额</th>
                 <th data-column-id="name">明细</th>
             </tr>
@@ -44,8 +44,46 @@
 		<label onClick="javascript:history.back();" class="activeProperyValue">返回</label>&nbsp;<label class="activeProperyValue"
         onClick="javascript:showDetail();">查看明细</label>
 	</div>
-	 <div style="height:20px">
+	 <div style="height:5px">
 		
+	</div>
+    <!-- 模态框（Modal） -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		style="width: 100%; margin: 0; position: fixed; bottom: 0; left: 0; right: 0;">
+		<div class="modal-dialog"
+			style="width: 100%; margin: 0; position: fixed; bottom: 0; left: 0; right: 0; border-radius: 0;">
+			<div class="modal-content" style="border-radius: 0;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel"
+						style="text-align: center;">趣味竞猜明细</h4>
+				</div>
+				<div class="modal-body" style="text-align: center;">
+					<form role="form">
+                      <div class="form-group">
+                        <label for="createDate">时间</label>
+                        <input type="text" class="form-control" id="createDate" placeholder="">
+                      </div>
+                      <div class="form-group">
+                        <label for="zhihuidouCount">当时智慧豆</label>
+                         <input type="text" class="form-control" id="zhihuidouCount" placeholder="">
+                      </div>
+                      
+                     <div class="form-group">
+                        <label for="name">明细</label>
+                        <textarea id="name" class="form-control" rows="3">${product.description}</textarea>
+                        
+                      </div>
+                    </form>
+				</div>
+				
+
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
 	</div>
     <script>
     	$(function () {
@@ -60,7 +98,13 @@
 				selection: true,
 				multiSelect: false,
 				rowSelect: true,
-				keepSelection: true
+				keepSelection: true,
+				formatters: {
+					"createDate": function(column, row)
+					{
+						return formatDateString(row.createDate);
+					}
+				}
 				
 			});
 			
@@ -69,10 +113,38 @@
 		
 		function showDetail(){
 			var selectedRows = $("#grid-data").bootgrid("getSelectedRows");
+			if(selectedRows.length==0){
+				return;
+			}
+			var id=selectedRows[0];
 			var currentRows = $("#grid-data").bootgrid("getCurrentRows");
-			var rows = $("#grid-data").bootgrid("getSelectedRows");	
-			var i = 0;
+			var obj={};
+			for(var i=0;i<currentRows.length;i++){
+				if(currentRows[i].id==id){
+					obj=currentRows[i];
+					break;
+				}
+			}
+			
+        	$("#createDate").val(formatDateString(obj.createDate));
+			$("#zhihuidouCount").val(obj.zhihuidouCount);
+			$("#name").val(obj.name);
+			$("#myModal").modal("show");
 		}
+		
+		function formatDateString(timestamp) {  
+			//timestamp为秒数  
+			var now = new Date(timestamp);  
+			  
+			var year=now.getFullYear();   
+			var month=now.getMonth()+1;   
+			var date=now.getDate();  
+			var hour=now.getHours();   
+			var minute=now.getMinutes();   
+			var second=now.getSeconds();  
+			var str = year+"-"+month+"-"+date+" "+" "+hour+":"+minute+":"+second;  
+			return str;  
+		}  
     </script>
 </body>
 </html>
