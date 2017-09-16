@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.alibaba.fastjson.JSONArray;
+import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.domain.PrImageType;
 import com.zwo.modules.mall.domain.PrProduct;
@@ -155,7 +156,7 @@ public class MemberGoodsController extends BaseController {
 		uiModel.addAttribute("propertiesString",
 				JSONArray.toJSONString(properties));
 		uiModel.addAttribute("product", product);
-		List<GroupPurcse> groupPurcses = groupPurcseService.selectGroupPurcseByPId(goodsId, false);
+		List<GroupPurcse> groupPurcses =  groupPurcseService.selectGroupPurcseByPId(goodsId, false);
 		uiModel.addAttribute("groupPurcses", groupPurcses);
 		return basePath + "goodsDetail";
 	}

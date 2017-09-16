@@ -448,4 +448,17 @@ FROM
     order by gp.CREATE_DATE asc limit 0,10
   </select>
   
+  
+  <!-- 查询没有成团的列表 -->
+  <select id="selectGroupPurcseByPId" parameterType="map" resultMap="BaseResultMap">
+  	SELECT 
+    	<include refid="Base_Column_List" />
+	FROM
+    group_purcse
+	WHERE
+    	PRODUCT_ID = #{productId,jdbcType=VARCHAR}
+        AND DISABLE = #{disable,jdbcType=BIT}
+        AND EXPIRED_TIME > (SELECT NOW()) 
+    order by CREATE_DATE desc limit 0,4
+  </select>
 </mapper>

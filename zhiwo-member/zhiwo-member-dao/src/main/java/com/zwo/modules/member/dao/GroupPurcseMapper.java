@@ -2,7 +2,9 @@ package com.zwo.modules.member.dao;
 
 import com.zwo.modules.member.domain.GroupPurcse;
 import com.zwo.modules.member.domain.GroupPurcseCriteria;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface GroupPurcseMapper {
@@ -100,4 +102,12 @@ public interface GroupPurcseMapper {
      * @return
      */
     List<GroupPurcse> selectUnFormByPId(@Param("productId")String productId);
+    
+    /**
+     * 根据产品ID查询没有成团的列表，仅查前面十条记录。
+     * @param productId
+     * @param disable
+     * @return
+     */
+    List<GroupPurcse>selectGroupPurcseByPId(@Param("productId")String productId,@Param("disable")boolean disable);
 }

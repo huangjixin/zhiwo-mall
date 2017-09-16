@@ -9,14 +9,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import tk.mybatis.mapper.common.Mapper;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -27,8 +26,6 @@ import com.zwo.modules.member.service.IGroupPurcseService;
 import com.zwotech.common.utils.RedisUtil;
 import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
-
-import tk.mybatis.mapper.common.Mapper;
 
 /**
  * @author hjx
@@ -402,18 +399,13 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 		return pageInfo;
 	}
 
+	
 	@Override
-	@Cacheable(key = "#productId+'_key_GroupPurcse'", value = "GroupPurcse")
+	@Cacheable(key = "#productId+'_key_GroupPurcse'", value = "GroupPurcses")
 	public List<GroupPurcse> selectGroupPurcseByPId(String productId,boolean disable) {
-		GroupPurcseCriteria groupPurcseCriteria = new GroupPurcseCriteria();
-		groupPurcseCriteria.createCriteria().andProductIdEqualTo(productId).andDisableEqualTo(disable);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "根据产品ID查询没有成团的列表，仅查前面十条记录开始，传入的商品ID是"+productId);
-		List<GroupPurcse> list = groupPurcseMapper.selectByExample(groupPurcseCriteria);
-		PageInfo<GroupPurcse> page = new PageInfo<GroupPurcse>(list);
-		page.setList(list);
-		page.setEndRow(4);
-		page.setStartRow(0);
+		List<GroupPurcse> list = groupPurcseMapper.selectGroupPurcseByPId(productId,disable);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "根据产品ID查询没有成团的列表，仅查前面十条记录结束，结果数目："+list.size());
 		return list;
