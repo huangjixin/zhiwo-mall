@@ -155,7 +155,7 @@ public class MemberGoodsController extends BaseController {
 		uiModel.addAttribute("propertiesString",
 				JSONArray.toJSONString(properties));
 		uiModel.addAttribute("product", product);
-		List<GroupPurcse> groupPurcses = groupPurcseService.selectUnFormByPId(goodsId);
+		List<GroupPurcse> groupPurcses = groupPurcseService.selectGroupPurcseByPId(goodsId, false);
 		uiModel.addAttribute("groupPurcses", groupPurcses);
 		return basePath + "goodsDetail";
 	}

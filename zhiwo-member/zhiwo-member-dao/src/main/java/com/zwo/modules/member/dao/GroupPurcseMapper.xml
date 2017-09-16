@@ -434,7 +434,7 @@
 FROM
     group_purcse gp
         LEFT JOIN
-    zwoshop.pr_product product ON product.id = gp.PRODUCT_ID
+    pr_product product ON product.id = gp.PRODUCT_ID
         LEFT JOIN
     group_purcse_member gpm ON gp.id = gpm.GROUP_PURCSE_ID
         LEFT JOIN

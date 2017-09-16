@@ -26,7 +26,7 @@ public interface IMemberService extends IBaseService<Member> {
 	 * @param memberId
 	 * @return
 	 */
-	List<MemberAddress> selectMemberAddressByMId(String memberId);
+//	List<MemberAddress> selectMemberAddressByMId(String memberId);
 	
 	/**
 	 * 根据会员Id进行会员账户查询。

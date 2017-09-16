@@ -18,5 +18,5 @@ public interface IGroupPurcseService extends IBaseService<GroupPurcse> {
      * @param productId
      * @return
      */
-    List<GroupPurcse> selectUnFormByPId(String productId);
+    List<GroupPurcse> selectGroupPurcseByPId(String productId,boolean disable);
 }

@@ -1,6 +1,6 @@
 /**
- * 
- */
+* 
+*/
 package com.zwo.modules.member.service.impl;
 
 import java.util.List;
@@ -9,26 +9,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import tk.mybatis.mapper.common.Mapper;
+
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.zwo.modules.member.dao.GroupPurcseMapper;
-import com.zwo.modules.member.domain.GroupPurcse;
-import com.zwo.modules.member.domain.GroupPurcseCriteria;
-import com.zwo.modules.member.service.IGroupPurcseService;
+import com.zwo.modules.member.dao.GroupPurcseMemberMapper;
+import com.zwo.modules.member.domain.GroupPurcseMember;
+import com.zwo.modules.member.domain.GroupPurcseMemberCriteria;
+import com.zwo.modules.member.service.IGroupPurcseMemberService;
 import com.zwotech.common.utils.RedisUtil;
 import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
-
-import tk.mybatis.mapper.common.Mapper;
 
 /**
  * @author hjx
@@ -37,27 +34,31 @@ import tk.mybatis.mapper.common.Mapper;
 @Service
 @Lazy(true)
 @Transactional(readOnly = false)
-public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
-		IGroupPurcseService {
-	private static Logger logger = LoggerFactory
-			.getLogger(GroupPurcseServiceImpl.class);
+public class GroupPurcseMemberServiceImpl extends BaseService<GroupPurcseMember> implements IGroupPurcseMemberService {
+	private static Logger logger = LoggerFactory.getLogger(GroupPurcseMemberServiceImpl.class);
 
-	private static final String BASE_MESSAGE = "【GroupPurcseServiceImpl服务类提供的基础操作增删改查等】";
-
-	private static final String KEY_GROUP_PURCSE = "_key_GroupPurcse";
+	private static final String BASE_MESSAGE = "【GroupPurcseMemberServiceImpl服务类提供的基础操作增删改查等】";
+	
+	private static final String KEY_GROUP_PURCSE_MEMBER = "_key_GroupPurcseMember";
 
 	@Autowired
 	@Lazy(true)
-	private GroupPurcseMapper groupPurcseMapper;
+	private GroupPurcseMemberMapper groupPurcseMemberMapper;
 
 	@Override
-	public Mapper<GroupPurcse> getBaseMapper() {
+	public Mapper<GroupPurcseMember> getBaseMapper() {
 		return null;
 	}
 
 	@SuppressWarnings("rawtypes")
 	private RedisTemplate redisTemplate;
-
+	
+	public GroupPurcseMemberServiceImpl() {
+		super();
+		if (redisTemplate == null) {
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
+	}
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -65,7 +66,7 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 	 * com.zwotech.modules.core.service.IBaseService#insertBatch(java.util.List)
 	 */
 	/*
-	 * @Override public int insertBatch(List<GroupPurcse> list) { // TODO
+	 * @Override public int insertBatch(List<GroupPurcseMember> list) { // TODO
 	 * Auto-generated method stub return 0; }
 	 */
 
@@ -81,12 +82,6 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 	 * Auto-generated method stub return 0; }
 	 */
 
-	public GroupPurcseServiceImpl() {
-		super();
-		if (redisTemplate == null) {
-			redisTemplate = SpringContextHolder.getBean("redisTemplate");
-		}
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -100,20 +95,17 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
-		List<GroupPurcse> list = groupPurcseMapper
-				.selectByExample((GroupPurcseCriteria) example);
+		List<GroupPurcseMember> list = groupPurcseMemberMapper.selectByExample((GroupPurcseMemberCriteria)example);
 		try {
-			for (GroupPurcse groupPurcse : list) {
-				RedisUtil.removeRedisKey(redisTemplate, groupPurcse.getId()
-						+ KEY_GROUP_PURCSE);
+			for (GroupPurcseMember GroupPurcseMember : list) {
+				RedisUtil.removeRedisKey(redisTemplate, GroupPurcseMember.getId()+KEY_GROUP_PURCSE_MEMBER);
 			}
 		} catch (Exception e) {
-
+			
 		}
-
+		
 		// 逻辑操作
-		int result = groupPurcseMapper
-				.deleteByExample((GroupPurcseCriteria) example);
+		int result = groupPurcseMemberMapper.deleteByExample((GroupPurcseMemberCriteria) example);
 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除结束");
@@ -129,20 +121,18 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 			logger.info(BASE_MESSAGE + "deleteBatch批量删除ID为：" + list.toString());
 
 		// 逻辑操作
-		GroupPurcseCriteria GroupPurcseCriteria = new GroupPurcseCriteria();
-		GroupPurcseCriteria.createCriteria().andIdIn(list);
-		List<GroupPurcse> groupPurcses = groupPurcseMapper
-				.selectByExample(GroupPurcseCriteria);
+		GroupPurcseMemberCriteria GroupPurcseMemberCriteria = new GroupPurcseMemberCriteria();
+		GroupPurcseMemberCriteria.createCriteria().andIdIn(list);
+		List<GroupPurcseMember> GroupPurcseMembers = groupPurcseMemberMapper.selectByExample(GroupPurcseMemberCriteria);
 		try {
-			for (GroupPurcse groupPurcse : groupPurcses) {
-				RedisUtil.removeRedisKey(redisTemplate, groupPurcse.getId()
-						+ KEY_GROUP_PURCSE);
+			for (GroupPurcseMember GroupPurcseMember : GroupPurcseMembers) {
+				RedisUtil.removeRedisKey(redisTemplate, GroupPurcseMember.getId()+KEY_GROUP_PURCSE_MEMBER);
 			}
 		} catch (Exception e) {
-
+			
 		}
-
-		int result = groupPurcseMapper.deleteByExample(GroupPurcseCriteria);
+		
+		int result = groupPurcseMemberMapper.deleteByExample(GroupPurcseMemberCriteria);
 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteBatch批量删除结束");
@@ -157,19 +147,18 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "GroupPurcse", key = "#id+''")
+	@CacheEvict(value = "GroupPurcseMember", key = "#id+''")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除开始");
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为："
-					+ id.toString());
+			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为：" + id.toString());
 
 		// 逻辑操作
-		int result = groupPurcseMapper.deleteByPrimaryKey(id);
-		RedisUtil.removeRedisKey(redisTemplate, id + KEY_GROUP_PURCSE);
-
+		int result = groupPurcseMemberMapper.deleteByPrimaryKey(id);
+		RedisUtil.removeRedisKey(redisTemplate, id+KEY_GROUP_PURCSE_MEMBER);
+		
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除结束");
 		return result;
@@ -182,8 +171,8 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	// @Cacheable(value = "GroupPurcse", key = "#record.id")
-	public int insert(GroupPurcse record) {
+//	@Cacheable(value = "GroupPurcseMember", key = "#record.id")
+	public int insert(GroupPurcseMember record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入开始");
@@ -191,10 +180,9 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
-			record.setId(System.currentTimeMillis() + ""
-					+ Math.round(Math.random() * 99));
+			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
 		}
-		int result = groupPurcseMapper.insert(record);
+		int result = groupPurcseMemberMapper.insert(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入结束");
 		return result;
@@ -208,8 +196,8 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 	 * Object)
 	 */
 	@Override
-	// @CachePut(value = "GroupPurcse", key = "#record.id")
-	public int insertSelective(GroupPurcse record) {
+//	@CachePut(value = "GroupPurcseMember", key = "#record.id")
+	public int insertSelective(GroupPurcseMember record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入开始");
@@ -217,10 +205,9 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
-			record.setId(System.currentTimeMillis() + ""
-					+ Math.round(Math.random() * 99));
+			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
 		}
-		int result = groupPurcseMapper.insertSelective(record);
+		int result = groupPurcseMemberMapper.insertSelective(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入结束");
 		return result;
@@ -235,8 +222,8 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public List<GroupPurcse> selectByExample(Object example) {
-		return groupPurcseMapper.selectByExample((GroupPurcseCriteria) example);
+	public List<GroupPurcseMember> selectByExample(Object example) {
+		return groupPurcseMemberMapper.selectByExample((GroupPurcseMemberCriteria) example);
 	}
 
 	/*
@@ -247,9 +234,9 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+'_key_GroupPurcse'", value = "GroupPurcse")
+	@Cacheable(key = "#id+'_key_GroupPurcseMember'", value = "GroupPurcseMember")
 	@Transactional(readOnly = true)
-	public GroupPurcse selectByPrimaryKey(String id) {
+	public GroupPurcseMember selectByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询开始");
@@ -257,10 +244,10 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询参数为：" + id);
 
 		// 逻辑操作
-		GroupPurcse GroupPurcse = groupPurcseMapper.selectByPrimaryKey(id);
+		GroupPurcseMember GroupPurcseMember = groupPurcseMemberMapper.selectByPrimaryKey(id);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询结束");
-		return GroupPurcse;
+		return GroupPurcseMember;
 	}
 
 	/*
@@ -271,22 +258,18 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 	 * java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public int updateByExampleSelective(GroupPurcse record, Object example) {
+	public int updateByExampleSelective(GroupPurcseMember record, Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新开始");
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为："
-					+ record.toString());
-		List<GroupPurcse> list = groupPurcseMapper
-				.selectByExample((GroupPurcseCriteria) example);
-		for (GroupPurcse groupPurcse : list) {
-			RedisUtil.removeRedisKey(redisTemplate, groupPurcse.getId()
-					+ KEY_GROUP_PURCSE);
+			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
+		List<GroupPurcseMember> list = groupPurcseMemberMapper.selectByExample((GroupPurcseMemberCriteria)example);
+		for (GroupPurcseMember GroupPurcseMember : list) {
+			RedisUtil.removeRedisKey(redisTemplate, GroupPurcseMember.getId()+KEY_GROUP_PURCSE_MEMBER);
 		}
 		// 逻辑操作
-		int result = groupPurcseMapper.updateByExampleSelective(record,
-				(GroupPurcseCriteria) example);
+		int result = groupPurcseMemberMapper.updateByExampleSelective(record, (GroupPurcseMemberCriteria) example);
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新结束");
@@ -301,22 +284,18 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 	 * Object, java.lang.Object)
 	 */
 	@Override
-	public int updateByExample(GroupPurcse record, Object example) {
+	public int updateByExample(GroupPurcseMember record, Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExample更新开始");
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByExample更新对象为："
-					+ record.toString());
-		List<GroupPurcse> list = groupPurcseMapper
-				.selectByExample((GroupPurcseCriteria) example);
-		for (GroupPurcse groupPurcse : list) {
-			RedisUtil.removeRedisKey(redisTemplate, groupPurcse.getId()
-					+ KEY_GROUP_PURCSE);
+			logger.info(BASE_MESSAGE + "updateByExample更新对象为：" + record.toString());
+		List<GroupPurcseMember> list = groupPurcseMemberMapper.selectByExample((GroupPurcseMemberCriteria)example);
+		for (GroupPurcseMember GroupPurcseMember : list) {
+			RedisUtil.removeRedisKey(redisTemplate, GroupPurcseMember.getId()+KEY_GROUP_PURCSE_MEMBER);
 		}
 		// 逻辑操作
-		int result = groupPurcseMapper.updateByExample(record,
-				(GroupPurcseCriteria) example);
+		int result = groupPurcseMemberMapper.updateByExample(record, (GroupPurcseMemberCriteria) example);
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExample更新结束");
@@ -331,19 +310,17 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "GroupPurcse", key = "#record.id+'_key_GroupPurcse'")
-	public int updateByPrimaryKeySelective(GroupPurcse record) {
+	@CacheEvict(value = "GroupPurcseMember", key = "#record.id+'_key_GroupPurcseMember'")
+	public int updateByPrimaryKeySelective(GroupPurcseMember record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新开始");
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为："
-					+ record.toString());
-		RedisUtil.removeRedisKey(redisTemplate, record.getId()
-				+ KEY_GROUP_PURCSE);
-
+			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
+		RedisUtil.removeRedisKey(redisTemplate, record.getId()+KEY_GROUP_PURCSE_MEMBER);
+		
 		// 逻辑操作
-		int result = groupPurcseMapper.updateByPrimaryKeySelective(record);
+		int result = groupPurcseMemberMapper.updateByPrimaryKeySelective(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新结束");
 		return result;
@@ -357,18 +334,16 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "GroupPurcse", key = "#record.id+'_key_GroupPurcse'")
-	public int updateByPrimaryKey(GroupPurcse record) {
+	@CacheEvict(value = "GroupPurcseMember", key = "#record.id+'_key_GroupPurcseMember'")
+	public int updateByPrimaryKey(GroupPurcseMember record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新开始");
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为："
-					+ record.toString());
-		RedisUtil.removeRedisKey(redisTemplate, record.getId()
-				+ KEY_GROUP_PURCSE);
+			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为：" + record.toString());
+		RedisUtil.removeRedisKey(redisTemplate, record.getId()+KEY_GROUP_PURCSE_MEMBER);
 		// 逻辑操作
-		int result = groupPurcseMapper.updateByPrimaryKey(record);
+		int result = groupPurcseMemberMapper.updateByPrimaryKey(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新结束");
 		return result;
@@ -383,16 +358,14 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 	 */
 	@Transactional(readOnly = true)
 	@Override
-	public PageInfo<GroupPurcse> selectByPageInfo(Object example,
-			PageInfo<GroupPurcse> pageInfo) {
+	public PageInfo<GroupPurcseMember> selectByPageInfo(Object example, PageInfo<GroupPurcseMember> pageInfo) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页参数：" + pageInfo.toString());
 		PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
-		List<GroupPurcse> list = groupPurcseMapper
-				.selectByExample((GroupPurcseCriteria) example);
-		PageInfo<GroupPurcse> page = new PageInfo<GroupPurcse>(list);
+		List<GroupPurcseMember> list = groupPurcseMemberMapper.selectByExample((GroupPurcseMemberCriteria) example);
+		PageInfo<GroupPurcseMember> page = new PageInfo<GroupPurcseMember>(list);
 		pageInfo.setList(list);
 		pageInfo.setTotal(page.getTotal());
 		pageInfo.setEndRow(page.getEndRow());
@@ -403,19 +376,16 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 	}
 
 	@Override
-	@Cacheable(key = "#productId+'_key_GroupPurcse'", value = "GroupPurcse")
-	public List<GroupPurcse> selectGroupPurcseByPId(String productId,boolean disable) {
-		GroupPurcseCriteria groupPurcseCriteria = new GroupPurcseCriteria();
-		groupPurcseCriteria.createCriteria().andProductIdEqualTo(productId).andDisableEqualTo(disable);
+	@Transactional(readOnly = true)
+	public int countByGroupPurcseId(String groupPurcseId) {
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "根据产品ID查询没有成团的列表，仅查前面十条记录开始，传入的商品ID是"+productId);
-		List<GroupPurcse> list = groupPurcseMapper.selectByExample(groupPurcseCriteria);
-		PageInfo<GroupPurcse> page = new PageInfo<GroupPurcse>(list);
-		page.setList(list);
-		page.setEndRow(4);
-		page.setStartRow(0);
+			logger.info(BASE_MESSAGE + "根据开团的ID查询中间表个数开始，团的参数是："+groupPurcseId);
+		GroupPurcseMemberCriteria criteria = new GroupPurcseMemberCriteria();
+		criteria.createCriteria().andGroupPurcseIdEqualTo(groupPurcseId);
+		int result = groupPurcseMemberMapper.countByExample(criteria);
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "根据产品ID查询没有成团的列表，仅查前面十条记录结束，结果数目："+list.size());
-		return list;
+			logger.info(BASE_MESSAGE + "根据开团的ID查询中间表个数结束，结果个数是："+result);
+		return result;
 	}
+
 }

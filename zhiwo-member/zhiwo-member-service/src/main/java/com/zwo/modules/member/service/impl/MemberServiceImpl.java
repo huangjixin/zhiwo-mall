@@ -15,6 +15,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +50,8 @@ import com.zwo.modules.member.domain.MemberPlayHisAccount;
 import com.zwo.modules.member.domain.MemberPlayHisAccountCriteria;
 import com.zwo.modules.member.service.IMemberService;
 import com.zwotech.common.utils.PasswordHelper;
+import com.zwotech.common.utils.RedisUtil;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
 
 /**
@@ -62,6 +65,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	private static Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
 
 	private static final String BASE_MESSAGE = "【MemberServiceImpl服务类提供的基础操作增删改查等】";
+	private static final String KEY_KEY_MEMBER = "_key_key_member";
 
 	@Autowired
 	@Lazy(true)
@@ -112,11 +116,20 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	@Lazy(true)
 	private GuessQuestionMapper questionMapper;
 
+	private RedisTemplate redisTemplate;
+	
 	@Override
 	public Mapper<Member> getBaseMapper() {
 		return memberMapper;
 	}
 
+
+	public MemberServiceImpl() {
+		super();
+		if(redisTemplate==null){
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
+	}
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -140,6 +153,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	 * Auto-generated method stub return 0; }
 	 */
 
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -148,12 +162,14 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = "Member", allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
-
+		List<Member> list = this.selectByExample(example);
+		for (Member member : list) {
+			RedisUtil.removeRedisKey(redisTemplate, member.getId()+KEY_KEY_MEMBER);
+		}
 		// 逻辑操作
 		int result = memberMapper.deleteByExample(example);
 
@@ -162,7 +178,6 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		return result;
 	}
 
-	@CacheEvict(value = "Member", allEntries = true)
 //	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
@@ -174,6 +189,11 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		// 逻辑操作
 		MemberCriteria memberCriteria = new MemberCriteria();
 		memberCriteria.createCriteria().andIdIn(list);
+		List<Member> members = this.selectByExample(memberCriteria);
+		for (Member member : members) {
+			RedisUtil.removeRedisKey(redisTemplate, member.getId()+KEY_KEY_MEMBER);
+		}
+		
 		int result = memberMapper.deleteByExample(memberCriteria);
 
 		if (logger.isInfoEnabled())
@@ -189,7 +209,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "Member", key="#id+'_member'")
+	@CacheEvict(value = "Member", key="#id+'_key_member'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -197,6 +217,8 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为：" + id.toString());
 
+		RedisUtil.removeRedisKey(redisTemplate, id+KEY_KEY_MEMBER);
+		
 		// 逻辑操作
 		int result = super.deleteByPrimaryKey(id);
 
@@ -212,7 +234,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	//@CachePut(value = "Member", key = "#record.id+'_member'")
+	//@CachePut(value = "Member", key = "#record.id+'_key_member'")
 	public int insert(Member record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -245,7 +267,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	 */
 
 	@Override
-	//@CachePut(value = "Member", key = "#record.id+'_member'")
+	//@CachePut(value = "Member", key = "#record.id+'_key_member'")
 	public int insertSelective(Member record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -310,7 +332,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+'_member'", value = "Member")
+	@Cacheable(key = "#id+'_key_member'", value = "Member")
 	@Transactional(readOnly = true)
 	public Member selectByPrimaryKey(String id) {
 		// 日志记录
@@ -333,7 +355,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	 * com.zwotech.modules.core.service.IBaseService#updateByExampleSelective(
 	 * java.lang.Object, java.lang.Object)
 	 */
-	@CacheEvict(value = "Member", allEntries = true)
+//	@CacheEvict(value = "Member", allEntries = true)
 	@Override
 	public int updateByExampleSelective(Member record, Object example) {
 		// 日志记录
@@ -344,6 +366,11 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		if ("".equals(record.getParentId())) {
 			record.setParentId(null);
 		}
+		List<Member> list = this.selectByExample(example);
+		for (Member member : list) {
+			RedisUtil.removeRedisKey(redisTemplate, member.getId()+KEY_KEY_MEMBER);
+		}
+		
 		// 逻辑操作
 		int result = super.updateByExampleSelective(record, example);
 		// 日志记录
@@ -373,6 +400,10 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		if (record.getPassword() != null) {
 			record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
 		}
+		List<Member> list = this.selectByExample(example);
+		for (Member member : list) {
+			RedisUtil.removeRedisKey(redisTemplate, member.getId()+KEY_KEY_MEMBER);
+		}
 		//逻辑操作		
 		int result = super.updateByExample(record, example);
 		//日志记录
@@ -389,7 +420,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "Member", key="#record.id+'_member'")
+	@CacheEvict(value = "Member", key="#record.id+'_key_member'")
 	public int updateByPrimaryKeySelective(Member record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -417,7 +448,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "Member", key="#record.id+'_member'")
+	@CacheEvict(value = "Member", key="#record.id+'_key_member'")
 	public int updateByPrimaryKey(Member record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -457,28 +488,6 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		return pageInfo;
 	}
 
-	public static void main(String[] args) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/mall-applicationContext.xml");// 此文件放在SRC目录下
-		IMemberService memberServiceImpl = (IMemberService) context.getBean("memberServiceImpl");
-		Member member = new Member();
-		member.setId(System.currentTimeMillis() + "");
-		int result = memberServiceImpl.insertSelective(member);
-		logger.info(result + "");
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	@Cacheable(value = "MemberAddress", key="#root.method.name+#memberId")
-	public List<MemberAddress> selectMemberAddressByMId(String memberId) {
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "会员查询地址开始");
-		MemberAddressCriteria memberAddressCriteria = new MemberAddressCriteria();
-		memberAddressCriteria.createCriteria().andMemberIdEqualTo(memberId);
-		List<MemberAddress> list = addressMapper.selectByExample(memberAddressCriteria);
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "会员查询地址结束,结果："+list.size());
-		return list;
-	}
 
 	@Override
 	@Transactional(readOnly = true)
