@@ -401,6 +401,7 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 
 	
 	@Override
+	@Transactional(readOnly = true)
 	@Cacheable(key = "#productId+'_key_GroupPurcse'", value = "GroupPurcses")
 	public List<GroupPurcse> selectGroupPurcseByPId(String productId,boolean disable) {
 		if (logger.isInfoEnabled())

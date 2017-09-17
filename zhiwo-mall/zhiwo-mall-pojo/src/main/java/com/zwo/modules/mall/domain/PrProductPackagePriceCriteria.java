@@ -254,52 +254,62 @@ public class PrProductPackagePriceCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andIndependentPriceEqualTo(Double value) {
+        public Criteria andIndependentPriceEqualTo(String value) {
             addCriterion("INDEPENDENT_PRICE =", value, "independentPrice");
             return (Criteria) this;
         }
 
-        public Criteria andIndependentPriceNotEqualTo(Double value) {
+        public Criteria andIndependentPriceNotEqualTo(String value) {
             addCriterion("INDEPENDENT_PRICE <>", value, "independentPrice");
             return (Criteria) this;
         }
 
-        public Criteria andIndependentPriceGreaterThan(Double value) {
+        public Criteria andIndependentPriceGreaterThan(String value) {
             addCriterion("INDEPENDENT_PRICE >", value, "independentPrice");
             return (Criteria) this;
         }
 
-        public Criteria andIndependentPriceGreaterThanOrEqualTo(Double value) {
+        public Criteria andIndependentPriceGreaterThanOrEqualTo(String value) {
             addCriterion("INDEPENDENT_PRICE >=", value, "independentPrice");
             return (Criteria) this;
         }
 
-        public Criteria andIndependentPriceLessThan(Double value) {
+        public Criteria andIndependentPriceLessThan(String value) {
             addCriterion("INDEPENDENT_PRICE <", value, "independentPrice");
             return (Criteria) this;
         }
 
-        public Criteria andIndependentPriceLessThanOrEqualTo(Double value) {
+        public Criteria andIndependentPriceLessThanOrEqualTo(String value) {
             addCriterion("INDEPENDENT_PRICE <=", value, "independentPrice");
             return (Criteria) this;
         }
 
-        public Criteria andIndependentPriceIn(List<Double> values) {
+        public Criteria andIndependentPriceLike(String value) {
+            addCriterion("INDEPENDENT_PRICE like", value, "independentPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndependentPriceNotLike(String value) {
+            addCriterion("INDEPENDENT_PRICE not like", value, "independentPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndependentPriceIn(List<String> values) {
             addCriterion("INDEPENDENT_PRICE in", values, "independentPrice");
             return (Criteria) this;
         }
 
-        public Criteria andIndependentPriceNotIn(List<Double> values) {
+        public Criteria andIndependentPriceNotIn(List<String> values) {
             addCriterion("INDEPENDENT_PRICE not in", values, "independentPrice");
             return (Criteria) this;
         }
 
-        public Criteria andIndependentPriceBetween(Double value1, Double value2) {
+        public Criteria andIndependentPriceBetween(String value1, String value2) {
             addCriterion("INDEPENDENT_PRICE between", value1, value2, "independentPrice");
             return (Criteria) this;
         }
 
-        public Criteria andIndependentPriceNotBetween(Double value1, Double value2) {
+        public Criteria andIndependentPriceNotBetween(String value1, String value2) {
             addCriterion("INDEPENDENT_PRICE not between", value1, value2, "independentPrice");
             return (Criteria) this;
         }
@@ -584,6 +594,136 @@ public class PrProductPackagePriceCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andDisableIsNull() {
+            addCriterion("DISABLE is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableIsNotNull() {
+            addCriterion("DISABLE is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableEqualTo(Byte value) {
+            addCriterion("DISABLE =", value, "disable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableNotEqualTo(Byte value) {
+            addCriterion("DISABLE <>", value, "disable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableGreaterThan(Byte value) {
+            addCriterion("DISABLE >", value, "disable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableGreaterThanOrEqualTo(Byte value) {
+            addCriterion("DISABLE >=", value, "disable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableLessThan(Byte value) {
+            addCriterion("DISABLE <", value, "disable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableLessThanOrEqualTo(Byte value) {
+            addCriterion("DISABLE <=", value, "disable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableIn(List<Byte> values) {
+            addCriterion("DISABLE in", values, "disable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableNotIn(List<Byte> values) {
+            addCriterion("DISABLE not in", values, "disable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableBetween(Byte value1, Byte value2) {
+            addCriterion("DISABLE between", value1, value2, "disable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableNotBetween(Byte value1, Byte value2) {
+            addCriterion("DISABLE not between", value1, value2, "disable");
+            return (Criteria) this;
+        }
+
+        public Criteria andIconIsNull() {
+            addCriterion("ICON is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIconIsNotNull() {
+            addCriterion("ICON is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIconEqualTo(String value) {
+            addCriterion("ICON =", value, "icon");
+            return (Criteria) this;
+        }
+
+        public Criteria andIconNotEqualTo(String value) {
+            addCriterion("ICON <>", value, "icon");
+            return (Criteria) this;
+        }
+
+        public Criteria andIconGreaterThan(String value) {
+            addCriterion("ICON >", value, "icon");
+            return (Criteria) this;
+        }
+
+        public Criteria andIconGreaterThanOrEqualTo(String value) {
+            addCriterion("ICON >=", value, "icon");
+            return (Criteria) this;
+        }
+
+        public Criteria andIconLessThan(String value) {
+            addCriterion("ICON <", value, "icon");
+            return (Criteria) this;
+        }
+
+        public Criteria andIconLessThanOrEqualTo(String value) {
+            addCriterion("ICON <=", value, "icon");
+            return (Criteria) this;
+        }
+
+        public Criteria andIconLike(String value) {
+            addCriterion("ICON like", value, "icon");
+            return (Criteria) this;
+        }
+
+        public Criteria andIconNotLike(String value) {
+            addCriterion("ICON not like", value, "icon");
+            return (Criteria) this;
+        }
+
+        public Criteria andIconIn(List<String> values) {
+            addCriterion("ICON in", values, "icon");
+            return (Criteria) this;
+        }
+
+        public Criteria andIconNotIn(List<String> values) {
+            addCriterion("ICON not in", values, "icon");
+            return (Criteria) this;
+        }
+
+        public Criteria andIconBetween(String value1, String value2) {
+            addCriterion("ICON between", value1, value2, "icon");
+            return (Criteria) this;
+        }
+
+        public Criteria andIconNotBetween(String value1, String value2) {
+            addCriterion("ICON not between", value1, value2, "icon");
+            return (Criteria) this;
+        }
+
         public Criteria andIdLikeInsensitive(String value) {
             addCriterion("upper(ID) like", value.toUpperCase(), "id");
             return (Criteria) this;
@@ -591,6 +731,11 @@ public class PrProductPackagePriceCriteria {
 
         public Criteria andPropertiesLikeInsensitive(String value) {
             addCriterion("upper(PROPERTIES) like", value.toUpperCase(), "properties");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndependentPriceLikeInsensitive(String value) {
+            addCriterion("upper(INDEPENDENT_PRICE) like", value.toUpperCase(), "independentPrice");
             return (Criteria) this;
         }
 
@@ -611,6 +756,11 @@ public class PrProductPackagePriceCriteria {
 
         public Criteria andPropertyValueIdLikeInsensitive(String value) {
             addCriterion("upper(PROPERTY_VAlUE_ID) like", value.toUpperCase(), "propertyValueId");
+            return (Criteria) this;
+        }
+
+        public Criteria andIconLikeInsensitive(String value) {
+            addCriterion("upper(ICON) like", value.toUpperCase(), "icon");
             return (Criteria) this;
         }
     }

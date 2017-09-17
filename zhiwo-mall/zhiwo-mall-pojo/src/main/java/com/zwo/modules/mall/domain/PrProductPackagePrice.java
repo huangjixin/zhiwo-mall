@@ -44,6 +44,15 @@ public class PrProductPackagePrice implements Serializable {
     @Column(name = "PROPERTY_VAlUE_ID")
     private String propertyValueId;
 
+    @Column(name = "DISABLE")
+    private Byte disable;
+
+    /**
+     * 属性对应的图片
+     */
+    @Column(name = "ICON")
+    private String icon;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -93,7 +102,7 @@ public class PrProductPackagePrice implements Serializable {
      * @param independentPrice 属性值组合价
      */
     public void setIndependentPrice(String independentPrice) {
-        this.independentPrice = independentPrice;
+        this.independentPrice = independentPrice == null ? null : independentPrice.trim();
     }
 
     /**
@@ -162,5 +171,37 @@ public class PrProductPackagePrice implements Serializable {
      */
     public void setPropertyValueId(String propertyValueId) {
         this.propertyValueId = propertyValueId == null ? null : propertyValueId.trim();
+    }
+
+    /**
+     * @return DISABLE
+     */
+    public Byte getDisable() {
+        return disable;
+    }
+
+    /**
+     * @param disable
+     */
+    public void setDisable(Byte disable) {
+        this.disable = disable;
+    }
+
+    /**
+     * 获取属性对应的图片
+     *
+     * @return ICON - 属性对应的图片
+     */
+    public String getIcon() {
+        return icon;
+    }
+
+    /**
+     * 设置属性对应的图片
+     *
+     * @param icon 属性对应的图片
+     */
+    public void setIcon(String icon) {
+        this.icon = icon == null ? null : icon.trim();
     }
 }
