@@ -91,7 +91,7 @@ public class MemberGoodsController extends BaseController {
 	 * @param httpServletResponse
 	 * @return
 	 */
-	@RequestMapping(value = { "goodsDetail" }, method = RequestMethod.GET)
+	@RequestMapping(value = "goodsDetail", method = RequestMethod.GET)
 	public String goodsDetail(@RequestParam String goodsId, Model uiModel,
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {

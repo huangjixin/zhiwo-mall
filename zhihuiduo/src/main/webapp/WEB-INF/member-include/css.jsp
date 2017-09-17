@@ -174,4 +174,11 @@ a:hover {
 .label-danger {
 	padding-top: 5px;
 }
+
+.fadeDiv{
+	position: fixed; z-index:999; top:40px; left:10px; background-color:#000000;FILTER:alpha(opacity=80);opacity:0.8;-moz-opacity:0.8;color:white; font-size:1.4rem;border-radius:6px; height:35px; padding:0px; padding-right:10px;
+}
+.fadeImg{
+	height:35px;border-radius:4px;border-top-right-radius:0px;border-bottom-right-radius:0px;
+}
 </style>

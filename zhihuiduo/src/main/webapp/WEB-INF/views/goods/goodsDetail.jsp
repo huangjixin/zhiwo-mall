@@ -382,13 +382,23 @@ body {
 						type="hidden"> <input id="proValues" name="proValues"
 						type="hidden"><input id="mode" name="mode"
 						type="hidden">
-					<button type="submit" class="btn btn-danger"
+                     <shiro:authenticated>
+							<button type="submit" class="btn btn-danger"
 						style="width: 100%; margin: 0; position: fixed; bottom: 0; left: 0; right: 0; border-radius: 0px;">
 						确定</button>
+						</shiro:authenticated>
+						<shiro:notAuthenticated>
+							<a href="${ctx}/memberLogin"><button type="button" class="btn btn-danger"
+						style="width: 100%; margin: 0; position: fixed; bottom: 0; left: 0; right: 0; border-radius: 0px;">
+						去登录</button></a>
+						</shiro:notAuthenticated>
+					
 				</form>
 			</div>
 		</div>
 	</div>
+    
+    <%@ include file="/WEB-INF/member-include/fade-ui.jsp"%>
 	<%@ include file="/WEB-INF/member-include/bottomMenu.jsp"%>
 	<script>
 		var propertiesString = '${propertiesString}';
@@ -525,6 +535,9 @@ body {
 											});
 											
 							 $("img").lazyload({effect: "fadeIn"});
+							 /*$("#p").hide(100,function(){
+								 self.setInterval("fadeInOut('p')",6000); 
+							 });*/
 						});
 
 		var selectedProperyPackagePrice = "";
@@ -686,6 +699,12 @@ body {
 				return true;
 			}
 		}
+		
+		function fadeInOut(detination){
+			$("#"+detination).fadeOut(2000).fadeIn(1000);
+		}
+		
+		<%--<%@ include file="/WEB-INF/member-include/fade-js.jsp"%>--%>
 
 		var swiper = new Swiper('.swiper-container');
 	</script>

@@ -41,7 +41,7 @@
 					</p>
 					<c:forEach var="options"
 						items="${guessQuestionOption.guessQuestionOptions}">
-						<p onClick="bet('${options.id}')">
+						<p onClick="bet('${options.id}','${guessQuestionOption.guessQuestion.id}')">
 							<span id="${options.id}_name">${options.name}</span> <span
 								class="pull-right">猜中回报率&nbsp;<span
 								id="${options.id}_betRate" style="color: red;">${options.betRate}</span>&nbsp;<i
@@ -113,21 +113,26 @@
 						</span>
 					</div>
 					<br>
-					<form id="form" action="" method="post">
-						<input id="bet" value="" type="hidden" /> <input id="optionsId"
-							value="" type="hidden" />
-					</form>
+                    
+					<form id="form" action="${ctx}/memberGuess/guessCheckOut" method="post">
+                    	<shiro:user>
+						<input id="bet" value="" type="hidden" name="bet" /> 
+                        <input id="optionsId" name="optionId" value="" type="hidden" />
+                        <input id="questionId" name="questionId" value="" type="hidden" />
+                        </shiro:user>
+                    
 					<!--required:true,number:true}-->
 					<div style="text-align: center">
 						<shiro:user>
-							<button type="submit" class="btn btn-danger"
-							style="width: 80%; color: #ffffff;">立即投注</button>
+							<button id="submitBtn" disabled="true" type="button" onClick="save();" class="btn btn-danger"
+							style="width: 100%; margin: 0; position: fixed; bottom: 0; left: 0; right: 0; border-radius: 0px;">立即投注</button>
 						</shiro:user>
 						<shiro:notAuthenticated>
-							<a href="${ctx}/memberLogin"><span>点击去登录</span></a>
+							<a href="${ctx}/memberLogin"><button disabled="true" type="button" onClick="save();" class="btn btn-danger"
+							style="width: 100%; margin: 0; position: fixed; bottom: 0; left: 0; right: 0; border-radius: 0px;">点击去登录</button></a>
 						</shiro:notAuthenticated>
 					</div>
-
+					</form>
 				</div>
 				<div class="modal-footer" style="text-align: center;"></div>
 
