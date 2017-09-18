@@ -214,38 +214,45 @@ public class ProductController extends BaseController<PrProduct> {
 			}
 		}
 		JSONArray perpertyArray = null;
+		perpertyArray = (JSONArray) JSONArray.parse(propertyValues);
+		for (Object object : perpertyArray) {
+			JSONObject jsonObject = (JSONObject) object;
+			PrProductPropertyValue productProperty = new PrProductPropertyValue();
+			productProperty.setId(jsonObject.getString("id"));
+			productProperty.setProductId(product.getId());
+			productProperty.setPropertyId(jsonObject
+					.getString("propertyId"));
+			productProperty.setName((String) jsonObject.get("name"));
+			productPropertyValueService.insertSelective(productProperty);
+		}
 		if (null != propertyValues && !"".equals(propertyValues)) {
-			perpertyArray = (JSONArray) JSONArray.parse(propertyValues);
-			for (Object object : perpertyArray) {
-				JSONObject jsonObject = (JSONObject) object;
-				PrProductPropertyValue productProperty = new PrProductPropertyValue();
-				productProperty.setId(jsonObject.getString("id"));
-				productProperty.setProductId(product.getId());
-				productProperty.setPropertyId(jsonObject
-						.getString("propertyId"));
-				productProperty.setName((String) jsonObject.get("name"));
-				productPropertyValueService.insertSelective(productProperty);
-			}
+			
 		}
 
 		JSONArray perPriceArray = null;
+		
+		perPriceArray = (JSONArray) JSONArray.parse(propertyPrices);
+		for (Object obj : perPriceArray) {
+			JSONObject json = (JSONObject) obj;
+			PrProductPackagePrice packagePrice = new PrProductPackagePrice();
+			String id = json.getString("id");
+			String groupPrice = json.getString("groupPrice");
+			String indepentPrice = json.getString("indepentPrice");
+			String pId = product.getId();
+			String pValueId = json.getString("propertyValueId");
+			String icon = json.getString("icon");
+			String disable = json.getString("disable");
+			packagePrice.setIcon(icon);
+			packagePrice.setDisable(Byte.valueOf(disable));
+			packagePrice.setId(id);
+			packagePrice.setGourpPrice(groupPrice);
+			packagePrice.setIndependentPrice(indepentPrice);
+			packagePrice.setProductId(pId);
+			packagePrice.setPropertyValueId(pValueId);
+			packagePriceService.insertSelective(packagePrice);
+		}
 		if (null != propertyPrices && !"".equals(propertyPrices)) {
-			perPriceArray = (JSONArray) JSONArray.parse(propertyPrices);
-			for (Object obj : perPriceArray) {
-				JSONObject json = (JSONObject) obj;
-				PrProductPackagePrice packagePrice = new PrProductPackagePrice();
-				String id = json.getString("id");
-				String groupPrice = json.getString("groupPrice");
-				String indepentPrice = json.getString("indepentPrice");
-				String pId = product.getId();
-				String pValueId = json.getString("propertyValueId");
-				packagePrice.setId(id);
-				packagePrice.setGourpPrice(groupPrice);
-				packagePrice.setIndependentPrice(indepentPrice);
-				packagePrice.setProductId(pId);
-				packagePrice.setPropertyValueId(pValueId);
-				packagePriceService.insertSelective(packagePrice);
-			}
+			
 		}
 		// redirectAttributes.addFlashAttribute("propertyValues",
 		// propertyValues);
@@ -282,12 +289,31 @@ public class ProductController extends BaseController<PrProduct> {
 		}
 
 		JSONArray perpertyArray = null;
+		List<PrProductPropertyValue> productPropertyValues = this.productPropertyValueService
+				.selectByProductId(product.getId());
+
+		perpertyArray = (JSONArray) JSONArray.parse(propertyValues);
+		if(perpertyArray==null){
+			perpertyArray = new JSONArray();
+		}
+		productPropertyValueService.deleteByProductId(product.getId());
+
+		for (Object object : perpertyArray) {
+			JSONObject jsonObject = (JSONObject) object;
+			PrProductPropertyValue productProperty = new PrProductPropertyValue();
+			productProperty.setId(jsonObject.getString("id"));
+			productProperty.setProductId(product.getId());
+			productProperty.setImageId(jsonObject.getString("imageId"));
+			productProperty.setPropertyId(jsonObject
+					.getString("propertyId"));
+			productProperty.setName((String) jsonObject.get("name"));
+			productPropertyValueService
+					.insertSelective(productProperty);
+		}
+		
 		if (null != propertyValues && !"".equals(propertyValues)) {
 			boolean reConnect = false;
-			List<PrProductPropertyValue> productPropertyValues = this.productPropertyValueService
-					.selectByProductId(product.getId());
-
-			perpertyArray = (JSONArray) JSONArray.parse(propertyValues);
+			
 
 			for (int i = 0; i < perpertyArray.size(); i++) {
 				JSONObject object = (JSONObject) perpertyArray.get(i);
@@ -307,29 +333,46 @@ public class ProductController extends BaseController<PrProduct> {
 			reConnect = true;
 			// 重新建立关联关系
 			if (reConnect == true) {
-				productPropertyValueService.deleteByProductId(product.getId());
-
-				for (Object object : perpertyArray) {
-					JSONObject jsonObject = (JSONObject) object;
-					PrProductPropertyValue productProperty = new PrProductPropertyValue();
-					productProperty.setId(jsonObject.getString("id"));
-					productProperty.setProductId(product.getId());
-					productProperty.setImageId(jsonObject.getString("imageId"));
-					productProperty.setPropertyId(jsonObject
-							.getString("propertyId"));
-					productProperty.setName((String) jsonObject.get("name"));
-					productPropertyValueService
-							.insertSelective(productProperty);
-				}
+				
 			}
 		}
 
 		JSONArray perPriceArray = null;
+		perPriceArray = (JSONArray) JSONArray.parse(propertyPrices);
+		if(perPriceArray==null){
+			perPriceArray = new JSONArray();
+		}
+		List<PrProductPackagePrice> packagePrices = packagePriceService
+				.selectByProductId(product.getId());
+		packagePriceService.deleteByProductId(product.getId());
+		for (Object obj : perPriceArray) {
+			JSONObject json = (JSONObject) obj;
+			PrProductPackagePrice packagePrice = new PrProductPackagePrice();
+			String id = json.getString("id");
+			String uuid = UUID.randomUUID().toString()
+					.replaceAll("-", "");
+			id = uuid;
+			String groupPrice = json.getString("groupPrice");
+			String indepentPrice = json.getString("indepentPrice");
+			String pId = product.getId();
+			String pValueId = json.getString("propertyValueId");
+			String icon = json.getString("icon");
+//			String disable = json.getString("disable");
+			String disable = "0";
+			packagePrice.setIcon(icon);
+			packagePrice.setDisable(Byte.valueOf(disable));
+			packagePrice.setId(id);
+			packagePrice.setGourpPrice(groupPrice);
+			packagePrice.setIndependentPrice(indepentPrice);
+			packagePrice.setProductId(pId);
+			packagePrice.setPropertyValueId(pValueId);
+			packagePriceService.insertSelective(packagePrice);
+		}
+		
+		/*
 		if (null != propertyPrices && !"".equals(propertyPrices)) {
 			boolean reConnect = false;
-			perPriceArray = (JSONArray) JSONArray.parse(propertyPrices);
-			List<PrProductPackagePrice> packagePrices = packagePriceService
-					.selectByProductId(product.getId());
+			
 			
 			if (perPriceArray.size() == packagePrices.size()) {
 				for (int i = 0; i < perPriceArray.size(); i++) {
@@ -399,27 +442,9 @@ public class ProductController extends BaseController<PrProduct> {
 			reConnect = true;
 			// 重新建立关联关系
 			if (reConnect == true) {
-				packagePriceService.deleteByProductId(product.getId());
-				for (Object obj : perPriceArray) {
-					JSONObject json = (JSONObject) obj;
-					PrProductPackagePrice packagePrice = new PrProductPackagePrice();
-					String id = json.getString("id");
-					String uuid = UUID.randomUUID().toString()
-							.replaceAll("-", "");
-					id = uuid;
-					String groupPrice = json.getString("groupPrice");
-					String indepentPrice = json.getString("indepentPrice");
-					String pId = product.getId();
-					String pValueId = json.getString("propertyValueId");
-					packagePrice.setId(id);
-					packagePrice.setGourpPrice(groupPrice);
-					packagePrice.setIndependentPrice(indepentPrice);
-					packagePrice.setProductId(pId);
-					packagePrice.setPropertyValueId(pValueId);
-					packagePriceService.insertSelective(packagePrice);
-				}
+				
 			}
-		}
+		}*/
 
 		int res = this.productService.updateByPrimaryKeySelective(product);
 		if (res == 1) {

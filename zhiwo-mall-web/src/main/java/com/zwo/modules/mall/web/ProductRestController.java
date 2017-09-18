@@ -146,6 +146,7 @@ public class ProductRestController extends BaseController<PrProduct> {
 		
 		return product;
 	}
+	
 	@RequiresPermissions("mall:product:view")
 	@RequestMapping(value = "/select")
 	public DatagridPage<PrProduct> select(@ModelAttribute PageInfo<PrProduct> pageInfo, @ModelAttribute PrProduct product, Model uiModel,
