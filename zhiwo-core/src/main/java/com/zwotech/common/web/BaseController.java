@@ -59,6 +59,13 @@ public class BaseController<T extends Serializable> {
 		DatagridPage<T> page = new DatagridPage<T>();
 		page.setTotal(pageInfo.getTotal());
 		page.setRows(pageInfo.getList());
+		page.setRowCount(pageInfo.getPageSize());
+		int i = (int) (page.getTotal()%page.getRowCount());
+		int j = (int) (page.getTotal()/page.getRowCount());
+		if(i !=0){
+			j+=1;
+		}
+		page.setPages(j);
 		return page;
 	}
 

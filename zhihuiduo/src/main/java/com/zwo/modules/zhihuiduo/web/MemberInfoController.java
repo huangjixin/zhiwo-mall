@@ -76,6 +76,9 @@ public class MemberInfoController extends BaseController {
 	public String getMemInfo(Model uiModel,
 			HttpServletRequest httpServletRequest) {
 		Subject subject = SecurityUtils.getSubject();
+		if(!subject.isAuthenticated()){
+			return "/memberLogin";
+		}
 		if (subject != null) {
 			Member member = (Member) subject.getSession()
 					.getAttribute("member");

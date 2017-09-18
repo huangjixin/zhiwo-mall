@@ -40,6 +40,7 @@ public class DatagridPage<E> implements Serializable{
     private static final long serialVersionUID = 1L;
     private int current=1;
     private int rowCount = 10;
+    private int pages=1;
     
     public int getCurrent() {
 		return current;
@@ -90,6 +91,14 @@ public class DatagridPage<E> implements Serializable{
 	 */
 	public void setRows(List<E> rows) {
 		this.rows = rows;
+	}
+
+	public int getPages() {
+		return pages;
+	}
+
+	public void setPages(int pages) {
+		this.pages = pages;
 	}
     
 }
