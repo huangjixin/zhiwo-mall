@@ -249,59 +249,62 @@ $option.css({ "background-color": "#DEDEDE" });
 </script>
 </head>
 <body>
-    <div class="page-header"
-		style="text-align: center; font-size: 2rem; position:fixed; background-color:#fff; left:0;right:0; top:0; padding-top:10px; margin-top:0;">
-		<b>收货地址</b>&nbsp;&nbsp;<small  style="color:red;" onClick="javascript:history.back();">返回</small>
+	<div class="page-header"
+		style="text-align: center; font-size: 2rem; position: fixed; background-color: #fff; left: 0; right: 0; top: 0; padding-top: 10px; margin-top: 0;">
+		<b>收货地址</b>&nbsp;&nbsp;<small style="color: red;"
+			onClick="backForward()">返回</small>
 	</div>
-    <div style="height:45px;"></div>
+	<div style="height: 45px;"></div>
+
 	<div id="addressDiv">
-    	<!--地址循环开始-->
-    <c:forEach var="addr" items="${addresses}">
-    	<div class="thumbnail" id="${addr.id}_thumbnail">
-		<div class="caption">
-			<input id="${addr.id}" type="hidden"
-				value="${addr.id}" />
-			<p>
-				<span id="${addr.id}_name">${addr.name}</span>,<span
-					id="${addr.id}_mobilPhone">${addr.mobilPhone}</span>
-			</p>
-			<p>
-				<span id="${addr.id}_province">${addr.province}</span><span
-					id="${addr.id}_city">${addr.city}</span><span
-					id="${addr.id}_street">${addr.street}</span>
-			</p>
-			<hr class="hr1" />
-			<div class="pull-left">
-				<div class="checkbox">
-                	<c:if test="${addr.isDefault=='0'}">
-					<span class="label label-info" style="padding-top:5px;" id="${addr.id}_defaultSettingLabel"
-						onClick="setDefaultMemberAddress('${addr.id}')">设为默认
-					</span>
-                    </c:if>
-                    <c:if test="${addr.isDefault=='1'}">
-					<span class="label label-danger" id="${addr.id}_defaultLabel">已为默认</span>
-                    </c:if>
+		<!--地址循环开始-->
+		<c:forEach var="addr" items="${addresses}">
+			<div class="thumbnail" id="${addr.id}_thumbnail"
+				onClick="searialForm('${addr.id}');return false;">
+				<div class="caption">
+					<input id="${addr.id}" type="hidden" value="${addr.id}" />
+					<p>
+						<span id="${addr.id}_name">${addr.name}</span>,<span
+							id="${addr.id}_mobilPhone">${addr.mobilPhone}</span>
+					</p>
+					<p>
+						<span id="${addr.id}_province">${addr.province}</span><span
+							id="${addr.id}_city">${addr.city}</span><span
+							id="${addr.id}_street">${addr.street}</span>
+					</p>
+					<hr class="hr1" />
+					<div class="pull-left">
+						<div class="checkbox">
+							<c:if test="${addr.isDefault=='0'}">
+								<span class="label label-info" style="padding-top: 5px;"
+									id="${addr.id}_defaultSettingLabel"
+									onClick="setDefaultMemberAddress('${addr.id}')">设为默认 </span>
+							</c:if>
+							<c:if test="${addr.isDefault=='1'}">
+								<span class="label label-danger" id="${addr.id}_defaultLabel">已为默认</span>
+							</c:if>
+						</div>
+					</div>
+					<div class="pull-right" style="font-weight: normal;">
+						<span class="label label-info" style="padding-top: 5px;"
+							onClick="edit('${addr.id}')"> <i
+							class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;编辑
+						</span> &nbsp;&nbsp; <span class="label label-danger"
+							style="padding-top: 5px;"
+							onClick="deleteMemberAddress('${addr.id}')"> <i
+							class="fa fa-trash-o" aria-hidden="true"></i>&nbsp;&nbsp;删除
+						</span>
+					</div>
+
+
+					<div class="clearfix"></div>
 				</div>
 			</div>
-			<div class="pull-right" style="font-weight: normal;">
-				<span class="label label-info" style="padding-top: 5px;"
-					onClick="edit('${addr.id}')"> <i
-					class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;编辑
-				</span> &nbsp;&nbsp; <span class="label label-danger"
-					style="padding-top: 5px;" onClick="deleteMemberAddress('${addr.id}')"> <i class="fa fa-trash-o"
-					aria-hidden="true"></i>&nbsp;&nbsp;删除
-				</span>
-			</div>
+		</c:forEach>
 
-
-			<div class="clearfix"></div>
-		</div>
+		<!--地址循环结束-->
 	</div>
-    </c:forEach>
-	
-    <!--地址循环结束-->
-    </div>
-    
+
 	<div style="text-align: center; margin-bottom: 20px; margin-top: 16px;">
 		<button class="btn btn-danger" data-toggle="modal"
 			data-target="#myModal"
@@ -356,6 +359,27 @@ $option.css({ "background-color": "#DEDEDE" });
 	</div>
 	<script type="text/javascript">
 	var mode = "create";
+	var fromUrl = "${fromURL}";
+	function backForward(){
+		history.back();
+	}
+	
+	function searialForm(addressId){
+		$("#id").val(addressId);
+		var name = $("#"+addressId+"_name").html();
+		$("#name").val(name);
+		var mobilPhone = $("#"+addressId+"_mobilPhone").html();
+		$("#mobilPhone").val(mobilPhone);
+		var province = $("#"+addressId+"_province").html();
+		$("#selProvince").val(province);
+		$('#selProvince').change();
+		var city = $("#"+addressId+"_city").html();
+		$("#selCity").val(city);
+		var street = $("#"+addressId+"_street").html();
+		$("#street").val(street);
+	}
+	
+	
 	function save(){
 		var bootstrapValidator = $("#form").data('bootstrapValidator');
 		bootstrapValidator.validate();

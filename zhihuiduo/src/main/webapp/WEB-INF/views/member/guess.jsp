@@ -41,7 +41,8 @@
 					</p>
 					<c:forEach var="options"
 						items="${guessQuestionOption.guessQuestionOptions}">
-						<p onClick="bet('${options.id}','${guessQuestionOption.guessQuestion.id}')">
+						<p
+							onClick="bet('${options.id}','${guessQuestionOption.guessQuestion.id}')">
 							<span id="${options.id}_name">${options.name}</span> <span
 								class="pull-right">猜中回报率&nbsp;<span
 								id="${options.id}_betRate" style="color: red;">${options.betRate}</span>&nbsp;<i
@@ -113,25 +114,28 @@
 						</span>
 					</div>
 					<br>
-                    
-					<form id="form" action="${ctx}/memberGuess/guessCheckOut" method="post">
-                    	<shiro:user>
-						<input id="bet" value="" type="hidden" name="bet" /> 
-                        <input id="optionsId" name="optionId" value="" type="hidden" />
-                        <input id="questionId" name="questionId" value="" type="hidden" />
-                        </shiro:user>
-                    
-					<!--required:true,number:true}-->
-					<div style="text-align: center">
-						<shiro:user>
-							<button id="submitBtn" disabled="true" type="button" onClick="save();" class="btn btn-danger"
-							style="width: 100%; margin: 0; position: fixed; bottom: 0; left: 0; right: 0; border-radius: 0px;">立即投注</button>
-						</shiro:user>
-						<shiro:notAuthenticated>
-							<a href="${ctx}/memberLogin"><button disabled="true" type="button" onClick="save();" class="btn btn-danger"
-							style="width: 100%; margin: 0; position: fixed; bottom: 0; left: 0; right: 0; border-radius: 0px;">点击去登录</button></a>
-						</shiro:notAuthenticated>
-					</div>
+
+					<form id="form" action="${ctx}/memberGuess/guessCheckOut"
+						method="post">
+						<shiro:authenticated>
+							<input id="bet" value="" type="hidden" name="bet" />
+							<input id="optionsId" name="optionId" value="" type="hidden" />
+							<input id="questionId" name="questionId" value="" type="hidden" />
+						</shiro:authenticated>
+
+						<!--required:true,number:true}-->
+						<div style="text-align: center">
+							<shiro:authenticated>
+								<button id="submitBtn" disabled="true" type="button"
+									onClick="save();" class="btn btn-danger"
+									style="width: 100%; margin: 0; position: fixed; bottom: 0; left: 0; right: 0; border-radius: 0px;">立即投注</button>
+							</shiro:authenticated>
+							<shiro:notAuthenticated>
+								<a href="${ctx}/memberLogin"><button disabled="true"
+										type="button" onClick="save();" class="btn btn-danger"
+										style="width: 100%; margin: 0; position: fixed; bottom: 0; left: 0; right: 0; border-radius: 0px;">点击去登录</button></a>
+							</shiro:notAuthenticated>
+						</div>
 					</form>
 				</div>
 				<div class="modal-footer" style="text-align: center;"></div>
@@ -141,13 +145,15 @@
 		</div>
 		<!-- /.modal -->
 	</div>
-	
+
 	<%--<%@ include file="/WEB-INF/member-include/bottomIndex.jsp"%>--%>
-            <!--$("#indexBtn").removeClass("menuItemActive");	
+	<!--$("#indexBtn").removeClass("menuItemActive");	
 			$("#indexBtn").addClass("menuItem");
 			$("#guessBtn").addClass("menuItemActive");-->
 	<script type="text/javascript">
-		<%@ include file="/WEB-INF/member-include/js-guess.jsp"%>
+		
+	<%@ include file="/WEB-INF/member-include/js-guess.jsp"%>
+		
 	</script>
 
 </body>

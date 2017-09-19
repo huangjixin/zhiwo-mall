@@ -3,6 +3,7 @@ package com.zwo.modules.zhihuiduo.web;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -218,6 +219,13 @@ public class MemberOrderController extends BaseController<TbUser> {
 		orderTradeService.insertSelective(orderTrade);
 
 		uiModel.addAttribute("order", orderTrade);
+		
+		
+		List<MemberAddress> list = null;
+		if (member != null) {
+			list = addressService.listAllByMemberId(member.getId());
+		}
+		uiModel.addAttribute("addresses", list);
 		return basePath + "checkOut";
 		// return "redirect:/memberOrder/checkOut";
 	}

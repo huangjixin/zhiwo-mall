@@ -44,6 +44,15 @@ public class MemberAddressController extends BaseController {
 
 	private static final String basePath = "views/member/";
 
+	/*@RequestMapping()
+	public String defaultMethod(Model uiModel,
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		return selectAddress(uiModel,
+				 httpServletRequest,
+				 httpServletResponse);
+	}*/
+	
 	@RequiresAuthentication
 	@RequestMapping(value = { "memberAddress" })
 	public String selectAddress(Model uiModel,
@@ -59,13 +68,26 @@ public class MemberAddressController extends BaseController {
 			}
 		}
 
-		/*
-		 * MemberAddressCriteria addressCriteria = new MemberAddressCriteria();
-		 * addressCriteria.setOrderByClause("create_date asc"); list =
-		 * addressService.selectByExample(addressCriteria);
-		 */
 		uiModel.addAttribute("addresses", list);
 		return basePath + "memberAddress";
+	}
+	
+	@RequiresAuthentication
+	@RequestMapping(value = { "listAllByMemberId" })
+	public List<MemberAddress> listAllByMemberId(Model uiModel,
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		List<MemberAddress> list = null;
+		Subject subject = SecurityUtils.getSubject();
+		if (subject != null) {
+			Member member = (Member) subject.getSession()
+					.getAttribute("member");
+			if (member != null) {
+				list = addressService.listAllByMemberId(member.getId());
+			}
+		}
+		
+		return list;
 	}
 
 	@RequiresAuthentication
