@@ -7,35 +7,20 @@
 <title>智惠多商品云购.会员登录</title>
 <%@ include file="/WEB-INF/member-include/css.jsp"%>
 <%@ include file="/WEB-INF/member-include/js.jsp"%>
+<link href="${ctx}/css/signin.css" rel="stylesheet">
+<%@ include file="/WEB-INF/include/easyui-js.jsp"%>
 </head>
 <body>
-	<form class="form-horizontal" role="form" action="${ctx}/memberLogin/login" method="post">
-  <div class="form-group">
-    <label for="username" class="col-sm-2 control-label">账号</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control" id="username" name="username" placeholder="请输入用户名/手机号">
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="password" class="col-sm-2 control-label">密码</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control" id="password" name="password" placeholder="请输入密码">
-    </div>
-  </div>
-  <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-      <div class="checkbox">
-        <label>
-          <input type="checkbox">请记住我
-        </label>
-      </div>
-    </div>
-  </div>
-  <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default">登录</button>
-    </div>
-  </div>
-</form>
+<div class="signin">
+	<div class="signin-head"><img src="images/test/head_120.png" alt="" class="img-circle"></div>
+	<form class="form-signin" role="form" action="${ctx}/memberLogin/login?fromURL=${fromURL}" method="post">
+		<input id="username" name="username" type="text" class="form-control" placeholder="用户名" required autofocus />
+		<input id="password" name="password" type="password" class="form-control" placeholder="密码" required />
+		<button class="btn btn-lg btn-warning btn-block" type="submit">登录</button>
+<!-- 		<label class="checkbox"> -->
+<!-- 			<input type="checkbox" value="rememberMe"> 记住我 -->
+<!-- 		</label> -->
+	</form>
+</div>
 </body>
 </html>

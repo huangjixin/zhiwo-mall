@@ -50,18 +50,25 @@ public class MemberLoginController extends BaseController {
 	@RequestMapping()
 	String defaultMethod(Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		return login(uiModel, httpServletRequest, httpServletResponse);
+		return login(uiModel, httpServletRequest, httpServletResponse,"");
 	}
 
 	@RequestMapping(value = { "login" }, method = RequestMethod.GET)
 	public String login(Model uiModel, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
+			HttpServletResponse httpServletResponse,
+			@RequestParam(required=false,defaultValue="") String fromURL) {
+		String localAddr = httpServletRequest.getLocalAddr();
+		String remoteAddr = httpServletRequest.getRemoteAddr();
+		String URL=httpServletRequest.getHeader("Referer");
+		uiModel.addAttribute("fromURL",URL);
+		
 		return basePath + "login";
 	}
 
 	@RequestMapping(value = { "login" }, method = RequestMethod.POST)
 	public String loginForm(Model uiModel, @RequestParam String username,
 			@RequestParam String password,
+			@RequestParam(required=false,defaultValue="") String fromURL,
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		password = PasswordHelper.encryptPassword(password);
@@ -76,15 +83,17 @@ public class MemberLoginController extends BaseController {
 		} catch (Exception ex) {
 			// throw new Exception("用户名或者密码错误");
 			uiModel.addAttribute("message", "用户名或者密码错误");
-			return "login";
+			return "/memberLogin/login";
 		}
 		Member member = memberService.selectMember(username);
 		currentUser.getSession().setAttribute("member", member);
 		// uiModel.addAttribute("member", member);
-		String url = WebUtils.getSavedRequest(httpServletRequest).getRequestUrl();
-		url=(url==null?"redirect:/mindex":url);
+		//String url = WebUtils.getSavedRequest(httpServletRequest).getRequestUrl();
+		String url = fromURL;
+		url=("".equals(url)?"redirect:/mindex":"redirect:"+url);
 		return url;
 	}
+	
 
 	@RequestMapping(value = { "register" }, method = RequestMethod.GET)
 	public String register(Model uiModel,
