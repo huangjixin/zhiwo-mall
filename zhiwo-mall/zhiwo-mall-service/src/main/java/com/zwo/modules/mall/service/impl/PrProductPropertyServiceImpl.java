@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.dao.PrProductPropertyMapper;
+import com.zwo.modules.mall.domain.PrProduct;
+import com.zwo.modules.mall.domain.PrProductCriteria;
 import com.zwo.modules.mall.domain.PrProductProperty;
 import com.zwo.modules.mall.domain.PrProductPropertyCriteria;
 import com.zwo.modules.mall.service.IPrProductPropertyService;
@@ -39,7 +41,9 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	private static Logger logger = LoggerFactory.getLogger(PrProductPropertyServiceImpl.class);
 
 	private static final String BASE_MESSAGE = "【PrProductPropertyServiceImpl服务类提供的基础操作增删改查等】";
-	private static final String LIST_ALL_PRODUCT_PROPERTY =  "listAllProductProperty";
+	public static final String LIST_ALL_PRODUCT_PROPERTY =  "listAllProductProperty";
+	
+	public static final String KEY_PRPRODUCTPROPERTY = "_key_PrProductProperty";
 	
 	@SuppressWarnings("rawtypes")
 	private RedisTemplate redisTemplate;
@@ -47,6 +51,13 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	@Autowired
 	@Lazy(true)
 	private PrProductPropertyMapper productPropertyMapper;
+
+	public PrProductPropertyServiceImpl() {
+		super();
+		if (redisTemplate == null) {
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
+	}
 
 	@Override
 	public Mapper<PrProductProperty> getBaseMapper() {
@@ -86,12 +97,15 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = {"PrProductProperty"}, allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
-
+		List<PrProductProperty> list = this.productPropertyMapper
+				.selectByExample(example);
+		for (PrProductProperty productProperty : list) {
+			removeRedisKey(productProperty.getId() + KEY_PRPRODUCTPROPERTY);
+		}
 		// 逻辑操作
 		int result = productPropertyMapper.deleteByExample(example);
 
@@ -102,7 +116,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 		return result;
 	}
 
-	@CacheEvict(value = {"PrProductProperty"}, allEntries = true)
+//	@CacheEvict(value = {"PrProductProperty"}, allEntries = true)
 //	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
@@ -114,6 +128,13 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 		// 逻辑操作
 		PrProductPropertyCriteria productPropertyCriteria = new PrProductPropertyCriteria();
 		productPropertyCriteria.createCriteria().andIdIn(list);
+		//移除缓存
+		List<PrProductProperty> productProperties = this.productPropertyMapper
+				.selectByExample(productPropertyCriteria);
+		for (PrProductProperty productProperty : productProperties) {
+			removeRedisKey(productProperty.getId() + KEY_PRPRODUCTPROPERTY);
+		}
+		
 		int result = productPropertyMapper.deleteByExample(productPropertyCriteria);
 		removeRedisKey(LIST_ALL_PRODUCT_PROPERTY);
 		if (logger.isInfoEnabled())
@@ -129,7 +150,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = {"PrProductProperty"},key="#id+'productProperty'")
+	@CacheEvict(value = {"PrProductProperty"},key="#id+'_key_PrProductProperty'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -219,7 +240,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+'productProperty'", value = {"PrProductProperty"})
+	@Cacheable(key = "#id+'_key_PrProductProperty'", value = {"PrProductProperty"})
 	@Transactional(readOnly = true)
 	public PrProductProperty selectByPrimaryKey(String id) {
 		// 日志记录
@@ -250,6 +271,11 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
+		List<PrProductProperty> list = this.productPropertyMapper
+				.selectByExample(example);
+		for (PrProductProperty productProperty : list) {
+			removeRedisKey(productProperty.getId() + KEY_PRPRODUCTPROPERTY);
+		}
 		removeRedisKey(LIST_ALL_PRODUCT_PROPERTY);
 		// 逻辑操作
 		int result = super.updateByExampleSelective(record, example);
@@ -274,6 +300,11 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 			logger.info(BASE_MESSAGE+"updateByExample更新开始");
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
+		List<PrProductProperty> list = this.productPropertyMapper
+				.selectByExample(example);
+		for (PrProductProperty productProperty : list) {
+			removeRedisKey(productProperty.getId() + KEY_PRPRODUCTPROPERTY);
+		}
 		removeRedisKey(LIST_ALL_PRODUCT_PROPERTY);								
 		//逻辑操作		
 		int result = super.updateByExample(record, example);
@@ -291,7 +322,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = {"PrProductProperty"},key="#record.id+'productProperty'",allEntries=true)
+	@CacheEvict(value = {"PrProductProperty"},key="#record.id+'_key_PrProductProperty'")
 	public int updateByPrimaryKeySelective(PrProductProperty record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -314,7 +345,7 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = {"PrProductProperty"},key="#record.id+'productProperty'",allEntries=true)
+	@CacheEvict(value = {"PrProductProperty"},key="#record.id+'_key_PrProductProperty'")
 	public int updateByPrimaryKey(PrProductProperty record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
