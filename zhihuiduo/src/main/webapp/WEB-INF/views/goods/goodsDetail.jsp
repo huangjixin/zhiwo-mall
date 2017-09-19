@@ -128,7 +128,7 @@ body {
 				<!-- 轮播图设置 -->
 				<c:forEach var="prImage" items="${swiperImages}">
 					<div class="swiper-slide">
-						<img class="img-responsive" src="${ctx}/images/busy.gif" data-original="${ctx}/${prImage.url}">
+						<img class="img-responsive" src="${ctx}/${prImage.url}" >
 					</div>
 				</c:forEach>
 			</div>
@@ -535,9 +535,9 @@ body {
 											});
 											
 							 $("img").lazyload({effect: "fadeIn"});
-							 /*$("#p").hide(100,function(){
+							 $("#p").hide(100,function(){
 								 self.setInterval("fadeInOut('p')",6000); 
-							 });*/
+							 });
 						});
 
 		var selectedProperyPackagePrice = "";

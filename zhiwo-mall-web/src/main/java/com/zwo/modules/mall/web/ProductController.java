@@ -293,158 +293,207 @@ public class ProductController extends BaseController<PrProduct> {
 				.selectByProductId(product.getId());
 
 		perpertyArray = (JSONArray) JSONArray.parse(propertyValues);
-		if(perpertyArray==null){
-			perpertyArray = new JSONArray();
-		}
-		productPropertyValueService.deleteByProductId(product.getId());
-
-		for (Object object : perpertyArray) {
-			JSONObject jsonObject = (JSONObject) object;
-			PrProductPropertyValue productProperty = new PrProductPropertyValue();
-			productProperty.setId(jsonObject.getString("id"));
-			productProperty.setProductId(product.getId());
-			productProperty.setImageId(jsonObject.getString("imageId"));
-			productProperty.setPropertyId(jsonObject
-					.getString("propertyId"));
-			productProperty.setName((String) jsonObject.get("name"));
-			productPropertyValueService
-					.insertSelective(productProperty);
-		}
 		
-		if (null != propertyValues && !"".equals(propertyValues)) {
-			boolean reConnect = false;
-			
-
-			for (int i = 0; i < perpertyArray.size(); i++) {
-				JSONObject object = (JSONObject) perpertyArray.get(i);
-				String id = object.getString("id");
-				boolean flag = false;
-				for (PrProductPropertyValue propertyValue : productPropertyValues) {
-					if (id.equals(propertyValue.getId())) {
-						flag = true;
+		//是否重新建立关联关系。
+		boolean reConnect = false;
+		//优先判断有没有属性值，如果都没有那不用重新建立
+		if(perpertyArray == null && productPropertyValues.size()==0){
+			reConnect = false;
+		}else if(perpertyArray != null && productPropertyValues.size()==0){
+			reConnect = true;
+		}else{
+			if(perpertyArray != null){
+				int length = perpertyArray.size();
+				for(int i=0;i<length;i++){
+					JSONObject jsonObject = (JSONObject) perpertyArray.get(i);
+					String id = jsonObject.getString("id");
+					int length1= productPropertyValues.size();
+					boolean flag = false;
+					for (int j = 0; j < length1; j++) {
+						PrProductPropertyValue propertyValue = productPropertyValues.get(j);
+						if(id.equals(propertyValue.getId())){
+							flag = true;
+							break;
+						}
+					}
+					
+					if (flag == false) {
+						reConnect = true;
 						break;
 					}
 				}
-				if (flag == false) {
-					reConnect = true;
-					break;
-				}
-			}
-			reConnect = true;
-			// 重新建立关联关系
-			if (reConnect == true) {
 				
+				if(reConnect == false){
+					length = productPropertyValues.size();
+					for(int i=0;i<length;i++){
+						PrProductPropertyValue propertyValue = productPropertyValues.get(i);
+						int length1= perpertyArray.size();
+						boolean flag = false;
+						for (int j = 0; j < length1; j++) {
+							JSONObject jsonObject = (JSONObject) perpertyArray.get(j);
+							String id = jsonObject.getString("id");
+							if(id.equals(propertyValue.getId())){
+								flag = true;
+								break;
+							}
+						}
+						
+						if (flag == false) {
+							reConnect = true;
+							break;
+						}
+					}
+				}
+			}else{
+				reConnect = true;
 			}
 		}
-
+		
+		if(reConnect == true){
+			productPropertyValueService.deleteByProductId(product.getId());
+			if(perpertyArray!=null){
+				for (Object object : perpertyArray) {
+					JSONObject jsonObject = (JSONObject) object;
+					PrProductPropertyValue productProperty = new PrProductPropertyValue();
+					productProperty.setId(jsonObject.getString("id"));
+					productProperty.setProductId(product.getId());
+					productProperty.setImageId(jsonObject.getString("imageId"));
+					productProperty.setPropertyId(jsonObject
+							.getString("propertyId"));
+					productProperty.setName((String) jsonObject.get("name"));
+					productPropertyValueService
+							.insertSelective(productProperty);
+				}
+			}	
+		}
+		
+		
+		// 价格组合
+        ////////////
 		JSONArray perPriceArray = null;
 		perPriceArray = (JSONArray) JSONArray.parse(propertyPrices);
-		if(perPriceArray==null){
-			perPriceArray = new JSONArray();
-		}
 		List<PrProductPackagePrice> packagePrices = packagePriceService
 				.selectByProductId(product.getId());
-		packagePriceService.deleteByProductId(product.getId());
-		for (Object obj : perPriceArray) {
-			JSONObject json = (JSONObject) obj;
-			PrProductPackagePrice packagePrice = new PrProductPackagePrice();
-			String id = json.getString("id");
-			String uuid = UUID.randomUUID().toString()
-					.replaceAll("-", "");
-			id = uuid;
-			String groupPrice = json.getString("groupPrice");
-			String indepentPrice = json.getString("indepentPrice");
-			String pId = product.getId();
-			String pValueId = json.getString("propertyValueId");
-			String icon = json.getString("icon");
-//			String disable = json.getString("disable");
-			String disable = "0";
-			packagePrice.setIcon(icon);
-			packagePrice.setDisable(Byte.valueOf(disable));
-			packagePrice.setId(id);
-			packagePrice.setGourpPrice(groupPrice);
-			packagePrice.setIndependentPrice(indepentPrice);
-			packagePrice.setProductId(pId);
-			packagePrice.setPropertyValueId(pValueId);
-			packagePriceService.insertSelective(packagePrice);
+		if(perPriceArray==null && packagePrices.size()==0){
+			reConnect = false;
+		}else if(perPriceArray != null && packagePrices.size()==0){
+			reConnect = true;
+		}else{
+			if(perPriceArray!=null){
+				int length = perPriceArray.size();
+				for(int i=0;i<length;i++){
+					JSONObject jsonObject = (JSONObject) perPriceArray.get(i);
+					String id = jsonObject.getString("id");
+					int length1= packagePrices.size();
+					boolean flag = false;
+					for (int j = 0; j < length1; j++) {
+						PrProductPackagePrice packagePrice = packagePrices.get(j);
+						if(id.equals(packagePrice.getId())){
+							flag = true;
+							break;
+						}
+					}
+					
+					if (flag == false) {
+						reConnect = true;
+						break;
+					}
+				}
+				
+				if(reConnect == false){
+					length = packagePrices.size();
+					for(int i=0;i<length;i++){
+						PrProductPackagePrice packagePrice = packagePrices.get(i);
+						int length1= perpertyArray.size();
+						boolean flag = false;
+						for (int j = 0; j < length1; j++) {
+							JSONObject jsonObject = (JSONObject) perPriceArray.get(j);
+							String id = jsonObject.getString("id");
+							if(id.equals(packagePrice.getId())){
+								flag = true;
+								break;
+							}
+						}
+						
+						if (flag == false) {
+							reConnect = true;
+							break;
+						}
+					}
+				}
+			}else{
+				reConnect = true;
+			}
+			
 		}
 		
-		/*
-		if (null != propertyPrices && !"".equals(propertyPrices)) {
-			boolean reConnect = false;
-			
-			
-			if (perPriceArray.size() == packagePrices.size()) {
-				for (int i = 0; i < perPriceArray.size(); i++) {
-					JSONObject object = (JSONObject) perPriceArray.get(i);
-					String id = object.getString("id");
-					boolean flag = false;
-					for (PrProductPackagePrice prProductPackagePrice : packagePrices) {
-						if (id.equals(prProductPackagePrice.getId())) {
-							flag = true;
-							break;
-						}
-					}
-					if (flag == false) {
-						reConnect = true;
-						break;
-					}
-				}
-				if(reConnect == false){
+		// 检查属性有没有改变。
+		if (reConnect == false && perPriceArray!=null) {
+			for (int i = 0; i < perPriceArray.size(); i++) {
+				JSONObject object = (JSONObject) perPriceArray.get(i);
+				String id = object.getString("id");
 				for (PrProductPackagePrice prProductPackagePrice : packagePrices) {
-					boolean flag = false;
-					for(int i = 0; i < perPriceArray.size(); i++) {
-						JSONObject object = (JSONObject) perPriceArray.get(i);
-						String id = object.getString("id");
-						if (id.equals(prProductPackagePrice.getId())) {
-							flag = true;
-							break;
+					if (id.equals(prProductPackagePrice.getId())) {
+						boolean changed = false;
+						String icon = object.getString("icon");
+						String gourpPrice = object.getString("gourpPrice");
+						String independentPrice = object
+								.getString("independentPrice");
+						if (!icon.equals(prProductPackagePrice
+								.getIcon())) {
+							changed = true;
+							prProductPackagePrice.setIcon(icon);
 						}
-					}
-					if (flag == false) {
-						reConnect = true;
+						if (!gourpPrice.equals(prProductPackagePrice
+								.getGourpPrice())) {
+							changed = true;
+							prProductPackagePrice.setGourpPrice(gourpPrice);
+						}
+						if (!independentPrice.equals(prProductPackagePrice
+								.getIndependentPrice().toString())) {
+							changed = true;
+							prProductPackagePrice
+									.setIndependentPrice(independentPrice);
+						}
+						if (changed == true) {
+							packagePriceService
+									.updateByPrimaryKey(prProductPackagePrice);
+						}
 						break;
-					}
-				}}
-			}
-
-			// 检查属性有没有改变。
-			if (reConnect == false) {
-				for (int i = 0; i < perPriceArray.size(); i++) {
-					JSONObject object = (JSONObject) perPriceArray.get(i);
-					String id = object.getString("id");
-					for (PrProductPackagePrice prProductPackagePrice : packagePrices) {
-						if (id.equals(prProductPackagePrice.getId())) {
-							boolean changed = false;
-							String gourpPrice = object.getString("gourpPrice");
-							String independentPrice = object
-									.getString("independentPrice");
-							if (!gourpPrice.equals(prProductPackagePrice
-									.getGourpPrice())) {
-								changed = true;
-								prProductPackagePrice.setGourpPrice(gourpPrice);
-							}
-							if (!independentPrice.equals(prProductPackagePrice
-									.getIndependentPrice().toString())) {
-								changed = true;
-								prProductPackagePrice
-										.setIndependentPrice(independentPrice);
-							}
-							if (changed == true) {
-								packagePriceService
-										.updateByPrimaryKey(prProductPackagePrice);
-							}
-							break;
-						}
 					}
 				}
 			}
-			reConnect = true;
-			// 重新建立关联关系
-			if (reConnect == true) {
-				
+		}
+		
+		
+		if (reConnect == true) {
+			packagePriceService.deleteByProductId(product.getId());
+			if(perPriceArray!=null){
+				for (Object obj : perPriceArray) {
+					JSONObject json = (JSONObject) obj;
+					PrProductPackagePrice packagePrice = new PrProductPackagePrice();
+					String id = json.getString("id");
+					String uuid = UUID.randomUUID().toString()
+							.replaceAll("-", "");
+					id = uuid;
+					String groupPrice = json.getString("groupPrice");
+					String indepentPrice = json.getString("indepentPrice");
+					String pId = product.getId();
+					String pValueId = json.getString("propertyValueId");
+					String icon = json.getString("icon");
+//					String disable = json.getString("disable");
+					String disable = "0";
+					packagePrice.setIcon(icon);
+					packagePrice.setDisable(Byte.valueOf(disable));
+					packagePrice.setId(id);
+					packagePrice.setGourpPrice(groupPrice);
+					packagePrice.setIndependentPrice(indepentPrice);
+					packagePrice.setProductId(pId);
+					packagePrice.setPropertyValueId(pValueId);
+					packagePriceService.insertSelective(packagePrice);
+				}
 			}
-		}*/
+		}
 
 		int res = this.productService.updateByPrimaryKeySelective(product);
 		if (res == 1) {
