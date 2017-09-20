@@ -250,27 +250,27 @@ $option.css({ "background-color": "#DEDEDE" });
 	<div id="checkDiv" onClick="setCheckDivToNone(false);return false;">
 		<div id="defaultAddress">
 			<c:if test="${address==null}">
-					<div
-						style="height: 80px; line-height: 80px; background-color: #ffffff; padding-left: 10px; padding-right: 10px;">
-						<div class="pull-left">
-							<span><i class="fa fa-plus-square fa-lg"
-								aria-hidden="true" style="color: red;"></i></span> <span>&nbsp;&nbsp;</span>
-							<span>手动添加新地址</span>
-						</div>
-						<div class="pull-right">
-							<span>&nbsp;&nbsp;</span> <span><i
-								class="fa fa-arrow-circle-right lg" aria-hidden="true"></i></span>
-						</div>
-						<div class="clearfix"></div>
+				<div
+					style="height: 80px; line-height: 80px; background-color: #ffffff; padding-left: 10px; padding-right: 10px;">
+					<div class="pull-left">
+						<span><i class="fa fa-plus-square fa-lg" aria-hidden="true"
+							style="color: red;"></i></span> <span>&nbsp;&nbsp;</span> <span>手动添加新地址</span>
 					</div>
+					<div class="pull-right">
+						<span>&nbsp;&nbsp;</span> <span><i
+							class="fa fa-arrow-circle-right lg" aria-hidden="true"></i></span>
+					</div>
+					<div class="clearfix"></div>
+				</div>
 
-				</c:if> <c:if test="${address!=null}">
-					<div
-						style="height: 80px; background-color: #ffffff; padding-left: 10px; padding-right: 10px; padding-top: 10px; border-bottom: 1px solid red;">
-						<strong>${address.name}</strong>,<span>${address.mobilPhone}</span><br>
-						<span>${address.province}&nbsp;&nbsp;${address.city}&nbsp;&nbsp;${address.street}</span>
-					</div>
-				</c:if>
+			</c:if>
+			<c:if test="${address!=null}">
+				<div
+					style="height: 80px; background-color: #ffffff; padding-left: 10px; padding-right: 10px; padding-top: 10px; border-bottom: 1px solid red;">
+					<strong>${address.name}</strong>,<span>${address.mobilPhone}</span><br>
+					<span>${address.province}&nbsp;&nbsp;${address.city}&nbsp;&nbsp;${address.street}</span>
+				</div>
+			</c:if>
 		</div>
 
 		<div
@@ -429,13 +429,16 @@ $option.css({ "background-color": "#DEDEDE" });
 		}
 		
 		function setCheckDivToNone(toCheckDiv){
-			if(toCheckDiv){
+			$("#checkDiv").slideToggle("fast");
+			$("#addressSettingDiv").slideToggle("fast");
+			/*if(toCheckDiv){
+					
 				$("#checkDiv").css('display','inline');
 				$("#addressSettingDiv").css('display','none');
 			}else{
 				$("#checkDiv").css('display','none');
 				$("#addressSettingDiv").css('display','inline');
-			}
+			}*/
 			
 		}
 		
