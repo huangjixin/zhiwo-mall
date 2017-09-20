@@ -23,6 +23,11 @@
 	
 	<context:property-placeholder location="classpath*:spring/*.properties" />
 	
+	<bean id="weChatVo" class="com.zwo.modules.wechat.domain.WeChatVo">
+		<property name="appid" value="${appid}"></property>
+		<property name="appsecret" value="${appsecret}"></property>
+	</bean>
+	
 	<!-- 正式发布要替换成阿里巴巴的数据库连接org.springframework.jdbc.datasource.DriverManagerDataSource  -->
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
 		init-method="init" destroy-method="close">
