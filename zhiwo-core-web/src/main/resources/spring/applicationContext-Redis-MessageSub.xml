@@ -47,6 +47,16 @@
 						</bean>
 					</list>
 				</entry>
+				<!-- 关注公众号自动注册会员-->
+				<entry key-ref="memberSubcribeMessageListener">
+					<list>
+						<bean class="org.springframework.data.redis.listener.ChannelTopic">
+							<!-- 常量定义在ChannelContance类里面 -->
+							<!-- 消息发布在竞猜问题服务类里面 -->
+							<constructor-arg value="member_create.queue.channel" />
+						</bean>
+					</list>
+				</entry>
 			</map>
 		</property>
 	</bean>

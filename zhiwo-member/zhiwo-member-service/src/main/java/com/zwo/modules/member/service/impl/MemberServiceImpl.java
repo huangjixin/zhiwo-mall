@@ -65,7 +65,8 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	private static Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
 
 	private static final String BASE_MESSAGE = "【MemberServiceImpl服务类提供的基础操作增删改查等】";
-	private static final String KEY_KEY_MEMBER = "_key_key_member";
+	private static final String KEY_MEMBER = "_key_member";
+	private static final String KEY_OPENID_MEMBER = "_key_openid_member";
 
 	@Autowired
 	@Lazy(true)
@@ -168,7 +169,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
 		List<Member> list = this.selectByExample(example);
 		for (Member member : list) {
-			RedisUtil.removeRedisKey(redisTemplate, member.getId()+KEY_KEY_MEMBER);
+			RedisUtil.removeRedisKey(redisTemplate, member.getId()+KEY_MEMBER);
 		}
 		// 逻辑操作
 		int result = memberMapper.deleteByExample(example);
@@ -191,7 +192,8 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		memberCriteria.createCriteria().andIdIn(list);
 		List<Member> members = this.selectByExample(memberCriteria);
 		for (Member member : members) {
-			RedisUtil.removeRedisKey(redisTemplate, member.getId()+KEY_KEY_MEMBER);
+			RedisUtil.removeRedisKey(redisTemplate, member.getId()+KEY_MEMBER);
+			RedisUtil.removeRedisKey(redisTemplate, member.getOpenId()+KEY_OPENID_MEMBER);
 		}
 		
 		int result = memberMapper.deleteByExample(memberCriteria);
@@ -216,9 +218,9 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为：" + id.toString());
-
-		RedisUtil.removeRedisKey(redisTemplate, id+KEY_KEY_MEMBER);
-		
+		Member member = selectByPrimaryKey(id);
+		RedisUtil.removeRedisKey(redisTemplate, id+KEY_MEMBER);
+		RedisUtil.removeRedisKey(redisTemplate, member.getOpenId()+KEY_OPENID_MEMBER);
 		// 逻辑操作
 		int result = super.deleteByPrimaryKey(id);
 
@@ -245,9 +247,9 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 			record.setParentId(null);
 		}
 		// 逻辑操作
-				if (record.getPassword() != null) {
-					record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
-				}		
+		if (record.getPassword() != null) {
+			record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
+		}		
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
 			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
@@ -368,7 +370,8 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		}
 		List<Member> list = this.selectByExample(example);
 		for (Member member : list) {
-			RedisUtil.removeRedisKey(redisTemplate, member.getId()+KEY_KEY_MEMBER);
+			RedisUtil.removeRedisKey(redisTemplate, member.getId()+KEY_MEMBER);
+			RedisUtil.removeRedisKey(redisTemplate, member.getOpenId()+KEY_OPENID_MEMBER);
 		}
 		
 		// 逻辑操作
@@ -402,7 +405,8 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		}
 		List<Member> list = this.selectByExample(example);
 		for (Member member : list) {
-			RedisUtil.removeRedisKey(redisTemplate, member.getId()+KEY_KEY_MEMBER);
+			RedisUtil.removeRedisKey(redisTemplate, member.getId()+KEY_MEMBER);
+			RedisUtil.removeRedisKey(redisTemplate, member.getOpenId()+KEY_OPENID_MEMBER);
 		}
 		//逻辑操作		
 		int result = super.updateByExample(record, example);
@@ -722,6 +726,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Member selectMember(String usernameOrMphoneOrEmail) {
 		MemberCriteria memberCriteria = new MemberCriteria();
 		com.zwo.modules.member.domain.MemberCriteria.Criteria nameCriteria = memberCriteria.createCriteria().andUsernameEqualTo(usernameOrMphoneOrEmail);
@@ -737,16 +742,18 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 
 
 	@Override
+	@Transactional(readOnly = true)
+	@Cacheable(value = "Member", key="#openId+'_key_openid_member'")
 	public Member selectByOpenId(String openId) {
 		MemberCriteria memberCriteria = new MemberCriteria();
-		MemberCriteria.Criteria criteria = memberCriteria.createCriteria();
-		criteria.andOpenIdEqualTo(openId);
+		memberCriteria.createCriteria().andOpenIdEqualTo(openId);
 		List<Member> list = this.memberMapper.selectByExample(memberCriteria);
 		return list.isEmpty()?null:list.get(0);
 	}
 
 
 	@Override
+	@Transactional(readOnly = true)
 	public int countByOpenId(String openId) {
 		MemberCriteria memberCriteria = new MemberCriteria();
 		MemberCriteria.Criteria criteria = memberCriteria.createCriteria();
