@@ -11,4 +11,11 @@ public class RedisUtil {
 			}
 		}
 	}
+	
+	@SuppressWarnings("rawtypes")
+	public static void publish(RedisTemplate redisTemplate, String channel,
+			Object message) {
+		if(redisTemplate!=null)
+		redisTemplate.convertAndSend(channel, message);
+	}
 }

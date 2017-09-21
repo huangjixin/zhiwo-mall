@@ -21,4 +21,14 @@ public class ChannelContance {
 	 * 商品图删除订阅频道。
 	 */
 	public static final String PRIMAGE_DELETE_TOPIC_CHANNEL = "primage_delete.topic.channel";
+	
+	/**
+	 * 用户关注公众号产生创建新用户。
+	 */
+	public static final String MEMBER_CREATE_QUEUE_CHANNEL = "member_create.queue.channel";
+	
+	/**
+	 * 用户关注公众号产生更新用户。
+	 */
+	public static final String MEMBER_UPDATE_QUEUE_CHANNEL = "member_update.queue.channel";
 }

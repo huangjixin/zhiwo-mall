@@ -734,4 +734,24 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 
 		return list.isEmpty()?null:list.get(0);
 	}
+
+
+	@Override
+	public Member selectByOpenId(String openId) {
+		MemberCriteria memberCriteria = new MemberCriteria();
+		MemberCriteria.Criteria criteria = memberCriteria.createCriteria();
+		criteria.andOpenIdEqualTo(openId);
+		List<Member> list = this.memberMapper.selectByExample(memberCriteria);
+		return list.isEmpty()?null:list.get(0);
+	}
+
+
+	@Override
+	public int countByOpenId(String openId) {
+		MemberCriteria memberCriteria = new MemberCriteria();
+		MemberCriteria.Criteria criteria = memberCriteria.createCriteria();
+		criteria.andOpenIdEqualTo(openId);
+		
+		return this.memberMapper.selectCountByExample(memberCriteria);
+	}
 }

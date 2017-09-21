@@ -21,6 +21,20 @@ import com.zwotech.modules.core.service.IBaseService;
  *
  */
 public interface IMemberService extends IBaseService<Member> {
+	
+	/**
+	 * 查询openId的会员
+	 * @param openId
+	 * @return
+	 */
+	Member selectByOpenId(String openId);
+	
+	/**
+	 * 查询openId的记录数
+	 * @param openId
+	 * @return
+	 */
+	int countByOpenId(String openId);
 	/**
 	 * 根据会员Id进行地址查询。
 	 * @param memberId
