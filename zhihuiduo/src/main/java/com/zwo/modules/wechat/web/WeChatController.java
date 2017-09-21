@@ -1,8 +1,9 @@
 package com.zwo.modules.wechat.web;
 
-import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import weixin.popular.support.ExpireKey;
 import weixin.popular.support.expirekey.DefaultExpireKey;
 
+import com.zwo.modules.member.domain.Member;
 import com.zwo.modules.member.service.IMemberService;
 import com.zwo.modules.wechat.dispatcher.EventDispatcher;
 import com.zwo.modules.wechat.dispatcher.MsgDispatcher;
@@ -84,8 +86,8 @@ public class WeChatController {
 				EventDispatcher.processEvent(map); // 进入事件处理
 				if (map.get("Event").equals(MessageUtil.EVENT_TYPE_SUBSCRIBE)) { // 关注事件
 					System.out.println("==============这是关注事件！");
-					int result = memberService.countByOpenId(openid);
-					String content = result ==0?"欢迎你关注智惠多，请尽情购物吧！":"欢迎你回来智惠多，请尽情购物吧！";
+					Member member = memberService.selectByOpenId(openid);
+					String content = member ==null?"欢迎你关注智惠多，请尽情购物吧！":"欢迎你回来智惠多，请尽情购物吧！";
 					// 普通文本消息
 					TextMessage txtmsg = new TextMessage();
 					txtmsg.setToUserName(openid);
@@ -94,7 +96,17 @@ public class WeChatController {
 					txtmsg.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_TEXT);
 					txtmsg.setContent(content);
 					
-					RedisUtil.publish(redisTemplate, ChannelContance.MEMBER_CREATE_QUEUE_CHANNEL, openid);
+					Map<String, String> message = new HashMap<String, String>();
+					message.put("openId", openid);
+					if(member==null){
+						String id = UUID.randomUUID().toString().replaceAll("-", "");
+						String username = id.substring(0, 6);
+						message.put("id", id);
+						message.put("username", username);
+						message.put("password", username);
+					}
+					
+					RedisUtil.publish(redisTemplate, ChannelContance.MEMBER_CREATE_QUEUE_CHANNEL, message);
 					return MessageUtil.textMessageToXml(txtmsg);
 				}
 
