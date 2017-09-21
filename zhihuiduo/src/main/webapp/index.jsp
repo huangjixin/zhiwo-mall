@@ -5,134 +5,188 @@
 <html>
 <head>
 <title>智惠多商品云购</title>
+<meta charset="utf-8">
+<meta http-equiv="Pragma" content="no-cache">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 <%@ include file="/WEB-INF/member-include/css.jsp"%>
 <%@ include file="/WEB-INF/member-include/js.jsp"%>
-<style>
-	.thumbnail {
-		 padding: 16px;
-		 margin-bottom: 5px;
-		 line-height: 1.42857143;
-		 border: 0px solid #ddd;
-		 border-radius: 0px;
-	}
-	
-	.swiper-container {
-			text-align:center;
-			width: 100%;
-			margin: 0px auto;
-		}
-		.swiper-slide {
-			text-align: center;
-			/*font-size: 18px;*/
-			font-size:1.6rem ; 
-			background: #ccc;
-			
-			/* Center slide text vertically */
-			display: -webkit-box;
-			display: -ms-flexbox;
-			display: -webkit-flex;
-			display: flex;
-			-webkit-box-pack: center;
-			-ms-flex-pack: center;
-			-webkit-justify-content: center;
-			justify-content: center;
-			-webkit-box-align: center;
-			-ms-flex-align: center;
-			-webkit-align-items: center;
-			align-items: center;
-		}
-</style>
+<link href="${ctx}/css/zhihuiduo.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <div class="swiper-container">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide">
-            	<div class="container_fluid">
-                	<div class="row" id="indexThumbnailRow">
-                    	<!--<div class="thumbnail">
-                                <img src="${ctx}/images/yuebing.png" 
-                                 alt="智惠多月饼">
-                                <div class="caption" style="text-align:left;">
-                                	<p>【呆呆兔】 1000g500g 可选中秋月饼广式多口味水果味小月饼 独立包装散装33个左右传统糕点</p>
-                                    <div class="pull-right">
-                                    	<img src="${ctx}/images/1671169078.jpg" class="img-circle" width="30px"/>
-                                        <img src="${ctx}/images/1671169078.jpg" class="img-circle" width="30px"/>
-                                    	<button type="button" class="btn btn-danger">去开团 ></button>
-                                    </div>
-                                	<div class="pull-left">
-                                    	<label style="color:red;font-size:2rem;"><i class="fa fa-jpy"></i>88</label>
-                                     	<label style="color:gray;font-size:1.4rem;" class="checkbox-inline">已团14万件</label>
-                                    </div>
-                                    
-                                    <div class="clearfix"></div>
-                                </div>
-                             </div>
-                             
-                             
-                             <div class="thumbnail">
-                                <img src="${ctx}/images/yuebing.png" 
-                                 alt="智惠多月饼">
-                                <div class="caption" style="text-align:left;">
-                                	<p>【呆呆兔】 1000g500g 可选中秋月饼广式多口味水果味小月饼 独立包装散装33个左右传统糕点</p>
-                                    <div class="pull-right">
-                                    	<img src="${ctx}/images/1671169078.jpg" class="img-circle" width="30px"/>
-                                        <img src="${ctx}/images/1671169078.jpg" class="img-circle" width="30px"/>
-                                    	<button type="button" class="btn btn-danger">去开团 ></button>
-                                    </div>
-                                	<div class="pull-left">
-                                    	<label style="color:red;font-size:2rem;"><i class="fa fa-jpy"></i>88</label>
-                                     	<label style="color:gray;font-size:1.4rem;" class="checkbox-inline">已团14万件</label>
-                                    </div>
-                                    
-                                    <div class="clearfix"></div>
-                                </div>
-                             </div>
-                             <div class="thumbnail">
-                                <img src="${ctx}/images/yuebing.png"  alt="智惠多月饼">
-                                <div class="caption" style="text-align:left;">
-                                	<p>【呆呆兔】 1000g500g 可选中秋月饼广式多口味水果味小月饼 独立包装散装33个左右传统糕点</p>
-                                    <div class="pull-right">
-                                    	<img src="${ctx}/images/1671169078.jpg" class="img-circle" width="30px"/>
-                                        <img src="${ctx}/images/1671169078.jpg" class="img-circle" width="30px"/>
-                                    	<button type="button" class="btn btn-danger">去开团 ></button>
-                                    </div>
-                                	<div class="pull-left">
-                                    	<label style="color:red;font-size:2rem;"><i class="fa fa-jpy"></i>88</label>
-                                     	<label style="color:gray;font-size:1.4rem;" class="checkbox-inline">已团14万件</label>
-                                    </div>
-                                    
-                                    <div class="clearfix"></div>
-                                </div>
-                             </div>-->
-                             
-                             
-                    </div>
-                </div>	
-            </div>
-            <div class="swiper-slide">Slide 2</div>
-            <div class="swiper-slide">Slide 3</div>
-            <div class="swiper-slide">Slide 4</div>
-            <div class="swiper-slide">Slide 5</div>
-            <div class="swiper-slide">Slide 6</div>
-            <div class="swiper-slide">Slide 7</div>
-            <div class="swiper-slide">Slide 8</div>
-            <div class="swiper-slide">Slide 9</div>
-            <div class="swiper-slide">Slide 10</div>
-        </div>
+	<!-- 代码 开始 -->
+	<h2 class="htit">demo示例一</h2>
+	<div class="wrapper wrapper01" id="retr">
+		<div class="scroller">
+			<ul class="clearfix">
+				<li><a href="javascript:void(0)">全部科目</a></li>
+				<li><a href="javascript:void(0)">会计从业</a></li>
+				<li><a href="javascript:void(0)">会计职称</a></li>
+				<li><a href="javascript:void(0)">注会</a></li>
+				<li><a href="javascript:void(0)">税务师</a></li>
+				<li><a href="javascript:void(0)">国际证书</a></li>
+				<li><a href="javascript:void(0)">更多</a></li>
+				<li><a href="javascript:void(0)">更多注会</a></li>
+				<li><a href="javascript:void(0)">国际证书2</a></li>
+				<li><a href="javascript:void(0)">更多4</a></li>
+				<li><a href="javascript:void(0)">更多5</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<h2 class="htit">demo示例二</h2>
+	<div class="wrapper wrapper02" id="wrapper02">
+		<div class="scroller">
+			<ul class="clearfix">
+				<li><a href="javascript:void(0)">全部科目</a></li>
+				<li><a href="javascript:void(0)">会计从业</a></li>
+				<li><a href="javascript:void(0)">会计职称</a></li>
+				<li><a href="javascript:void(0)">注会</a></li>
+				<li><a href="javascript:void(0)">税务师</a></li>
+				<li><a href="javascript:void(0)">国际证书</a></li>
+				<li><a href="javascript:void(0)">更多</a></li>
+				<li><a href="javascript:void(0)">更多注会</a></li>
+				<li><a href="javascript:void(0)">国际证书2</a></li>
+				<li><a href="javascript:void(0)">更多4</a></li>
+				<li><a href="javascript:void(0)">更多5</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<h2 class="htit">demo示例三</h2>
+	<div class="wrapper wrapper03" id="wrapper03">
+		<div class="scroller">
+			<ul class="clearfix">
+				<li><a href="javascript:void(0)">全部科目</a></li>
+				<li><a href="javascript:void(0)">会计从业</a></li>
+				<li><a href="javascript:void(0)">会计职称</a></li>
+				<li><a href="javascript:void(0)">注会</a></li>
+				<li><a href="javascript:void(0)">税务师</a></li>
+				<li><a href="javascript:void(0)">国际证书</a></li>
+				<li><a href="javascript:void(0)">更多</a></li>
+				<li><a href="javascript:void(0)">更多注会</a></li>
+				<li><a href="javascript:void(0)">国际证书2</a></li>
+				<li><a href="javascript:void(0)">大头网</a></li>
+				<li><a href="javascript:void(0)">更多5</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<h2 class="htit">demo示例四</h2>
+	<div class="wrapper wrapper04" id="sass">
+		<div class="scroller">
+			<ul class="clearfix">
+				<li><a href="javascript:void(0)">全部科目</a></li>
+				<li><a href="javascript:void(0)">会计从业</a></li>
+				<li><a href="javascript:void(0)">会计职称</a></li>
+				<li><a href="javascript:void(0)">注会</a></li>
+				<li><a href="javascript:void(0)">税务师</a></li>
+				<li><a href="javascript:void(0)">国际证书</a></li>
+				<li><a href="javascript:void(0)">更多</a></li>
+				<li><a href="javascript:void(0)">更多注会</a></li>
+				<li><a href="javascript:void(0)">国际证书2</a></li>
+				<li><a href="javascript:void(0)">更多4</a></li>
+				<li><a href="javascript:void(0)">更多5</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<h2 class="htit">demo示例五</h2>
+	<div class="wrapper02" id="demo05">
+		<div class="scroller">
+			<ul class="clearfix">
+				<li><a href="javascript:void(0)">全部科目</a></li>
+				<li><a href="javascript:void(0)">会计从业</a></li>
+				<li><a href="javascript:void(0)">会计职称</a></li>
+				<li><a href="javascript:void(0)">注会</a></li>
+				<li><a href="javascript:void(0)">税务师</a></li>
+				<li><a href="javascript:void(0)">国际证书</a></li>
+				<li><a href="javascript:void(0)">更多</a></li>
+				<li><a href="javascript:void(0)">更多注会</a></li>
+				<li><a href="javascript:void(0)">国际证书2</a></li>
+				<li><a href="javascript:void(0)">更多4</a></li>
+				<li><a href="javascript:void(0)">更多5</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<h2 class="htit">demo示例六</h2>
+	<div class="wrapper02" id="demo06">
+		<div class="scroller">
+			<ul class="clearfix">
+				<li><a href="javascript:void(0)">北京</a></li>
+				<li><a href="javascript:void(0)">上海</a></li>
+				<li><a href="javascript:void(0)">广州</a></li>
+				<li><a href="javascript:void(0)">深证</a></li>
+				<li><a href="javascript:void(0)">杭州</a></li>
+				<li><a href="javascript:void(0)">武汉</a></li>
+				<li><a href="javascript:void(0)">天津</a></li>
+				<li><a href="javascript:void(0)">郑州</a></li>
+				<li><a href="javascript:void(0)">海口</a></li>
+				<li><a href="javascript:void(0)">郑州</a></li>
+				<li><a href="javascript:void(0)">长春</a></li>
+				<li><a href="javascript:void(0)">长沙</a></li>
+				<li><a href="javascript:void(0)">南京</a></li>
+				<li><a href="javascript:void(0)">西安</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div style="padding: 1rem .4rem; line-height: .6rem; font-size: .5rem">
+		参数说明：<br /> className:'cur', //当前选中点击元素的class类名<br />
+		clickScrollTime:300, //点击后滑动时间<br /> duibiScreenWidth:0.4,
+		//单位以rem为准，默认为0.4rem<br /> fingerClick:0,
+		//目标第0或1个选项触发,必须每一项长度一致，方可用此项<br />
+		endClickScroll:function(thisObj){}//回调函数<br />
+	</div>
+
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<!--<script type="text/javascript" src="js/flexible.js"></script>-->
+	<script type="text/javascript" src="js/iscroll.js"></script>
+	<script type="text/javascript" src="js/navbarscroll.js"></script>
+	<script type="text/javascript">
+		$(function() {
+
+			//demo示例一到四 通过lass调取，一句可以搞定，用于页面中可能有多个导航的情况
+			$('.wrapper').navbarscroll();
+
+			//demo示例五 通过id调取
+			$('#demo05').navbarscroll({
+				defaultSelect : 6,
+				endClickScroll : function(obj) {
+					console.log(obj.text())
+				}
+			});
+
+			//demo示例六 通过id调取
+			$('#demo06').navbarscroll({
+				defaultSelect : 3,
+				scrollerWidth : 6,
+				fingerClick : 1,
+				endClickScroll : function(obj) {
+					console.log(obj.text())
+				}
+			});
+		});
+	</script>
+	<!-- 代码 结束 -->
+    <div style="width:100px;">
+    <img class="img-responsive" src="/passets/2017/9/8/1504858658682.jpeg" >
     </div>
-<script>
-  window.rawData={"goodsList":[{"data":{"goodsID":26455602,"shortGoodsName":"【呆呆兔】 1000g500g 可选中秋月饼广式多口味水果味小月饼 独立包装散装33个左右传统糕点","goodsName":"呆呆兔 1000g500g 可选中秋月饼广式多口味水果味小月饼 独立包装散装33个左右传统糕点","price":"8.8","salePrice":"8.8","normalPrice":"11.8","discount":"59.2","customerNum":2,"soldQuantity":"15万","eventDesc":"2人团","eventType":0,"isApp":0,"buyButtonTxt":"去开团","country":"","imageUrl":"http://omsproductionimg.yangkeduo.com/images/2017-08-02/d9d5e4af21b61e664fc45cfaef171f53.jpeg@750w_1l_50Q.webp","thumbUrl":"http://omsproductionimg.yangkeduo.com/images/2017-08-20/e55c31bd02b20092afe59da5d02497c7.jpeg@750w_1l_50Q.webp","imgUrl":"http://omsproductionimg.yangkeduo.com/images/2017-08-02/d9d5e4af21b61e664fc45cfaef171f53.jpeg@750w_1l_50Q.webp"},"props":{"key":"goods_26455602","withLocalGroups":true,"extraTrackingParams":{"op":"click","event":"goods_clk","page_name":"index","page_section":"goods_list","p_rec":"{\"t\":\"default\",\"m\":\"default\",\"bk\":\"0\",\"g\":\"\"}"},"listItemName":"portalListItemV2","isDoubleList":false,"doImpr":false,"imprParams":{"goods_id":26455602,"page_section":"goods_list","is_app":0,"event_type":0,"p_rec":"{\"t\":\"default\",\"m\":\"default\",\"bk\":\"0\",\"g\":\"\"}"}}},{"data":{"goodsID":26455602,"shortGoodsName":"【呆呆兔】 1000g500g 可选中秋月饼广式多口味水果味小月饼 独立包装散装33个左右传统糕点","goodsName":"呆呆兔 1000g500g 可选中秋月饼广式多口味水果味小月饼 独立包装散装33个左右传统糕点","price":"8.8","salePrice":"8.8","normalPrice":"11.8","discount":"59.2","customerNum":2,"soldQuantity":"15万","eventDesc":"2人团","eventType":0,"isApp":0,"buyButtonTxt":"去开团","country":"","imageUrl":"http://omsproductionimg.yangkeduo.com/images/2017-08-02/d9d5e4af21b61e664fc45cfaef171f53.jpeg@750w_1l_50Q.webp","thumbUrl":"http://omsproductionimg.yangkeduo.com/images/2017-08-20/e55c31bd02b20092afe59da5d02497c7.jpeg@750w_1l_50Q.webp","imgUrl":"http://omsproductionimg.yangkeduo.com/images/2017-08-02/d9d5e4af21b61e664fc45cfaef171f53.jpeg@750w_1l_50Q.webp"},"props":{"key":"goods_26455602","withLocalGroups":true,"extraTrackingParams":{"op":"click","event":"goods_clk","page_name":"index","page_section":"goods_list","p_rec":"{\"t\":\"default\",\"m\":\"default\",\"bk\":\"0\",\"g\":\"\"}"},"listItemName":"portalListItemV2","isDoubleList":false,"doImpr":false,"imprParams":{"goods_id":26455602,"page_section":"goods_list","is_app":0,"event_type":0,"p_rec":"{\"t\":\"default\",\"m\":\"default\",\"bk\":\"0\",\"g\":\"\"}"}}},{"data":{"goodsID":26455602,"shortGoodsName":"【呆呆兔】 1000g500g 可选中秋月饼广式多口味水果味小月饼 独立包装散装33个左右传统糕点","goodsName":"呆呆兔 1000g500g 可选中秋月饼广式多口味水果味小月饼 独立包装散装33个左右传统糕点","price":"8.8","salePrice":"8.8","normalPrice":"11.8","discount":"59.2","customerNum":2,"soldQuantity":"15万","eventDesc":"2人团","eventType":0,"isApp":0,"buyButtonTxt":"去开团","country":"","imageUrl":"http://omsproductionimg.yangkeduo.com/images/2017-08-02/d9d5e4af21b61e664fc45cfaef171f53.jpeg@750w_1l_50Q.webp","thumbUrl":"http://omsproductionimg.yangkeduo.com/images/2017-08-20/e55c31bd02b20092afe59da5d02497c7.jpeg@750w_1l_50Q.webp","imgUrl":"http://omsproductionimg.yangkeduo.com/images/2017-08-02/d9d5e4af21b61e664fc45cfaef171f53.jpeg@750w_1l_50Q.webp"},"props":{"key":"goods_26455602","withLocalGroups":true,"extraTrackingParams":{"op":"click","event":"goods_clk","page_name":"index","page_section":"goods_list","p_rec":"{\"t\":\"default\",\"m\":\"default\",\"bk\":\"0\",\"g\":\"\"}"},"listItemName":"portalListItemV2","isDoubleList":false,"doImpr":false,"imprParams":{"goods_id":26455602,"page_section":"goods_list","is_app":0,"event_type":0,"p_rec":"{\"t\":\"default\",\"m\":\"default\",\"bk\":\"0\",\"g\":\"\"}"}}}]};
-  window.onload= function (){
-		var globalData =   window.rawData;
-		var goodsList = globalData.goodsList;
-		var thumbnailData = "";
-		for(var i=0;i<goodsList.length;i++){
-			thumbnailData +='<div class="thumbnail" class="col-sm-12" ><img style="width:100%;" src="${ctx}/images/yuebing.png" alt="智惠多月饼"><div class="caption" style="text-align:left;"><p>【呆呆兔】 1000g500g 可选中秋月饼广式多口味水果味小月饼 独立包装散装33个左右传统糕点</p><div class="pull-right"><img src="${ctx}/images/1671169078.jpg" class="img-circle" width="30px"/><img src="${ctx}/images/1671169078.jpg" class="img-circle" width="30px"/><button type="button" class="btn btn-danger">去开团 ></button></div><div class="pull-left"><label style="color:red;font-size:2rem;"><i class="fa fa-jpy"></i>88</label><label style="color:gray;font-size:1.4rem;" class="checkbox-inline">已团14万件</label></div><div class="clearfix"></div></div></div>';
-		}
+
+
+	<div
+		style="text-align: center; margin: 50px 0; font: normal">
+		<p>
+			来源：<a href="http://www.datouwang.com/" target="_blank">大头网</a>
+		</p>
+		<p>转载请注明出处，此代码仅供学习交流，请勿用于商业用途。</p>
 		
-		$('#indexThumbnailRow').append(thumbnailData);
-  }
-  var swiper = new Swiper('.swiper-container');
-</script>
+	</div>
+
+
 </body>
 </html>

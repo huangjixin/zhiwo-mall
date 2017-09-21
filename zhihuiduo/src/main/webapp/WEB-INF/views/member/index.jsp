@@ -7,9 +7,9 @@
 <title>智惠多商品云购</title>
 <%@ include file="/WEB-INF/member-include/css.jsp"%>
 <%@ include file="/WEB-INF/member-include/js.jsp"%>
-
-<!--<script type="text/javascript" src="${ctx}/js/flexible.js"></script>-->
-<script type="text/javascript" src="${ctx}/js/iscroll.js"></script>
+<link href="${ctx}/css/zhihuiduo.css" rel="stylesheet" type="text/css" />
+<!--<script type="text/javascript" src="${ctx}/js/flexible.js"></script>
+<script type="text/javascript" src="${ctx}/js/iscroll.js"></script>-->
 <script type="text/javascript" src="${ctx}/js/navbarscroll.js"></script>
 <style>
 .thumbnail {
@@ -44,6 +44,7 @@
 	-webkit-align-items: center;
 	align-items: center;
 }
+
 </style>
 </head>
 <body>
@@ -71,25 +72,26 @@
 			<div class="swiper-slide">
 				<div class="row">
                 	<c:forEach var="product" items="${list}">
-                    	<a href="${ctx}/goodsDetail?goodsId=${product.id}"><div class="col-sm-12 col-md-12">
+                    	<a href="${ctx}/goodsDetail?goodsId=${product.id}">
+                        <div class="col-sm-12 col-md-12">
                             <div class="thumbnail">
-                            	
-                                <img class="lazy" src="${ctx}/images/busy.gif"  data-original="${ctx}/${product.icon}">
+                            	<img class="lazy" src="${ctx}/images/busy.gif"  data-original="${ctx}/${product.icon}">
                                <!--<img src="${ctx}/${product.icon}" data-original="${ctx}/${product.icon}">-->
                                 <div class="caption" style="text-align: left;">
                                     <p>${product.name}</p>
-                                    <div class="pull-right">
-                                        <img src="${ctx}/images/1671169078.jpg" class="img-circle"
-                                            width="30px" /> <img src="${ctx}/images/1671169078.jpg"
-                                            class="img-circle" width="30px" />
-                                        <button type="button" class="btn btn-danger">去开团 ></button>
-                                    </div>
                                     <div class="pull-left">
                                         <label style="color: red; font-size: 2rem;"><i
                                             class="fa fa-jpy"></i>${product.gourpSalePrice}</label> <label
                                             style="color: gray; font-size: 1.4rem;"
                                             class="checkbox-inline">已团14万件</label>
                                     </div>
+                                    <div class="pull-right">
+                                        <img src="${ctx}/images/1671169078.jpg" class="img-circle"
+                                            width="30px" /> <img src="${ctx}/images/1671169078.jpg"
+                                            class="img-circle" width="30px" />
+                                        <button type="button" class="btn btn-danger">去开团 ></button>
+                                    </div>
+                                    
     
                                     <div class="clearfix"></div>
                                 </div>
