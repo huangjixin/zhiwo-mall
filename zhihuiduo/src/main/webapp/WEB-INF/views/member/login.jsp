@@ -12,14 +12,16 @@
 </head>
 <body>
 <div class="signin">
-	<div class="signin-head"><img src="images/test/head_120.png" alt="" class="img-circle"></div>
+	<div class="signin-head"><img src="${ctx}/images/test/head_120.png" alt="" class="img-circle"></div>
 	<form class="form-signin" role="form" action="${ctx}/memberLogin/login?fromURL=${fromURL}" method="post">
 		<input id="username" name="username" type="text" class="form-control" placeholder="用户名" required autofocus />
 		<input id="password" name="password" type="password" class="form-control" placeholder="密码" required />
-		<button class="btn btn-lg btn-warning btn-block" type="submit">登录</button>
+		<button class="btn btn-lg btn-warning " type="submit">登录</button>
+		<button class="btn btn-lg btn-warning " type="button">注册</button>
 <!-- 		<label class="checkbox"> -->
 <!-- 			<input type="checkbox" value="rememberMe"> 记住我 -->
 <!-- 		</label> -->
+		<label>${message}</label>
 	</form>
 </div>
 </body>

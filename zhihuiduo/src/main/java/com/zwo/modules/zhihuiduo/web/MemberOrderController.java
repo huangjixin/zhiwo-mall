@@ -14,6 +14,7 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +37,9 @@ import com.zwo.modules.member.service.IMemberService;
 import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.service.IShopService;
 import com.zwo.modules.system.domain.TbUser;
+import com.zwotech.common.redis.channel.ChannelContance;
+import com.zwotech.common.utils.RedisUtil;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
 @Controller
@@ -67,11 +71,18 @@ public class MemberOrderController extends BaseController<TbUser> {
 	@Lazy(true)
 	private IGroupPurcseMemberService groupPurcseMemberService;
 
-	// @SuppressWarnings("rawtypes")
-	// private RedisTemplate redisTemplate = SpringContextHolder
-	// .getBean("redisTemplate");
+	 @SuppressWarnings("rawtypes")
+	 private RedisTemplate redisTemplate;
 
 	private static final String basePath = "views/member/";
+
+	
+	public MemberOrderController() {
+		super();
+		if(redisTemplate == null){
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
+	}
 
 	/**
 	 * 跳转到下单页面，mode是group的话，那表示该团是拼团。
@@ -208,16 +219,30 @@ public class MemberOrderController extends BaseController<TbUser> {
 			}  
 		    
 			groupPurcse.setExpiredTime(date);
-			groupPurcseService.insertSelective(groupPurcse); //开团。
+			if(redisTemplate != null){
+				
+			}else{
+				groupPurcseService.insertSelective(groupPurcse); //开团。
+			}
+			
 		}
 		
 		groupPurcseMember.setGroupPurcseId(groupPurcse.getId());
 		//插入中间表，表示开团或者参团成功
-		groupPurcseMemberService.insertSelective(groupPurcseMember);
+		if(redisTemplate != null){
+			
+		}else{
+			groupPurcseMemberService.insertSelective(groupPurcseMember);
+		}
+		
 		
 		//下单成功
-		orderTradeService.insertSelective(orderTrade);
-
+		if(redisTemplate != null){
+			RedisUtil.publish(redisTemplate, ChannelContance.ORDER_CREATE_QUEUE_CHANNEL, orderTrade);
+		}else{
+			orderTradeService.insertSelective(orderTrade);
+		}
+		
 		uiModel.addAttribute("order", orderTrade);
 		
 		
