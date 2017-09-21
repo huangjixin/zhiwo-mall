@@ -68,6 +68,7 @@ public class MemberSubcribeUpdateMessageListener implements MessageListener {
 					jsonObject.put("country", user.getCountry());
 					jsonObject.put("city", user.getCity());
 					member.setDescription(jsonObject.toJSONString());
+					member.setPassword(null);
 					memberService.updateByPrimaryKeySelective(member);
 				}
 			}

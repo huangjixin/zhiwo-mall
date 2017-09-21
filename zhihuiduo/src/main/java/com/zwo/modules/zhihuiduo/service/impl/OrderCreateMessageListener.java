@@ -62,7 +62,7 @@ public class OrderCreateMessageListener implements MessageListener {
 //				String id = UUID.randomUUID().toString().replaceAll("-", "");
 //				orderTrade.setId(id);
 				OrderTrade orderTrade2 = orderTradeService.selectByPrimaryKey(orderTrade.getId());
-				if(orderTrade2!=null){
+				if(orderTrade2==null){
 					orderTradeService.insertSelective(orderTrade);
 				}
 			}

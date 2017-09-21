@@ -83,7 +83,7 @@ public class MemberLoginController extends BaseController {
 		} catch (Exception ex) {
 			// throw new Exception("用户名或者密码错误");
 			uiModel.addAttribute("message", "用户名或者密码错误");
-			return "/memberLogin/login";
+			return "redirect:/memberLogin/login";
 		}
 		Member member = memberService.selectMember(username);
 		currentUser.getSession().setAttribute("member", member);

@@ -3,16 +3,16 @@ body {
 }
 
 .signin {
-	width:477px;
-	height:479px;
+	width:400px;
+	height:400px;
 	background:url(../images/login_bg.png) no-repeat;
 	margin:0 auto;
 	
 	position:absolute;
 	top:50%;
 	left:50%;
-	margin-top:-239px;
-	margin-left:-238px;
+	margin-top:-200px;
+	margin-left:-200px;
 }
 .signin-head {
 	margin:0 auto;

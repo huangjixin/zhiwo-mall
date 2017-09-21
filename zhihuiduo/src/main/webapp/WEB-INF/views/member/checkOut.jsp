@@ -247,8 +247,8 @@ $option.css({ "background-color": "#DEDEDE" });
 </script>
 </head>
 <body>
-	<div id="checkDiv" onClick="setCheckDivToNone(false);return false;">
-		<div id="defaultAddress">
+	<div id="checkDiv">
+		<div id="defaultAddress"  onClick="setCheckDivToNone(false);return false;">
 			<c:if test="${address==null}">
 				<div
 					style="height: 80px; line-height: 80px; background-color: #ffffff; padding-left: 10px; padding-right: 10px;">
