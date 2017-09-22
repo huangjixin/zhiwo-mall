@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import weixin.popular.support.ExpireKey;
 import weixin.popular.support.expirekey.DefaultExpireKey;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zwo.modules.member.domain.Member;
 import com.zwo.modules.member.service.IMemberService;
 import com.zwo.modules.wechat.dispatcher.EventDispatcher;
@@ -115,10 +116,11 @@ public class WeChatController {
 						member.setUsername(username);
 						member.setPassword(username);
 					}
+					String memberString = JSONObject.toJSONString(member);
 					ActiveMQUtil
 							.send(jmsQueueTemplate,
 									ChannelContance.MEMBER_CREATE_QUEUE_CHANNEL,
-									member);
+									memberString);
 					/*
 					 * RedisUtil.publish(redisTemplate,
 					 * ChannelContance.MEMBER_CREATE_QUEUE_CHANNEL, message);

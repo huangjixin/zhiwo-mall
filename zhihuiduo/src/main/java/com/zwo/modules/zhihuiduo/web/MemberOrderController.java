@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zwo.modules.mall.domain.OrderStatus;
 import com.zwo.modules.mall.domain.OrderTrade;
 import com.zwo.modules.mall.domain.PrProduct;
@@ -223,15 +224,14 @@ public class MemberOrderController extends BaseController<TbUser> {
 			try {
 				date = format.parse(d);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
 			groupPurcse.setExpiredTime(date);
 			if (jmsQueueTemplate != null) {
-				ActiveMQUtil.send(jmsQueueTemplate,
-						ChannelContance.GROUPPURCSE_CREATE_QUEUE_CHANNEL,
-						groupPurcse);
+//				ActiveMQUtil.send(jmsQueueTemplate,
+//						ChannelContance.GROUPPURCSE_CREATE_QUEUE_CHANNEL,
+//						groupPurcse);
 			} else {
 				asycInsertGroupPurcse(groupPurcse);
 				// groupPurcseService.insertSelective(groupPurcse); // 开团。
@@ -250,8 +250,9 @@ public class MemberOrderController extends BaseController<TbUser> {
 
 		// 下单成功
 		if (jmsQueueTemplate != null) {
+			String jsonString = JSONObject.toJSONString(orderTrade);
 			ActiveMQUtil.send(jmsQueueTemplate,
-					ChannelContance.ORDER_CREATE_QUEUE_CHANNEL, orderTrade);
+					ChannelContance.ORDER_CREATE_QUEUE_CHANNEL, jsonString);
 		} else {
 			// orderTradeService.insertSelective(orderTrade);
 			asycInsertOrderTrade(orderTrade);

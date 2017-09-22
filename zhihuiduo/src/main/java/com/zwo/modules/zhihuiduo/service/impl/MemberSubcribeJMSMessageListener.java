@@ -3,6 +3,9 @@
  */
 package com.zwo.modules.zhihuiduo.service.impl;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 import javax.jms.Message;
 import javax.jms.MessageListener;
 
@@ -11,6 +14,11 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
+import weixin.popular.api.UserAPI;
+import weixin.popular.bean.user.User;
+
+import com.alibaba.fastjson.JSONObject;
+import com.zwo.modules.mall.domain.OrderTrade;
 import com.zwo.modules.member.domain.Member;
 import com.zwo.modules.member.service.IMemberService;
 import com.zwotech.common.redis.channel.ChannelContance;
@@ -54,7 +62,8 @@ public class MemberSubcribeJMSMessageListener implements MessageListener {
 				member.setPassword(memb.getPassword());
 				member.setOpenId(memb.getOpenId());
 				memberService.insertSelective(member);
-				ActiveMQUtil.send(jmsQueueTemplate, ChannelContance.MEMBER_UPDATE_QUEUE_CHANNEL, member);
+				asycUpdateMember(member);
+				//ActiveMQUtil.send(jmsQueueTemplate, ChannelContance.MEMBER_UPDATE_QUEUE_CHANNEL, member);
 /*
 				RedisUtil
 						.publish(
@@ -64,5 +73,30 @@ public class MemberSubcribeJMSMessageListener implements MessageListener {
 			}
 		}
 	}
-
+	
+	/**
+	 * 异步获取用户头像等信息。
+	 * @param member
+	 */
+	private void asycUpdateMember(final Member member) {
+		Executor executor = Executors.newSingleThreadExecutor();
+		executor.execute(new Runnable() {
+			public void run() {
+				String openId = member.getOpenId();
+				String accessToken = "ehBA152ia2KiCO69OO8cCdWPy9qmqwLOQMfL0v-cVFauZyDDH-9HgS10-crP6E_aQe7uBJrUb3_Dn5OYhpjD1Fm46p3O3lZuequQ2CIxJJWXvR2Oq2bxkcWxlmJylfEtZBShABAGIZ";
+				User user = UserAPI.userInfo(accessToken, openId);
+				if (user != null) {
+					member.setIcon(user.getHeadimgurl());
+					member.setNickname(user.getNickname());
+					JSONObject jsonObject = new JSONObject();
+					jsonObject.put("unionid", user.getUnionid());
+					jsonObject.put("country", user.getCountry());
+					jsonObject.put("city", user.getCity());
+					member.setDescription(jsonObject.toJSONString());
+					member.setPassword(null);
+					memberService.updateByPrimaryKeySelective(member);
+				}
+			}
+		});
+	}
 }
