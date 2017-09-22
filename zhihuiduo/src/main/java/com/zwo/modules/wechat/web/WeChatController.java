@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import weixin.popular.api.UserAPI;
+import weixin.popular.bean.user.User;
 import weixin.popular.support.ExpireKey;
 import weixin.popular.support.expirekey.DefaultExpireKey;
 
@@ -116,11 +120,19 @@ public class WeChatController {
 						member.setUsername(username);
 						member.setPassword(username);
 					}
-					String memberString = JSONObject.toJSONString(member);
-					ActiveMQUtil
-							.send(jmsQueueTemplate,
-									ChannelContance.MEMBER_CREATE_QUEUE_CHANNEL,
-									memberString);
+					
+					if(jmsQueueTemplate==null){
+						memberService.insertSelective(member);
+						asycUpdateMember(member);
+					}else{
+						String memberString = JSONObject.toJSONString(member);
+						
+						ActiveMQUtil
+						.send(jmsQueueTemplate,
+								ChannelContance.MEMBER_CREATE_QUEUE_CHANNEL,
+								memberString);
+					}
+					
 					/*
 					 * RedisUtil.publish(redisTemplate,
 					 * ChannelContance.MEMBER_CREATE_QUEUE_CHANNEL, message);
@@ -157,4 +169,29 @@ public class WeChatController {
 		return null;
 	}
 
+	/**
+	 * 异步获取用户头像等信息。
+	 * @param member
+	 */
+	private void asycUpdateMember(final Member member) {
+		Executor executor = Executors.newSingleThreadExecutor();
+		executor.execute(new Runnable() {
+			public void run() {
+				String openId = member.getOpenId();
+				String accessToken = MessageUtil.ACCESS_TOKEN;
+				User user = UserAPI.userInfo(accessToken, openId);
+				if (user != null) {
+					member.setIcon(user.getHeadimgurl());
+					member.setNickname(user.getNickname());
+					JSONObject jsonObject = new JSONObject();
+					jsonObject.put("unionid", user.getUnionid());
+					jsonObject.put("country", user.getCountry());
+					jsonObject.put("city", user.getCity());
+					member.setDescription(jsonObject.toJSONString());
+					member.setPassword(null);
+					memberService.updateByPrimaryKeySelective(member);
+				}
+			}
+		});
+	}
 }

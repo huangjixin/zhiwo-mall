@@ -33,7 +33,7 @@ import com.zwo.modules.wechat.domain.message.resp.VoiceMessage;
  * @date 2016年3月7日 上午10:05:04
  */
 public class MessageUtil {
- 
+	public static String ACCESS_TOKEN = "qQgbaPewP5ODw3Wk2y_NWFcGU560H8jRFETEZ41RHVjJ5W28oiSJ73Z-PBm9qkH1rmmTqkf7_uB6Rqys6ufKdUsA4G2Pe8MEdwf16m0EzyLf0i4XNgx0GFFH4DQFGqAlRCZjAGAGRO";
     /**
      * 返回消息类型：文本
      */
