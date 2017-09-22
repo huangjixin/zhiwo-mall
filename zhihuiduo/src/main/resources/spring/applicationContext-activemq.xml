@@ -31,15 +31,17 @@
 		<!-- 消息转换器 -->
 		<!-- <property name="messageConverter" ref="jmsMessageConverter" /> -->
 	</bean>
-	<!-- <bean id="jmsMessageConverter" class="com.zwo.modules.zhihuiduo.dto.JMSMessageConverter" /> -->
+	<!-- <bean id="jmsMessageConverter" class="com.zwo.modules.zhihuiduo.dto.JMSMessageConverter" 
+		/> -->
 
 	<jms:listener-container destination-type="queue"
 		container-type="default" connection-factory="connectionFactory"
 		acknowledge="auto">
 		<jms:listener destination="order_create.queue.channel"
 			ref="orderCreateJMSMessageListener" />
-		<!-- <jms:listener destination="groupPurcse_update.queue.channel" ref="memberSubcribeUpdateJMSMessageListener" 
-			/> <jms:listener destination="groupPurcse_create.queue.channel" ref="memberSubcribeUpdateJMSMessageListener" 
+		<jms:listener destination="member_create.queue.channel"
+			ref="memberSubcribeJMSMessageListener" />
+		<!-- <jms:listener destination="groupPurcse_create.queue.channel" ref="memberSubcribeUpdateJMSMessageListener" 
 			/> -->
 	</jms:listener-container>
 
