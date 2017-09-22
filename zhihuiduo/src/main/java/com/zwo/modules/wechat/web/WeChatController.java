@@ -57,14 +57,19 @@ public class WeChatController {
 	@Autowired
 	@Lazy(true)
 	private IMemberService memberService;
+	
+	@SuppressWarnings("rawtypes")
 	private RedisTemplate redisTemplate;
+	
 	private JmsTemplate jmsQueueTemplate;
 
 	public WeChatController() {
 		super();
-		redisTemplate = SpringContextHolder.getBean("redisTemplate");
-
-		if (jmsQueueTemplate == null) {
+		if (SpringContextHolder.getApplicationContext().containsBean("redisTemplate")) {
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
+		
+		if (SpringContextHolder.getApplicationContext().containsBean("jmsQueueTemplate")) {
 			jmsQueueTemplate = SpringContextHolder.getBean("jmsQueueTemplate");
 		}
 	}

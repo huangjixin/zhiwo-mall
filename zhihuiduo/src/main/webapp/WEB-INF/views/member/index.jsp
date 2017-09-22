@@ -8,44 +8,8 @@
 <%@ include file="/WEB-INF/member-include/css.jsp"%>
 <%@ include file="/WEB-INF/member-include/js.jsp"%>
 <link href="${ctx}/css/zhihuiduo.css" rel="stylesheet" type="text/css" />
-<!--<script type="text/javascript" src="${ctx}/js/flexible.js"></script>
-<script type="text/javascript" src="${ctx}/js/iscroll.js"></script>-->
+<script type="text/javascript" src="${ctx}/js/zhihuiduo/index.js"></script>
 <script type="text/javascript" src="${ctx}/js/navbarscroll.js"></script>
-<style>
-.thumbnail {
-	padding: 0px;
-	margin-bottom: 5px;
-	line-height: 1.42857143;
-	border: 0px solid #ddd;
-	border-radius: 0px;
-}
-
-.swiper-container {
-	text-align: center;
-	width: 100%;
-	margin: 0px auto;
-}
-
-.swiper-slide {
-	text-align: center;
-	/*font-size: 18px;*/
-	background: #F2F2F2;
-	/* Center slide text vertically */
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: -webkit-flex;
-	display: flex;
-	-webkit-box-pack: center;
-	-ms-flex-pack: center;
-	-webkit-justify-content: center;
-	justify-content: center;
-	-webkit-box-align: center;
-	-ms-flex-align: center;
-	-webkit-align-items: center;
-	align-items: center;
-}
-
-</style>
 </head>
 <body>
 	<div class="wrapper wrapper02" id="wrapper02" name="wrapper">
@@ -66,41 +30,16 @@
 			</ul>
 		</div>
 	</div>
-	<div style="height: 30px; text-aling: center; font-size: 1.4rem;"></div>
+	<div style="height: 40px; text-aling: center; font-size: 1.4rem;"></div>
 	<div class="swiper-container">
 		<div class="swiper-wrapper">
 			<div class="swiper-slide">
-				<div class="row">
-                	<c:forEach var="product" items="${list}">
-                    	<a href="${ctx}/goodsDetail?goodsId=${product.id}">
-                        <div class="col-sm-12 col-md-12">
-                            <div class="thumbnail">
-                            	<img class="lazy" src="${ctx}/images/busy.gif"  data-original="${ctx}/${product.icon}">
-                               <!--<img src="${ctx}/${product.icon}" data-original="${ctx}/${product.icon}">-->
-                                <div class="caption" style="text-align: left;">
-                                    <p>${product.name}</p>
-                                    <div class="pull-left">
-                                        <label style="color: red; font-size: 2rem;"><i
-                                            class="fa fa-jpy"></i>${product.gourpSalePrice}</label> <label
-                                            style="color: gray; font-size: 1.4rem;"
-                                            class="checkbox-inline">已团14万件</label>
-                                    </div>
-                                    <div class="pull-right">
-                                        <img src="${ctx}/images/1671169078.jpg" class="img-circle"
-                                            width="30px" /> <img src="${ctx}/images/1671169078.jpg"
-                                            class="img-circle" width="30px" />
-                                        <button type="button" class="btn btn-danger">去开团 ></button>
-                                    </div>
-                                    
-    
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </div>
-                        </a>
+				<div class="row" id="productRow" style="">
+                <c:forEach var="product" items="${list}">
+                    	
                     </c:forEach>
 					
-					<div class="col-sm-12 col-md-12">
+					<!--<div class="col-sm-12 col-md-12">
 						<div class="thumbnail">
 							<img src="${ctx}/images/yuebing.png" alt="智惠多月饼">
 							<div class="caption" style="text-align: left;">
@@ -121,13 +60,13 @@
 								<div class="clearfix"></div>
 							</div>
 						</div>
-					</div>
+					</div>-->
 
-					<div class="col-sm-12 col-md-12">
+						<!--<div class="col-sm-12 col-md-12">
 						<div class="thumbnail">
 							<div style="height: 70px; text-aling: center; font-size: 1.4rem;">没有数据了</div>
 						</div>
-					</div>
+					</div>-->
 
 				</div>
 
@@ -143,18 +82,15 @@
 			<div class="swiper-slide">Slide 10</div>
 		</div>
 	</div>
-
+	<div style="height: 60px; text-aling: center; font-size: 1.4rem;"></div>
+    
+    <div id="p" class="fadeDiv">
+    	 <img id="memberIcon" src="${ctx}/uassets/2017/8/27/1503807062182.jpg" class="fadeImg">&nbsp;&nbsp;<span>黄记新</span>拼单了&nbsp;&nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i>
+    </div>
 	<!--↓3列菜单开始↓-->
 	<%@ include file="/WEB-INF/member-include/bottomIndex.jsp"%>
-	<script>
-		$(function() {
-			//通过lass调取，一句可以搞定，用于页面中可能有多个导航的情况
-			$('.wrapper').navbarscroll();
-			
-			 $("img").lazyload({effect: "fadeIn"});
-		});
-
-		var swiper = new Swiper('.swiper-container');
+    <script>
+    	window.rawData= '${rawData}';
 	</script>
 </body>
 </html>
