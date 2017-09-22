@@ -5,9 +5,10 @@
 <html>
 <head>
 <title>智惠多商品云购.会员账户明细</title>
-<link href="https://cdn.bootcss.com/jquery-bootgrid/1.3.1/jquery.bootgrid.min.css" rel="stylesheet" type="text/css">
 <%@ include file="/WEB-INF/member-include/css.jsp"%>
 <%@ include file="/WEB-INF/member-include/js.jsp"%>
+<link href="${ctx}/css/zhihuiduo.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/jquery-bootgrid/1.3.1/jquery.bootgrid.min.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery-bootgrid/1.3.1/jquery.bootgrid.min.js"></script>
 </head>
 <body>

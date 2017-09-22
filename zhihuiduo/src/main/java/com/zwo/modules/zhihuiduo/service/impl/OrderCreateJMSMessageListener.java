@@ -3,18 +3,18 @@
  */
 package com.zwo.modules.zhihuiduo.service.impl;
 
+import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import javax.jms.ObjectMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
 import com.zwo.modules.mall.domain.OrderTrade;
 import com.zwo.modules.mall.service.IOrderTradeService;
-import com.zwo.modules.member.domain.Member;
 import com.zwotech.common.utils.SpringContextHolder;
 
 /**
@@ -40,12 +40,18 @@ public class OrderCreateJMSMessageListener implements MessageListener {
 
 	@Override
 	public void onMessage(Message message) {
-		if (message instanceof OrderTrade) {
-			OrderTrade orderTrade = (OrderTrade) message;
-			OrderTrade orderTrade2 = orderTradeService
-					.selectByPrimaryKey(orderTrade.getId());
-			if (orderTrade2 == null) {
-				orderTradeService.insertSelective(orderTrade);
+		if (message instanceof ObjectMessage) {
+			ObjectMessage objMessage = (ObjectMessage) message;
+			try {
+				Object obj = objMessage.getObject();
+				OrderTrade orderTrade = (OrderTrade) obj;
+				OrderTrade orderTrade2 = orderTradeService
+						.selectByPrimaryKey(orderTrade.getId());
+				if (orderTrade2 == null) {
+					orderTradeService.insertSelective(orderTrade);
+				}
+			} catch (JMSException e) {
+				e.printStackTrace();
 			}
 		}
 	}

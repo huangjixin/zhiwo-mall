@@ -88,7 +88,7 @@ public class MemberOrderController extends BaseController<TbUser> {
 			redisTemplate = SpringContextHolder.getBean("redisTemplate");
 		}
 		if (jmsQueueTemplate == null) {
-			jmsQueueTemplate = SpringContextHolder.getBean("jmsTemplate");
+			jmsQueueTemplate = SpringContextHolder.getBean("jmsQueueTemplate");
 		}
 	}
 

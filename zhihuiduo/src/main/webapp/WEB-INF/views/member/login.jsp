@@ -5,9 +5,11 @@
 <html>
 <head>
 <title>智惠多商品云购.会员登录</title>
+
 <%@ include file="/WEB-INF/member-include/css.jsp"%>
 <%@ include file="/WEB-INF/member-include/js.jsp"%>
 <link href="${ctx}/css/signin.css" rel="stylesheet">
+<link href="${ctx}/css/zhihuiduo.css" rel="stylesheet" type="text/css" />
 <%@ include file="/WEB-INF/include/easyui-js.jsp"%>
 </head>
 <body>

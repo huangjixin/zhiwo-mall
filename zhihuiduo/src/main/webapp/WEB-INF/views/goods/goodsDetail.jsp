@@ -5,10 +5,10 @@
 <html>
 <head>
 <title>智惠多商品云购.商品详情</title>
-<link href="${ctx}/css/bootstrap-spinner.css" rel="stylesheet" type="text/css">
-<link href="${ctx}/css/zhihuiduo.css" rel="stylesheet" type="text/css" />
 <%@ include file="/WEB-INF/member-include/css.jsp"%>
 <%@ include file="/WEB-INF/member-include/js.jsp"%>
+<link href="${ctx}/css/bootstrap-spinner.css" rel="stylesheet" type="text/css">
+<link href="${ctx}/css/zhihuiduo.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="${ctx}/js/jquery.spinner.min.js"></script>
 
 <style>

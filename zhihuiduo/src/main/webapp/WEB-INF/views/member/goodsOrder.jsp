@@ -5,8 +5,10 @@
 <html>
 <head>
 <title>智惠多商品云购</title>
+<link href="${ctx}/css/zhihuiduo.css" rel="stylesheet" type="text/css" />
 <%@ include file="/WEB-INF/member-include/css.jsp"%>
 <%@ include file="/WEB-INF/member-include/js.jsp"%>
+<link href="${ctx}/css/zhihuiduo.css" rel="stylesheet" type="text/css" />
 <style>
 .thumbnail {
 	padding: 0px;

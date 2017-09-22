@@ -5,16 +5,13 @@
 <html>
 <head>
 <title>智惠多商品云购.会员地址</title>
+<link href="${ctx}/css/zhihuiduo.css" rel="stylesheet" type="text/css" />
 <%@ include file="/WEB-INF/member-include/css.jsp"%>
 <%@ include file="/WEB-INF/member-include/js.jsp"%>
+<link href="${ctx}/css/zhihuiduo.css" rel="stylesheet" type="text/css" />
 <!--<script type="text/javascript" src="${ctx}/js/location.js"></script> 
 <script type="text/javascript" src="${ctx}/js/YlChinaArea.js"></script> -->
 <style>
-body {
-	font-size: 1.5rem;
-	background-color: #F2F2F2;
-}
-
 .thumbnail {
 	padding: 1px;
 	margin-bottom: 5px;
