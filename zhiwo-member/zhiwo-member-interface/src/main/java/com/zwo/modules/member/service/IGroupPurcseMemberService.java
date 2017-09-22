@@ -3,6 +3,8 @@
  */
 package com.zwo.modules.member.service;
 
+import java.util.List;
+
 import com.zwo.modules.member.domain.GroupPurcseMember;
 import com.zwotech.modules.core.service.IBaseService;
 
@@ -17,4 +19,11 @@ public interface IGroupPurcseMemberService extends IBaseService<GroupPurcseMembe
 	 * @return
 	 */
 	int countByGroupPurcseId(String groupPurcseId);
+	
+	/**
+	 * 查询开团的人。
+	 * @param groupPurcseId
+	 * @return
+	 */
+	List<GroupPurcseMember> selectByGroupPurcseId(String groupPurcseId);
 }

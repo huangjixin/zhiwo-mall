@@ -39,7 +39,9 @@ public class GroupPurcseMemberServiceImpl extends BaseService<GroupPurcseMember>
 
 	private static final String BASE_MESSAGE = "【GroupPurcseMemberServiceImpl服务类提供的基础操作增删改查等】";
 	
-	private static final String KEY_GROUP_PURCSE_MEMBER = "_key_GroupPurcseMember";
+	public static final String KEY_GROUP_PURCSE_MEMBER = "_key_GroupPurcseMember";
+	
+	public static final String KEY_GROUP_PURCSE_ID_MEMBERS = "_key_GroupPurcseIdMember";
 
 	@Autowired
 	@Lazy(true)
@@ -386,6 +388,14 @@ public class GroupPurcseMemberServiceImpl extends BaseService<GroupPurcseMember>
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "根据开团的ID查询中间表个数结束，结果个数是："+result);
 		return result;
+	}
+
+	@Override
+	public List<GroupPurcseMember> selectByGroupPurcseId(String groupPurcseId) {
+		GroupPurcseMemberCriteria criteria = new GroupPurcseMemberCriteria();
+		criteria.createCriteria().andGroupPurcseIdEqualTo(groupPurcseId);
+		List<GroupPurcseMember> list = groupPurcseMemberMapper.selectByExample(criteria);
+		return list;
 	}
 
 }

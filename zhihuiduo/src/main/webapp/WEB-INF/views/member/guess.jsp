@@ -9,20 +9,10 @@
 <%@ include file="/WEB-INF/member-include/css.jsp"%>
 <%@ include file="/WEB-INF/member-include/js.jsp"%>
 <link href="${ctx}/css/zhihuiduo.css" rel="stylesheet" type="text/css" />
-<style>
-.label label-info {
-	padding-top: 5px;
-}
-
-.form-group {
-	margin: 3px;
-}
-</style>
-
 </head>
 <body>
 	<div class="page-header"
-		style="text-align: center; font-size: 2rem; margin-top: 20px; margin-bottom: 10px;">
+		style="text-align: center; font-size: 2rem; margin-top: 0px; margin-bottom: 10px;">
 		<b>趣味竞猜</b><small onclick="javascript:history.back()">&nbsp;&nbsp;返回</small>
 	</div>
 	<jsp:useBean id="now" class="java.util.Date" />
@@ -51,8 +41,9 @@
 								class="fa fa-angle-right fa-lg"></i></span>
 						</p>
 					</c:forEach>
-
-					<hr class="hr1" />
+					<!--<br>
+					<hr class="hr1" />-->
+                    <br>
 					<div class="pull-left">
 						<span class="label label-danger">投注截止时间：<fmt:formatDate
 								value="${guessQuestionOption.guessQuestion.questionEndTime}"
