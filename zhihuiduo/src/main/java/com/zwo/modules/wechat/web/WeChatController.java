@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,7 @@ import com.zwo.modules.wechat.domain.WeChatVo;
 import com.zwo.modules.wechat.domain.message.resp.TextMessage;
 import com.zwo.modules.wechat.util.MessageUtil;
 import com.zwotech.common.redis.channel.ChannelContance;
+import com.zwotech.common.utils.ActiveMQUtil;
 import com.zwotech.common.utils.RedisUtil;
 import com.zwotech.common.utils.SignUtil;
 import com.zwotech.common.utils.SpringContextHolder;
@@ -46,16 +48,20 @@ public class WeChatController {
 	@Autowired
 	@Lazy(true)
 	private WeChatVo weChatVo;
-	
+
 	@Autowired
 	@Lazy(true)
 	private IMemberService memberService;
 	private RedisTemplate redisTemplate;
-	
-	
+	private JmsTemplate jmsQueueTemplate;
+
 	public WeChatController() {
 		super();
 		redisTemplate = SpringContextHolder.getBean("redisTemplate");
+
+		if (jmsQueueTemplate == null) {
+			jmsQueueTemplate = SpringContextHolder.getBean("jmsQueueTemplate");
+		}
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -87,7 +93,8 @@ public class WeChatController {
 				if (map.get("Event").equals(MessageUtil.EVENT_TYPE_SUBSCRIBE)) { // 关注事件
 					System.out.println("==============这是关注事件！");
 					Member member = memberService.selectByOpenId(openid);
-					String content = member ==null?"欢迎你关注智惠多，请尽情购物吧！":"欢迎你回来智惠多，请尽情购物吧！";
+					String content = member == null ? "欢迎你关注智惠多，请尽情购物吧！"
+							: "欢迎你回来智惠多，请尽情购物吧！";
 					// 普通文本消息
 					TextMessage txtmsg = new TextMessage();
 					txtmsg.setToUserName(openid);
@@ -95,18 +102,27 @@ public class WeChatController {
 					txtmsg.setCreateTime(new Date().getTime());
 					txtmsg.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_TEXT);
 					txtmsg.setContent(content);
-					
+
 					Map<String, String> message = new HashMap<String, String>();
 					message.put("openId", openid);
-					if(member==null){
-						String id = UUID.randomUUID().toString().replaceAll("-", "");
+					if (member == null) {
+						member = new Member();
+						String id = UUID.randomUUID().toString()
+								.replaceAll("-", "");
 						String username = id.substring(0, 6);
-						message.put("id", id);
-						message.put("username", username);
-						message.put("password", username);
+						member.setId(id);
+						member.setOpenId(openid);
+						member.setUsername(username);
+						member.setPassword(username);
 					}
-					
-					RedisUtil.publish(redisTemplate, ChannelContance.MEMBER_CREATE_QUEUE_CHANNEL, message);
+					ActiveMQUtil
+							.send(jmsQueueTemplate,
+									ChannelContance.MEMBER_CREATE_QUEUE_CHANNEL,
+									member);
+					/*
+					 * RedisUtil.publish(redisTemplate,
+					 * ChannelContance.MEMBER_CREATE_QUEUE_CHANNEL, message);
+					 */
 					return MessageUtil.textMessageToXml(txtmsg);
 				}
 

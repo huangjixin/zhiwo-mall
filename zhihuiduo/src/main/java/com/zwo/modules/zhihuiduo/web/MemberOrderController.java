@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +17,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +41,7 @@ import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.service.IShopService;
 import com.zwo.modules.system.domain.TbUser;
 import com.zwotech.common.redis.channel.ChannelContance;
+import com.zwotech.common.utils.ActiveMQUtil;
 import com.zwotech.common.utils.RedisUtil;
 import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
@@ -71,16 +75,20 @@ public class MemberOrderController extends BaseController<TbUser> {
 	@Lazy(true)
 	private IGroupPurcseMemberService groupPurcseMemberService;
 
-	 @SuppressWarnings("rawtypes")
-	 private RedisTemplate redisTemplate;
+	@SuppressWarnings("rawtypes")
+	private RedisTemplate redisTemplate;
+	@SuppressWarnings("rawtypes")
+	private JmsTemplate jmsQueueTemplate;
 
 	private static final String basePath = "views/member/";
 
-	
 	public MemberOrderController() {
 		super();
-		if(redisTemplate == null){
+		if (redisTemplate == null) {
 			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
+		if (jmsQueueTemplate == null) {
+			jmsQueueTemplate = SpringContextHolder.getBean("jmsTemplate");
 		}
 	}
 
@@ -107,7 +115,11 @@ public class MemberOrderController extends BaseController<TbUser> {
 		PrProduct product = prductService.selectByPrimaryKey(goodsId);
 		Shop shop = shopService.selectByPrimaryKey(product.getShopId());
 		Member member = null;
-		
+
+		// groupPurcseId是不是为null表示是拼团还是开团
+		GroupPurcse groupPurcse = null;
+		GroupPurcseMember groupPurcseMember = new GroupPurcseMember();// 拼团中间表。
+		int numberCount = 0;
 		OrderTrade orderTrade = new OrderTrade();
 		String orderuuid = UUID.randomUUID().toString().replaceAll("-", "");
 		orderTrade.setId(orderuuid);
@@ -134,8 +146,7 @@ public class MemberOrderController extends BaseController<TbUser> {
 
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
-			member = (Member) subject.getSession()
-					.getAttribute("member");
+			member = (Member) subject.getSession().getAttribute("member");
 			if (member != null) {
 				orderTrade.setMemberId(member.getId());
 				MemberAddress address = addressService
@@ -147,11 +158,6 @@ public class MemberOrderController extends BaseController<TbUser> {
 
 		}
 
-		// groupPurcseId是不是为null表示是拼团还是开团
-		GroupPurcse groupPurcse = null;
-		GroupPurcseMember groupPurcseMember = null;//拼团中间表。
-		int numberCount = 0;
-		
 		if (null != groupPurcseId) {
 			groupPurcse = groupPurcseService.selectByPrimaryKey(groupPurcseId);
 			if (groupPurcse != null) {
@@ -162,90 +168,97 @@ public class MemberOrderController extends BaseController<TbUser> {
 			groupPurcse = new GroupPurcse();
 			groupPurcse.setId(id);
 			groupPurcse.setDisable(false);
-			
+
 			id = UUID.randomUUID().toString().replaceAll("-", "");
 			groupPurcseMember = new GroupPurcseMember();
 			groupPurcseMember.setId(id);
 		}
-		
-		if(groupPurcse !=null){
+
+		if (groupPurcse != null) {
 			groupPurcse.setProductId(goodsId);
-			if(member!=null){
+			if (member != null) {
 				groupPurcse.setMemeberId(member.getId());
 				groupPurcse.setMemberIcon(member.getIcon());
 				groupPurcse.setMemberName(member.getNickname());
 				groupPurcse.setMemberOpenId(member.getOpenId());
 			}
-			
+
 		}
-		
-		if(groupPurcseMember !=null){
-			if(member!=null){
+
+		if (groupPurcseMember != null) {
+			if (member != null) {
 				groupPurcseMember.setMemberId(member.getId());
 				groupPurcseMember.setMemberIcon(member.getIcon());
 				groupPurcseMember.setMemberName(member.getNickname());
 				groupPurcseMember.setMemberOpenId(member.getOpenId());
 			}
 		}
-		
-		if (null != groupPurcseId) {//参团。
-			//插入拼团中间表。
-			if(groupPurcseMember !=null){
+
+		if (null != groupPurcseId) {// 参团。
+			// 插入拼团中间表。
+			if (groupPurcseMember != null) {
 				groupPurcseMember.setGroupPurcseId(groupPurcse.getId());
 			}
-			int countGroupPurcseMember = groupPurcseMemberService.countByGroupPurcseId(groupPurcse.getId());
-			//满团后设置disable为true，表示该团已经满人了。
-			if(numberCount!=0 && numberCount==(countGroupPurcseMember+1)){
+			int countGroupPurcseMember = groupPurcseMemberService
+					.countByGroupPurcseId(groupPurcse.getId());
+			// 满团后设置disable为true，表示该团已经满人了。
+			if (numberCount != 0 && numberCount == (countGroupPurcseMember + 1)) {
 				groupPurcse.setDisable(true);
 			}
-			groupPurcseService.updateByPrimaryKeySelective(groupPurcse);//更新拼团。
-		}else{
+			groupPurcseService.updateByPrimaryKeySelective(groupPurcse);// 更新拼团。
+		} else {
 			// 开拼团
 			if ("group".equals(mode)) {
-				groupPurcse.setDisable(false);;
+				groupPurcse.setDisable(false);
+				;
 			} else { // 独立团直接设置为不可用了
 				groupPurcse.setDisable(true);
 			}
 			long dateTime = new Date().getTime();
-			dateTime+=3600000*24*2;
-			SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
-		    String d = format.format(dateTime);  
-		    Date date = new Date();
+			dateTime += 3600000 * 24 * 2;
+			SimpleDateFormat format = new SimpleDateFormat(
+					"yyyy-MM-dd HH:mm:ss");
+			String d = format.format(dateTime);
+			Date date = new Date();
 			try {
 				date = format.parse(d);
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}  
-		    
-			groupPurcse.setExpiredTime(date);
-			if(redisTemplate != null){
-				
-			}else{
-				groupPurcseService.insertSelective(groupPurcse); //开团。
 			}
-			
+
+			groupPurcse.setExpiredTime(date);
+			if (jmsQueueTemplate != null) {
+				ActiveMQUtil.send(jmsQueueTemplate,
+						ChannelContance.GROUPPURCSE_CREATE_QUEUE_CHANNEL,
+						groupPurcse);
+			} else {
+				asycInsertGroupPurcse(groupPurcse);
+				// groupPurcseService.insertSelective(groupPurcse); // 开团。
+			}
+
 		}
-		
+
 		groupPurcseMember.setGroupPurcseId(groupPurcse.getId());
-		//插入中间表，表示开团或者参团成功
-		if(redisTemplate != null){
+		// 插入中间表，表示开团或者参团成功
+		if (jmsQueueTemplate != null) {
 			
-		}else{
-			groupPurcseMemberService.insertSelective(groupPurcseMember);
+		} else {
+			// groupPurcseMemberService.insertSelective(groupPurcseMember);
+			asycInsertGroupPurcseMember(groupPurcseMember);
 		}
-		
-		
-		//下单成功
-		if(redisTemplate != null){
-			RedisUtil.publish(redisTemplate, ChannelContance.ORDER_CREATE_QUEUE_CHANNEL, orderTrade);
-		}else{
-			orderTradeService.insertSelective(orderTrade);
+
+		// 下单成功
+		if (jmsQueueTemplate != null) {
+			ActiveMQUtil.send(jmsQueueTemplate,
+					ChannelContance.ORDER_CREATE_QUEUE_CHANNEL, orderTrade);
+		} else {
+			// orderTradeService.insertSelective(orderTrade);
+			asycInsertOrderTrade(orderTrade);
 		}
-		
+
 		uiModel.addAttribute("order", orderTrade);
-		
-		
+
 		List<MemberAddress> list = null;
 		if (member != null) {
 			list = addressService.listAllByMemberId(member.getId());
@@ -253,6 +266,34 @@ public class MemberOrderController extends BaseController<TbUser> {
 		uiModel.addAttribute("addresses", list);
 		return basePath + "checkOut";
 		// return "redirect:/memberOrder/checkOut";
+	}
+
+	private void asycInsertOrderTrade(final OrderTrade orderTrade) {
+		Executor executor = Executors.newSingleThreadExecutor();
+		executor.execute(new Runnable() {
+			public void run() {
+				orderTradeService.insertSelective(orderTrade);
+			}
+		});
+	}
+
+	private void asycInsertGroupPurcseMember(
+			final GroupPurcseMember groupPurcseMember) {
+		Executor executor = Executors.newSingleThreadExecutor();
+		executor.execute(new Runnable() {
+			public void run() {
+				groupPurcseMemberService.insertSelective(groupPurcseMember);
+			}
+		});
+	}
+
+	private void asycInsertGroupPurcse(final GroupPurcse groupPurcse) {
+		Executor executor = Executors.newSingleThreadExecutor();
+		executor.execute(new Runnable() {
+			public void run() {
+				groupPurcseService.insertSelective(groupPurcse);
+			}
+		});
 	}
 
 	/**
