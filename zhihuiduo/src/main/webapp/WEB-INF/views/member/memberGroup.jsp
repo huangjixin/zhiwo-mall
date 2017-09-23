@@ -20,11 +20,11 @@
 			<div class="media" id="media">
 				<div class="media-left">
 					<img id="mediaIcon" class="media-object"
-						style="width: 120px; height: 120px; border-radius: 4px;">
+						style="width: 120px; border-radius: 4px;">
 				</div>
 				<div class="media-body" style="padding-top:5px;">
-					<h5 class="media-heading" id="nameHeading">${product.name}</h5>
-                    <span style="color: gray; font-size: 1rem;">已拼${productsCount}件</span>
+					<h5 class="media-heading" id="nameHeading"></h5>
+                    <span style="color: gray; font-size: 1rem;">已拼<b id="soldQuantityB"></b>件</span>
                     <p>
                     	<i  id="priceP" class="fa fa-jpy fa-lg" aria-hidden="true" style="font-size: 2rem; padding-top: 10px; color:red;">${product.gourpSalePrice}</i>
                     </p>
@@ -87,12 +87,12 @@
 					<div class="media-left"> <img id="propertyValueImg"
 						class="media-object img-rounded"
 						src="${ctx}/images/goods/user_13926205227/product_12365/02f8bc94495c5f6dde5e20f6e3e206c4.jpeg@750w_1l_50Q"
-						width="100px;" height="100px;" style="border:1px solid yellow">
+						width="100px;" height="100px;" style="border:1px solid red">
 					</div>
 					<div class="media-body">
 						<div style="height: 55px;"></div>
 						<h4 class="media-heading" style="color: red; font-size: 1.8rem;">
-							<i class="fa fa-jpy"></i><label id="priceLabel">${product.gourpSalePrice}</label>
+							<i class="fa fa-jpy"></i><label id="priceLabel"></label>
 						</h4>
 						<label style="font-size: 1.2rem;" id="propertyValueLabel">请选择属性</label>
 					</div>
@@ -100,32 +100,7 @@
                 <div style="height: 100px;"></div>
 				<div id="packagePriceProDiv" style="min-height: 200px; max-height:300px; overflow:hidden;">
 					
-					<c:forEach var="property" items="${properties}">
-						<c:set value="false" var="flag" />
-						<c:forEach var="pValue" items="${propertyValues}">
-							<c:if test="${property.id==pValue.propertyId}">
-								<c:set value="true" var="flag" />
-							</c:if>
-						</c:forEach>
-						<c:if test="${flag==true}">
-							<div class="form-group">
-								<div class="col-sm-9">
-									<label for="propertyValue" class="col-sm-1 control-label"
-										style="font-size: 1rem;">${property.name}</label>
-
-									<c:forEach var="pValue" items="${propertyValues}"
-										varStatus="status">
-										<c:if test="${property.id==pValue.propertyId}">
-											<label id="${pValue.id}" name="${property.code}"
-												class="ProperyValue"
-												onClick="settingProperyValueCla('${property.code}', '${pValue.id}')">${pValue.name}</label>
-										</c:if>
-									</c:forEach>
-								</div>
-							</div>
-						</c:if>
-					</c:forEach>
-					<div class="form-group">
+					<div class="form-group" id="numCountFormGroup">
 						<div class="col-sm-9">
 							<label class="col-sm-1 control-label" style="font-size: 1.2rem;">数量</label>
 							<div class="input-group number-spinner col-md-4">
@@ -201,6 +176,36 @@
 			}
 			
 			$("img").lazyload({effect: "fadeIn"});
+			
+			
+			// spinner(+-btn to change value) & total to parent input 
+							$(document)
+									.on(
+											'click',
+											'.number-spinner a',
+											function() {
+												var btn = $(this), input = btn
+														.closest(
+																'.number-spinner')
+														.find('input'), total = $(
+														'#passengers').val(), oldValue = input
+														.val().trim();
+
+												if (btn.attr('data-dir') == 'up') {
+													if (oldValue < input
+															.attr('max')) {
+														oldValue++;
+														total++;
+													}
+												} else {
+													if (oldValue > input
+															.attr('min')) {
+														oldValue--;
+														total--;
+													}
+												}
+												input.val(oldValue);
+											});
 		});
 		
 		
@@ -222,6 +227,7 @@
 			$("#mediaIcon").attr("src",urlHead+'/images/busy.gif');
 			$("#mediaIcon").attr("data-original",urlHead+'/'+product.icon);
 			$("#nameHeading").html(product.name);
+			$("#soldQuantityB").html(product.soldQuantity);
 			$("#nameHeading").bind("click",function(){
 				var url = urlHead+"/goodsDetail?goodsId="+product.id;
 				showProduct(url);
@@ -293,7 +299,7 @@
 				}
 			}
 			
-			$("#packagePriceProDiv").append(propertesPara);
+			$("#numCountFormGroup").before(propertesPara);
 		}
 		
 		function settingProperyValueCla(proName, proValueId) {
@@ -340,7 +346,8 @@
 			var groupId = "";
 			var groupInputId = "";
 			var groupIdExist = false;
-
+			var packagePriceProValueId = "";
+			
 			if (selectedPValue.length == 1) {
 				var object = selectedPValue[0];
 				if (mode == 'group') {
@@ -348,7 +355,7 @@
 				} else {
 					groupId += object.id + "_IndependInput";
 				}
-
+				packagePriceProValueId = object.id;
 				if ($('#' + groupId).length > 0) {
 					groupIdExist = true;
 				}
@@ -371,7 +378,7 @@
 							} else {
 								temp += obj.id + "_IndependInput";
 							}
-
+							packagePriceProValueId = obj.id;
 						} else {
 							temp += obj.id;
 						}
@@ -393,7 +400,7 @@
 								} else {
 									temp1 += "_" + obj1.id + "_IndependInput";
 								}
-
+								packagePriceProValueId = obj1.id;
 								if ($('#' + temp1).length > 0) {
 									temp = temp1;
 									groupIdExist = true;
@@ -421,6 +428,16 @@
 				$('#priceLabel').html(groupvalue);
 				console.log("团购价是：" + groupvalue);
 				selectedProperyPackagePrice = groupId;
+				
+				for(var i=0;i<packagePrices.length;i++){
+					var packagePrice = packagePrices[i];
+					if(packagePriceProValueId == packagePrice.propertyValueId){
+						$("#propertyValueImg").attr("src",ctx+'/images/busy.gif');
+						$("#propertyValueImg").attr("data-original",packagePrice.icon);
+						$("#propertyValueImg").lazyload({effect: "fadeIn"});
+						break;
+					}
+				}
 			}
 			var proValues = "已选 ";
 			for (var i = 0; i < selectedPValue.length; i++) {
@@ -436,15 +453,6 @@
 		
 		function showProductDialog(){
 			$('#prriceModal').modal("show");
-		}
-		
-		
-		String.prototype.replaceAll = function(reallyDo, replaceWith, ignoreCase) {   
-			if (!RegExp.prototype.isPrototypeOf(reallyDo)) {   
-				return this.replace(new RegExp(reallyDo, (ignoreCase ? "gi": "g")), replaceWith);   
-			 } else {   
-				return this.replace(reallyDo, replaceWith);   
-			 }   
 		}
 	</script>
 </body>

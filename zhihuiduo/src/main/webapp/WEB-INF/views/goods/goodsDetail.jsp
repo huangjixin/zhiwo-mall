@@ -10,17 +10,10 @@
 <link href="${ctx}/css/bootstrap-spinner.css" rel="stylesheet" type="text/css">
 <link href="${ctx}/css/zhihuiduo.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="${ctx}/js/jquery.spinner.min.js"></script>
-
-<style>
-body {
-	background-color: #F2F2F2;
-	font-size: 1.5rem;
-}
-
-</style>
+<script type="text/javascript" src="${ctx}/js/zhihuiduo/goodsDetail.js"></script>
 </head>
 <body>
-	<input id="gourpSalePrice" name="gourpSalePrice" type="hidden"
+	<!--<input id="gourpSalePrice" name="gourpSalePrice" type="hidden"
 		value="${product.gourpSalePrice }">
 	<input id="independentPrice" name="independentPrice" type="hidden"
 		value="${product.independentPrice }">
@@ -30,16 +23,16 @@ body {
 			value="${packagePrice.gourpPrice}" type="hidden">
 		<input id="${packagePrice.propertyValueId}_IndependInput"
 			value="${packagePrice.independentPrice}" type="hidden">
-	</c:forEach>
+	</c:forEach>-->
 	<div class="thumbnail">
 		<div class="swiper-container">
-			<div class="swiper-wrapper">
-				<!-- 轮播图设置 -->
+			<div class="swiper-wrapper" id="swiperWrapper">
+				<!-- 轮播图设置
 				<c:forEach var="prImage" items="${swiperImages}">
 					<div class="swiper-slide">
 						<img class="img-responsive" src="${ctx}/${prImage.url}" >
 					</div>
-				</c:forEach>
+				</c:forEach> -->
 			</div>
 		</div>
 		<div class="caption">
@@ -47,12 +40,12 @@ body {
 
 			<div class="pull-left">
 				<label style="color: red; font-size: 2rem;"><i
-					class="fa fa-jpy"></i>${product.gourpSalePrice}</label>&nbsp;&nbsp;<label
-					style="color: gray; font-size: 1.5rem;"><i
-					class="fa fa-jpy"></i><span style="text-decoration: line-through">${product.marketPrice}</span></label>
+					class="fa fa-jpy" id="gSalePriceLabel"></i></label>&nbsp;&nbsp;<label
+					style="color: gray; font-size: 1.5rem;"><i id="marketPriceLabel"
+					class="fa fa-jpy"></i><span style="text-decoration: line-through"></span></label>
 			</div>
 			<div class="pull-right">
-				<label style="color: gray; font-size: 1.5rem;">已拼72734件·2人拼单</label>
+				<label style="color: gray; font-size: 1.5rem;">已拼<span id="soldQuantitySpan"></span>件·2人拼单</label>
 			</div>
 
 			<div class="clearfix"></div>
@@ -69,16 +62,16 @@ body {
     
 	<div class="thumbnail">
 		<div class="caption">
-        	<div class="page-header" style="padding-top:0px; margin-top:5px;">
+        	<div class="page-header" style="padding-top:0px; margin-top:5px;" id="groupPurcseHeader">
                 <h4>看看谁在开团</h4>
             </div>
-            <div class="media">
+           <!-- <div class="media">
             <div class="pull-right" style="padding-top:7px;">
             	<button type="button" class="btn btn-danger">去参团</button>
 			</div>
             <div class="media-left">
             		<img class="img-circle" src="${ctx}/images/busy.gif"  data-original="${ctx}/${shop.icon}"  style="width:50px;">
-                    <!--<img class="img-circle" src="${ctx}/${shop.icon}" style="width:50px;">-->
+                   <img class="img-circle" src="${ctx}/${shop.icon}" style="width:50px;">
                 </div>
 				<div class="media-body">
 					<h5 class="media-heading" style="padding-top: 6px;">人生如戏，戏如人生</h5>
@@ -98,8 +91,8 @@ body {
 					<h5 class="media-heading" style="padding-top: 6px;">人生如戏，戏如人生</h5>
                     <span style="color: gray; font-size: 1.4rem;">还差一人，剩余2小时</span>
 				</div>
-			</div>	
-			<c:forEach var="groupPurcse" items="${groupPurcses}">
+			</div>	-->
+			<!--<c:forEach var="groupPurcse" items="${groupPurcses}">groupPurcseHeader
             <a href="${ctx}/memberGroup?goodsId=${groupPurcse.productId}&groupPurcseId=${groupPurcse.id}">
 			<div class="media">
              <div class="pull-right" style="padding-top:7px;">
@@ -114,7 +107,7 @@ body {
 				</div>
 			</div>		
             </a>
-			</c:forEach>
+			</c:forEach>-->
 		</div>
 	</div>
 	
@@ -141,8 +134,8 @@ body {
 							style="width: 50px; height: 50px; border-radius: 4px;">
 					</div>
 					<div class="media-body">
-						<h5 class="media-heading" style="padding-top: 6px;">${shop.name}</h5>
-						<span style="color: gray; font-size: 1.4rem;">商品数量${fn:length(goodsList)}.已团${shopProductsCount}件</span>
+						<h5 class="media-heading" style="padding-top: 6px;" id="shopHead"></h5>
+						<span style="color: gray; font-size: 1.4rem;">商品数量<span id="goodsCount"></span>.已团${shopProductsCount}件</span>
 					</div>
 					<div class="media-right" style="padding-top: 10px;">
 						<img class="media-object"
@@ -164,17 +157,8 @@ body {
 					<label>&nbsp;</label>
 					<h4 class="media-heading">商品详情</h4>
 					<hr class="hr1" />
-                    <div class="media-body">
-                    	${product.content} 
-                        <!--<img
-						src="${ctx}/images/goods/user_13926205227/product_12365/02f8bc94495c5f6dde5e20f6e3e206c4.jpeg@750w_1l_50Q"
-						class="img-responsive"> <img
-						src="${ctx}/images/goods/user_13926205227/product_12365/0c4d438262012c7099a25f05958272ef.jpeg@750w_1l_50Q"
-						class="img-responsive"> <img
-						src="${ctx}/images/goods/user_13926205227/product_12365/583052abadbe0b8daf936fd447ebe31c.jpeg@750w_1l_50Q"
-						class="img-responsive"> <img
-						src="${ctx}/images/goods/user_13926205227/product_12365/b8863f414edab95ca9f41dc3a51d6176.jpeg@750w_1l_50Q"
-						class="img-responsive">-->
+                    <div class="media-body" id="proContent">
+                    	<!--${product.content}-->
                     </div>
 					
 				</div>
@@ -209,8 +193,8 @@ body {
 	<div style="height: 75px; text-align: center">已经到底部了</div>
 
 
-	<!-- 轮播图设置模态框（Modal） -->
-	<div class="modal fade" id="swiperImageModal" tabindex="-2"
+    <!--商品属性弹窗-->
+    <div class="modal fade" id="prriceModal" tabindex="-2"
 		role="dialog" aria-labelledby="swiperImageModalLabel"
 		aria-hidden="true">
 		<div class="modal-dialog"
@@ -221,49 +205,24 @@ body {
 					<button type="button" class="close" data-dismiss="swiperImageModal"
 						aria-hidden="true">&times;&nbsp;</button>
 				</div>
-				<div class="media" style="position: absolute; top: -50px;">
-					<a class="media-left" href="#"> <img id="propertyValueImg"
+				<div class="media" style="position: absolute; top: -30px; left:10px;">
+					<div class="media-left"> <img id="propertyValueImg"
 						class="media-object img-rounded"
 						src="${ctx}/images/goods/user_13926205227/product_12365/02f8bc94495c5f6dde5e20f6e3e206c4.jpeg@750w_1l_50Q"
-						width="100px;" height="100px;">
-					</a>
+						width="100px;" height="100px;" style="border:1px solid red">
+					</div>
 					<div class="media-body">
 						<div style="height: 55px;"></div>
 						<h4 class="media-heading" style="color: red; font-size: 1.8rem;">
-							<i class="fa fa-jpy"></i><label id="priceLabel">${product.gourpSalePrice}</label>
+							<i class="fa fa-jpy"></i><label id="priceLabel"></label>
 						</h4>
 						<label style="font-size: 1.2rem;" id="propertyValueLabel">请选择属性</label>
 					</div>
 				</div>
                 <div style="height: 100px;"></div>
-				<div id="packagePriceProDiv" style="min-height: 200px; max-height:300px; overflow:scroll;">
+				<div id="packagePriceProDiv" style="min-height: 200px; max-height:300px; overflow:hidden;">
 					
-					<c:forEach var="property" items="${properties}">
-						<c:set value="false" var="flag" />
-						<c:forEach var="pValue" items="${propertyValues}">
-							<c:if test="${property.id==pValue.propertyId}">
-								<c:set value="true" var="flag" />
-							</c:if>
-						</c:forEach>
-						<c:if test="${flag==true}">
-							<div class="form-group">
-								<div class="col-sm-9">
-									<label for="propertyValue" class="col-sm-1 control-label"
-										style="font-size: 1rem;">${property.name}</label>
-
-									<c:forEach var="pValue" items="${propertyValues}"
-										varStatus="status">
-										<c:if test="${property.id==pValue.propertyId}">
-											<label id="${pValue.id}" name="${property.code}"
-												class="ProperyValue"
-												onClick="settingProperyValueCla('${property.code}', '${pValue.id}')">${pValue.name}</label>
-										</c:if>
-									</c:forEach>
-								</div>
-							</div>
-						</c:if>
-					</c:forEach>
-					<div class="form-group">
+					<div class="form-group" id="numCountFormGroup">
 						<div class="col-sm-9">
 							<label class="col-sm-1 control-label" style="font-size: 1.2rem;">数量</label>
 							<div class="input-group number-spinner col-md-4">
@@ -310,308 +269,9 @@ body {
     <%@ include file="/WEB-INF/member-include/fade-ui.jsp"%>
 	<%@ include file="/WEB-INF/member-include/bottomMenu.jsp"%>
 	<script>
-		var propertiesString = '${propertiesString}';
-		var propertyValuesString = '${propertyValuesString}';
-
-		//保存属性数组
-		var propertyValueArray = [];
-		var selectedPValue = [];
-		//保存属性值数组
-		var proArray = [];
-		var mode = 'group';
-		$()
-				.ready(
-						function() {
-							//图片懒加载。
-							$("img").lazyload({
-								threshold : 200,
-								placeholder : "${ctx}/images/heart.png",
-								event : "click",
-								effect : "fadeIn",	
-							});
-							
-							
-							if (propertiesString != '') {
-								proArray = JSON.parse('${propertiesString}');
-							}
-
-							if (propertyValuesString != '') {
-								propertyValueArray = JSON
-										.parse('${propertyValuesString}');
-							}
-
-							// spinner(+-btn to change value) & total to parent input 
-							$(document)
-									.on(
-											'click',
-											'.number-spinner a',
-											function() {
-												var btn = $(this), input = btn
-														.closest(
-																'.number-spinner')
-														.find('input'), total = $(
-														'#passengers').val(), oldValue = input
-														.val().trim();
-
-												if (btn.attr('data-dir') == 'up') {
-													if (oldValue < input
-															.attr('max')) {
-														oldValue++;
-														total++;
-													}
-												} else {
-													if (oldValue > input
-															.attr('min')) {
-														oldValue--;
-														total--;
-													}
-												}
-												input.val(oldValue);
-											});
-							$("#independentPriceLabel").html("${product.independentPrice}");
-							$("#gourpSalePriceLabel").html("${product.gourpSalePrice}");
-							$("#distributionValueLabel").html("${product.distributionValue}");
-							
-							$("#indexBtn").removeClass("menuItemActive");
-							$("#indexBtn").addClass("menuItem");
-							//跳转到首页
-							$("#indexBtn").bind("click", function() {
-								window.location = "${ctx}/mindex";
-							});
-							//单独开团
-							$("#independBuyBtn")
-									.bind(
-											"click",
-											function() {
-												mode = 'independ';
-												$("#swiperImageModal").modal(
-														'show');
-												$('#priceLabel').html("");
-												for (var i = 0; i < proArray.length; i++) {
-													$(
-															"[name="
-																	+ proArray[i].code
-																	+ "]")
-															.removeClass(
-																	"activeProperyValue");
-													$(
-															"[name="
-																	+ proArray[i].code
-																	+ "]")
-															.addClass(
-																	"ProperyValue");
-												}
-												if (propertyValueArray.length == 0) {
-													$('#priceLabel')
-															.html(
-																	$(
-																			"#independentPrice")
-																			.val());
-												}
-
-											});
-							//拼团开团
-							$("#groupBuyBtn")
-									.bind(
-											"click",
-											function() {
-												mode = 'group'
-												$("#swiperImageModal").modal(
-														'show');
-												for (var i = 0; i < proArray.length; i++) {
-													$(
-															"[name="
-																	+ proArray[i].code
-																	+ "]")
-															.removeClass(
-																	"activeProperyValue");
-													$(
-															"[name="
-																	+ proArray[i].code
-																	+ "]")
-															.addClass(
-																	"ProperyValue");
-												}
-												$('#priceLabel').html("");
-
-												if (propertyValueArray.length == 0) {
-													$('#priceLabel')
-															.html(
-																	$(
-																			"#gourpSalePrice")
-																			.val());
-												}
-											});
-											
-							 $("img").lazyload({effect: "fadeIn"});
-							 $("#p").hide(100,function(){
-								 self.setInterval("fadeInOut('p')",6000); 
-							 });
-						});
-
-		var selectedProperyPackagePrice = "";
-
-		function settingProperyValueCla(proName, proValueId) {
-			var obj;
-			for (var i = 0; i < propertyValueArray.length; i++) {
-				if (proValueId == propertyValueArray[i].id) {
-					obj = propertyValueArray[i];
-					break;
-				}
-			}
-
-			//找到属性
-			if (obj) {
-				var flag = -1;
-				for (var i = 0; i < selectedPValue.length; i++) {
-					var object = selectedPValue[i];
-					if (object.propertyId == obj.propertyId) {
-						flag = i;
-						break;
-					}
-				}
-				if (flag != -1) {
-					selectedPValue.splice(flag, 1);
-				}
-			}
-
-			$("[name=" + proName + "]").removeClass("activeProperyValue");
-			$("[name=" + proName + "]").addClass("ProperyValue");
-			$("#" + proValueId).removeClass("ProperyValue");
-			$("#" + proValueId).addClass("activeProperyValue");
-
-			for (var j = 0; j < propertyValueArray.length; j++) {
-				var object = propertyValueArray[j];
-				var id = object.id;
-				if (id == proValueId) {
-					var proValueIndex = $.inArray(object, selectedPValue);
-					if (proValueIndex == -1) {
-						selectedPValue.push(object);
-					}
-				}
-			}
-
-			//打印调试
-			var groupId = "";
-			var groupInputId = "";
-			var groupIdExist = false;
-
-			if (selectedPValue.length == 1) {
-				var object = selectedPValue[0];
-				if (mode == 'group') {
-					groupId += object.id + "_GroupInput";
-				} else {
-					groupId += object.id + "_IndependInput";
-				}
-
-				if ($('#' + groupId).length > 0) {
-					groupIdExist = true;
-				}
-			}else{
-				for (var i = 0; i < selectedPValue.length; i++) {
-					groupId = "";
-					var object = selectedPValue[i];
-					groupId += object.id + "_";
-					var temp = groupId;
-					for (var j = 0; j < selectedPValue.length; j++) {
-						temp = groupId;
-						if (object == selectedPValue[j]) {
-							continue;
-						}
-
-						var obj = selectedPValue[j];
-						if (selectedPValue.length == 2) {
-							if (mode == 'group') {
-								temp += obj.id + "_GroupInput";
-							} else {
-								temp += obj.id + "_IndependInput";
-							}
-
-						} else {
-							temp += obj.id;
-						}
-
-						if ($('#' + temp).length > 0) {
-							groupIdExist = true;
-							break;
-						}
-
-						if (selectedPValue.length == 3) {
-							var temp1 = temp;
-							for (var k = 0; k < selectedPValue.length; k++) {
-								var obj1 = selectedPValue[k];
-								if (obj1 == object || obj1 == obj) {
-									continue;
-								}
-								if (mode == 'group') {
-									temp1 += "_" + obj1.id + "_GroupInput";
-								} else {
-									temp1 += "_" + obj1.id + "_IndependInput";
-								}
-
-								if ($('#' + temp1).length > 0) {
-									temp = temp1;
-									groupIdExist = true;
-									break;
-								}
-							}
-						}
-
-						if (groupIdExist == true) {
-							groupId = temp;
-							break;
-						}
-					}
-
-					if (groupIdExist == true) {
-						groupId = temp;
-						break;
-
-					}
-				}
-			}
-
-			if (groupIdExist == true) {
-				var groupvalue = $('#' + groupId).val();
-				$('#priceLabel').html(groupvalue);
-				console.log("团购价是：" + groupvalue);
-				selectedProperyPackagePrice = groupId;
-			}
-			var proValues = "已选 ";
-			for (var i = 0; i < selectedPValue.length; i++) {
-				proValues += selectedPValue[i].name + "  ";
-			}
-			$('#propertyValueLabel').html(proValues);
-		}
-
-		//去结算。
-		function checkOut() {
-			if (selectedProperyPackagePrice != "") {
-				var index = selectedProperyPackagePrice.lastIndexOf("_");
-				if (index != -1) {
-					selectedProperyPackagePrice = selectedProperyPackagePrice
-							.substring(0, index);
-				}
-			}
-			var packagePriceId = selectedProperyPackagePrice;
-			$("#packagePriceId").val(packagePriceId);
-			var dealPrice = $('#priceLabel').html();
-			$("#dealPrice").val(dealPrice);
-			var buyNum = $("#numberCount").val();
-			$("#buyNum").val(buyNum);
-			var proValues = JSON.stringify(selectedPValue);
-			$("#proValues").val(proValues);
-			$("#mode").val(mode);
-			if (dealPrice == "") {
-				return false;
-			} else {
-				return true;
-			}
-		}
+		var obj = ${rawData};
 		
-		function fadeInOut(detination){
-			$("#"+detination).fadeOut(2000).fadeIn(1000);
-		}
+		
 		
 		<%--<%@ include file="/WEB-INF/member-include/fade-js.jsp"%>--%>
 
