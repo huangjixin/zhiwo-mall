@@ -84,7 +84,7 @@
 	</div>
 	<div style="height: 60px; text-aling: center; font-size: 1.4rem;"></div>
     
-    <div id="p" class="fadeDiv">
+    <div id="p" class="fadeDiv" style="display:none;">
     	 <img id="memberIcon" src="${ctx}/uassets/2017/8/27/1503807062182.jpg" class="fadeImg">&nbsp;&nbsp;<span>黄记新</span>拼单了&nbsp;&nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i>
     </div>
 	<!--↓3列菜单开始↓-->

@@ -27,6 +27,8 @@ public class ProductExtention extends PrProductWithBLOBs {
 	private GroupPurcse groupPurcse;
 	private List<GroupPurcseMember> groupPurcseMembers;
 
+	private List<GroupPurcse> groupPurcses;
+	
 	public GroupPurcse getGroupPurcse() {
 		return groupPurcse;
 	}
@@ -90,5 +92,13 @@ public class ProductExtention extends PrProductWithBLOBs {
 
 	public void setSoldQuantity(String soldQuantity) {
 		this.soldQuantity = soldQuantity;
+	}
+
+	public List<GroupPurcse> getGroupPurcses() {
+		return groupPurcses;
+	}
+
+	public void setGroupPurcses(List<GroupPurcse> groupPurcses) {
+		this.groupPurcses = groupPurcses;
 	}
 }

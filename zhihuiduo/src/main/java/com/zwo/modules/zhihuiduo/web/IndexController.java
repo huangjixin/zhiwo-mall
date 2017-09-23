@@ -61,7 +61,7 @@ public class IndexController extends BaseController {
 		for (int i = 0; i < 10; i++) {
 			GroupPurcse groupPurcseMember  = new GroupPurcse();
 			groupPurcseMember.setId("027355643cba4095a4da68ea906a42fa");
-			groupPurcseMember.setProductId("c6dd09184e7d4f8ab7b9d96edbaf3595");
+			groupPurcseMember.setProductId("99fda1d4bd0f4b7ebc596cc393688590");
 			groupPurcseMember.setMemberName("田间青青");
 			groupPurcseMember.setMemberIcon("http://wx.qlogo.cn/mmopen/z2JphiaeYdpf3r6Lxr1icDaiajHGGSI5SkOOtGbIJo5h8eSt2NiaBHtpWOpuvsrPpCRtZKov3iacScRyicErrzEUlHcrvibNfRlMRae/0");
 			groupPurcses.add(groupPurcseMember);

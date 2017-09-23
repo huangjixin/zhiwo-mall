@@ -122,9 +122,12 @@ public class MemberGroupController extends BaseController {
 		ProductExtention productExtention = null;
 		List<GroupPurcseMember> groupPurcseMembers = null;
 		GroupPurcse groupPurcse = null;
-		PrProductWithBLOBs product = null;
+		PrProduct product = null;
 		List<PrProductPackagePrice> packagePrices = null;
 		List<PrProductPropertyValue> productPropertyValues = null;
+		List<GroupPurcse> groupPurcses = null;
+		// 商品属性。
+		List<PrProductProperty> properties = productPropertyService.listAll();
 		
 		String key = groupPurcseId+GroupPurcseMemberServiceImpl.KEY_GROUP_PURCSE_ID_MEMBERS;
 		if(redisTemplate!=null){
@@ -133,7 +136,7 @@ public class MemberGroupController extends BaseController {
 			if(productExtention == null){
 				productExtention = new ProductExtention();
 				
-				product = prductService.selectByPrimKey(goodsId);
+				product = prductService.selectByPrimaryKey(goodsId);
 				try {
 					BeanUtils.copyProperties(productExtention, product);
 				} catch (IllegalAccessException e) {
@@ -143,33 +146,28 @@ public class MemberGroupController extends BaseController {
 				}
 				
 				groupPurcse = groupPurcseService.selectByPrimaryKey(groupPurcseId);
-				productExtention.setGroupPurcse(groupPurcse);
 				
 				if(groupPurcse!=null && groupPurcse.getDisable()==false){
 					groupPurcseMembers = groupPurcseMemberService.selectByGroupPurcseId(groupPurcse.getId());
+					groupPurcses =groupPurcseService.selectGroupPurcseByPId(goodsId, false);
 				}
 				
-				packagePrices = packagePriceService.selectByProductId(product
-						.getId());
-				productPropertyValues = this.propertyValueService
-						.selectByProductId(product.getId());
+				productExtention.setGroupPurcse(groupPurcse);
+				packagePrices = packagePriceService.selectByProductId(product.getId());
+				productPropertyValues = this.propertyValueService.selectByProductId(product.getId());
 				productExtention.setPackagePrices(packagePrices);
 				productExtention.setProductPropertyValues(productPropertyValues);
 				productExtention.setGroupPurcseMembers(groupPurcseMembers);
+				productExtention.setGroupPurcses(groupPurcses);
+				productExtention.setProperties(properties);
 				
 				redisTemplate.opsForValue().set(key, productExtention);
-				redisTemplate.expire(key, 30, TimeUnit.MINUTES);
-				
-				jsonString = JSONObject.toJSONString(productExtention);
-				uiModel.addAttribute("rawData", jsonString);
-			}else{
-				jsonString = JSONObject.toJSONString(productExtention);
-				uiModel.addAttribute("rawData", jsonString);
+				redisTemplate.expire(key, 30, TimeUnit.SECONDS);
 			}
 		}else{
 			productExtention = new ProductExtention();
 			
-			product = prductService.selectByPrimKey(goodsId);
+			product = prductService.selectByPrimaryKey(goodsId);
 			try {
 				BeanUtils.copyProperties(productExtention, product);
 			} catch (IllegalAccessException e) {
@@ -179,12 +177,13 @@ public class MemberGroupController extends BaseController {
 			}
 			
 			groupPurcse = groupPurcseService.selectByPrimaryKey(groupPurcseId);
-			productExtention.setGroupPurcse(groupPurcse);
 			
 			if(groupPurcse!=null && groupPurcse.getDisable()==false){
 				groupPurcseMembers = groupPurcseMemberService.selectByGroupPurcseId(groupPurcse.getId());
+				groupPurcses =groupPurcseService.selectGroupPurcseByPId(goodsId, false);
 			}
 			
+			productExtention.setGroupPurcse(groupPurcse);
 			packagePrices = packagePriceService.selectByProductId(product
 					.getId());
 			productPropertyValues = this.propertyValueService
@@ -192,13 +191,15 @@ public class MemberGroupController extends BaseController {
 			productExtention.setPackagePrices(packagePrices);
 			productExtention.setProductPropertyValues(productPropertyValues);
 			productExtention.setGroupPurcseMembers(groupPurcseMembers);
-			
+			productExtention.setGroupPurcses(groupPurcses);
+			productExtention.setProperties(properties);
 			redisTemplate.opsForValue().set(key, productExtention);
-			redisTemplate.expire(key, 30, TimeUnit.MINUTES);
+			redisTemplate.expire(key, 30, TimeUnit.SECONDS);
 			
-			jsonString = JSONObject.toJSONString(productExtention);
-			uiModel.addAttribute("rawData", jsonString);
 		}
+		
+		jsonString = JSONObject.toJSONString(productExtention);
+		uiModel.addAttribute("rawData", jsonString);
 		
 		uiModel.addAttribute("product", product);
 		uiModel.addAttribute("groupPurcse", groupPurcse);

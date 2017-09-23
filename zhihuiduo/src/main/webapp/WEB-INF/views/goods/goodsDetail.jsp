@@ -236,7 +236,7 @@ body {
 					</div>
 				</div>
                 <div style="height: 100px;"></div>
-				<div style="min-height: 200px; max-height:300px; overflow:scroll;">
+				<div id="packagePriceProDiv" style="min-height: 200px; max-height:300px; overflow:scroll;">
 					
 					<c:forEach var="property" items="${properties}">
 						<c:set value="false" var="flag" />

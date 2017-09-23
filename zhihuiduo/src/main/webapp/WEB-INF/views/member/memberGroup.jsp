@@ -34,10 +34,10 @@
             
             <p
                 style="text-align: left; font-size: 1.4rem; padding:4px; background-color:#FAFAFA">
-               <small><i class="fa fa-check-square-o" aria-hidden="true" style="color:red;"></i>&nbsp;假一赔十</small>&nbsp;&nbsp;<small><i class="fa fa-check-square-o" aria-hidden="true" style="color:red;"></i>&nbsp;7天退换</small>&nbsp;&nbsp;<small><i class="fa fa-check-square-o" aria-hidden="true" style="color:red;"></i>&nbsp;48小时发货</small>
+               <span><i class="fa fa-check-square-o" aria-hidden="true" style="color:red;"></i>&nbsp;假一赔十</span>&nbsp;&nbsp;<span><i class="fa fa-check-square-o" aria-hidden="true" style="color:red;"></i>&nbsp;7天退换</span>&nbsp;&nbsp;<span><i class="fa fa-check-square-o" aria-hidden="true" style="color:red;"></i>&nbsp;48小时发货</span>
             </p>
             <div style="text-align:center; padding:10px;" id="groupPurcseMemberIcon">
-                <c:if test="${groupPurcse.disable==true}">
+                <!--<c:if test="${groupPurcse.disable==true}">
                 	<c:forEach var="groupPurcseMember" items="${groupPurcseMembers}">
                 		<img src="${groupPurcseMember.memberIcon}" class="img-circle" width="60px" height="60px;" />
                 	</c:forEach>
@@ -45,21 +45,21 @@
                 <c:if test="${groupPurcse.disable==false}">
                 	<img src="${groupPurcse.memberIcon}" class="img-circle" width="60px" height="60px;" />
                 	<img src="" class="img-circle" width="50px" height="50px;" />
-                </c:if>
+                </c:if>-->
             	
             </div>
             <div style="text-align:center; padding:10px;">
-            	<c:if test="${groupPurcse.disable==true}">
+            	<!--<c:if test="${groupPurcse.disable==true}">
                 	<a href="${ctx}/goodsDetail?goodsId=${product.id}"><span class="label label-danger" style="font-size: 2rem;text-align:center; width:100%; left:0;right:0;">去开团</span></a>
                 </c:if>
             	<c:if test="${groupPurcse.disable==false}">
                 	<span class="label label-danger" style="font-size: 2rem;text-align:center; width:100%; left:0;right:0;">参加拼单</span>
-                </c:if>
+                </c:if>-->
             </div>
             <br>
             <hr class="hr1"/>
             <br>
-            <div style="font-size: 1.2rem;">
+            <div style="font-size: 1.4rem;">
             <div class="pull-left">
                     	<span>拼单须知</span>
                     </div>
@@ -72,7 +72,7 @@
 	</div>
     
     <!--商品属性弹窗-->
-    <div class="modal fade" id="swiperImageModal" tabindex="-2"
+    <div class="modal fade" id="prriceModal" tabindex="-2"
 		role="dialog" aria-labelledby="swiperImageModalLabel"
 		aria-hidden="true">
 		<div class="modal-dialog"
@@ -83,12 +83,12 @@
 					<button type="button" class="close" data-dismiss="swiperImageModal"
 						aria-hidden="true">&times;&nbsp;</button>
 				</div>
-				<div class="media" style="position: absolute; top: -50px;">
-					<a class="media-left" href="#"> <img id="propertyValueImg"
+				<div class="media" style="position: absolute; top: -30px; left:10px;">
+					<div class="media-left"> <img id="propertyValueImg"
 						class="media-object img-rounded"
 						src="${ctx}/images/goods/user_13926205227/product_12365/02f8bc94495c5f6dde5e20f6e3e206c4.jpeg@750w_1l_50Q"
-						width="100px;" height="100px;">
-					</a>
+						width="100px;" height="100px;" style="border:1px solid yellow">
+					</div>
 					<div class="media-body">
 						<div style="height: 55px;"></div>
 						<h4 class="media-heading" style="color: red; font-size: 1.8rem;">
@@ -98,7 +98,7 @@
 					</div>
 				</div>
                 <div style="height: 100px;"></div>
-				<div style="min-height: 200px; max-height:300px; overflow:scroll;">
+				<div id="packagePriceProDiv" style="min-height: 200px; max-height:300px; overflow:hidden;">
 					
 					<c:forEach var="property" items="${properties}">
 						<c:set value="false" var="flag" />
@@ -171,21 +171,28 @@
  	<script>
 	 	window.rawData= '${rawData}';
 		var properties;
-		var productPropertyValues;
+		var propertyValues;
 		var packagePrices;
 		var groupPurcse;
 	    var groupPurcseMembers;
+		
+		//保存属性数组
+		var propertyValueArray = [];
+		var selectedPValue = [];
+		var selectedProperyPackagePrice = "";
+		
 		
 		var ctx = "";
 		var fadeCount = 0;
 		
 		$(function() {
 			ctx = window.location.protocol+"//"+window.location.host;
+			var data =  window.rawData;
 			
-			var obj = JSON.parse(window.rawData);
+			var obj = JSON.parse(data);
 			if(obj){
 				 properties= obj.properties;
-				 productPropertyValues= obj.productPropertyValues;
+    			 propertyValueArray= propertyValues= obj.productPropertyValues;
 				 packagePrices= obj.packagePrices;
 				 groupPurcse= obj.groupPurcse;
 	    		 groupPurcseMembers= obj.groupPurcseMembers;
@@ -199,6 +206,19 @@
 		
 		//添加商品属性。
 		function appendProductPro(urlHead,product){
+			//添加隐藏属性。
+			if(packagePrices){
+				var length = packagePrices.length;
+				for(var i=0;i<length;i++){
+					var packagePrice= packagePrices[i];
+					var para = "";
+					para+='<input id="'+packagePrice.propertyValueId+'_GroupInput" value="'+packagePrice.gourpPrice+'" type="hidden">';
+					para+='<input id="'+packagePrice.propertyValueId+'_IndependInput" value="'+packagePrice.independentPrice+'" type="hidden">';
+					$('body').append(para);
+				}
+			}
+			
+			
 			$("#mediaIcon").attr("src",urlHead+'/images/busy.gif');
 			$("#mediaIcon").attr("data-original",urlHead+'/'+product.icon);
 			$("#nameHeading").html(product.name);
@@ -215,21 +235,216 @@
 				length = groupPurcseMembers.length;
 				for(var i=0;i<length;i++){
 					var gpm = groupPurcseMembers[i];
-					para+='<img src="'+gpm.memberIcon+'" class="img-circle" width="60px" height="60px;" />';
+					para+='<img src="'+gpm.memberIcon+'" class="img-circle" width="60px" height="60px;"  style="border:1px solid yellow;"/>';
+					para+='&nbsp;';
 				}
+				para+="<br>";
+				para+='<span onClick="showProductDialog()" class="label label-danger" style="font-size: 2rem;text-align:center; width:100%; left:0;right:0;">一键开团</span>';
+				para+="<br>";
 				$("#groupPurcseMemberIcon").append(para);
 			}else{
-				para+='<img src="'+groupPurcse.memberIcon+'" class="img-circle" width="60px" height="60px;" />';
-                para+='<img src="" class="img-circle" width="50px" height="50px;" />';
+				para+='<img src="'+groupPurcse.memberIcon+'" class="img-circle" style="border:1px solid yellow;" width="60px" height="60px;" />';
+				para+='&nbsp;';
+                para+='<img  class="img-circle" width="60px" height="60px;" style="border:1px dashed gray;" /><br>';
+				
+				para+='<span id="countimeSpan">仅剩1个名额，距离结束时间还有</span><b id="timeB" style="color:red;">19:25:33</b><br>';
+				para+="<br>";
+				para+='<span onClick="showProductDialog()" class="label label-danger" style="font-size: 2rem;text-align:center; width:100%; left:0;right:0;">参团作战</span><br>';
+				//$("#countimeSpan").before(para);
 				$("#groupPurcseMemberIcon").append(para);
 			}
 			
 			
+			$("#propertyValueImg").attr("src",product.icon);
+			$("#priceLabel").html(product.gourpSalePrice);
+			
+			
+			var propertesPara = "";
+			
+			if(properties){
+				var length = properties.length;
+				for(var i=0;i<length;i++){
+					var flag = false;
+					var property= properties[i];
+					if(propertyValues){
+						var len = propertyValues.length;
+						for(var j=0;j<len;j++){
+							var pValue = propertyValues[j];
+							if(property.id==pValue.propertyId){
+								flag = true;
+								break;
+							}
+						}
+						
+						if(flag == true){
+							var proPara = '<div class="form-group"><div class="col-sm-9"><label for="propertyValue" class="col-sm-1 control-label" style="font-size: 1rem;">'+property.name+'</label>';
+							for(var k=0;k<propertyValues.length;k++){
+								var proValue= propertyValues[k];
+								if(property.id==proValue.propertyId){
+									var onclickFun = 'onClick="settingProperyValueCla(\''+property.code+'\',\''+proValue.id+'\')"';
+									proPara +='<label '+onclickFun+' id="'+proValue.id+'" name="'+property.code+'" class="ProperyValue" >'+proValue.name+'</label>';
+								}
+							}
+							
+							proPara +='</div></div>';
+							propertesPara += proPara;
+						}
+					}
+				}
+			}
+			
+			$("#packagePriceProDiv").append(propertesPara);
+		}
+		
+		function settingProperyValueCla(proName, proValueId) {
+			var obj;
+			for (var i = 0; i < propertyValueArray.length; i++) {
+				if (proValueId == propertyValueArray[i].id) {
+					obj = propertyValueArray[i];
+					break;
+				}
+			}
+
+			//找到属性
+			if (obj) {
+				var flag = -1;
+				for (var i = 0; i < selectedPValue.length; i++) {
+					var object = selectedPValue[i];
+					if (object.propertyId == obj.propertyId) {
+						flag = i;
+						break;
+					}
+				}
+				if (flag != -1) {
+					selectedPValue.splice(flag, 1);
+				}
+			}
+
+			$("[name=" + proName + "]").removeClass("activeProperyValue");
+			$("[name=" + proName + "]").addClass("ProperyValue");
+			$("#" + proValueId).removeClass("ProperyValue");
+			$("#" + proValueId).addClass("activeProperyValue");
+
+			for (var j = 0; j < propertyValueArray.length; j++) {
+				var object = propertyValueArray[j];
+				var id = object.id;
+				if (id == proValueId) {
+					var proValueIndex = $.inArray(object, selectedPValue);
+					if (proValueIndex == -1) {
+						selectedPValue.push(object);
+					}
+				}
+			}
+
+			//打印调试
+			var groupId = "";
+			var groupInputId = "";
+			var groupIdExist = false;
+
+			if (selectedPValue.length == 1) {
+				var object = selectedPValue[0];
+				if (mode == 'group') {
+					groupId += object.id + "_GroupInput";
+				} else {
+					groupId += object.id + "_IndependInput";
+				}
+
+				if ($('#' + groupId).length > 0) {
+					groupIdExist = true;
+				}
+			}else{
+				for (var i = 0; i < selectedPValue.length; i++) {
+					groupId = "";
+					var object = selectedPValue[i];
+					groupId += object.id + "_";
+					var temp = groupId;
+					for (var j = 0; j < selectedPValue.length; j++) {
+						temp = groupId;
+						if (object == selectedPValue[j]) {
+							continue;
+						}
+
+						var obj = selectedPValue[j];
+						if (selectedPValue.length == 2) {
+							if (mode == 'group') {
+								temp += obj.id + "_GroupInput";
+							} else {
+								temp += obj.id + "_IndependInput";
+							}
+
+						} else {
+							temp += obj.id;
+						}
+
+						if ($('#' + temp).length > 0) {
+							groupIdExist = true;
+							break;
+						}
+
+						if (selectedPValue.length == 3) {
+							var temp1 = temp;
+							for (var k = 0; k < selectedPValue.length; k++) {
+								var obj1 = selectedPValue[k];
+								if (obj1 == object || obj1 == obj) {
+									continue;
+								}
+								if (mode == 'group') {
+									temp1 += "_" + obj1.id + "_GroupInput";
+								} else {
+									temp1 += "_" + obj1.id + "_IndependInput";
+								}
+
+								if ($('#' + temp1).length > 0) {
+									temp = temp1;
+									groupIdExist = true;
+									break;
+								}
+							}
+						}
+
+						if (groupIdExist == true) {
+							groupId = temp;
+							break;
+						}
+					}
+
+					if (groupIdExist == true) {
+						groupId = temp;
+						break;
+
+					}
+				}
+			}
+
+			if (groupIdExist == true) {
+				var groupvalue = $('#' + groupId).val();
+				$('#priceLabel').html(groupvalue);
+				console.log("团购价是：" + groupvalue);
+				selectedProperyPackagePrice = groupId;
+			}
+			var proValues = "已选 ";
+			for (var i = 0; i < selectedPValue.length; i++) {
+				proValues += selectedPValue[i].name + "  ";
+			}
+			$('#propertyValueLabel').html(proValues);
 		}
 		
 		//跳转到
 		function showProduct(url){
 			window.location.href=url;
+		}
+		
+		function showProductDialog(){
+			$('#prriceModal').modal("show");
+		}
+		
+		
+		String.prototype.replaceAll = function(reallyDo, replaceWith, ignoreCase) {   
+			if (!RegExp.prototype.isPrototypeOf(reallyDo)) {   
+				return this.replace(new RegExp(reallyDo, (ignoreCase ? "gi": "g")), replaceWith);   
+			 } else {   
+				return this.replace(reallyDo, replaceWith);   
+			 }   
 		}
 	</script>
 </body>
