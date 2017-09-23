@@ -2,6 +2,8 @@ package com.zwo.modules.zhihuiduo.dto;
 
 import java.util.List;
 
+import com.zwo.modules.mall.domain.PrImage;
+import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductPackagePrice;
 import com.zwo.modules.mall.domain.PrProductProperty;
 import com.zwo.modules.mall.domain.PrProductPropertyValue;
@@ -18,7 +20,7 @@ public class ProductExtention extends PrProductWithBLOBs {
 
 	private String buyButtonText = "去参团";
 	private String eventDesc = "2人团";
-	private String soldQuantity = "15565件";
+	private String soldQuantity = "15565";
 
 	private List<PrProductProperty> properties;
 	private List<PrProductPropertyValue> productPropertyValues;
@@ -28,7 +30,11 @@ public class ProductExtention extends PrProductWithBLOBs {
 	private List<GroupPurcseMember> groupPurcseMembers;
 
 	private List<GroupPurcse> groupPurcses;
-	
+
+	private List<PrProduct> goodsList;
+
+	private List<PrImage> swpierImages;
+
 	public GroupPurcse getGroupPurcse() {
 		return groupPurcse;
 	}
@@ -100,5 +106,21 @@ public class ProductExtention extends PrProductWithBLOBs {
 
 	public void setGroupPurcses(List<GroupPurcse> groupPurcses) {
 		this.groupPurcses = groupPurcses;
+	}
+
+	public List<PrProduct> getGoodsList() {
+		return goodsList;
+	}
+
+	public void setGoodsList(List<PrProduct> goodsList) {
+		this.goodsList = goodsList;
+	}
+
+	public List<PrImage> getSwpierImages() {
+		return swpierImages;
+	}
+
+	public void setSwpierImages(List<PrImage> swpierImages) {
+		this.swpierImages = swpierImages;
 	}
 }

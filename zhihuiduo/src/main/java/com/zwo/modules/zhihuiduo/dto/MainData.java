@@ -7,6 +7,7 @@ import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.domain.PrCategory;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.member.domain.GroupPurcse;
+import com.zwo.modules.shop.domain.Shop;
 
 public class MainData implements Serializable {
 
@@ -20,7 +21,7 @@ public class MainData implements Serializable {
 	private List<GroupPurcse> groupPurcses;
 	
 	private PageInfo<ProductExtention> productExtentionPage;
-
+	
 	public List<PrCategory> getCategorys() {
 		return categorys;
 	}

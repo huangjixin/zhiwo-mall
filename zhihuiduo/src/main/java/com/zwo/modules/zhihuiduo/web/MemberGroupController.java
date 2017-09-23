@@ -164,6 +164,7 @@ public class MemberGroupController extends BaseController {
 				redisTemplate.opsForValue().set(key, productExtention);
 				redisTemplate.expire(key, 30, TimeUnit.SECONDS);
 			}
+			
 		}else{
 			productExtention = new ProductExtention();
 			
@@ -192,20 +193,17 @@ public class MemberGroupController extends BaseController {
 			productExtention.setProductPropertyValues(productPropertyValues);
 			productExtention.setGroupPurcseMembers(groupPurcseMembers);
 			productExtention.setGroupPurcses(groupPurcses);
-			productExtention.setProperties(properties);
-			redisTemplate.opsForValue().set(key, productExtention);
-			redisTemplate.expire(key, 30, TimeUnit.SECONDS);
-			
+			productExtention.setProperties(properties);			
 		}
 		
 		jsonString = JSONObject.toJSONString(productExtention);
 		uiModel.addAttribute("rawData", jsonString);
 		
-		uiModel.addAttribute("product", product);
+		/*uiModel.addAttribute("product", product);
 		uiModel.addAttribute("groupPurcse", groupPurcse);
 		uiModel.addAttribute("groupPurcseMembers", groupPurcseMembers);
 		uiModel.addAttribute("packagePrices", packagePrices);
-		uiModel.addAttribute("productPropertyValues", productPropertyValues);
+		uiModel.addAttribute("productPropertyValues", productPropertyValues);*/
 		
 		return basePath + "memberGroup";
 	}

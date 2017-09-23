@@ -1,21 +1,26 @@
 package com.zwo.modules.zhihuiduo.web;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.util.HtmlUtils;
 
 import com.alibaba.fastjson.JSONArray;
-import com.github.pagehelper.PageInfo;
+import com.alibaba.fastjson.JSONObject;
 import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.domain.PrImageType;
 import com.zwo.modules.mall.domain.PrProduct;
@@ -29,11 +34,15 @@ import com.zwo.modules.mall.service.IPrProductPropertyService;
 import com.zwo.modules.mall.service.IPrProductPropertyValueService;
 import com.zwo.modules.mall.service.IPrductService;
 import com.zwo.modules.member.domain.GroupPurcse;
+import com.zwo.modules.member.domain.GroupPurcseMember;
 import com.zwo.modules.member.service.IGroupPurcseService;
 import com.zwo.modules.member.service.IMemberService;
+import com.zwo.modules.member.service.impl.GroupPurcseMemberServiceImpl;
 import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.service.IShopCategoryService;
 import com.zwo.modules.shop.service.IShopService;
+import com.zwo.modules.zhihuiduo.dto.ProductExtention;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
 /**
@@ -76,12 +85,19 @@ public class MemberGoodsController extends BaseController {
 	@Lazy(true)
 	private IGroupPurcseService groupPurcseService;
 
-//	@SuppressWarnings("rawtypes")
-//	private RedisTemplate redisTemplate = SpringContextHolder
-//			.getBean("redisTemplate");
+	@SuppressWarnings("rawtypes")
+	private RedisTemplate redisTemplate;
 
 	private static final String basePath = "views/goods/";
 
+	private static final String KEY_GOODSDETAIL_INFO = "_key_GoodsDetail_Info";
+
+	public MemberGoodsController() {
+		super();
+		if(SpringContextHolder.getApplicationContext().containsBean("redisTemplate")){
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
+	}
 	/**
 	 * 商品具体信息。
 	 * 
@@ -105,59 +121,110 @@ public class MemberGoodsController extends BaseController {
 			return basePath + goodsId;
 		}*/
 
-		PrProductWithBLOBs product = prductService.selectByPrimKey(goodsId);
-		/*if(!"".equals(product.getContent())){
-			String str="<img style=\"**\" alt=\"**\" src=\"**\">";
-			String cont = product.getContent();
-			String regex="(<img.*)src=";
-			cont.replaceAll(regex,"src=\"/images/heart.png\" $1 data-original=");
-			product.setContent(cont);
-		}*/
+		String jsonString=null;
+		ProductExtention productExtention = null;
+		List<GroupPurcseMember> groupPurcseMembers = null;
+		GroupPurcse groupPurcse = null;
+		PrProductWithBLOBs product = null;
+		Shop shop = null;
+		List<PrProductPackagePrice> packagePrices = null;
+		List<PrProductPropertyValue> productPropertyValues = null;
+		List<GroupPurcse> groupPurcses = null;
+		// 商品属性。
+		List<PrProductProperty> properties;
+		List<PrProduct> goodsList = null;
+		List<PrImage> swiperImages = null;
 		
-		if (product != null) {
-			if(product.getShopId()!=null){
-				int shopProductsCount = prductService.selectPrProductsCountByShopId(product.getShopId());
-				uiModel.addAttribute("shopProductsCount", shopProductsCount);
+		
+		String key = goodsId+KEY_GOODSDETAIL_INFO;
+		
+		if(redisTemplate!=null){
+			productExtention = (ProductExtention) redisTemplate.opsForValue().get(key);
+			
+			if(productExtention == null){
+				productExtention = new ProductExtention();
+				
+				product = prductService.selectByPrimKey(goodsId);
+				if(product!=null){
+					try {
+						BeanUtils.copyProperties(productExtention, product);
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						e.printStackTrace();
+					}
+					
+					groupPurcses =groupPurcseService.selectGroupPurcseByPId(goodsId, false);
+					properties = productPropertyService.listAll();
+					packagePrices = packagePriceService.selectByProductId(product.getId());
+					productPropertyValues = this.propertyValueService.selectByProductId(product.getId());
+					
+					if(product.getShopId()!=null){
+						shop = shopService.selectByPrimKey(product.getShopId());
+						goodsList = prductService.selectPrProductsByShopId(shop.getId());
+						productExtention.setShopIcon(shop.getIcon());
+						productExtention.setShopName(shop.getName());
+					}
+					// 商品轮播图。
+					swiperImages = imageService.selectByProductId(product.getId(), PrImageType.SWIPER);
+					
+					productExtention.setGoodsList(goodsList);
+					productExtention.setSwpierImages(swiperImages);
+					productExtention.setPackagePrices(packagePrices);
+					productExtention.setProductPropertyValues(productPropertyValues);
+					productExtention.setGroupPurcseMembers(groupPurcseMembers);
+					productExtention.setGroupPurcses(groupPurcses);
+					productExtention.setProperties(properties);
+					
+					redisTemplate.opsForValue().set(key, productExtention);
+					redisTemplate.expire(key, 30, TimeUnit.SECONDS);
+				}
+				
+			}
+		}else{
+			productExtention = new ProductExtention();
+			
+			product = prductService.selectByPrimKey(goodsId);
+			if(product!=null){
+				try {
+					BeanUtils.copyProperties(productExtention, product);
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+				
+				groupPurcses =groupPurcseService.selectGroupPurcseByPId(goodsId, false);
+				properties = productPropertyService.listAll();
+				packagePrices = packagePriceService.selectByProductId(product.getId());
+				productPropertyValues = this.propertyValueService.selectByProductId(product.getId());
+				
+				if(product.getShopId()!=null){
+					shop = shopService.selectByPrimKey(product.getShopId());
+					goodsList = prductService.selectPrProductsByShopId(shop.getId());
+					productExtention.setShopIcon(shop.getIcon());
+					productExtention.setShopName(shop.getName());
+				}
+				// 商品轮播图。
+				swiperImages = imageService.selectByProductId(product.getId(), PrImageType.SWIPER);
+				
+				productExtention.setGoodsList(goodsList);
+				productExtention.setSwpierImages(swiperImages);
+				productExtention.setPackagePrices(packagePrices);
+				productExtention.setProductPropertyValues(productPropertyValues);
+				productExtention.setGroupPurcseMembers(groupPurcseMembers);
+				productExtention.setGroupPurcses(groupPurcses);
+				productExtention.setProperties(properties);
 			}
 			
-			if (null != product.getShopId()) {
-				// 查询店铺信息。
-				Shop shop = shopService.selectByPrimKey(product.getShopId());
-				uiModel.addAttribute("shop", shop);
-				if (shop != null) {
-					// 查询店铺所有的商品，统一用goods。
-					List<PrProduct> goodsList = prductService.selectPrProductsByShopId(shop.getId());
-					uiModel.addAttribute("goodsList", goodsList);
-				}
-
-			}
-
-			List<PrProductPackagePrice> packagePrices = null;
-			List<PrProductPropertyValue> productPropertyValues = null;
-			packagePrices = packagePriceService.selectByProductId(product
-					.getId());
-			productPropertyValues = this.propertyValueService
-					.selectByProductId(product.getId());
-
-			// 商品属性值。
-			uiModel.addAttribute("propertyValuesString",
-					JSONArray.toJSONString(productPropertyValues));
-			uiModel.addAttribute("propertyValues", productPropertyValues);
-			uiModel.addAttribute("packagePrices", packagePrices);
-
-			// 商品轮播图。
-			List<PrImage> prImages = imageService.selectByProductId(
-					product.getId(), PrImageType.SWIPER);
-			uiModel.addAttribute("swiperImages", prImages);
 		}
-		// 商品属性。
-		List<PrProductProperty> properties = productPropertyService.listAll();
-		uiModel.addAttribute("properties", properties);
-		uiModel.addAttribute("propertiesString",
-				JSONArray.toJSONString(properties));
-		uiModel.addAttribute("product", product);
-		List<GroupPurcse> groupPurcses =  groupPurcseService.selectGroupPurcseByPId(goodsId, false);
-		uiModel.addAttribute("groupPurcses", groupPurcses);
+//		String content = product.getContent();
+//		content = HtmlUtils.htmlEscape(content);
+//		productExtention.setContent(content);
+		
+		jsonString = JSONObject.toJSONString(productExtention,true);
+		uiModel.addAttribute("rawData", jsonString);
+		
 		return basePath + "goodsDetail";
 	}
 }

@@ -6,6 +6,8 @@
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js"></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/iScroll/5.2.0/iscroll.min.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery-infinitescroll/2.0b2.120520/jquery.infinitescroll.min.js"></script>
+
 <!--<script type="text/javascript" src="https://cdn.bootcss.com/iScroll/5.2.0/iscroll-zoom.min.js"></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/iScroll/5.2.0/iscroll-probe.min.js"></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/iScroll/5.2.0/iscroll-infinite.min.js"></script>
