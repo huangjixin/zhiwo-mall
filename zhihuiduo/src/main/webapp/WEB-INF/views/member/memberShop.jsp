@@ -4,10 +4,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>智惠多商品云购.店铺.${shop.name}</title>
+<title>智惠多商品云购.店铺.</title>
 <%@ include file="/WEB-INF/member-include/css.jsp"%>
 <%@ include file="/WEB-INF/member-include/js.jsp"%>
 <link href="${ctx}/css/zhihuiduo.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="${ctx}/js/zhihuiduo/memberShop.js"></script>
 <style>
 body {
 	background-color: #ffffff;
@@ -39,18 +40,18 @@ body {
 <body>
 	<div class="page-header"
 		style="text-align: center; font-size: 2rem; position:fixed; background-color:#fff; left:0;right:0; top:0; padding-top:10px; margin-top:0;">
-		<b>${shop.name}</b>&nbsp;&nbsp;<small  style="color:red;" onClick="javascript:history.back();">返回</small>
+		<b id="shopTitle">${shop.name}</b>&nbsp;&nbsp;<small  style="color:red;" onClick="javascript:history.back();">返回</small>
 	</div>
     <div style="height:45px;"></div>
 	<div class="thumbnail">
 		<div class="caption">
 			<div class="media" style="padding-top: 4px; padding-bottom: 8px;">
 				<div class="media-left">
-					<img class="media-object" src="${ctx}/images/busy.gif" data-original="${ctx}/${shop.icon}"
+					<img id="shopIcon" class="media-object" src="${ctx}/images/busy.gif" data-original="${ctx}/${shop.icon}"
 						style="width: 60px; height: 60px; border-radius: 4px;">
 				</div>
 				<div class="media-body">
-					<h4 class="media-heading" style="padding-top: 6px;">${shop.name}</h4>
+					<h4 class="media-heading" style="padding-top: 6px;" id="shopName">${shop.name}</h4>
 					<span style="color: gray; font-size: 1.4rem;">商品数量${productsCount}</span>
 				</div>
 				<div class="media-right" style="padding-top: 10px;">
@@ -60,13 +61,13 @@ body {
 
 			</div>
 			<div>
-				<p>${shop.description}</p>
+				<p id="shopDescription">${shop.description}</p>
 			</div>
 		</div>
 	</div>
 
 
-	<div class="thumbnail">
+	<div class="thumbnail" id="shopGoods">
 		<div class="caption">
 			<h4>全部商品</h4>
 		</div>
@@ -74,33 +75,12 @@ body {
 
 	<c:forEach var="prod" items="${products}">
     <a href="${ctx}/goodsDetail?goodsId=${prod.id}">
-		<div class="col-xs-6">
-		<div class="thumbnail">
-        	<!--<img class="lazy" src="${ctx}/images/heart.png" data-original="${ctx}/${prod.icon}">-->
-			<img class="img-responsive" src="${ctx}/images/busy.gif" data-original="${ctx}/${prod.icon}">
-			<div class="caption" style="font-size: 1.3rem;">
-				<h6>${prod.name}</h6>
-				<div class="pull-left">
-					<label style="color: red;"><i class="fa fa-jpy"></i>${prod.gourpSalePrice}</label> <span>已拼1222件</span>
-				</div>
-				<%-- <div class="pull-right">
-					<img class="img-circle" src="${ctx}/${shop.icon}"
-						style="width: 25px;"> <img class="img-circle"
-						src="${ctx}/${shop.icon}" style="width: 25px;">
-				</div> --%>
-
-
-				<div class="clearfix"></div>
-			</div>
-
-		</div>
-	</div></a>
+		<div class="col-xs-6" onClick="gotoGoodsDetail();"><div class="thumbnail"><img class="img-responsive" src="${ctx}/images/busy.gif" data-original="${ctx}/${prod.icon}"><div class="caption" style="font-size: 1.3rem;"><h6>${prod.name}</h6><div class="pull-left"><label style="color: red;"><i class="fa fa-jpy"></i>${prod.gourpSalePrice}</label> <span>已拼1222件</span></div><div class="clearfix"></div></div></div></div></a>
 	</c:forEach>
 	
+    <%@ include file="/WEB-INF/member-include/fade-ui.jsp"%>
 	<script>
-		$(function() {
-			$("img").lazyload({effect: "fadeIn"});
-		});
+		var obj = ${rawData};
 	</script>
 
 </body>
