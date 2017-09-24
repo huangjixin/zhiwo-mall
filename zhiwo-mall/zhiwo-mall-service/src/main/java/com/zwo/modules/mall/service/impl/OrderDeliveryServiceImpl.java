@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +19,11 @@ import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.dao.OrderDeliveryMapper;
 import com.zwo.modules.mall.domain.OrderDelivery;
 import com.zwo.modules.mall.domain.OrderDeliveryCriteria;
+import com.zwo.modules.mall.domain.PrProduct;
+import com.zwo.modules.mall.domain.PrProductCriteria;
 import com.zwo.modules.mall.service.IOrderDeliveryService;
+import com.zwotech.common.utils.RedisUtil;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -30,10 +35,13 @@ import tk.mybatis.mapper.common.Mapper;
 @Service
 @Lazy(true)
 @Transactional(readOnly = false)
-public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> implements IOrderDeliveryService {
-	private static Logger logger = LoggerFactory.getLogger(OrderDeliveryServiceImpl.class);
+public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery>
+		implements IOrderDeliveryService {
+	private static Logger logger = LoggerFactory
+			.getLogger(OrderDeliveryServiceImpl.class);
 
 	private static final String BASE_MESSAGE = "【OrderDeliveryServiceImpl服务类提供的基础操作增删改查等】";
+	public static final String KEY_ORDER_DELIVERY = "_key_order_delivery";
 
 	@Autowired
 	@Lazy(true)
@@ -42,6 +50,17 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 	@Override
 	public Mapper<OrderDelivery> getBaseMapper() {
 		return orderDeliveryMapper;
+	}
+
+	@SuppressWarnings("rawtypes")
+	private RedisTemplate redisTemplate;
+
+	public OrderDeliveryServiceImpl() {
+		super();
+		if (SpringContextHolder.getApplicationContext().containsBean(
+				"redisTemplate")) {
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
 	}
 
 	/*
@@ -80,7 +99,12 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
-
+		List<OrderDelivery> list = this.orderDeliveryMapper
+				.selectByExample((PrProductCriteria) example);
+		for (OrderDelivery delivery : list) {
+			RedisUtil.removeRedisKey(redisTemplate, delivery.getId()
+					+ KEY_ORDER_DELIVERY);
+		}
 		// 逻辑操作
 		int result = orderDeliveryMapper.deleteByExample(example);
 
@@ -90,7 +114,7 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 	}
 
 	@CacheEvict(value = "OrderDelivery", allEntries = true)
-//	@Override
+	// @Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -101,6 +125,13 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 		// 逻辑操作
 		OrderDeliveryCriteria orderDeliveryCriteria = new OrderDeliveryCriteria();
 		orderDeliveryCriteria.createCriteria().andIdIn(list);
+		List<OrderDelivery> deliveries = this.orderDeliveryMapper
+				.selectByExample(orderDeliveryCriteria);
+		for (OrderDelivery delivery : deliveries) {
+			RedisUtil.removeRedisKey(redisTemplate, delivery.getId()
+					+ KEY_ORDER_DELIVERY);
+		}
+
 		int result = orderDeliveryMapper.deleteByExample(orderDeliveryCriteria);
 
 		if (logger.isInfoEnabled())
@@ -116,14 +147,15 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "OrderDelivery",key="#id+'_orderDelivery'")
+	@CacheEvict(value = "OrderDelivery", key = "#id+'_key_order_delivery'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除开始");
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为：" + id.toString());
-
+			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为："
+					+ id.toString());
+		RedisUtil.removeRedisKey(redisTemplate, id + KEY_ORDER_DELIVERY);
 		// 逻辑操作
 		int result = super.deleteByPrimaryKey(id);
 
@@ -139,7 +171,7 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "OrderDelivery", key = "#record.id+'_orderDelivery'")
+	// @CachePut(value = "OrderDelivery", key = "#record.id+'_orderDelivery'")
 	public int insert(OrderDelivery record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -149,7 +181,8 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
-			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
+			record.setId(System.currentTimeMillis() + ""
+					+ Math.round(Math.random() * 99));
 		}
 		int result = super.insert(record);
 		if (logger.isInfoEnabled())
@@ -166,7 +199,7 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 	 */
 
 	@Override
-//	@CachePut(value = "OrderDelivery", key = "#record.id+'_orderDelivery'")
+	// @CachePut(value = "OrderDelivery", key = "#record.id+'_orderDelivery'")
 	public int insertSelective(OrderDelivery record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -176,7 +209,8 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
-			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
+			record.setId(System.currentTimeMillis() + ""
+					+ Math.round(Math.random() * 99));
 		}
 		int result = super.insertSelective(record);
 		if (logger.isInfoEnabled())
@@ -194,7 +228,7 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 	@Override
 	@Transactional(readOnly = true)
 	public List<OrderDelivery> selectByExample(Object example) {
-		return null;
+		return this.orderDeliveryMapper.selectByExample(example);
 	}
 
 	/*
@@ -205,7 +239,7 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+'_orderDelivery'", value = "OrderDelivery")
+	@Cacheable(key = "#id+'_key_order_delivery'", value = "OrderDelivery")
 	@Transactional(readOnly = true)
 	public OrderDelivery selectByPrimaryKey(String id) {
 		// 日志记录
@@ -235,8 +269,14 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新开始");
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
-
+			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为："
+					+ record.toString());
+		List<OrderDelivery> deliveries = this.orderDeliveryMapper
+				.selectByExample(example);
+		for (OrderDelivery delivery : deliveries) {
+			RedisUtil.removeRedisKey(redisTemplate, delivery.getId()
+					+ KEY_ORDER_DELIVERY);
+		}
 		// 逻辑操作
 		int result = super.updateByExampleSelective(record, example);
 		// 日志记录
@@ -255,17 +295,23 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 	@Override
 	@CacheEvict(value = "OrderDelivery", allEntries = true)
 	public int updateByExample(OrderDelivery record, Object example) {
-		//日志记录
-		if(logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE+"updateByExample更新开始");
-		if(logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
-										
-		//逻辑操作		
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExample更新开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExample更新对象为："
+					+ record.toString());
+		List<OrderDelivery> deliveries = this.orderDeliveryMapper
+				.selectByExample(example);
+		for (OrderDelivery delivery : deliveries) {
+			RedisUtil.removeRedisKey(redisTemplate, delivery.getId()
+					+ KEY_ORDER_DELIVERY);
+		}
+		// 逻辑操作
 		int result = super.updateByExample(record, example);
-		//日志记录
-		if(logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE+"updateByExample更新结束");
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExample更新结束");
 		return result;
 	}
 
@@ -277,14 +323,15 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "OrderDelivery",key="#record.id+'_orderDelivery'")
+	@CacheEvict(value = "OrderDelivery", key = "#record.id+'_key_order_delivery'")
 	public int updateByPrimaryKeySelective(OrderDelivery record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新开始");
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
-
+			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为："
+					+ record.toString());
+		RedisUtil.removeRedisKey(redisTemplate, record.getId() + KEY_ORDER_DELIVERY);
 		// 逻辑操作
 		int result = super.updateByPrimaryKeySelective(record);
 		if (logger.isInfoEnabled())
@@ -300,14 +347,15 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "OrderDelivery",key="#record.id+'_orderDelivery'")
+	@CacheEvict(value = "OrderDelivery", key = "#record.id+'_orderDelivery'")
 	public int updateByPrimaryKey(OrderDelivery record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新开始");
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为：" + record.toString());
-
+			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为："
+					+ record.toString());
+		RedisUtil.removeRedisKey(redisTemplate, record.getId() + KEY_ORDER_DELIVERY);
 		// 逻辑操作
 		int result = super.updateByPrimaryKey(record);
 		if (logger.isInfoEnabled())
@@ -324,7 +372,8 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 	 */
 	@Transactional(readOnly = true)
 	@Override
-	public PageInfo<OrderDelivery> selectByPageInfo(Object example, PageInfo<OrderDelivery> pageInfo) {
+	public PageInfo<OrderDelivery> selectByPageInfo(Object example,
+			PageInfo<OrderDelivery> pageInfo) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页开始");
 		if (logger.isInfoEnabled())
@@ -334,6 +383,5 @@ public class OrderDeliveryServiceImpl extends BaseService<OrderDelivery> impleme
 			logger.info(BASE_MESSAGE + "分页结束");
 		return pageInfo;
 	}
-
 
 }

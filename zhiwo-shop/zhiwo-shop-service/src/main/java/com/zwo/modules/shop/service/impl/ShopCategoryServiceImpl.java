@@ -15,18 +15,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.shop.dao.ShopCategoryMapper;
+import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.domain.ShopCategory;
 import com.zwo.modules.shop.domain.ShopCategoryCriteria;
 import com.zwo.modules.shop.service.IShopCategoryService;
 import com.zwo.modules.system.dao.TbUserAssetsMapper;
 import com.zwo.modules.system.domain.TbUserAssets;
 import com.zwo.modules.system.domain.TbUserAssetsCriteria;
+import com.zwotech.common.utils.RedisUtil;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -43,6 +47,8 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 
 	private static final String BASE_MESSAGE = "【ShopCategoryServiceImpl服务类提供的基础操作增删改查等】";
 
+	public static final String KEY_SHOP_CATEGORY = "_key_ShopCategory";
+	
 	@Autowired
 	@Lazy(true)
 	private TbUserAssetsMapper userAssetsMapper;
@@ -56,6 +62,18 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 		return null;
 	}
 
+	@SuppressWarnings("rawtypes")
+	private RedisTemplate redisTemplate;
+	
+	public ShopCategoryServiceImpl() {
+		super();
+		if (redisTemplate == null) {
+			if (SpringContextHolder.getApplicationContext().containsBean(
+					"redisTemplate")) {
+				redisTemplate = SpringContextHolder.getBean("redisTemplate");
+			}
+		}
+	}
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -87,12 +105,16 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = "ShopCategory", allEntries = true)
+//	@CacheEvict(value = "ShopCategory", allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
-
+		List<ShopCategory> categories = this.selectByExample(example);
+		for (ShopCategory category : categories) {
+			RedisUtil.removeRedisKey(redisTemplate, category.getId()+KEY_SHOP_CATEGORY);
+		}
+		
 		// 逻辑操作
 		int result = shopCategoryMapper.deleteByExample((ShopCategoryCriteria)example);
 
@@ -111,6 +133,7 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 			logger.info(BASE_MESSAGE + "deleteBatch批量删除ID为：" + list.toString());
 		TbUserAssetsCriteria userAssetsCriteria = new TbUserAssetsCriteria();
 		userAssetsCriteria.createCriteria().andOrgIdIn(list);
+		
 		List<TbUserAssets> assets = userAssetsMapper.selectByExample(userAssetsCriteria);
 		for (TbUserAssets tbUserAssets : assets) {
 			//文件
@@ -126,6 +149,11 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 		// 逻辑操作
 		ShopCategoryCriteria shopCategoryCriteria = new ShopCategoryCriteria();
 		shopCategoryCriteria.createCriteria().andIdIn(list);
+		List<ShopCategory> categories = this.selectByExample(shopCategoryCriteria);
+		for (ShopCategory category : categories) {
+			RedisUtil.removeRedisKey(redisTemplate, category.getId()+KEY_SHOP_CATEGORY);
+		}
+		
 		int result = shopCategoryMapper.deleteByExample(shopCategoryCriteria);
 
 		if (logger.isInfoEnabled())
@@ -141,7 +169,7 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "ShopCategory", key="#id+'_shopCategory'")
+	@CacheEvict(value = "ShopCategory", key="#id+'_key_ShopCategory'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -164,7 +192,7 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "ShopCategory", key = "#record.id+'_shopCategory'")
+//	@CachePut(value = "ShopCategory", key = "#record.id+'_key_ShopCategory'")
 	public int insert(ShopCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -193,7 +221,7 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 	 */
 
 	@Override
-//	@CachePut(value = "ShopCategory", key = "#record.id+'_shopCategory'")
+//	@CachePut(value = "ShopCategory", key = "#record.id+'_key_ShopCategory'")
 	public int insertSelective(ShopCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -234,7 +262,7 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+'_shopCategory'", value = "ShopCategory")
+	@Cacheable(key = "#id+'_key_ShopCategory'", value = "ShopCategory")
 	@Transactional(readOnly = true)
 	public ShopCategory selectByPrimaryKey(String id) {
 		// 日志记录
@@ -257,7 +285,7 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 	 * com.zwotech.modules.core.service.IBaseService#updateByExampleSelective(
 	 * java.lang.Object, java.lang.Object)
 	 */
-	@CacheEvict(value = "ShopCategory", allEntries = true)
+//	@CacheEvict(value = "ShopCategory", allEntries = true)
 	@Override
 	public int updateByExampleSelective(ShopCategory record, Object example) {
 		// 日志记录
@@ -268,6 +296,11 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 		if ("".equals(record.getParentId())) {
 			record.setParentId(null);
 		}
+		List<ShopCategory> categories = this.selectByExample(example);
+		for (ShopCategory category : categories) {
+			RedisUtil.removeRedisKey(redisTemplate, category.getId()+KEY_SHOP_CATEGORY);
+		}
+		
 		// 逻辑操作
 		int result = this.shopCategoryMapper.updateByExampleSelective(record,(ShopCategoryCriteria) example);
 		// 日志记录
@@ -284,7 +317,7 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 	 * Object, java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "ShopCategory", allEntries = true)
+//	@CacheEvict(value = "ShopCategory", allEntries = true)
 	public int updateByExample(ShopCategory record, Object example) {
 		//日志记录
 		if(logger.isInfoEnabled())
@@ -293,7 +326,12 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
 		if ("".equals(record.getParentId())) {
 			record.setParentId(null);
-		}								
+		}	
+		List<ShopCategory> categories = this.selectByExample(example);
+		for (ShopCategory category : categories) {
+			RedisUtil.removeRedisKey(redisTemplate, category.getId()+KEY_SHOP_CATEGORY);
+		}
+		
 		//逻辑操作		
 		int result = this.shopCategoryMapper.updateByExample(record, (ShopCategoryCriteria)example);
 		//日志记录
@@ -310,7 +348,7 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "ShopCategory", key="#record.id+'_shopCategory'")
+	@CacheEvict(value = "ShopCategory", key="#record.id+'_key_ShopCategory'")
 	public int updateByPrimaryKeySelective(ShopCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -335,7 +373,7 @@ public class ShopCategoryServiceImpl extends BaseService<ShopCategory> implement
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "ShopCategory", key="#record.id+'_shopCategory'")
+	@CacheEvict(value = "ShopCategory", key="#record.id+'_key_ShopCategory'")
 	public int updateByPrimaryKey(ShopCategory record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

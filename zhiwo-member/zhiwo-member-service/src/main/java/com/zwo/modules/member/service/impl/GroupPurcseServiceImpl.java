@@ -80,7 +80,8 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 
 	public GroupPurcseServiceImpl() {
 		super();
-		if (redisTemplate == null) {
+		if (SpringContextHolder.getApplicationContext().containsBean(
+				"redisTemplate")) {
 			redisTemplate = SpringContextHolder.getBean("redisTemplate");
 		}
 	}
@@ -117,7 +118,7 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 		return result;
 	}
 
-	// @Override
+	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -154,7 +155,7 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "GroupPurcse", key = "#id+''")
+	@CacheEvict(value = "GroupPurcse", key = "#id+'_key_GroupPurcse'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -402,7 +403,7 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 	
 	@Override
 	@Transactional(readOnly = true)
-	@Cacheable(key = "#productId+'_key_GroupPurcse'", value = "GroupPurcses")
+//	@Cacheable(key = "#productId+'_key_GroupPurcse'", value = "GroupPurcses")
 	public List<GroupPurcse> selectGroupPurcseByPId(String productId,boolean disable) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "根据产品ID查询没有成团的列表，仅查前面十条记录开始，传入的商品ID是"+productId);

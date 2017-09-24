@@ -10,6 +10,7 @@ import com.zwo.modules.mall.domain.PrProductPropertyValue;
 import com.zwo.modules.mall.domain.PrProductWithBLOBs;
 import com.zwo.modules.member.domain.GroupPurcse;
 import com.zwo.modules.member.domain.GroupPurcseMember;
+import com.zwo.modules.shop.domain.Shop;
 
 public class ProductExtention extends PrProductWithBLOBs {
 
@@ -35,6 +36,8 @@ public class ProductExtention extends PrProductWithBLOBs {
 
 	private List<PrImage> swpierImages;
 
+	private Shop shop;
+	
 	public GroupPurcse getGroupPurcse() {
 		return groupPurcse;
 	}
@@ -122,5 +125,13 @@ public class ProductExtention extends PrProductWithBLOBs {
 
 	public void setSwpierImages(List<PrImage> swpierImages) {
 		this.swpierImages = swpierImages;
+	}
+
+	public Shop getShop() {
+		return shop;
+	}
+
+	public void setShop(Shop shop) {
+		this.shop = shop;
 	}
 }

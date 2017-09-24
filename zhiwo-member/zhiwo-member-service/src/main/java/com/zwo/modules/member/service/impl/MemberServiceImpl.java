@@ -127,8 +127,11 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 
 	public MemberServiceImpl() {
 		super();
-		if(redisTemplate==null){
-			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		if (redisTemplate == null) {
+			if (SpringContextHolder.getApplicationContext().containsBean(
+					"redisTemplate")) {
+				redisTemplate = SpringContextHolder.getBean("redisTemplate");
+			}
 		}
 	}
 	/*
@@ -179,7 +182,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		return result;
 	}
 
-//	@Override
+	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
 		if (logger.isInfoEnabled())

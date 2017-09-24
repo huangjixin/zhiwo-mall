@@ -41,6 +41,7 @@ import com.zwo.modules.member.domain.MemberPlayHisAccount;
 import com.zwo.modules.member.service.IGuessQuestionService;
 import com.zwotech.common.redis.channel.ChannelContance;
 import com.zwotech.common.redis.channel.RedisPushMessage;
+import com.zwotech.common.utils.RedisUtil;
 import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
 
@@ -58,7 +59,9 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion>
 
 	private static final String BASE_MESSAGE = "【GuessQuestionServiceImpl服务类提供的基础操作增删改查等】";
 
-	private static final String KEYLAST_GUESS_QUESTION_OPTIONS = "_GuessQuestionOptions";
+	private static final String KEY_GUESS_QUESTION_OPTION = "_key_GuessQuestionOption";
+	
+	private static final String KEY_GUESS_QUESTION_OPTIONS = "_key_GuessQuestionOptions";
 	private static final String KEY_SELECTINEFFECTQUESTION_GUESSQUESTION = "selectIneffectQuestion_guessQuestion";
 
 	@SuppressWarnings("rawtypes")
@@ -88,6 +91,17 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion>
 	public Mapper<GuessQuestion> getBaseMapper() {
 		return guessQuestionMapper;
 	}
+	
+
+	public GuessQuestionServiceImpl() {
+		super();
+		if (redisTemplate == null) {
+			if (SpringContextHolder.getApplicationContext().containsBean(
+					"redisTemplate")) {
+				redisTemplate = SpringContextHolder.getBean("redisTemplate");
+			}
+		}
+	}	
 
 	/*
 	 * (non-Javadoc)
@@ -112,6 +126,9 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion>
 	 * Auto-generated method stub return 0; }
 	 */
 
+
+
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -120,32 +137,21 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion>
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = "GuessQuestion", allEntries = true)
+//	@CacheEvict(value = "GuessQuestion", allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
 
-		removeRedisKey(KEY_SELECTINEFFECTQUESTION_GUESSQUESTION);
+		RedisUtil.removeRedisKey(redisTemplate, KEY_SELECTINEFFECTQUESTION_GUESSQUESTION);
 		List<GuessQuestion> guessQuestions = this.selectByExample(example);
 		for (GuessQuestion guessQuestion : guessQuestions) {
-			removeRedisKey(guessQuestion.getId()
-					+ KEYLAST_GUESS_QUESTION_OPTIONS);
+			RedisUtil.removeRedisKey(redisTemplate, guessQuestion.getId() + KEY_GUESS_QUESTION_OPTIONS);
+			RedisUtil.removeRedisKey(redisTemplate, guessQuestion.getId() + KEY_GUESS_QUESTION_OPTION);
 		}
 
-		List<GuessQuestion> list = this.selectByExample(example);
-		for (GuessQuestion guessQuestion : list) {
-			if (redisTemplate != null) {
-				if (redisTemplate.hasKey(guessQuestion.getId()
-						+ "_GuessQuestionOptions")) {
-					redisTemplate.delete(guessQuestion.getId()
-							+ "_GuessQuestionOptions");
-				}
-			}
-		}
 
-		RedisPushMessage.publish(redisTemplate,
-				ChannelContance.GUESS_QUESTION_GENERATION_TOPIC_CHANNEL,
+		RedisPushMessage.publish(redisTemplate,ChannelContance.GUESS_QUESTION_GENERATION_TOPIC_CHANNEL,
 				"重新生成竞猜页面");
 
 		// 逻辑操作
@@ -156,25 +162,22 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion>
 		return result;
 	}
 
-	@CacheEvict(value = "GuessQuestion", allEntries = true)
-	// @Override
+//	@CacheEvict(value = "GuessQuestion", allEntries = true)
+	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteBatch批量删除开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteBatch批量删除ID为：" + list.toString());
-
+		RedisUtil.removeRedisKey(redisTemplate, KEY_SELECTINEFFECTQUESTION_GUESSQUESTION);
 		// 逻辑操作
 		GuessQuestionCriteria guessQuestionCriteria = new GuessQuestionCriteria();
 		guessQuestionCriteria.createCriteria().andIdIn(list);
-
-		removeRedisKey(KEY_SELECTINEFFECTQUESTION_GUESSQUESTION);
-		List<GuessQuestion> guessQuestions = this
-				.selectByExample(guessQuestionCriteria);
+		List<GuessQuestion> guessQuestions = this.selectByExample(guessQuestionCriteria);
 		for (GuessQuestion guessQuestion : guessQuestions) {
-			removeRedisKey(guessQuestion.getId()
-					+ KEYLAST_GUESS_QUESTION_OPTIONS);
+			RedisUtil.removeRedisKey(redisTemplate, guessQuestion.getId() + KEY_GUESS_QUESTION_OPTIONS);
+			RedisUtil.removeRedisKey(redisTemplate, guessQuestion.getId() + KEY_GUESS_QUESTION_OPTION);
 		}
 
 		RedisPushMessage.publish(redisTemplate,
@@ -205,8 +208,9 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion>
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为："
 					+ id.toString());
-		removeRedisKey(KEY_SELECTINEFFECTQUESTION_GUESSQUESTION);
-		removeRedisKey(id + KEYLAST_GUESS_QUESTION_OPTIONS);
+		RedisUtil.removeRedisKey(redisTemplate, KEY_SELECTINEFFECTQUESTION_GUESSQUESTION);
+		RedisUtil.removeRedisKey(redisTemplate, id + KEY_GUESS_QUESTION_OPTIONS);
+		RedisUtil.removeRedisKey(redisTemplate, id + KEY_GUESS_QUESTION_OPTION);
 
 		// 逻辑操作
 		int result = super.deleteByPrimaryKey(id);
@@ -239,8 +243,8 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion>
 			logger.info(BASE_MESSAGE + "insert插入开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-
-		removeRedisKey(KEY_SELECTINEFFECTQUESTION_GUESSQUESTION);
+		RedisUtil.removeRedisKey(redisTemplate, KEY_SELECTINEFFECTQUESTION_GUESSQUESTION);
+		
 		RedisPushMessage.publish(redisTemplate,
 				ChannelContance.GUESS_QUESTION_GENERATION_TOPIC_CHANNEL,
 				"重新生成竞猜页面");
@@ -274,7 +278,8 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion>
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
 
-		removeRedisKey(KEY_SELECTINEFFECTQUESTION_GUESSQUESTION);
+		RedisUtil.removeRedisKey(redisTemplate, KEY_SELECTINEFFECTQUESTION_GUESSQUESTION);
+		
 		RedisPushMessage.publish(redisTemplate,
 				ChannelContance.GUESS_QUESTION_GENERATION_TOPIC_CHANNEL,
 				"重新生成竞猜页面");
@@ -334,7 +339,7 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion>
 	 * com.zwotech.modules.core.service.IBaseService#updateByExampleSelective(
 	 * java.lang.Object, java.lang.Object)
 	 */
-	@CacheEvict(value = "GuessQuestion", allEntries = true)
+//	@CacheEvict(value = "GuessQuestion", allEntries = true)
 	@Override
 	public int updateByExampleSelective(GuessQuestion record, Object example) {
 		// 日志记录
@@ -343,7 +348,12 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion>
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为："
 					+ record.toString());
-		removeRedisKey(KEY_SELECTINEFFECTQUESTION_GUESSQUESTION);
+		List<GuessQuestion> guessQuestions = this.selectByExample(example);
+		for (GuessQuestion guessQuestion : guessQuestions) {
+			RedisUtil.removeRedisKey(redisTemplate, guessQuestion.getId() + KEY_GUESS_QUESTION_OPTIONS);
+			RedisUtil.removeRedisKey(redisTemplate, guessQuestion.getId() + KEY_GUESS_QUESTION_OPTION);
+		}
+		
 		RedisPushMessage.publish(redisTemplate,
 				ChannelContance.GUESS_QUESTION_GENERATION_TOPIC_CHANNEL,
 				"重新生成竞猜页面");
@@ -366,7 +376,7 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion>
 	 * Object, java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "GuessQuestion", allEntries = true)
+//	@CacheEvict(value = "GuessQuestion", allEntries = true)
 	public int updateByExample(GuessQuestion record, Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -375,8 +385,11 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion>
 			logger.info(BASE_MESSAGE + "updateByExample更新对象为："
 					+ record.toString());
 
-		removeRedisKey(KEY_SELECTINEFFECTQUESTION_GUESSQUESTION);
-
+		List<GuessQuestion> guessQuestions = this.selectByExample(example);
+		for (GuessQuestion guessQuestion : guessQuestions) {
+			RedisUtil.removeRedisKey(redisTemplate, guessQuestion.getId() + KEY_GUESS_QUESTION_OPTIONS);
+			RedisUtil.removeRedisKey(redisTemplate, guessQuestion.getId() + KEY_GUESS_QUESTION_OPTION);
+		}
 		// 逻辑操作
 		int result = super.updateByExample(record, example);
 		RedisPushMessage.publish(redisTemplate,
@@ -405,7 +418,10 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion>
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为："
 					+ record.toString());
 
-		removeRedisKey(KEY_SELECTINEFFECTQUESTION_GUESSQUESTION);
+		RedisUtil.removeRedisKey(redisTemplate, KEY_SELECTINEFFECTQUESTION_GUESSQUESTION);
+		RedisUtil.removeRedisKey(redisTemplate, record.getId() + KEY_GUESS_QUESTION_OPTIONS);
+		RedisUtil.removeRedisKey(redisTemplate, record.getId() + KEY_GUESS_QUESTION_OPTION);
+		
 		RedisPushMessage.publish(redisTemplate,
 				ChannelContance.GUESS_QUESTION_GENERATION_TOPIC_CHANNEL,
 				"重新生成竞猜页面");
@@ -432,7 +448,11 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion>
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为："
 					+ record.toString());
-		removeRedisKey(KEY_SELECTINEFFECTQUESTION_GUESSQUESTION);
+		
+		RedisUtil.removeRedisKey(redisTemplate, KEY_SELECTINEFFECTQUESTION_GUESSQUESTION);
+		RedisUtil.removeRedisKey(redisTemplate, record.getId() + KEY_GUESS_QUESTION_OPTIONS);
+		RedisUtil.removeRedisKey(redisTemplate, record.getId() + KEY_GUESS_QUESTION_OPTION);
+		
 		RedisPushMessage.publish(redisTemplate,
 				ChannelContance.GUESS_QUESTION_GENERATION_TOPIC_CHANNEL,
 				"重新生成竞猜页面");
@@ -501,7 +521,7 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion>
 
 	@Override
 	@Transactional(readOnly = true)
-	@Cacheable(key = "#questionId+'_GuessQuestionOptions'", value = "GuessQuestionOptions")
+	@Cacheable(key = "#questionId+'_key_GuessQuestionOptions'", value = "GuessQuestionOptions")
 	public List<GuessQuestionOptions> selectByQuestionId(String questionId) {
 		GuessQuestionOptionsCriteria optionsCriteria = new GuessQuestionOptionsCriteria();
 		optionsCriteria.createCriteria().andGuessQuestionIdEqualTo(questionId);
@@ -542,23 +562,5 @@ public class GuessQuestionServiceImpl extends BaseService<GuessQuestion>
 		return 1;
 	}
 	
-	/**
-	 * 移除key.
-	 * 
-	 * @param key
-	 */
-	@SuppressWarnings("unchecked")
-	private void removeRedisKey(String key) {
-		if (redisTemplate == null) {
-			redisTemplate = SpringContextHolder.getBean("redisTemplate");
-		}
-
-		if (redisTemplate != null) {
-
-			if (redisTemplate.hasKey(key)) {
-				redisTemplate.delete(key);
-			}
-		}
-	}
 
 }

@@ -23,6 +23,7 @@ import com.zwo.modules.mall.dao.PrProductPackagePriceMapper;
 import com.zwo.modules.mall.domain.PrProductPackagePrice;
 import com.zwo.modules.mall.domain.PrProductPackagePriceCriteria;
 import com.zwo.modules.mall.service.IPrProductPackagePriceService;
+import com.zwotech.common.utils.RedisUtil;
 import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
 
@@ -38,9 +39,11 @@ import tk.mybatis.mapper.common.Mapper;
 public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPackagePrice> implements IPrProductPackagePriceService {
 	private static Logger logger = LoggerFactory.getLogger(PrProductPackagePriceServiceImpl.class);
 
-	private static final String BASE_MESSAGE = "【PrProductPackagePriceServiceImpl服务类提供的基础操作增删改查等】";
-	private static final String KEY_PROD_LAST_PRPRODUCT_PACKAGEPRICES = "_Product_PrProductPackagePrices";
-	private static final String KEY_VALUED_LAST_PRPRODUCT_PACKAGEPRICES = "_valueId_PrProductPackagePrices";
+	public static final String BASE_MESSAGE = "【PrProductPackagePriceServiceImpl服务类提供的基础操作增删改查等】";
+	public static final String KEY_PRODUCT_PRPRODUCTPACKAGEPRICES = "_key_Product_PrProductPackagePrices";
+	public static final String KEY_VALUEID_PRPRODUCTPACKAGEPRICES = "_key_ValueId_PrProductPackagePrices";
+	
+	public static final String KEY_PRPRODUCT_PACKAGEPRICE = "_key_PrProductPackagePrice";
 
 	@Autowired
 	@Lazy(true)
@@ -54,6 +57,14 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 		return productPackagePriceMapper;
 	}
 
+	public PrProductPackagePriceServiceImpl() {
+		super();
+		if (SpringContextHolder.getApplicationContext().containsBean(
+				"redisTemplate")) {
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -85,15 +96,16 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = {"PrProductPackagePrice","PrProductPackagePrices"}, allEntries = true)
+//	@CacheEvict(value = {"PrProductPackagePrice","PrProductPackagePrices"}, allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
 		List<PrProductPackagePrice> list = this.selectByExample(example);
 		for (PrProductPackagePrice prProductPackagePrice : list) {
-			removeRedisKey(prProductPackagePrice.getProductId()+KEY_PROD_LAST_PRPRODUCT_PACKAGEPRICES);
-			removeRedisKey(prProductPackagePrice.getPropertyValueId()+KEY_PROD_LAST_PRPRODUCT_PACKAGEPRICES);
+			RedisUtil.removeRedisKey(redisTemplate, prProductPackagePrice.getId()+KEY_PRPRODUCT_PACKAGEPRICE);
+			removeRedisKey(prProductPackagePrice.getProductId()+KEY_PRODUCT_PRPRODUCTPACKAGEPRICES);
+			removeRedisKey(prProductPackagePrice.getPropertyValueId()+KEY_PRODUCT_PRPRODUCTPACKAGEPRICES);
 		}
 		
 		
@@ -105,8 +117,8 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 		return result;
 	}
 
-	@CacheEvict(value = {"PrProductPackagePrice","PrProductPackagePrices"}, allEntries = true)
-//	@Override
+//	@CacheEvict(value = {"PrProductPackagePrice","PrProductPackagePrices"}, allEntries = true)
+	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -119,8 +131,10 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 		productPackagePriceCriteria.createCriteria().andIdIn(list);
 		List<PrProductPackagePrice> prices = this.selectByExample(productPackagePriceCriteria);
 		for (PrProductPackagePrice prProductPackagePrice : prices) {
-			removeRedisKey(prProductPackagePrice.getProductId()+KEY_PROD_LAST_PRPRODUCT_PACKAGEPRICES);
-			removeRedisKey(prProductPackagePrice.getPropertyValueId()+KEY_PROD_LAST_PRPRODUCT_PACKAGEPRICES);
+			RedisUtil.removeRedisKey(redisTemplate, prProductPackagePrice.getId()+KEY_PRPRODUCT_PACKAGEPRICE);
+			
+			removeRedisKey(prProductPackagePrice.getProductId()+KEY_PRODUCT_PRPRODUCTPACKAGEPRICES);
+			removeRedisKey(prProductPackagePrice.getPropertyValueId()+KEY_PRODUCT_PRPRODUCTPACKAGEPRICES);
 		}
 		
 		int result = productPackagePriceMapper.deleteByExample(productPackagePriceCriteria);
@@ -138,7 +152,7 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = {"PrProductPackagePrice","PrProductPackagePrices"},key="#id+''")
+	@CacheEvict(value = {"PrProductPackagePrice"},key="#id+'_key_PrProductPackagePrice'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -146,8 +160,10 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为：" + id.toString());
 		PrProductPackagePrice prProductPackagePrice = selectByPrimaryKey(id);
-		removeRedisKey(prProductPackagePrice.getProductId()+KEY_PROD_LAST_PRPRODUCT_PACKAGEPRICES);
-		removeRedisKey(prProductPackagePrice.getPropertyValueId()+KEY_PROD_LAST_PRPRODUCT_PACKAGEPRICES);
+		RedisUtil.removeRedisKey(redisTemplate, prProductPackagePrice.getId()+KEY_PRPRODUCT_PACKAGEPRICE);
+		
+		removeRedisKey(prProductPackagePrice.getProductId()+KEY_PRODUCT_PRPRODUCTPACKAGEPRICES);
+		removeRedisKey(prProductPackagePrice.getPropertyValueId()+KEY_PRODUCT_PRPRODUCTPACKAGEPRICES);
 		// 逻辑操作
 		int result = super.deleteByPrimaryKey(id);
 
@@ -170,8 +186,8 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 			logger.info(BASE_MESSAGE + "insert插入开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-		removeRedisKey(record.getProductId()+KEY_PROD_LAST_PRPRODUCT_PACKAGEPRICES);
-		removeRedisKey(record.getPropertyValueId()+KEY_PROD_LAST_PRPRODUCT_PACKAGEPRICES);
+		removeRedisKey(record.getProductId()+KEY_PRODUCT_PRPRODUCTPACKAGEPRICES);
+		removeRedisKey(record.getPropertyValueId()+KEY_PRODUCT_PRPRODUCTPACKAGEPRICES);
 		
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
@@ -199,8 +215,8 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 			logger.info(BASE_MESSAGE + "insert插入开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-		removeRedisKey(record.getProductId()+KEY_PROD_LAST_PRPRODUCT_PACKAGEPRICES);
-		removeRedisKey(record.getPropertyValueId()+KEY_PROD_LAST_PRPRODUCT_PACKAGEPRICES);
+		removeRedisKey(record.getProductId()+KEY_PRODUCT_PRPRODUCTPACKAGEPRICES);
+		removeRedisKey(record.getPropertyValueId()+KEY_PRODUCT_PRPRODUCTPACKAGEPRICES);
 		
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
@@ -233,7 +249,7 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = {"PrProductPackagePrice","PrProductPackagePrices"})
+	@Cacheable(key = "#id+'_key_PrProductPackagePrice'", value = {"PrProductPackagePrice"})
 	@Transactional(readOnly = true)
 	public PrProductPackagePrice selectByPrimaryKey(String id) {
 		// 日志记录
@@ -256,7 +272,7 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 	 * com.zwotech.modules.core.service.IBaseService#updateByExampleSelective(
 	 * java.lang.Object, java.lang.Object)
 	 */
-	@CacheEvict(value = {"PrProductPackagePrice","PrProductPackagePrices"}, allEntries = true)
+//	@CacheEvict(value = {"PrProductPackagePrice"}, allEntries = true)
 	@Override
 	public int updateByExampleSelective(PrProductPackagePrice record, Object example) {
 		// 日志记录
@@ -266,8 +282,10 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
 		List<PrProductPackagePrice> list = this.selectByExample(example);
 		for (PrProductPackagePrice prProductPackagePrice : list) {
-			removeRedisKey(prProductPackagePrice.getProductId()+KEY_PROD_LAST_PRPRODUCT_PACKAGEPRICES);
-			removeRedisKey(prProductPackagePrice.getPropertyValueId()+KEY_PROD_LAST_PRPRODUCT_PACKAGEPRICES);
+			RedisUtil.removeRedisKey(redisTemplate, prProductPackagePrice.getId()+KEY_PRPRODUCT_PACKAGEPRICE);
+			
+			removeRedisKey(prProductPackagePrice.getProductId()+KEY_PRODUCT_PRPRODUCTPACKAGEPRICES);
+			removeRedisKey(prProductPackagePrice.getPropertyValueId()+KEY_PRODUCT_PRPRODUCTPACKAGEPRICES);
 		}
 		// 逻辑操作
 		int result = super.updateByExampleSelective(record, example);
@@ -285,7 +303,7 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 	 * Object, java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = {"PrProductPackagePrice","PrProductPackagePrices"}, allEntries = true)
+//	@CacheEvict(value = {"PrProductPackagePrice"}, allEntries = true)
 	public int updateByExample(PrProductPackagePrice record, Object example) {
 		//日志记录
 		if(logger.isInfoEnabled())
@@ -294,8 +312,10 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
 		List<PrProductPackagePrice> list = this.selectByExample(example);
 		for (PrProductPackagePrice prProductPackagePrice : list) {
-			removeRedisKey(prProductPackagePrice.getProductId()+KEY_PROD_LAST_PRPRODUCT_PACKAGEPRICES);
-			removeRedisKey(prProductPackagePrice.getPropertyValueId()+KEY_PROD_LAST_PRPRODUCT_PACKAGEPRICES);
+			RedisUtil.removeRedisKey(redisTemplate, prProductPackagePrice.getId()+KEY_PRPRODUCT_PACKAGEPRICE);
+			
+			removeRedisKey(prProductPackagePrice.getProductId()+KEY_PRODUCT_PRPRODUCTPACKAGEPRICES);
+			removeRedisKey(prProductPackagePrice.getPropertyValueId()+KEY_PRODUCT_PRPRODUCTPACKAGEPRICES);
 		}
 		
 		//逻辑操作		
@@ -314,15 +334,17 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = {"PrProductPackagePrice","PrProductPackagePrices"},key="#record.id+'_PrProductPackagePrice'")
+	@CacheEvict(value = {"PrProductPackagePrice"},key="#record.id+'_key_PrProductPackagePrice'")
 	public int updateByPrimaryKeySelective(PrProductPackagePrice record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
-		removeRedisKey(record.getProductId()+KEY_PROD_LAST_PRPRODUCT_PACKAGEPRICES);
-		removeRedisKey(record.getPropertyValueId()+KEY_PROD_LAST_PRPRODUCT_PACKAGEPRICES);
+		RedisUtil.removeRedisKey(redisTemplate, record.getId()+KEY_PRPRODUCT_PACKAGEPRICE);
+		
+		removeRedisKey(record.getProductId()+KEY_PRODUCT_PRPRODUCTPACKAGEPRICES);
+		removeRedisKey(record.getPropertyValueId()+KEY_PRODUCT_PRPRODUCTPACKAGEPRICES);
 	
 		// 逻辑操作
 		int result = super.updateByPrimaryKeySelective(record);
@@ -339,15 +361,18 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = {"PrProductPackagePrice"},key="#record.id+'_PrProductPackagePrice'")
+	@CacheEvict(value = {"PrProductPackagePrice"},key="#record.id+'_key_PrProductPackagePrice'")
 	public int updateByPrimaryKey(PrProductPackagePrice record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为：" + record.toString());
-		removeRedisKey(record.getProductId()+KEY_PROD_LAST_PRPRODUCT_PACKAGEPRICES);
-		removeRedisKey(record.getPropertyValueId()+KEY_PROD_LAST_PRPRODUCT_PACKAGEPRICES);
+		
+		RedisUtil.removeRedisKey(redisTemplate, record.getId()+KEY_PRPRODUCT_PACKAGEPRICE);
+		
+		removeRedisKey(record.getProductId()+KEY_PRODUCT_PRPRODUCTPACKAGEPRICES);
+		removeRedisKey(record.getPropertyValueId()+KEY_PRODUCT_PRPRODUCTPACKAGEPRICES);
 	
 		// 逻辑操作
 		int result = super.updateByPrimaryKey(record);
@@ -376,7 +401,7 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 		return pageInfo;
 	}
 
-	@Cacheable(key = "#pId+'_Product_PrProductPackagePrices'", value = "PrProductPackagePrices")
+	@Cacheable(key = "#pId+'_key_Product_PrProductPackagePrices'", value = "PrProductPackagePrices")
 	@Transactional(readOnly = true)
 	@Override
 	public List<PrProductPackagePrice> selectByProductId(String pId) {
@@ -391,7 +416,7 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 	}
 
 	@Override
-	@CacheEvict(value = {"PrProductPackagePrices"},key="#pId+'_Product_PrProductPackagePrices'",allEntries=true)
+	@CacheEvict(value = {"PrProductPackagePrices"},key="#pId+'_key_Product_PrProductPackagePrices'")
 	public void deleteByProductId(String pId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "根据商品Id删除开始");
@@ -403,7 +428,7 @@ public class PrProductPackagePriceServiceImpl extends BaseService<PrProductPacka
 	}
 
 	@Override
-	@Cacheable(key = "#pId+'_valueId_PrProductPackagePrices'", value = "PrProductPackagePrice")
+	@Cacheable(key = "#pId+'_key_ValueId_PrProductPackagePrices'", value = "PrProductPackagePrice")
 	public PrProductPackagePrice selectByPropertyValueId(String valueId) {
 		PrProductPackagePriceCriteria packagePriceCriteria = new PrProductPackagePriceCriteria();
 		packagePriceCriteria.createCriteria().andPropertyValueIdEqualTo(valueId);

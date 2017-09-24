@@ -78,6 +78,7 @@ public class MemberOrderController extends BaseController<TbUser> {
 
 	@SuppressWarnings("rawtypes")
 	private RedisTemplate redisTemplate;
+	
 	@SuppressWarnings("rawtypes")
 	private JmsTemplate jmsQueueTemplate;
 
@@ -86,10 +87,12 @@ public class MemberOrderController extends BaseController<TbUser> {
 	public MemberOrderController() {
 		super();
 		if (redisTemplate == null) {
-			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+			if(SpringContextHolder.getApplicationContext().containsBean("redisTemplate"))
+				redisTemplate = SpringContextHolder.getBean("redisTemplate");
 		}
 		if (jmsQueueTemplate == null) {
-			jmsQueueTemplate = SpringContextHolder.getBean("jmsQueueTemplate");
+			if(SpringContextHolder.getApplicationContext().containsBean("jmsQueueTemplate"))
+				jmsQueueTemplate = SpringContextHolder.getBean("jmsQueueTemplate");
 		}
 	}
 

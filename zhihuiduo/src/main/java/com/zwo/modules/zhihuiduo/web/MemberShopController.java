@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import com.zwo.modules.member.service.IMemberService;
 import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.service.IShopCategoryService;
 import com.zwo.modules.shop.service.IShopService;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
 /**
@@ -62,11 +64,18 @@ public class MemberShopController extends BaseController {
 	@Lazy(true)
 	private IShopCategoryService shopCategoryService;
 
-	// @SuppressWarnings("rawtypes")
-	// private RedisTemplate redisTemplate = SpringContextHolder
-	// .getBean("redisTemplate");
+	 @SuppressWarnings("rawtypes")
+	 private RedisTemplate redisTemplate;
 
 	private static final String basePath = "views/member/";
+
+	public MemberShopController() {
+		super();
+		if(SpringContextHolder.getApplicationContext().containsBean("redisTemplate")){
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
+	}
+
 
 	/**
 	 * 商铺具体信息。

@@ -62,6 +62,14 @@ public class PrImageServiceImpl extends BaseService<PrImage> implements
 		return prImageMapper;
 	}
 
+	public PrImageServiceImpl() {
+		super();
+		if (SpringContextHolder.getApplicationContext().containsBean(
+				"redisTemplate")) {
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

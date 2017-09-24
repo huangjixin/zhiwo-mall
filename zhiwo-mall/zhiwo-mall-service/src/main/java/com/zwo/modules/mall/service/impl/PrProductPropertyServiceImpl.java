@@ -54,7 +54,8 @@ public class PrProductPropertyServiceImpl extends BaseService<PrProductProperty>
 
 	public PrProductPropertyServiceImpl() {
 		super();
-		if (redisTemplate == null) {
+		if (SpringContextHolder.getApplicationContext().containsBean(
+				"redisTemplate")) {
 			redisTemplate = SpringContextHolder.getBean("redisTemplate");
 		}
 	}

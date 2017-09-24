@@ -57,7 +57,8 @@ public class GroupPurcseMemberServiceImpl extends BaseService<GroupPurcseMember>
 	
 	public GroupPurcseMemberServiceImpl() {
 		super();
-		if (redisTemplate == null) {
+		if (SpringContextHolder.getApplicationContext().containsBean(
+				"redisTemplate")) {
 			redisTemplate = SpringContextHolder.getBean("redisTemplate");
 		}
 	}

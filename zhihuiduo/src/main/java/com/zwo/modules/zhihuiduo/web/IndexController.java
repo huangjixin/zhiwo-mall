@@ -46,17 +46,26 @@ public class IndexController extends BaseController {
 
 	private static final String basePath = "views/member/";
 
+	
+	public IndexController() {
+		super();
+		if (redisTemplate == null) {
+			if(SpringContextHolder.getApplicationContext().containsBean("redisTemplate"))
+				redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
+	}
+
+
 	@RequestMapping(value = { "mindex" }, method = RequestMethod.GET)
 	public String index(Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		if (redisTemplate != null) {
-			redisTemplate = SpringContextHolder.getBean("redisTemplate");
-		}
+		
 		List<PrProduct> list = null;
 		list = prductService.selectAllByStatus(ProductStatus.ONLINE);
 		if (redisTemplate != null) {
 			ListOperations<String, List> listOpe = redisTemplate.opsForList();
 		}
+		
 		List<GroupPurcse> groupPurcses = new ArrayList<GroupPurcse>();
 		for (int i = 0; i < 10; i++) {
 			GroupPurcse groupPurcseMember  = new GroupPurcse();

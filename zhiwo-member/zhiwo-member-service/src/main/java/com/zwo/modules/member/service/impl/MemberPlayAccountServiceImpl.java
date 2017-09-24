@@ -56,8 +56,11 @@ public class MemberPlayAccountServiceImpl extends BaseService<MemberPlayAccount>
 
 	public MemberPlayAccountServiceImpl() {
 		super();
-		if(redisTemplate== null){
-			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		if (redisTemplate == null) {
+			if (SpringContextHolder.getApplicationContext().containsBean(
+					"redisTemplate")) {
+				redisTemplate = SpringContextHolder.getBean("redisTemplate");
+			}
 		}
 	}
 	
@@ -111,7 +114,7 @@ public class MemberPlayAccountServiceImpl extends BaseService<MemberPlayAccount>
 	}
 
 //	@CacheEvict(value = "MemberPlayAccount", allEntries = true)
-	// @Override
+	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -264,7 +267,10 @@ public class MemberPlayAccountServiceImpl extends BaseService<MemberPlayAccount>
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
-
+		List<MemberPlayAccount> list = this.selectByExample(example);
+		for (MemberPlayAccount memberPlayAccount : list) {
+			RedisUtil.removeRedisKey(redisTemplate, memberPlayAccount.getId()+_KEY);
+		}
 		// 逻辑操作
 		int result = super.updateByExampleSelective(record, example);
 		// 日志记录
@@ -288,7 +294,10 @@ public class MemberPlayAccountServiceImpl extends BaseService<MemberPlayAccount>
 			logger.info(BASE_MESSAGE + "updateByExample更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExample更新对象为：" + record.toString());
-
+		List<MemberPlayAccount> list = this.selectByExample(example);
+		for (MemberPlayAccount memberPlayAccount : list) {
+			RedisUtil.removeRedisKey(redisTemplate, memberPlayAccount.getId()+_KEY);
+		}
 		// 逻辑操作
 		int result = super.updateByExample(record, example);
 		// 日志记录

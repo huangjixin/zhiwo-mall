@@ -11,14 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.dao.PrSupplierMapper;
+import com.zwo.modules.mall.domain.PrProductPropertyValue;
 import com.zwo.modules.mall.domain.PrSupplier;
 import com.zwo.modules.mall.domain.PrSupplierCriteria;
 import com.zwo.modules.mall.service.IPrSupplierService;
+import com.zwotech.common.utils.RedisUtil;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -30,18 +34,33 @@ import tk.mybatis.mapper.common.Mapper;
 @Service
 @Lazy(true)
 @Transactional(readOnly = false)
-public class PrSupplierServiceImpl extends BaseService<PrSupplier> implements IPrSupplierService {
-	private static Logger logger = LoggerFactory.getLogger(PrSupplierServiceImpl.class);
+public class PrSupplierServiceImpl extends BaseService<PrSupplier> implements
+		IPrSupplierService {
+	private static Logger logger = LoggerFactory
+			.getLogger(PrSupplierServiceImpl.class);
 
 	private static final String BASE_MESSAGE = "【PrSupplierServiceImpl服务类提供的基础操作增删改查等】";
+
+	public static final String KEY_PRSUPPLIER = "_key_PrSupplier";
 
 	@Autowired
 	@Lazy(true)
 	private PrSupplierMapper prSupplierMapper;
 
+	@SuppressWarnings("rawtypes")
+	private RedisTemplate redisTemplate;
+
 	@Override
 	public Mapper<PrSupplier> getBaseMapper() {
 		return prSupplierMapper;
+	}
+
+	public PrSupplierServiceImpl() {
+		super();
+		if (SpringContextHolder.getApplicationContext().containsBean(
+				"redisTemplate")) {
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
 	}
 
 	/*
@@ -75,12 +94,18 @@ public class PrSupplierServiceImpl extends BaseService<PrSupplier> implements IP
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrSupplier", allEntries = true)
+	// @CacheEvict(value = "PrSupplier", allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
-		
+		List<PrSupplier> prSuppliers = prSupplierMapper
+				.selectByExample(example);
+		for (PrSupplier prSupplier : prSuppliers) {
+			RedisUtil.removeRedisKey(redisTemplate,
+					prSupplier.getId() + KEY_PRSUPPLIER);
+		}
+
 		// 逻辑操作
 		int result = prSupplierMapper.deleteByExample(example);
 
@@ -89,8 +114,8 @@ public class PrSupplierServiceImpl extends BaseService<PrSupplier> implements IP
 		return result;
 	}
 
-	@CacheEvict(value = "PrSupplier", allEntries = true)
-//	@Override
+//	@CacheEvict(value = "PrSupplier", allEntries = true)
+	 @Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -101,6 +126,12 @@ public class PrSupplierServiceImpl extends BaseService<PrSupplier> implements IP
 		// 逻辑操作
 		PrSupplierCriteria prSupplierCriteria = new PrSupplierCriteria();
 		prSupplierCriteria.createCriteria().andIdIn(list);
+		List<PrSupplier> prSuppliers = prSupplierMapper
+				.selectByExample(prSupplierCriteria);
+		for (PrSupplier prSupplier : prSuppliers) {
+			RedisUtil.removeRedisKey(redisTemplate,
+					prSupplier.getId() + KEY_PRSUPPLIER);
+		}
 		int result = prSupplierMapper.deleteByExample(prSupplierCriteria);
 
 		if (logger.isInfoEnabled())
@@ -116,13 +147,17 @@ public class PrSupplierServiceImpl extends BaseService<PrSupplier> implements IP
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "PrSupplier",key="#id+'_PrSupplier'")
+	@CacheEvict(value = "PrSupplier", key = "#id+'_PrSupplier'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除开始");
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为：" + id.toString());
+			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为："
+					+ id.toString());
+			
+		RedisUtil.removeRedisKey(redisTemplate,id + KEY_PRSUPPLIER);
+		
 		// 逻辑操作
 		int result = super.deleteByPrimaryKey(id);
 
@@ -138,7 +173,7 @@ public class PrSupplierServiceImpl extends BaseService<PrSupplier> implements IP
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "PrSupplier", key = "#record.id")
+	// @CachePut(value = "PrSupplier", key = "#record.id")
 	public int insert(PrSupplier record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -148,7 +183,8 @@ public class PrSupplierServiceImpl extends BaseService<PrSupplier> implements IP
 
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
-			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
+			record.setId(System.currentTimeMillis() + ""
+					+ Math.round(Math.random() * 99));
 		}
 		int result = super.insert(record);
 		if (logger.isInfoEnabled())
@@ -165,7 +201,7 @@ public class PrSupplierServiceImpl extends BaseService<PrSupplier> implements IP
 	 */
 
 	@Override
-//	@CachePut(value = "PrSupplier", key = "#record.id")
+	// @CachePut(value = "PrSupplier", key = "#record.id")
 	public int insertSelective(PrSupplier record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -175,7 +211,8 @@ public class PrSupplierServiceImpl extends BaseService<PrSupplier> implements IP
 
 		// 如果数据没有设置id,默认使用时间戳
 		if (null == record.getId() || "".equals(record.getId())) {
-			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
+			record.setId(System.currentTimeMillis() + ""
+					+ Math.round(Math.random() * 99));
 		}
 		int result = super.insertSelective(record);
 		if (logger.isInfoEnabled())
@@ -234,8 +271,14 @@ public class PrSupplierServiceImpl extends BaseService<PrSupplier> implements IP
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新开始");
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
-
+			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为："
+					+ record.toString());
+		List<PrSupplier> prSuppliers = prSupplierMapper
+				.selectByExample(example);
+		for (PrSupplier prSupplier : prSuppliers) {
+			RedisUtil.removeRedisKey(redisTemplate,
+					prSupplier.getId() + KEY_PRSUPPLIER);
+		}
 		// 逻辑操作
 		int result = super.updateByExampleSelective(record, example);
 		// 日志记录
@@ -254,17 +297,23 @@ public class PrSupplierServiceImpl extends BaseService<PrSupplier> implements IP
 	@Override
 	@CacheEvict(value = "PrSupplier", allEntries = true)
 	public int updateByExample(PrSupplier record, Object example) {
-		//日志记录
-		if(logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE+"updateByExample更新开始");
-		if(logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
-										
-		//逻辑操作		
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExample更新开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExample更新对象为："
+					+ record.toString());
+		List<PrSupplier> prSuppliers = prSupplierMapper
+				.selectByExample(example);
+		for (PrSupplier prSupplier : prSuppliers) {
+			RedisUtil.removeRedisKey(redisTemplate,
+					prSupplier.getId() + KEY_PRSUPPLIER);
+		}
+		// 逻辑操作
 		int result = super.updateByExample(record, example);
-		//日志记录
-		if(logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE+"updateByExample更新结束");
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExample更新结束");
 		return result;
 	}
 
@@ -276,14 +325,15 @@ public class PrSupplierServiceImpl extends BaseService<PrSupplier> implements IP
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrSupplier",key="#record.id")
+	@CacheEvict(value = "PrSupplier", key = "#record.id")
 	public int updateByPrimaryKeySelective(PrSupplier record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新开始");
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
-
+			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为："
+					+ record.toString());
+		RedisUtil.removeRedisKey(redisTemplate,record.getId() + KEY_PRSUPPLIER);
 		// 逻辑操作
 		int result = super.updateByPrimaryKeySelective(record);
 		if (logger.isInfoEnabled())
@@ -299,14 +349,15 @@ public class PrSupplierServiceImpl extends BaseService<PrSupplier> implements IP
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrSupplier",key="#record.id")
+	@CacheEvict(value = "PrSupplier", key = "#record.id")
 	public int updateByPrimaryKey(PrSupplier record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新开始");
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为：" + record.toString());
-
+			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为："
+					+ record.toString());
+		RedisUtil.removeRedisKey(redisTemplate,record.getId() + KEY_PRSUPPLIER);
 		// 逻辑操作
 		int result = super.updateByPrimaryKey(record);
 		if (logger.isInfoEnabled())
@@ -323,7 +374,8 @@ public class PrSupplierServiceImpl extends BaseService<PrSupplier> implements IP
 	 */
 	@Transactional(readOnly = true)
 	@Override
-	public PageInfo<PrSupplier> selectByPageInfo(Object example, PageInfo<PrSupplier> pageInfo) {
+	public PageInfo<PrSupplier> selectByPageInfo(Object example,
+			PageInfo<PrSupplier> pageInfo) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页开始");
 		if (logger.isInfoEnabled())

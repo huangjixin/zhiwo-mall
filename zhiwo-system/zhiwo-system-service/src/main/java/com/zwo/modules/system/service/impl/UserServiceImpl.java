@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,8 @@ import com.zwo.modules.system.domain.TbUserGroupRoleCriteria;
 import com.zwo.modules.system.domain.TbUserUserGroup;
 import com.zwo.modules.system.service.ITbUserService;
 import com.zwotech.common.utils.PasswordHelper;
+import com.zwotech.common.utils.RedisUtil;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -48,6 +51,8 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 
 	private static final String BASE_MESSAGE = "【TbUserServiceImpl服务类提供的基础操作增删改查等】";
 
+	public static final String KEY_TBUSER = "_key_tbUser";
+	
 	@Autowired
 	@Lazy(true)
 	private TbUserMapper tbUserMapper;
@@ -69,6 +74,18 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 		return tbUserMapper;
 	}
 
+
+	@SuppressWarnings("rawtypes")
+	private RedisTemplate redisTemplate;
+
+	public UserServiceImpl() {
+		super();
+		if (SpringContextHolder.getApplicationContext().containsBean(
+				"redisTemplate")) {
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -100,12 +117,16 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbUser", allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
-
+		List<TbUser> users = this.selectByExample(example);
+		for (TbUser user : users) {
+			RedisUtil.removeRedisKey(redisTemplate, user.getId()+KEY_TBUSER);
+			RedisUtil.removeRedisKey(redisTemplate, user.getUsername()+KEY_TBUSER);
+			RedisUtil.removeRedisKey(redisTemplate, user.getMobilPhone()+KEY_TBUSER);
+		}
 		// 逻辑操作
 		int result = tbUserMapper.deleteByExample(example);
 
@@ -114,8 +135,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 		return result;
 	}
 
-	@CacheEvict(value = "TbUser", allEntries = true)
-	// @Override
+	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -126,6 +146,13 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 		// 逻辑操作
 		TbUserCriteria tbUserCriteria = new TbUserCriteria();
 		tbUserCriteria.createCriteria().andIdIn(list);
+		List<TbUser> users = this.selectByExample(tbUserCriteria);
+		for (TbUser user : users) {
+			RedisUtil.removeRedisKey(redisTemplate, user.getId()+KEY_TBUSER);
+			RedisUtil.removeRedisKey(redisTemplate, user.getUsername()+KEY_TBUSER);
+			RedisUtil.removeRedisKey(redisTemplate, user.getMobilPhone()+KEY_TBUSER);
+		}
+		
 		int result = tbUserMapper.deleteByExample(tbUserCriteria);
 
 		if (logger.isInfoEnabled())
@@ -141,14 +168,17 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "TbUser", key = "#id+'_user'")
+	@CacheEvict(value = "TbUser", key = "#id+'_key_tbUser'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为：" + id.toString());
-
+		TbUser user = this.selectByPrimaryKey(id);
+		RedisUtil.removeRedisKey(redisTemplate, user.getUsername()+KEY_TBUSER);
+		RedisUtil.removeRedisKey(redisTemplate, id+KEY_TBUSER);
+		
 		// 逻辑操作
 		int result = super.deleteByPrimaryKey(id);
 
@@ -164,7 +194,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "TbUser", key = "#record.id+'_user'")
+//	@CachePut(value = "TbUser", key = "#record.id+'_key_tbUser'")
 	public int insert(TbUser record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -195,7 +225,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	 */
 
 	@Override
-//	@CachePut(value = "TbUser", key = "#record.id+'_user'")
+//	@CachePut(value = "TbUser", key = "#record.id+'_key_tbUser'")
 	public int insertSelective(TbUser record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -237,7 +267,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+'_user'", value = "TbUser")
+	@Cacheable(key = "#id+'_key_tbUser'", value = "TbUser")
 	@Transactional(readOnly = true)
 	public TbUser selectByPrimaryKey(String id) {
 		// 日志记录
@@ -260,7 +290,6 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	 * com.zwotech.modules.core.service.IBaseService#updateByExampleSelective(
 	 * java.lang.Object, java.lang.Object)
 	 */
-	@CacheEvict(value = "TbUser", allEntries = true)
 	@Override
 	public int updateByExampleSelective(TbUser record, Object example) {
 		// 日志记录
@@ -268,7 +297,12 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
-
+		List<TbUser> users = this.selectByExample(example);
+		for (TbUser user : users) {
+			RedisUtil.removeRedisKey(redisTemplate, user.getId()+KEY_TBUSER);
+			RedisUtil.removeRedisKey(redisTemplate, user.getUsername()+KEY_TBUSER);
+			RedisUtil.removeRedisKey(redisTemplate, user.getMobilPhone()+KEY_TBUSER);
+		}
 		// 逻辑操作
 		if (record.getPassword() != null && !"".equals(record.getPassword())) {
 			record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
@@ -288,14 +322,18 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	 * Object, java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbUser", allEntries = true)
 	public int updateByExample(TbUser record, Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExample更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExample更新对象为：" + record.toString());
-
+		List<TbUser> users = this.selectByExample(example);
+		for (TbUser user : users) {
+			RedisUtil.removeRedisKey(redisTemplate, user.getId()+KEY_TBUSER);
+			RedisUtil.removeRedisKey(redisTemplate, user.getUsername()+KEY_TBUSER);
+			RedisUtil.removeRedisKey(redisTemplate, user.getMobilPhone()+KEY_TBUSER);
+		}
 		// 逻辑操作
 		if (record.getPassword() != null && !"".equals(record.getPassword())) {
 			record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
@@ -315,14 +353,15 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbUser", key = "#record.id+'_user'")
+	@CacheEvict(value = "TbUser", key = "#record.id+'_key_tbUser'")
 	public int updateByPrimaryKeySelective(TbUser record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
-
+		RedisUtil.removeRedisKey(redisTemplate, record.getMobilPhone()+KEY_TBUSER);
+		RedisUtil.removeRedisKey(redisTemplate, record.getUsername()+KEY_TBUSER);
 		// 逻辑操作
 		if (record.getPassword() != null && !"".equals(record.getPassword())) {
 			record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
@@ -341,14 +380,15 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbUser", key = "#record.id+'_user'")
+	@CacheEvict(value = "TbUser", key = "#record.id+'_key_tbUser'")
 	public int updateByPrimaryKey(TbUser record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为：" + record.toString());
-
+		RedisUtil.removeRedisKey(redisTemplate, record.getMobilPhone()+KEY_TBUSER);
+		RedisUtil.removeRedisKey(redisTemplate, record.getUsername()+KEY_TBUSER);
 		// 逻辑操作
 		if (record.getPassword() != null && !"".equals(record.getPassword())) {
 			record.setPassword(PasswordHelper.encryptPassword(record.getPassword()));
@@ -381,7 +421,8 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 		return pageInfo;
 	}
 
-
+	@Transactional(readOnly = true)
+	@Cacheable(key = "#username+'_key_tbUser'", value = "TbUser")
 	@Override
 	public TbUser findByUsername(String username) {
 		// 日志记录
@@ -402,6 +443,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Set<String> findRoles(String username) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "findRoles查询开始");
@@ -418,6 +460,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Set<String> findPermissions(String username) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -435,6 +478,7 @@ public class UserServiceImpl extends BaseService<TbUser> implements ITbUserServi
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public TbUser login(TbUser user) {
 		// 日志记录
 		if (logger.isInfoEnabled())

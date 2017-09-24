@@ -48,6 +48,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 
 	private static final String BASE_MESSAGE = "【PrProductServiceImpl服务类提供的基础操作增删改查等】";
 
+	private static final String KEY_PRODUCT_WITHOUT_BLOB = "_product_withoutBlob";
 	private static final String KEY_SHOPID_PRODUCT = "_key_shopId_product";
 	private static final String KEY_SHOPID_PRODUCT_COUNT = "_key_shopId_product_Count";
 	private static final String KEY_GROUP_PURCSE = "_key_GroupPurcse";
@@ -76,6 +77,13 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		return null;
 	}
 
+	public ProductServiceImpl() {
+		super();
+		if (SpringContextHolder.getApplicationContext().containsBean(
+				"redisTemplate")) {
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
+	}
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -107,6 +115,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
 			
 			removeRedisKey(prProduct.getId() + KEY_GROUP_PURCSE);
+			removeRedisKey(prProduct.getId() + KEY_PRODUCT_WITHOUT_BLOB);
 		}
 		// 逻辑操作
 		int result = productMapper.deleteByExample((PrProductCriteria) example);
@@ -145,6 +154,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 			removeRedisKey(key);
 			
 			removeRedisKey(prProduct.getId() + KEY_GROUP_PURCSE);
+			removeRedisKey(prProduct.getId() + KEY_PRODUCT_WITHOUT_BLOB);
 		}
 
 		int result = productMapper.deleteByExample(productCriteria);
@@ -183,6 +193,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		removeRedisKey(key);
 
 		removeRedisKey(prProduct.getId() + KEY_GROUP_PURCSE);
+		removeRedisKey(prProduct.getId() + KEY_PRODUCT_WITHOUT_BLOB);
 		// 逻辑操作
 		int result = this.productMapper.deleteByPrimaryKey(id);
 
@@ -239,6 +250,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	 */
 	@Override
 	@Transactional(readOnly = true)
+	@Cacheable(key = "#id+'_product_withoutBlob'", value = "PrProduct")
 	public PrProduct selectByPrimaryKey(String id) {
 		return productMapper.selectByKey(id);
 	}
@@ -463,6 +475,8 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		for (PrProduct prProduct : products) {
 			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT);
 			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
+			
+			removeRedisKey(prProduct.getId() + KEY_PRODUCT_WITHOUT_BLOB);
 		}
 
 		if (null != record.getContent() && !"".equals(record.getContent())) {
@@ -513,7 +527,8 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 
 		removeRedisKey(record.getShopId() + KEY_SHOPID_PRODUCT);
 		removeRedisKey(record.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
-
+		removeRedisKey(record.getId() + KEY_PRODUCT_WITHOUT_BLOB);
+		
 		if (null != record.getContent() && !"".equals(record.getContent())) {
 			String content = record.getContent();
 			content = HtmlUtils.htmlEscape(content);
@@ -535,7 +550,8 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeyWithBLOBs更新对象为："
 					+ record.toString());
 		removeRedisKey(record.getShopId() + KEY_SHOPID_PRODUCT);
-
+		removeRedisKey(record.getId() + KEY_PRODUCT_WITHOUT_BLOB);
+		
 		if (null != record.getContent() && !"".equals(record.getContent())) {
 			String content = record.getContent();
 			content = HtmlUtils.htmlEscape(content);
@@ -548,6 +564,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		return result;
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	@Cacheable(value = "ShopPrProducts", key = "#shopId+'_key_shopId_product'")
 	public List<PrProduct> selectPrProductsByShopId(String shopId) {
@@ -564,6 +581,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		return list;
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	@Cacheable(value = "ShopPrProductsCount", key = "#shopId+'_key_shopId_product_Count'")
 	public Integer selectPrProductsCountByShopId(String shopId) {
@@ -598,6 +616,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public PageInfo<PrProduct> selectByCategoryIdPageInfo(String categoryId,
 			PageInfo<PrProduct> pageInfo) {
 		PrProductCriteria productCriteria = new PrProductCriteria();
@@ -608,6 +627,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<PrProduct> selectAllByStatus(String status) {
 		PrProductCriteria productCriteria = new PrProductCriteria();
 		productCriteria.createCriteria().andStatusEqualTo(status);
@@ -617,6 +637,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public PageInfo<PrProduct> selectAllByStatus(String status,
 			PageInfo<PrProduct> pageInfo) {
 		PrProductCriteria productCriteria = new PrProductCriteria();

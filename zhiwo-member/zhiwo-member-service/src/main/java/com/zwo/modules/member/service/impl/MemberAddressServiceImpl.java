@@ -40,6 +40,7 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 
 	private static final String BASE_MESSAGE = "【MemberAddressServiceImpl服务类提供的基础操作增删改查等】";
 
+	private static final String KEY_MEMBER_ADDRESS = "_key_MemberAddress";
 	private static final String KEYLAST_LIST_ALL_BY_MEMBERID = "_key_list_all_by_memberid";
 	
 	private static final String KEYLAST_DEFAULT_MEMBER_ADDRESS = "_key_DefaultMemberAddress";
@@ -55,7 +56,16 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 	public Mapper<MemberAddress> getBaseMapper() {
 		return memberAddressMapper;
 	}
-
+	
+	public MemberAddressServiceImpl() {
+		super();
+		if (redisTemplate == null) {
+			if (SpringContextHolder.getApplicationContext().containsBean(
+					"redisTemplate")) {
+				redisTemplate = SpringContextHolder.getBean("redisTemplate");
+			}
+		}
+	}	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -87,7 +97,7 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = "MemberAddress", allEntries = true)
+//	@CacheEvict(value = "MemberAddress", allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -99,6 +109,7 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 			for (MemberAddress memberAddress : addresses) {
 				if(memberAddress.getMemberId()!=null){
 					try {
+						removeRedisKey(memberAddress.getMemberId()+KEY_MEMBER_ADDRESS);
 						removeRedisKey(memberAddress.getMemberId()+KEYLAST_DEFAULT_MEMBER_ADDRESS);
 						removeRedisKey(memberAddress.getMemberId()+KEYLAST_LIST_ALL_BY_MEMBERID);
 					} catch (Exception e) {
@@ -113,8 +124,8 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 		return result;
 	}
 
-	@CacheEvict(value = "MemberAddress", allEntries = true)
-	// @Override
+//	@CacheEvict(value = "MemberAddress", allEntries = true)
+	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -152,7 +163,7 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "MemberAddress", key = "#id+'_MemberAddress'")
+	@CacheEvict(value = "MemberAddress", key = "#id+'_key_MemberAddress'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -282,7 +293,7 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+'_MemberAddress'", value = "MemberAddress")
+	@Cacheable(key = "#id+'_key_MemberAddress'", value = "MemberAddress")
 	@Transactional(readOnly = true)
 	public MemberAddress selectByPrimaryKey(String id) {
 		// 日志记录
@@ -354,7 +365,7 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "MemberAddress", key = "#record.id+'_MemberAddress'")
+	@CacheEvict(value = "MemberAddress", key = "#record.id+'_key_MemberAddress'")
 	public int updateByPrimaryKeySelective(MemberAddress record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -389,7 +400,7 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "MemberAddress", key = "#record.id+'_MemberAddress'")
+	@CacheEvict(value = "MemberAddress", key = "#record.id+'_key_MemberAddress'")
 	public int updateByPrimaryKey(MemberAddress record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -491,8 +502,10 @@ public class MemberAddressServiceImpl extends BaseService<MemberAddress> impleme
 	@SuppressWarnings("unchecked")
 	private void removeRedisKey(String key){
 		if (redisTemplate == null) {
-			redisTemplate = SpringContextHolder
-					.getBean("redisTemplate");
+			if (SpringContextHolder.getApplicationContext().containsBean(
+					"redisTemplate")) {
+				redisTemplate = SpringContextHolder.getBean("redisTemplate");
+			}
 		}
 
 		if (redisTemplate != null) {

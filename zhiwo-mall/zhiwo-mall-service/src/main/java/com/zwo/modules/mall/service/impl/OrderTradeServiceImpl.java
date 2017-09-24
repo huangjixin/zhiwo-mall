@@ -50,7 +50,7 @@ public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements
 
 	public OrderTradeServiceImpl() {
 		super();
-		if (redisTemplate == null) {
+		if(SpringContextHolder.getApplicationContext().containsBean("redisTemplate")){
 			redisTemplate = SpringContextHolder.getBean("redisTemplate");
 		}
 	}
