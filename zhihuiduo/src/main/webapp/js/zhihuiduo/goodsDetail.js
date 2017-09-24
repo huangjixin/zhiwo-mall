@@ -1,4 +1,4 @@
-	    var goodsList ;
+var goodsList ;
 		var swiperImages ;
 		var packagePrices ;
 		var groupPurcses ;
@@ -132,7 +132,7 @@
 				for(var i=0;i<length;i++){
 					var swiperImage= swiperImages[i];
 					
-					var para = '<div class="swiper-slide"><img class="img-responsive" src="'+ctx+'/'+swiperImage.url+'"></div>';
+					var para = '<div class="swiper-slide"><img class="img-responsive" src="'+ctx+'/images/busy.gif"  data-original="'+ctx+'/'+swiperImage.url+'"></div>';
 					
 					$('#swiperWrapper').append(para);
 				}
@@ -142,8 +142,6 @@
 			$('#marketPriceLabel').html(" "+product.marketPrice);
 			$('#soldQuantitySpan').html(product.soldQuantity);
 			$('#proContent').html(product.content);
-			$('#productDescription').html(product.description);
-			$('#productName').html(product.name);
 			$('#shopHead').html(product.shopName);
 			if(goodsList){
 				$('#goodsCount').html(goodsList.length);
