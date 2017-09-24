@@ -69,13 +69,12 @@
 						var url = ctx+'/goodsDetail?goodsId='+prod.id;
 						var prodIcon = '<img class="img-responsive" src="'+ctx+'/images/busy.gif" data-original="'+ctx+'/'+prod.icon+'">';
 						var prodName = '<h5>'+prod.name+'</h5>';
-						var parameter = '<div id="'+prod.id+'Div" style="display:none;" class="col-xs-6" onClick="turnTo('+url+');"><div class="thumbnail">'+prodIcon+'<div class="caption">'+prodName+'<div style="height:2px;"></div><div class="pull-left"><label style="color: red;"><i class="fa fa-jpy"></i>'+prod.gourpSalePrice+'</label> <span style="font-size:1.3rem;">已拼1222件</span></div><div class="clearfix"></div></div></div></div>';
+						var parameter = '<div id="'+prod.id+'Div" style="display:none;" class="col-xs-6" onClick="turnTo(\''+url+'\');"><div class="thumbnail">'+prodIcon+'<div class="caption">'+prodName+'<div style="height:2px;"></div><div class="pull-left"><label style="color: red;"><i class="fa fa-jpy"></i>'+prod.gourpSalePrice+'</label> <span style="font-size:1.3rem;">已拼1222件</span></div><div class="clearfix"></div></div></div></div>';
 						$("#shopGoods").after(parameter);
 						$('#'+prod.id+'Div').fadeIn('slow');
 					}
 				}
 			}
-			
 		}
 		
 		//跳转到
