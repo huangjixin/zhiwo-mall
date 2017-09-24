@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.service.IPrImageService;
 import com.zwo.modules.mall.service.IPrProductPackagePriceService;
@@ -24,6 +25,7 @@ import com.zwo.modules.member.service.IMemberService;
 import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.service.IShopCategoryService;
 import com.zwo.modules.shop.service.IShopService;
+import com.zwo.modules.zhihuiduo.dto.ProductExtention;
 import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
@@ -90,15 +92,25 @@ public class MemberShopController extends BaseController {
 	public String memberShop(@PathVariable String shopId, Model uiModel,
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-
+		String jsonString=null;
+		ProductExtention productExtention = null;
+		productExtention = new ProductExtention();
+		
 		Shop shop = shopService.selectByPrimKey(shopId);
+		
 		List<PrProduct> products = prductService
 				.selectPrProductsByShopId(shopId);
-		int productsCount = prductService.selectPrProductsCountByShopId(shopId);
+		productExtention.setShop(shop);
+		productExtention.setGoodsList(products);
+		/*int productsCount = prductService.selectPrProductsCountByShopId(shopId);
 
 		uiModel.addAttribute("shop", shop);
 		uiModel.addAttribute("products", products);
-		uiModel.addAttribute("productsCount", productsCount);
+		uiModel.addAttribute("productsCount", productsCount);*/
+		
+		jsonString = JSONObject.toJSONString(productExtention,true);
+		uiModel.addAttribute("rawData", jsonString);
+		
 		return basePath + "memberShop";
 	}
 
