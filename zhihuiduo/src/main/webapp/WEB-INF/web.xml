@@ -88,10 +88,10 @@
 		<servlet-name>default</servlet-name>
 		<url-pattern>*.ftl</url-pattern>
 	</servlet-mapping>
-	<servlet-mapping>
+	<!-- <servlet-mapping>
 		<servlet-name>default</servlet-name>
 		<url-pattern>*.htm</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping> -->
 	<servlet-mapping>
 		<servlet-name>default</servlet-name>
 		<url-pattern>*.ico</url-pattern>
