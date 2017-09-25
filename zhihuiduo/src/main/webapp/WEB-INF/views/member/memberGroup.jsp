@@ -432,9 +432,12 @@
 				for(var i=0;i<packagePrices.length;i++){
 					var packagePrice = packagePrices[i];
 					if(packagePriceProValueId == packagePrice.propertyValueId){
-						$("#propertyValueImg").attr("src",ctx+'/images/busy.gif');
-						$("#propertyValueImg").attr("data-original",packagePrice.icon);
-						$("#propertyValueImg").lazyload({effect: "fadeIn"});
+						if(packagePrice.icon && packagePrice.icon!=''){
+							$("#propertyValueImg").attr("src",ctx+"/"+packagePrice.icon);
+							//$("#propertyValueImg").attr("src",ctx+'/images/busy.gif');
+							//$("#propertyValueImg").attr("data-original",ctx+"/"+packagePrice.icon);
+							$("#propertyValueImg").lazyload({effect: "fadeIn"});
+						}
 						break;
 					}
 				}
