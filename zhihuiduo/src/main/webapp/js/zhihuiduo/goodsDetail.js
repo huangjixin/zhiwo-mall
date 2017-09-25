@@ -132,16 +132,21 @@ var goodsList ;
 				for(var i=0;i<length;i++){
 					var swiperImage= swiperImages[i];
 					
-					var para = '<div class="swiper-slide"><img class="img-responsive" src="'+ctx+'/images/busy.gif"  data-original="'+ctx+'/'+swiperImage.url+'"></div>';
+					var para = '<div class="swiper-slide" id="'+swiperImage.id+'SwiperImage" style="display:none;"><img class="img-responsive" src="'+ctx+'/'+swiperImage.url+'"></div>';
 					
 					$('#swiperWrapper').append(para);
+					$('#'+swiperImage.id+'SwiperImage').fadeIn('slow');
 				}
 			}
 			
-			$('#gSalePriceLabel').html(" "+product.gourpSalePrice);
-			$('#marketPriceLabel').html(" "+product.marketPrice);
+			$('#gSalePriceLabel').html(product.gourpSalePrice);
+			$('#marketPriceLabel').html(product.marketPrice);
 			$('#soldQuantitySpan').html(product.soldQuantity);
 			$('#proContent').html(product.content);
+			$('#productName').html(product.name);
+			$('#productDescription').html(product.description);
+			
+			
 			$('#shopHead').html(product.shopName);
 			if(goodsList){
 				$('#goodsCount').html(goodsList.length);
@@ -379,4 +384,11 @@ var goodsList ;
 		
 		function fadeInOut(detination){
 			$("#"+detination).fadeOut(2000).fadeIn(1000);
+		}
+		
+		function gotoShop(){
+			if(obj){
+			    var url = ctx+'/memberShop/'+obj.shopId+'.htm?timestamp='+new Date().getTime();
+					showProduct(url);
+			}	
 		}

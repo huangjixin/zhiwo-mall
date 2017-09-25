@@ -57,7 +57,11 @@
 			if(obj){
 				if(shop){
 					$("#shopTitle").html(shop.name);
-					$("#shopIcon").attr("data-original",shop.icon);
+					if(shop && shop.icon!=''){
+						$("#shopIcon").attr("src",ctx+"/images/busy.gif");
+						$("#shopIcon").attr("data-original",ctx+"/"+shop.icon);
+					}
+					
 					$("#shopName").html(shop.name);
 					$("#shopDescription").html(shop.description);
 				}
@@ -66,7 +70,7 @@
 					var length = products.length;
 					for(var i=0;i<length;i++){
 						var prod = products[i];
-						var url = ctx+'/goodsDetail?goodsId='+prod.id;
+						var url = ctx+"/goodsDetail/"+product.id+'.htm?timestamp='+new Date().getTime();
 						var prodIcon = '<img class="img-responsive" src="'+ctx+'/images/busy.gif" data-original="'+ctx+'/'+prod.icon+'">';
 						var prodName = '<h5>'+prod.name+'</h5>';
 						var parameter = '<div id="'+prod.id+'Div" style="display:none;" class="col-xs-6" onClick="turnTo(\''+url+'\');"><div class="thumbnail">'+prodIcon+'<div class="caption">'+prodName+'<div style="height:2px;"></div><div class="pull-left"><label style="color: red;"><i class="fa fa-jpy"></i>'+prod.gourpSalePrice+'</label> <span style="font-size:1.3rem;">已拼1222件</span></div><div class="clearfix"></div></div></div></div>';

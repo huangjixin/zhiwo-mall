@@ -78,7 +78,6 @@ public class MemberShopController extends BaseController {
 		}
 	}
 
-
 	/**
 	 * 商铺具体信息。
 	 * 
@@ -88,7 +87,7 @@ public class MemberShopController extends BaseController {
 	 * @param httpServletResponse
 	 * @return
 	 */
-	@RequestMapping(value = "memberShop/{shopId:[0-9]+}", method = RequestMethod.GET)
+	@RequestMapping(value = "memberShop/{shopId}", method = RequestMethod.GET)
 	public String memberShop(@PathVariable String shopId, Model uiModel,
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {

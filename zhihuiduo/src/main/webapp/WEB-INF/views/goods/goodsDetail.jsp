@@ -49,12 +49,12 @@
 			</div>
 
 			<div class="clearfix"></div>
-			<div style="text-align: left; font-size: 1.5rem; font-weight: bold;">${product.name}</div>
+			<div style="text-align: left; font-size: 1.5rem; font-weight: bold;" id="productName"></div>
 			<div>&nbsp;</div>
-			<div style="text-align: left; font-size: 1.4rem; color: #666;">${product.description}</div>
+			<div style="text-align: left; font-size: 1.4rem; color: #666;" id="productDescription"></div>
 			<br>
-			<p style="text-align: left; font-size: 1.4rem; padding:4px; background-color:#FAFAFA">
-		        <small><i class="fa fa-check-square-o" aria-hidden="true" style="color:red;"></i>&nbsp;假一赔十</small>&nbsp;&nbsp;<small><i class="fa fa-check-square-o" aria-hidden="true" style="color:red;"></i>&nbsp;7天退换</small>&nbsp;&nbsp;<small><i class="fa fa-check-square-o" aria-hidden="true" style="color:red;"></i>&nbsp;48小时发货</small>
+			<p style="text-align: left;padding:4px; background-color:#FAFAFA">
+		        <span><i class="fa fa-check-square-o" aria-hidden="true" style="color:red;"></i>&nbsp;假一赔十</span>&nbsp;&nbsp;<span><i class="fa fa-check-square-o" aria-hidden="true" style="color:red;"></i>&nbsp;7天退换</span>&nbsp;&nbsp;<span><i class="fa fa-check-square-o" aria-hidden="true" style="color:red;"></i>&nbsp;48小时发货</span>
 		    </p>
 			<hr class="hr1" />
 		</div>
@@ -124,8 +124,8 @@
 		</div>
 	</div>
 
-	<a href="${ctx}/memberShop/${product.shopId}">
-	<div class="thumbnail">
+	<!--<a href="${ctx}/memberShop/${product.shopId}">-->
+	<div class="thumbnail" onClick="gotoShop();">
 		<div class="caption">
 			<div class="pull-left">
 				<div class="media" style="padding-top: 4px; padding-bottom: 8px;">
@@ -149,7 +149,7 @@
 			<div class="clearfix"></div>
 		</div>
 	</div>
-	</a>
+	<!--</a>-->
 	<div class="thumbnail">
 		<div class="caption">
 			<div class="media">

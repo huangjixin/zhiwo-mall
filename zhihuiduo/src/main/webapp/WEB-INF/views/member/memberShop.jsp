@@ -40,14 +40,14 @@ body {
 <body>
 	<div class="page-header"
 		style="text-align: center; font-size: 2rem; position:fixed; background-color:#fff; left:0;right:0; top:0; padding-top:10px; margin-top:0;">
-		<b id="shopTitle">${shop.name}</b>&nbsp;&nbsp;<small  style="color:red;" onClick="javascript:history.back();">返回</small>
+		<b id="shopTitle"></b>&nbsp;&nbsp;<small  style="color:red;" onClick="javascript:history.back();">返回</small>
 	</div>
     <div style="height:45px;"></div>
 	<div class="thumbnail">
 		<div class="caption">
 			<div class="media" style="padding-top: 4px; padding-bottom: 8px;">
 				<div class="media-left">
-					<img id="shopIcon" class="media-object" src="${ctx}/images/busy.gif" data-original="${ctx}/${shop.icon}"
+					<img id="shopIcon" class="media-object"
 						style="width: 60px; height: 60px; border-radius: 4px;">
 				</div>
 				<div class="media-body">

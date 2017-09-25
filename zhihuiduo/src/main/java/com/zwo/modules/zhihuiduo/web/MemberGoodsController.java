@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -107,8 +108,8 @@ public class MemberGoodsController extends BaseController {
 	 * @param httpServletResponse
 	 * @return
 	 */
-	@RequestMapping(value = "goodsDetail", method = RequestMethod.GET)
-	public String goodsDetail(@RequestParam String goodsId, Model uiModel,
+	@RequestMapping(value = "goodsDetail/{goodsId}", method = RequestMethod.GET)
+	public String goodsDetail(@PathVariable String goodsId, Model uiModel,
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		String rootDir = httpServletRequest.getSession().getServletContext()
