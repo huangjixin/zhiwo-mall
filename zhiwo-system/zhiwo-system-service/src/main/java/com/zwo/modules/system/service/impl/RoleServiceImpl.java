@@ -13,13 +13,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import tk.mybatis.mapper.common.Mapper;
 
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.system.dao.TbResourcesMapper;
@@ -30,10 +31,11 @@ import com.zwo.modules.system.domain.TbRole;
 import com.zwo.modules.system.domain.TbRoleCriteria;
 import com.zwo.modules.system.domain.TbRoleResources;
 import com.zwo.modules.system.domain.TbRoleResourcesCriteria;
+import com.zwo.modules.system.domain.TbUserGroup;
 import com.zwo.modules.system.service.ITbRoleService;
+import com.zwotech.common.utils.RedisUtil;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
-
-import tk.mybatis.mapper.common.Mapper;
 
 /**
  * @author hjx
@@ -47,9 +49,14 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 
 	private static final String BASE_MESSAGE = "【TbRoleServiceImpl服务类提供的基础操作增删改查等】";
 
+	public static final String KEY_TBROLE = "_key_tbRole";
+	
 	@Autowired
 	@Lazy(true)
 	private JdbcTemplate jdbcTemplate;
+	
+	@SuppressWarnings("rawtypes")
+	private RedisTemplate redisTemplate;
 	
 	@Autowired
 	@Lazy(true)
@@ -68,6 +75,14 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 		return roleMapper;
 	}
 
+	public RoleServiceImpl() {
+		super();
+		if (SpringContextHolder.getApplicationContext().containsBean(
+				"redisTemplate")) {
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -99,12 +114,14 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbRole", allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
-
+		List<TbRole> roles = this.selectByExample(example);
+		for (TbRole role : roles) {
+			RedisUtil.removeRedisKey(redisTemplate, role.getId()+KEY_TBROLE);
+		}
 		// 逻辑操作
 		int result = roleMapper.deleteByExample(example);
 
@@ -113,8 +130,7 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 		return result;
 	}
 
-	@CacheEvict(value = "TbRole", allEntries = true)
-//	@Override
+	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -125,6 +141,11 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 		// 逻辑操作
 		TbRoleCriteria roleCriteria = new TbRoleCriteria();
 		roleCriteria.createCriteria().andIdIn(list);
+		List<TbRole> roles = this.selectByExample(roleCriteria);
+		for (TbRole role : roles) {
+			RedisUtil.removeRedisKey(redisTemplate, role.getId()+KEY_TBROLE);
+		}
+		
 		int result = roleMapper.deleteByExample(roleCriteria);
 
 		if (logger.isInfoEnabled())
@@ -140,7 +161,7 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "TbRole", key="#id+'_role'")
+	@CacheEvict(value = "TbRole", key="#id+'_key_tbRole'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -163,7 +184,7 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "TbRole", key = "#record.id+'_role'")
+//	@CachePut(value = "TbRole", key = "#record.id+'_key_tbRole'")
 	public int insert(TbRole record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -190,7 +211,7 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	 */
 
 	@Override
-//	@CachePut(value = "TbRole", key = "#record.id+'_role'")
+//	@CachePut(value = "TbRole", key = "#record.id+'_key_tbRole'")
 	public int insertSelective(TbRole record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -229,7 +250,7 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+'_role'", value = "TbRole")
+	@Cacheable(key = "#id+'_key_tbRole'", value = "TbRole")
 	@Transactional(readOnly = true)
 	public TbRole selectByPrimaryKey(String id) {
 		// 日志记录
@@ -252,7 +273,7 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	 * com.zwotech.modules.core.service.IBaseService#updateByExampleSelective(
 	 * java.lang.Object, java.lang.Object)
 	 */
-	@CacheEvict(value = "TbRole", allEntries = true)
+//	@CacheEvict(value = "TbRole", allEntries = true)
 	@Override
 	public int updateByExampleSelective(TbRole record, Object example) {
 		// 日志记录
@@ -260,7 +281,10 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
-
+		List<TbRole> roles = this.selectByExample(example);
+		for (TbRole role : roles) {
+			RedisUtil.removeRedisKey(redisTemplate, role.getId()+KEY_TBROLE);
+		}
 		// 逻辑操作
 		int result = super.updateByExampleSelective(record, example);
 		// 日志记录
@@ -277,14 +301,17 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	 * Object, java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbRole", allEntries = true)
+//	@CacheEvict(value = "TbRole", allEntries = true)
 	public int updateByExample(TbRole record, Object example) {
 		//日志记录
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新开始");
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
-										
+		List<TbRole> roles = this.selectByExample(example);
+		for (TbRole role : roles) {
+			RedisUtil.removeRedisKey(redisTemplate, role.getId()+KEY_TBROLE);
+		}								
 		//逻辑操作		
 		int result = super.updateByExample(record, example);
 		//日志记录
@@ -301,7 +328,7 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbRole", key="#record.id+'_role'")
+	@CacheEvict(value = "TbRole", key="#record.id+'_key_tbRole'")
 	public int updateByPrimaryKeySelective(TbRole record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -324,7 +351,7 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbRole", key="#record.id+'_role'")
+	@CacheEvict(value = "TbRole", key="#record.id+'_key_tbRole'")
 	public int updateByPrimaryKey(TbRole record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -414,6 +441,7 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<TbResources> selectByRolename(String rolename) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "根据角色名进行查询资源开始");
@@ -424,6 +452,7 @@ public class RoleServiceImpl extends BaseService<TbRole> implements ITbRoleServi
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<TbResources> selectByRoleId(String roleId) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "根据角色ID进行查询资源开始");

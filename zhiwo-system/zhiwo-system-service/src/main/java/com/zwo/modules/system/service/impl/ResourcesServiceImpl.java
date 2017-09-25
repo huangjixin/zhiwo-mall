@@ -9,23 +9,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import tk.mybatis.mapper.common.Mapper;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.system.dao.TbResourcesMapper;
 import com.zwo.modules.system.domain.TbResources;
 import com.zwo.modules.system.domain.TbResourcesCriteria;
+import com.zwo.modules.system.domain.TbUser;
 import com.zwo.modules.system.service.ITbResourcesService;
+import com.zwotech.common.utils.RedisUtil;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
-
-import tk.mybatis.mapper.common.Mapper;
 
 /**
  * @author hjx
@@ -39,6 +40,8 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 
 	private static final String BASE_MESSAGE = "【TbResourcesServiceImpl服务类提供的基础操作增删改查等】";
 
+	public static final String KEY_TBRESOURCES = "_key_tbResources";
+	
 	@Autowired
 	@Lazy(true)
 	private TbResourcesMapper resourcesMapper;
@@ -46,6 +49,17 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 	@Override
 	public Mapper<TbResources> getBaseMapper() {
 		return null;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private RedisTemplate redisTemplate;
+
+	public ResourcesServiceImpl() {
+		super();
+		if (SpringContextHolder.getApplicationContext().containsBean(
+				"redisTemplate")) {
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
 	}
 
 	/*
@@ -79,12 +93,15 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbResources", allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
-
+		List<TbResources> tbResources = this.selectByExample(example);
+		for (TbResources resources : tbResources) {
+			RedisUtil.removeRedisKey(redisTemplate, resources.getId()+KEY_TBRESOURCES);
+		}
+		
 		// 逻辑操作
 		int result = resourcesMapper.deleteByExample((TbResourcesCriteria)example);
 
@@ -103,9 +120,13 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 			logger.info(BASE_MESSAGE + "deleteBatch批量删除ID为：" + list.toString());
 
 		// 逻辑操作
-		TbResourcesCriteria roleCriteria = new TbResourcesCriteria();
-		roleCriteria.createCriteria().andIdIn(list);
-		int result = resourcesMapper.deleteByExample(roleCriteria);
+		TbResourcesCriteria criteria = new TbResourcesCriteria();
+		criteria.createCriteria().andIdIn(list);
+		List<TbResources> tbResources = this.selectByExample(criteria);
+		for (TbResources resources : tbResources) {
+			RedisUtil.removeRedisKey(redisTemplate, resources.getId()+KEY_TBRESOURCES);
+		}
+		int result = resourcesMapper.deleteByExample(criteria);
 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteBatch批量删除结束");
@@ -120,7 +141,7 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "TbResources", key="#id+'_resources'")
+	@CacheEvict(value = "TbResources", key="#id+'_key_tbResources'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -143,7 +164,7 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "TbResources", key = "#record.id+'_resources'")
+//	@CachePut(value = "TbResources", key = "#record.id+'_key_tbResources'")
 	public int insert(TbResources record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -172,7 +193,7 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 	 */
 
 	@Override
-//	@CachePut(value = "TbResources", key = "#record.id+'_resources'")
+//	@CachePut(value = "TbResources", key = "#record.id+'_key_tbResources'")
 	public int insertSelective(TbResources record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -213,7 +234,7 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+'_resources'", value = "TbResources")
+	@Cacheable(key = "#id+'_key_tbResources'", value = "TbResources")
 	@Transactional(readOnly = true)
 	public TbResources selectByPrimaryKey(String id) {
 		// 日志记录
@@ -247,6 +268,10 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 		if ("".equals(record.getParentId())) {
 			record.setParentId(null);
 		}
+		List<TbResources> tbResources = this.selectByExample(example);
+		for (TbResources resources : tbResources) {
+			RedisUtil.removeRedisKey(redisTemplate, resources.getId()+KEY_TBRESOURCES);
+		}
 		// 逻辑操作
 		int result = resourcesMapper.updateByExampleSelective(record, (TbResourcesCriteria)example);
 		// 日志记录
@@ -272,7 +297,11 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
 		if ("".equals(record.getParentId())) {
 			record.setParentId(null);
-		}								
+		}	
+		List<TbResources> tbResources = this.selectByExample(example);
+		for (TbResources resources : tbResources) {
+			RedisUtil.removeRedisKey(redisTemplate, resources.getId()+KEY_TBRESOURCES);
+		}
 		//逻辑操作		
 		int result = resourcesMapper.updateByExample(record, (TbResourcesCriteria)example);
 		//日志记录
@@ -289,7 +318,7 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbResources", key="#record.id+'_resources'")
+	@CacheEvict(value = "TbResources", key="#record.id+'_key_tbResources'")
 	public int updateByPrimaryKeySelective(TbResources record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -314,7 +343,7 @@ public class ResourcesServiceImpl extends BaseService<TbResources> implements IT
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbResources", key="#record.id+'_resources'")
+	@CacheEvict(value = "TbResources", key="#record.id+'_key_tbResources'")
 	public int updateByPrimaryKey(TbResources record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

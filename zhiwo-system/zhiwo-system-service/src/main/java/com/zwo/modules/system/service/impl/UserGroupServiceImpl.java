@@ -12,15 +12,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import tk.mybatis.mapper.common.Mapper;
 
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.system.dao.TbRoleMapper;
@@ -31,9 +31,9 @@ import com.zwo.modules.system.domain.TbUserGroup;
 import com.zwo.modules.system.domain.TbUserGroupCriteria;
 import com.zwo.modules.system.domain.TbUserGroupRoleCriteria;
 import com.zwo.modules.system.service.ITbUserGroupService;
+import com.zwotech.common.utils.RedisUtil;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
-
-import tk.mybatis.mapper.common.Mapper;
 
 /**
  * @author hjx
@@ -47,9 +47,14 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 
 	private static final String BASE_MESSAGE = "【TbUserGroupServiceImpl服务类提供的基础操作增删改查等】";
 
+	public static final String KEY_TBUSER_GROUP = "_key_tbUserGroup";
+	
 	@Autowired
 	@Lazy(true)
 	private JdbcTemplate jdbcTemplate;
+	
+	@SuppressWarnings("rawtypes")
+	private RedisTemplate redisTemplate;
 	
 	@Autowired
 	@Lazy(true)
@@ -68,6 +73,15 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 		return tbUserGroupMapper;
 	}
 
+
+	public UserGroupServiceImpl() {
+		super();
+		if (SpringContextHolder.getApplicationContext().containsBean(
+				"redisTemplate")) {
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -99,12 +113,16 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbUserGroup", allEntries = true)
+//	@CacheEvict(value = "TbUserGroup", allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
-
+		List<TbUserGroup> groups = this.selectByExample(example);
+		for (TbUserGroup group : groups) {
+			RedisUtil.removeRedisKey(redisTemplate, group.getId()+KEY_TBUSER_GROUP);
+		}
+		
 		// 逻辑操作
 		int result = tbUserGroupMapper.deleteByExample(example);
 
@@ -140,7 +158,7 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "TbUserGroup", key="#id+'_userGroup'")
+	@CacheEvict(value = "TbUserGroup", key="#id+'_key_tbUserGroup'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -163,7 +181,7 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "TbUserGroup", key = "#record.id+'_userGroup'")
+//	@CachePut(value = "TbUserGroup", key = "#record.id+'_key_tbUserGroup'")
 	public int insert(TbUserGroup record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -190,7 +208,7 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 	 */
 
 	@Override
-//	@Cacheable(value = "TbUserGroup", key = "#record.id+'_userGroup'")
+//	@Cacheable(value = "TbUserGroup", key = "#record.id+'_key_tbUserGroup'")
 	public int insertSelective(TbUserGroup record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -230,7 +248,7 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+'_userGroup'", value = "TbUserGroup")
+	@Cacheable(key = "#id+'_key_tbUserGroup'", value = "TbUserGroup")
 	@Transactional(readOnly = true)
 	public TbUserGroup selectByPrimaryKey(String id) {
 		// 日志记录
@@ -253,7 +271,6 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 	 * com.zwotech.modules.core.service.IBaseService#updateByExampleSelective(
 	 * java.lang.Object, java.lang.Object)
 	 */
-	@CacheEvict(value = "TbUserGroup", allEntries = true)
 	@Override
 	public int updateByExampleSelective(TbUserGroup record, Object example) {
 		// 日志记录
@@ -261,7 +278,11 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
-
+		List<TbUserGroup> groups = this.selectByExample(example);
+		for (TbUserGroup group : groups) {
+			RedisUtil.removeRedisKey(redisTemplate, group.getId()+KEY_TBUSER_GROUP);
+		}
+		
 		// 逻辑操作
 		int result = super.updateByExampleSelective(record, example);
 		// 日志记录
@@ -278,14 +299,16 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 	 * Object, java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbUserGroup", allEntries = true)
 	public int updateByExample(TbUserGroup record, Object example) {
 		//日志记录
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新开始");
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
-										
+		List<TbUserGroup> groups = this.selectByExample(example);
+		for (TbUserGroup group : groups) {
+			RedisUtil.removeRedisKey(redisTemplate, group.getId()+KEY_TBUSER_GROUP);
+		}								
 		//逻辑操作		
 		int result = super.updateByExample(record, example);
 		//日志记录
@@ -302,14 +325,14 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbUserGroup", key="#record.id+'_userGroup'")
+	@CacheEvict(value = "TbUserGroup", key="#record.id+'_key_tbUserGroup'")
 	public int updateByPrimaryKeySelective(TbUserGroup record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
-
+		
 		// 逻辑操作
 		int result = super.updateByPrimaryKeySelective(record);
 		if (logger.isInfoEnabled())
@@ -325,14 +348,14 @@ public class UserGroupServiceImpl extends BaseService<TbUserGroup> implements IT
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbUserGroup", key="#record.id+'_userGroup'")
+	@CacheEvict(value = "TbUserGroup", key="#record.id+'_key_tbUserGroup'")
 	public int updateByPrimaryKey(TbUserGroup record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为：" + record.toString());
-
+		
 		// 逻辑操作
 		int result = super.updateByPrimaryKey(record);
 		if (logger.isInfoEnabled())
