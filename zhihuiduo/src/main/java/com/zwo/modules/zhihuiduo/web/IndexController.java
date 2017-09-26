@@ -12,10 +12,15 @@ import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.DatagridPage;
+import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.ProductStatus;
 import com.zwo.modules.mall.service.IPrductService;
@@ -60,12 +65,13 @@ public class IndexController extends BaseController {
 	public String index(Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		
-		List<PrProduct> list = null;
-		list = prductService.selectAllByStatus(ProductStatus.ONLINE);
+//		List<PrProduct> list = null;
+//		list = prductService.selectAllByStatus(ProductStatus.ONLINE);
 		if (redisTemplate != null) {
 			ListOperations<String, List> listOpe = redisTemplate.opsForList();
 		}
 		
+		//模拟最新开团。
 		List<GroupPurcse> groupPurcses = new ArrayList<GroupPurcse>();
 		for (int i = 0; i < 10; i++) {
 			GroupPurcse groupPurcseMember  = new GroupPurcse();
@@ -79,11 +85,24 @@ public class IndexController extends BaseController {
 		
 		MainData data = new MainData();
 		data.setGroupPurcses(groupPurcses);
-		data.setProducts(list);
+		PageInfo<PrProduct> pageInfo = new PageInfo<PrProduct>();
+		pageInfo = prductService.selectIndex(pageInfo);
+		DatagridPage<PrProduct> page = super.setPage(pageInfo);
+		data.setProductPage(page);
+//		data.setProducts(list);
 		String rawData = JSONObject.toJSONString(data);
 //		uiModel.addAttribute("list", list);
 		uiModel.addAttribute("rawData", rawData);
 		return basePath + "index";
+	}
+	
+	@RequestMapping(value = "indexGoods", method = RequestMethod.GET)
+	@ResponseBody
+	public DatagridPage<PrProduct> indexGoods(@ModelAttribute PageInfo<PrProduct> pageInfo, Model uiModel,
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		pageInfo = prductService.selectIndex(pageInfo);
+		return super.setPage(pageInfo);
 	}
 
 }

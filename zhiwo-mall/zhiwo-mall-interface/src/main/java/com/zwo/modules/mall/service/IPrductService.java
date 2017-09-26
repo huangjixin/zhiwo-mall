@@ -84,4 +84,11 @@ public interface IPrductService extends IBaseService<PrProduct> {
      * @return
      */
     PageInfo<PrProduct> selectAllByStatus(String status,PageInfo<PrProduct> pageInfo);
+    
+    /**
+     * 首页查询商品。
+     * @param pageInfo
+     * @return
+     */
+    PageInfo<PrProduct> selectIndex(PageInfo<PrProduct> pageInfo);
 }

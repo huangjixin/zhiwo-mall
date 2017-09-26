@@ -52,7 +52,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	private static final String KEY_SHOPID_PRODUCT = "_key_shopId_product";
 	private static final String KEY_SHOPID_PRODUCT_COUNT = "_key_shopId_product_Count";
 	private static final String KEY_GROUP_PURCSE = "_key_GroupPurcse";
-	
+
 	@Autowired
 	@Lazy(true)
 	private PrProductMapper productMapper;
@@ -84,6 +84,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 			redisTemplate = SpringContextHolder.getBean("redisTemplate");
 		}
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -113,7 +114,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		for (PrProduct prProduct : list) {
 			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT);
 			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
-			
+
 			removeRedisKey(prProduct.getId() + KEY_GROUP_PURCSE);
 			removeRedisKey(prProduct.getId() + KEY_PRODUCT_WITHOUT_BLOB);
 		}
@@ -152,7 +153,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 			removeRedisKey(key);
 			key = prProduct.getId() + "_" + PrImageType.THUMBNAIL + "_prImages";
 			removeRedisKey(key);
-			
+
 			removeRedisKey(prProduct.getId() + KEY_GROUP_PURCSE);
 			removeRedisKey(prProduct.getId() + KEY_PRODUCT_WITHOUT_BLOB);
 		}
@@ -475,7 +476,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		for (PrProduct prProduct : products) {
 			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT);
 			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
-			
+
 			removeRedisKey(prProduct.getId() + KEY_PRODUCT_WITHOUT_BLOB);
 		}
 
@@ -528,7 +529,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		removeRedisKey(record.getShopId() + KEY_SHOPID_PRODUCT);
 		removeRedisKey(record.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
 		removeRedisKey(record.getId() + KEY_PRODUCT_WITHOUT_BLOB);
-		
+
 		if (null != record.getContent() && !"".equals(record.getContent())) {
 			String content = record.getContent();
 			content = HtmlUtils.htmlEscape(content);
@@ -551,7 +552,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 					+ record.toString());
 		removeRedisKey(record.getShopId() + KEY_SHOPID_PRODUCT);
 		removeRedisKey(record.getId() + KEY_PRODUCT_WITHOUT_BLOB);
-		
+
 		if (null != record.getContent() && !"".equals(record.getContent())) {
 			String content = record.getContent();
 			content = HtmlUtils.htmlEscape(content);
@@ -615,13 +616,22 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		}
 	}
 
+	/*
+	 * 进入分类的商品必须是可用，库存大于0，上架状态。 (non-Javadoc)
+	 * 
+	 * @see
+	 * com.zwo.modules.mall.service.IPrductService#selectByCategoryIdPageInfo
+	 * (java.lang.String, com.github.pagehelper.PageInfo)
+	 */
 	@Override
 	@Transactional(readOnly = true)
 	public PageInfo<PrProduct> selectByCategoryIdPageInfo(String categoryId,
 			PageInfo<PrProduct> pageInfo) {
 		PrProductCriteria productCriteria = new PrProductCriteria();
-		productCriteria.createCriteria().andCategoryIdEqualTo(categoryId);
-		productCriteria.setOrderByClause("create_date asc");
+		productCriteria.createCriteria().andCategoryIdEqualTo(categoryId)
+				.andDisableEqualTo(false).andStorageGreaterThan(0)
+				.andStatusEqualTo("online");
+		productCriteria.setOrderByClause("create_date desc");
 		PageInfo<PrProduct> info = selectByPageInfo(productCriteria, pageInfo);
 		return info;
 	}
@@ -632,7 +642,8 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		PrProductCriteria productCriteria = new PrProductCriteria();
 		productCriteria.createCriteria().andStatusEqualTo(status);
 		productCriteria.setOrderByClause("create_date asc");
-		List<PrProduct> list = this.productMapper.selectByExample(productCriteria);
+		List<PrProduct> list = this.productMapper
+				.selectByExample(productCriteria);
 		return list;
 	}
 
@@ -642,7 +653,25 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 			PageInfo<PrProduct> pageInfo) {
 		PrProductCriteria productCriteria = new PrProductCriteria();
 		productCriteria.createCriteria().andStatusEqualTo(status);
-		productCriteria.setOrderByClause("create_date asc");
+		productCriteria.setOrderByClause("create_date desc");
+		PageInfo<PrProduct> info = selectByPageInfo(productCriteria, pageInfo);
+		return info;
+	}
+
+	/*
+	 * 进入首页的商品必须是可用，库存大于0，上架状态。 (non-Javadoc).
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.zwo.modules.mall.service.IPrductService#selectIndex(com.github.pagehelper
+	 * .PageInfo)
+	 */
+	@Override
+	public PageInfo<PrProduct> selectIndex(PageInfo<PrProduct> pageInfo) {
+		PrProductCriteria productCriteria = new PrProductCriteria();
+		productCriteria.createCriteria().andDisableEqualTo(false)
+				.andStorageGreaterThan(0).andStatusEqualTo("online");
+		productCriteria.setOrderByClause("create_date desc");
 		PageInfo<PrProduct> info = selectByPageInfo(productCriteria, pageInfo);
 		return info;
 	}

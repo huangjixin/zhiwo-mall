@@ -3,11 +3,11 @@ package com.zwo.modules.zhihuiduo.dto;
 import java.io.Serializable;
 import java.util.List;
 
+import com.github.pagehelper.DatagridPage;
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.domain.PrCategory;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.member.domain.GroupPurcse;
-import com.zwo.modules.shop.domain.Shop;
 
 public class MainData implements Serializable {
 
@@ -21,6 +21,7 @@ public class MainData implements Serializable {
 	private List<GroupPurcse> groupPurcses;
 	
 	private PageInfo<ProductExtention> productExtentionPage;
+	private DatagridPage<PrProduct> productPage;
 	
 	public List<PrCategory> getCategorys() {
 		return categorys;
@@ -53,6 +54,14 @@ public class MainData implements Serializable {
 
 	public void setGroupPurcses(List<GroupPurcse> groupPurcses) {
 		this.groupPurcses = groupPurcses;
+	}
+
+	public DatagridPage<PrProduct> getProductPage() {
+		return productPage;
+	}
+
+	public void setProductPage(DatagridPage<PrProduct> productPage) {
+		this.productPage = productPage;
 	}
 
 }

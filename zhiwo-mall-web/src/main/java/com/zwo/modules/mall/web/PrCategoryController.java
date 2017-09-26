@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.zwo.modules.mall.domain.PrCategory;
 import com.zwo.modules.mall.service.IPrCategoryService;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
 @Controller
@@ -29,18 +30,24 @@ public class PrCategoryController extends BaseController<PrCategory> {
 	@Lazy(true)
 	private IPrCategoryService prCategoryService;
 	
-	@Autowired
-	@Lazy(true)
 	private RedisTemplate redisTemplate;
 
 	private static final String basePath = "views/mall/category/";
 
-	@RequestMapping(value = { "", "list" })
+
+	public PrCategoryController() {
+		super();
+		if(SpringContextHolder.getApplicationContext().containsBean("redisTemplate")){
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
+	}
+	
+	@RequestMapping()
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath + "category_list";
 	}
 
-	 @RequiresPermissions("mall:prCategory:create")
+	@RequiresPermissions("mall:prCategory:create")
 	@RequestMapping(value = { "create" }, method = RequestMethod.GET)
 	public String tocreate(@ModelAttribute PrCategory prCategory, BindingResult result, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -60,7 +67,7 @@ public class PrCategoryController extends BaseController<PrCategory> {
 		return basePath + "category_edit";
 	}
 
-	 @RequiresPermissions("mall:prCategory:create")
+	@RequiresPermissions("mall:prCategory:create")
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid PrCategory prCategory, BindingResult result, Model uiModel,
 			RedirectAttributes redirectAttributes, HttpServletRequest httpServletRequest,
