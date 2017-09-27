@@ -2,7 +2,10 @@ package com.zwo.modules.system.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import javax.persistence.*;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Table(name = "tb_user_group")
@@ -65,6 +68,9 @@ public class TbUserGroup implements Serializable {
      */
     @Column(name = "CODE")
     private String code;
+    
+    @Transient
+    private List<TbRole> roles;
 
     private static final long serialVersionUID = 1L;
 
@@ -247,4 +253,12 @@ public class TbUserGroup implements Serializable {
     public String getText() {
         return this.name;
     }
+
+	public List<TbRole> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<TbRole> roles) {
+		this.roles = roles;
+	}
 }

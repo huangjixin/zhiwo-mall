@@ -42,9 +42,9 @@ public class PrProductUpdateMessageListener implements MessageListener {
 		if(body instanceof PrProduct){
 			product = (PrProduct) body;
 			//更新整个商品JSP；
-			//String path = System.getProperty("webapp.root");
-			//path += File.separator+"WEB-INF" + File.separator+"views"+ File.separator+"goods";
-//			String templateName = "goodsDetail.ftl";
+			String path = System.getProperty("webapp.root");
+			path += File.separator+"WEB-INF" + File.separator+"views"+ File.separator+"goods";
+			String templateName = "goodsDetail.ftl";
 //			String fileName = product.getId()+".jsp";
 			//Map root = new HashMap<>();
 			//FreeMarkerUtil.analysisTemplate(templatePath, templateName, fileName, root);
