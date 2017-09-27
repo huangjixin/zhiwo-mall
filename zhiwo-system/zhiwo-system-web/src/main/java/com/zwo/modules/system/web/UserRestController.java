@@ -76,7 +76,7 @@ public class UserRestController extends BaseController<TbUser> {
 	 * @return
 	 */
 	@RequiresPermissions("system:user:view")
-	@RequestMapping(value = "/show/{id}")
+	@RequestMapping(value = "show/{id}")
 	public TbUser getTbUser(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		TbUser tbuser = userService.selectByPrimaryKey(id);
@@ -87,7 +87,7 @@ public class UserRestController extends BaseController<TbUser> {
 	@RequiresPermissions("system:user:view")
 	@RequestMapping(value = "select")
 	@ResponseBody
-	public DatagridPage<TbUser> select(@ModelAttribute PageInfo<TbUser> pageInfo, @ModelAttribute TbUser tbuser,
+	public DatagridPage<TbUser> select(@RequestParam(required=false) String searchPara,@ModelAttribute PageInfo<TbUser> pageInfo, @ModelAttribute TbUser tbuser,
 			Model uiModel, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
 		super.select(pageInfo, uiModel, httpServletRequest, httpServletResponse);
@@ -95,16 +95,24 @@ public class UserRestController extends BaseController<TbUser> {
 		TbUserCriteria tbuserCriteria = null;
 		tbuserCriteria = new TbUserCriteria();
 		TbUserCriteria.Criteria criteria = tbuserCriteria.createCriteria();
-		if (null != tbuser.getDisable()) {
-			criteria.andDisableEqualTo(tbuser.getDisable());
+				
+		tbuserCriteria.setOrderByClause("create_date desc");
+		
+		if (null != searchPara && !"".equals(searchPara)) {
+			criteria.andUsernameLike("%" + searchPara + "%");
+			//tbuserCriteria.or(tbuserCriteria.createCriteria().andMobilPhoneLike("%" + searchPara + "%"));
+			//tbuserCriteria.or(tbuserCriteria.createCriteria().andEmailLike("%" + searchPara + "%"));
 		}
 		
-		tbuserCriteria.setOrderByClause("id desc");
-		if (null != tbuser.getUsername() && !"".equals(tbuser.getUsername())) {
-			criteria.andUsernameLike("%" + tbuser.getUsername() + "%");
+		if (null != tbuser.getMobilPhone() && !"".equals(tbuser.getMobilPhone())) {
+			criteria.andMobilPhoneLike("%" + tbuser.getMobilPhone() + "%");
 		}
+		
 		if (null != tbuser.getUsergroupId() && !"".equals(tbuser.getUsergroupId())) {
 			criteria.andUsergroupIdEqualTo(tbuser.getUsergroupId());
+		}
+		if (null != tbuser.getDisable() && !"".equals(tbuser.getDisable())) {
+			criteria.andDisableEqualTo(tbuser.getDisable());
 		}
 
 		pageInfo = userService.selectByPageInfo(tbuserCriteria, pageInfo);

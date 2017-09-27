@@ -26,7 +26,7 @@ import com.zwo.modules.system.service.ITbUserService;
 import com.zwotech.common.web.BaseController;
 
 @Controller
-@RequestMapping(value={"userGroup","userGroup/"})
+@RequestMapping(value={"userGroup"})
 @Lazy(true)
 public class UserGroupController extends BaseController<TbUserGroup> {
 	@Autowired
@@ -42,7 +42,7 @@ public class UserGroupController extends BaseController<TbUserGroup> {
 	private static final String basePath = "views/system/userGroup/";
 	
 	@RequiresPermissions("system:userGroup:view")
-	@RequestMapping(value = { "", "list" })
+	@RequestMapping()
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath+"userGroup_list";
 	}

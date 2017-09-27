@@ -27,8 +27,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.DatagridPage;
 import com.github.pagehelper.PageInfo;
+import com.zwo.modules.system.domain.TbRole;
 import com.zwo.modules.system.domain.TbUserGroup;
 import com.zwo.modules.system.domain.TbUserGroupCriteria;
+import com.zwo.modules.system.service.ITbRoleService;
 import com.zwo.modules.system.service.ITbUserGroupService;
 import com.zwotech.common.web.BaseController;
 
@@ -39,6 +41,10 @@ public class UserGroupRestController extends BaseController<TbUserGroup> {
 	@Autowired
 	@Lazy(true)
 	private ITbUserGroupService userGroupService;
+	
+	@Autowired
+	@Lazy(true)
+	private ITbRoleService roleService;
 	
 	/** 
 	 * @Title: deleteById 
@@ -94,8 +100,39 @@ public class UserGroupRestController extends BaseController<TbUserGroup> {
 	public TbUserGroup getTbUserGroup(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		TbUserGroup tbuserGroup = userGroupService.selectByPrimaryKey(id);
-		
+		List<TbRole> roles = roleService.selectByExample(null);
+		List<TbRole> rolesAuth = userGroupService.findByUserGroupId(id);
+		for (TbRole tbRole : roles) {
+			for (TbRole role : rolesAuth) {
+				if(tbRole.getId().equals(role.getId())){
+					tbRole.setSelected(true);
+					break;
+				}
+			}
+		}
+		tbuserGroup.setRoles(roles);
 		return tbuserGroup;
+	}
+	
+	@RequiresPermissions("system:userGroup:view")
+	@RequestMapping(value = "getRolesByUserGroupId")
+	public List<TbRole> getRolesByUserGroupId(@RequestParam(defaultValue="",required=false) String userGroupId, Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		
+		List<TbRole> roles = roleService.selectByExample(null);
+		if(!"".equals(userGroupId)){
+			List<TbRole> rolesAuth = userGroupService.findByUserGroupId(userGroupId);
+			for (TbRole tbRole : roles) {
+				for (TbRole role : rolesAuth) {
+					if(tbRole.getId().equals(role.getId())){
+						tbRole.setSelected(true);
+						break;
+					}
+				}
+			}
+		}
+		
+		return roles;
 	}
 	
 	@RequiresPermissions("system:userGroup:view")
