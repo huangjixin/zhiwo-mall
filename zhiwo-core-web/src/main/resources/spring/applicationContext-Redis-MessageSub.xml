@@ -57,6 +57,22 @@
 						</bean>
 					</list>
 				</entry>
+				<!-- 关注公众号更新会员公众号-->
+				<entry key-ref="memberSubcribeUpdateMessageListener">
+					<list>
+						<bean class="org.springframework.data.redis.listener.ChannelTopic">
+							<constructor-arg value="member_update.queue.channel" />
+						</bean>
+					</list>
+				</entry>
+				<!-- 关注公众号更新会员公众号-->
+				<entry key-ref="orderCreateMessageListener">
+					<list>
+						<bean class="org.springframework.data.redis.listener.ChannelTopic">
+							<constructor-arg value="order_create.queue.channel" />
+						</bean>
+					</list>
+				</entry>
 			</map>
 		</property>
 	</bean>
