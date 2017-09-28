@@ -32,9 +32,9 @@ public class FreeMarkerUtil {
 			Template template = config.getTemplate(templateName, "UTF-8");
 			template.setEncoding("UTF-8");
 			// 合并数据模型与模板
-//			FileOutputStream fos = new FileOutputStream(fileName);
-//			Writer out = new OutputStreamWriter(fos, "UTF-8");
-			Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName)));
+			FileOutputStream fos = new FileOutputStream(fileName);
+			Writer out = new OutputStreamWriter(fos, "UTF-8");
+//			Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName)));
 			template.process(root, out);
 			out.flush();
 			out.close();
