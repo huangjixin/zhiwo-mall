@@ -59,18 +59,15 @@ public class MemberGoodsController extends BaseController<PrProduct> {
 	@Autowired
 	@Lazy(true)
 	private IPrImageService imageService;
-
 	@Autowired
 	@Lazy(true)
 	private IMemberService memberService;
 	@Autowired
 	@Lazy(true)
 	private IPrductService prductService;
-
 	@Autowired
 	@Lazy(true)
 	private IPrProductPropertyService productPropertyService;
-
 	@Autowired
 	@Lazy(true)
 	private IPrProductPackagePriceService packagePriceService;
@@ -117,18 +114,10 @@ public class MemberGoodsController extends BaseController<PrProduct> {
 			HttpServletResponse httpServletResponse) {
 		String rootDir = httpServletRequest.getSession().getServletContext()
 				.getRealPath("/");
-		String goodsDetailJspUri = rootDir + "WEB-INF" + File.separator
-				+ "views" + File.separator + "goods" + goodsId + ".jsp";
-		/*
-		 * Path path = Paths.get(goodsDetailJspUri);
-		 * 
-		 * if (Files.exists(path)) { return basePath + goodsId; }
-		 */
-
+		
 		String jsonString = null;
 		ProductExtention productExtention = null;
 		List<GroupPurcseMember> groupPurcseMembers = null;
-		GroupPurcse groupPurcse = null;
 		PrProductWithBLOBs product = null;
 		Shop shop = null;
 		List<PrProductPackagePrice> packagePrices = null;
