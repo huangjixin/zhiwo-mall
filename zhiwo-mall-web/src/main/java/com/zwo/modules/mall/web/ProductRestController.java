@@ -1,8 +1,11 @@
 package com.zwo.modules.mall.web;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,9 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.redis.core.ListOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +31,7 @@ import com.zwo.modules.mall.service.IPrImageService;
 import com.zwo.modules.mall.service.IPrProductPackagePriceService;
 import com.zwo.modules.mall.service.IPrProductPropertyValueService;
 import com.zwo.modules.mall.service.IPrductService;
-import com.zwotech.common.utils.SpringContextHolder;
+import com.zwotech.common.utils.FreeMarkerUtil;
 import com.zwotech.common.web.BaseController;
 
 @RestController
@@ -51,6 +51,7 @@ public class ProductRestController extends BaseController<PrProduct> {
 	@Autowired
 	@Lazy(true)
 	private IPrProductPackagePriceService packagePriceService;
+	private String replaceAll;
 	
 
 //	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
@@ -162,6 +163,14 @@ public class ProductRestController extends BaseController<PrProduct> {
 			criteria.andNameLike("%" + product.getName() + "%");
 		}
 		
+		if (null != product.getDisable() && !"".equals(product.getDisable())) {
+			criteria.andDisableEqualTo(product.getDisable());
+		}
+		
+		if (null != product.getStatus() && !"".equals(product.getStatus())) {
+			criteria.andStatusEqualTo(product.getStatus());
+		}
+		
 		pageInfo = prductService.selectByPageInfo(productCriteria, pageInfo);
 		return super.setPage(pageInfo);
 	}
@@ -174,12 +183,53 @@ public class ProductRestController extends BaseController<PrProduct> {
 		List<PrImage> list = imageService.selectByProductId(productId,PrImageType.PROP);
 		return list;
 	}
-	
+
 	@RequestMapping(value = "selectSwiperImages")
 	public List<PrImage> selectSwiperImages(@RequestParam String productId,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 //		List<PrImage> list = prductService.selectByProductId(productId,true);
 		List<PrImage> list = imageService.selectByProductId(productId,PrImageType.SWIPER);;
 		return list;
+	}
+
+	@RequestMapping(value = "setStatus")
+	public int setStatus(@RequestParam String id,@RequestParam String status,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		PrProductWithBLOBs product = new PrProductWithBLOBs();
+		product.setStatus(status);
+		product.setId(id);
+		int result = prductService.updateByPrimaryKeySelective(product);
+
+		return result;
+	}
+	
+
+	@RequestMapping(value = "setDisable")
+	public int setDisable(@RequestParam String id,@RequestParam boolean disable,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		PrProductWithBLOBs product = new PrProductWithBLOBs();
+		product.setDisable(disable);;
+		product.setId(id);
+		int result = prductService.updateByPrimaryKeySelective(product);
+
+		return result;
+	}
+	
+	@RequestMapping(value = "geneProductHtm")
+	public void geneProductHtm(@RequestParam String id){
+		String cpath = this.getClass().getResource("/").getPath().replaceFirst("/", "");
+		String webappRoot = cpath.replaceAll("/WEB-INF/classes/", "");
+		String templatePath = webappRoot+ File.separator+"template";
+		String templateName = "goodsDetail.ftl";
+		String fileName =webappRoot+ File.separator+"goodsDetail"+ File.separator+id+".htm";
+		System.out.println(cpath);
+		/*PrProductWithBLOBs product = prductService.selectByPrimKey(id);
+		String path = System.getProperty("webapp.root");
+		path += File.separator+"WEB-INF" + File.separator+"views"+ File.separator+"goods";
+		String templateName = "goodsDetail.ftl";
+		String fileName = product.getId()+".jsp";*/
+		Map root = new HashMap<>();
+		root.put("rawData", "");
+		FreeMarkerUtil.analysisTemplate(templatePath, templateName, fileName, root);
 	}
 }
