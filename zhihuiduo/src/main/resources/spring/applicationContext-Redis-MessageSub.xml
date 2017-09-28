@@ -33,7 +33,7 @@
 				<entry key-ref="prProductUpdateMessageListener">
 					<list>
 						<bean class="org.springframework.data.redis.listener.ChannelTopic">
-							<constructor-arg value="topic.PrProduct.channel" />
+							<constructor-arg value="product_generation.topic.channel" />
 						</bean>
 					</list>
 				</entry>
@@ -72,6 +72,7 @@
 						</bean>
 					</list>
 				</entry>
+				
 			</map>
 		</property>
 	</bean>
