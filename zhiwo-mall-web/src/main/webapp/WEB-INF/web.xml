@@ -7,7 +7,7 @@
 	<display-name>zhiwo-mall-service</display-name>
 	<context-param>
 		<param-name>webAppRootKey</param-name>
-		<param-value>web.root</param-value>
+		<param-value>zhiwo-system-web.root</param-value>
 	</context-param>
 	<context-param>
 		<param-name>log4jConfigLocation</param-name>
@@ -77,10 +77,10 @@
 		<servlet-name>default</servlet-name>
 		<url-pattern>*.ftl</url-pattern>
 	</servlet-mapping>
-	<servlet-mapping>
+	<!-- <servlet-mapping>
 		<servlet-name>default</servlet-name>
 		<url-pattern>*.htm</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping> -->
 	<servlet-mapping>
 		<servlet-name>default</servlet-name>
 		<url-pattern>*.ico</url-pattern>
@@ -105,4 +105,12 @@
 		<servlet-name>default</servlet-name>
 		<url-pattern>*.css</url-pattern>
 	</servlet-mapping>
+	<welcome-file-list>
+	    <welcome-file>index.html</welcome-file>
+	    <welcome-file>index.htm</welcome-file>
+	    <welcome-file>index.jsp</welcome-file>
+	    <welcome-file>default.html</welcome-file>
+	    <welcome-file>default.htm</welcome-file>
+	    <welcome-file>default.jsp</welcome-file>
+	  </welcome-file-list>
 </web-app>
