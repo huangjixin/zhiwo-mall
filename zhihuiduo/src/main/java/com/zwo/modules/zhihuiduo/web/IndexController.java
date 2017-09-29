@@ -86,6 +86,8 @@ public class IndexController extends BaseController {
 		MainData data = new MainData();
 		data.setGroupPurcses(groupPurcses);
 		PageInfo<PrProduct> pageInfo = new PageInfo<PrProduct>();
+		pageInfo.setPageNum(1);
+		pageInfo.setPageSize(10);
 		pageInfo = prductService.selectIndex(pageInfo);
 		DatagridPage<PrProduct> page = super.setPage(pageInfo);
 		data.setProductPage(page);

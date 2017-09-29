@@ -107,7 +107,7 @@ public class MemberOrderController extends BaseController<TbUser> {
 	@RequestMapping(value = "checkOut")
 	@RequiresAuthentication
 	public String checkOut(@RequestParam String goodsId,
-			@RequestParam String shopId, @RequestParam Integer buyNum,
+			@RequestParam Integer buyNum,
 			@RequestParam String packagePriceId,
 			@RequestParam String proValues, @RequestParam String dealPrice,
 			@RequestParam(defaultValue = "group") String mode,
@@ -120,10 +120,6 @@ public class MemberOrderController extends BaseController<TbUser> {
 		Shop shop = shopService.selectByPrimaryKey(product.getShopId());
 		Member member = null;
 
-		// groupPurcseId是不是为null表示是拼团还是开团
-		GroupPurcse groupPurcse = null;
-		GroupPurcseMember groupPurcseMember = new GroupPurcseMember();// 拼团中间表。
-		int numberCount = 0;
 		OrderTrade orderTrade = new OrderTrade();
 		String orderuuid = UUID.randomUUID().toString().replaceAll("-", "");
 		orderTrade.setId(orderuuid);
@@ -134,7 +130,7 @@ public class MemberOrderController extends BaseController<TbUser> {
 		// 开拼团
 		if ("group".equals(mode)) {
 			orderTrade.setIsFormSccuess(false);
-		} else { // 独立团
+		} else { // 独立团，可以发货
 			orderTrade.setIsFormSccuess(true);
 		}
 
@@ -142,6 +138,7 @@ public class MemberOrderController extends BaseController<TbUser> {
 			uiModel.addAttribute("shop", shop);
 
 		}
+		
 		if (product != null) {
 			orderTrade.setShopId(product.getShopId());
 			uiModel.addAttribute("product", product);
@@ -162,6 +159,93 @@ public class MemberOrderController extends BaseController<TbUser> {
 
 		}
 
+		// 如果有用中间件那么就用ActiveMQ进行消息转发，否则另开线程下单
+		/*if (jmsQueueTemplate != null) {
+			String jsonString = JSONObject.toJSONString(orderTrade);
+			ActiveMQUtil.send(jmsQueueTemplate,
+					ChannelContance.ORDER_CREATE_QUEUE_CHANNEL, jsonString);
+		} else {
+			asycInsertOrderTrade(orderTrade);
+		}*/
+
+		asycInsertOrderTrade(orderTrade);
+		uiModel.addAttribute("order", orderTrade);
+		
+		//获取用户的全部地址。
+		List<MemberAddress> list = null;
+		if (member != null) {
+			list = addressService.listAllByMemberId(member.getId());
+		}
+		uiModel.addAttribute("addresses", list);
+		
+		return basePath + "checkOut";
+		// return "redirect:/memberOrder/checkOut";
+	}
+
+	private void asycInsertOrderTrade(final OrderTrade orderTrade) {
+		Executor executor = Executors.newSingleThreadExecutor();
+		executor.execute(new Runnable() {
+			public void run() {
+				orderTradeService.insertSelective(orderTrade);
+			}
+		});
+	}
+
+	private void asycInsertGroupPurcseMember(
+			final GroupPurcseMember groupPurcseMember) {
+		Executor executor = Executors.newSingleThreadExecutor();
+		executor.execute(new Runnable() {
+			public void run() {
+				groupPurcseMemberService.insertSelective(groupPurcseMember);
+			}
+		});
+	}
+
+	private void asycInsertGroupPurcse(final GroupPurcse groupPurcse) {
+		Executor executor = Executors.newSingleThreadExecutor();
+		executor.execute(new Runnable() {
+			public void run() {
+				groupPurcseService.insertSelective(groupPurcse);
+			}
+		});
+	}
+
+	/**
+	 * 微信回调函数，根据groupPurcseId参数是否为NULL进行判断是开团还是参团。
+	 * 
+	 * @param goodsId
+	 * @param shopId
+	 * @param buyNum
+	 * @param packagePriceId
+	 * @param proValues
+	 * @param dealPrice
+	 * @param redirectAttributes
+	 * @param uiModel
+	 * @param mode
+	 * @param groupPurcseId
+	 * @param httpServletRequest
+	 * @param httpServletResponse
+	 * @return
+	 */
+	@RequestMapping(value = "checkBack")
+	public String checkBack(@RequestParam String goodsId,
+			@RequestParam Integer buyNum,
+			@RequestParam String packagePriceId,
+			@RequestParam String proValues,
+			@RequestParam String dealPrice,
+			@RequestParam(defaultValue = "group") String mode,
+			@RequestParam(required = false) String groupPurcseId,
+			RedirectAttributes redirectAttributes, Model uiModel,
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		
+		Member member = null;
+		// groupPurcseId是不是为null表示是拼团还是开团
+		GroupPurcse groupPurcse = null;
+		GroupPurcseMember groupPurcseMember = new GroupPurcseMember();// 拼团中间表。
+		int numberCount = 0;		
+		PrProduct product = prductService.selectByPrimaryKey("150383670510593");
+		uiModel.addAttribute("product", product);
 		if (null != groupPurcseId) {
 			groupPurcse = groupPurcseService.selectByPrimaryKey(groupPurcseId);
 			if (groupPurcse != null) {
@@ -250,85 +334,7 @@ public class MemberOrderController extends BaseController<TbUser> {
 			// groupPurcseMemberService.insertSelective(groupPurcseMember);
 			asycInsertGroupPurcseMember(groupPurcseMember);
 		}
-
-		// 下单成功
-		if (jmsQueueTemplate != null) {
-			String jsonString = JSONObject.toJSONString(orderTrade);
-			ActiveMQUtil.send(jmsQueueTemplate,
-					ChannelContance.ORDER_CREATE_QUEUE_CHANNEL, jsonString);
-		} else {
-			// orderTradeService.insertSelective(orderTrade);
-			asycInsertOrderTrade(orderTrade);
-		}
-
-		uiModel.addAttribute("order", orderTrade);
-
-		List<MemberAddress> list = null;
-		if (member != null) {
-			list = addressService.listAllByMemberId(member.getId());
-		}
-		uiModel.addAttribute("addresses", list);
-		return basePath + "checkOut";
-		// return "redirect:/memberOrder/checkOut";
-	}
-
-	private void asycInsertOrderTrade(final OrderTrade orderTrade) {
-		Executor executor = Executors.newSingleThreadExecutor();
-		executor.execute(new Runnable() {
-			public void run() {
-				orderTradeService.insertSelective(orderTrade);
-			}
-		});
-	}
-
-	private void asycInsertGroupPurcseMember(
-			final GroupPurcseMember groupPurcseMember) {
-		Executor executor = Executors.newSingleThreadExecutor();
-		executor.execute(new Runnable() {
-			public void run() {
-				groupPurcseMemberService.insertSelective(groupPurcseMember);
-			}
-		});
-	}
-
-	private void asycInsertGroupPurcse(final GroupPurcse groupPurcse) {
-		Executor executor = Executors.newSingleThreadExecutor();
-		executor.execute(new Runnable() {
-			public void run() {
-				groupPurcseService.insertSelective(groupPurcse);
-			}
-		});
-	}
-
-	/**
-	 * 结算。
-	 * 
-	 * @param goodsId
-	 * @param shopId
-	 * @param buyNum
-	 * @param packagePriceId
-	 * @param proValues
-	 * @param dealPrice
-	 * @param redirectAttributes
-	 * @param uiModel
-	 * @param mode
-	 * @param groupPurcseId
-	 * @param httpServletRequest
-	 * @param httpServletResponse
-	 * @return
-	 */
-	@RequestMapping(value = "check")
-	public String check_out(@RequestParam String goodsId,
-			@RequestParam String shopId, @RequestParam Integer buyNum,
-			@RequestParam String packagePriceId,
-			@RequestParam String proValues, @RequestParam String dealPrice,
-			RedirectAttributes redirectAttributes, Model uiModel,
-			@RequestParam(defaultValue = "group") String mode,
-			@RequestParam(required = false) String groupPurcseId,
-			HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
-		PrProduct product = prductService.selectByPrimaryKey("150383670510593");
-		uiModel.addAttribute("product", product);
+		
 		return basePath + "checkOut";
 	}
 
