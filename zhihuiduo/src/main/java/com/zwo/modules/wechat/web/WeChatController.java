@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import weixin.popular.api.SnsAPI;
 import weixin.popular.api.UserAPI;
 import weixin.popular.bean.user.User;
 import weixin.popular.support.ExpireKey;
@@ -170,7 +171,7 @@ public class WeChatController {
 		} catch (Exception e) {
 
 		}
-
+		
 		return null;
 	}
 
