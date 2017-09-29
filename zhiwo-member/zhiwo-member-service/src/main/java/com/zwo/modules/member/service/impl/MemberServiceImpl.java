@@ -5,6 +5,8 @@ package com.zwo.modules.member.service.impl;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
@@ -293,9 +295,20 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		int result = super.insertSelective(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入结束");
-		createMemberAccount(record);
-		createMemberPlayAccount(record);
+		//当新增一个会员成功的时候，为其创建一个游戏竞猜账号和一个分销账号。
+		asycInsertOrderTrade(record);
 		return result;
+	}
+	
+
+	private void asycInsertOrderTrade(final Member record) {
+		Executor executor = Executors.newSingleThreadExecutor();
+		executor.execute(new Runnable() {
+			public void run() {
+				createMemberAccount(record);
+				createMemberPlayAccount(record);
+			}
+		});
 	}
 
 	@Async
@@ -303,6 +316,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 		MemberAccount memberAccount = new MemberAccount();
 		memberAccount.setId(record.getId());
 		memberAccount.setMemberId(record.getId());
+		memberAccount.setBalance((double) 100);//开户赠送一百智惠豆。
 		int result = memberAccountMapper.insertSelective(memberAccount);
 		return result;
 	}
