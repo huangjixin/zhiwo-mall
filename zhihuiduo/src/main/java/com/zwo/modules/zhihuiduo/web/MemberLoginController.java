@@ -149,6 +149,14 @@ public class MemberLoginController extends BaseController {
 
 		String url = fromURL.indexOf("login") != -1 ? "" : fromURL;
 		url = ("".equals(url) ? "redirect:/mindex" : "redirect:" + url);
+		boolean isWechatBrowser;
+		if(member.getOpenId()==null){
+			String ua = ((HttpServletRequest) httpServletRequest).getHeader("user-agent")
+					.toLowerCase();
+			if (ua.indexOf("micromessenger") > 0) {// 是微信浏览器
+				isWechatBrowser = true;
+			}
+		}
 		return url;
 	}
 
