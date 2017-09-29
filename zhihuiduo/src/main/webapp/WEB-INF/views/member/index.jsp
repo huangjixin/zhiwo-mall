@@ -7,13 +7,13 @@
 <title>智惠多商品云购</title>
 <%@ include file="/WEB-INF/member-include/css.jsp"%>
 <%@ include file="/WEB-INF/member-include/js.jsp"%>
-<link href="${ctx}/css/zhihuiduo.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="${ctx}/js/zhihuiduo/index.js"></script>
-<script type="text/javascript" src="${ctx}/js/navbarscroll.js"></script>
+<link href="/css/zhihuiduo.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/js/zhihuiduo/index.js"></script>
+<script type="text/javascript" src="/js/navbarscroll.js"></script>
 </head>
 <body>
 	<div id="p" class="fadeDiv" style="display:none;">
-    	 <img id="memberIcon" src="${ctx}/uassets/2017/8/27/1503807062182.jpg" class="fadeImg">&nbsp;&nbsp;<span>黄记新</span>拼单了&nbsp;&nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i>
+    	 <img id="memberIcon" src="/uassets/2017/8/27/1503807062182.jpg" class="fadeImg">&nbsp;&nbsp;<span>黄记新</span>拼单了&nbsp;&nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i>
     </div>
 	<div class="wrapper wrapper02" id="wrapper02" name="wrapper">
 		<div class="scroller">
@@ -38,40 +38,8 @@
 		<div class="swiper-wrapper">
 			<div class="swiper-slide">
 				<div class="row" id="indexProductsRow">
-                	<c:forEach var="product" items="${list}">
-                    </c:forEach>
-					
-					<!--<div class="col-sm-12 col-md-12">
-						<div class="thumbnail">
-							<img src="${ctx}/images/yuebing.png" alt="智惠多月饼">
-							<div class="caption" style="text-align: left;">
-								<p>【呆呆兔】 1000g500g 可选中秋月饼广式多口味水果味小月饼 独立包装散装33个左右传统糕点</p>
-								<div class="pull-right">
-									<img src="${ctx}/images/1671169078.jpg" class="img-circle"
-										width="30px" /> <img src="${ctx}/images/1671169078.jpg"
-										class="img-circle" width="30px" />
-									<button type="button" class="btn btn-danger">去开团 ></button>
-								</div>
-								<div class="pull-left">
-									<label style="color: red; font-size: 2rem;"><i
-										class="fa fa-jpy"></i>88</label> <label
-										style="color: gray; font-size: 1.4rem;"
-										class="checkbox-inline">已团14万件</label>
-								</div>
-
-								<div class="clearfix"></div>
-							</div>
-						</div>
-					</div>-->
-
-						<!--<div class="col-sm-12 col-md-12">
-						<div class="thumbnail">
-							<div style="height: 70px; text-aling: center; font-size: 1.4rem;">没有数据了</div>
-						</div>
-					</div>-->
-
+                	
 				</div>
-
 			</div>
 			<div class="swiper-slide">Slide 2</div>
 			<div class="swiper-slide">Slide 3</div>
@@ -92,7 +60,6 @@
     <script>
     	window.rawData= ${rawData};
 		
-		
 		var ctx = "";
 		var fadeCount = 0;
 		var groupPurcses;
@@ -100,6 +67,8 @@
 		var indexPageInfo;
 		var swiper;
 		var navbarIndex;
+		var currentScrollTop;
+		var currentPageNum=0;
 		
 		$(function() {
 			ctx = window.location.protocol+"//"+window.location.host;
@@ -140,10 +109,40 @@
 						navbarIndex = index;
 						swiper.slideTo(index, 500);
 					}
-					
 				}
             });
+			
+			$(document).scroll(function(){  
+				var scrollTop = $(document).scrollTop();
+				var docHeight = $(document).height();
+				var winHeight = $(window).height();
+				if(scrollTop>=docHeight-winHeight){
+					getRemoteProduct();
+				}
+			 });
 		});
+		
+		
+		
+		function getRemoteProduct(){
+			var swiperActiveIndex = swiper.activeIndex;
+			//首页去取数据。
+			if(swiperActiveIndex ==0){
+				 var data = {};
+				 data.pageNum = currentPageNum+1;
+   				 data.pageSize = 10;
+				 $.ajax({  
+					url:ctx+"/indexGoods",  
+					data:data,   
+					type:"get",  
+					success:function(data){  
+						var list = data.rows;
+						addIndexListProduct(ctx,"indexProductsRow",list);
+					}  
+				});  
+			}
+			console.log('远程加载数据'); 
+		}
 		
 		function fadeInOut(detination){
 			if(groupPurcses){
@@ -179,6 +178,8 @@
 				addProduct(urlHead,target,pro);
 				$('#'+pro.id+'Div').fadeIn('slow');
 			}
+			currentPageNum+=1;
+			$("img").lazyload();
 		}
 		
 		//添加商品
