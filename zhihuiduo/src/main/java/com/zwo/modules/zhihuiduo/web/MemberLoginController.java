@@ -13,12 +13,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import weixin.popular.api.SnsAPI;
+import weixin.popular.bean.sns.SnsToken;
+import weixin.popular.bean.user.User;
+
 import com.zwo.modules.member.domain.Member;
 import com.zwo.modules.member.service.IMemberService;
+import com.zwo.modules.wechat.domain.WeChatVo;
 import com.zwotech.common.utils.PasswordHelper;
 import com.zwotech.common.web.BaseController;
 
@@ -36,11 +42,21 @@ public class MemberLoginController extends BaseController {
 	@Lazy(true)
 	private IMemberService memberService;
 
+//	@Autowired
+//	@Lazy(true)
+	private WeChatVo weChatVo;
+
 	// @SuppressWarnings("rawtypes")
 	// private RedisTemplate redisTemplate =
 	// SpringContextHolder.getBean("redisTemplate");
 
 	private static final String basePath = "views/member/";
+
+	
+	public MemberLoginController() {
+		super();
+		weChatVo = new WeChatVo();
+	}
 
 	/**
 	 * 默认执行方法。
@@ -64,6 +80,35 @@ public class MemberLoginController extends BaseController {
 		String URL = httpServletRequest.getHeader("Referer");
 		uiModel.addAttribute("fromURL", URL);
 
+		boolean isWechatBrowser = false;
+		String ua = ((HttpServletRequest) httpServletRequest).getHeader(
+				"user-agent").toLowerCase();
+		if (ua.indexOf("micromessenger") > 0) {// 是微信浏览器
+			isWechatBrowser = true;
+		}
+		
+		if(isWechatBrowser == true){
+			String redirect_uri = "http://huangjixin.ngrok.xiaomiqiu.cn/memberLogin/getCodeAndAccessToken";
+			String state = "123456";
+			String url = SnsAPI.connectOauth2Authorize(weChatVo.getAppid(), redirect_uri,true,state);
+			return "redirect:"+url;
+		}
+		
+		return basePath + "login";
+	}
+	
+	@RequestMapping(value = { "getCodeAndAccessToken" }, method = RequestMethod.GET)
+	public String getCodeAndAccessToken(Model uiModel,
+			@RequestParam String code, @RequestParam String state) {
+		if(code!=null){
+			SnsToken token = SnsAPI.oauth2AccessToken(weChatVo.getAppid(),
+					weChatVo.getAppsecret(), code);
+			if(token!=null){
+				User user = SnsAPI.userinfo(token.getAccess_token(), token.getOpenid(), "zh_CN");
+				uiModel.addAttribute("userInfo", user);
+			}
+		}
+		
 		return basePath + "login";
 	}
 
@@ -110,13 +155,26 @@ public class MemberLoginController extends BaseController {
 	 */
 	@RequestMapping(value = { "loginByMobilPhone" }, method = RequestMethod.POST)
 	public String loginByMobilPhone(Model uiModel,
-			@RequestParam String mobilPhone, @RequestParam String validateCode,
+			@ModelAttribute Member memb,
+			@RequestParam String mobilPhone,
+			@RequestParam String validateCode,
+			@RequestParam(required = false) String openid,
 			@RequestParam(required = false, defaultValue = "") String fromURL,
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
+		Member member = null;
+		String openId =openid;
+		// snsapi请求获取用户的openId，判断系统是否已经存在该openId,如果存在那么说明该用户已经关注过了。
+		if(memb.getOpenId() !=null){
+			member = memberService.selectMember(memb.getOpenId());
+			if(member == null){
+				member = memberService.selectMember(mobilPhone);
+			}
+		}else{
+			member = memberService.selectMember(mobilPhone);
+		}
+		
 		// 会员如果不存在就为他们创建一个账号
-		Member member = memberService.selectMember(mobilPhone);
-
 		if (member == null) {
 			member = new Member();
 			String id = UUID.randomUUID().toString().replaceAll("-", "");
@@ -125,7 +183,69 @@ public class MemberLoginController extends BaseController {
 			member.setUsername(username);
 			member.setPassword(username);
 			member.setMobilPhone(mobilPhone);
+		   
+			if(memb.getOpenId() !=null){
+				member.setOpenId(memb.getOpenId());
+			}
+			//是否订阅
+			if(memb.getAge() !=null){
+				member.setAge(memb.getAge());
+			}
+			if(memb.getOpenId() !=null){
+				member.setOpenId(memb.getOpenId());
+			}
+			if(memb.getNickname() !=null){
+				member.setNickname(memb.getNickname());
+			}
+			if(memb.getSex() !=null){
+				member.setSex(memb.getSex());
+			}
+			if(memb.getIcon() !=null){
+				member.setIcon(memb.getIcon());
+			}
+			if(memb.getOrgId() !=null){
+				member.setOrgId(memb.getOrgId());
+			}
+			if(memb.getDescription() !=null){
+				member.setDescription(memb.getDescription());
+			}
+			if(memb.getMemberGroupId() !=null){
+				member.setMemberGroupId(memb.getMemberGroupId());
+			}
 			memberService.insertSelective(member);
+		}else{
+			if(memb.getOpenId() !=null){
+				member.setOpenId(memb.getOpenId());
+			}
+			//是否订阅
+			if(memb.getAge() !=null&&!"".equals(memb.getAge())){
+				member.setAge(memb.getAge());
+			}
+			if(memb.getOpenId() !=null&&!"".equals(memb.getOpenId())){
+				member.setOpenId(memb.getOpenId());
+			}
+			if(memb.getNickname() !=null&&!"".equals(memb.getNickname())){
+				member.setNickname(memb.getNickname());
+			}
+			if(memb.getSex() !=null&&!"".equals(memb.getSex())){
+				member.setSex(memb.getSex());
+			}
+			if(memb.getIcon() !=null&&!"".equals(memb.getOrgId())){
+				member.setIcon(memb.getIcon());
+			}
+			if(memb.getOrgId() !=null&&!"".equals(memb.getOrgId())){
+				member.setOrgId(memb.getOrgId());
+			}
+			if(memb.getDescription() !=null&&!"".equals(memb.getDescription())){
+				member.setDescription(memb.getDescription());
+			}
+			if(memb.getMemberGroupId() !=null&&!"".equals(memb.getMemberGroupId())){
+				member.setMemberGroupId(memb.getMemberGroupId());
+			}
+			if(null==member.getMobilPhone()){
+				member.setMobilPhone(mobilPhone);
+			}
+			memberService.updateByPrimaryKeySelective(member);
 		}
 
 		String password = member.getUsername();
@@ -150,9 +270,9 @@ public class MemberLoginController extends BaseController {
 		String url = fromURL.indexOf("login") != -1 ? "" : fromURL;
 		url = ("".equals(url) ? "redirect:/mindex" : "redirect:" + url);
 		boolean isWechatBrowser;
-		if(member.getOpenId()==null){
-			String ua = ((HttpServletRequest) httpServletRequest).getHeader("user-agent")
-					.toLowerCase();
+		if (member.getOpenId() == null) {
+			String ua = ((HttpServletRequest) httpServletRequest).getHeader(
+					"user-agent").toLowerCase();
 			if (ua.indexOf("micromessenger") > 0) {// 是微信浏览器
 				isWechatBrowser = true;
 			}
