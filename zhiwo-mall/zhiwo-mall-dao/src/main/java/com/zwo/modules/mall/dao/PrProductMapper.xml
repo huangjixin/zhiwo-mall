@@ -131,7 +131,7 @@
     ID, CREATOR, ORG_ID, UPDATER, CREATE_DATE, UPDATE_DATE, DISABLE, START_TIME, END_TIME, 
     SORT, IS_DEFAULT, EN_NAME, NAME, DESCRIPTION, ICON, KEYWORDS, THUMBNAIL, CODE, CATEGORY_ID, 
     ALLOW_DISTRIBUTION, DISTRIBUTION_VALUE, SHOP_ID, USER_ID, PURCHASING_COST, DIST_INTRUEDUTION, 
-    SUPPLIER_ID, GOURP_SALE_PRICE, INDEPENDENT_PRICE, NUMBER_COUNT, AUDIT_DESCRIPTION, 
+    SUPPLIER_ID, GOURP_SALE_PRICE, INDEPENDENT_PRICE, AUDIT_DESCRIPTION, 
     STORAGE, STATUS, MARKET_PRICE, TRANSPORT_FEE, SHOP_NAME, SHOP_ICON, IS_SENT_UNPAY
   </sql>
   <sql id="Blob_Column_List" >
@@ -173,8 +173,14 @@
     <if test="distinct" >
       distinct
     </if>
-    <include refid="Base_Column_List" />
-    from pr_product
+    <include refid="Base_Column_List" />,a.number_Count
+    from pr_product LEFT JOIN
+    (SELECT 
+        COUNT(*) as number_Count, PRODUCT_ID
+    FROM
+        order_trade
+	where IS_FORM_SCCUESS='1'
+    GROUP BY PRODUCT_ID) AS a ON id = a.PRODUCT_ID
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -192,7 +198,14 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from pr_product
+    ,a.number_count
+    from pr_product LEFT JOIN
+    (SELECT 
+        COUNT(*) as number_count, PRODUCT_ID
+    FROM
+        order_trade
+	where IS_FORM_SCCUESS='1'
+    GROUP BY PRODUCT_ID) AS a ON id = a.PRODUCT_ID
     where ID = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
