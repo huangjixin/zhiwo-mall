@@ -746,9 +746,11 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 	@Transactional(readOnly = true)
 	public Member selectMember(String usernameOrMphoneOrEmail) {
 		MemberCriteria memberCriteria = new MemberCriteria();
+		com.zwo.modules.member.domain.MemberCriteria.Criteria openidCriteria = memberCriteria.createCriteria().andOpenIdEqualTo(usernameOrMphoneOrEmail);
 		com.zwo.modules.member.domain.MemberCriteria.Criteria nameCriteria = memberCriteria.createCriteria().andUsernameEqualTo(usernameOrMphoneOrEmail);
 		com.zwo.modules.member.domain.MemberCriteria.Criteria phoneCriteria = memberCriteria.createCriteria().andMobilPhoneEqualTo(usernameOrMphoneOrEmail);
 		com.zwo.modules.member.domain.MemberCriteria.Criteria emailCriteria = memberCriteria.createCriteria().andEmailEqualTo(usernameOrMphoneOrEmail);
+		memberCriteria.or(openidCriteria);
 		memberCriteria.or(nameCriteria);
 		memberCriteria.or(phoneCriteria);
 		memberCriteria.or(emailCriteria);
