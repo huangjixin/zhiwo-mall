@@ -136,4 +136,18 @@
 	WHERE
 	    user.id  = #{userId}
   </select>
+  
+  <select id="selectBuyerByPid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+	    mem.id,mem.NICKNAME, mem.icon
+	FROM
+	    member AS mem
+	        LEFT JOIN
+	    order_trade AS ot ON mem.id = ot.MEMBER_ID
+	        LEFT JOIN
+	    pr_product p ON ot.PRODUCT_ID = p.id
+	WHERE
+		p.id= #{productId} and 
+	    ot.IS_FORM_SCCUESS = '1' order by ot.CREATE_DATE desc limit 0,2 
+  </select>
 </mapper>

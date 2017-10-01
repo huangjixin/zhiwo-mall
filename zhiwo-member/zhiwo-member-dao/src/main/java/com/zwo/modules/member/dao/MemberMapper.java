@@ -20,4 +20,11 @@ public interface MemberMapper extends Mapper<Member> {
      * @return
      */
     List<Member> selectByUserId(String userId);
+    
+    /**
+     * 根据商品ID查询最新两个购买该产品的会员。
+     * @param productId
+     * @return
+     */
+    List<Member> selectBuyerByPid(String productId);
 }
