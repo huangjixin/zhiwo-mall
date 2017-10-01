@@ -2,6 +2,9 @@ package com.zwo.modules.mall.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
+import com.zwo.modules.member.domain.Member;
 
 public class PrProduct implements Serializable {
     /**
@@ -1195,4 +1198,27 @@ public class PrProduct implements Serializable {
     public void setIsSentUnpay(Integer isSentUnpay) {
         this.isSentUnpay = isSentUnpay;
     }
+    
+    public Integer getNumberGroupPurcse() {
+		return numberGroupPurcse;
+	}
+
+	public void setNumberGroupPurcse(Integer numberGroupPurcse) {
+		this.numberGroupPurcse = numberGroupPurcse;
+	}
+
+	public List<Member> getMembers() {
+		return members;
+	}
+
+	public void setMembers(List<Member> members) {
+		this.members = members;
+	}
+
+	/**
+     * 正在拼单的人数
+     */
+    private Integer numberGroupPurcse;
+    
+    private List<Member> members;
 }
