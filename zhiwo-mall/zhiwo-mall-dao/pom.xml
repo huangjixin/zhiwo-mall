@@ -21,5 +21,15 @@
   			<artifactId>zhiwo-mall-pojo</artifactId>
   			<version>1.0</version>
 	</dependency>
+	<dependency>
+			<groupId>com.zwo.member.pojo</groupId>
+  			<artifactId>zhiwo-member-pojo</artifactId>
+  			<version>1.0</version>
+	</dependency>
+	<dependency>
+			<groupId>com.zwo.member.dao</groupId>
+  			<artifactId>zhiwo-member-dao</artifactId>
+  			<version>1.0</version>
+	</dependency>
   </dependencies>
 </project>
