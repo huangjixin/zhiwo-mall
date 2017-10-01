@@ -77,6 +77,15 @@ public class ProductController extends BaseController<PrProduct> {
 
 	private RedisTemplate redisTemplate;
 
+	
+	public ProductController() {
+		super();
+		if (redisTemplate == null) {
+			if(SpringContextHolder.getApplicationContext().containsBean("redisTemplate"))
+				redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
+	}
+
 	@RequiresPermissions("mall:product:view")
 	@RequestMapping(value = { "", "list" })
 	public String list(HttpServletRequest httpServletRequest) {
@@ -112,9 +121,6 @@ public class ProductController extends BaseController<PrProduct> {
 			@RequestParam(required = false) String propertyPrices,
 			Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		if (redisTemplate == null) {
-			redisTemplate = SpringContextHolder.getBean("redisTemplate");
-		}
 
 		PrProductWithBLOBs product = productService.selectByPrimKey(id);
 
