@@ -1,13 +1,17 @@
 package com.zwo.modules.zhihuiduo.web;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,7 +28,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.alibaba.fastjson.JSONObject;
+import weixin.popular.api.PayMchAPI;
+import weixin.popular.bean.paymch.MchBaseResult;
+import weixin.popular.bean.paymch.MchPayNotify;
+import weixin.popular.bean.paymch.Unifiedorder;
+import weixin.popular.bean.paymch.UnifiedorderResult;
+import weixin.popular.support.ExpireKey;
+import weixin.popular.support.expirekey.DefaultExpireKey;
+import weixin.popular.util.PayUtil;
+import weixin.popular.util.SignatureUtil;
+import weixin.popular.util.StreamUtils;
+import weixin.popular.util.XMLConverUtil;
+
 import com.zwo.modules.mall.domain.OrderStatus;
 import com.zwo.modules.mall.domain.OrderTrade;
 import com.zwo.modules.mall.domain.PrProduct;
@@ -41,9 +56,6 @@ import com.zwo.modules.member.service.IMemberService;
 import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.service.IShopService;
 import com.zwo.modules.system.domain.TbUser;
-import com.zwotech.common.redis.channel.ChannelContance;
-import com.zwotech.common.utils.ActiveMQUtil;
-import com.zwotech.common.utils.RedisUtil;
 import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
@@ -78,21 +90,30 @@ public class MemberOrderController extends BaseController<TbUser> {
 
 	@SuppressWarnings("rawtypes")
 	private RedisTemplate redisTemplate;
-	
+
 	@SuppressWarnings("rawtypes")
 	private JmsTemplate jmsQueueTemplate;
 
 	private static final String basePath = "views/member/";
 
+	private String appid; // appid
+	private String mch_id; // 微信支付商户号
+	private String key; // API密钥
+	// 重复通知过滤
+	private static ExpireKey expireKey = new DefaultExpireKey();
+
 	public MemberOrderController() {
 		super();
 		if (redisTemplate == null) {
-			if(SpringContextHolder.getApplicationContext().containsBean("redisTemplate"))
+			if (SpringContextHolder.getApplicationContext().containsBean(
+					"redisTemplate"))
 				redisTemplate = SpringContextHolder.getBean("redisTemplate");
 		}
 		if (jmsQueueTemplate == null) {
-			if(SpringContextHolder.getApplicationContext().containsBean("jmsQueueTemplate"))
-				jmsQueueTemplate = SpringContextHolder.getBean("jmsQueueTemplate");
+			if (SpringContextHolder.getApplicationContext().containsBean(
+					"jmsQueueTemplate"))
+				jmsQueueTemplate = SpringContextHolder
+						.getBean("jmsQueueTemplate");
 		}
 	}
 
@@ -107,8 +128,7 @@ public class MemberOrderController extends BaseController<TbUser> {
 	@RequestMapping(value = "checkOut")
 	@RequiresAuthentication
 	public String checkOut(@RequestParam String goodsId,
-			@RequestParam Integer buyNum,
-			@RequestParam String packagePriceId,
+			@RequestParam Integer buyNum, @RequestParam String packagePriceId,
 			@RequestParam String proValues, @RequestParam String dealPrice,
 			@RequestParam(defaultValue = "group") String mode,
 			@RequestParam(required = false) String groupPurcseId,
@@ -138,7 +158,7 @@ public class MemberOrderController extends BaseController<TbUser> {
 			uiModel.addAttribute("shop", shop);
 
 		}
-		
+
 		if (product != null) {
 			orderTrade.setShopId(product.getShopId());
 			uiModel.addAttribute("product", product);
@@ -160,24 +180,24 @@ public class MemberOrderController extends BaseController<TbUser> {
 		}
 
 		// 如果有用中间件那么就用ActiveMQ进行消息转发，否则另开线程下单
-		/*if (jmsQueueTemplate != null) {
-			String jsonString = JSONObject.toJSONString(orderTrade);
-			ActiveMQUtil.send(jmsQueueTemplate,
-					ChannelContance.ORDER_CREATE_QUEUE_CHANNEL, jsonString);
-		} else {
-			asycInsertOrderTrade(orderTrade);
-		}*/
+		/*
+		 * if (jmsQueueTemplate != null) { String jsonString =
+		 * JSONObject.toJSONString(orderTrade);
+		 * ActiveMQUtil.send(jmsQueueTemplate,
+		 * ChannelContance.ORDER_CREATE_QUEUE_CHANNEL, jsonString); } else {
+		 * asycInsertOrderTrade(orderTrade); }
+		 */
 
 		asycInsertOrderTrade(orderTrade);
 		uiModel.addAttribute("order", orderTrade);
-		
-		//获取用户的全部地址。
+
+		// 获取用户的全部地址。
 		List<MemberAddress> list = null;
 		if (member != null) {
 			list = addressService.listAllByMemberId(member.getId());
 		}
 		uiModel.addAttribute("addresses", list);
-		
+
 		return basePath + "checkOut";
 		// return "redirect:/memberOrder/checkOut";
 	}
@@ -229,21 +249,19 @@ public class MemberOrderController extends BaseController<TbUser> {
 	 */
 	@RequestMapping(value = "checkBack")
 	public String checkBack(@RequestParam String goodsId,
-			@RequestParam Integer buyNum,
-			@RequestParam String packagePriceId,
-			@RequestParam String proValues,
-			@RequestParam String dealPrice,
+			@RequestParam Integer buyNum, @RequestParam String packagePriceId,
+			@RequestParam String proValues, @RequestParam String dealPrice,
 			@RequestParam(defaultValue = "group") String mode,
 			@RequestParam(required = false) String groupPurcseId,
 			RedirectAttributes redirectAttributes, Model uiModel,
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		
+
 		Member member = null;
 		// groupPurcseId是不是为null表示是拼团还是开团
 		GroupPurcse groupPurcse = null;
 		GroupPurcseMember groupPurcseMember = new GroupPurcseMember();// 拼团中间表。
-		int numberCount = 0;		
+		int numberCount = 0;
 		PrProduct product = prductService.selectByPrimaryKey("150383670510593");
 		uiModel.addAttribute("product", product);
 		if (null != groupPurcseId) {
@@ -316,9 +334,9 @@ public class MemberOrderController extends BaseController<TbUser> {
 
 			groupPurcse.setExpiredTime(date);
 			if (jmsQueueTemplate != null) {
-//				ActiveMQUtil.send(jmsQueueTemplate,
-//						ChannelContance.GROUPPURCSE_CREATE_QUEUE_CHANNEL,
-//						groupPurcse);
+				// ActiveMQUtil.send(jmsQueueTemplate,
+				// ChannelContance.GROUPPURCSE_CREATE_QUEUE_CHANNEL,
+				// groupPurcse);
 			} else {
 				asycInsertGroupPurcse(groupPurcse);
 				// groupPurcseService.insertSelective(groupPurcse); // 开团。
@@ -329,13 +347,116 @@ public class MemberOrderController extends BaseController<TbUser> {
 		groupPurcseMember.setGroupPurcseId(groupPurcse.getId());
 		// 插入中间表，表示开团或者参团成功
 		if (jmsQueueTemplate != null) {
-			
+
 		} else {
 			// groupPurcseMemberService.insertSelective(groupPurcseMember);
-			asycInsertGroupPurcseMember(groupPurcseMember);
 		}
-		
+		asycInsertGroupPurcseMember(groupPurcseMember);
+
+		// 如果拼团人数已经达到规定的数目，那么就更新订单，让客户发货。
+
 		return basePath + "checkOut";
+	}
+
+	@RequestMapping(value = "getPayMchJs")
+	@RequiresAuthentication
+	public void getPayMchJs(@RequestParam String goodsId,
+			@RequestParam Integer buyNum, @RequestParam String packagePriceId,
+			@RequestParam String proValues, @RequestParam String dealPrice,
+			@RequestParam(defaultValue = "group") String mode,
+			@RequestParam(required = false) String groupPurcseId,
+			RedirectAttributes redirectAttributes, Model uiModel,
+			HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		// payPackage 的商品信息，总价可以通过前端传入
+
+		Unifiedorder unifiedorder = new Unifiedorder();
+		unifiedorder.setAppid(appid);
+		unifiedorder.setMch_id(mch_id);
+		unifiedorder
+				.setNonce_str(UUID.randomUUID().toString().replace("-", ""));
+
+		unifiedorder.setBody("商品信息");
+		unifiedorder.setOut_trade_no("123456");
+		unifiedorder.setTotal_fee("1");// 单位分
+		unifiedorder.setSpbill_create_ip(request.getRemoteAddr());// IP
+		unifiedorder.setNotify_url("http://mydomain.com/test/notify");
+		unifiedorder.setTrade_type("JSAPI");// JSAPI，NATIVE，APP，MWEB
+
+		UnifiedorderResult unifiedorderResult = PayMchAPI.payUnifiedorder(
+				unifiedorder, key);
+
+		// @since 2.8.5 API返回数据签名验证
+		if (unifiedorderResult.getSign_status() != null
+				&& unifiedorderResult.getSign_status()) {
+			String json = PayUtil.generateMchPayJsRequestJson(
+					unifiedorderResult.getPrepay_id(), appid, key);
+
+			// 将json 传到jsp 页面
+			request.setAttribute("json", json);
+			// 示例jsp
+			request.getRequestDispatcher("pay_example.jsp").forward(request,
+					response);
+		}
+	}
+
+	/**
+	 * 支付回调通知
+	 * 
+	 * @param goodsId
+	 * @param buyNum
+	 * @param packagePriceId
+	 * @param proValues
+	 * @param dealPrice
+	 * @param mode
+	 * @param groupPurcseId
+	 * @param redirectAttributes
+	 * @param uiModel
+	 * @param httpServletRequest
+	 * @param httpServletResponse
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "payMchNotify")
+	@RequiresAuthentication
+	public void payMchNotify(@RequestParam String goodsId,
+			@RequestParam Integer buyNum, @RequestParam String packagePriceId,
+			@RequestParam String proValues, @RequestParam String dealPrice,
+			@RequestParam(defaultValue = "group") String mode,
+			@RequestParam(required = false) String groupPurcseId,
+			RedirectAttributes redirectAttributes, Model uiModel,
+			HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
+		// 获取请求数据
+		String xmlData = StreamUtils.copyToString(request.getInputStream(),
+				Charset.forName("utf-8"));
+		// 将XML转为MAP,确保所有字段都参与签名验证
+		Map<String, String> mapData = XMLConverUtil.convertToMap(xmlData);
+		// 转换数据对象
+		MchPayNotify payNotify = XMLConverUtil.convertToObject(
+				MchPayNotify.class, xmlData);
+		// 已处理 去重
+		if (expireKey.exists(payNotify.getTransaction_id())) {
+			return;
+		}
+		// @since 2.8.5
+		payNotify.buildDynamicField(mapData);
+		// 签名验证
+		if (SignatureUtil.validateSign(mapData, key)) {
+			expireKey.add(payNotify.getTransaction_id());
+			MchBaseResult baseResult = new MchBaseResult();
+			baseResult.setReturn_code("SUCCESS");
+			baseResult.setReturn_msg("OK");
+			response.getOutputStream().write(
+					XMLConverUtil.convertToXML(baseResult).getBytes());
+		} else {
+			MchBaseResult baseResult = new MchBaseResult();
+			baseResult.setReturn_code("FAIL");
+			baseResult.setReturn_msg("ERROR");
+			response.getOutputStream().write(
+					XMLConverUtil.convertToXML(baseResult).getBytes());
+		}
+
 	}
 
 }
