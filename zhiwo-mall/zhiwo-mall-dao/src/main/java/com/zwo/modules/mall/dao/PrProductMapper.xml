@@ -981,7 +981,22 @@
   <select id="selectByKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from pr_product
+    ,a.number_count,b.number_group_purcse
+    from pr_product LEFT JOIN
+    (SELECT 
+        COUNT(*) as number_count, PRODUCT_ID
+    FROM
+        order_trade
+	where IS_FORM_SCCUESS='1'
+    GROUP BY PRODUCT_ID) AS a ON id = a.PRODUCT_ID
+    left join 
+     (SELECT 
+	    count(*) as NUMBER_GROUP_PURCSE,PRODUCT_ID
+	FROM
+	    group_purcse
+	WHERE
+	    PRODUCT_ID = #{id,jdbcType=VARCHAR}
+	    AND DISABLE = FALSE) as b on id=b.PRODUCT_ID
     where ID = #{id,jdbcType=VARCHAR}
   </select>
   
