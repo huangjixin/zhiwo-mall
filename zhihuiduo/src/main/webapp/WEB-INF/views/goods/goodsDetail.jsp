@@ -20,8 +20,10 @@
 			</div>
 		</div>
 		<div class="caption">
-			<br>
- 			<div class="pull-left">
+        	<div style="text-align:center;">
+	            <h3 id="offlineTitle" style="color:red;"></h3>
+            </div>
+        	<div class="pull-left">
 				<label style="color: red; font-size: 2rem;"><i
 					class="fa fa-jpy" id="gSalePriceLabel"></i></label>&nbsp;&nbsp;<label
 					style="color: gray; font-size: 1.5rem;"><i id="marketPriceLabel"
@@ -46,7 +48,7 @@
 	<div class="thumbnail">
 		<div class="caption">
         	<div class="page-header" style="padding-top:0px; margin-top:5px;" id="groupPurcseHeader">
-                <h4>看看谁在开团</h4>
+                <h4 id="groupHeader">正在开团的人数：</h4>
             </div>
 		</div>
 	</div>
@@ -180,11 +182,11 @@
 						type="hidden"> <input id="proValues" name="proValues"
 						type="hidden"><input id="mode" name="mode"
 						type="hidden">
-                     <shiro:authenticated>
-							<button type="submit" class="btn btn-danger"
-						style="width: 100%; margin: 0; position: fixed; bottom: 0; left: 0; right: 0; border-radius: 0px;">
+                     
+					<button id="submitBtn" type="submit" class="btn btn-danger"
+							style="width: 100%; margin: 0; position: fixed; bottom: 0; left: 0; right: 0; border-radius: 0px;">
 						确定</button>
-						</shiro:authenticated>
+						<shiro:authenticated></shiro:authenticated>
 				</form>
 			</div>
 		</div>
@@ -238,8 +240,7 @@
 			$("img").lazyload({effect: "fadeIn"});
 			
 			$(document).on('click','.number-spinner a',function() {
-					var btn = $(this), input = btn
-														.closest(
+						var btn = $(this), input = btn.closest(
 																'.number-spinner')
 														.find('input'), total = $(
 														'#passengers').val(), oldValue = input
@@ -343,15 +344,36 @@
 				}
 			}
 			
+			if(obj.status=='offline'){
+				$('#offlineTitle').html('该商品已下架');
+				$('#submitBtn').html('该商品已下架');
+				$('#submitBtn').attr('disabled',true);
+			}else if(obj.status=='online'){
+				$('#offlineTitle').html('');
+				$('#submitBtn').attr('disabled',false);
+				$('#submitBtn').html('确定');
+			}
+			
+			if(obj.storage){
+				if(obj.storage==0){
+					$('#offlineTitle').html('该商品已售馨');
+					$('#submitBtn').html('该商品已售馨');
+					$('#submitBtn').attr('disabled',true);
+				}
+			}
+			
+			
 			$('#gSalePriceLabel').html(product.gourpSalePrice);
 			$('#marketPriceLabel').html(product.marketPrice);
-			$('#soldQuantitySpan').html(product.soldQuantity);
+			$('#soldQuantitySpan').html(product.numberCount);
 			
 			var cont = HTMLDecode(product.content);
 			$('#proContent').append(cont);
 			$('#productName').html(product.name);
 			$('#productDescription').html(product.description);
 			
+			//正在拼单的人数
+			$('#groupHeader').append(product.numberGroupPurcse);
 			
 			$('#shopHead').html(product.shopName);
 			if(goodsList){
@@ -362,7 +384,7 @@
 				var length = groupPurcses.length;
 				for(var i=0;i<length;i++){
 					var gPurcse= groupPurcses[i];
-					var url = ctx+"/memberGroup?goodsId="+gPurcse.productId+"&groupPurcseId="+gPurcse.id;
+					var url = ctx+"/memberGroup"+gPurcse.id+"?goodsId="+gPurcse.productId;
 					var para = '<div class="media" onClick="showProduct(\''+url+'\');"><div class="pull-right" style="padding-top:7px;"><button type="button" class="btn btn-danger">去参团</button></div><div class="media-left"><img class="img-circle" src="'+ctx+'/images/busy.gif" style="width:40px;" data-original="'+gPurcse.memberIcon+'"></div><div class="media-body"><h5 class="media-heading" style="padding-top: 6px;">'+gPurcse.memberName+'</h5><span style="color: gray; font-size: 1.4rem;">还差1人，剩余2小时</span></div></div>';
 					
 					$('#groupPurcseHeader').after(para);
@@ -553,6 +575,8 @@
 				proValues += selectedPValue[i].name + "  ";
 			}
 			$('#propertyValueLabel').html(proValues);
+			
+			
 		}
 		
 		//跳转到

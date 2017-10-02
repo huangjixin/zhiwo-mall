@@ -36,6 +36,8 @@
                 style="text-align: left; font-size: 1.4rem; padding:4px; background-color:#FAFAFA">
                <span><i class="fa fa-check-square-o" aria-hidden="true" style="color:red;"></i>&nbsp;假一赔十</span>&nbsp;&nbsp;<span><i class="fa fa-check-square-o" aria-hidden="true" style="color:red;"></i>&nbsp;7天退换</span>&nbsp;&nbsp;<span><i class="fa fa-check-square-o" aria-hidden="true" style="color:red;"></i>&nbsp;48小时发货</span>
             </p>
+            <div style="text-align:center;">
+	            <h3 id="offlineTitle" style="color:red;"></h3>
             <div style="text-align:center; padding:10px;" id="groupPurcseMemberIcon">
                 <!--<c:if test="${groupPurcse.disable==true}">
                 	<c:forEach var="groupPurcseMember" items="${groupPurcseMembers}">
@@ -128,7 +130,10 @@
 						type="hidden"> <input id="proValues" name="proValues"
 						type="hidden"><input id="mode" name="mode"
 						type="hidden">
-                     <shiro:authenticated>
+                        <button type="submit" id="submitBtn" class="btn btn-danger"
+						style="width: 100%; margin: 0; position: fixed; bottom: 0; left: 0; right: 0; border-radius: 0px;">
+						确定</button>
+                     	<!--<shiro:authenticated>
 							<button type="submit" class="btn btn-danger"
 						style="width: 100%; margin: 0; position: fixed; bottom: 0; left: 0; right: 0; border-radius: 0px;">
 						确定</button>
@@ -137,14 +142,14 @@
 							<a href="${ctx}/memberLogin"><button type="button" class="btn btn-danger"
 						style="width: 100%; margin: 0; position: fixed; bottom: 0; left: 0; right: 0; border-radius: 0px;">
 						去登录</button></a>
-						</shiro:notAuthenticated>
+						</shiro:notAuthenticated>-->
 					
 				</form>
 			</div>
 		</div>
 	</div>
  	<script>
-	 	window.rawData= '${rawData}';
+	 	window.rawData= ${rawData};
 		var properties;
 		var propertyValues;
 		var packagePrices;
@@ -159,12 +164,11 @@
 		
 		var ctx = "";
 		var fadeCount = 0;
-		
+		var obj;
 		$(function() {
 			ctx = window.location.protocol+"//"+window.location.host;
-			var data =  window.rawData;
 			
-			var obj = JSON.parse(data);
+			obj = window.rawData;
 			if(obj){
 				 properties= obj.properties;
     			 propertyValueArray= propertyValues= obj.productPropertyValues;
@@ -176,14 +180,8 @@
 			}
 			
 			$("img").lazyload({effect: "fadeIn"});
-			
-			
 			// spinner(+-btn to change value) & total to parent input 
-							$(document)
-									.on(
-											'click',
-											'.number-spinner a',
-											function() {
+							$(document).on('click','.number-spinner a',function() {
 												var btn = $(this), input = btn
 														.closest(
 																'.number-spinner')
@@ -223,11 +221,29 @@
 				}
 			}
 			
-			
-			$("#mediaIcon").attr("src",urlHead+'/images/busy.gif');
+			if(obj){
+				if(obj.status=='offline'){
+					$('#offlineTitle').html('该商品已下架');
+					$('#submitBtn').html('该商品已下架');
+					$('#submitBtn').attr('disabled',true);
+				}else if(obj.status=='online'){
+					$('#offlineTitle').html('');
+					$('#submitBtn').attr('disabled',false);
+					$('#submitBtn').html('确定');
+				}
+				
+				if(obj.storage){
+					if(obj.storage==0){
+						$('#offlineTitle').html('该商品已售馨');
+						$('#submitBtn').html('该商品已售馨');
+						$('#submitBtn').attr('disabled',true);
+					}
+				}
+			}
+			$("#mediaIcon").attr("src",urlHead+'/images/busy.webp');
 			$("#mediaIcon").attr("data-original",urlHead+'/'+product.icon);
 			$("#nameHeading").html(product.name);
-			$("#soldQuantityB").html(product.soldQuantity);
+			$("#soldQuantityB").html(product.numberCount);
 			$("#nameHeading").bind("click",function(){
 				var url = urlHead+"/goodsDetail?goodsId="+product.id;
 				showProduct(url);
@@ -434,7 +450,7 @@
 					if(packagePriceProValueId == packagePrice.propertyValueId){
 						if(packagePrice.icon && packagePrice.icon!=''){
 							$("#propertyValueImg").attr("src",ctx+"/"+packagePrice.icon);
-							//$("#propertyValueImg").attr("src",ctx+'/images/busy.gif');
+							//$("#propertyValueImg").attr("src",ctx+'/images/busy.webp');
 							//$("#propertyValueImg").attr("data-original",ctx+"/"+packagePrice.icon);
 							$("#propertyValueImg").lazyload({effect: "fadeIn"});
 						}
