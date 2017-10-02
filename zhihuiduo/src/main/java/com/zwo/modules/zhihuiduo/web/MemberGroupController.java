@@ -18,6 +18,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -114,8 +115,8 @@ public class MemberGroupController extends BaseController {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value = { "memberGroup" }, method = RequestMethod.GET)
-	public String memberGroup(@RequestParam String goodsId,@RequestParam String groupPurcseId, Model uiModel,
+	@RequestMapping(value = { "memberGroup/{groupPurcseId}" }, method = RequestMethod.GET)
+	public String memberGroup(@RequestParam String goodsId,@PathVariable String groupPurcseId, Model uiModel,
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		String jsonString=null;
@@ -130,7 +131,37 @@ public class MemberGroupController extends BaseController {
 		List<PrProductProperty> properties = productPropertyService.listAll();
 		
 		String key = groupPurcseId+GroupPurcseMemberServiceImpl.KEY_GROUP_PURCSE_ID_MEMBERS;
-		if(redisTemplate!=null){
+		
+		productExtention = new ProductExtention();
+		
+		product = prductService.selectByPrimaryKey(goodsId);
+		try {
+			BeanUtils.copyProperties(productExtention, product);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		
+		groupPurcse = groupPurcseService.selectByPrimaryKey(groupPurcseId);
+		
+		if(groupPurcse!=null && groupPurcse.getDisable()==false){
+			groupPurcseMembers = groupPurcseMemberService.selectByGroupPurcseId(groupPurcse.getId());
+			groupPurcses =groupPurcseService.selectGroupPurcseByPId(goodsId, false);
+		}
+		
+		productExtention.setGroupPurcse(groupPurcse);
+		packagePrices = packagePriceService.selectByProductId(product
+				.getId());
+		productPropertyValues = this.propertyValueService
+				.selectByProductId(product.getId());
+		productExtention.setPackagePrices(packagePrices);
+		productExtention.setProductPropertyValues(productPropertyValues);
+		productExtention.setGroupPurcseMembers(groupPurcseMembers);
+		productExtention.setGroupPurcses(groupPurcses);
+		productExtention.setProperties(properties);	
+		
+		/*if(redisTemplate!=null){
 			productExtention = (ProductExtention) redisTemplate.opsForValue().get(key);
 			
 			if(productExtention == null){
@@ -166,35 +197,8 @@ public class MemberGroupController extends BaseController {
 			}
 			
 		}else{
-			productExtention = new ProductExtention();
-			
-			product = prductService.selectByPrimaryKey(goodsId);
-			try {
-				BeanUtils.copyProperties(productExtention, product);
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
-			
-			groupPurcse = groupPurcseService.selectByPrimaryKey(groupPurcseId);
-			
-			if(groupPurcse!=null && groupPurcse.getDisable()==false){
-				groupPurcseMembers = groupPurcseMemberService.selectByGroupPurcseId(groupPurcse.getId());
-				groupPurcses =groupPurcseService.selectGroupPurcseByPId(goodsId, false);
-			}
-			
-			productExtention.setGroupPurcse(groupPurcse);
-			packagePrices = packagePriceService.selectByProductId(product
-					.getId());
-			productPropertyValues = this.propertyValueService
-					.selectByProductId(product.getId());
-			productExtention.setPackagePrices(packagePrices);
-			productExtention.setProductPropertyValues(productPropertyValues);
-			productExtention.setGroupPurcseMembers(groupPurcseMembers);
-			productExtention.setGroupPurcses(groupPurcses);
-			productExtention.setProperties(properties);			
-		}
+					
+		}*/
 		
 		jsonString = JSONObject.toJSONString(productExtention);
 		uiModel.addAttribute("rawData", jsonString);
