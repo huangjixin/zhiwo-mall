@@ -38,7 +38,13 @@
 		<div class="swiper-wrapper">
 			<div class="swiper-slide">
 				<div class="row" id="indexProductsRow">
+                	<div class="swiper-container">
+		<div class="swiper-wrapper">
+			<div class="swiper-slide">
+				<div class="row" id="indexProductsRow">
                 	
+				</div>
+			</div>
 				</div>
 			</div>
 			<div class="swiper-slide">Slide 2</div>
