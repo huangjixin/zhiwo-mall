@@ -125,8 +125,8 @@
 					<input id="packagePriceId" name="packagePriceId" type="hidden">
 					<input id="dealPrice" name="dealPrice" type="hidden"> <input
 						id="buyNum" name="buyNum" type="hidden"> <input
-						id="shopId" name="shopId" value="${product.shopId}" type="hidden">
-					<input id="goodsId" name="goodsId" value="${product.id}"
+						id="shopId" name="shopId" value="" type="hidden">
+					<input id="goodsId" name="goodsId" value=""
 						type="hidden"> <input id="proValues" name="proValues"
 						type="hidden"><input id="mode" name="mode"
 						type="hidden">
@@ -150,6 +150,9 @@
 	</div>
  	<script>
 	 	window.rawData= ${rawData};
+		
+		var interval = 1000; 
+		
 		var properties;
 		var propertyValues;
 		var packagePrices;
@@ -165,6 +168,10 @@
 		var ctx = "";
 		var fadeCount = 0;
 		var obj;
+		
+		//开团模式，是独立团还是拼团。
+		var mode = "group";
+		
 		$(function() {
 			ctx = window.location.protocol+"//"+window.location.host;
 			
@@ -240,6 +247,7 @@
 					}
 				}
 			}
+			
 			$("#mediaIcon").attr("src",urlHead+'/images/busy.webp');
 			$("#mediaIcon").attr("data-original",urlHead+'/'+product.icon);
 			$("#nameHeading").html(product.name);
@@ -269,11 +277,13 @@
 				para+='&nbsp;';
                 para+='<img  class="img-circle" width="60px" height="60px;" style="border:1px dashed gray;" /><br>';
 				
-				para+='<span id="countimeSpan">仅剩1个名额，距离结束时间还有</span><b id="timeB" style="color:red;">19:25:33</b><br>';
+				para+='<span id="countimeSpan">仅剩1个名额，距离结束时间还有</span><b id="expiredTimeB" style="color:red;"></b><br>';
 				para+="<br>";
 				para+='<span onClick="showProductDialog()" class="label label-danger" style="font-size: 2rem;text-align:center; width:100%; left:0;right:0;">参团作战</span><br>';
 				//$("#countimeSpan").before(para);
 				$("#groupPurcseMemberIcon").append(para);
+				
+				window.setInterval(function(){showCountDown(groupPurcse.expiredTime,'expiredTimeB');}, interval); 
 			}
 			
 			
@@ -473,6 +483,48 @@
 		function showProductDialog(){
 			$('#prriceModal').modal("show");
 		}
+		
+		//去结算。
+		function checkOut() {
+			if (selectedProperyPackagePrice != "") {
+				var index = selectedProperyPackagePrice.lastIndexOf("_");
+				if (index != -1) {
+					selectedProperyPackagePrice = selectedProperyPackagePrice
+							.substring(0, index);
+				}
+			}
+			
+			var packagePriceId = selectedProperyPackagePrice;
+			$("#packagePriceId").val(packagePriceId);
+			var dealPrice = $('#priceLabel').html();
+			$("#dealPrice").val(dealPrice);
+			var buyNum = $("#numberCount").val();
+			$("#buyNum").val(buyNum);
+			var proValues = JSON.stringify(selectedPValue);
+			$("#proValues").val(proValues);
+			$("#goodsId").val(obj.id);
+			$("#mode").val(mode);
+			if (dealPrice == "") {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		
+		function showCountDown(endDate,divname) 
+		{ 
+			var now = new Date(); 
+			var leftTime=endDate-now.getTime(); 
+			var leftsecond = parseInt(leftTime/1000); 
+			//var day1=parseInt(leftsecond/(24*60*60*6)); 
+			var day1=Math.floor(leftsecond/(60*60*24)); 
+			var hour=Math.floor((leftsecond-day1*24*60*60)/3600); 
+			var minute=Math.floor((leftsecond-day1*24*60*60-hour*3600)/60); 
+			var second=Math.floor(leftsecond-day1*24*60*60-hour*3600-minute*60); 
+			var timeStr = day1+"天"+hour+":"+minute+":"+second+"";
+			$('#'+divname).html(timeStr);
+		} 
+		
 	</script>
 </body>
 </html>

@@ -196,6 +196,9 @@
 	<%@ include file="/WEB-INF/member-include/bottomMenu.jsp"%>
 	<script>
 		var obj = ${rawData};
+		
+		var interval = 1000;//倒计时时间间隔  
+		
 		var goodsList ;
 		var swiperImages ;
 		var packagePrices ;
@@ -215,6 +218,9 @@
 		
 		var ctx = "";
 		var fadeCount = 0;
+		
+		//开团模式，是独立团还是拼团。
+		var mode = "group";
 	
 		$(function() {
 			ctx = window.location.protocol+"//"+window.location.host;
@@ -384,11 +390,13 @@
 				var length = groupPurcses.length;
 				for(var i=0;i<length;i++){
 					var gPurcse= groupPurcses[i];
-					var url = ctx+"/memberGroup"+gPurcse.id+"?goodsId="+gPurcse.productId;
-					var para = '<div class="media" onClick="showProduct(\''+url+'\');"><div class="pull-right" style="padding-top:7px;"><button type="button" class="btn btn-danger">去参团</button></div><div class="media-left"><img class="img-circle" src="'+ctx+'/images/busy.gif" style="width:40px;" data-original="'+gPurcse.memberIcon+'"></div><div class="media-body"><h5 class="media-heading" style="padding-top: 6px;">'+gPurcse.memberName+'</h5><span style="color: gray; font-size: 1.4rem;">还差1人，剩余2小时</span></div></div>';
+					var url = ctx+"/memberGroup/"+gPurcse.id;
+					var para = '<div class="media" onClick="showProduct(\''+url+'\');"><div class="pull-right" style="padding-top:7px;"><button type="button" class="btn btn-danger">去参团</button></div><div class="media-left"><img class="img-circle" src="'+ctx+'/images/busy.gif" style="width:40px;" data-original="'+gPurcse.memberIcon+'"></div><div class="media-body"><h5 class="media-heading" style="padding-top: 6px;">'+gPurcse.memberName+'</h5><span style="color: gray; font-size: 1.4rem;">还差1人，剩余<span id="'+gPurcse.id+'expiredTime" style="color:red;"></span></span></div></div>';
 					
 					$('#groupPurcseHeader').after(para);
 				}
+				
+				window.setInterval(function(){setCountDown(groupPurcses);}, interval); 
 			}
 			
 			
@@ -584,6 +592,7 @@
 			window.location.href=url;
 		}
 		
+		//弹出属性框
 		function showProductDialog(){
 			$('#prriceModal').modal("show");
 		}
@@ -599,6 +608,7 @@
 							.substring(0, index);
 				}
 			}
+			
 			var packagePriceId = selectedProperyPackagePrice;
 			$("#packagePriceId").val(packagePriceId);
 			var dealPrice = $('#priceLabel').html();
@@ -620,12 +630,35 @@
 			$("#"+detination).fadeOut(2000).fadeIn(1000);
 		}
 		
+		//跳转到商铺
 		function gotoShop(){
 			if(obj){
 			    var url = ctx+'/memberShop/'+obj.shopId+'.htm?timestamp='+new Date().getTime();
 					showProduct(url);
 			}	
 		}
+		
+		function setCountDown(gPurcses){
+			for(var i=0;i<gPurcses.length;i++){
+				var gPurcse = gPurcses[i];
+				showCountDown(gPurcse.expiredTime,gPurcse.id+'expiredTime');
+			}
+		}
+		
+		//倒计时
+		function showCountDown(endDate,divname) 
+		{ 
+			var now = new Date(); 
+			var leftTime=endDate-now.getTime(); 
+			var leftsecond = parseInt(leftTime/1000); 
+			//var day1=parseInt(leftsecond/(24*60*60*6)); 
+			var day1=Math.floor(leftsecond/(60*60*24)); 
+			var hour=Math.floor((leftsecond-day1*24*60*60)/3600); 
+			var minute=Math.floor((leftsecond-day1*24*60*60-hour*3600)/60); 
+			var second=Math.floor(leftsecond-day1*24*60*60-hour*3600-minute*60); 
+			var timeStr = day1+"天"+hour+":"+minute+":"+second+"";
+			$('#'+divname).html(timeStr);
+		} 
 	</script>
 </body>
 </html>
