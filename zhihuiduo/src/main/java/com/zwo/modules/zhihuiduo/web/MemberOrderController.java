@@ -40,6 +40,8 @@ import weixin.popular.util.SignatureUtil;
 import weixin.popular.util.StreamUtils;
 import weixin.popular.util.XMLConverUtil;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.zwo.modules.mall.domain.OrderStatus;
 import com.zwo.modules.mall.domain.OrderTrade;
 import com.zwo.modules.mall.domain.PrProduct;
@@ -148,7 +150,16 @@ public class MemberOrderController extends BaseController<TbUser> {
 		orderTrade.setStatus(OrderStatus.TO_BE_PAYED);
 		orderTrade.setDisable(false);
 		orderTrade.setBuyNum(buyNum);
-
+		String description = "";
+		
+		JSONArray jsonArray = JSONArray.parseArray(proValues);
+		for (Object object : jsonArray) {
+			JSONObject obj = (JSONObject) object;
+			String name = obj.getString("name");
+			description+=name+" ";
+		}
+		
+		orderTrade.setDescription(description);
 		// 开拼团
 		if ("group".equals(mode)) {
 			orderTrade.setIsFormSccuess(false);
