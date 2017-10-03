@@ -187,6 +187,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+  	<![CDATA[
     select 
     <include refid="Base_Column_List" />
     ,
@@ -206,8 +207,9 @@
 	    group_purcse
 	WHERE
 	    PRODUCT_ID = #{id,jdbcType=VARCHAR}
-	    AND DISABLE = FALSE and expire_time<(select now())) as b on id=b.PRODUCT_ID
+	    AND DISABLE = FALSE and expired_time<(select now() as now)) as b on id=b.PRODUCT_ID
     where ID = #{id,jdbcType=VARCHAR}
+    ]]>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     <!--
