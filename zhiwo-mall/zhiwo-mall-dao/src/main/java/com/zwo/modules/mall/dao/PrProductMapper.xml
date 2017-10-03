@@ -206,7 +206,7 @@
 	    group_purcse
 	WHERE
 	    PRODUCT_ID = #{id,jdbcType=VARCHAR}
-	    AND DISABLE = FALSE) as b on id=b.PRODUCT_ID
+	    AND DISABLE = FALSE and expire_time<(select now())) as b on id=b.PRODUCT_ID
     where ID = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
