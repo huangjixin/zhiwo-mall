@@ -118,7 +118,7 @@ public class MemberOrderController extends BaseController<TbUser> {
 	}
 
 	/**
-	 * 跳转到下单页面，mode是group的话，那表示该团是拼团。
+	 * 跳转到下单页面，mode是group的话，那表示该团是拼团,如果为indenpent的话即为独立开团，可以发货。
 	 * 
 	 * @param uiModel
 	 * @param httpServletRequest
@@ -126,10 +126,12 @@ public class MemberOrderController extends BaseController<TbUser> {
 	 * @return
 	 */
 	@RequestMapping(value = "checkOut")
-	@RequiresAuthentication
+//	@RequiresAuthentication
 	public String checkOut(@RequestParam String goodsId,
-			@RequestParam Integer buyNum, @RequestParam String packagePriceId,
-			@RequestParam String proValues, @RequestParam String dealPrice,
+			@RequestParam Integer buyNum, 
+			@RequestParam String packagePriceId,
+			@RequestParam String proValues, 
+			@RequestParam String dealPrice,
 			@RequestParam(defaultValue = "group") String mode,
 			@RequestParam(required = false) String groupPurcseId,
 			RedirectAttributes redirectAttributes, Model uiModel,
@@ -137,7 +139,7 @@ public class MemberOrderController extends BaseController<TbUser> {
 			HttpServletResponse httpServletResponse) {
 
 		PrProduct product = prductService.selectByPrimaryKey(goodsId);
-		Shop shop = shopService.selectByPrimaryKey(product.getShopId());
+		Shop shop = shopService.selectByPrimKey(product.getShopId());
 		Member member = null;
 
 		OrderTrade orderTrade = new OrderTrade();

@@ -77,8 +77,10 @@ public class MemberLoginController extends BaseController {
 			@RequestParam(required = false, defaultValue = "") String fromURL) {
 		String localAddr = httpServletRequest.getLocalAddr();
 		String remoteAddr = httpServletRequest.getRemoteAddr();
-		String URL = httpServletRequest.getHeader("Referer");
-		uiModel.addAttribute("fromURL", URL);
+		if("".equals(fromURL)){
+			String URL = httpServletRequest.getHeader("Referer");
+			uiModel.addAttribute("fromURL", URL);
+		}
 
 		boolean isWechatBrowser = false;
 		String ua = ((HttpServletRequest) httpServletRequest).getHeader(
@@ -245,6 +247,7 @@ public class MemberLoginController extends BaseController {
 			if(null==member.getMobilPhone()){
 				member.setMobilPhone(mobilPhone);
 			}
+			member.setPassword(null);
 			memberService.updateByPrimaryKeySelective(member);
 		}
 
