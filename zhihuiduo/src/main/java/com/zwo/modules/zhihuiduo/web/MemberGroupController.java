@@ -116,9 +116,10 @@ public class MemberGroupController extends BaseController {
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = { "memberGroup/{groupPurcseId}" }, method = RequestMethod.GET)
-	public String memberGroup(@RequestParam String goodsId,@PathVariable String groupPurcseId, Model uiModel,
+	public String memberGroup(@PathVariable String groupPurcseId, Model uiModel,
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
+		String goodsId = null;
 		String jsonString=null;
 		ProductExtention productExtention = null;
 		List<GroupPurcseMember> groupPurcseMembers = null;
@@ -127,6 +128,11 @@ public class MemberGroupController extends BaseController {
 		List<PrProductPackagePrice> packagePrices = null;
 		List<PrProductPropertyValue> productPropertyValues = null;
 		List<GroupPurcse> groupPurcses = null;
+		
+		groupPurcse = groupPurcseService.selectByPrimaryKey(groupPurcseId);
+		if(groupPurcse!=null){
+			goodsId = groupPurcse.getProductId();
+		}
 		// 商品属性。
 		List<PrProductProperty> properties = productPropertyService.listAll();
 		
@@ -134,32 +140,32 @@ public class MemberGroupController extends BaseController {
 		
 		productExtention = new ProductExtention();
 		
-		product = prductService.selectByPrimaryKey(goodsId);
-		try {
-			BeanUtils.copyProperties(productExtention, product);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+		if(goodsId!=null){
+			product = prductService.selectByPrimaryKey(goodsId);
+			try {
+				BeanUtils.copyProperties(productExtention, product);
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			
+			if(groupPurcse!=null && groupPurcse.getDisable()==false){
+				groupPurcseMembers = groupPurcseMemberService.selectByGroupPurcseId(groupPurcse.getId());
+				groupPurcses =groupPurcseService.selectGroupPurcseByPId(goodsId, false);
+			}
+			
+			productExtention.setGroupPurcse(groupPurcse);
+			packagePrices = packagePriceService.selectByProductId(product
+					.getId());
+			productPropertyValues = this.propertyValueService
+					.selectByProductId(product.getId());
+			productExtention.setPackagePrices(packagePrices);
+			productExtention.setProductPropertyValues(productPropertyValues);
+			productExtention.setGroupPurcseMembers(groupPurcseMembers);
+			productExtention.setGroupPurcses(groupPurcses);
+			productExtention.setProperties(properties);	
 		}
-		
-		groupPurcse = groupPurcseService.selectByPrimaryKey(groupPurcseId);
-		
-		if(groupPurcse!=null && groupPurcse.getDisable()==false){
-			groupPurcseMembers = groupPurcseMemberService.selectByGroupPurcseId(groupPurcse.getId());
-			groupPurcses =groupPurcseService.selectGroupPurcseByPId(goodsId, false);
-		}
-		
-		productExtention.setGroupPurcse(groupPurcse);
-		packagePrices = packagePriceService.selectByProductId(product
-				.getId());
-		productPropertyValues = this.propertyValueService
-				.selectByProductId(product.getId());
-		productExtention.setPackagePrices(packagePrices);
-		productExtention.setProductPropertyValues(productPropertyValues);
-		productExtention.setGroupPurcseMembers(groupPurcseMembers);
-		productExtention.setGroupPurcses(groupPurcses);
-		productExtention.setProperties(properties);	
 		
 		/*if(redisTemplate!=null){
 			productExtention = (ProductExtention) redisTemplate.opsForValue().get(key);
