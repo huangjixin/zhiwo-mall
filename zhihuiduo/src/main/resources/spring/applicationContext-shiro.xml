@@ -123,10 +123,10 @@
 		</property>
 		<property name="filterChainDefinitions">
 			<value>
-				/memberGuess/*   = user
-				/memberInfo/*    = user
-				/memberOrder/*   = user
-				/memberOrder/guessCheckOut = user
+				/memberGuess/*   = authc
+				/memberInfo/*    = authc
+				/memberOrder/*   = authc
+				/memberOrder/guessCheckOut = authc
 				/memberLogin/* = anon
 				/checkLogin    = anon
 				/memberLogin/logout = logout
