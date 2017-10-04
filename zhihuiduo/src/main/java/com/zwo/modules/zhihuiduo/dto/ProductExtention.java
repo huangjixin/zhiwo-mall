@@ -2,6 +2,7 @@ package com.zwo.modules.zhihuiduo.dto;
 
 import java.util.List;
 
+import com.zwo.modules.mall.domain.OrderTrade;
 import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductPackagePrice;
@@ -10,6 +11,8 @@ import com.zwo.modules.mall.domain.PrProductPropertyValue;
 import com.zwo.modules.mall.domain.PrProductWithBLOBs;
 import com.zwo.modules.member.domain.GroupPurcse;
 import com.zwo.modules.member.domain.GroupPurcseMember;
+import com.zwo.modules.member.domain.Member;
+import com.zwo.modules.member.domain.MemberAddress;
 import com.zwo.modules.shop.domain.Shop;
 
 public class ProductExtention extends PrProductWithBLOBs {
@@ -37,6 +40,18 @@ public class ProductExtention extends PrProductWithBLOBs {
 	private List<PrImage> swpierImages;
 
 	private Shop shop;
+	
+	//用于支付
+	private MemberAddress defautAddress;
+	
+	//用于地址列表编辑或者支付的地址列表
+	private List<MemberAddress> memberAddresses;
+
+	//用于支付的订单。
+	private OrderTrade order;
+	
+	private Member member;
+	
 	
 	public GroupPurcse getGroupPurcse() {
 		return groupPurcse;
@@ -133,5 +148,37 @@ public class ProductExtention extends PrProductWithBLOBs {
 
 	public void setShop(Shop shop) {
 		this.shop = shop;
+	}
+
+	public MemberAddress getDefautAddress() {
+		return defautAddress;
+	}
+
+	public void setDefautAddress(MemberAddress defautAddress) {
+		this.defautAddress = defautAddress;
+	}
+
+	public List<MemberAddress> getMemberAddresses() {
+		return memberAddresses;
+	}
+
+	public void setMemberAddresses(List<MemberAddress> memberAddresses) {
+		this.memberAddresses = memberAddresses;
+	}
+
+	public OrderTrade getOrder() {
+		return order;
+	}
+
+	public void setOrder(OrderTrade order) {
+		this.order = order;
+	}
+
+	public Member getMember() {
+		return member;
+	}
+
+	public void setMember(Member member) {
+		this.member = member;
 	}
 }
