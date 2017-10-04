@@ -61,8 +61,8 @@ public class MemberAddressController extends BaseController {
 		List<MemberAddress> list = null;
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
-			Member member = (Member) subject.getSession()
-					.getAttribute("member");
+			 String username = (String) subject.getPrincipal();
+			 Member member = memberService.selectMember(username);
 			if (member != null) {
 				list = addressService.listAllByMemberId(member.getId());
 			}
@@ -80,8 +80,8 @@ public class MemberAddressController extends BaseController {
 		List<MemberAddress> list = null;
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
-			Member member = (Member) subject.getSession()
-					.getAttribute("member");
+			 String username = (String) subject.getPrincipal();
+			 Member member = memberService.selectMember(username);
 			if (member != null) {
 				list = addressService.listAllByMemberId(member.getId());
 			}
@@ -99,8 +99,8 @@ public class MemberAddressController extends BaseController {
 			HttpServletResponse httpServletResponse) {
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
-			Member member = (Member) subject.getSession()
-					.getAttribute("member");
+			 String username = (String) subject.getPrincipal();
+			 Member member = memberService.selectMember(username);
 			if (member != null) {
 				/*if (address.getMemberId() != null) {
 					Member memb = memberService.selectByPrimaryKey(address
@@ -132,8 +132,8 @@ public class MemberAddressController extends BaseController {
 			HttpServletResponse httpServletResponse) {
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
-			Member member = (Member) subject.getSession()
-					.getAttribute("member");
+			 String username = (String) subject.getPrincipal();
+			 Member member = memberService.selectMember(username);
 			if (member != null) {
 				/*if (address.getMemberId() != null) {
 					Member memb = memberService.selectByPrimaryKey(address
@@ -162,8 +162,8 @@ public class MemberAddressController extends BaseController {
 
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
-			Member member = (Member) subject.getSession()
-					.getAttribute("member");
+			 String username = (String) subject.getPrincipal();
+			 Member member = memberService.selectMember(username);
 			/*if (member != null) {
 				if (address.getMemberId() != null) {
 					Member memb = memberService.selectByPrimaryKey(address
@@ -193,8 +193,8 @@ public class MemberAddressController extends BaseController {
 		Member member = null;
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
-			member = (Member) subject.getSession()
-					.getAttribute("member");
+			 String username = (String) subject.getPrincipal();
+			 member = memberService.selectMember(username);
 			/*if (member != null) {
 				if (address.getMemberId() != null) {
 					Member memb = memberService.selectByPrimaryKey(address

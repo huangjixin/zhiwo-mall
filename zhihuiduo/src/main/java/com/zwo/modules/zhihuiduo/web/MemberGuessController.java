@@ -104,8 +104,8 @@ public class MemberGuessController extends BaseController {
 		JSONObject jsonObject = new JSONObject();
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
-			Member member = (Member) subject.getSession()
-					.getAttribute("member");
+			 String username = (String) subject.getPrincipal();
+			 Member member = memberService.selectMember(username);
 
 			if (member != null) {
 				MemberPlayAccount memberPlayAccount = memberPlayAccountService

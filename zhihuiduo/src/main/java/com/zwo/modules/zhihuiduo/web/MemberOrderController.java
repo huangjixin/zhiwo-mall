@@ -1,6 +1,7 @@
 package com.zwo.modules.zhihuiduo.web;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.subject.Subject;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import weixin.popular.api.PayMchAPI;
@@ -58,6 +61,7 @@ import com.zwo.modules.member.service.IMemberService;
 import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.service.IShopService;
 import com.zwo.modules.system.domain.TbUser;
+import com.zwo.modules.zhihuiduo.dto.ProductExtention;
 import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
@@ -120,7 +124,7 @@ public class MemberOrderController extends BaseController<TbUser> {
 	}
 
 	/**
-	 * 跳转到下单页面，mode是group的话，那表示该团是拼团,如果为indenpent的话即为独立开团，可以发货。
+	 * 跳转到下单页面，dealPrice不包含运费，真正结算的时候应该包含。mode是group的话，那表示该团是拼团,如果为indenpent的话即为独立开团，可以发货。
 	 * 
 	 * @param uiModel
 	 * @param httpServletRequest
@@ -139,9 +143,23 @@ public class MemberOrderController extends BaseController<TbUser> {
 			RedirectAttributes redirectAttributes, Model uiModel,
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-
-		PrProduct product = prductService.selectByPrimaryKey(goodsId);
-		Shop shop = shopService.selectByPrimKey(product.getShopId());
+		ProductExtention prExtention = new ProductExtention();
+		String jsonString = null;
+		Shop shop = null;
+		PrProduct product = null;
+		
+		try {
+			product = prductService.selectByPrimaryKey(goodsId);
+			product.setGourpSalePrice(Double.valueOf(dealPrice));
+			BeanUtils.copyProperties(prExtention, product);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		
+		shop = shopService.selectByPrimKey(product.getShopId());
+		
 		Member member = null;
 
 		OrderTrade orderTrade = new OrderTrade();
@@ -150,6 +168,7 @@ public class MemberOrderController extends BaseController<TbUser> {
 		orderTrade.setStatus(OrderStatus.TO_BE_PAYED);
 		orderTrade.setDisable(false);
 		orderTrade.setBuyNum(buyNum);
+		
 		String description = "";
 		
 		JSONArray jsonArray = JSONArray.parseArray(proValues);
@@ -167,24 +186,20 @@ public class MemberOrderController extends BaseController<TbUser> {
 			orderTrade.setIsFormSccuess(true);
 		}
 
-		if (shop != null) {
-			uiModel.addAttribute("shop", shop);
-
-		}
-
 		if (product != null) {
 			orderTrade.setShopId(product.getShopId());
-			uiModel.addAttribute("product", product);
 			orderTrade.setProductId(goodsId);
 		}
 
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
-			member = (Member) subject.getSession().getAttribute("member");
+			String username = (String) subject.getPrincipal();
+			member = memberService.selectMember(username);
+			
 			if (member != null) {
 				orderTrade.setMemberId(member.getId());
-				MemberAddress address = addressService
-						.selectDefaultAddressByMemberId(member.getId());
+				MemberAddress address = addressService.selectDefaultAddressByMemberId(member.getId());
+				prExtention.setDefautAddress(address);
 				uiModel.addAttribute("member", member);
 				uiModel.addAttribute("address", address);
 			}
@@ -200,17 +215,26 @@ public class MemberOrderController extends BaseController<TbUser> {
 		 * ChannelContance.ORDER_CREATE_QUEUE_CHANNEL, jsonString); } else {
 		 * asycInsertOrderTrade(orderTrade); }
 		 */
-
 		asycInsertOrderTrade(orderTrade);
-		uiModel.addAttribute("order", orderTrade);
-
+		
 		// 获取用户的全部地址。
 		List<MemberAddress> list = null;
 		if (member != null) {
 			list = addressService.listAllByMemberId(member.getId());
 		}
+		
+		prExtention.setShop(shop);
+		prExtention.setOrder(orderTrade);
+		prExtention.setMemberAddresses(list);
+		prExtention.setShop(shop);
+		
+		uiModel.addAttribute("shop", shop);
+		uiModel.addAttribute("order", orderTrade);
+		uiModel.addAttribute("product", product);
 		uiModel.addAttribute("addresses", list);
-
+		
+		jsonString = JSONObject.toJSONString(prExtention, true);
+		uiModel.addAttribute("rawData", jsonString);
 		return basePath + "checkOut";
 		// return "redirect:/memberOrder/checkOut";
 	}
@@ -241,6 +265,31 @@ public class MemberOrderController extends BaseController<TbUser> {
 				groupPurcseService.insertSelective(groupPurcse);
 			}
 		});
+	}
+	
+	//payway可选参数为：wechat，alipay，sendWithoutPay分别是微信支付，支付宝，货到付款。
+	@RequestMapping(value = "preCheckPay")
+	@ResponseBody
+	public JSONObject preCheckPay(@RequestParam String payway,
+			@RequestParam String goodsId,
+			@RequestParam Integer buyNum, 
+			@RequestParam String packagePriceId,
+			@RequestParam String proValues, 
+			@RequestParam String dealPrice,
+			@RequestParam(defaultValue = "group") String mode,
+			@RequestParam(required = false) String groupPurcseId,
+			Model uiModel,
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		
+		if("sendWithoutPay".equals(payway)){
+			
+		}else if("wechat".equals(payway)){
+			
+		}else if("alipay".equals(payway)){
+			
+		}
+		return null;
 	}
 
 	/**

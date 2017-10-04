@@ -80,8 +80,8 @@ public class MemberInfoController extends BaseController {
 			return "/memberLogin";
 		}
 		if (subject != null) {
-			Member member = (Member) subject.getSession()
-					.getAttribute("member");
+			 String username = (String) subject.getPrincipal();
+			 Member member = memberService.selectMember(username);
 
 			if (member != null) {
 				uiModel.addAttribute("member", member);
@@ -107,8 +107,8 @@ public class MemberInfoController extends BaseController {
 		// 会员的智慧豆账户。
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
-			Member member = (Member) subject.getSession()
-					.getAttribute("member");
+			 String username = (String) subject.getPrincipal();
+			 Member member = memberService.selectMember(username);
 			if (member != null) {
 				memberAccount = memberService.selectMemberAccountByMId(member
 						.getId());
@@ -136,8 +136,8 @@ public class MemberInfoController extends BaseController {
 		// 会员的智慧豆账户。
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
-			Member member = (Member) subject.getSession()
-					.getAttribute("member");
+			 String username = (String) subject.getPrincipal();
+			 Member member = memberService.selectMember(username);
 			if (member != null) {
 //				memberPlayAccount = memberService
 //						.selectMemberPlayAccountByMemberId(member.getId());
@@ -177,8 +177,8 @@ public class MemberInfoController extends BaseController {
 		Subject subject = SecurityUtils.getSubject();
 		Member member = null;
 		if (subject != null) {
-			member = (Member) subject.getSession()
-					.getAttribute("member");
+			 String username = (String) subject.getPrincipal();
+			 member = memberService.selectMember(username);
 		}
 		
 		MemberPlayHisAccountCriteria hisAccountCriteria = new MemberPlayHisAccountCriteria();

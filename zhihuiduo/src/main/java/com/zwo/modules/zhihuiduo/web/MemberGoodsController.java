@@ -128,7 +128,47 @@ public class MemberGoodsController extends BaseController<PrProduct> {
 		List<PrProduct> goodsList = null;
 		List<PrImage> swiperImages = null;
 
-		String key = goodsId + KEY_GOODSDETAIL_INFO;
+		productExtention = new ProductExtention();
+
+		product = prductService.selectByPrimKey(goodsId);
+		if (product != null) {
+			try {
+				BeanUtils.copyProperties(productExtention, product);
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+
+			groupPurcses = groupPurcseService.selectGroupPurcseByPId(
+					goodsId, false);
+			properties = productPropertyService.listAll();
+			packagePrices = packagePriceService.selectByProductId(product
+					.getId());
+			productPropertyValues = this.propertyValueService
+					.selectByProductId(product.getId());
+
+			if (product.getShopId() != null) {
+				shop = shopService.selectByPrimKey(product.getShopId());
+				goodsList = prductService.selectPrProductsByShopId(shop
+						.getId());
+				productExtention.setShopIcon(shop.getIcon());
+				productExtention.setShopName(shop.getName());
+			}
+			// 商品轮播图。
+			swiperImages = imageService.selectByProductId(product.getId(),
+					PrImageType.SWIPER);
+
+			productExtention.setGoodsList(goodsList);
+			productExtention.setSwpierImages(swiperImages);
+			productExtention.setPackagePrices(packagePrices);
+			productExtention.setProductPropertyValues(productPropertyValues);
+			productExtention.setGroupPurcseMembers(groupPurcseMembers);
+			productExtention.setGroupPurcses(groupPurcses);
+			productExtention.setProperties(properties);
+		}
+		
+		/*String key = goodsId + KEY_GOODSDETAIL_INFO;
 
 		if (redisTemplate != null) {
 			productExtention = (ProductExtention) redisTemplate.opsForValue()
@@ -181,52 +221,10 @@ public class MemberGoodsController extends BaseController<PrProduct> {
 
 			}
 		} else {
-			productExtention = new ProductExtention();
+			
 
-			product = prductService.selectByPrimKey(goodsId);
-			if (product != null) {
-				try {
-					BeanUtils.copyProperties(productExtention, product);
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
-				}
-
-				groupPurcses = groupPurcseService.selectGroupPurcseByPId(
-						goodsId, false);
-				properties = productPropertyService.listAll();
-				packagePrices = packagePriceService.selectByProductId(product
-						.getId());
-				productPropertyValues = this.propertyValueService
-						.selectByProductId(product.getId());
-
-				if (product.getShopId() != null) {
-					shop = shopService.selectByPrimKey(product.getShopId());
-					goodsList = prductService.selectPrProductsByShopId(shop
-							.getId());
-					productExtention.setShopIcon(shop.getIcon());
-					productExtention.setShopName(shop.getName());
-				}
-				// 商品轮播图。
-				swiperImages = imageService.selectByProductId(product.getId(),
-						PrImageType.SWIPER);
-
-				productExtention.setGoodsList(goodsList);
-				productExtention.setSwpierImages(swiperImages);
-				productExtention.setPackagePrices(packagePrices);
-				productExtention
-						.setProductPropertyValues(productPropertyValues);
-				productExtention.setGroupPurcseMembers(groupPurcseMembers);
-				productExtention.setGroupPurcses(groupPurcses);
-				productExtention.setProperties(properties);
-			}
-
-		}
-		// String content = product.getContent();
-		// content = HtmlUtils.htmlEscape(content);
-		// productExtention.setContent(content);
-
+		}*/
+		
 		jsonString = JSONObject.toJSONString(productExtention, true);
 		uiModel.addAttribute("rawData", jsonString);
 
