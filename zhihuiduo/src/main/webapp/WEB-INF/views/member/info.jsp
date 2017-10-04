@@ -55,6 +55,7 @@
 		<a href="${ctx}/memberInfo/memberAddress" class="list-group-item">收货地址<span
 			class="badge"><i class="fa fa-angle-right" aria-hidden="true"></i></i></span></a>
 		</c:if>
+        <li class="list-group-item" onClick="logout();">退出<span class="badge"><i class="fa fa-angle-right" aria-hidden="true"></i></i></span></li>
 	</ul>
 	<div style="height: 1px;">&nbsp;</div>
 
@@ -65,7 +66,7 @@
 	<%--<%@ include file="/WEB-INF/member-include/bottomIndex.jsp"%>--%>
      <script>
 	 	function logout(){
-			window.loacation.href='${ctx}/memberLogin/logout';
+			self.location='${ctx}/memberLogin/logout';
 		}
 		
 		$(function() {

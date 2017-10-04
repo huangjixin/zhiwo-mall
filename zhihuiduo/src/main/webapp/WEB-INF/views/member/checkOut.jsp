@@ -246,12 +246,13 @@ function setBgColor() {
 var $option = $("select option:odd"); 
 $option.css({ "background-color": "#DEDEDE" }); 
 } 
+
 </script>
 </head>
 <body>
 	<div id="checkDiv">
 		<div id="defaultAddress"  onClick="setCheckDivToNone(false);return false;">
-			<c:if test="${address==null}">
+			<!--<c:if test="${address==null}">
 				<div
 					style="height: 80px; line-height: 80px; background-color: #ffffff; padding-left: 10px; padding-right: 10px;">
 					<div class="pull-left">
@@ -272,38 +273,54 @@ $option.css({ "background-color": "#DEDEDE" });
 					<strong>${address.name}</strong>,<span>${address.mobilPhone}</span><br>
 					<span>${address.province}&nbsp;&nbsp;${address.city}&nbsp;&nbsp;${address.street}</span>
 				</div>
-			</c:if>
+			</c:if>-->
 		</div>
 
 		<div
 			style="background-color: #ffffff; padding-left: 10px; padding-right: 10px; padding-top: 3px; padding-bottom: 3px; margin-top: 4px;">
-			<span><c:if test="${shop==null}">${product.enName}</c:if></span>
+			<span id="shopNameSpan"><!--<c:if test="${shop==null}">${product.enName}</c:if>--></span>
 		</div>
 		<div
 			style="background-color: #ffffff; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; margin-top: 4px;">
 			<div class="media">
 				<div class="media-left">
-					<img class="media-object" src="${ctx}/images/busy.gif"
+					<img id="pIcon" class="media-object" src="${ctx}/images/busy.webp"
 						data-original="${ctx}/${product.icon}" width="120px" alt="媒体对象">
 				</div>
 				<div class="media-body">
-					<h5 class="media-heading">${product.name}</h5>
-
+					<h5 class="media-heading" id="pName"></h5>
 				</div>
 			</div>
 		</div>
-
+        <div id="paywayDiv" class="list-group">
+          
+        </div>
+        <form id="payForm" role="form">
+        	<input id="orderId" name="orderId" type="hidden"/>
+            <input id="goodsId" name="goodsId" type="hidden"/>
+            <input id="buyNum" name="buyNum" type="hidden"/>
+            <input id="dealPrice" name="dealPrice" type="hidden"/>
+            <input id="mode" name="mode" type="hidden"/>
+            <input id="groupPurcseId" name="groupPurcseId" type="hidden"/>
+            <input id="proValues" name="proValues" type="hidden"/>
+            <input id="packagePriceId" name="packagePriceId" type="hidden"/>
+        </form>
 		<div
 			style="height: 40px; background-color: #ffffff; border-top: 0px solid red; position: absolute; left: 0; right: 0; bottom: 0;">
 			<div
 				style="float: right; background-color: red; color: #ffffff; width: 40%; height: 40px; text-align: center; line-height: 40px;">
-				<span>立即支付</span>
+				<span id="confirmBtn" onClick="checkPay();">确定</span>
 			</div>
 			<div
 				style="float: right; background-color: #ffffff; color: #151516; width: 60%; height: 40px; text-align: right; line-height: 40px; padding-right: 30px;">
+                <span>运费：</span>&nbsp;&nbsp;<span
+					style="color: red; font-size: 2rem;"><i class="fa fa-jpy"></i>&nbsp;<label id="transportFeeLabel"></label></span>
+                    &nbsp;
+                <span>货款：</span>&nbsp;&nbsp;<span
+					style="color: red; font-size: 2rem;"><i class="fa fa-jpy"></i>&nbsp;<label id="dealPriceLabel"></label></span>
+                    &nbsp;
 				<span>实际付款：</span>&nbsp;&nbsp;<span
-					style="color: red; font-size: 2rem;"><i class="fa fa-jpy"></i>&nbsp;<label
-					style="">88</label></span>
+					style="color: red; font-size: 2rem;"><i class="fa fa-jpy"></i>&nbsp;<label id="TotalPriceLabel"></label></span>
 			</div>
 		</div>
 	</div>
@@ -321,7 +338,7 @@ $option.css({ "background-color": "#DEDEDE" });
 
 		<div id="addressDiv">
 			<!--地址循环开始-->
-			<c:forEach var="addr" items="${addresses}">
+			<!--<c:forEach var="addr" items="${addresses}">
 				<div class="thumbnail" id="${addr.id}_thumbnail"
 					onClick="searialForm('${addr.id}');return false;">
 					<div class="caption">
@@ -358,7 +375,7 @@ $option.css({ "background-color": "#DEDEDE" });
 						<div class="clearfix"></div>
 					</div>
 				</div>
-			</c:forEach>
+			</c:forEach>-->
 
 			<!--地址循环结束-->
 		</div>
@@ -418,10 +435,108 @@ $option.css({ "background-color": "#DEDEDE" });
 		</div>
 	</div>
 	<script>
+		window.rawData = ${rawData};
+		
+		var ctx = "";
+		var obj;
+		
+		var payway = "wechat";
+		
 		$(function() {
+			ctx = window.location.protocol+"//"+window.location.host;
+			
+			if(window.rawData){
+				obj = window.rawData;
+				setDefaultAddr();
+				setProduct();
+				setAddresses();
+				setPayway();
+			}
+			
+			
 			$("img").lazyload({effect: "fadeIn"});
 		});
+
+		function setDefaultAddr(){
+			if(obj){
+				var para = '';
+				if(obj.defautAddress){
+					var address = obj.defautAddress;
+					para +='<div style="height: 80px; background-color: #ffffff; padding-left: 10px; padding-right: 10px; padding-top: 10px; border-bottom: 1px solid red;"><strong>'+address.name+'</strong>,<span>'+address.mobilPhone+'</span><br><span>'+address.province+'&nbsp;&nbsp;'+address.city+'&nbsp;&nbsp;'+address.street+'</span></div>';
+				}else{
+					para +='<div style="height: 80px; line-height: 80px; background-color: #ffffff; padding-left: 10px; padding-right: 10px;"><div class="pull-left"><span><i class="fa fa-plus-square fa-lg" aria-hidden="true" style="color: red;"></i></span> <span>&nbsp;&nbsp;</span> <span>手动添加新地址</span></div><div class="pull-right"><span>&nbsp;&nbsp;</span> <span><i class="fa fa-arrow-circle-right lg" aria-hidden="true"></i></span></div><div class="clearfix"></div></div>';
+				}
+				
+				$('#defaultAddress').append(para);
+			}
+		}
+					
+		function setProduct(){
+			if(obj){
+				var para = '';
+				if(obj.shop){
+					$('#shopNameSpan').html(obj.shop.name);
+				}
+				if(obj.icon){
+					$('#pIcon').attr("data-original",ctx+'/'+obj.icon);
+				}
+				if(obj.name){
+					$('#pName').html(obj.name);
+				}
+				
+				var transportFee=0;
+				if(obj.transportFee){
+					transportFee=obj.transportFee;
+				}
+				$('#transportFeeLabel').html(transportFee);
+				if(obj.gourpSalePrice){
+					$('#dealPriceLabel').html(obj.gourpSalePrice);
+					$('#TotalPriceLabel').html(transportFee + obj.gourpSalePrice);
+				}
+				
+			}
+		}
 		
+		//设置地址列表
+		function setAddresses(){
+			if(obj){
+				if(obj.memberAddresses){
+					var addres = obj.memberAddresses;
+					var length = addres.length;
+					for(var i=0;i<length;i++){
+						var addr = addres[i];
+						var isDefult = ''
+						if(addr.isDefault=='1'){
+							isDefult ='<span class="label label-danger" id="'+addr.id+'_defaultLabel">已为默认</span>'
+						}
+						var para = '<div class="thumbnail" id="'+addr.id+'_thumbnail" onClick="searialForm(\''+addr.id+'\');return false;"><div class="caption"><input id="'+addr.id+'" type="hidden" value="'+addr.id+'" /><p><span id="'+addr.id+'_name">'+addr.name+'</span>,<span id="'+addr.id+'_mobilPhone">'+addr.mobilPhone+'</span></p><p><span id="'+addr.id+'_province">'+addr.province+'</span>&nbsp;&nbsp;<span id="'+addr.id+'_city">'+addr.city+'</span>&nbsp;&nbsp;<span id="'+addr.id+'_street">'+addr.street+'</span></p><hr class="hr1" /><div class="pull-left"><div class="checkbox">'+isDefult+'</div></div><div class="pull-right" style="font-weight: normal;"><span class="label label-info" style="padding-top: 5px;" onClick="useAddress(\''+addr.id+'\')"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;使用</span> &nbsp;&nbsp; <span class="label label-danger" style="padding-top: 5px;" onClick="deleteMemberAddress(\''+addr.id+'\')"> <i class="fa fa-trash-o" aria-hidden="true"></i>&nbsp;&nbsp;删除</span></div><div class="clearfix"></div></div></div>';
+						$('#addressDiv').append(para);
+					}
+				}
+			}
+		}
+		
+		//设置支付方式
+		function setPayway(){
+			if(obj){
+				var para = '';
+				
+				para += '<a class="list-group-item" href="#" onClick="changePayway(\'wechat\');return false;"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp; 微信支付(推荐)</a>';
+				para +='<a class="list-group-item" href="#" onClick="changePayway(\'alipay\');return false;"><i class="fa fa-book fa-fw" aria-hidden="true"></i>&nbsp; 支付宝</a>';
+				if(obj.isSentUnpay=='1'){
+					 para +='<a class="list-group-item" href="#" onClick="changePayway(\'sendWithoutPay\');return false;"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i>&nbsp; 货到付款</a>';
+				}
+			   
+				
+				$('#paywayDiv').append(para);
+			}
+		}
+			
+		
+		//点击修改支付方式。
+		function changePayway(paywayPara){
+			payway = paywayPara;
+		}
 		
 		function getQueryString(name)
 		{
@@ -433,15 +548,6 @@ $option.css({ "background-color": "#DEDEDE" });
 		function setCheckDivToNone(toCheckDiv){
 			$("#checkDiv").slideToggle("fast");
 			$("#addressSettingDiv").slideToggle("fast");
-			/*if(toCheckDiv){
-					
-				$("#checkDiv").css('display','inline');
-				$("#addressSettingDiv").css('display','none');
-			}else{
-				$("#checkDiv").css('display','none');
-				$("#addressSettingDiv").css('display','inline');
-			}*/
-			
 		}
 		
 		function useAddress(addressId){
