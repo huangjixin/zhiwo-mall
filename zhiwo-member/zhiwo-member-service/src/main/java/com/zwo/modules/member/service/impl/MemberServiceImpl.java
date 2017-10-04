@@ -744,6 +744,7 @@ public class MemberServiceImpl extends BaseService<Member> implements IMemberSer
 
 	@Override
 	@Transactional(readOnly = true)
+	@Cacheable(value = "Member", key="#usernameOrMphoneOrEmail+'_key_usernameOrMphoneOrEmail'")
 	public Member selectMember(String usernameOrMphoneOrEmail) {
 		MemberCriteria memberCriteria = new MemberCriteria();
 		com.zwo.modules.member.domain.MemberCriteria.Criteria openidCriteria = memberCriteria.createCriteria().andOpenIdEqualTo(usernameOrMphoneOrEmail);
