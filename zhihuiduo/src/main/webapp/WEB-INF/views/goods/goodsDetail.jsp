@@ -26,11 +26,11 @@
         	<div class="pull-left">
 				<label style="color: red; font-size: 2rem;"><i
 					class="fa fa-jpy" id="gSalePriceLabel"></i></label>&nbsp;&nbsp;<label
-					style="color: gray; font-size: 1.5rem;"><i id="marketPriceLabel"
-					class="fa fa-jpy"></i><span style="text-decoration: line-through"></span></label>
+					style="color: gray; font-size: 1.5rem;"><i 
+					class="fa fa-jpy"></i><span id="marketPriceLabel" style="text-decoration:line-through;"></span></label>
 			</div>
 			<div class="pull-right">
-				<label style="color: gray; font-size: 1.5rem;">已拼<span id="soldQuantitySpan"></span>件·2人拼单</label>
+				<label style="color: gray; font-size: 1.5rem;">已拼<span id="soldQuantitySpan"></span>件</label>
 			</div>
 
 			<div class="clearfix"></div>
@@ -48,7 +48,7 @@
 	<div class="thumbnail">
 		<div class="caption">
         	<div class="page-header" style="padding-top:0px; margin-top:5px;" id="groupPurcseHeader">
-                <h4 id="groupHeader">正在开团的人数：</h4>
+                <h4 id="groupHeader">正在开团：</h4>
             </div>
 		</div>
 	</div>
@@ -71,14 +71,14 @@
 			<div class="pull-left">
 				<div class="media" style="padding-top: 4px; padding-bottom: 8px;">
 					<div class="media-left">
-						<img class="media-object" style="width: 50px; height: 50px; border-radius: 4px;">
+						<img class="media-object" style="width: 50px; height: 50px; border-radius: 4px;" id="shopIcon">
 					</div>
 					<div class="media-body">
 						<h5 class="media-heading" style="padding-top: 6px;" id="shopHead"></h5>
 						<span style="color: gray; font-size: 1.4rem;">商品数量<span id="goodsCount"></span>
 					</div>
 					<div class="media-right" style="padding-top: 10px;">
-						<img class="media-object" src="/images/busy.gif" data-original="/images/goodsDetail/gotoShop.png" style="width: 75px; height: 25px;">
+						<img class="media-object" src="/images/goodsDetail/gotoShop.png" style="width: 75px; height: 25px;">
 					</div>
 				</div>
 			</div>
@@ -124,7 +124,13 @@
 			</div>
 		</div>
 	</div>
-
+    <div class="thumbnail" id="shopGoods">
+		<div class="caption">
+			<h4>其它商品</h4>
+		</div>
+        
+	</div>
+	<div class="clearfix"></div>
 	<div style="height: 75px; text-align: center">已经到底部了</div>
 	<!--商品属性弹窗-->
     <div class="modal fade" id="prriceModal" tabindex="-2"
@@ -368,6 +374,8 @@
 				}
 			}
 			
+			$('#gourpSalePriceLabel').html(product.gourpSalePrice);
+			$('#independentPriceLabel').html(product.independentPrice);
 			
 			$('#gSalePriceLabel').html(product.gourpSalePrice);
 			$('#marketPriceLabel').html(product.marketPrice);
@@ -382,21 +390,46 @@
 			$('#groupHeader').append(product.numberGroupPurcse);
 			
 			$('#shopHead').html(product.shopName);
-			if(goodsList){
-				$('#goodsCount').html(goodsList.length);
+			if(product.numberCount){
+				$('#goodsCount').html(product.numberCount);
 			}
+			
+			if(product.shopIcon){
+				$('#shopIcon').attr("src",ctx+'/'+product.shopIcon);
+			}
+			
 			
 			if(groupPurcses){
 				var length = groupPurcses.length;
 				for(var i=0;i<length;i++){
 					var gPurcse= groupPurcses[i];
 					var url = ctx+"/memberGroup/"+gPurcse.id;
-					var para = '<div class="media" onClick="showProduct(\''+url+'\');"><div class="pull-right" style="padding-top:7px;"><button type="button" class="btn btn-danger">去参团</button></div><div class="media-left"><img class="img-circle" src="'+ctx+'/images/busy.gif" style="width:40px;" data-original="'+gPurcse.memberIcon+'"></div><div class="media-body"><h5 class="media-heading" style="padding-top: 6px;">'+gPurcse.memberName+'</h5><span style="color: gray; font-size: 1.4rem;">还差1人，剩余<span id="'+gPurcse.id+'expiredTime" style="color:red;"></span></span></div></div>';
+					var para = '<div class="media" onClick="showProduct(\''+url+'\');"><div class="pull-right" style="padding-top:7px;"><button type="button" class="btn btn-danger">去参团</button></div><div class="media-left"><img class="img-circle" src="'+ctx+'/images/busy.webp" style="width:40px;" data-original="'+gPurcse.memberIcon+'"></div><div class="media-body"><h5 class="media-heading" style="padding-top: 6px;">'+gPurcse.memberName+'</h5><span style="color: gray; font-size: 1.4rem;">还差1人，剩余<span id="'+gPurcse.id+'expiredTime" style="color:red;"></span></span></div></div>';
 					
 					$('#groupPurcseHeader').after(para);
 				}
 				
+				//倒计时器
 				window.setInterval(function(){setCountDown(groupPurcses);}, interval); 
+				
+				//添加商铺的其它商品
+				if(goodsList){
+					var length = goodsList.length;
+					for(var i=0;i<length;i++){
+						var prod = goodsList[i];
+						var numCountPara = 0;
+						if(prod.numberCount){
+							numCountPara = prod.numberCount;
+						}
+						var url = ctx+"/goodsDetail/"+prod.id+'.htm?timestamp='+new Date().getTime();
+						var prodIcon = '<img class="img-responsive" src="'+ctx+'/images/busy.webp" data-original="'+ctx+'/'+prod.icon+'">';
+						var prodName = '<h5>'+prod.name+'</h5>';
+						var parameter = '<div id="'+prod.id+'Div" style="margin: 0;" class="col-xs-6" onClick="showProduct(\''+url+'\');"><div class="thumbnail" style="background-color:#ffffff;">'+prodIcon+'<div class="caption">'+prodName+'<div style="height:2px;"></div><div class="pull-left"><label style="color: red;"><i class="fa fa-jpy"></i>'+prod.gourpSalePrice+'</label> <span style="font-size:1.3rem;">已拼'+numCountPara+'件</span></div><div class="clearfix"></div></div></div></div>';
+						console.log(parameter);
+						$("#shopGoods").append(parameter);
+						$('#'+prod.id+'Div').fadeIn('slow');
+					}
+				}
 			}
 			
 			
