@@ -748,4 +748,30 @@ public class Shop implements Serializable {
     public void setAdminName(String adminName) {
         this.adminName = adminName == null ? null : adminName.trim();
     }
+    
+    public Integer getNumberCount() {
+		return numberCount;
+	}
+
+	public void setNumberCount(Integer numberCount) {
+		this.numberCount = numberCount;
+	}
+
+	public Integer getNumberGroupPurcse() {
+		return numberGroupPurcse;
+	}
+
+	public void setNumberGroupPurcse(Integer numberGroupPurcse) {
+		this.numberGroupPurcse = numberGroupPurcse;
+	}
+
+	/**
+     * 商品总数。
+     */
+    private Integer numberCount;
+    
+    /**
+     * 已买出去的商品总数。
+     */
+    private Integer numberGroupPurcse;
 }
