@@ -47,7 +47,7 @@ public class CmsDocumentController extends BaseController<CmsDocument> {
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable("id") String id, Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		CmsDocumentWithBLOBs document = documentService.selectByPrimKey(id);
+		CmsDocument document = documentService.selectByPrimaryKey(id);
 
 		uiModel.addAttribute("document", document);
 		uiModel.addAttribute("operation", "edit");
