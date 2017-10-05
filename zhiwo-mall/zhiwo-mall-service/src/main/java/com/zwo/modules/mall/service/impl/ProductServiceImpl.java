@@ -97,7 +97,6 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	 * @Override public int insertBatch(List<PrProduct> list) { Auto-generated
 	 * method stub return 0; }
 	 */
-
 	/*
 	 * (non-Javadoc)
 	 * 
