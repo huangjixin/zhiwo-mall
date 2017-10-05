@@ -2,17 +2,11 @@ package com.zwo.modules.cms.domain;
 
 import java.io.Serializable;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import com.zwotech.modules.core.domain.Node;
+import javax.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Table(name = "cms_channel")
-public class CmsChannel extends Node implements Serializable {
+public class CmsChannel implements Serializable {
     /**
      * id标志符
      */
