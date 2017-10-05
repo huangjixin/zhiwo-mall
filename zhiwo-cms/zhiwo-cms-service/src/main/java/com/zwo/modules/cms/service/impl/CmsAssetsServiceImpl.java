@@ -18,6 +18,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,8 @@ import com.zwo.modules.cms.dao.CmsAssetsMapper;
 import com.zwo.modules.cms.domain.CmsAssets;
 import com.zwo.modules.cms.domain.CmsAssetsCriteria;
 import com.zwo.modules.cms.service.ICmsAssetsService;
+import com.zwotech.common.utils.RedisUtil;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -41,7 +44,10 @@ public class CmsAssetsServiceImpl extends BaseService<CmsAssets> implements ICms
 	private static Logger logger = LoggerFactory.getLogger(CmsAssetsServiceImpl.class);
 
 	private static final String BASE_MESSAGE = "【CmsAssetsServiceImpl服务类提供的基础操作增删改查等】";
-
+	private static final String KEY_CMS_ASSETS = "_key_cms_assets";
+	
+	private RedisTemplate redisTemplate;
+	
 	@Autowired
 	@Lazy(true)
 	private CmsAssetsMapper cmsAssetsMapper;
@@ -51,6 +57,16 @@ public class CmsAssetsServiceImpl extends BaseService<CmsAssets> implements ICms
 		return cmsAssetsMapper;
 	}
 
+	public CmsAssetsServiceImpl() {
+		super();
+		if (redisTemplate == null) {
+			if (SpringContextHolder.getApplicationContext().containsBean(
+					"redisTemplate")) {
+				redisTemplate = SpringContextHolder.getBean("redisTemplate");
+			}
+		}
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -82,12 +98,14 @@ public class CmsAssetsServiceImpl extends BaseService<CmsAssets> implements ICms
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = "CmsAssets", allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
 		List<CmsAssets> assets = cmsAssetsMapper.selectByExample(example);
+		for (CmsAssets assets2 : assets) {
+			RedisUtil.removeRedisKey(redisTemplate, assets2.getId()+KEY_CMS_ASSETS);
+		}
 		
 		for (CmsAssets tbUserAssets : assets) {
 			if(tbUserAssets.getPath()!=null){
@@ -109,7 +127,7 @@ public class CmsAssetsServiceImpl extends BaseService<CmsAssets> implements ICms
 		return result;
 	}
 
-	@CacheEvict(value = "CmsAssets", allEntries = true)
+//	@CacheEvict(value = "CmsAssets", allEntries = true)
 //	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
@@ -122,6 +140,9 @@ public class CmsAssetsServiceImpl extends BaseService<CmsAssets> implements ICms
 		CmsAssetsCriteria cmsAssetsCriteria = new CmsAssetsCriteria();
 		cmsAssetsCriteria.createCriteria().andIdIn(list);
 		List<CmsAssets> assets = cmsAssetsMapper.selectByExample(cmsAssetsCriteria);
+		for (CmsAssets assets2 : assets) {
+			RedisUtil.removeRedisKey(redisTemplate, assets2.getId()+KEY_CMS_ASSETS);
+		}
 		
 		for (CmsAssets tbUserAssets : assets) {
 			if(tbUserAssets.getPath()!=null){
@@ -150,7 +171,7 @@ public class CmsAssetsServiceImpl extends BaseService<CmsAssets> implements ICms
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "CmsAssets", key="#id+''")
+	@CacheEvict(value = "CmsAssets", key="#id+'_key_cms_assets'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -249,7 +270,7 @@ public class CmsAssetsServiceImpl extends BaseService<CmsAssets> implements ICms
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = "CmsAssets")
+	@Cacheable(key = "#id+'_key_cms_assets'", value = "CmsAssets")
 	@Transactional(readOnly = true)
 	public CmsAssets selectByPrimaryKey(String id) {
 		// 日志记录
@@ -272,7 +293,6 @@ public class CmsAssetsServiceImpl extends BaseService<CmsAssets> implements ICms
 	 * com.zwotech.modules.core.service.IBaseService#updateByExampleSelective(
 	 * java.lang.Object, java.lang.Object)
 	 */
-	@CacheEvict(value = "CmsAssets", allEntries = true)
 	@Override
 	public int updateByExampleSelective(CmsAssets record, Object example) {
 		// 日志记录
@@ -280,7 +300,11 @@ public class CmsAssetsServiceImpl extends BaseService<CmsAssets> implements ICms
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
-
+		List<CmsAssets> assets = cmsAssetsMapper.selectByExample(example);
+		for (CmsAssets assets2 : assets) {
+			RedisUtil.removeRedisKey(redisTemplate, assets2.getId()+KEY_CMS_ASSETS);
+		}
+		
 		// 逻辑操作
 		int result = super.updateByExampleSelective(record, example);
 		// 日志记录
@@ -297,14 +321,16 @@ public class CmsAssetsServiceImpl extends BaseService<CmsAssets> implements ICms
 	 * Object, java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "CmsAssets", allEntries = true)
 	public int updateByExample(CmsAssets record, Object example) {
 		//日志记录
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新开始");
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
-										
+		List<CmsAssets> assets = cmsAssetsMapper.selectByExample(example);
+		for (CmsAssets assets2 : assets) {
+			RedisUtil.removeRedisKey(redisTemplate, assets2.getId()+KEY_CMS_ASSETS);
+		}								
 		//逻辑操作		
 		int result = super.updateByExample(record, example);
 		//日志记录
@@ -321,7 +347,7 @@ public class CmsAssetsServiceImpl extends BaseService<CmsAssets> implements ICms
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "CmsAssets", key="#record.id")
+	@CacheEvict(value = "CmsAssets", key="#record.id+'_key_cms_assets'")
 	public int updateByPrimaryKeySelective(CmsAssets record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -344,7 +370,7 @@ public class CmsAssetsServiceImpl extends BaseService<CmsAssets> implements ICms
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "CmsAssets", key="#record.id")
+	@CacheEvict(value = "CmsAssets", key="#record.id+'_key_cms_assets'")
 	public int updateByPrimaryKey(CmsAssets record) {
 		// 日志记录
 		if (logger.isInfoEnabled())

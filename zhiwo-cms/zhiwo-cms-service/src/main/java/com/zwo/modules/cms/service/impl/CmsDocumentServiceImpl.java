@@ -14,16 +14,19 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.cms.dao.CmsDocumentMapper;
+import com.zwo.modules.cms.domain.CmsAssets;
 import com.zwo.modules.cms.domain.CmsDocument;
 import com.zwo.modules.cms.domain.CmsDocumentCriteria;
 import com.zwo.modules.cms.domain.CmsDocumentWithBLOBs;
 import com.zwo.modules.cms.service.ICmsDocumentService;
+import com.zwotech.common.utils.RedisUtil;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -40,15 +43,29 @@ public class CmsDocumentServiceImpl extends BaseService<CmsDocument> implements 
 
 	private static final String BASE_MESSAGE = "【CmsDocumentServiceImpl服务类提供的基础操作增删改查等】";
 
+	private static final String KEY_CMS_DOCUMENT = "_key_cms_document";
+	
 	@Autowired
 	@Lazy(true)
 	private CmsDocumentMapper cmsDocumentMapper;
 
+	private RedisTemplate redisTemplate;
+	
 	@Override
 	public Mapper<CmsDocument> getBaseMapper() {
-		return null;
+		return cmsDocumentMapper;
 	}
 
+
+	public CmsDocumentServiceImpl() {
+		super();
+		if (redisTemplate == null) {
+			if (SpringContextHolder.getApplicationContext().containsBean(
+					"redisTemplate")) {
+				redisTemplate = SpringContextHolder.getBean("redisTemplate");
+			}
+		}
+	}
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -80,22 +97,25 @@ public class CmsDocumentServiceImpl extends BaseService<CmsDocument> implements 
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = "CmsDocument", allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
-
+		List<CmsDocument> channels = cmsDocumentMapper.selectByExample(example);
+		for (CmsDocument channel : channels) {
+			RedisUtil.removeRedisKey(redisTemplate, channel.getId()+KEY_CMS_DOCUMENT);
+		}
+		
 		// 逻辑操作
-		int result = cmsDocumentMapper.deleteByExample((CmsDocumentCriteria) example);
+		int result = cmsDocumentMapper.deleteByExample(example);
 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除结束");
 		return result;
 	}
 
-	@CacheEvict(value = "CmsDocument", allEntries = true)
-	// @Override
+//	@CacheEvict(value = "CmsDocument", allEntries = true)
+//	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -106,6 +126,11 @@ public class CmsDocumentServiceImpl extends BaseService<CmsDocument> implements 
 		// 逻辑操作
 		CmsDocumentCriteria cmsDocumentCriteria = new CmsDocumentCriteria();
 		cmsDocumentCriteria.createCriteria().andIdIn(list);
+		List<CmsDocument> channels = cmsDocumentMapper.selectByExample(cmsDocumentCriteria);
+		for (CmsDocument channel : channels) {
+			RedisUtil.removeRedisKey(redisTemplate, channel.getId()+KEY_CMS_DOCUMENT);
+		}
+		
 		int result = cmsDocumentMapper.deleteByExample(cmsDocumentCriteria);
 
 		if (logger.isInfoEnabled())
@@ -121,7 +146,7 @@ public class CmsDocumentServiceImpl extends BaseService<CmsDocument> implements 
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "CmsDocument", key = "#id+''")
+	@CacheEvict(value = "CmsDocument", key="#id+'_key_cms_document'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -130,7 +155,7 @@ public class CmsDocumentServiceImpl extends BaseService<CmsDocument> implements 
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除ID为：" + id.toString());
 
 		// 逻辑操作
-		int result = cmsDocumentMapper.deleteByPrimaryKey(id);
+		int result = super.deleteByPrimaryKey(id);
 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除结束");
@@ -144,9 +169,22 @@ public class CmsDocumentServiceImpl extends BaseService<CmsDocument> implements 
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@Deprecated
+//	@CachePut(value = "CmsDocument", key = "#record.id")
 	public int insert(CmsDocument record) {
-		return 0;
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "insert插入开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
+		
+		// 如果数据没有设置id,默认使用时间戳
+		if (null == record.getId() || "".equals(record.getId())) {
+			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
+		}
+		int result = super.insert(record);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "insert插入结束");
+		return result;
 	}
 
 	/*
@@ -158,10 +196,22 @@ public class CmsDocumentServiceImpl extends BaseService<CmsDocument> implements 
 	 */
 
 	@Override
-	@Deprecated
+//	@CachePut(value = "CmsDocument", key = "#record.id")
 	public int insertSelective(CmsDocument record) {
-		return 0;
-
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "insert插入开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
+		
+		// 如果数据没有设置id,默认使用时间戳
+		if (null == record.getId() || "".equals(record.getId())) {
+			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
+		}
+		int result = super.insertSelective(record);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "insert插入结束");
+		return result;
 	}
 
 	/*
@@ -174,7 +224,7 @@ public class CmsDocumentServiceImpl extends BaseService<CmsDocument> implements 
 	@Override
 	@Transactional(readOnly = true)
 	public List<CmsDocument> selectByExample(Object example) {
-		return cmsDocumentMapper.selectByExample((CmsDocumentCriteria) example);
+		return cmsDocumentMapper.selectByExample(example);
 	}
 
 	/*
@@ -185,8 +235,20 @@ public class CmsDocumentServiceImpl extends BaseService<CmsDocument> implements 
 	 * lang.String)
 	 */
 	@Override
+	@Cacheable(key = "#id+'_key_cms_document'", value = "CmsDocument")
+	@Transactional(readOnly = true)
 	public CmsDocument selectByPrimaryKey(String id) {
-		return null;
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询参数为：" + id);
+
+		// 逻辑操作
+		CmsDocument cmsDocument = super.selectByPrimaryKey(id);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询结束");
+		return cmsDocument;
 	}
 
 	/*
@@ -196,10 +258,25 @@ public class CmsDocumentServiceImpl extends BaseService<CmsDocument> implements 
 	 * com.zwotech.modules.core.service.IBaseService#updateByExampleSelective(
 	 * java.lang.Object, java.lang.Object)
 	 */
-	@Deprecated
 	@Override
 	public int updateByExampleSelective(CmsDocument record, Object example) {
-		return 0;
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExampleSelective更新开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
+		
+		List<CmsDocument> channels = cmsDocumentMapper.selectByExample(example);
+		for (CmsDocument channel : channels) {
+			RedisUtil.removeRedisKey(redisTemplate, channel.getId()+KEY_CMS_DOCUMENT);
+		}
+		
+		// 逻辑操作
+		int result = super.updateByExampleSelective(record, example);
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExampleSelective更新结束");
+		return result;
 	}
 
 	/*
@@ -209,10 +286,25 @@ public class CmsDocumentServiceImpl extends BaseService<CmsDocument> implements 
 	 * com.zwotech.modules.core.service.IBaseService#updateByExample(java.lang.
 	 * Object, java.lang.Object)
 	 */
-	@Deprecated
 	@Override
 	public int updateByExample(CmsDocument record, Object example) {
-		return 0;
+		//日志记录
+		if(logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE+"updateByExample更新开始");
+		if(logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
+							
+		List<CmsDocument> channels = cmsDocumentMapper.selectByExample(example);
+		for (CmsDocument channel : channels) {
+			RedisUtil.removeRedisKey(redisTemplate, channel.getId()+KEY_CMS_DOCUMENT);
+		}
+		
+		//逻辑操作		
+		int result = super.updateByExample(record, example);
+		//日志记录
+		if(logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE+"updateByExample更新结束");
+		return result;
 	}
 
 	/*
@@ -223,9 +315,19 @@ public class CmsDocumentServiceImpl extends BaseService<CmsDocument> implements 
 	 * (java.lang.Object)
 	 */
 	@Override
-	@Deprecated
+	@CacheEvict(value = "CmsDocument", key="#record.id")
 	public int updateByPrimaryKeySelective(CmsDocument record) {
-		return 0;
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
+		
+		// 逻辑操作
+		int result = super.updateByPrimaryKeySelective(record);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新结束");
+		return result;
 	}
 
 	/*
@@ -236,16 +338,16 @@ public class CmsDocumentServiceImpl extends BaseService<CmsDocument> implements 
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "CmsDocument", key = "#record.id")
+	@CacheEvict(value = "CmsDocument", key="#record.id+'_key_cms_document'")
 	public int updateByPrimaryKey(CmsDocument record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为：" + record.toString());
-
+		
 		// 逻辑操作
-		int result = cmsDocumentMapper.updateByPrimaryKey(record);
+		int result = super.updateByPrimaryKey(record);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新结束");
 		return result;
@@ -265,13 +367,7 @@ public class CmsDocumentServiceImpl extends BaseService<CmsDocument> implements 
 			logger.info(BASE_MESSAGE + "分页开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页参数：" + pageInfo.toString());
-		PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
-		List<CmsDocument> list = this.cmsDocumentMapper.selectByExample((CmsDocumentCriteria) example);
-		PageInfo<CmsDocument> page = new PageInfo<CmsDocument>(list);
-		pageInfo.setList(list);
-		pageInfo.setTotal(page.getTotal());
-		pageInfo.setEndRow(page.getEndRow());
-		pageInfo.setStartRow(page.getStartRow());
+		pageInfo = super.selectByPageInfo(example, pageInfo);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页结束");
 		return pageInfo;
@@ -284,131 +380,6 @@ public class CmsDocumentServiceImpl extends BaseService<CmsDocument> implements 
 		cmsDocument.setId(System.currentTimeMillis() + "");
 		int result = cmsDocumentServiceImpl.insertSelective(cmsDocument);
 		logger.info(result + "");
-	}
-
-//	@CachePut(value = "CmsDocument", key = "#record.id")
-	public int insert(CmsDocumentWithBLOBs record) {
-		// 日志记录
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "insert插入开始");
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-
-		// 如果数据没有设置id,默认使用时间戳
-		if (null == record.getId() || "".equals(record.getId())) {
-			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
-		}
-		int result = cmsDocumentMapper.insert(record);
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "insert插入结束");
-		return result;
-	}
-
-//	@CachePut(value = "CmsDocument", key = "#record.id")
-	public int insertSelective(CmsDocumentWithBLOBs record) {
-		// 日志记录
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "insert插入开始");
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-
-		// 如果数据没有设置id,默认使用时间戳
-		if (null == record.getId() || "".equals(record.getId())) {
-			record.setId(System.currentTimeMillis() + "" + Math.round(Math.random() * 99));
-		}
-		int result = cmsDocumentMapper.insertSelective(record);
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "insert插入结束");
-		return result;
-	}
-
-	@Transactional(readOnly = true)
-	public List<CmsDocumentWithBLOBs> selectByExampleWithBLOBs(CmsDocumentCriteria example) {
-		return cmsDocumentMapper.selectByExampleWithBLOBs(example);
-	}
-
-	@Transactional(readOnly = true)
-	public List<CmsDocument> selectByExample(CmsDocumentCriteria example) {
-		return cmsDocumentMapper.selectByExample((CmsDocumentCriteria) example);
-	}
-
-	@Cacheable(key = "#id+''", value = "CmsDocument")
-	@Transactional(readOnly = true)
-	public CmsDocumentWithBLOBs selectByPrimKey(String id) {
-		// 日志记录
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询开始");
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询参数为：" + id);
-
-		// 逻辑操作
-		CmsDocumentWithBLOBs cmsDocument = cmsDocumentMapper.selectByPrimaryKey(id);
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询结束");
-		return cmsDocument;
-	}
-
-	@CacheEvict(value = "CmsDocument", allEntries = true)
-	public int updateByExampleSelective(CmsDocumentWithBLOBs record, CmsDocumentCriteria example) {
-		// 日志记录
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByExampleSelective更新开始");
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
-
-		// 逻辑操作
-		int result = cmsDocumentMapper.updateByExampleSelective(record, (CmsDocumentCriteria) example);
-		// 日志记录
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByExampleSelective更新结束");
-		return result;
-	}
-
-	@CacheEvict(value = "CmsDocument", allEntries = true)
-	public int updateByExampleWithBLOBs(CmsDocumentWithBLOBs record, CmsDocumentCriteria example) {
-		// 日志记录
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByExampleWithBLOBs更新开始");
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByExampleWithBLOBs更新对象为：" + record.toString());
-
-		// 逻辑操作
-		int result = cmsDocumentMapper.updateByExampleWithBLOBs(record, example);
-		// 日志记录
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByExampleWithBLOBs更新结束");
-		return result;
-	}
-
-	@CacheEvict(value = "CmsDocument", allEntries = true)
-	public int updateByExample(CmsDocument record, CmsDocumentCriteria example) {
-		// 日志记录
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByExample更新开始");
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByExample更新对象为：" + record.toString());
-
-		// 逻辑操作
-		int result = cmsDocumentMapper.updateByExample(record, example);
-		// 日志记录
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByExample更新结束");
-		return result;
-	}
-
-	@CacheEvict(value = "CmsDocument", key = "#record.id")
-	public int updateByPrimaryKeySelective(CmsDocumentWithBLOBs record) {
-		// 日志记录
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新开始");
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为：" + record.toString());
-
-		// 逻辑操作
-		int result = cmsDocumentMapper.updateByPrimaryKeySelective(record);
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新结束");
-		return result;
 	}
 
 }

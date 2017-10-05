@@ -14,14 +14,18 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.cms.dao.CmsChannelMapper;
+import com.zwo.modules.cms.domain.CmsAssets;
 import com.zwo.modules.cms.domain.CmsChannel;
 import com.zwo.modules.cms.domain.CmsChannelCriteria;
 import com.zwo.modules.cms.service.ICmsChannelService;
+import com.zwotech.common.utils.RedisUtil;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -38,15 +42,29 @@ public class CmsChannelServiceImpl extends BaseService<CmsChannel> implements IC
 
 	private static final String BASE_MESSAGE = "【CmsChannelServiceImpl服务类提供的基础操作增删改查等】";
 
+	private static final String KEY_CMS_CHANNEL = "_key_cms_channel";
+	
 	@Autowired
 	@Lazy(true)
 	private CmsChannelMapper cmsChannelMapper;
 
+	private RedisTemplate redisTemplate;
+	
 	@Override
 	public Mapper<CmsChannel> getBaseMapper() {
 		return cmsChannelMapper;
 	}
 
+
+	public CmsChannelServiceImpl() {
+		super();
+		if (redisTemplate == null) {
+			if (SpringContextHolder.getApplicationContext().containsBean(
+					"redisTemplate")) {
+				redisTemplate = SpringContextHolder.getBean("redisTemplate");
+			}
+		}
+	}
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -78,12 +96,15 @@ public class CmsChannelServiceImpl extends BaseService<CmsChannel> implements IC
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = "CmsChannel", allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
-
+		List<CmsChannel> channels = cmsChannelMapper.selectByExample(example);
+		for (CmsChannel channel : channels) {
+			RedisUtil.removeRedisKey(redisTemplate, channel.getId()+KEY_CMS_CHANNEL);
+		}
+		
 		// 逻辑操作
 		int result = cmsChannelMapper.deleteByExample(example);
 
@@ -92,7 +113,7 @@ public class CmsChannelServiceImpl extends BaseService<CmsChannel> implements IC
 		return result;
 	}
 
-	@CacheEvict(value = "CmsChannel", allEntries = true)
+//	@CacheEvict(value = "CmsChannel", allEntries = true)
 //	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
@@ -104,6 +125,11 @@ public class CmsChannelServiceImpl extends BaseService<CmsChannel> implements IC
 		// 逻辑操作
 		CmsChannelCriteria cmsChannelCriteria = new CmsChannelCriteria();
 		cmsChannelCriteria.createCriteria().andIdIn(list);
+		List<CmsChannel> channels = cmsChannelMapper.selectByExample(cmsChannelCriteria);
+		for (CmsChannel channel : channels) {
+			RedisUtil.removeRedisKey(redisTemplate, channel.getId()+KEY_CMS_CHANNEL);
+		}
+		
 		int result = cmsChannelMapper.deleteByExample(cmsChannelCriteria);
 
 		if (logger.isInfoEnabled())
@@ -119,7 +145,7 @@ public class CmsChannelServiceImpl extends BaseService<CmsChannel> implements IC
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "CmsChannel", key="#id+''")
+	@CacheEvict(value = "CmsChannel", key="#id+'_key_cms_channel'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -212,7 +238,7 @@ public class CmsChannelServiceImpl extends BaseService<CmsChannel> implements IC
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = "CmsChannel")
+	@Cacheable(key = "#id+'_key_cms_channel'", value = "CmsChannel")
 	@Transactional(readOnly = true)
 	public CmsChannel selectByPrimaryKey(String id) {
 		// 日志记录
@@ -235,7 +261,6 @@ public class CmsChannelServiceImpl extends BaseService<CmsChannel> implements IC
 	 * com.zwotech.modules.core.service.IBaseService#updateByExampleSelective(
 	 * java.lang.Object, java.lang.Object)
 	 */
-	@CacheEvict(value = "CmsChannel", allEntries = true)
 	@Override
 	public int updateByExampleSelective(CmsChannel record, Object example) {
 		// 日志记录
@@ -246,6 +271,11 @@ public class CmsChannelServiceImpl extends BaseService<CmsChannel> implements IC
 		if ("".equals(record.getParentId())) {
 			record.setParentId(null);
 		}
+		List<CmsChannel> channels = cmsChannelMapper.selectByExample(example);
+		for (CmsChannel channel : channels) {
+			RedisUtil.removeRedisKey(redisTemplate, channel.getId()+KEY_CMS_CHANNEL);
+		}
+		
 		// 逻辑操作
 		int result = super.updateByExampleSelective(record, example);
 		// 日志记录
@@ -262,7 +292,6 @@ public class CmsChannelServiceImpl extends BaseService<CmsChannel> implements IC
 	 * Object, java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "CmsChannel", allEntries = true)
 	public int updateByExample(CmsChannel record, Object example) {
 		//日志记录
 		if(logger.isInfoEnabled())
@@ -272,6 +301,11 @@ public class CmsChannelServiceImpl extends BaseService<CmsChannel> implements IC
 		if ("".equals(record.getParentId())) {
 			record.setParentId(null);
 		}					
+		List<CmsChannel> channels = cmsChannelMapper.selectByExample(example);
+		for (CmsChannel channel : channels) {
+			RedisUtil.removeRedisKey(redisTemplate, channel.getId()+KEY_CMS_CHANNEL);
+		}
+		
 		//逻辑操作		
 		int result = super.updateByExample(record, example);
 		//日志记录
@@ -313,7 +347,7 @@ public class CmsChannelServiceImpl extends BaseService<CmsChannel> implements IC
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "CmsChannel", key="#record.id")
+	@CacheEvict(value = "CmsChannel", key="#record.id+'_key_cms_channel'")
 	public int updateByPrimaryKey(CmsChannel record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
