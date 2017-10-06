@@ -137,15 +137,15 @@
     from shop 
     LEFT JOIN 
     (SELECT 
-    COUNT(*) AS NUMBER_COUNT,p.SHOP_ID
-FROM
-    pr_product p
-WHERE
-    p.SHOP_ID = #{id,jdbcType=VARCHAR}) AS P
+    	COUNT(*) AS NUMBER_COUNT,p.SHOP_ID
+	FROM
+    	pr_product p
+	WHERE
+    	p.SHOP_ID = #{id,jdbcType=VARCHAR}) AS P
     on P.SHOP_ID=shop.id
     LEFT JOIN (
     	SELECT 
-		    COUNT(*) AS NUMBER_GROUP_PURCSE
+		    COUNT(*) AS NUMBER_GROUP_PURCSE,p.SHOP_ID
 		FROM
 		    group_purcse g
 		        LEFT JOIN
@@ -154,7 +154,7 @@ WHERE
 			AND g.DISABLE = FALSE
         	AND g.expired_time &lt; (SELECT NOW() AS now)
     ) AS T
-    
+    on shop.id=T.sid
     where ID = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
