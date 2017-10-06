@@ -41,6 +41,14 @@ public class ProductExtention extends PrProductWithBLOBs {
 
 	private Shop shop;
 	
+	//用于下单
+	private Integer buyNum;
+	private String packagePriceId;
+	private String proValues;
+	private String dealPrice;
+	private String mode;
+	private String groupPurcseId;
+	
 	//用于支付
 	private MemberAddress defautAddress;
 	
@@ -180,5 +188,55 @@ public class ProductExtention extends PrProductWithBLOBs {
 
 	public void setMember(Member member) {
 		this.member = member;
+	}
+	
+	
+
+	public Integer getBuyNum() {
+		return buyNum;
+	}
+
+	public void setBuyNum(Integer buyNum) {
+		this.buyNum = buyNum;
+	}
+
+	public String getPackagePriceId() {
+		return packagePriceId;
+	}
+
+	public void setPackagePriceId(String packagePriceId) {
+		this.packagePriceId = packagePriceId;
+	}
+
+	public String getProValues() {
+		return proValues;
+	}
+
+	public void setProValues(String proValues) {
+		this.proValues = proValues;
+	}
+
+	public String getDealPrice() {
+		return dealPrice;
+	}
+
+	public void setDealPrice(String dealPrice) {
+		this.dealPrice = dealPrice;
+	}
+
+	public String getMode() {
+		return mode;
+	}
+
+	public void setMode(String mode) {
+		this.mode = mode;
+	}
+
+	public String getGroupPurcseId() {
+		return groupPurcseId;
+	}
+
+	public void setGroupPurcseId(String groupPurcseId) {
+		this.groupPurcseId = groupPurcseId;
 	}
 }
