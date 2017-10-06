@@ -11,6 +11,32 @@
 <link href="../css/zhihuiduo.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="../js/jquery.spinner.min.js"></script>
 <script type="text/javascript" src="../js/zhihuiduo/goodsDetail.js"></script>
+<style>
+body {
+	background-color: #f2f2f2;
+}
+
+.thumbnail {
+	padding: 0px;
+	margin-bottom: 5px;
+	line-height: 1.42857143;
+	border: 0px solid #ddd;
+	border-radius: 0px;
+}
+
+.label label-info {
+	padding-top: 5px;
+}
+
+.form-group {
+	margin: 3px;
+}
+
+.col-xs-6 {
+	padding-left: 2px;
+	padding-right: 2px;
+}
+</style>
 </head>
 <body>
 	<div class="thumbnail">
@@ -48,7 +74,7 @@
 	<div class="thumbnail">
 		<div class="caption">
         	<div class="page-header" style="padding-top:0px; margin-top:5px;" id="groupPurcseHeader">
-                <h4 id="groupHeader">正在开团：</h4>
+                <h4 id="groupHeader" class="media-heading">正在开团：</h4>
             </div>
 		</div>
 	</div>
@@ -126,7 +152,7 @@
 	</div>
     <div class="thumbnail" id="shopGoods">
 		<div class="caption">
-			<h4>其它商品</h4>
+			<h4 class="media-heading">其它商品</h4>
 		</div>
         
 	</div>
@@ -316,7 +342,7 @@
 					
 			var swiper = new Swiper('.swiper-container',{
 				autoplay : 5000,
-				loop : false
+				loop : true
 			});
 		});
 	
@@ -403,7 +429,7 @@
 				var length = groupPurcses.length;
 				for(var i=0;i<length;i++){
 					var gPurcse= groupPurcses[i];
-					var url = ctx+"/memberGroup/"+gPurcse.id;
+					var url = ctx+"/memberGroup/"+gPurcse.id+".htm";
 					var para = '<div class="media" onClick="showProduct(\''+url+'\');"><div class="pull-right" style="padding-top:7px;"><button type="button" class="btn btn-danger">去参团</button></div><div class="media-left"><img class="img-circle" src="'+ctx+'/images/busy.webp" style="width:40px;" data-original="'+gPurcse.memberIcon+'"></div><div class="media-body"><h5 class="media-heading" style="padding-top: 6px;">'+gPurcse.memberName+'</h5><span style="color: gray; font-size: 1.4rem;">还差1人，剩余<span id="'+gPurcse.id+'expiredTime" style="color:red;"></span></span></div></div>';
 					
 					$('#groupPurcseHeader').after(para);
