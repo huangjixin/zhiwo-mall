@@ -124,7 +124,8 @@ public class MemberOrderController extends BaseController<TbUser> {
 	}
 
 	/**
-	 * 跳转到下单页面，dealPrice不包含运费，真正结算的时候应该包含。mode是group的话，那表示该团是拼团,如果为indenpent的话即为独立开团，可以发货。
+	 * 跳转到下单页面，dealPrice不包含运费，真正结算的时候应该包含。mode是group的话，那表示该团是拼团,
+	 * 如果为indenpent的话即为独立开团，可以发货。
 	 * 
 	 * @param uiModel
 	 * @param httpServletRequest
@@ -132,12 +133,10 @@ public class MemberOrderController extends BaseController<TbUser> {
 	 * @return
 	 */
 	@RequestMapping(value = "checkOut")
-//	@RequiresAuthentication
+	// @RequiresAuthentication
 	public String checkOut(@RequestParam String goodsId,
-			@RequestParam Integer buyNum, 
-			@RequestParam String packagePriceId,
-			@RequestParam String proValues, 
-			@RequestParam String dealPrice,
+			@RequestParam Integer buyNum, @RequestParam String packagePriceId,
+			@RequestParam String proValues, @RequestParam String dealPrice,
 			@RequestParam(defaultValue = "group") String mode,
 			@RequestParam(required = false) String groupPurcseId,
 			RedirectAttributes redirectAttributes, Model uiModel,
@@ -147,7 +146,7 @@ public class MemberOrderController extends BaseController<TbUser> {
 		String jsonString = null;
 		Shop shop = null;
 		PrProduct product = null;
-		
+
 		try {
 			product = prductService.selectByPrimaryKey(goodsId);
 			product.setGourpSalePrice(Double.valueOf(dealPrice));
@@ -157,9 +156,9 @@ public class MemberOrderController extends BaseController<TbUser> {
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
-		
+
 		shop = shopService.selectByPrimKey(product.getShopId());
-		
+
 		Member member = null;
 
 		OrderTrade orderTrade = new OrderTrade();
@@ -168,16 +167,21 @@ public class MemberOrderController extends BaseController<TbUser> {
 		orderTrade.setStatus(OrderStatus.TO_BE_PAYED);
 		orderTrade.setDisable(false);
 		orderTrade.setBuyNum(buyNum);
+		orderTrade.setDealPrice(dealPrice);
+		//独立开团的话订单里面的isDefault字段设置为true，反则设置为false.
+		orderTrade.setIsDefault("group".equals(mode));
 		
+		//订单根据此判断是否为开团或者拼团。
+		orderTrade.setGroupPurcseId(groupPurcseId);
 		String description = "";
-		
+
 		JSONArray jsonArray = JSONArray.parseArray(proValues);
 		for (Object object : jsonArray) {
 			JSONObject obj = (JSONObject) object;
 			String name = obj.getString("name");
-			description+=name+" ";
+			description += name + " ";
 		}
-		
+
 		orderTrade.setDescription(description);
 		// 开拼团
 		if ("group".equals(mode)) {
@@ -195,10 +199,11 @@ public class MemberOrderController extends BaseController<TbUser> {
 		if (subject != null) {
 			String username = (String) subject.getPrincipal();
 			member = memberService.selectMember(username);
-			
+
 			if (member != null) {
 				orderTrade.setMemberId(member.getId());
-				MemberAddress address = addressService.selectDefaultAddressByMemberId(member.getId());
+				MemberAddress address = addressService
+						.selectDefaultAddressByMemberId(member.getId());
 				prExtention.setDefautAddress(address);
 				uiModel.addAttribute("member", member);
 				uiModel.addAttribute("address", address);
@@ -216,23 +221,23 @@ public class MemberOrderController extends BaseController<TbUser> {
 		 * asycInsertOrderTrade(orderTrade); }
 		 */
 		asycInsertOrderTrade(orderTrade);
-		
+
 		// 获取用户的全部地址。
 		List<MemberAddress> list = null;
 		if (member != null) {
 			list = addressService.listAllByMemberId(member.getId());
 		}
-		
+
 		prExtention.setShop(shop);
 		prExtention.setOrder(orderTrade);
 		prExtention.setMemberAddresses(list);
 		prExtention.setShop(shop);
-		
+
 		uiModel.addAttribute("shop", shop);
 		uiModel.addAttribute("order", orderTrade);
 		uiModel.addAttribute("product", product);
 		uiModel.addAttribute("addresses", list);
-		
+
 		jsonString = JSONObject.toJSONString(prExtention, true);
 		uiModel.addAttribute("rawData", jsonString);
 		return basePath + "checkOut";
@@ -248,46 +253,51 @@ public class MemberOrderController extends BaseController<TbUser> {
 		});
 	}
 
-	private void asycInsertGroupPurcseMember(
-			final GroupPurcseMember groupPurcseMember) {
-		Executor executor = Executors.newSingleThreadExecutor();
-		executor.execute(new Runnable() {
-			public void run() {
-				groupPurcseMemberService.insertSelective(groupPurcseMember);
-			}
-		});
-	}
-
-	private void asycInsertGroupPurcse(final GroupPurcse groupPurcse) {
-		Executor executor = Executors.newSingleThreadExecutor();
-		executor.execute(new Runnable() {
-			public void run() {
-				groupPurcseService.insertSelective(groupPurcse);
-			}
-		});
-	}
 	
-	//payway可选参数为：wechat，alipay，sendWithoutPay分别是微信支付，支付宝，货到付款。
-	@RequestMapping(value = "preCheckPay")
+
+	// payway可选参数为：wechat，alipay，sendWithoutPay分别是微信支付，支付宝，货到付款。
+	@RequestMapping(value = "getPayMchJs")
 	@ResponseBody
-	public JSONObject preCheckPay(@RequestParam String payway,
-			@RequestParam String goodsId,
-			@RequestParam Integer buyNum, 
-			@RequestParam String packagePriceId,
-			@RequestParam String proValues, 
-			@RequestParam String dealPrice,
+	public String getPayMchJs(@RequestParam String payway,
+			@RequestParam String goodsId, @RequestParam String orderId,
+			@RequestParam Integer buyNum, @RequestParam String packagePriceId,
+			@RequestParam String proValues, @RequestParam String dealPrice,
 			@RequestParam(defaultValue = "group") String mode,
 			@RequestParam(required = false) String groupPurcseId,
-			Model uiModel,
-			HttpServletRequest httpServletRequest,
+			Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		
-		if("sendWithoutPay".equals(payway)){
+
+		//货到付款
+		if ("sendWithoutPay".equals(payway)) {
+			//直接开团
 			
-		}else if("wechat".equals(payway)){
-			
-		}else if("alipay".equals(payway)){
-			
+		} else if ("wechat".equals(payway)) {//微信支付
+			Unifiedorder unifiedorder = new Unifiedorder();
+			unifiedorder.setAppid(appid);
+			unifiedorder.setMch_id(mch_id);
+			unifiedorder.setNonce_str(UUID.randomUUID().toString()
+					.replace("-", ""));
+
+			unifiedorder.setBody("商品信息");
+			unifiedorder.setOut_trade_no(orderId);
+			unifiedorder.setTotal_fee(dealPrice);// 单位分
+			unifiedorder
+					.setSpbill_create_ip(httpServletRequest.getRemoteAddr());// IP
+			unifiedorder.setNotify_url("http://mydomain.com/test/notify");
+			unifiedorder.setTrade_type("JSAPI");// JSAPI，NATIVE，APP，MWEB
+
+			UnifiedorderResult unifiedorderResult = PayMchAPI.payUnifiedorder(
+					unifiedorder, key);
+
+			// @since 2.8.5 API返回数据签名验证
+			if (unifiedorderResult.getSign_status() != null
+					&& unifiedorderResult.getSign_status()) {
+				String json = PayUtil.generateMchPayJsRequestJson(
+						unifiedorderResult.getPrepay_id(), appid, key);
+				return json;
+			}
+		} else if ("alipay".equals(payway)) {
+
 		}
 		return null;
 	}
@@ -378,7 +388,6 @@ public class MemberOrderController extends BaseController<TbUser> {
 			// 开拼团
 			if ("group".equals(mode)) {
 				groupPurcse.setDisable(false);
-				;
 			} else { // 独立团直接设置为不可用了
 				groupPurcse.setDisable(true);
 			}
@@ -420,48 +429,6 @@ public class MemberOrderController extends BaseController<TbUser> {
 		return basePath + "checkOut";
 	}
 
-	@RequestMapping(value = "getPayMchJs")
-	@RequiresAuthentication
-	public void getPayMchJs(@RequestParam String goodsId,
-			@RequestParam Integer buyNum, @RequestParam String packagePriceId,
-			@RequestParam String proValues, @RequestParam String dealPrice,
-			@RequestParam(defaultValue = "group") String mode,
-			@RequestParam(required = false) String groupPurcseId,
-			RedirectAttributes redirectAttributes, Model uiModel,
-			HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {
-		// payPackage 的商品信息，总价可以通过前端传入
-
-		Unifiedorder unifiedorder = new Unifiedorder();
-		unifiedorder.setAppid(appid);
-		unifiedorder.setMch_id(mch_id);
-		unifiedorder
-				.setNonce_str(UUID.randomUUID().toString().replace("-", ""));
-
-		unifiedorder.setBody("商品信息");
-		unifiedorder.setOut_trade_no("123456");
-		unifiedorder.setTotal_fee("1");// 单位分
-		unifiedorder.setSpbill_create_ip(request.getRemoteAddr());// IP
-		unifiedorder.setNotify_url("http://mydomain.com/test/notify");
-		unifiedorder.setTrade_type("JSAPI");// JSAPI，NATIVE，APP，MWEB
-
-		UnifiedorderResult unifiedorderResult = PayMchAPI.payUnifiedorder(
-				unifiedorder, key);
-
-		// @since 2.8.5 API返回数据签名验证
-		if (unifiedorderResult.getSign_status() != null
-				&& unifiedorderResult.getSign_status()) {
-			String json = PayUtil.generateMchPayJsRequestJson(
-					unifiedorderResult.getPrepay_id(), appid, key);
-
-			// 将json 传到jsp 页面
-			request.setAttribute("json", json);
-			// 示例jsp
-			request.getRequestDispatcher("pay_example.jsp").forward(request,
-					response);
-		}
-	}
-
 	/**
 	 * 支付回调通知
 	 * 
@@ -480,15 +447,7 @@ public class MemberOrderController extends BaseController<TbUser> {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "payMchNotify")
-	@RequiresAuthentication
-	public void payMchNotify(@RequestParam String goodsId,
-			@RequestParam Integer buyNum, @RequestParam String packagePriceId,
-			@RequestParam String proValues, @RequestParam String dealPrice,
-			@RequestParam(defaultValue = "group") String mode,
-			@RequestParam(required = false) String groupPurcseId,
-			RedirectAttributes redirectAttributes, Model uiModel,
-			HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
+	public void payMchNotify(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		// 获取请求数据
 		String xmlData = StreamUtils.copyToString(request.getInputStream(),
 				Charset.forName("utf-8"));
@@ -518,7 +477,140 @@ public class MemberOrderController extends BaseController<TbUser> {
 			response.getOutputStream().write(
 					XMLConverUtil.convertToXML(baseResult).getBytes());
 		}
-
+		
+		//如果支付成功那么就开团。
+		if (SignatureUtil.validateSign(mapData, key)) {
+			String orderId = payNotify.getOut_trade_no();
+			OrderTrade orderTrade = this.orderTradeService.selectByPrimaryKey(orderId);
+			orderTrade.setStatus(OrderStatus.TO_BE_SENT_PAYED);
+			this.orderTradeService.updateByPrimaryKeySelective(orderTrade);
+			processOrder(orderId,request,response);
+		}
+		
 	}
 
+	/**
+	 * 处理回调订单(此处的逻辑稍微复杂：取到订单Id，订单修改disable为true表示下单成功，接着处理开团的逻辑)
+	 * @param orderId
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "processOrder")
+	public String processOrder(@RequestParam String orderId,HttpServletRequest request,HttpServletResponse response){
+		OrderTrade orderTrade = this.orderTradeService.selectByPrimaryKey(orderId);
+		
+		//订单下单成功。
+		orderTrade.setDisable(true);
+		
+		String groupPurcseId = orderTrade.getGroupPurcseId();
+		Member member = null;
+		// groupPurcseId是不是为null表示是拼团还是开团
+		GroupPurcse groupPurcse = null;
+		GroupPurcseMember groupPurcseMember = new GroupPurcseMember();// 拼团中间表。
+		int numberCount = 1;
+		
+		PrProduct product = prductService.selectByPrimaryKey(orderTrade.getProductId());
+		member = memberService.selectByPrimaryKey(orderTrade.getMemberId());
+		
+		
+		//根据是否有团Id判断是开团还是拼团。
+		if (null != groupPurcseId) {
+			groupPurcse = groupPurcseService.selectByPrimaryKey(groupPurcseId);
+			if (groupPurcse != null) {
+				numberCount = groupPurcse.getNumberCount();
+			}
+		} else {
+			String id = UUID.randomUUID().toString().replaceAll("-", "");
+			groupPurcse = new GroupPurcse();
+			groupPurcse.setId(id);
+			//团满人设置为true，不满为false；
+			groupPurcse.setDisable(false);
+//			groupPurcseService.insertSelective(groupPurcse);
+		}
+
+		//设置开团的会员信息。
+		groupPurcse.setProductId(product.getId());
+		if (member != null) {
+			groupPurcse.setMemeberId(member.getId());
+			groupPurcse.setMemberIcon(member.getIcon());
+			groupPurcse.setMemberName(member.getNickname());
+			groupPurcse.setMemberOpenId(member.getOpenId());
+		}
+
+		groupPurcseMember = new GroupPurcseMember();
+		groupPurcseMember.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+		//设置中间表信息。
+		if (member != null) {
+			groupPurcseMember.setMemberId(member.getId());
+			groupPurcseMember.setMemberIcon(member.getIcon());
+			groupPurcseMember.setMemberName(member.getNickname());
+			groupPurcseMember.setMemberOpenId(member.getOpenId());
+		}
+
+		if (null != groupPurcseId) {// 参团。
+			// 插入拼团中间表。
+			if (groupPurcseMember != null) {
+				groupPurcseMember.setGroupPurcseId(groupPurcse.getId());
+			}
+			int countGroupPurcseMember = groupPurcseMemberService
+					.countByGroupPurcseId(groupPurcse.getId());
+			// 满团后设置disable为true，表示该团已经满人了。
+			if (numberCount != 0 && numberCount == (countGroupPurcseMember + 1)) {
+				groupPurcse.setDisable(true);
+			}
+			groupPurcseService.updateByPrimaryKeySelective(groupPurcse);// 更新拼团。
+		} else {
+			// 开拼团
+			if (orderTrade.getIsDefault()) {
+				groupPurcse.setDisable(false);
+			} else { // 独立团直接设置为不可用了
+				groupPurcse.setDisable(true);
+				orderTrade.setIsFormSccuess(true);
+			}
+			
+			//开团截止时间为4天96小时。
+			long dateTime = new Date().getTime();
+			dateTime += 3600000 * 24 * 4;
+			SimpleDateFormat format = new SimpleDateFormat(
+					"yyyy-MM-dd HH:mm:ss");
+			String d = format.format(dateTime);
+			Date date = new Date();
+			try {
+				date = format.parse(d);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+
+			groupPurcse.setExpiredTime(date);
+			
+			groupPurcseService.insertSelective(groupPurcse); // 开团。
+		}
+
+		groupPurcseMember.setGroupPurcseId(groupPurcse.getId());
+		groupPurcseMemberService.insertSelective(groupPurcseMember);
+		
+		orderTradeService.updateByPrimaryKeySelective(orderTrade);
+		
+		return null;
+	}
+
+	private void asycInsertGroupPurcseMember(
+			final GroupPurcseMember groupPurcseMember) {
+		Executor executor = Executors.newSingleThreadExecutor();
+		executor.execute(new Runnable() {
+			public void run() {
+				groupPurcseMemberService.insertSelective(groupPurcseMember);
+			}
+		});
+	}
+
+	private void asycInsertGroupPurcse(final GroupPurcse groupPurcse) {
+		Executor executor = Executors.newSingleThreadExecutor();
+		executor.execute(new Runnable() {
+			public void run() {
+				groupPurcseService.insertSelective(groupPurcse);
+			}
+		});
+	}
 }
