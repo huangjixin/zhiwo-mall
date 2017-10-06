@@ -186,7 +186,7 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    ,a.number_count,b.NUMBER_GROUP_PURCSE
+    ,a.number_count as number_count,b.NUMBER_GROUP_PURCSE as number_group_purcse
     from pr_product LEFT JOIN
     (SELECT 
         COUNT(*) as number_count, PRODUCT_ID
