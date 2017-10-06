@@ -145,7 +145,7 @@
     on P.SHOP_ID=shop.id
     LEFT JOIN (
     	SELECT 
-		    COUNT(*) AS NUMBER_GROUP_PURCSE,p.SHOP_ID
+		    COUNT(*) AS NUMBER_GROUP_PURCSE,p.SHOP_ID as sid
 		FROM
 		    group_purcse g
 		        LEFT JOIN
