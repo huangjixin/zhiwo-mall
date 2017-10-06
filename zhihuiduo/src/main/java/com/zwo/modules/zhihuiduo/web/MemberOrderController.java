@@ -27,6 +27,7 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -227,7 +228,8 @@ public class MemberOrderController extends BaseController<TbUser> {
 		if (member != null) {
 			list = addressService.listAllByMemberId(member.getId());
 		}
-
+		prExtention.setMode(mode);
+		prExtention.setGroupPurcseId(groupPurcseId);
 		prExtention.setShop(shop);
 		prExtention.setOrder(orderTrade);
 		prExtention.setMemberAddresses(list);
@@ -256,21 +258,18 @@ public class MemberOrderController extends BaseController<TbUser> {
 	
 
 	// payway可选参数为：wechat，alipay，sendWithoutPay分别是微信支付，支付宝，货到付款。
-	@RequestMapping(value = "getPayMchJs")
+	@RequestMapping(value = "getPayMchJs",method=RequestMethod.POST)
 	@ResponseBody
 	public String getPayMchJs(@RequestParam String payway,
-			@RequestParam String goodsId, @RequestParam String orderId,
-			@RequestParam Integer buyNum, @RequestParam String packagePriceId,
-			@RequestParam String proValues, @RequestParam String dealPrice,
-			@RequestParam(defaultValue = "group") String mode,
-			@RequestParam(required = false) String groupPurcseId,
+			@RequestParam String orderId,
+			@RequestParam String dealPrice,
 			Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 
 		//货到付款
 		if ("sendWithoutPay".equals(payway)) {
 			//直接开团
-			
+			processOrder(orderId, httpServletRequest, httpServletResponse);
 		} else if ("wechat".equals(payway)) {//微信支付
 			Unifiedorder unifiedorder = new Unifiedorder();
 			unifiedorder.setAppid(appid);
