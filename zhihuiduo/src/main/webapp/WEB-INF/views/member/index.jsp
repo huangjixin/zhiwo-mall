@@ -206,7 +206,7 @@
 			}
 			
 			var redirectUrl = urlHead+"/goodsDetail/"+product.id+'.htm?timestamp='+new Date().getTime();
-			var parameter = '<div id="'+product.id+'Div" style="display:none;" class="col-sm-12 col-md-12" onClick="showProduct(\''+redirectUrl+'\');"><div class="thumbnail" style="padding-top:0px;"><img class="lazy" src="'+urlHead+'/images/busy.webp"  data-original="'+urlHead+'/'+product.icon+'" style="max-height:200px;" ><div class="caption" style="text-align: left;"><p>'+product.name+'</p><div class="pull-left"><label style="color: red; font-size: 2rem;"><i class="fa fa-jpy"></i>'+product.gourpSalePrice+'</label> <label style="color: gray; font-size: 1.4rem;" class="checkbox-inline">'+numberCountPara+'</label></div><div class="pull-right">'+memberIconPara+'<button type="button" class="btn btn-danger">去开团 ></button></div><div class="clearfix"></div></div></div></div>';
+			var parameter = '<div id="'+product.id+'Div" style="display:none;" class="col-sm-12 col-md-12" onClick="showProduct(\''+redirectUrl+'\');"><div class="thumbnail" style="padding-top:0px;"><img class="lazy" src="'+urlHead+'/images/busy.webp"  data-original="'+urlHead+'/'+product.icon+'" style="max-height:200px;" ><div class="caption" style="text-align: left;font-size:1.3rem;"><p>'+product.name+'</p><div class="pull-left"><label style="color: red; font-size: 2rem;"><i class="fa fa-jpy"></i>'+product.gourpSalePrice+'</label> <label style="color: gray; font-size: 1.4rem;" class="checkbox-inline">'+numberCountPara+'</label></div><div class="pull-right">'+memberIconPara+'<button type="button" class="btn btn-danger">去开团 ></button></div><div class="clearfix"></div></div></div></div>';
 			console.log(parameter);
 			$("#"+target).append(parameter);
 		}

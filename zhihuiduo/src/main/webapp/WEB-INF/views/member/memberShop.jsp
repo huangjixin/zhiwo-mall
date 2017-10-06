@@ -11,7 +11,7 @@
 <script type="text/javascript" src="${ctx}/js/zhihuiduo/memberShop.js"></script>
 <style>
 body {
-	background-color: #ffffff;
+	background-color: #f2f2f2;
 }
 
 .thumbnail {
@@ -39,7 +39,7 @@ body {
 </head>
 <body>
 	<div class="page-header"
-		style="text-align: center; font-size: 2rem; position:fixed; background-color:#fff; left:0;right:0; top:0; padding-top:10px; margin-top:0;">
+		style="text-align: center; font-size: 2rem; position:fixed; z-index:999; background-color:#fff; left:0;right:0; top:0; padding-top:10px; margin-top:0;">
 		<b id="shopTitle"></b>&nbsp;&nbsp;<small  style="color:red;" onClick="javascript:history.back();">返回</small>
 	</div>
     <div style="height:45px;"></div>
@@ -52,7 +52,7 @@ body {
 				</div>
 				<div class="media-body">
 					<h4 class="media-heading" style="padding-top: 6px;" id="shopName">${shop.name}</h4>
-					<span style="color: gray; font-size: 1.4rem;">商品数量${productsCount}</span>
+					<span style="color: gray; font-size: 1.4rem;">商品数量<span id="numberCountSpan"></span>${productsCount}</span>
 				</div>
 				<div class="media-right" style="padding-top: 10px;">
 					<i class="fa fa-wechat fa-lg" aria-hidden="true"
@@ -65,24 +65,24 @@ body {
 			</div>
 		</div>
 	</div>
-
+	
 
 	<div class="thumbnail" id="shopGoods">
 		<div class="caption">
-			<h4>全部商品</h4>
+        	<h4 class="media-heading">全部商品</h4>
 		</div>
 	</div>
 
-	<c:forEach var="prod" items="${products}">
-    <a href="${ctx}/goodsDetail?goodsId=${prod.id}">
+	<!--<c:forEach var="prod" items="${products}">
+    <a href="${ctx}/goodsDetail/${prod.id}.htm">
 		<div class="col-xs-6" onClick="gotoGoodsDetail();"><div class="thumbnail"><img class="img-responsive" src="${ctx}/images/busy.webp" data-original="${ctx}/${prod.icon}"><div class="caption" style="font-size: 1.3rem;"><h6>${prod.name}</h6><div class="pull-left"><label style="color: red;"><i class="fa fa-jpy"></i>${prod.gourpSalePrice}</label> <span>已拼1222件</span></div><div class="clearfix"></div></div></div></div></a>
-	</c:forEach>
+	</c:forEach>-->
 	
     <%@ include file="/WEB-INF/member-include/fade-ui.jsp"%>
 	<script>
 		var obj = ${rawData};
 		
-				var ctx = "";
+		var ctx = "";
 		var fadeCount = 0;
 		var groupPurcses;
 		var products;
@@ -148,23 +148,28 @@ body {
 					
 					$("#shopName").html(shop.name);
 					$("#shopDescription").html(shop.description);
+					$("#numberCountSpan").html(shop.numberCount);
 				}
 				
 				if(products){
 					var length = products.length;
 					for(var i=0;i<length;i++){
 						var prod = products[i];
-						var url = ctx+"/goodsDetail/"+product.id+'.htm?timestamp='+new Date().getTime();
+						var numCountPara = 0;
+						if(prod.numberCount){
+							numCountPara = prod.numberCount;
+						}
+						var url = ctx+"/goodsDetail/"+prod.id+'.htm?timestamp='+new Date().getTime();
 						var prodIcon = '<img class="img-responsive" src="'+ctx+'/images/busy.webp" data-original="'+ctx+'/'+prod.icon+'">';
 						var prodName = '<h5>'+prod.name+'</h5>';
-						var parameter = '<div id="'+prod.id+'Div" style="display:none;" class="col-xs-6" onClick="turnTo(\''+url+'\');"><div class="thumbnail">'+prodIcon+'<div class="caption">'+prodName+'<div style="height:2px;"></div><div class="pull-left"><label style="color: red;"><i class="fa fa-jpy"></i>'+prod.gourpSalePrice+'</label> <span style="font-size:1.3rem;">已拼'+prod.numberCount+'件</span></div><div class="clearfix"></div></div></div></div>';
+						var parameter = '<div id="'+prod.id+'Div" style="display:none;" class="col-xs-6" onClick="turnTo(\''+url+'\');"><div class="thumbnail">'+prodIcon+'<div class="caption">'+prodName+'<div style="height:2px;"></div><div class="pull-left"><label style="color: red;"><i class="fa fa-jpy"></i>'+prod.gourpSalePrice+'</label> <span style="font-size:1.3rem;">已拼'+numCountPara+'件</span></div><div class="clearfix"></div></div></div></div>';
 						$("#shopGoods").after(parameter);
 						$('#'+prod.id+'Div').fadeIn('slow');
 					}
 				}
 			}
 		}
-		
+				
 		//跳转到
 		function turnTo(url){
 			window.location.href=url;

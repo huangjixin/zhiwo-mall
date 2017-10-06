@@ -248,8 +248,8 @@
 				}
 			}
 			
-			$("#mediaIcon").attr("src",urlHead+'/images/busy.webp');
-			$("#mediaIcon").attr("data-original",urlHead+'/'+product.icon);
+			$("#mediaIcon").attr("src",urlHead+'/'+product.icon);
+			//$("#mediaIcon").attr("data-original",urlHead+'/'+product.icon);
 			$("#nameHeading").html(product.name);
 			$("#soldQuantityB").html(product.numberCount);
 			$("#nameHeading").bind("click",function(){

@@ -289,6 +289,7 @@ $option.css({ "background-color": "#DEDEDE" });
 				</div>
 				<div class="media-body">
 					<h5 class="media-heading" id="pName"></h5>
+                    <h5 id="propertyValuesInfo"></h5>
 				</div>
 			</div>
 		</div>
@@ -308,19 +309,20 @@ $option.css({ "background-color": "#DEDEDE" });
 		<div
 			style="height: 40px; background-color: #ffffff; border-top: 0px solid red; position: absolute; left: 0; right: 0; bottom: 0;">
 			<div
-				style="float: right; background-color: red; color: #ffffff; width: 40%; height: 40px; text-align: center; line-height: 40px;">
-				<span id="confirmBtn" onClick="checkPay();">确定</span>
+				style="float: right; background-color: red; color: #ffffff; width: 25%; height: 40px; text-align: center; line-height: 40px;"
+                 onClick="checkPay();">
+				<span id="confirmBtn">确定</span>
 			</div>
 			<div
-				style="float: right; background-color: #ffffff; color: #151516; width: 60%; height: 40px; text-align: right; line-height: 40px; padding-right: 30px;">
-                <span>运费：</span>&nbsp;&nbsp;<span
-					style="color: red; font-size: 2rem;"><i class="fa fa-jpy"></i>&nbsp;<label id="transportFeeLabel"></label></span>
-                    &nbsp;
-                <span>货款：</span>&nbsp;&nbsp;<span
-					style="color: red; font-size: 2rem;"><i class="fa fa-jpy"></i>&nbsp;<label id="dealPriceLabel"></label></span>
-                    &nbsp;
-				<span>实际付款：</span>&nbsp;&nbsp;<span
-					style="color: red; font-size: 2rem;"><i class="fa fa-jpy"></i>&nbsp;<label id="TotalPriceLabel"></label></span>
+				style="float: right; background-color: #ffffff; color: #151516; width: 75%; height: 40px; text-align: left; line-height: 40px; padding-right: 30px; padding-left:2px;">
+                运费:<span
+					style="color: red;"><i class="fa fa-jpy"></i><label id="transportFeeLabel"></label></span>
+                   &nbsp;
+                货款:<span
+					style="color: red;"><i class="fa fa-jpy"></i><label id="dealPriceLabel"></label></span>
+                   &nbsp;
+				实际付款:<span
+					style="color: red;"><i class="fa fa-jpy"></i><label id="TotalPriceLabel"></label></span>
 			</div>
 		</div>
 	</div>
@@ -434,6 +436,20 @@ $option.css({ "background-color": "#DEDEDE" });
 			<!-- /.modal -->
 		</div>
 	</div>
+    <div class="rs-dialog" id="toolTipModal">
+        <div class="rs-dialog-box">
+            <a class="close" href="#">×</a>
+                <div class="rs-dialog-header">
+                	<h3></h3>
+                </div>
+                <div class="rs-dialog-body">
+                	<p id="tooltipContent"></p>
+                </div>
+                <div class="rs-dialog-footer">
+                <input type="button" class="close" value="Close" style="float:right">
+            </div>
+        </div>
+    </div>
 	<script>
 		window.rawData = ${rawData};
 		
@@ -441,6 +457,7 @@ $option.css({ "background-color": "#DEDEDE" });
 		var obj;
 		
 		var payway = "wechat";
+		var currentAddr;//当前地址。
 		
 		$(function() {
 			ctx = window.location.protocol+"//"+window.location.host;
@@ -462,6 +479,7 @@ $option.css({ "background-color": "#DEDEDE" });
 				var para = '';
 				if(obj.defautAddress){
 					var address = obj.defautAddress;
+					currentAddr = address;
 					para +='<div style="height: 80px; background-color: #ffffff; padding-left: 10px; padding-right: 10px; padding-top: 10px; border-bottom: 1px solid red;"><strong>'+address.name+'</strong>,<span>'+address.mobilPhone+'</span><br><span>'+address.province+'&nbsp;&nbsp;'+address.city+'&nbsp;&nbsp;'+address.street+'</span></div>';
 				}else{
 					para +='<div style="height: 80px; line-height: 80px; background-color: #ffffff; padding-left: 10px; padding-right: 10px;"><div class="pull-left"><span><i class="fa fa-plus-square fa-lg" aria-hidden="true" style="color: red;"></i></span> <span>&nbsp;&nbsp;</span> <span>手动添加新地址</span></div><div class="pull-right"><span>&nbsp;&nbsp;</span> <span><i class="fa fa-arrow-circle-right lg" aria-hidden="true"></i></span></div><div class="clearfix"></div></div>';
@@ -483,6 +501,13 @@ $option.css({ "background-color": "#DEDEDE" });
 				if(obj.name){
 					$('#pName').html(obj.name);
 				}
+				
+				if(obj.order){
+					if(obj.order.description){
+						$('#propertyValuesInfo').html(obj.order.description);
+					}
+				}
+				
 				
 				var transportFee=0;
 				if(obj.transportFee){
@@ -521,10 +546,10 @@ $option.css({ "background-color": "#DEDEDE" });
 			if(obj){
 				var para = '';
 				
-				para += '<a class="list-group-item" href="#" onClick="changePayway(\'wechat\');return false;"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp; 微信支付(推荐)</a>';
-				para +='<a class="list-group-item" href="#" onClick="changePayway(\'alipay\');return false;"><i class="fa fa-book fa-fw" aria-hidden="true"></i>&nbsp; 支付宝</a>';
+				para += '<a class="list-group-item focus" href="#" onClick="changePayway(\'wechat\');return false;"><i class="fa fa-weixin fa-fw" aria-hidden="true"></i>&nbsp; 微信支付(推荐)</a>';
+				/*para +='<a class="list-group-item" href="#" onClick="changePayway(\'alipay\');return false;"><i class="fa fa-paypal fa-fw" aria-hidden="true"></i>&nbsp; 支付宝</a>';*/
 				if(obj.isSentUnpay=='1'){
-					 para +='<a class="list-group-item" href="#" onClick="changePayway(\'sendWithoutPay\');return false;"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i>&nbsp; 货到付款</a>';
+					 para +='<a class="list-group-item" href="#" onClick="changePayway(\'sendWithoutPay\');return false;"><i class="fa fa-truck fa-fw" aria-hidden="true"></i>&nbsp; 货到付款</a>';
 				}
 			   
 				
@@ -538,8 +563,49 @@ $option.css({ "background-color": "#DEDEDE" });
 			payway = paywayPara;
 		}
 		
-		function getQueryString(name)
-		{
+		//确定支付。
+		function checkPay(){
+			if(currentAddr){
+				$('#tooltipContent').html('');
+			}else{
+				$('#tooltipContent').html('请设置地址');
+				$('#toolTipModal').modal('show');
+				return;	
+			}
+			
+			if(payway =='wechat'){
+				
+			}else if(payway =='sendWithoutPay'){
+			
+				 var url = ctx+'/memberOrder/getPayMchJs';
+				 var data = {};
+				 data.payway= payway;
+				 //data.goodsId= obj.id;
+				 data.orderId= obj.order.id;
+				 //data.buyNum= obj.order.buyNum;
+				 data.dealPrice= obj.order.dealPrice;
+				 //data.groupPurcseId= obj.groupPurcseId;
+				 //data.mode= obj.mode;
+				 
+				 $.ajax({
+					 url:url,
+					 type: "post",
+					 data: data,
+					 success: function (result) {
+						console.log(result);
+				 	 },error: function(data) {
+                       // alert("error:"+data.responseText);
+             	 	 }
+           		  });
+				
+			}else if(payway =='alipay'){
+				
+			}
+			
+			console.log(payway);
+		}
+		
+		function getQueryString(name){
 			 var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
 			 var r = window.location.search.substr(1).match(reg);
 			 if(r!=null)return  unescape(r[2]); return null;
@@ -561,12 +627,18 @@ $option.css({ "background-color": "#DEDEDE" });
 
 			$("#defaultAddress").empty();
 			$("#defaultAddress").append(para);
-			setCheckDivToNone(true)
+			setCheckDivToNone(true);
+			
+			currentAddr.name = name;
+			currentAddr.mobilPhone = mobilPhone;
+			currentAddr.province = province;
+			currentAddr.city = city;
+		 	currentAddr.street = street;
 		}
 		
 		
 		///////////////////////////////////////////////////////
-		var mode = "create";
+	var mode = "create";
 	var fromUrl = "${fromURL}";
 	function backForward(){
 		var data = $('#form').serialize();
