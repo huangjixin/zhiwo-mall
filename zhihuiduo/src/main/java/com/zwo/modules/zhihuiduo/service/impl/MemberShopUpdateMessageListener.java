@@ -124,7 +124,7 @@ public class MemberShopUpdateMessageListener implements MessageListener {
 					.replaceFirst("/", "");
 			String webappRoot = cpath.replaceAll("/WEB-INF/classes/", "");
 			String templatePath = webappRoot + File.separator + "template";
-			String templateName = "memberGroup.ftl";
+			String templateName = "memberShop.ftl";
 			String fileName = webappRoot + File.separator + "memberShop"
 					+ File.separator + shopId + ".htm";
 			
