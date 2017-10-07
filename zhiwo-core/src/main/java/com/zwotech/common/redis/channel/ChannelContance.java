@@ -48,4 +48,9 @@ public class ChannelContance {
 	 * 用户开团。
 	 */
 	public static final String GROUPPURCSE_CREATE_QUEUE_CHANNEL = "groupPurcse_create.queue.channel";
+	
+	/**
+	 * 店铺生成静态页面。
+	 */
+	public static final String SHOP_CREATE_QUEUE_CHANNEL = "shop_create.topic.channel";
 }
