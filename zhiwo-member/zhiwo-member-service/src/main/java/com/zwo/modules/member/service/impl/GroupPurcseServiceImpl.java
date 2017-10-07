@@ -245,7 +245,7 @@ public class GroupPurcseServiceImpl extends BaseService<GroupPurcse> implements
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+'_key_GroupPurcse'", value = "GroupPurcse")
+//	@Cacheable(key = "#id+'_key_GroupPurcse'", value = "GroupPurcse")
 	@Transactional(readOnly = true)
 	public GroupPurcse selectByPrimaryKey(String id) {
 		// 日志记录
