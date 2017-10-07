@@ -189,11 +189,13 @@
     ,a.number_count as number_count,b.NUMBER_GROUP_PURCSE as number_group_purcse
     from pr_product LEFT JOIN
     (SELECT 
-        COUNT(*) as number_count, PRODUCT_ID
+        COUNT(*) AS number_count, PRODUCT_ID
     FROM
         order_trade
-	where IS_FORM_SCCUESS='1'
-    GROUP BY PRODUCT_ID) AS a ON id = a.PRODUCT_ID
+    WHERE
+        PRODUCT_ID = '99fda1d4bd0f4b7ebc596cc393688590'
+    AND IS_FORM_SCCUESS = '1'
+    ) AS a ON id = a.PRODUCT_ID
     left join 
      (SELECT 
 	    count(*) as NUMBER_GROUP_PURCSE,PRODUCT_ID
