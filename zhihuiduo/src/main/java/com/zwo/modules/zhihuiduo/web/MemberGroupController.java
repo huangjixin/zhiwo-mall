@@ -150,7 +150,7 @@ public class MemberGroupController extends BaseController {
 				e.printStackTrace();
 			}
 			
-			if(groupPurcse!=null && groupPurcse.getDisable()==false){
+			if(groupPurcse!=null){
 				groupPurcseMembers = groupPurcseMemberService.selectByGroupPurcseId(groupPurcse.getId());
 				groupPurcses =groupPurcseService.selectGroupPurcseByPId(goodsId, false);
 			}

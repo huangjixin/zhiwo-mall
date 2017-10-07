@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -63,6 +64,8 @@ import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.service.IShopService;
 import com.zwo.modules.system.domain.TbUser;
 import com.zwo.modules.zhihuiduo.dto.ProductExtention;
+import com.zwotech.common.redis.channel.ChannelContance;
+import com.zwotech.common.utils.RedisUtil;
 import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
@@ -133,6 +136,7 @@ public class MemberOrderController extends BaseController<TbUser> {
 	 * @param httpServletResponse
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "checkOut")
 	// @RequiresAuthentication
 	public String checkOut(@RequestParam String goodsId,
@@ -222,7 +226,9 @@ public class MemberOrderController extends BaseController<TbUser> {
 		 * asycInsertOrderTrade(orderTrade); }
 		 */
 		asycInsertOrderTrade(orderTrade);
-
+		if(this.redisTemplate!=null){
+			redisTemplate.opsForValue().set(orderTrade.getId()+"_orderTrade", orderTrade, 15, TimeUnit.MINUTES);
+		}
 		// 获取用户的全部地址。
 		List<MemberAddress> list = null;
 		if (member != null) {
@@ -497,8 +503,21 @@ public class MemberOrderController extends BaseController<TbUser> {
 	 */
 	@RequestMapping(value = "processOrder")
 	public String processOrder(@RequestParam String orderId,HttpServletRequest request,HttpServletResponse response){
-		OrderTrade orderTrade = this.orderTradeService.selectByPrimaryKey(orderId);
+		OrderTrade orderTrade = null;
+		if(this.redisTemplate!=null){
+			orderTrade = (OrderTrade) redisTemplate.opsForValue().get(orderId+"_orderTrade");
+		}else{
+			orderTrade =this.orderTradeService.selectByPrimaryKey(orderId);
+		}
 		
+		if(orderTrade==null){
+			return null;
+		}
+		
+		//订单取消或者交易成功不予以处理。
+		if(orderTrade.getDisable()==true){
+			return null;
+		}
 		//订单下单成功。
 		orderTrade.setDisable(true);
 		
@@ -507,14 +526,14 @@ public class MemberOrderController extends BaseController<TbUser> {
 		// groupPurcseId是不是为null表示是拼团还是开团
 		GroupPurcse groupPurcse = null;
 		GroupPurcseMember groupPurcseMember = new GroupPurcseMember();// 拼团中间表。
-		int numberCount = 1;
+		int numberCount = 2;//默认开团人数。
 		
 		PrProduct product = prductService.selectByPrimaryKey(orderTrade.getProductId());
 		member = memberService.selectByPrimaryKey(orderTrade.getMemberId());
 		
 		
 		//根据是否有团Id判断是开团还是拼团。
-		if (null != groupPurcseId) {
+		if (null != groupPurcseId && !"".equals(groupPurcseId)) {
 			groupPurcse = groupPurcseService.selectByPrimaryKey(groupPurcseId);
 			if (groupPurcse != null) {
 				numberCount = groupPurcse.getNumberCount();
@@ -533,7 +552,7 @@ public class MemberOrderController extends BaseController<TbUser> {
 		if (member != null) {
 			groupPurcse.setMemeberId(member.getId());
 			groupPurcse.setMemberIcon(member.getIcon());
-			groupPurcse.setMemberName(member.getNickname());
+			groupPurcse.setMemberName(member.getNickname()==null?member.getUsername():member.getNickname());
 			groupPurcse.setMemberOpenId(member.getOpenId());
 		}
 
@@ -543,11 +562,11 @@ public class MemberOrderController extends BaseController<TbUser> {
 		if (member != null) {
 			groupPurcseMember.setMemberId(member.getId());
 			groupPurcseMember.setMemberIcon(member.getIcon());
-			groupPurcseMember.setMemberName(member.getNickname());
+			groupPurcseMember.setMemberName(member.getNickname()==null?member.getUsername():member.getNickname());
 			groupPurcseMember.setMemberOpenId(member.getOpenId());
 		}
 
-		if (null != groupPurcseId) {// 参团。
+		if (null != groupPurcseId && !"".equals(groupPurcseId)) {// 参团。
 			// 插入拼团中间表。
 			if (groupPurcseMember != null) {
 				groupPurcseMember.setGroupPurcseId(groupPurcse.getId());
@@ -555,8 +574,12 @@ public class MemberOrderController extends BaseController<TbUser> {
 			int countGroupPurcseMember = groupPurcseMemberService
 					.countByGroupPurcseId(groupPurcse.getId());
 			// 满团后设置disable为true，表示该团已经满人了。
-			if (numberCount != 0 && numberCount == (countGroupPurcseMember + 1)) {
+			if (numberCount != 0 && (countGroupPurcseMember + 1) >= numberCount) {
 				groupPurcse.setDisable(true);
+				orderTrade.setIsFormSccuess(true);
+				
+				//满人，发团。
+				orderTradeService.updateOrderTradeByGroupId(groupPurcse.getId(),true);
 			}
 			groupPurcseService.updateByPrimaryKeySelective(groupPurcse);// 更新拼团。
 		} else {
@@ -584,12 +607,20 @@ public class MemberOrderController extends BaseController<TbUser> {
 			groupPurcse.setExpiredTime(date);
 			
 			groupPurcseService.insertSelective(groupPurcse); // 开团。
+			if(groupPurcse.getDisable()){
+				orderTradeService.updateOrderTradeByGroupId(groupPurcse.getId(),true);
+			}
 		}
 
 		groupPurcseMember.setGroupPurcseId(groupPurcse.getId());
 		groupPurcseMemberService.insertSelective(groupPurcseMember);
 		
 		orderTradeService.updateByPrimaryKeySelective(orderTrade);
+		
+		if(redisTemplate!=null){
+			//发送消息更新该团的静态网页。
+			RedisUtil.publish(redisTemplate, ChannelContance.GROUPPURCSE_CREATE_QUEUE_CHANNEL, groupPurcse);
+		}
 		
 		return null;
 	}
