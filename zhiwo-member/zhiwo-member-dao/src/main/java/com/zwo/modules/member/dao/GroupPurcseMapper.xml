@@ -459,6 +459,6 @@ FROM
     	PRODUCT_ID = #{productId,jdbcType=VARCHAR}
         AND DISABLE = #{disable,jdbcType=BIT}
         AND EXPIRED_TIME > (SELECT NOW()) 
-    order by CREATE_DATE desc limit 0,4
+    order by CREATE_DATE asc limit 0,12
   </select>
 </mapper>
