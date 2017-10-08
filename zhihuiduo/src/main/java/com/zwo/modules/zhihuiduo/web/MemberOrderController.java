@@ -60,6 +60,8 @@ import com.zwo.modules.member.service.IGroupPurcseMemberService;
 import com.zwo.modules.member.service.IGroupPurcseService;
 import com.zwo.modules.member.service.IMemberAddressService;
 import com.zwo.modules.member.service.IMemberService;
+import com.zwo.modules.payment.domain.PayTradePaymentOrder;
+import com.zwo.modules.payment.service.IPayTradePaymentOrderService;
 import com.zwo.modules.shop.domain.Shop;
 import com.zwo.modules.shop.service.IShopService;
 import com.zwo.modules.system.domain.TbUser;
@@ -98,6 +100,10 @@ public class MemberOrderController extends BaseController<TbUser> {
 	@Lazy(true)
 	private IGroupPurcseMemberService groupPurcseMemberService;
 
+	@Autowired
+	@Lazy(true)
+	private IPayTradePaymentOrderService payTradePaymentOrderService;
+	
 	@SuppressWarnings("rawtypes")
 	private RedisTemplate redisTemplate;
 
@@ -269,6 +275,7 @@ public class MemberOrderController extends BaseController<TbUser> {
 	public String getPayMchJs(@RequestParam String payway,
 			@RequestParam String orderId,
 			@RequestParam String dealPrice,
+			@RequestParam String transportFee,
 			Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 
@@ -490,6 +497,20 @@ public class MemberOrderController extends BaseController<TbUser> {
 			orderTrade.setStatus(OrderStatus.TO_BE_SENT_PAYED);
 			this.orderTradeService.updateByPrimaryKeySelective(orderTrade);
 			processOrder(orderId,request,response);
+			
+			String id = UUID.randomUUID().toString().replaceAll("-", "");
+			PayTradePaymentOrder paymentOrder = new PayTradePaymentOrder();
+			paymentOrder.setId(id);
+			paymentOrder.setMemberId(orderTrade.getMemberId());
+			paymentOrder.setDisable(false);
+			paymentOrder.setIsRefund(false);
+			paymentOrder.setMerchantOrderNo(orderId);
+			paymentOrder.setOrderId(orderId);
+			paymentOrder.setOrderAmount(Double.valueOf(orderTrade.getDealPrice()));
+			paymentOrder.setPayWayCode("wechat");
+			paymentOrder.setProductId(orderTrade.getProductId());
+			
+			this.payTradePaymentOrderService.insertSelective(paymentOrder);
 		}
 		
 	}
