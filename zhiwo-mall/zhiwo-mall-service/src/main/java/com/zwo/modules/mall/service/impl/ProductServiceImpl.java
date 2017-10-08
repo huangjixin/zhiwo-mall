@@ -120,7 +120,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 			removeRedisKey(prProduct.getId() + KEY_PRODUCT_WITHOUT_BLOB);
 			
 			RedisPushMessage.publish(redisTemplate,ChannelContance.PRODUCT_DELETE_TOPIC_CHANNEL,
-					prProduct);
+					prProduct.getId());
 		}
 		// 逻辑操作
 		int result = productMapper.deleteByExample((PrProductCriteria) example);
@@ -163,7 +163,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 			
 			//发布删除页面的通知。
 			RedisPushMessage.publish(redisTemplate,ChannelContance.PRODUCT_DELETE_TOPIC_CHANNEL,
-					prProduct);
+					prProduct.getId());
 		}
 
 		int result = productMapper.deleteByExample(productCriteria);
@@ -207,7 +207,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		int result = this.productMapper.deleteByPrimaryKey(id);
 		//发布删除页面的通知。
 		RedisPushMessage.publish(redisTemplate,ChannelContance.PRODUCT_DELETE_TOPIC_CHANNEL,
-				prProduct);
+				prProduct.getId());
 		
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除结束");
@@ -327,7 +327,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		int result = this.productMapper.updateByPrimaryKey(record);
 		//发布生成页面的通知。
 		RedisPushMessage.publish(redisTemplate,ChannelContance.PRODUCT_GENERATION_TOPIC_CHANNEL,
-				record);
+				record.getId());
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新结束");
 		return result;
@@ -390,7 +390,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		int result = this.productMapper.insert(record);
 		//发布生成页面的通知。
 		RedisPushMessage.publish(redisTemplate,ChannelContance.PRODUCT_GENERATION_TOPIC_CHANNEL,
-						record);
+						record.getId());
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入结束");
 		return result;
@@ -422,7 +422,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		int result = this.productMapper.insertSelective(record);
 		//发布生成页面的通知。
 		RedisPushMessage.publish(redisTemplate,ChannelContance.PRODUCT_GENERATION_TOPIC_CHANNEL,
-						record);
+						record.getId());
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insertSelective插入结束");
 
@@ -468,7 +468,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT);
 			//发布删除页面的通知。
 			RedisPushMessage.publish(redisTemplate,ChannelContance.PRODUCT_DELETE_TOPIC_CHANNEL,
-					prProduct);
+					prProduct.getId());
 		}
 
 		if (null != record.getContent() && !"".equals(record.getContent())) {
@@ -503,7 +503,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 			removeRedisKey(prProduct.getId() + KEY_PRODUCT_WITHOUT_BLOB);
 			//发布删除页面的通知。
 			RedisPushMessage.publish(redisTemplate,ChannelContance.PRODUCT_DELETE_TOPIC_CHANNEL,
-					prProduct);
+					prProduct.getId());
 		}
 
 		if (null != record.getContent() && !"".equals(record.getContent())) {
@@ -564,8 +564,8 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		// 逻辑操作
 		int result = this.productMapper.updateByPrimaryKeySelective(record);
 		//发布生成页面的通知。
-				RedisPushMessage.publish(redisTemplate,ChannelContance.PRODUCT_GENERATION_TOPIC_CHANNEL,
-						record);
+		RedisPushMessage.publish(redisTemplate,ChannelContance.PRODUCT_GENERATION_TOPIC_CHANNEL,
+						record.getId());
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新结束");
 		return result;
@@ -591,7 +591,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		int result = this.productMapper.updateByPrimaryKeyWithBLOBs(record);
 		//发布生成页面的通知。
 		RedisPushMessage.publish(redisTemplate,ChannelContance.PRODUCT_GENERATION_TOPIC_CHANNEL,
-				record);
+				record.getId());
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeyWithBLOBs更新结束");
 		return result;
