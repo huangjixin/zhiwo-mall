@@ -94,8 +94,6 @@ public class MemberGroupUpdateMessageListener implements MessageListener {
 	 */
 	@Override
 	public void onMessage(final Message message, final byte[] pattern) {
-		if(1==1)
-			return;
 		String jsonString = null;
 		
 		String goodsId = null;
@@ -139,7 +137,7 @@ public class MemberGroupUpdateMessageListener implements MessageListener {
 					e.printStackTrace();
 				}
 				
-				if(groupPurcse!=null && groupPurcse.getDisable()==false){
+				if(groupPurcse!=null){
 					groupPurcseMembers = groupPurcseMemberService.selectByGroupPurcseId(groupPurcse.getId());
 					groupPurcses =groupPurcseService.selectGroupPurcseByPId(goodsId, false);
 				}
@@ -166,7 +164,7 @@ public class MemberGroupUpdateMessageListener implements MessageListener {
 			String templatePath = webappRoot + File.separator + "template";
 			String templateName = "memberGroup.ftl";
 			String fileName = webappRoot + File.separator + "memberGroup"
-					+ File.separator + product.getId() + ".htm";
+					+ File.separator + groupPurcseId + ".htm";
 			
 			Map root = new HashMap<>();
 			root.put("rawData", jsonString);
