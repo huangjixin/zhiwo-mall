@@ -50,7 +50,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.zwo.modules.mall.domain.OrderStatus;
 import com.zwo.modules.mall.domain.OrderTrade;
 import com.zwo.modules.mall.domain.PrProduct;
+import com.zwo.modules.mall.domain.PrProductProperty;
 import com.zwo.modules.mall.service.IOrderTradeService;
+import com.zwo.modules.mall.service.IPrProductPropertyService;
+import com.zwo.modules.mall.service.IPrProductPropertyValueService;
 import com.zwo.modules.mall.service.IPrductService;
 import com.zwo.modules.member.domain.GroupPurcse;
 import com.zwo.modules.member.domain.GroupPurcseMember;
@@ -103,6 +106,14 @@ public class MemberOrderController extends BaseController<TbUser> {
 	@Autowired
 	@Lazy(true)
 	private IPayTradePaymentOrderService payTradePaymentOrderService;
+	
+	@Autowired
+	@Lazy(true)
+	private IPrProductPropertyService propertyService;
+	
+	@Autowired
+	@Lazy(true)
+	private IPrProductPropertyValueService propertyValueService;
 	
 	@SuppressWarnings("rawtypes")
 	private RedisTemplate redisTemplate;
@@ -190,7 +201,8 @@ public class MemberOrderController extends BaseController<TbUser> {
 		for (Object object : jsonArray) {
 			JSONObject obj = (JSONObject) object;
 			String name = obj.getString("name");
-			description += name + " ";
+			String propertyName = obj.getString("propertyName");
+			description += propertyName+":"+name + " ";
 		}
 
 		orderTrade.setDescription(description);
