@@ -37,6 +37,7 @@ import weixin.popular.api.PayMchAPI;
 import weixin.popular.bean.message.massmessage.MassTextMessage;
 import weixin.popular.bean.paymch.MchBaseResult;
 import weixin.popular.bean.paymch.MchPayNotify;
+import weixin.popular.bean.paymch.SecapiPayRefund;
 import weixin.popular.bean.paymch.Unifiedorder;
 import weixin.popular.bean.paymch.UnifiedorderResult;
 import weixin.popular.support.ExpireKey;
@@ -297,7 +298,8 @@ public class MemberOrderController extends BaseController<TbUser> {
 		//货到付款
 		if ("sendWithoutPay".equals(payway)) {
 			//直接开团
-			processOrder(orderId, httpServletRequest, httpServletResponse);
+			String result = processOrder(orderId, httpServletRequest, httpServletResponse);
+			return result;
 		} else if ("wechat".equals(payway)) {//微信支付
 			Unifiedorder unifiedorder = new Unifiedorder();
 			unifiedorder.setAppid(appid);
@@ -315,7 +317,7 @@ public class MemberOrderController extends BaseController<TbUser> {
 
 			UnifiedorderResult unifiedorderResult = PayMchAPI.payUnifiedorder(
 					unifiedorder, key);
-
+			
 			// @since 2.8.5 API返回数据签名验证
 			if (unifiedorderResult.getSign_status() != null
 					&& unifiedorderResult.getSign_status()) {
@@ -572,6 +574,15 @@ public class MemberOrderController extends BaseController<TbUser> {
 		if (null != groupPurcseId && !"".equals(groupPurcseId)) {
 			groupPurcse = groupPurcseService.selectByPrimaryKey(groupPurcseId);
 			if (groupPurcse != null) {
+				//该团已满，新开团。
+				if(groupPurcse.getDisable()){
+					groupPurcse = new GroupPurcse();
+					String id = UUID.randomUUID().toString().replaceAll("-", "");
+					groupPurcse.setId(id);
+					//团满人设置为true，不满为false；
+					groupPurcse.setDisable(false);
+					groupPurcseId = null;
+				}
 				numberCount = groupPurcse.getNumberCount();
 			}
 		} else {
@@ -696,5 +707,20 @@ public class MemberOrderController extends BaseController<TbUser> {
 				groupPurcseService.insertSelective(groupPurcse);
 			}
 		});
+	}
+	
+	/**
+	 * 退款。
+	 * @param orderId
+	 */
+	public void payRefund(@RequestParam String orderId){
+		SecapiPayRefund secapiPayRefund = new SecapiPayRefund();
+		secapiPayRefund.setAppid(appid);
+		secapiPayRefund.setMch_id(mch_id);
+		secapiPayRefund.setNonce_str(UUID.randomUUID().toString()
+					.replace("-", ""));
+		
+		secapiPayRefund.setOut_trade_no(orderId);
+		PayMchAPI.secapiPayRefund(secapiPayRefund, key);
 	}
 }
