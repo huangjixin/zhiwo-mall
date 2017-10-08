@@ -109,65 +109,67 @@ public class PrProductUpdateMessageListener implements MessageListener {
 				.getDefaultSerializer();
 		Object channel = stringSerializer.deserialize(message.getChannel());
 		Object body = valueSerializer.deserialize(message.getBody());
-
-		if (body instanceof PrProduct) {
-			product = (PrProductWithBLOBs) body;
-			productExtention = new ProductExtention();
-
-			if (product != null) {
-				try {
-					BeanUtils.copyProperties(productExtention, product);
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
-				}
-
-				groupPurcses = groupPurcseService.selectGroupPurcseByPId(
-						product.getId(), false);
-				properties = productPropertyService.listAll();
-				packagePrices = packagePriceService.selectByProductId(product
-						.getId());
-				productPropertyValues = this.propertyValueService
-						.selectByProductId(product.getId());
-
-				if (product.getShopId() != null) {
-					shop = shopService.selectByPrimKey(product.getShopId());
-					goodsList = prductService.selectPrProductsByShopId(shop
-							.getId());
-					productExtention.setShopIcon(shop.getIcon());
-					productExtention.setShopName(shop.getName());
-				}
-				// 商品轮播图。
-				swiperImages = imageService.selectByProductId(product.getId(),
-						PrImageType.SWIPER);
-
-				productExtention.setGoodsList(goodsList);
-				productExtention.setSwpierImages(swiperImages);
-				productExtention.setPackagePrices(packagePrices);
-				productExtention
-						.setProductPropertyValues(productPropertyValues);
-				productExtention.setGroupPurcseMembers(groupPurcseMembers);
-				productExtention.setGroupPurcses(groupPurcses);
-				productExtention.setProperties(properties);
-			}
-				
-			//结果集。
-			jsonString = JSONObject.toJSONString(productExtention, true);
-
-			String cpath = this.getClass().getResource("/").getPath()
-					.replaceFirst("/", "");
-			String webappRoot = cpath.replaceAll("/WEB-INF/classes/", "");
-			String templatePath = webappRoot + File.separator + "template";
-			String templateName = "goodsDetail.ftl";
-			String fileName = webappRoot + File.separator + "goodsDetail"
-					+ File.separator + product.getId() + ".htm";
-			
-			Map root = new HashMap<>();
-			root.put("rawData", jsonString);
-			FreeMarkerUtil.analysisTemplate(templatePath, templateName,
-					fileName, root);
+		
+		String id = (String) body;
+		product = this.prductService.selectByPrimKey(id);
+		if(product==null){
+			return;
 		}
+		productExtention = new ProductExtention();
+		
+		if (product != null) {
+			try {
+				BeanUtils.copyProperties(productExtention, product);
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+
+			groupPurcses = groupPurcseService.selectGroupPurcseByPId(
+					product.getId(), false);
+			properties = productPropertyService.listAll();
+			packagePrices = packagePriceService.selectByProductId(product
+					.getId());
+			productPropertyValues = this.propertyValueService
+					.selectByProductId(product.getId());
+
+			if (product.getShopId() != null) {
+				shop = shopService.selectByPrimKey(product.getShopId());
+				goodsList = prductService.selectPrProductsByShopId(shop
+						.getId());
+				productExtention.setShopIcon(shop.getIcon());
+				productExtention.setShopName(shop.getName());
+			}
+			// 商品轮播图。
+			swiperImages = imageService.selectByProductId(product.getId(),
+					PrImageType.SWIPER);
+
+			productExtention.setGoodsList(goodsList);
+			productExtention.setSwpierImages(swiperImages);
+			productExtention.setPackagePrices(packagePrices);
+			productExtention
+					.setProductPropertyValues(productPropertyValues);
+			productExtention.setGroupPurcseMembers(groupPurcseMembers);
+			productExtention.setGroupPurcses(groupPurcses);
+			productExtention.setProperties(properties);
+		}
+			
+		//结果集。
+		jsonString = JSONObject.toJSONString(productExtention, true);
+
+		String cpath = this.getClass().getResource("/").getPath()
+				.replaceFirst("/", "");
+		String webappRoot = cpath.replaceAll("/WEB-INF/classes/", "");
+		String templatePath = webappRoot + File.separator + "template";
+		String templateName = "goodsDetail.ftl";
+		String fileName = webappRoot + File.separator + "goodsDetail"
+				+ File.separator + product.getId() + ".htm";
+		
+		Map root = new HashMap<>();
+		root.put("rawData", jsonString);
+		FreeMarkerUtil.analysisTemplate(templatePath, templateName,
+				fileName, root);
 	}
 
 	public static void main(String[] args) {
