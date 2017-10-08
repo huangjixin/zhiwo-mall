@@ -6,6 +6,7 @@ import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -13,13 +14,11 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -33,7 +32,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import weixin.popular.api.MessageAPI;
 import weixin.popular.api.PayMchAPI;
+import weixin.popular.bean.message.massmessage.MassTextMessage;
 import weixin.popular.bean.paymch.MchBaseResult;
 import weixin.popular.bean.paymch.MchPayNotify;
 import weixin.popular.bean.paymch.Unifiedorder;
@@ -50,7 +51,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.zwo.modules.mall.domain.OrderStatus;
 import com.zwo.modules.mall.domain.OrderTrade;
 import com.zwo.modules.mall.domain.PrProduct;
-import com.zwo.modules.mall.domain.PrProductProperty;
 import com.zwo.modules.mall.service.IOrderTradeService;
 import com.zwo.modules.mall.service.IPrProductPropertyService;
 import com.zwo.modules.mall.service.IPrProductPropertyValueService;
@@ -126,6 +126,9 @@ public class MemberOrderController extends BaseController<TbUser> {
 	private String appid; // appid
 	private String mch_id; // 微信支付商户号
 	private String key; // API密钥
+	//access_token
+	String access_token = "";
+	
 	// 重复通知过滤
 	private static ExpireKey expireKey = new DefaultExpireKey();
 
@@ -653,6 +656,24 @@ public class MemberOrderController extends BaseController<TbUser> {
 		if(redisTemplate!=null){
 			//发送消息更新该团的静态网页。
 			RedisUtil.publish(redisTemplate, ChannelContance.GROUPPURCSE_CREATE_QUEUE_CHANNEL, groupPurcse);
+			//更新该商品的静态网页。
+			if(orderTrade.getIsFormSccuess()){
+				RedisUtil.publish(redisTemplate, ChannelContance.PRODUCT_GENERATION_TOPIC_CHANNEL, groupPurcse.getProductId());
+			}
+			
+			if(member!=null){
+				//发送微信消息告知开团成功。
+				if(member.getOpenId()!=null){
+					PrProduct prProduct = this.prductService.selectByPrimaryKey(orderTrade.getProductId());
+					String text = prProduct.getName();
+					MassTextMessage textMessage = new MassTextMessage(text);
+					textMessage.setTouser(new HashSet<String>());
+					textMessage.getTouser().add(member.getOpenId());
+					if(null!=access_token && !"".equals(access_token)){
+						MessageAPI.messageMassSend(access_token,textMessage);
+					}
+				}
+			}
 		}
 		
 		return null;
