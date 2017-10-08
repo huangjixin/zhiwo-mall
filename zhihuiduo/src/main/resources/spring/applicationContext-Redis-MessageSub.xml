@@ -47,6 +47,26 @@
 						</bean>
 					</list>
 				</entry>
+				<!-- 店铺页面生成 -->
+				<entry key-ref="memberShopUpdateMessageListener">
+					<list>
+						<bean class="org.springframework.data.redis.listener.ChannelTopic">
+							<!-- 常量定义在ChannelContance类里面 -->
+							<!-- 消息发布在竞猜问题服务类里面 -->
+							<constructor-arg value="shop_create.topic.channel" />
+						</bean>
+					</list>
+				</entry>
+				<!-- 开团页面生成 -->
+				<entry key-ref="memberGroupUpdateMessageListener">
+					<list>
+						<bean class="org.springframework.data.redis.listener.ChannelTopic">
+							<!-- 常量定义在ChannelContance类里面 -->
+							<!-- 消息发布在竞猜问题服务类里面 -->
+							<constructor-arg value="groupPurcse_create.topic.channel" />
+						</bean>
+					</list>
+				</entry>
 				
 				<!-- 关注公众号自动注册会员-->
 				<entry key-ref="memberSubcribeMessageListener">
