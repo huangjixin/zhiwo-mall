@@ -14,6 +14,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,8 @@ import com.zwo.modules.payment.dao.PayTradePaymentOrderMapper;
 import com.zwo.modules.payment.domain.PayTradePaymentOrder;
 import com.zwo.modules.payment.domain.PayTradePaymentOrderCriteria;
 import com.zwo.modules.payment.service.IPayTradePaymentOrderService;
+import com.zwotech.common.utils.RedisUtil;
+import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -39,6 +42,8 @@ public class PayTradePaymentOrderServiceImpl extends BaseService<PayTradePayment
 
 	private static final String BASE_MESSAGE = "【PayTradePaymentOrderServiceImpl服务类提供的基础操作增删改查等】";
 
+	public static final String KEY_PAY_TRADE_PAYMENT_ORDER = "_key_PayTradePaymentOrder";
+	
 	@Autowired
 	@Lazy(true)
 	private PayTradePaymentOrderMapper payTradePaymentOrderMapper;
@@ -46,6 +51,18 @@ public class PayTradePaymentOrderServiceImpl extends BaseService<PayTradePayment
 	@Override
 	public Mapper<PayTradePaymentOrder> getBaseMapper() {
 		return null;
+	}
+	
+	
+
+	@SuppressWarnings("rawtypes")
+	private RedisTemplate redisTemplate;
+
+	public PayTradePaymentOrderServiceImpl() {
+		super();
+		if(SpringContextHolder.getApplicationContext().containsBean("redisTemplate")){
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
 	}
 
 	/*
@@ -79,12 +96,15 @@ public class PayTradePaymentOrderServiceImpl extends BaseService<PayTradePayment
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = "PayTradePaymentOrder", allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
-
+		List<PayTradePaymentOrder>tradePaymentOrders = payTradePaymentOrderMapper.selectByExample((PayTradePaymentOrderCriteria) example);
+		for (PayTradePaymentOrder payTradePaymentOrder : tradePaymentOrders) {
+			RedisUtil.removeRedisKey(redisTemplate, payTradePaymentOrder.getId()+KEY_PAY_TRADE_PAYMENT_ORDER);
+		}
+		
 		// 逻辑操作
 		int result = payTradePaymentOrderMapper.deleteByExample((PayTradePaymentOrderCriteria)example);
 
@@ -93,7 +113,6 @@ public class PayTradePaymentOrderServiceImpl extends BaseService<PayTradePayment
 		return result;
 	}
 
-	@CacheEvict(value = "PayTradePaymentOrder", allEntries = true)
 //	@Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
@@ -105,6 +124,12 @@ public class PayTradePaymentOrderServiceImpl extends BaseService<PayTradePayment
 		// 逻辑操作
 		PayTradePaymentOrderCriteria payTradePaymentOrderCriteria = new PayTradePaymentOrderCriteria();
 		payTradePaymentOrderCriteria.createCriteria().andIdIn(list);
+		
+		List<PayTradePaymentOrder>tradePaymentOrders = payTradePaymentOrderMapper.selectByExample(payTradePaymentOrderCriteria);
+		for (PayTradePaymentOrder payTradePaymentOrder : tradePaymentOrders) {
+			RedisUtil.removeRedisKey(redisTemplate, payTradePaymentOrder.getId()+KEY_PAY_TRADE_PAYMENT_ORDER);
+		}
+		
 		int result = payTradePaymentOrderMapper.deleteByExample(payTradePaymentOrderCriteria);
 
 		if (logger.isInfoEnabled())
@@ -120,7 +145,7 @@ public class PayTradePaymentOrderServiceImpl extends BaseService<PayTradePayment
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "PayTradePaymentOrder", key="#id+''")
+	@CacheEvict(value = "PayTradePaymentOrder", key="#id+'_key_PayTradePaymentOrder'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -143,7 +168,6 @@ public class PayTradePaymentOrderServiceImpl extends BaseService<PayTradePayment
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "PayTradePaymentOrder", key = "#record.id")
 	public int insert(PayTradePaymentOrder record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -170,7 +194,6 @@ public class PayTradePaymentOrderServiceImpl extends BaseService<PayTradePayment
 	 */
 
 	@Override
-//	@CachePut(value = "PayTradePaymentOrder", key = "#record.id")
 	public int insertSelective(PayTradePaymentOrder record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -209,7 +232,7 @@ public class PayTradePaymentOrderServiceImpl extends BaseService<PayTradePayment
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+''", value = "PayTradePaymentOrder")
+	@Cacheable(key = "#id+'_key_PayTradePaymentOrder'", value = "PayTradePaymentOrder")
 	@Transactional(readOnly = true)
 	public PayTradePaymentOrder selectByPrimaryKey(String id) {
 		// 日志记录
@@ -232,7 +255,6 @@ public class PayTradePaymentOrderServiceImpl extends BaseService<PayTradePayment
 	 * com.zwotech.modules.core.service.IBaseService#updateByExampleSelective(
 	 * java.lang.Object, java.lang.Object)
 	 */
-	@CacheEvict(value = "PayTradePaymentOrder", allEntries = true)
 	@Override
 	public int updateByExampleSelective(PayTradePaymentOrder record, Object example) {
 		// 日志记录
@@ -241,6 +263,11 @@ public class PayTradePaymentOrderServiceImpl extends BaseService<PayTradePayment
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
 
+		List<PayTradePaymentOrder>tradePaymentOrders = payTradePaymentOrderMapper.selectByExample((PayTradePaymentOrderCriteria) example);
+		for (PayTradePaymentOrder payTradePaymentOrder : tradePaymentOrders) {
+			RedisUtil.removeRedisKey(redisTemplate, payTradePaymentOrder.getId()+KEY_PAY_TRADE_PAYMENT_ORDER);
+		}
+		
 		// 逻辑操作
 		int result = payTradePaymentOrderMapper.updateByExampleSelective(record, (PayTradePaymentOrderCriteria)example);
 		// 日志记录
@@ -257,14 +284,16 @@ public class PayTradePaymentOrderServiceImpl extends BaseService<PayTradePayment
 	 * Object, java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PayTradePaymentOrder", allEntries = true)
 	public int updateByExample(PayTradePaymentOrder record, Object example) {
 		//日志记录
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新开始");
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
-										
+		List<PayTradePaymentOrder>tradePaymentOrders = payTradePaymentOrderMapper.selectByExample((PayTradePaymentOrderCriteria) example);
+		for (PayTradePaymentOrder payTradePaymentOrder : tradePaymentOrders) {
+			RedisUtil.removeRedisKey(redisTemplate, payTradePaymentOrder.getId()+KEY_PAY_TRADE_PAYMENT_ORDER);
+		}							
 		//逻辑操作		
 		int result = payTradePaymentOrderMapper.updateByExample(record, (PayTradePaymentOrderCriteria)example);
 		//日志记录
@@ -281,7 +310,7 @@ public class PayTradePaymentOrderServiceImpl extends BaseService<PayTradePayment
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PayTradePaymentOrder", key="#record.id")
+	@CacheEvict(value = "PayTradePaymentOrder", key="#record.id+'_key_PayTradePaymentOrder'")
 	public int updateByPrimaryKeySelective(PayTradePaymentOrder record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -304,7 +333,7 @@ public class PayTradePaymentOrderServiceImpl extends BaseService<PayTradePayment
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PayTradePaymentOrder", key="#record.id")
+	@CacheEvict(value = "PayTradePaymentOrder", key="#record.id+'_key_PayTradePaymentOrder'")
 	public int updateByPrimaryKey(PayTradePaymentOrder record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
