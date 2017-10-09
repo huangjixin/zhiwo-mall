@@ -38,4 +38,12 @@ public interface IOrderTradeService extends IBaseService<OrderTrade> {
 	 */
 	Integer selectCountByShopId(String shopId,String status);
 	
+	/**
+	 * 更新拼团的订单状态。
+	 * @param groupId
+	 * @param isFormSucc
+	 * @return
+	 */
+	int updateOrderTradeByGroupId(String groupId,boolean isFormSucc);
+	
 }
