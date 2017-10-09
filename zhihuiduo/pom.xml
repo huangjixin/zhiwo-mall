@@ -40,6 +40,16 @@
 			<artifactId>zhiwo-member-service</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.zwo.payment.service.impl</groupId>
+			<artifactId>zhiwo-payment-service</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.zwo.payment.service</groupId>
+			<artifactId>zhiwo-payment-interface</artifactId>
+			<version>1.0</version>
+		</dependency>
 		
 		<dependency>
 			<groupId>com.zwo.core.web</groupId>
