@@ -95,7 +95,7 @@ public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements
 	 * Object)
 	 */
 	@Override
-	@CacheEvict(value = "OrderTrade", allEntries = true)
+//	@CacheEvict(value = "OrderTrade", allEntries = true)
 	public int deleteByExample(Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -120,7 +120,7 @@ public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements
 		return result;
 	}
 
-	@CacheEvict(value = "OrderTrade", allEntries = true)
+//	@CacheEvict(value = "OrderTrade", allEntries = true)
 	// @Override
 	public int deleteBatch(List<String> list) {
 		// 日志记录
@@ -224,7 +224,7 @@ public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements
 	 */
 
 	@Override
-	@CachePut(value = "OrderTrade", key = "#record.id+'_orderTrade'")
+//	@CachePut(value = "OrderTrade", key = "#record.id+'_orderTrade'")
 	public int insertSelective(OrderTrade record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -271,7 +271,7 @@ public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+'_orderTrade'", value = "OrderTrade")
+	//@Cacheable(key = "#id+'_orderTrade'", value = "OrderTrade")
 	@Transactional(readOnly = true)
 	public OrderTrade selectByPrimaryKey(String id) {
 		// 日志记录
@@ -294,7 +294,7 @@ public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements
 	 * com.zwotech.modules.core.service.IBaseService#updateByExampleSelective(
 	 * java.lang.Object, java.lang.Object)
 	 */
-	@CacheEvict(value = "OrderTrade", allEntries = true)
+//	@CacheEvict(value = "OrderTrade", allEntries = true)
 	@Override
 	public int updateByExampleSelective(OrderTrade record, Object example) {
 		// 日志记录
@@ -303,7 +303,16 @@ public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为："
 					+ record.toString());
-
+		List<OrderTrade> list = orderTradeMapper
+				.selectByExample((OrderTradeCriteria) example);
+		for (OrderTrade orderTrade : list) {
+			RedisUtil.removeRedisKey(redisTemplate, orderTrade.getProductId()
+					+ orderTrade.getStatus()
+					+ KEY_ORDERTRADE_COUNT_BY_PRODUCTID);
+			RedisUtil.removeRedisKey(redisTemplate, orderTrade.getShopId()
+					+ orderTrade.getStatus()
+					+ KEY_ORDERTRADE_COUNT_BY_PRODUCTID);
+		}
 		// 逻辑操作
 		int result = orderTradeMapper.updateByExampleSelective(record,
 				(OrderTradeCriteria) example);
@@ -321,7 +330,7 @@ public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements
 	 * Object, java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "OrderTrade", allEntries = true)
+//	@CacheEvict(value = "OrderTrade", allEntries = true)
 	public int updateByExample(OrderTrade record, Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -329,7 +338,16 @@ public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExample更新对象为："
 					+ record.toString());
-
+		List<OrderTrade> list = orderTradeMapper
+				.selectByExample((OrderTradeCriteria) example);
+		for (OrderTrade orderTrade : list) {
+			RedisUtil.removeRedisKey(redisTemplate, orderTrade.getProductId()
+					+ orderTrade.getStatus()
+					+ KEY_ORDERTRADE_COUNT_BY_PRODUCTID);
+			RedisUtil.removeRedisKey(redisTemplate, orderTrade.getShopId()
+					+ orderTrade.getStatus()
+					+ KEY_ORDERTRADE_COUNT_BY_PRODUCTID);
+		}
 		// 逻辑操作
 		int result = orderTradeMapper.updateByExample(record,
 				(OrderTradeCriteria) example);
@@ -457,6 +475,22 @@ public class OrderTradeServiceImpl extends BaseService<OrderTrade> implements
 		}
 		int count = orderTradeMapper.countByExample(orderTradeCriteria);
 		return count;
+	}
+
+	@Override
+	public int updateOrderTradeByGroupId(String groupId, boolean isFormSucc) {
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "把groupPurcseId字段值为"+groupId+"列修改字段IsFormSccuess为"+isFormSucc+"开始");
+		
+		OrderTradeCriteria orderTradeCriteria = new OrderTradeCriteria();
+		orderTradeCriteria.createCriteria().andGroupPurcseIdEqualTo(groupId);
+		OrderTrade orderTrade = new OrderTrade();
+		orderTrade.setIsFormSccuess(isFormSucc);
+		int result = orderTradeMapper.updateByExampleSelective(orderTrade, orderTradeCriteria);
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "把groupPurcseId字段值为"+groupId+"列修改字段IsFormSccuess为"+isFormSucc+"结束，结果修改了"+result+"行");
+		return result;
 	}
 
 	/*
