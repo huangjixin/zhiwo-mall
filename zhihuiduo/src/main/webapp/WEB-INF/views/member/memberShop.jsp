@@ -41,6 +41,7 @@ body {
 	<div class="page-header"
 		style="text-align: center; font-size: 2rem; position:fixed; z-index:999; background-color:#fff; left:0;right:0; top:0; padding-top:10px; margin-top:0;">
 		<b id="shopTitle"></b>&nbsp;&nbsp;<small  style="color:red;" onClick="javascript:history.back();">返回</small>
+        <h3 id="closeHeader" style="color:red;"></h3>
 	</div>
     <div style="height:45px;"></div>
 	<div class="thumbnail">
@@ -51,8 +52,8 @@ body {
 						style="width: 60px; height: 60px; border-radius: 4px; border:1 solid gray">
 				</div>
 				<div class="media-body">
-					<h4 class="media-heading" style="padding-top: 6px;" id="shopName">${shop.name}</h4>
-					<span style="color: gray; font-size: 1.4rem;">商品数量<span id="numberCountSpan"></span>${productsCount}</span>
+					<h4 class="media-heading" style="padding-top: 6px;" id="shopName"></h4>
+					<span style="color: gray; font-size: 1.4rem;">商品数量<span id="numberCountSpan"></span></span>
 				</div>
 				<div class="media-right" style="padding-top: 10px;">
 					<i class="fa fa-wechat fa-lg" aria-hidden="true"
@@ -140,6 +141,10 @@ body {
 		function addShop(){
 			if(obj){
 				if(shop){
+					if(shop.disable==true){
+						$("#closeHeader").html("该商铺处于禁用状态");
+					}
+					
 					$("#shopTitle").html(shop.name);
 					if(shop && shop.icon!=''){
 						$("#shopIcon").attr("src",ctx+"/images/busy.webp");

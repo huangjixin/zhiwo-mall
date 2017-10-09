@@ -278,23 +278,26 @@ $option.css({ "background-color": "#DEDEDE" });
 
 		<div
 			style="background-color: #ffffff; padding-left: 10px; padding-right: 10px; padding-top: 3px; padding-bottom: 3px; margin-top: 4px;">
-			<span id="shopNameSpan"><!--<c:if test="${shop==null}">${product.enName}</c:if>--></span>
-		</div>
-		<div
-			style="background-color: #ffffff; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; margin-top: 4px;">
-			<div class="media">
-				<div class="media-left">
-					<img id="pIcon" class="media-object" src="${ctx}/images/busy.webp"
-						data-original="${ctx}/${product.icon}" width="120px" alt="媒体对象">
-				</div>
-				<div class="media-body">
-					<h5 class="media-heading" id="pName"></h5>
-                    <h5 id="propertyValuesInfo"></h5>
-				</div>
-			</div>
-		</div>
+             <div class="pull-left"><span id="shopNameSpan"><!--<c:if test="${shop==null}">${product.enName}</c:if>--></span></div>
+			
+            <div class="pull-right" style="color:red; display:none;" id="tooltipDiv"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i><span id="tooltip"></span></div>
+            <div class="clearfix"></div>
+		
+            <div
+                style="background-color: #ffffff; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; margin-top: 4px;">
+                <div class="media">
+                    <div class="media-left">
+                        <img id="pIcon" class="media-object" src="${ctx}/images/busy.webp"
+                            data-original="${ctx}/${product.icon}" width="120px" alt="媒体对象">
+                    </div>
+                    <div class="media-body">
+                        <h5 class="media-heading" id="pName"></h5>
+                        <h5 id="propertyValuesInfo"></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="paywayDiv" class="list-group">
-          
         </div>
         <form id="payForm" role="form">
         	<input id="orderId" name="orderId" type="hidden"/>
@@ -305,6 +308,9 @@ $option.css({ "background-color": "#DEDEDE" });
             <input id="groupPurcseId" name="groupPurcseId" type="hidden"/>
             <input id="proValues" name="proValues" type="hidden"/>
             <input id="packagePriceId" name="packagePriceId" type="hidden"/>
+            <input id="address" name="address" type="hidden"/>
+            <input id="transportFee" name="transportFee" type="hidden"/>
+            <input id="payway" name="payway" type="hidden"/>
         </form>
 		<div
 			style="height: 40px; background-color: #ffffff; border-top: 0px solid red; position: absolute; left: 0; right: 0; bottom: 0;">
@@ -436,20 +442,7 @@ $option.css({ "background-color": "#DEDEDE" });
 			<!-- /.modal -->
 		</div>
 	</div>
-    <div class="rs-dialog" id="toolTipModal">
-        <div class="rs-dialog-box">
-            <a class="close" href="#">×</a>
-                <div class="rs-dialog-header">
-                	<h3></h3>
-                </div>
-                <div class="rs-dialog-body">
-                	<p id="tooltipContent"></p>
-                </div>
-                <div class="rs-dialog-footer">
-                <input type="button" class="close" value="Close" style="float:right">
-            </div>
-        </div>
-    </div>
+   
 	<script>
 		window.rawData = ${rawData};
 		
@@ -534,7 +527,7 @@ $option.css({ "background-color": "#DEDEDE" });
 						if(addr.isDefault=='1'){
 							isDefult ='<span class="label label-danger" id="'+addr.id+'_defaultLabel">已为默认</span>'
 						}
-						var para = '<div class="thumbnail" id="'+addr.id+'_thumbnail" onClick="searialForm(\''+addr.id+'\');return false;"><div class="caption"><input id="'+addr.id+'" type="hidden" value="'+addr.id+'" /><p><span id="'+addr.id+'_name">'+addr.name+'</span>,<span id="'+addr.id+'_mobilPhone">'+addr.mobilPhone+'</span></p><p><span id="'+addr.id+'_province">'+addr.province+'</span>&nbsp;&nbsp;<span id="'+addr.id+'_city">'+addr.city+'</span>&nbsp;&nbsp;<span id="'+addr.id+'_street">'+addr.street+'</span></p><hr class="hr1" /><div class="pull-left"><div class="checkbox">'+isDefult+'</div></div><div class="pull-right" style="font-weight: normal;"><span class="label label-info" style="padding-top: 5px;" onClick="useAddress(\''+addr.id+'\')"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;使用</span> &nbsp;&nbsp; <span class="label label-danger" style="padding-top: 5px;" onClick="deleteMemberAddress(\''+addr.id+'\')"> <i class="fa fa-trash-o" aria-hidden="true"></i>&nbsp;&nbsp;删除</span></div><div class="clearfix"></div></div></div>';
+						var para = '<div class="thumbnail" id="'+addr.id+'_thumbnail" onClick="searialForm(\''+addr.id+'\');return false;"><div class="caption"><input id="'+addr.id+'" type="hidden" value="'+addr.id+'" /><p><span id="'+addr.id+'_name">'+addr.name+'</span>,<span id="'+addr.id+'_mobilPhone">'+addr.mobilPhone+'</span></p><p><span id="'+addr.id+'_province">'+addr.province+'</span>&nbsp;&nbsp;<span id="'+addr.id+'_city">'+addr.city+'</span>&nbsp;&nbsp;<span id="'+addr.id+'_street">'+addr.street+'</span></p><hr class="hr1" /><div class="pull-left"><div class="checkbox">'+isDefult+'</div></div><div class="pull-right" style="font-weight: normal; padding-top:10px;"><span class="label label-info" style="padding-top: 5px;" onClick="useAddress(\''+addr.id+'\')"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;使用</span> &nbsp;&nbsp; <span class="label label-danger" style="padding-top: 5px;" onClick="deleteMemberAddress(\''+addr.id+'\')"> <i class="fa fa-trash-o" aria-hidden="true"></i>&nbsp;&nbsp;删除</span></div><div class="clearfix"></div></div></div>';
 						$('#addressDiv').append(para);
 					}
 				}
@@ -566,24 +559,27 @@ $option.css({ "background-color": "#DEDEDE" });
 		//确定支付。
 		function checkPay(){
 			if(currentAddr){
-				$('#tooltipContent').html('');
+				$("#tooltipDiv").hide();
+				$("#tooltip").html('');
 			}else{
-				$('#tooltipContent').html('请设置地址');
-				$('#toolTipModal').modal('show');
+				$("#tooltipDiv").show();
+				$("#tooltip").html('请设置地址');
 				return;	
 			}
 			
-			if(payway =='wechat'){
-				
-			}else if(payway =='sendWithoutPay'){
-			
-				 var url = ctx+'/memberOrder/getPayMchJs';
+			var url = ctx+'/memberOrder/getPayMchJs';
 				 var data = {};
 				 data.payway= payway;
 				 //data.goodsId= obj.id;
 				 data.orderId= obj.order.id;
 				 //data.buyNum= obj.order.buyNum;
 				 data.dealPrice= obj.order.dealPrice;
+				 if(obj.transportFee){
+					 data.transportFee= obj.transportFee;
+				 }else{
+					 data.transportFee= 0;	 
+				 }
+				
 				 //data.groupPurcseId= obj.groupPurcseId;
 				 //data.mode= obj.mode;
 				 
@@ -592,17 +588,37 @@ $option.css({ "background-color": "#DEDEDE" });
 					 type: "post",
 					 data: data,
 					 success: function (result) {
+						 //跳转到开团成功或者拼团成功的页面。
 						console.log(result);
+						if(payway =='wechat'){
+							//json 数据
+							x_json = JSON.parse(result);
+							pay();
+						}else if(payway =='sendWithoutPay'){
+							
+						}else if(payway =='alipay'){
+							
+						}
 				 	 },error: function(data) {
                        // alert("error:"+data.responseText);
              	 	 }
            		  });
-				
-			}else if(payway =='alipay'){
-				
-			}
+				  
+			
 			
 			console.log(payway);
+		}
+		
+		var x_json;
+		function pay(){
+			WeixinJSBridge.invoke('getBrandWCPayRequest',x_json,function(res){
+				if(res.err_msg == 'get_brand_wcpay_request:ok'){
+					//支付成功，可以做跳转到支付成功的提示页面
+				}else{
+					//支付失败
+					alert(res.err_msg);
+				}
+			});
 		}
 		
 		function getQueryString(name){
@@ -629,11 +645,14 @@ $option.css({ "background-color": "#DEDEDE" });
 			$("#defaultAddress").append(para);
 			setCheckDivToNone(true);
 			
+			currentAddr = {};
 			currentAddr.name = name;
 			currentAddr.mobilPhone = mobilPhone;
 			currentAddr.province = province;
 			currentAddr.city = city;
 		 	currentAddr.street = street;
+			$("#tooltipDiv").hide();
+			$("#tooltip").html('');
 		}
 		
 		
@@ -687,7 +706,7 @@ $option.css({ "background-color": "#DEDEDE" });
 						defaultUi = '<span class="label label-danger" id="'+obj.id+'_defaultLabel">已为默认</span>';
 					 }
 						
-					var parameter = '<div class="thumbnail" id="'+obj.id+'_thumbnail"><div class="caption"><input id="'+obj.id+'" type="hidden" value="'+obj.id+'" /><p><span id="'+obj.id+'_name">'+obj.name+'</span>,<span id="'+obj.id+'_mobilPhone">'+obj.mobilPhone+'</span></p><p><span id="'+obj.id+'_province">'+obj.province+'</span>&nbsp;&nbsp;<span id="'+obj.id+'_city">'+obj.city+'</span>&nbsp;&nbsp;<span id="'+obj.id+'_street">'+obj.street+'</span></p><hr class="hr1" /><div class="pull-left"><div class="checkbox">'+defaultUi+'</div></div><div class="pull-right" style="font-weight: normal;"><span class="label label-info" style="padding-top: 5px;" onClick="useAddress(\''+obj.id+'\')"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;使用</span> &nbsp;&nbsp; <span class="label label-danger" style="padding-top: 5px;" onClick="deleteMemberAddress(\''+obj.id+'\')"> <i class="fa fa-trash-o" aria-hidden="true"></i>&nbsp;&nbsp;删除</span></div><div class="clearfix"></div></div></div>';
+					var parameter = '<div class="thumbnail" id="'+obj.id+'_thumbnail"><div class="caption"><input id="'+obj.id+'" type="hidden" value="'+obj.id+'" /><p><span id="'+obj.id+'_name">'+obj.name+'</span>,<span id="'+obj.id+'_mobilPhone">'+obj.mobilPhone+'</span></p><p><span id="'+obj.id+'_province">'+obj.province+'</span>&nbsp;&nbsp;<span id="'+obj.id+'_city">'+obj.city+'</span>&nbsp;&nbsp;<span id="'+obj.id+'_street">'+obj.street+'</span></p><hr class="hr1" /><div class="pull-left"><div class="checkbox">'+defaultUi+'</div></div><div class="pull-right" style="font-weight: normal; padding-top:10px;"><span class="label label-info" style="padding-top: 5px;" onClick="useAddress(\''+obj.id+'\')"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;使用</span> &nbsp;&nbsp; <span class="label label-danger" style="padding-top: 5px;" onClick="deleteMemberAddress(\''+obj.id+'\')"> <i class="fa fa-trash-o" aria-hidden="true"></i>&nbsp;&nbsp;删除</span></div><div class="clearfix"></div></div></div>';
 					$("#addressDiv").append(parameter);
 				 }else{
 					

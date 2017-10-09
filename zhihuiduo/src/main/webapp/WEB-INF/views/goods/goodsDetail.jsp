@@ -196,7 +196,7 @@ body {
 								</span> <input type="text" disabled name="numberCount" id="numberCount"
 									style="height: 28px;" class="form-control text-center"
 									value="1" max=9999 min=1> <span class="input-group-btn"
-									style="color: white;"> <a class="btn btn-info"
+									style="color: white; "> <a class="btn btn-info"
 									data-dir="up"><span class="glyphicon glyphicon-plus"></span></a>
 								</span>
 							</div>
@@ -213,6 +213,7 @@ body {
 					<input id="goodsId" name="goodsId" value=""
 						type="hidden"> <input id="proValues" name="proValues"
 						type="hidden"><input id="mode" name="mode"
+						type="hidden"><input id="groupPurcseId" name="groupPurcseId"
 						type="hidden">
                      
 					<button id="submitBtn" type="submit" class="btn btn-danger"
@@ -429,8 +430,14 @@ body {
 				var length = groupPurcses.length;
 				for(var i=0;i<length;i++){
 					var gPurcse= groupPurcses[i];
-					var url = ctx+"/memberGroup/"+gPurcse.id+".htm";
-					var para = '<div class="media" onClick="showProduct(\''+url+'\');"><div class="pull-right" style="padding-top:7px;"><button type="button" class="btn btn-danger">去参团</button></div><div class="media-left"><img class="img-circle" src="'+ctx+'/images/busy.webp" style="width:40px;" data-original="'+gPurcse.memberIcon+'"></div><div class="media-body"><h5 class="media-heading" style="padding-top: 6px;">'+gPurcse.memberName+'</h5><span style="color: gray; font-size: 1.4rem;">还差1人，剩余<span id="'+gPurcse.id+'expiredTime" style="color:red;"></span></span></div></div>';
+					var url = ctx+"/memberGroup/"+gPurcse.id+".htm?timestamp="+new Date().getTime();
+					var memberIcon = '';
+					if(gPurcse.memberIcon){
+						memberIcon = '<img class="img-circle" src="'+ctx+'/images/busy.webp" style="width:40px;" data-original="'+gPurcse.memberIcon+'">'
+					}else{
+						memberIcon = '<i class="fa fa-user-circle-o fa-3x" aria-hidden="true" style="color:gray;"></i>';
+					}
+					var para = '<div class="media" onClick="showProduct(\''+url+'\');"><div class="pull-right" style="padding-top:7px;"><button type="button" class="btn btn-danger">去参团</button></div><div class="media-left">'+memberIcon+'</div><div class="media-body"><h5 class="media-heading" style="padding-top: 6px;">'+gPurcse.memberName+'</h5><span style="color: gray; font-size: 1.4rem;">还差1人，剩余<span id="'+gPurcse.id+'expiredTime" style="color:red;"></span></span></div></div>';
 					
 					$('#groupPurcseHeader').after(para);
 				}
@@ -449,8 +456,8 @@ body {
 						}
 						var url = ctx+"/goodsDetail/"+prod.id+'.htm?timestamp='+new Date().getTime();
 						var prodIcon = '<img class="img-responsive" src="'+ctx+'/images/busy.webp" data-original="'+ctx+'/'+prod.icon+'">';
-						var prodName = '<h5>'+prod.name+'</h5>';
-						var parameter = '<div id="'+prod.id+'Div" style="margin: 0;" class="col-xs-6" onClick="showProduct(\''+url+'\');"><div class="thumbnail" style="background-color:#ffffff;">'+prodIcon+'<div class="caption">'+prodName+'<div style="height:2px;"></div><div class="pull-left"><label style="color: red;"><i class="fa fa-jpy"></i>'+prod.gourpSalePrice+'</label> <span style="font-size:1.3rem;">已拼'+numCountPara+'件</span></div><div class="clearfix"></div></div></div></div>';
+						var prodName = '<h6>'+prod.name+'</h6>';
+						var parameter = '<div id="'+prod.id+'Div" style="margin: 0;" class="col-xs-6" onClick="showProduct(\''+url+'\');"><div class="thumbnail" style="background-color:#ffffff;">'+prodIcon+'<div class="caption">'+prodName+'<div style="height:2px;"></div><div class="pull-left"><label style="color: red;font-size:1.5rem;"><i class="fa fa-jpy"></i>'+prod.gourpSalePrice+'</label>&nbsp;<label style="color: gray;text-decoration:line-through;"><i class="fa fa-jpy"></i>'+prod.marketPrice+'</label> <span style="font-size:1.3rem;"></span></div><div class="clearfix"></div></div></div></div>';
 						console.log(parameter);
 						$("#shopGoods").append(parameter);
 						$('#'+prod.id+'Div').fadeIn('slow');
@@ -482,6 +489,7 @@ body {
 							for(var k=0;k<propertyValues.length;k++){
 								var proValue= propertyValues[k];
 								if(property.id==proValue.propertyId){
+									proValue.propertyName = property.name;
 									var onclickFun = 'onClick="settingProperyValueCla(\''+property.code+'\',\''+proValue.id+'\')"';
 									proPara +='<label '+onclickFun+' id="'+proValue.id+'" name="'+property.code+'" class="ProperyValue" >'+proValue.name+'</label>';
 								}

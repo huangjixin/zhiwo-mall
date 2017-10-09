@@ -39,24 +39,7 @@
             <div style="text-align:center;">
 	            <h3 id="offlineTitle" style="color:red;"></h3>
             <div style="text-align:center; padding:10px;" id="groupPurcseMemberIcon">
-                <!--<c:if test="${groupPurcse.disable==true}">
-                	<c:forEach var="groupPurcseMember" items="${groupPurcseMembers}">
-                		<img src="${groupPurcseMember.memberIcon}" class="img-circle" width="60px" height="60px;" />
-                	</c:forEach>
-                </c:if>
-                <c:if test="${groupPurcse.disable==false}">
-                	<img src="${groupPurcse.memberIcon}" class="img-circle" width="60px" height="60px;" />
-                	<img src="" class="img-circle" width="50px" height="50px;" />
-                </c:if>-->
-            	
-            </div>
-            <div style="text-align:center; padding:10px;">
-            	<!--<c:if test="${groupPurcse.disable==true}">
-                	<a href="${ctx}/goodsDetail?goodsId=${product.id}"><span class="label label-danger" style="font-size: 2rem;text-align:center; width:100%; left:0;right:0;">去开团</span></a>
-                </c:if>
-            	<c:if test="${groupPurcse.disable==false}">
-                	<span class="label label-danger" style="font-size: 2rem;text-align:center; width:100%; left:0;right:0;">参加拼单</span>
-                </c:if>-->
+                
             </div>
             <br>
             <hr class="hr1"/>
@@ -120,7 +103,7 @@
 					</div>
 				</div>
 				<div class="modal-footer"></div>
-				<form action="${ctx}/memberOrder/checkOut" method="post"
+				<form id="form"  method="post"
 					onsubmit="return checkOut();">
 					<input id="packagePriceId" name="packagePriceId" type="hidden">
 					<input id="dealPrice" name="dealPrice" type="hidden"> <input
@@ -129,6 +112,7 @@
 					<input id="goodsId" name="goodsId" value=""
 						type="hidden"> <input id="proValues" name="proValues"
 						type="hidden"><input id="mode" name="mode"
+						type="hidden"><input id="groupPurcseId" name="groupPurcseId"
 						type="hidden">
                         <button type="submit" id="submitBtn" class="btn btn-danger"
 						style="width: 100%; margin: 0; position: fixed; bottom: 0; left: 0; right: 0; border-radius: 0px;">
@@ -148,6 +132,7 @@
 			</div>
 		</div>
 	</div>
+    <%@ include file="/WEB-INF/member-include/bottomIndex.jsp"%>
  	<script>
 	 	window.rawData= ${rawData};
 		
@@ -262,21 +247,51 @@
 			var para = "";
 			var length = 0;
 			if(disable ==true){
-				length = groupPurcseMembers.length;
-				for(var i=0;i<length;i++){
-					var gpm = groupPurcseMembers[i];
-					para+='<img src="'+gpm.memberIcon+'" class="img-circle" width="60px" height="60px;"  style="border:1px solid yellow;"/>';
-					para+='&nbsp;';
+				if(groupPurcseMembers){
+					length = groupPurcseMembers.length;
+					for(var i=0;i<length;i++){
+						var gpm = groupPurcseMembers[i];
+						var imgUrl = '';
+						if(gpm.memberIcon){
+							imgUrl = gpm.memberIcon;
+						}
+						imgUrl == ''?para+='<img class="img-circle" width="60px" height="60px;"  style="border:1px solid yellow;"/>':para+='<img src="'+gpm.memberIcon+'" class="img-circle" width="60px" height="60px;"  style="border:1px solid yellow;"/>';
+						
+						para+='&nbsp;';
+					}
+					
+					para+="<br>";
+					
+					for(var i=0;i<length;i++){
+						var gpm = groupPurcseMembers[i];
+						if(gpm.memberName){
+							para+='<span>'+gpm.memberName+'</span>';
+							para+='&nbsp;&nbsp;&nbsp;&nbsp;';	
+						}
+					}
+					
+					para+="<br>";
+					para+='<span style="font-size: 1.3rem;color:red;">该团已满</span><br>';
+					para+="<br>";
+					para+='<span onClick="showProductDialog()" class="label label-danger" style="font-size: 2rem;text-align:center; width:100%; left:0;right:0;">一键开团</span>';
+					para+="<br>";
+					$("#groupPurcseMemberIcon").append(para);
 				}
-				para+="<br>";
-				para+='<span onClick="showProductDialog()" class="label label-danger" style="font-size: 2rem;text-align:center; width:100%; left:0;right:0;">一键开团</span>';
-				para+="<br>";
-				$("#groupPurcseMemberIcon").append(para);
 			}else{
-				para+='<img src="'+groupPurcse.memberIcon+'" class="img-circle" style="border:1px solid yellow;" width="60px" height="60px;" />';
+				if(groupPurcse.memberIcon){
+				  para+='<img src="'+groupPurcse.memberIcon+'" class="img-circle" style="border:1px solid yellow;" width="60px" height="60px;" />';
+				}else{
+				  para+='<img class="img-circle" style="border:1px solid yellow;" width="60px" height="60px;" />';				
+				}
+				
+				
 				para+='&nbsp;';
                 para+='<img  class="img-circle" width="60px" height="60px;" style="border:1px dashed gray;" /><br>';
-				
+				para+='<span style="width:50%;text-align:right;">'+groupPurcse.memberName+'</span>';
+				para+='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';	
+				para+='<span style="width:50%;text-align:left;">?</span>';	
+				para+='&nbsp;&nbsp;&nbsp;&nbsp;';	
+				para+="<br>";
 				para+='<span id="countimeSpan">仅剩1个名额，距离结束时间还有</span><b id="expiredTimeB" style="color:red;"></b><br>';
 				para+="<br>";
 				para+='<span onClick="showProductDialog()" class="label label-danger" style="font-size: 2rem;text-align:center; width:100%; left:0;right:0;">参团作战</span><br>';
@@ -486,6 +501,7 @@
 		
 		//去结算。
 		function checkOut() {
+			
 			if (selectedProperyPackagePrice != "") {
 				var index = selectedProperyPackagePrice.lastIndexOf("_");
 				if (index != -1) {
@@ -493,7 +509,11 @@
 							.substring(0, index);
 				}
 			}
-			
+			var disable = groupPurcse.disable;
+			//如果为false那么开团人数未满，反则就表示已满，记得更新订单的isFormSuccess
+			if(disable==false){
+				$('#groupPurcseId').val(groupPurcse.id);
+			}
 			var packagePriceId = selectedProperyPackagePrice;
 			$("#packagePriceId").val(packagePriceId);
 			var dealPrice = $('#priceLabel').html();
@@ -504,6 +524,8 @@
 			$("#proValues").val(proValues);
 			$("#goodsId").val(obj.id);
 			$("#mode").val(mode);
+			var url = ctx+"/memberOrder/checkOut";
+			$("#form").attr("action",url);
 			if (dealPrice == "") {
 				return false;
 			} else {
