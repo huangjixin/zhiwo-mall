@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -218,4 +219,49 @@ public class MemberGroupController extends BaseController {
 		return basePath + "memberGroup";
 	}
 
+	/**
+	 * 跳转到我刚刚创建的参团界面。
+	 * @param groupPurcseId
+	 * @param uiModel
+	 * @param httpServletRequest
+	 * @param httpServletResponse
+	 * @return
+	 */
+	@RequestMapping(value = { "mymemberGroup/{groupPurcseId}" }, method = RequestMethod.GET)
+	public String mymemberGroup(@PathVariable String groupPurcseId, Model uiModel,
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		return null;
+	}
+	
+	/**
+	 * 跳转到拼团成功界面。
+	 * @param groupPurcseId
+	 * @param uiModel
+	 * @param httpServletRequest
+	 * @param httpServletResponse
+	 * @return
+	 */
+	@RequestMapping(value = { "mymemberGroup/Success" }, method = RequestMethod.GET)
+	public String memberGroupSuccess(@PathVariable String groupPurcseId, Model uiModel,
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		return null;
+	}
+	
+	@RequestMapping(value = { "memberGroup/getLatestGroupPurcseByPid/{pid}" }, method = RequestMethod.GET)
+	@ResponseBody
+	public List<GroupPurcse> getLatestGroupPurcseByPid(@PathVariable String pid, Model uiModel,
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		return null;
+	}
+	
+	@RequestMapping(value = { "memberGroup/getLatestGroupPurcse" }, method = RequestMethod.GET)
+	@ResponseBody
+	public List<GroupPurcse> getLatestGroupPurcse(@PathVariable String pid, Model uiModel,
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		return null;
+	}
 }
