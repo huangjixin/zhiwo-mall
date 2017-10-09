@@ -685,6 +685,16 @@ public class MemberOrderController extends BaseController<TbUser> {
 					}
 				}
 			}
+			
+			String key = groupPurcse.getId()+"_key_groupPurces";
+			if(!groupPurcse.getDisable()){
+				redisTemplate.opsForValue().set(key, groupPurcse, 96, TimeUnit.HOURS);
+			}else{
+				if(redisTemplate.hasKey(key)){
+					redisTemplate.delete(key);
+				}
+				
+			}
 		}
 		
 		return null;
