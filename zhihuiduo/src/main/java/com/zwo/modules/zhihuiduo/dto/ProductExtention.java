@@ -2,6 +2,7 @@ package com.zwo.modules.zhihuiduo.dto;
 
 import java.util.List;
 
+import com.github.pagehelper.DatagridPage;
 import com.zwo.modules.mall.domain.OrderTrade;
 import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.domain.PrProduct;
@@ -60,6 +61,11 @@ public class ProductExtention extends PrProductWithBLOBs {
 	
 	private Member member;
 	
+	private DatagridPage<PrProduct> productPage;
+	
+	
+	//首页轮播图。
+	private List indexSwipers;
 	
 	public GroupPurcse getGroupPurcse() {
 		return groupPurcse;
@@ -238,5 +244,21 @@ public class ProductExtention extends PrProductWithBLOBs {
 
 	public void setGroupPurcseId(String groupPurcseId) {
 		this.groupPurcseId = groupPurcseId;
+	}
+
+	public DatagridPage<PrProduct> getProductPage() {
+		return productPage;
+	}
+
+	public void setProductPage(DatagridPage<PrProduct> productPage) {
+		this.productPage = productPage;
+	}
+
+	public List getIndexSwipers() {
+		return indexSwipers;
+	}
+
+	public void setIndexSwipers(List indexSwipers) {
+		this.indexSwipers = indexSwipers;
 	}
 }
