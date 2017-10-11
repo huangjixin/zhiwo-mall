@@ -90,6 +90,35 @@ public class MemberInfoController extends BaseController {
 		return basePath + "info";
 	}
 
+
+	/**
+	 * 跳转到我的拼团页面。
+	 * 
+	 * @param uiModel
+	 * @param httpServletRequest
+	 * @param httpServletResponse
+	 * @return
+	 */
+	@RequiresAuthentication
+	@RequestMapping(value = { "memberGroupPurcse" })
+	public String getMemberGroupPurcse(Model uiModel,
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		MemberAccount memberAccount = null;
+		// 会员的智慧豆账户。
+		Subject subject = SecurityUtils.getSubject();
+		if (subject != null) {
+			 String username = (String) subject.getPrincipal();
+			 Member member = memberService.selectMember(username);
+			if (member != null) {
+				memberAccount = memberService.selectMemberAccountByMId(member
+						.getId());
+			}
+		}
+		uiModel.addAttribute("memberAccount", memberAccount);
+		return basePath + "memberGroupPurcse";
+	}
+	
 	/**
 	 * 跳转到会员账户页面。
 	 * 

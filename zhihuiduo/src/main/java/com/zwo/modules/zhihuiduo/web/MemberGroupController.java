@@ -264,9 +264,14 @@ public class MemberGroupController extends BaseController {
 	
 	@RequestMapping(value = { "memberGroup/getLatestGroupPurcse" }, method = RequestMethod.GET)
 	@ResponseBody
-	public List<GroupPurcse> getLatestGroupPurcse(@PathVariable String pid, Model uiModel,
+	public List<GroupPurcse> getLatestGroupPurcse(Model uiModel,
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		return null;
+		List<GroupPurcse> list = null;
+		if(redisTemplate!=null){
+			String keyList =  "key_list_groupPurces";
+			list = redisTemplate.opsForList().range(keyList,0,20);
+		}
+		return list;
 	}
 }

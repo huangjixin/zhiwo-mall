@@ -21,12 +21,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.DatagridPage;
 import com.github.pagehelper.PageInfo;
+import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.ProductStatus;
 import com.zwo.modules.mall.service.IPrductService;
 import com.zwo.modules.member.domain.GroupPurcse;
 import com.zwo.modules.member.service.IMemberService;
 import com.zwo.modules.zhihuiduo.dto.MainData;
+import com.zwo.modules.zhihuiduo.dto.ProductExtention;
 import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.common.web.BaseController;
 
@@ -82,17 +84,34 @@ public class IndexController extends BaseController {
 			groupPurcses.add(groupPurcseMember);
 		}
 		
-		
-		MainData data = new MainData();
-		data.setGroupPurcses(groupPurcses);
+		ProductExtention productExtention = new ProductExtention();
+		productExtention.setGroupPurcses(groupPurcses);
+	
 		PageInfo<PrProduct> pageInfo = new PageInfo<PrProduct>();
 		pageInfo.setPageNum(1);
 		pageInfo.setPageSize(10);
 		pageInfo = prductService.selectIndex(pageInfo);
 		DatagridPage<PrProduct> page = super.setPage(pageInfo);
-		data.setProductPage(page);
-//		data.setProducts(list);
-		String rawData = JSONObject.toJSONString(data);
+		productExtention.setProductPage(page);
+		
+		//模拟首页轮播图。
+		List indexSwipers = new ArrayList();
+		PrImage image = new PrImage();
+		image.setUrl("images/index/0c5729920be08b4c4db823814f4fce38.jpeg@750w_1l_50Q.webp");
+		indexSwipers.add(image);
+		image = new PrImage();
+		image.setUrl("images/index/420ee3bb39bf8bada8e4c54e82cca2f7.webp");
+		indexSwipers.add(image);
+		image = new PrImage();
+		image.setUrl("images/index/7a33a999dac04926836368c475cd5c40.jpeg@750w_1l_50Q.webp");
+		indexSwipers.add(image);
+		image = new PrImage();
+		image.setUrl("images/index/9681edec31eb353b630d5050d5cd2ddd.jpeg@750w_1l_50Q.webp");
+		indexSwipers.add(image);
+		productExtention.setIndexSwipers(indexSwipers);
+		
+		
+		String rawData = JSONObject.toJSONString(productExtention);
 //		uiModel.addAttribute("list", list);
 		uiModel.addAttribute("rawData", rawData);
 		return basePath + "index";
@@ -101,6 +120,15 @@ public class IndexController extends BaseController {
 	@RequestMapping(value = "indexGoods", method = RequestMethod.GET)
 	@ResponseBody
 	public DatagridPage<PrProduct> indexGoods(@ModelAttribute PageInfo<PrProduct> pageInfo, Model uiModel,
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		pageInfo = prductService.selectIndex(pageInfo);
+		return super.setPage(pageInfo);
+	}
+	
+	@RequestMapping(value = "categoryGoods/", method = RequestMethod.GET)
+	@ResponseBody
+	public DatagridPage<PrProduct> categoryGoods(@ModelAttribute PageInfo<PrProduct> pageInfo, Model uiModel,
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		pageInfo = prductService.selectIndex(pageInfo);

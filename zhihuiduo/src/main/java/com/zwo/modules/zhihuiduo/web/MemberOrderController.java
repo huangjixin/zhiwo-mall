@@ -596,11 +596,15 @@ public class MemberOrderController extends BaseController<TbUser> {
 
 		//设置开团的会员信息。
 		groupPurcse.setProductId(product.getId());
+		groupPurcse.setName(product.getName());
+		groupPurcse.setCreateDate(new Date());
+		
 		if (member != null) {
 			groupPurcse.setMemeberId(member.getId());
 			groupPurcse.setMemberIcon(member.getIcon());
 			groupPurcse.setMemberName(member.getNickname()==null?member.getUsername():member.getNickname());
 			groupPurcse.setMemberOpenId(member.getOpenId());
+			groupPurcse.setUpdateDate(new Date());
 		}
 
 		groupPurcseMember = new GroupPurcseMember();
@@ -662,6 +666,7 @@ public class MemberOrderController extends BaseController<TbUser> {
 		groupPurcseMember.setGroupPurcseId(groupPurcse.getId());
 		groupPurcseMemberService.insertSelective(groupPurcseMember);
 		
+		orderTrade.setGroupPurcseId(groupPurcse.getId());
 		orderTradeService.updateByPrimaryKeySelective(orderTrade);
 		
 		if(redisTemplate!=null){
@@ -695,7 +700,8 @@ public class MemberOrderController extends BaseController<TbUser> {
 				if(redisTemplate.hasKey(key)){
 					redisTemplate.delete(key);
 				}
-				redisTemplate.opsForList().remove(keyList,1,groupPurcse);
+				Long result = redisTemplate.opsForList().remove(keyList,0,groupPurcse);
+				System.out.println(result);
 			}
 		}
 		

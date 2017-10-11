@@ -231,13 +231,13 @@ public class MemberGoodsController extends BaseController<PrProduct> {
 		return basePath + "goodsDetail";
 	}
 
-	@RequestMapping(value = "goodsByCategory", method = RequestMethod.GET)
+	@RequestMapping(value = "goodsByCategory/{categoryId}", method = RequestMethod.GET)
 	@ResponseBody
-	public DatagridPage<PrProduct> goodsByCategory(@RequestParam String prCId,
+	public DatagridPage<PrProduct> goodsByCategory(@PathVariable String categoryId,
 			@ModelAttribute PageInfo<PrProduct> pageInfo, Model uiModel,
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		pageInfo = prductService.selectByCategoryIdPageInfo(prCId, pageInfo);
+		pageInfo = prductService.selectByCategoryIdPageInfo(categoryId, pageInfo);
 		return super.setPage(pageInfo);
 	}
 }
