@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zwo.modules.member.dao.MemberMapper" >
+  <resultMap id="BaseResultMap" type="com.zwo.modules.member.domain.Member" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="USERNAME" property="username" jdbcType="VARCHAR" />
+    <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    <result column="LOGIN_DATE" property="loginDate" jdbcType="TIMESTAMP" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="LAST_LOGIN_DATE" property="lastLoginDate" jdbcType="TIMESTAMP" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="MOBIL_PHONE" property="mobilPhone" jdbcType="VARCHAR" />
+    <result column="DISABLED" property="disabled" jdbcType="BIT" />
+    <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+    <result column="UPDATER" property="updater" jdbcType="VARCHAR" />
+    <result column="SEX" property="sex" jdbcType="BIT" />
+    <result column="ICON" property="icon" jdbcType="VARCHAR" />
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+    <result column="AGE" property="age" jdbcType="INTEGER" />
+    <result column="WEIGHT" property="weight" jdbcType="INTEGER" />
+    <result column="QQ" property="qq" jdbcType="VARCHAR" />
+    <result column="WEIXIN" property="weixin" jdbcType="VARCHAR" />
+    <result column="REAL_NAME" property="realName" jdbcType="VARCHAR" />
+    <result column="LOGIN_COUNT" property="loginCount" jdbcType="INTEGER" />
+    <result column="SORT" property="sort" jdbcType="INTEGER" />
+    <result column="ORG_ID" property="orgId" jdbcType="VARCHAR" />
+    <result column="PARENT_ID" property="parentId" jdbcType="VARCHAR" />
+    <result column="PARENTIDS" property="parentids" jdbcType="VARCHAR" />
+    <result column="MEMBER_GROUP_ID" property="memberGroupId" jdbcType="VARCHAR" />
+    <result column="NICKNAME" property="nickname" jdbcType="VARCHAR" />
+    <result column="OPEN_ID" property="openId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    ID, USERNAME, PASSWORD, LOGIN_DATE, CREATE_DATE, UPDATE_DATE, LAST_LOGIN_DATE, EMAIL, 
+    MOBIL_PHONE, DISABLED, CREATOR, UPDATER, SEX, ICON, DESCRIPTION, AGE, WEIGHT, QQ, 
+    WEIXIN, REAL_NAME, LOGIN_COUNT, SORT, ORG_ID, PARENT_ID, PARENTIDS, MEMBER_GROUP_ID, 
+    NICKNAME, OPEN_ID
+  </sql>
+  
+  <select id="selectByPid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    	mem.*
+	FROM
+    	member mem
+    LEFT JOIN
+    	member_product_distribution mpd ON mem.id = mpd.MEMBER_ID
+    LEFT JOIN
+    	pr_product prod ON mpd.PRODUCT_ID = prod.id
+	WHERE
+    	prod.id = #{productId}
+  </select>
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+	    mem.*
+	FROM
+	    member mem
+	        LEFT JOIN
+	    member_product_distribution mpd ON mem.id = mpd.MEMBER_ID
+	        LEFT JOIN
+	    pr_product prod ON prod.id = mpd.PRODUCT_ID
+	        LEFT JOIN
+	    shop s ON s.id = prod.SHOP_ID
+	        LEFT JOIN
+	    tb_user user ON s.USER_ID = user.id
+	WHERE
+	    user.id  = #{userId}
+  </select>
+  
+  <select id="selectBuyerByPid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+	    mem.id,mem.NICKNAME, mem.icon
+	FROM
+	    member AS mem
+	        LEFT JOIN
+	    order_trade AS ot ON mem.id = ot.MEMBER_ID
+	        LEFT JOIN
+	    pr_product p ON ot.PRODUCT_ID = p.id
+	WHERE
+		p.id= #{productId} and 
+	    ot.IS_FORM_SCCUESS = '1' order by ot.CREATE_DATE desc limit 0,2 
+  </select>
+</mapper>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zwo.modules.system.dao.TbUserApplyMapper" >
+  <resultMap id="BaseResultMap" type="com.zwo.modules.system.domain.TbUserApply" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="USERNAME" property="username" jdbcType="VARCHAR" />
+    <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    <result column="LOGIN_DATE" property="loginDate" jdbcType="TIMESTAMP" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="LAST_LOGIN_DATE" property="lastLoginDate" jdbcType="TIMESTAMP" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="MOBIL_PHONE" property="mobilPhone" jdbcType="VARCHAR" />
+    <result column="DISABLE" property="disable" jdbcType="BIT" />
+    <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+    <result column="UPDATER" property="updater" jdbcType="VARCHAR" />
+    <result column="SEX" property="sex" jdbcType="BIT" />
+    <result column="ICON" property="icon" jdbcType="VARCHAR" />
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+    <result column="AGE" property="age" jdbcType="INTEGER" />
+    <result column="WEIGHT" property="weight" jdbcType="INTEGER" />
+    <result column="QQ" property="qq" jdbcType="VARCHAR" />
+    <result column="WEIXIN" property="weixin" jdbcType="VARCHAR" />
+    <result column="REAL_NAME" property="realName" jdbcType="VARCHAR" />
+    <result column="SORT" property="sort" jdbcType="INTEGER" />
+    <result column="ORG_ID" property="orgId" jdbcType="VARCHAR" />
+    <result column="NICKNAME" property="nickname" jdbcType="VARCHAR" />
+    <result column="LOGIN_NAME" property="loginName" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="EMERGECY_CONTACT" property="emergecyContact" jdbcType="VARCHAR" />
+    <result column="IS_CERTIFICATE_INTERNATIONAL" property="isCertificateInternational" jdbcType="BIT" />
+    <result column="ID_CARD" property="idCard" jdbcType="VARCHAR" />
+    <result column="COOP_NAME" property="coopName" jdbcType="VARCHAR" />
+    <result column="COOP_ADDRESS" property="coopAddress" jdbcType="VARCHAR" />
+    <result column="BUSSINESS_LICENSE_CODE" property="bussinessLicenseCode" jdbcType="VARCHAR" />
+    <result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR" />
+    <result column="TAXPAYER" property="taxpayer" jdbcType="VARCHAR" />
+    <result column="SOCIETY_CODE" property="societyCode" jdbcType="VARCHAR" />
+    <result column="LEGAL_REPRESENTATIVE_CARD1" property="legalRepresentativeCard1" jdbcType="VARCHAR" />
+    <result column="LEGAL_REPRESENTATIVE_CARD2" property="legalRepresentativeCard2" jdbcType="VARCHAR" />
+    <result column="LEGAL_IDCARD_EFFITIVE" property="legalIdcardEffitive" jdbcType="VARCHAR" />
+    <result column="BUSSINESS_LICENSE_PIC" property="bussinessLicensePic" jdbcType="VARCHAR" />
+    <result column="LICENSE_FOR_OPENING_COUNT" property="licenseForOpeningCount" jdbcType="VARCHAR" />
+    <result column="QUANTITY_REPORT_ID" property="quantityReportId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    ID, USERNAME, PASSWORD, LOGIN_DATE, CREATE_DATE, UPDATE_DATE, LAST_LOGIN_DATE, EMAIL, 
+    MOBIL_PHONE, DISABLE, CREATOR, UPDATER, SEX, ICON, DESCRIPTION, AGE, WEIGHT, QQ, 
+    WEIXIN, REAL_NAME, SORT, ORG_ID, NICKNAME, LOGIN_NAME, TYPE, EMERGECY_CONTACT, IS_CERTIFICATE_INTERNATIONAL, 
+    ID_CARD, COOP_NAME, COOP_ADDRESS, BUSSINESS_LICENSE_CODE, ORG_CODE, TAXPAYER, SOCIETY_CODE, 
+    LEGAL_REPRESENTATIVE_CARD1, LEGAL_REPRESENTATIVE_CARD2, LEGAL_IDCARD_EFFITIVE, BUSSINESS_LICENSE_PIC, 
+    LICENSE_FOR_OPENING_COUNT, QUANTITY_REPORT_ID
+  </sql>
+</mapper>
