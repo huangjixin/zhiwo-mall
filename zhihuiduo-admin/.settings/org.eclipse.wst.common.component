@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="zhihuiduo-admin">
+        <wb-resource deploy-path="/" source-path="/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/zhihuiduo-web-java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/zhihuiduo-core-java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/zhihuiduo-fileupload-java"/>
+        <dependent-module archiveName="zhihuiduo-core.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/zhihuiduo-core/zhihuiduo-core">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="zhihuiduo-admin"/>
+        <property name="java-output-path" value="/zhihuiduo-admin/build/classes"/>
+    </wb-module>
+</project-modules>

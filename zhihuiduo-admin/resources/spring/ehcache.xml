@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache name="es">
+
+	<diskStore path="java.io.tmpdir" />
+
+	<!-- 默认缓存配置. -->
+	<defaultCache maxEntriesLocalHeap="1000" eternal="false"
+		timeToIdleSeconds="3600" timeToLiveSeconds="3600" overflowToDisk="false">
+	</defaultCache>
+	<!-- 页面缓存配置. -->
+	<cache name="SimplePageCachingFilter" maxEntriesLocalHeap="2000"
+		eternal="true" timeToIdleSeconds="3600" timeToLiveSeconds="0"
+		overflowToDisk="true" statistics="true" />
+
+	<!-- 文章点击率永远缓 -->
+	<cache name="docClickCache" maxEntriesLocalHeap="2000" eternal="true"
+		timeToIdleSeconds="3600" timeToLiveSeconds="0" overflowToDisk="true"
+		statistics="true">
+	</cache>
+
+	<!-- 登录记录缓存 锁定10分钟 -->
+	<cache name="passwordRetryCache" maxEntriesLocalHeap="2000"
+		eternal="false" timeToIdleSeconds="3600" timeToLiveSeconds="0"
+		overflowToDisk="false" statistics="true">
+	</cache>
+
+	<cache name="authorizationCache" maxEntriesLocalHeap="2000"
+		eternal="false" timeToIdleSeconds="3600" timeToLiveSeconds="0"
+		overflowToDisk="false" statistics="true">
+	</cache>
+
+	<cache name="authenticationCache" maxEntriesLocalHeap="2000"
+		eternal="false" timeToIdleSeconds="3600" timeToLiveSeconds="0"
+		overflowToDisk="false" statistics="true">
+	</cache>
+
+	<cache name="shiro-activeSessionCache" maxEntriesLocalHeap="2000"
+		eternal="false" timeToIdleSeconds="3600" timeToLiveSeconds="0"
+		overflowToDisk="false" statistics="true">
+	</cache>
+
+	<!-- <cache name="user" maxEntriesLocalHeap="2000" eternal="false" timeToIdleSeconds="600" 
+		timeToLiveSeconds="600" overflowToDisk="false" statistics="true"> </cache> 
+		<cache name="resources" maxEntriesLocalHeap="2000" eternal="false" timeToIdleSeconds="600" 
+		timeToLiveSeconds="600" overflowToDisk="false" statistics="true"> </cache> -->
+
+</ehcache>
