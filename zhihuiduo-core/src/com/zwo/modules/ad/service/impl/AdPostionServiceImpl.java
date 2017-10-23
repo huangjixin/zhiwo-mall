@@ -45,7 +45,7 @@ public class AdPostionServiceImpl extends BaseService<AdPostion> implements IAdP
 	private static Logger logger = LoggerFactory.getLogger(AdPostionServiceImpl.class);
 
 	private static final String BASE_MESSAGE = "【AdPostionServiceImpl服务类提供的基础操作增删改查等】";
-	private static final String KEY_ADPOSTION_ASSETS = "_key_adpostion";
+	private static final String KEY_ADPOSTION = "_key_adpostion";
 	
 	@SuppressWarnings("rawtypes")
 	private RedisTemplate redisTemplate;
@@ -110,7 +110,7 @@ public class AdPostionServiceImpl extends BaseService<AdPostion> implements IAdP
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
 		List<AdPostion> adpostions = adPostionMapper.selectByExample(example);
 		for (AdPostion adpostions2 : adpostions) {
-			RedisUtil.removeRedisKey(redisTemplate, adpostions2.getId()+KEY_ADPOSTION_ASSETS);
+			RedisUtil.removeRedisKey(redisTemplate, adpostions2.getId()+KEY_ADPOSTION);
 		}
 		
 		// 逻辑操作
@@ -135,7 +135,7 @@ public class AdPostionServiceImpl extends BaseService<AdPostion> implements IAdP
 		adPostionCriteria.createCriteria().andIdIn(list);
 		List<AdPostion> adpostions = adPostionMapper.selectByExample(adPostionCriteria);
 		for (AdPostion adpostions2 : adpostions) {
-			RedisUtil.removeRedisKey(redisTemplate, adpostions2.getId()+KEY_ADPOSTION_ASSETS);
+			RedisUtil.removeRedisKey(redisTemplate, adpostions2.getId()+KEY_ADPOSTION);
 		}
 		
 		int result = adPostionMapper.deleteByExample(adPostionCriteria);
@@ -274,7 +274,7 @@ public class AdPostionServiceImpl extends BaseService<AdPostion> implements IAdP
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
 		List<AdPostion> adpostions = adPostionMapper.selectByExample(example);
 		for (AdPostion adpostions2 : adpostions) {
-			RedisUtil.removeRedisKey(redisTemplate, adpostions2.getId()+KEY_ADPOSTION_ASSETS);
+			RedisUtil.removeRedisKey(redisTemplate, adpostions2.getId()+KEY_ADPOSTION);
 		}
 		
 		// 逻辑操作
@@ -301,7 +301,7 @@ public class AdPostionServiceImpl extends BaseService<AdPostion> implements IAdP
 			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
 		List<AdPostion> adpostions = adPostionMapper.selectByExample(example);
 		for (AdPostion adpostions2 : adpostions) {
-			RedisUtil.removeRedisKey(redisTemplate, adpostions2.getId()+KEY_ADPOSTION_ASSETS);
+			RedisUtil.removeRedisKey(redisTemplate, adpostions2.getId()+KEY_ADPOSTION);
 		}								
 		//逻辑操作		
 		int result = super.updateByExample(record, example);
