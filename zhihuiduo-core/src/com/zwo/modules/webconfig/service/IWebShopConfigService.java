@@ -10,6 +10,6 @@ import com.zwotech.modules.core.service.IBaseService;
  * @author hjx
  *
  */
-public interface WebShopConfigService extends IBaseService<WebShopConfig> {
+public interface IWebShopConfigService extends IBaseService<WebShopConfig> {
 
 }

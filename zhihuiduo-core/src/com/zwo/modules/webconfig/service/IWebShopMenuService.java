@@ -10,6 +10,6 @@ import com.zwotech.modules.core.service.IBaseService;
  * @author hjx
  *
  */
-public interface WebShopMenuService extends IBaseService<WebShopMenu> {
+public interface IWebShopMenuService extends IBaseService<WebShopMenu> {
 
 }
