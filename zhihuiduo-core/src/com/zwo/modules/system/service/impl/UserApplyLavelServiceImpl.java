@@ -15,17 +15,16 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import tk.mybatis.mapper.common.Mapper;
+
 import com.github.pagehelper.PageInfo;
-import com.zwo.modules.ad.domain.AdPostion;
-import com.zwo.modules.system.dao.TbUserApplyMapper;
-import com.zwo.modules.system.domain.TbUserApply;
-import com.zwo.modules.system.domain.TbUserApplyCriteria;
-import com.zwo.modules.system.service.ITbUserApplyService;
+import com.zwo.modules.system.dao.TbUserApplyLavelMapper;
+import com.zwo.modules.system.domain.TbUserApplyLavel;
+import com.zwo.modules.system.domain.TbUserApplyLavelCriteria;
+import com.zwo.modules.system.service.ITbUserApplyLavelService;
 import com.zwotech.common.utils.RedisUtil;
 import com.zwotech.common.utils.SpringContextHolder;
 import com.zwotech.modules.core.service.impl.BaseService;
-
-import tk.mybatis.mapper.common.Mapper;
 
 /**
  * @author hjx
@@ -34,26 +33,26 @@ import tk.mybatis.mapper.common.Mapper;
 @Service
 @Lazy(true)
 @Transactional(readOnly = false)
-public class UserApplyServiceImpl extends BaseService<TbUserApply> implements ITbUserApplyService {
-	private static Logger logger = LoggerFactory.getLogger(UserApplyServiceImpl.class);
+public class UserApplyLavelServiceImpl extends BaseService<TbUserApplyLavel> implements ITbUserApplyLavelService {
+	private static Logger logger = LoggerFactory.getLogger(UserApplyLavelServiceImpl.class);
 
-	private static final String BASE_MESSAGE = "【TbUserApplyServiceImpl服务类提供的基础操作增删改查等】";
+	private static final String BASE_MESSAGE = "【TbUserApplyLavelServiceImpl服务类提供的基础操作增删改查等】";
 
-	public static final String KEY_TB_USER_APPLYS = "_key_tb_user_apply";
+	public static final String KEY_TB_USER_APPLYS_LAVEL = "_key_tb_user_apply_lavel";
 	
 	@Autowired
 	@Lazy(true)
-	private TbUserApplyMapper userApplyMapper;
+	private TbUserApplyLavelMapper userApplyLavelMapper;
 
 	@SuppressWarnings("rawtypes")
 	private RedisTemplate redisTemplate;
 	
 	@Override
-	public Mapper<TbUserApply> getBaseMapper() {
-		return userApplyMapper;
+	public Mapper<TbUserApplyLavel> getBaseMapper() {
+		return userApplyLavelMapper;
 	}
 
-	public UserApplyServiceImpl() {
+	public UserApplyLavelServiceImpl() {
 		super();
 		if (redisTemplate == null) {
 			if (SpringContextHolder.getApplicationContext().containsBean(
@@ -69,7 +68,7 @@ public class UserApplyServiceImpl extends BaseService<TbUserApply> implements IT
 	 * com.zwotech.modules.core.service.IBaseService#insertBatch(java.util.List)
 	 */
 	/*
-	 * @Override public int insertBatch(List<TbUserApply> list) { // TODO
+	 * @Override public int insertBatch(List<TbUserApplyLavel> list) { // TODO
 	 * Auto-generated method stub return 0; }
 	 */
 
@@ -98,14 +97,14 @@ public class UserApplyServiceImpl extends BaseService<TbUserApply> implements IT
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除开始");
 		if(redisTemplate!=null){
-			List<TbUserApply> applies = this.userApplyMapper.selectByExample(example);
-			for (TbUserApply userApply : applies) {
-				RedisUtil.removeRedisKey(redisTemplate, userApply.getId()+KEY_TB_USER_APPLYS);
+			List<TbUserApplyLavel> applies = this.userApplyLavelMapper.selectByExample(example);
+			for (TbUserApplyLavel userApply : applies) {
+				RedisUtil.removeRedisKey(redisTemplate, userApply.getId()+KEY_TB_USER_APPLYS_LAVEL);
 			}
 		}
 		
 		// 逻辑操作
-		int result = userApplyMapper.deleteByExample(example);
+		int result = userApplyLavelMapper.deleteByExample(example);
 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByExample批量删除结束");
@@ -121,16 +120,16 @@ public class UserApplyServiceImpl extends BaseService<TbUserApply> implements IT
 			logger.info(BASE_MESSAGE + "deleteBatch批量删除ID为：" + list.toString());
 
 		// 逻辑操作
-		TbUserApplyCriteria userApplyCriteria = new TbUserApplyCriteria();
+		TbUserApplyLavelCriteria userApplyCriteria = new TbUserApplyLavelCriteria();
 		userApplyCriteria.createCriteria().andIdIn(list);
 		if(redisTemplate!=null){
-			List<TbUserApply> applies = this.userApplyMapper.selectByExample(userApplyCriteria);
-			for (TbUserApply userApply : applies) {
-				RedisUtil.removeRedisKey(redisTemplate, userApply.getId()+KEY_TB_USER_APPLYS);
+			List<TbUserApplyLavel> applies = this.userApplyLavelMapper.selectByExample(userApplyCriteria);
+			for (TbUserApplyLavel userApply : applies) {
+				RedisUtil.removeRedisKey(redisTemplate, userApply.getId()+KEY_TB_USER_APPLYS_LAVEL);
 			}
 		}
 		
-		int result = userApplyMapper.deleteByExample(userApplyCriteria);
+		int result = userApplyLavelMapper.deleteByExample(userApplyCriteria);
 
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteBatch批量删除结束");
@@ -145,7 +144,7 @@ public class UserApplyServiceImpl extends BaseService<TbUserApply> implements IT
 	 * lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "TbUserApply", key="#id+'_key_tb_user_apply'")
+	@CacheEvict(value = "TbUserApplyLavel", key="#id+'_key_tb_user_apply_lavel'")
 	public int deleteByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -168,8 +167,8 @@ public class UserApplyServiceImpl extends BaseService<TbUserApply> implements IT
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-//	@CachePut(value = "TbUserApply", key = "#record.id+'_userApply'")
-	public int insert(TbUserApply record) {
+//	@CachePut(value = "TbUserApplyLavel", key = "#record.id+'_userApply'")
+	public int insert(TbUserApplyLavel record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入开始");
@@ -195,8 +194,8 @@ public class UserApplyServiceImpl extends BaseService<TbUserApply> implements IT
 	 */
 
 	@Override
-//	@CachePut(value = "TbUserApply", key = "#record.id+'_userApply'")
-	public int insertSelective(TbUserApply record) {
+//	@CachePut(value = "TbUserApplyLavel", key = "#record.id+'_userApply'")
+	public int insertSelective(TbUserApplyLavel record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "insert插入开始");
@@ -222,8 +221,8 @@ public class UserApplyServiceImpl extends BaseService<TbUserApply> implements IT
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public List<TbUserApply> selectByExample(Object example) {
-		return userApplyMapper.selectByExample(example);
+	public List<TbUserApplyLavel> selectByExample(Object example) {
+		return userApplyLavelMapper.selectByExample(example);
 	}
 
 	/*
@@ -234,9 +233,9 @@ public class UserApplyServiceImpl extends BaseService<TbUserApply> implements IT
 	 * lang.String)
 	 */
 	@Override
-	@Cacheable(key = "#id+'_userApply'", value = "TbUserApply")
+	@Cacheable(key = "#id+'_userApply'", value = "TbUserApplyLavel")
 	@Transactional(readOnly = true)
-	public TbUserApply selectByPrimaryKey(String id) {
+	public TbUserApplyLavel selectByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询开始");
@@ -244,7 +243,7 @@ public class UserApplyServiceImpl extends BaseService<TbUserApply> implements IT
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询参数为：" + id);
 
 		// 逻辑操作
-		TbUserApply userApply = super.selectByPrimaryKey(id);
+		TbUserApplyLavel userApply = super.selectByPrimaryKey(id);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询结束");
 		return userApply;
@@ -258,16 +257,16 @@ public class UserApplyServiceImpl extends BaseService<TbUserApply> implements IT
 	 * java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public int updateByExampleSelective(TbUserApply record, Object example) {
+	public int updateByExampleSelective(TbUserApplyLavel record, Object example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExampleSelective更新条件对象为：" + record.toString());
 		if(redisTemplate!=null){
-			List<TbUserApply> applies = this.userApplyMapper.selectByExample(example);
-			for (TbUserApply userApply : applies) {
-				RedisUtil.removeRedisKey(redisTemplate, userApply.getId()+KEY_TB_USER_APPLYS);
+			List<TbUserApplyLavel> applies = this.userApplyLavelMapper.selectByExample(example);
+			for (TbUserApplyLavel userApply : applies) {
+				RedisUtil.removeRedisKey(redisTemplate, userApply.getId()+KEY_TB_USER_APPLYS_LAVEL);
 			}
 		}
 		// 逻辑操作
@@ -286,16 +285,16 @@ public class UserApplyServiceImpl extends BaseService<TbUserApply> implements IT
 	 * Object, java.lang.Object)
 	 */
 	@Override
-	public int updateByExample(TbUserApply record, Object example) {
+	public int updateByExample(TbUserApplyLavel record, Object example) {
 		//日志记录
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新开始");
 		if(logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE+"updateByExample更新对象为：" + record.toString());
 		if(redisTemplate!=null){
-			List<TbUserApply> applies = this.userApplyMapper.selectByExample(example);
-			for (TbUserApply userApply : applies) {
-				RedisUtil.removeRedisKey(redisTemplate, userApply.getId()+KEY_TB_USER_APPLYS);
+			List<TbUserApplyLavel> applies = this.userApplyLavelMapper.selectByExample(example);
+			for (TbUserApplyLavel userApply : applies) {
+				RedisUtil.removeRedisKey(redisTemplate, userApply.getId()+KEY_TB_USER_APPLYS_LAVEL);
 			}
 		}								
 		//逻辑操作		
@@ -314,8 +313,8 @@ public class UserApplyServiceImpl extends BaseService<TbUserApply> implements IT
 	 * (java.lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbUserApply", key="#record.id+'_key_tb_user_apply'")
-	public int updateByPrimaryKeySelective(TbUserApply record) {
+	@CacheEvict(value = "TbUserApplyLavel", key="#record.id+'_key_tb_user_apply_lavel'")
+	public int updateByPrimaryKeySelective(TbUserApplyLavel record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新开始");
@@ -337,8 +336,8 @@ public class UserApplyServiceImpl extends BaseService<TbUserApply> implements IT
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "TbUserApply", key="#record.id+'_key_tb_user_apply'")
-	public int updateByPrimaryKey(TbUserApply record) {
+	@CacheEvict(value = "TbUserApplyLavel", key="#record.id+'_key_tb_user_apply_lavel'")
+	public int updateByPrimaryKey(TbUserApplyLavel record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新开始");
@@ -361,7 +360,7 @@ public class UserApplyServiceImpl extends BaseService<TbUserApply> implements IT
 	 */
 	@Transactional(readOnly = true)
 	@Override
-	public PageInfo<TbUserApply> selectByPageInfo(Object example, PageInfo<TbUserApply> pageInfo) {
+	public PageInfo<TbUserApplyLavel> selectByPageInfo(Object example, PageInfo<TbUserApplyLavel> pageInfo) {
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "分页开始");
 		if (logger.isInfoEnabled())
