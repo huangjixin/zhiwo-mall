@@ -6,12 +6,9 @@
       WARNING - @mbg.generated
     -->
     <id column="ID" property="id" jdbcType="VARCHAR" />
-    <result column="EN_NAME" property="enName" jdbcType="VARCHAR" />
-    <result column="NAME" property="name" jdbcType="VARCHAR" />
-    <result column="ORG_ID" property="orgId" jdbcType="VARCHAR" />
+    <result column="MEMBER_ID" property="memberId" jdbcType="VARCHAR" />
     <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
     <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
-    <result column="IS_TOOIC" property="isTooic" jdbcType="BIT" />
     <result column="IS_DISABLE" property="isDisable" jdbcType="BIT" />
     <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
     <result column="UPDATER" property="updater" jdbcType="VARCHAR" />
@@ -20,10 +17,6 @@
     <result column="ICON" property="icon" jdbcType="VARCHAR" />
     <result column="PARENT_ID" property="parentId" jdbcType="VARCHAR" />
     <result column="PARENTIDS" property="parentids" jdbcType="VARCHAR" />
-    <result column="CODE" property="code" jdbcType="VARCHAR" />
-    <result column="KEYWORDS" property="keywords" jdbcType="VARCHAR" />
-    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
-    <result column="THUMBNAIL" property="thumbnail" jdbcType="VARCHAR" />
     <result column="SORT" property="sort" jdbcType="INTEGER" />
     <result column="CMS_DOCUMENT_ID" property="cmsDocumentId" jdbcType="VARCHAR" />
     <result column="CONTENT" property="content" jdbcType="VARCHAR" />
@@ -93,12 +86,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    <!--
-      WARNING - @mbg.generated
-    -->
-    ID, EN_NAME, NAME, ORG_ID, CREATE_DATE, UPDATE_DATE, IS_TOOIC, IS_DISABLE, CREATOR, 
-    UPDATER, PATH, MOBILE_FREEMARKER_TEMPLATE, ICON, PARENT_ID, PARENTIDS, CODE, KEYWORDS, 
-    DESCRIPTION, THUMBNAIL, SORT, CMS_DOCUMENT_ID, CONTENT
+    ID, MEMBER_ID, CREATE_DATE, UPDATE_DATE, IS_DISABLE, CREATOR, UPDATER, PATH, MOBILE_FREEMARKER_TEMPLATE, 
+    ICON, PARENT_ID, PARENTIDS, SORT, CMS_DOCUMENT_ID, CONTENT
   </sql>
   
 </mapper>

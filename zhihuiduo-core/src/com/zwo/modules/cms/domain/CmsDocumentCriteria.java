@@ -175,76 +175,6 @@ public class CmsDocumentCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andEnNameIsNull() {
-            addCriterion("EN_NAME is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andEnNameIsNotNull() {
-            addCriterion("EN_NAME is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andEnNameEqualTo(String value) {
-            addCriterion("EN_NAME =", value, "enName");
-            return (Criteria) this;
-        }
-
-        public Criteria andEnNameNotEqualTo(String value) {
-            addCriterion("EN_NAME <>", value, "enName");
-            return (Criteria) this;
-        }
-
-        public Criteria andEnNameGreaterThan(String value) {
-            addCriterion("EN_NAME >", value, "enName");
-            return (Criteria) this;
-        }
-
-        public Criteria andEnNameGreaterThanOrEqualTo(String value) {
-            addCriterion("EN_NAME >=", value, "enName");
-            return (Criteria) this;
-        }
-
-        public Criteria andEnNameLessThan(String value) {
-            addCriterion("EN_NAME <", value, "enName");
-            return (Criteria) this;
-        }
-
-        public Criteria andEnNameLessThanOrEqualTo(String value) {
-            addCriterion("EN_NAME <=", value, "enName");
-            return (Criteria) this;
-        }
-
-        public Criteria andEnNameLike(String value) {
-            addCriterion("EN_NAME like", value, "enName");
-            return (Criteria) this;
-        }
-
-        public Criteria andEnNameNotLike(String value) {
-            addCriterion("EN_NAME not like", value, "enName");
-            return (Criteria) this;
-        }
-
-        public Criteria andEnNameIn(List<String> values) {
-            addCriterion("EN_NAME in", values, "enName");
-            return (Criteria) this;
-        }
-
-        public Criteria andEnNameNotIn(List<String> values) {
-            addCriterion("EN_NAME not in", values, "enName");
-            return (Criteria) this;
-        }
-
-        public Criteria andEnNameBetween(String value1, String value2) {
-            addCriterion("EN_NAME between", value1, value2, "enName");
-            return (Criteria) this;
-        }
-
-        public Criteria andEnNameNotBetween(String value1, String value2) {
-            addCriterion("EN_NAME not between", value1, value2, "enName");
-            return (Criteria) this;
-        }
-
         public Criteria andNameIsNull() {
             addCriterion("NAME is null");
             return (Criteria) this;
@@ -315,73 +245,73 @@ public class CmsDocumentCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdIsNull() {
-            addCriterion("ORG_ID is null");
+        public Criteria andUserIdIsNull() {
+            addCriterion("USER_ID is null");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdIsNotNull() {
-            addCriterion("ORG_ID is not null");
+        public Criteria andUserIdIsNotNull() {
+            addCriterion("USER_ID is not null");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdEqualTo(String value) {
-            addCriterion("ORG_ID =", value, "orgId");
+        public Criteria andUserIdEqualTo(String value) {
+            addCriterion("USER_ID =", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdNotEqualTo(String value) {
-            addCriterion("ORG_ID <>", value, "orgId");
+        public Criteria andUserIdNotEqualTo(String value) {
+            addCriterion("USER_ID <>", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdGreaterThan(String value) {
-            addCriterion("ORG_ID >", value, "orgId");
+        public Criteria andUserIdGreaterThan(String value) {
+            addCriterion("USER_ID >", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdGreaterThanOrEqualTo(String value) {
-            addCriterion("ORG_ID >=", value, "orgId");
+        public Criteria andUserIdGreaterThanOrEqualTo(String value) {
+            addCriterion("USER_ID >=", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdLessThan(String value) {
-            addCriterion("ORG_ID <", value, "orgId");
+        public Criteria andUserIdLessThan(String value) {
+            addCriterion("USER_ID <", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdLessThanOrEqualTo(String value) {
-            addCriterion("ORG_ID <=", value, "orgId");
+        public Criteria andUserIdLessThanOrEqualTo(String value) {
+            addCriterion("USER_ID <=", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdLike(String value) {
-            addCriterion("ORG_ID like", value, "orgId");
+        public Criteria andUserIdLike(String value) {
+            addCriterion("USER_ID like", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdNotLike(String value) {
-            addCriterion("ORG_ID not like", value, "orgId");
+        public Criteria andUserIdNotLike(String value) {
+            addCriterion("USER_ID not like", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdIn(List<String> values) {
-            addCriterion("ORG_ID in", values, "orgId");
+        public Criteria andUserIdIn(List<String> values) {
+            addCriterion("USER_ID in", values, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdNotIn(List<String> values) {
-            addCriterion("ORG_ID not in", values, "orgId");
+        public Criteria andUserIdNotIn(List<String> values) {
+            addCriterion("USER_ID not in", values, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdBetween(String value1, String value2) {
-            addCriterion("ORG_ID between", value1, value2, "orgId");
+        public Criteria andUserIdBetween(String value1, String value2) {
+            addCriterion("USER_ID between", value1, value2, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdNotBetween(String value1, String value2) {
-            addCriterion("ORG_ID not between", value1, value2, "orgId");
+        public Criteria andUserIdNotBetween(String value1, String value2) {
+            addCriterion("USER_ID not between", value1, value2, "userId");
             return (Criteria) this;
         }
 
@@ -835,286 +765,6 @@ public class CmsDocumentCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andJspTemplateIsNull() {
-            addCriterion("JSP_TEMPLATE is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andJspTemplateIsNotNull() {
-            addCriterion("JSP_TEMPLATE is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andJspTemplateEqualTo(String value) {
-            addCriterion("JSP_TEMPLATE =", value, "jspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andJspTemplateNotEqualTo(String value) {
-            addCriterion("JSP_TEMPLATE <>", value, "jspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andJspTemplateGreaterThan(String value) {
-            addCriterion("JSP_TEMPLATE >", value, "jspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andJspTemplateGreaterThanOrEqualTo(String value) {
-            addCriterion("JSP_TEMPLATE >=", value, "jspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andJspTemplateLessThan(String value) {
-            addCriterion("JSP_TEMPLATE <", value, "jspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andJspTemplateLessThanOrEqualTo(String value) {
-            addCriterion("JSP_TEMPLATE <=", value, "jspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andJspTemplateLike(String value) {
-            addCriterion("JSP_TEMPLATE like", value, "jspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andJspTemplateNotLike(String value) {
-            addCriterion("JSP_TEMPLATE not like", value, "jspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andJspTemplateIn(List<String> values) {
-            addCriterion("JSP_TEMPLATE in", values, "jspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andJspTemplateNotIn(List<String> values) {
-            addCriterion("JSP_TEMPLATE not in", values, "jspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andJspTemplateBetween(String value1, String value2) {
-            addCriterion("JSP_TEMPLATE between", value1, value2, "jspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andJspTemplateNotBetween(String value1, String value2) {
-            addCriterion("JSP_TEMPLATE not between", value1, value2, "jspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileJspTemplateIsNull() {
-            addCriterion("MOBILE_JSP_TEMPLATE is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileJspTemplateIsNotNull() {
-            addCriterion("MOBILE_JSP_TEMPLATE is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileJspTemplateEqualTo(String value) {
-            addCriterion("MOBILE_JSP_TEMPLATE =", value, "mobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileJspTemplateNotEqualTo(String value) {
-            addCriterion("MOBILE_JSP_TEMPLATE <>", value, "mobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileJspTemplateGreaterThan(String value) {
-            addCriterion("MOBILE_JSP_TEMPLATE >", value, "mobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileJspTemplateGreaterThanOrEqualTo(String value) {
-            addCriterion("MOBILE_JSP_TEMPLATE >=", value, "mobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileJspTemplateLessThan(String value) {
-            addCriterion("MOBILE_JSP_TEMPLATE <", value, "mobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileJspTemplateLessThanOrEqualTo(String value) {
-            addCriterion("MOBILE_JSP_TEMPLATE <=", value, "mobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileJspTemplateLike(String value) {
-            addCriterion("MOBILE_JSP_TEMPLATE like", value, "mobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileJspTemplateNotLike(String value) {
-            addCriterion("MOBILE_JSP_TEMPLATE not like", value, "mobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileJspTemplateIn(List<String> values) {
-            addCriterion("MOBILE_JSP_TEMPLATE in", values, "mobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileJspTemplateNotIn(List<String> values) {
-            addCriterion("MOBILE_JSP_TEMPLATE not in", values, "mobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileJspTemplateBetween(String value1, String value2) {
-            addCriterion("MOBILE_JSP_TEMPLATE between", value1, value2, "mobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileJspTemplateNotBetween(String value1, String value2) {
-            addCriterion("MOBILE_JSP_TEMPLATE not between", value1, value2, "mobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andFreemarkerTemplateIsNull() {
-            addCriterion("FREEMARKER_TEMPLATE is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFreemarkerTemplateIsNotNull() {
-            addCriterion("FREEMARKER_TEMPLATE is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFreemarkerTemplateEqualTo(String value) {
-            addCriterion("FREEMARKER_TEMPLATE =", value, "freemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andFreemarkerTemplateNotEqualTo(String value) {
-            addCriterion("FREEMARKER_TEMPLATE <>", value, "freemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andFreemarkerTemplateGreaterThan(String value) {
-            addCriterion("FREEMARKER_TEMPLATE >", value, "freemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andFreemarkerTemplateGreaterThanOrEqualTo(String value) {
-            addCriterion("FREEMARKER_TEMPLATE >=", value, "freemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andFreemarkerTemplateLessThan(String value) {
-            addCriterion("FREEMARKER_TEMPLATE <", value, "freemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andFreemarkerTemplateLessThanOrEqualTo(String value) {
-            addCriterion("FREEMARKER_TEMPLATE <=", value, "freemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andFreemarkerTemplateLike(String value) {
-            addCriterion("FREEMARKER_TEMPLATE like", value, "freemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andFreemarkerTemplateNotLike(String value) {
-            addCriterion("FREEMARKER_TEMPLATE not like", value, "freemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andFreemarkerTemplateIn(List<String> values) {
-            addCriterion("FREEMARKER_TEMPLATE in", values, "freemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andFreemarkerTemplateNotIn(List<String> values) {
-            addCriterion("FREEMARKER_TEMPLATE not in", values, "freemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andFreemarkerTemplateBetween(String value1, String value2) {
-            addCriterion("FREEMARKER_TEMPLATE between", value1, value2, "freemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andFreemarkerTemplateNotBetween(String value1, String value2) {
-            addCriterion("FREEMARKER_TEMPLATE not between", value1, value2, "freemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileFreemarkerTemplateIsNull() {
-            addCriterion("MOBILE_FREEMARKER_TEMPLATE is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileFreemarkerTemplateIsNotNull() {
-            addCriterion("MOBILE_FREEMARKER_TEMPLATE is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileFreemarkerTemplateEqualTo(String value) {
-            addCriterion("MOBILE_FREEMARKER_TEMPLATE =", value, "mobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileFreemarkerTemplateNotEqualTo(String value) {
-            addCriterion("MOBILE_FREEMARKER_TEMPLATE <>", value, "mobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileFreemarkerTemplateGreaterThan(String value) {
-            addCriterion("MOBILE_FREEMARKER_TEMPLATE >", value, "mobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileFreemarkerTemplateGreaterThanOrEqualTo(String value) {
-            addCriterion("MOBILE_FREEMARKER_TEMPLATE >=", value, "mobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileFreemarkerTemplateLessThan(String value) {
-            addCriterion("MOBILE_FREEMARKER_TEMPLATE <", value, "mobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileFreemarkerTemplateLessThanOrEqualTo(String value) {
-            addCriterion("MOBILE_FREEMARKER_TEMPLATE <=", value, "mobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileFreemarkerTemplateLike(String value) {
-            addCriterion("MOBILE_FREEMARKER_TEMPLATE like", value, "mobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileFreemarkerTemplateNotLike(String value) {
-            addCriterion("MOBILE_FREEMARKER_TEMPLATE not like", value, "mobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileFreemarkerTemplateIn(List<String> values) {
-            addCriterion("MOBILE_FREEMARKER_TEMPLATE in", values, "mobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileFreemarkerTemplateNotIn(List<String> values) {
-            addCriterion("MOBILE_FREEMARKER_TEMPLATE not in", values, "mobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileFreemarkerTemplateBetween(String value1, String value2) {
-            addCriterion("MOBILE_FREEMARKER_TEMPLATE between", value1, value2, "mobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileFreemarkerTemplateNotBetween(String value1, String value2) {
-            addCriterion("MOBILE_FREEMARKER_TEMPLATE not between", value1, value2, "mobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
         public Criteria andIconIsNull() {
             addCriterion("ICON is null");
             return (Criteria) this;
@@ -1182,286 +832,6 @@ public class CmsDocumentCriteria {
 
         public Criteria andIconNotBetween(String value1, String value2) {
             addCriterion("ICON not between", value1, value2, "icon");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocJspTemplateIsNull() {
-            addCriterion("DOC_JSP_TEMPLATE is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocJspTemplateIsNotNull() {
-            addCriterion("DOC_JSP_TEMPLATE is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocJspTemplateEqualTo(String value) {
-            addCriterion("DOC_JSP_TEMPLATE =", value, "docJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocJspTemplateNotEqualTo(String value) {
-            addCriterion("DOC_JSP_TEMPLATE <>", value, "docJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocJspTemplateGreaterThan(String value) {
-            addCriterion("DOC_JSP_TEMPLATE >", value, "docJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocJspTemplateGreaterThanOrEqualTo(String value) {
-            addCriterion("DOC_JSP_TEMPLATE >=", value, "docJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocJspTemplateLessThan(String value) {
-            addCriterion("DOC_JSP_TEMPLATE <", value, "docJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocJspTemplateLessThanOrEqualTo(String value) {
-            addCriterion("DOC_JSP_TEMPLATE <=", value, "docJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocJspTemplateLike(String value) {
-            addCriterion("DOC_JSP_TEMPLATE like", value, "docJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocJspTemplateNotLike(String value) {
-            addCriterion("DOC_JSP_TEMPLATE not like", value, "docJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocJspTemplateIn(List<String> values) {
-            addCriterion("DOC_JSP_TEMPLATE in", values, "docJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocJspTemplateNotIn(List<String> values) {
-            addCriterion("DOC_JSP_TEMPLATE not in", values, "docJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocJspTemplateBetween(String value1, String value2) {
-            addCriterion("DOC_JSP_TEMPLATE between", value1, value2, "docJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocJspTemplateNotBetween(String value1, String value2) {
-            addCriterion("DOC_JSP_TEMPLATE not between", value1, value2, "docJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileJspTemplateIsNull() {
-            addCriterion("DOC_MOBILE__JSP_TEMPLATE is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileJspTemplateIsNotNull() {
-            addCriterion("DOC_MOBILE__JSP_TEMPLATE is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileJspTemplateEqualTo(String value) {
-            addCriterion("DOC_MOBILE__JSP_TEMPLATE =", value, "docMobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileJspTemplateNotEqualTo(String value) {
-            addCriterion("DOC_MOBILE__JSP_TEMPLATE <>", value, "docMobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileJspTemplateGreaterThan(String value) {
-            addCriterion("DOC_MOBILE__JSP_TEMPLATE >", value, "docMobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileJspTemplateGreaterThanOrEqualTo(String value) {
-            addCriterion("DOC_MOBILE__JSP_TEMPLATE >=", value, "docMobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileJspTemplateLessThan(String value) {
-            addCriterion("DOC_MOBILE__JSP_TEMPLATE <", value, "docMobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileJspTemplateLessThanOrEqualTo(String value) {
-            addCriterion("DOC_MOBILE__JSP_TEMPLATE <=", value, "docMobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileJspTemplateLike(String value) {
-            addCriterion("DOC_MOBILE__JSP_TEMPLATE like", value, "docMobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileJspTemplateNotLike(String value) {
-            addCriterion("DOC_MOBILE__JSP_TEMPLATE not like", value, "docMobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileJspTemplateIn(List<String> values) {
-            addCriterion("DOC_MOBILE__JSP_TEMPLATE in", values, "docMobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileJspTemplateNotIn(List<String> values) {
-            addCriterion("DOC_MOBILE__JSP_TEMPLATE not in", values, "docMobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileJspTemplateBetween(String value1, String value2) {
-            addCriterion("DOC_MOBILE__JSP_TEMPLATE between", value1, value2, "docMobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileJspTemplateNotBetween(String value1, String value2) {
-            addCriterion("DOC_MOBILE__JSP_TEMPLATE not between", value1, value2, "docMobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocFreemarkerTemplateIsNull() {
-            addCriterion("DOC_FREEMARKER_TEMPLATE is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocFreemarkerTemplateIsNotNull() {
-            addCriterion("DOC_FREEMARKER_TEMPLATE is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocFreemarkerTemplateEqualTo(String value) {
-            addCriterion("DOC_FREEMARKER_TEMPLATE =", value, "docFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocFreemarkerTemplateNotEqualTo(String value) {
-            addCriterion("DOC_FREEMARKER_TEMPLATE <>", value, "docFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocFreemarkerTemplateGreaterThan(String value) {
-            addCriterion("DOC_FREEMARKER_TEMPLATE >", value, "docFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocFreemarkerTemplateGreaterThanOrEqualTo(String value) {
-            addCriterion("DOC_FREEMARKER_TEMPLATE >=", value, "docFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocFreemarkerTemplateLessThan(String value) {
-            addCriterion("DOC_FREEMARKER_TEMPLATE <", value, "docFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocFreemarkerTemplateLessThanOrEqualTo(String value) {
-            addCriterion("DOC_FREEMARKER_TEMPLATE <=", value, "docFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocFreemarkerTemplateLike(String value) {
-            addCriterion("DOC_FREEMARKER_TEMPLATE like", value, "docFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocFreemarkerTemplateNotLike(String value) {
-            addCriterion("DOC_FREEMARKER_TEMPLATE not like", value, "docFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocFreemarkerTemplateIn(List<String> values) {
-            addCriterion("DOC_FREEMARKER_TEMPLATE in", values, "docFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocFreemarkerTemplateNotIn(List<String> values) {
-            addCriterion("DOC_FREEMARKER_TEMPLATE not in", values, "docFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocFreemarkerTemplateBetween(String value1, String value2) {
-            addCriterion("DOC_FREEMARKER_TEMPLATE between", value1, value2, "docFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocFreemarkerTemplateNotBetween(String value1, String value2) {
-            addCriterion("DOC_FREEMARKER_TEMPLATE not between", value1, value2, "docFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileFreemarkerTemplateIsNull() {
-            addCriterion("DOC_MOBILE_FREEMARKER_TEMPLATE is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileFreemarkerTemplateIsNotNull() {
-            addCriterion("DOC_MOBILE_FREEMARKER_TEMPLATE is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileFreemarkerTemplateEqualTo(String value) {
-            addCriterion("DOC_MOBILE_FREEMARKER_TEMPLATE =", value, "docMobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileFreemarkerTemplateNotEqualTo(String value) {
-            addCriterion("DOC_MOBILE_FREEMARKER_TEMPLATE <>", value, "docMobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileFreemarkerTemplateGreaterThan(String value) {
-            addCriterion("DOC_MOBILE_FREEMARKER_TEMPLATE >", value, "docMobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileFreemarkerTemplateGreaterThanOrEqualTo(String value) {
-            addCriterion("DOC_MOBILE_FREEMARKER_TEMPLATE >=", value, "docMobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileFreemarkerTemplateLessThan(String value) {
-            addCriterion("DOC_MOBILE_FREEMARKER_TEMPLATE <", value, "docMobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileFreemarkerTemplateLessThanOrEqualTo(String value) {
-            addCriterion("DOC_MOBILE_FREEMARKER_TEMPLATE <=", value, "docMobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileFreemarkerTemplateLike(String value) {
-            addCriterion("DOC_MOBILE_FREEMARKER_TEMPLATE like", value, "docMobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileFreemarkerTemplateNotLike(String value) {
-            addCriterion("DOC_MOBILE_FREEMARKER_TEMPLATE not like", value, "docMobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileFreemarkerTemplateIn(List<String> values) {
-            addCriterion("DOC_MOBILE_FREEMARKER_TEMPLATE in", values, "docMobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileFreemarkerTemplateNotIn(List<String> values) {
-            addCriterion("DOC_MOBILE_FREEMARKER_TEMPLATE not in", values, "docMobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileFreemarkerTemplateBetween(String value1, String value2) {
-            addCriterion("DOC_MOBILE_FREEMARKER_TEMPLATE between", value1, value2, "docMobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileFreemarkerTemplateNotBetween(String value1, String value2) {
-            addCriterion("DOC_MOBILE_FREEMARKER_TEMPLATE not between", value1, value2, "docMobileFreemarkerTemplate");
             return (Criteria) this;
         }
 
@@ -2415,63 +1785,73 @@ public class CmsDocumentCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andDisableIsNull() {
-            addCriterion("DISABLE is null");
+        public Criteria andAuthorIsNull() {
+            addCriterion("AUTHOR is null");
             return (Criteria) this;
         }
 
-        public Criteria andDisableIsNotNull() {
-            addCriterion("DISABLE is not null");
+        public Criteria andAuthorIsNotNull() {
+            addCriterion("AUTHOR is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDisableEqualTo(Boolean value) {
-            addCriterion("DISABLE =", value, "disable");
+        public Criteria andAuthorEqualTo(String value) {
+            addCriterion("AUTHOR =", value, "author");
             return (Criteria) this;
         }
 
-        public Criteria andDisableNotEqualTo(Boolean value) {
-            addCriterion("DISABLE <>", value, "disable");
+        public Criteria andAuthorNotEqualTo(String value) {
+            addCriterion("AUTHOR <>", value, "author");
             return (Criteria) this;
         }
 
-        public Criteria andDisableGreaterThan(Boolean value) {
-            addCriterion("DISABLE >", value, "disable");
+        public Criteria andAuthorGreaterThan(String value) {
+            addCriterion("AUTHOR >", value, "author");
             return (Criteria) this;
         }
 
-        public Criteria andDisableGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("DISABLE >=", value, "disable");
+        public Criteria andAuthorGreaterThanOrEqualTo(String value) {
+            addCriterion("AUTHOR >=", value, "author");
             return (Criteria) this;
         }
 
-        public Criteria andDisableLessThan(Boolean value) {
-            addCriterion("DISABLE <", value, "disable");
+        public Criteria andAuthorLessThan(String value) {
+            addCriterion("AUTHOR <", value, "author");
             return (Criteria) this;
         }
 
-        public Criteria andDisableLessThanOrEqualTo(Boolean value) {
-            addCriterion("DISABLE <=", value, "disable");
+        public Criteria andAuthorLessThanOrEqualTo(String value) {
+            addCriterion("AUTHOR <=", value, "author");
             return (Criteria) this;
         }
 
-        public Criteria andDisableIn(List<Boolean> values) {
-            addCriterion("DISABLE in", values, "disable");
+        public Criteria andAuthorLike(String value) {
+            addCriterion("AUTHOR like", value, "author");
             return (Criteria) this;
         }
 
-        public Criteria andDisableNotIn(List<Boolean> values) {
-            addCriterion("DISABLE not in", values, "disable");
+        public Criteria andAuthorNotLike(String value) {
+            addCriterion("AUTHOR not like", value, "author");
             return (Criteria) this;
         }
 
-        public Criteria andDisableBetween(Boolean value1, Boolean value2) {
-            addCriterion("DISABLE between", value1, value2, "disable");
+        public Criteria andAuthorIn(List<String> values) {
+            addCriterion("AUTHOR in", values, "author");
             return (Criteria) this;
         }
 
-        public Criteria andDisableNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("DISABLE not between", value1, value2, "disable");
+        public Criteria andAuthorNotIn(List<String> values) {
+            addCriterion("AUTHOR not in", values, "author");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthorBetween(String value1, String value2) {
+            addCriterion("AUTHOR between", value1, value2, "author");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthorNotBetween(String value1, String value2) {
+            addCriterion("AUTHOR not between", value1, value2, "author");
             return (Criteria) this;
         }
 
@@ -2480,18 +1860,13 @@ public class CmsDocumentCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andEnNameLikeInsensitive(String value) {
-            addCriterion("upper(EN_NAME) like", value.toUpperCase(), "enName");
-            return (Criteria) this;
-        }
-
         public Criteria andNameLikeInsensitive(String value) {
             addCriterion("upper(NAME) like", value.toUpperCase(), "name");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdLikeInsensitive(String value) {
-            addCriterion("upper(ORG_ID) like", value.toUpperCase(), "orgId");
+        public Criteria andUserIdLikeInsensitive(String value) {
+            addCriterion("upper(USER_ID) like", value.toUpperCase(), "userId");
             return (Criteria) this;
         }
 
@@ -2510,48 +1885,8 @@ public class CmsDocumentCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andJspTemplateLikeInsensitive(String value) {
-            addCriterion("upper(JSP_TEMPLATE) like", value.toUpperCase(), "jspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileJspTemplateLikeInsensitive(String value) {
-            addCriterion("upper(MOBILE_JSP_TEMPLATE) like", value.toUpperCase(), "mobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andFreemarkerTemplateLikeInsensitive(String value) {
-            addCriterion("upper(FREEMARKER_TEMPLATE) like", value.toUpperCase(), "freemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileFreemarkerTemplateLikeInsensitive(String value) {
-            addCriterion("upper(MOBILE_FREEMARKER_TEMPLATE) like", value.toUpperCase(), "mobileFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
         public Criteria andIconLikeInsensitive(String value) {
             addCriterion("upper(ICON) like", value.toUpperCase(), "icon");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocJspTemplateLikeInsensitive(String value) {
-            addCriterion("upper(DOC_JSP_TEMPLATE) like", value.toUpperCase(), "docJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileJspTemplateLikeInsensitive(String value) {
-            addCriterion("upper(DOC_MOBILE__JSP_TEMPLATE) like", value.toUpperCase(), "docMobileJspTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocFreemarkerTemplateLikeInsensitive(String value) {
-            addCriterion("upper(DOC_FREEMARKER_TEMPLATE) like", value.toUpperCase(), "docFreemarkerTemplate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocMobileFreemarkerTemplateLikeInsensitive(String value) {
-            addCriterion("upper(DOC_MOBILE_FREEMARKER_TEMPLATE) like", value.toUpperCase(), "docMobileFreemarkerTemplate");
             return (Criteria) this;
         }
 
@@ -2607,6 +1942,11 @@ public class CmsDocumentCriteria {
 
         public Criteria andCmsChannelIdLikeInsensitive(String value) {
             addCriterion("upper(CMS_CHANNEL_ID) like", value.toUpperCase(), "cmsChannelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthorLikeInsensitive(String value) {
+            addCriterion("upper(AUTHOR) like", value.toUpperCase(), "author");
             return (Criteria) this;
         }
     }

@@ -2,15 +2,11 @@ package com.zwo.modules.cms.domain;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import javax.persistence.*;
-
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.zwotech.modules.core.domain.Node;
-
 @Table(name = "cms_channel")
-public class CmsChannel extends Node implements Serializable {
+public class CmsChannel implements Serializable {
     /**
      * id标志符
      */
@@ -56,7 +52,7 @@ public class CmsChannel extends Node implements Serializable {
     private Boolean isTooic;
 
     /**
-     * 是否可用
+     * 是否可用，0表示可用，1表示禁用
      */
     @Column(name = "IS_DISABLE")
     private Boolean isDisable;
@@ -80,30 +76,6 @@ public class CmsChannel extends Node implements Serializable {
     private String path;
 
     /**
-     * JSP模板路径
-     */
-    @Column(name = "JSP_TEMPLATE")
-    private String jspTemplate;
-
-    /**
-     * 手机端JSP模板
-     */
-    @Column(name = "MOBILE_JSP_TEMPLATE")
-    private String mobileJspTemplate;
-
-    /**
-     * FREEMARKER静态模板
-     */
-    @Column(name = "FREEMARKER_TEMPLATE")
-    private String freemarkerTemplate;
-
-    /**
-     * 手机端FREEMARKER静态模板
-     */
-    @Column(name = "MOBILE_FREEMARKER_TEMPLATE")
-    private String mobileFreemarkerTemplate;
-
-    /**
      * 图标
      */
     @Column(name = "ICON")
@@ -120,30 +92,6 @@ public class CmsChannel extends Node implements Serializable {
      */
     @Column(name = "PARENTIDS")
     private String parentids;
-
-    /**
-     * 文档JSP模板路径
-     */
-    @Column(name = "DOC_JSP_TEMPLATE")
-    private String docJspTemplate;
-
-    /**
-     * 文档手机端JSP模板路基
-     */
-    @Column(name = "DOC_MOBILE__JSP_TEMPLATE")
-    private String docMobileJspTemplate;
-
-    /**
-     * 文档FREEMARKER静态模板
-     */
-    @Column(name = "DOC_FREEMARKER_TEMPLATE")
-    private String docFreemarkerTemplate;
-
-    /**
-     * 文档手机端FREEMARKER静态模板
-     */
-    @Column(name = "DOC_MOBILE_FREEMARKER_TEMPLATE")
-    private String docMobileFreemarkerTemplate;
 
     /**
      * 代码
@@ -186,6 +134,54 @@ public class CmsChannel extends Node implements Serializable {
      */
     @Column(name = "MCHANNEL_TEMPLATE")
     private String mchannelTemplate;
+
+    /**
+     * JSP模板路径
+     */
+    @Column(name = "JSP_TEMPLATE")
+    private String jspTemplate;
+
+    /**
+     * 手机端JSP模板
+     */
+    @Column(name = "MOBILE_JSP_TEMPLATE")
+    private String mobileJspTemplate;
+
+    /**
+     * FREEMARKER静态模板
+     */
+    @Column(name = "FREEMARKER_TEMPLATE")
+    private String freemarkerTemplate;
+
+    /**
+     * 手机端FREEMARKER静态模板
+     */
+    @Column(name = "MOBILE_FREEMARKER_TEMPLATE")
+    private String mobileFreemarkerTemplate;
+
+    /**
+     * 文档JSP模板路径
+     */
+    @Column(name = "DOC_JSP_TEMPLATE")
+    private String docJspTemplate;
+
+    /**
+     * 文档手机端JSP模板路基
+     */
+    @Column(name = "DOC_MOBILE__JSP_TEMPLATE")
+    private String docMobileJspTemplate;
+
+    /**
+     * 文档FREEMARKER静态模板
+     */
+    @Column(name = "DOC_FREEMARKER_TEMPLATE")
+    private String docFreemarkerTemplate;
+
+    /**
+     * 文档手机端FREEMARKER静态模板
+     */
+    @Column(name = "DOC_MOBILE_FREEMARKER_TEMPLATE")
+    private String docMobileFreemarkerTemplate;
 
     private static final long serialVersionUID = 1L;
 
@@ -316,18 +312,18 @@ public class CmsChannel extends Node implements Serializable {
     }
 
     /**
-     * 获取是否可用
+     * 获取是否可用，0表示可用，1表示禁用
      *
-     * @return IS_DISABLE - 是否可用
+     * @return IS_DISABLE - 是否可用，0表示可用，1表示禁用
      */
     public Boolean getIsDisable() {
         return isDisable;
     }
 
     /**
-     * 设置是否可用
+     * 设置是否可用，0表示可用，1表示禁用
      *
-     * @param isDisable 是否可用
+     * @param isDisable 是否可用，0表示可用，1表示禁用
      */
     public void setIsDisable(Boolean isDisable) {
         this.isDisable = isDisable;
@@ -388,78 +384,6 @@ public class CmsChannel extends Node implements Serializable {
     }
 
     /**
-     * 获取JSP模板路径
-     *
-     * @return JSP_TEMPLATE - JSP模板路径
-     */
-    public String getJspTemplate() {
-        return jspTemplate;
-    }
-
-    /**
-     * 设置JSP模板路径
-     *
-     * @param jspTemplate JSP模板路径
-     */
-    public void setJspTemplate(String jspTemplate) {
-        this.jspTemplate = jspTemplate == null ? null : jspTemplate.trim();
-    }
-
-    /**
-     * 获取手机端JSP模板
-     *
-     * @return MOBILE_JSP_TEMPLATE - 手机端JSP模板
-     */
-    public String getMobileJspTemplate() {
-        return mobileJspTemplate;
-    }
-
-    /**
-     * 设置手机端JSP模板
-     *
-     * @param mobileJspTemplate 手机端JSP模板
-     */
-    public void setMobileJspTemplate(String mobileJspTemplate) {
-        this.mobileJspTemplate = mobileJspTemplate == null ? null : mobileJspTemplate.trim();
-    }
-
-    /**
-     * 获取FREEMARKER静态模板
-     *
-     * @return FREEMARKER_TEMPLATE - FREEMARKER静态模板
-     */
-    public String getFreemarkerTemplate() {
-        return freemarkerTemplate;
-    }
-
-    /**
-     * 设置FREEMARKER静态模板
-     *
-     * @param freemarkerTemplate FREEMARKER静态模板
-     */
-    public void setFreemarkerTemplate(String freemarkerTemplate) {
-        this.freemarkerTemplate = freemarkerTemplate == null ? null : freemarkerTemplate.trim();
-    }
-
-    /**
-     * 获取手机端FREEMARKER静态模板
-     *
-     * @return MOBILE_FREEMARKER_TEMPLATE - 手机端FREEMARKER静态模板
-     */
-    public String getMobileFreemarkerTemplate() {
-        return mobileFreemarkerTemplate;
-    }
-
-    /**
-     * 设置手机端FREEMARKER静态模板
-     *
-     * @param mobileFreemarkerTemplate 手机端FREEMARKER静态模板
-     */
-    public void setMobileFreemarkerTemplate(String mobileFreemarkerTemplate) {
-        this.mobileFreemarkerTemplate = mobileFreemarkerTemplate == null ? null : mobileFreemarkerTemplate.trim();
-    }
-
-    /**
      * 获取图标
      *
      * @return ICON - 图标
@@ -511,78 +435,6 @@ public class CmsChannel extends Node implements Serializable {
      */
     public void setParentids(String parentids) {
         this.parentids = parentids == null ? null : parentids.trim();
-    }
-
-    /**
-     * 获取文档JSP模板路径
-     *
-     * @return DOC_JSP_TEMPLATE - 文档JSP模板路径
-     */
-    public String getDocJspTemplate() {
-        return docJspTemplate;
-    }
-
-    /**
-     * 设置文档JSP模板路径
-     *
-     * @param docJspTemplate 文档JSP模板路径
-     */
-    public void setDocJspTemplate(String docJspTemplate) {
-        this.docJspTemplate = docJspTemplate == null ? null : docJspTemplate.trim();
-    }
-
-    /**
-     * 获取文档手机端JSP模板路基
-     *
-     * @return DOC_MOBILE__JSP_TEMPLATE - 文档手机端JSP模板路基
-     */
-    public String getDocMobileJspTemplate() {
-        return docMobileJspTemplate;
-    }
-
-    /**
-     * 设置文档手机端JSP模板路基
-     *
-     * @param docMobileJspTemplate 文档手机端JSP模板路基
-     */
-    public void setDocMobileJspTemplate(String docMobileJspTemplate) {
-        this.docMobileJspTemplate = docMobileJspTemplate == null ? null : docMobileJspTemplate.trim();
-    }
-
-    /**
-     * 获取文档FREEMARKER静态模板
-     *
-     * @return DOC_FREEMARKER_TEMPLATE - 文档FREEMARKER静态模板
-     */
-    public String getDocFreemarkerTemplate() {
-        return docFreemarkerTemplate;
-    }
-
-    /**
-     * 设置文档FREEMARKER静态模板
-     *
-     * @param docFreemarkerTemplate 文档FREEMARKER静态模板
-     */
-    public void setDocFreemarkerTemplate(String docFreemarkerTemplate) {
-        this.docFreemarkerTemplate = docFreemarkerTemplate == null ? null : docFreemarkerTemplate.trim();
-    }
-
-    /**
-     * 获取文档手机端FREEMARKER静态模板
-     *
-     * @return DOC_MOBILE_FREEMARKER_TEMPLATE - 文档手机端FREEMARKER静态模板
-     */
-    public String getDocMobileFreemarkerTemplate() {
-        return docMobileFreemarkerTemplate;
-    }
-
-    /**
-     * 设置文档手机端FREEMARKER静态模板
-     *
-     * @param docMobileFreemarkerTemplate 文档手机端FREEMARKER静态模板
-     */
-    public void setDocMobileFreemarkerTemplate(String docMobileFreemarkerTemplate) {
-        this.docMobileFreemarkerTemplate = docMobileFreemarkerTemplate == null ? null : docMobileFreemarkerTemplate.trim();
     }
 
     /**
@@ -709,5 +561,149 @@ public class CmsChannel extends Node implements Serializable {
      */
     public void setMchannelTemplate(String mchannelTemplate) {
         this.mchannelTemplate = mchannelTemplate == null ? null : mchannelTemplate.trim();
+    }
+
+    /**
+     * 获取JSP模板路径
+     *
+     * @return JSP_TEMPLATE - JSP模板路径
+     */
+    public String getJspTemplate() {
+        return jspTemplate;
+    }
+
+    /**
+     * 设置JSP模板路径
+     *
+     * @param jspTemplate JSP模板路径
+     */
+    public void setJspTemplate(String jspTemplate) {
+        this.jspTemplate = jspTemplate == null ? null : jspTemplate.trim();
+    }
+
+    /**
+     * 获取手机端JSP模板
+     *
+     * @return MOBILE_JSP_TEMPLATE - 手机端JSP模板
+     */
+    public String getMobileJspTemplate() {
+        return mobileJspTemplate;
+    }
+
+    /**
+     * 设置手机端JSP模板
+     *
+     * @param mobileJspTemplate 手机端JSP模板
+     */
+    public void setMobileJspTemplate(String mobileJspTemplate) {
+        this.mobileJspTemplate = mobileJspTemplate == null ? null : mobileJspTemplate.trim();
+    }
+
+    /**
+     * 获取FREEMARKER静态模板
+     *
+     * @return FREEMARKER_TEMPLATE - FREEMARKER静态模板
+     */
+    public String getFreemarkerTemplate() {
+        return freemarkerTemplate;
+    }
+
+    /**
+     * 设置FREEMARKER静态模板
+     *
+     * @param freemarkerTemplate FREEMARKER静态模板
+     */
+    public void setFreemarkerTemplate(String freemarkerTemplate) {
+        this.freemarkerTemplate = freemarkerTemplate == null ? null : freemarkerTemplate.trim();
+    }
+
+    /**
+     * 获取手机端FREEMARKER静态模板
+     *
+     * @return MOBILE_FREEMARKER_TEMPLATE - 手机端FREEMARKER静态模板
+     */
+    public String getMobileFreemarkerTemplate() {
+        return mobileFreemarkerTemplate;
+    }
+
+    /**
+     * 设置手机端FREEMARKER静态模板
+     *
+     * @param mobileFreemarkerTemplate 手机端FREEMARKER静态模板
+     */
+    public void setMobileFreemarkerTemplate(String mobileFreemarkerTemplate) {
+        this.mobileFreemarkerTemplate = mobileFreemarkerTemplate == null ? null : mobileFreemarkerTemplate.trim();
+    }
+
+    /**
+     * 获取文档JSP模板路径
+     *
+     * @return DOC_JSP_TEMPLATE - 文档JSP模板路径
+     */
+    public String getDocJspTemplate() {
+        return docJspTemplate;
+    }
+
+    /**
+     * 设置文档JSP模板路径
+     *
+     * @param docJspTemplate 文档JSP模板路径
+     */
+    public void setDocJspTemplate(String docJspTemplate) {
+        this.docJspTemplate = docJspTemplate == null ? null : docJspTemplate.trim();
+    }
+
+    /**
+     * 获取文档手机端JSP模板路基
+     *
+     * @return DOC_MOBILE__JSP_TEMPLATE - 文档手机端JSP模板路基
+     */
+    public String getDocMobileJspTemplate() {
+        return docMobileJspTemplate;
+    }
+
+    /**
+     * 设置文档手机端JSP模板路基
+     *
+     * @param docMobileJspTemplate 文档手机端JSP模板路基
+     */
+    public void setDocMobileJspTemplate(String docMobileJspTemplate) {
+        this.docMobileJspTemplate = docMobileJspTemplate == null ? null : docMobileJspTemplate.trim();
+    }
+
+    /**
+     * 获取文档FREEMARKER静态模板
+     *
+     * @return DOC_FREEMARKER_TEMPLATE - 文档FREEMARKER静态模板
+     */
+    public String getDocFreemarkerTemplate() {
+        return docFreemarkerTemplate;
+    }
+
+    /**
+     * 设置文档FREEMARKER静态模板
+     *
+     * @param docFreemarkerTemplate 文档FREEMARKER静态模板
+     */
+    public void setDocFreemarkerTemplate(String docFreemarkerTemplate) {
+        this.docFreemarkerTemplate = docFreemarkerTemplate == null ? null : docFreemarkerTemplate.trim();
+    }
+
+    /**
+     * 获取文档手机端FREEMARKER静态模板
+     *
+     * @return DOC_MOBILE_FREEMARKER_TEMPLATE - 文档手机端FREEMARKER静态模板
+     */
+    public String getDocMobileFreemarkerTemplate() {
+        return docMobileFreemarkerTemplate;
+    }
+
+    /**
+     * 设置文档手机端FREEMARKER静态模板
+     *
+     * @param docMobileFreemarkerTemplate 文档手机端FREEMARKER静态模板
+     */
+    public void setDocMobileFreemarkerTemplate(String docMobileFreemarkerTemplate) {
+        this.docMobileFreemarkerTemplate = docMobileFreemarkerTemplate == null ? null : docMobileFreemarkerTemplate.trim();
     }
 }

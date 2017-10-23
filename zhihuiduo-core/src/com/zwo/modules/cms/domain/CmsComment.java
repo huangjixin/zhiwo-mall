@@ -16,22 +16,10 @@ public class CmsComment implements Serializable {
     private String id;
 
     /**
-     * 英文名称
-     */
-    @Column(name = "EN_NAME")
-    private String enName;
-
-    /**
-     * 名称
-     */
-    @Column(name = "NAME")
-    private String name;
-
-    /**
      * 组织结构表ID，该字段用于过滤数据，不做外键关联
      */
-    @Column(name = "ORG_ID")
-    private String orgId;
+    @Column(name = "MEMBER_ID")
+    private String memberId;
 
     /**
      * 创建日期
@@ -46,13 +34,7 @@ public class CmsComment implements Serializable {
     private Date updateDate;
 
     /**
-     * 是否为专题
-     */
-    @Column(name = "IS_TOOIC")
-    private Boolean isTooic;
-
-    /**
-     * 是否可用
+     * 是否可用，0为可用，1表示不可用
      */
     @Column(name = "IS_DISABLE")
     private Boolean isDisable;
@@ -100,30 +82,6 @@ public class CmsComment implements Serializable {
     private String parentids;
 
     /**
-     * 代码
-     */
-    @Column(name = "CODE")
-    private String code;
-
-    /**
-     * 关键字
-     */
-    @Column(name = "KEYWORDS")
-    private String keywords;
-
-    /**
-     * 描述
-     */
-    @Column(name = "DESCRIPTION")
-    private String description;
-
-    /**
-     * 缩略图
-     */
-    @Column(name = "THUMBNAIL")
-    private String thumbnail;
-
-    /**
      * 排序
      */
     @Column(name = "SORT")
@@ -156,57 +114,21 @@ public class CmsComment implements Serializable {
     }
 
     /**
-     * 获取英文名称
-     *
-     * @return EN_NAME - 英文名称
-     */
-    public String getEnName() {
-        return enName;
-    }
-
-    /**
-     * 设置英文名称
-     *
-     * @param enName 英文名称
-     */
-    public void setEnName(String enName) {
-        this.enName = enName == null ? null : enName.trim();
-    }
-
-    /**
-     * 获取名称
-     *
-     * @return NAME - 名称
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * 设置名称
-     *
-     * @param name 名称
-     */
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
-
-    /**
      * 获取组织结构表ID，该字段用于过滤数据，不做外键关联
      *
-     * @return ORG_ID - 组织结构表ID，该字段用于过滤数据，不做外键关联
+     * @return MEMBER_ID - 组织结构表ID，该字段用于过滤数据，不做外键关联
      */
-    public String getOrgId() {
-        return orgId;
+    public String getMemberId() {
+        return memberId;
     }
 
     /**
      * 设置组织结构表ID，该字段用于过滤数据，不做外键关联
      *
-     * @param orgId 组织结构表ID，该字段用于过滤数据，不做外键关联
+     * @param memberId 组织结构表ID，该字段用于过滤数据，不做外键关联
      */
-    public void setOrgId(String orgId) {
-        this.orgId = orgId == null ? null : orgId.trim();
+    public void setMemberId(String memberId) {
+        this.memberId = memberId == null ? null : memberId.trim();
     }
 
     /**
@@ -246,36 +168,18 @@ public class CmsComment implements Serializable {
     }
 
     /**
-     * 获取是否为专题
+     * 获取是否可用，0为可用，1表示不可用
      *
-     * @return IS_TOOIC - 是否为专题
-     */
-    public Boolean getIsTooic() {
-        return isTooic;
-    }
-
-    /**
-     * 设置是否为专题
-     *
-     * @param isTooic 是否为专题
-     */
-    public void setIsTooic(Boolean isTooic) {
-        this.isTooic = isTooic;
-    }
-
-    /**
-     * 获取是否可用
-     *
-     * @return IS_DISABLE - 是否可用
+     * @return IS_DISABLE - 是否可用，0为可用，1表示不可用
      */
     public Boolean getIsDisable() {
         return isDisable;
     }
 
     /**
-     * 设置是否可用
+     * 设置是否可用，0为可用，1表示不可用
      *
-     * @param isDisable 是否可用
+     * @param isDisable 是否可用，0为可用，1表示不可用
      */
     public void setIsDisable(Boolean isDisable) {
         this.isDisable = isDisable;
@@ -405,78 +309,6 @@ public class CmsComment implements Serializable {
      */
     public void setParentids(String parentids) {
         this.parentids = parentids == null ? null : parentids.trim();
-    }
-
-    /**
-     * 获取代码
-     *
-     * @return CODE - 代码
-     */
-    public String getCode() {
-        return code;
-    }
-
-    /**
-     * 设置代码
-     *
-     * @param code 代码
-     */
-    public void setCode(String code) {
-        this.code = code == null ? null : code.trim();
-    }
-
-    /**
-     * 获取关键字
-     *
-     * @return KEYWORDS - 关键字
-     */
-    public String getKeywords() {
-        return keywords;
-    }
-
-    /**
-     * 设置关键字
-     *
-     * @param keywords 关键字
-     */
-    public void setKeywords(String keywords) {
-        this.keywords = keywords == null ? null : keywords.trim();
-    }
-
-    /**
-     * 获取描述
-     *
-     * @return DESCRIPTION - 描述
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * 设置描述
-     *
-     * @param description 描述
-     */
-    public void setDescription(String description) {
-        this.description = description == null ? null : description.trim();
-    }
-
-    /**
-     * 获取缩略图
-     *
-     * @return THUMBNAIL - 缩略图
-     */
-    public String getThumbnail() {
-        return thumbnail;
-    }
-
-    /**
-     * 设置缩略图
-     *
-     * @param thumbnail 缩略图
-     */
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail == null ? null : thumbnail.trim();
     }
 
     /**

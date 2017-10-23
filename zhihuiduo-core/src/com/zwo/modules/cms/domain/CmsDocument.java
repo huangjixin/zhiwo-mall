@@ -16,22 +16,16 @@ public class CmsDocument implements Serializable {
     private String id;
 
     /**
-     * 英文名称
-     */
-    @Column(name = "EN_NAME")
-    private String enName;
-
-    /**
      * 名称
      */
     @Column(name = "NAME")
     private String name;
 
     /**
-     * 组织结构表ID，该字段用于过滤数据，不做外键关联
+     * 用户ID，不做外键关联
      */
-    @Column(name = "ORG_ID")
-    private String orgId;
+    @Column(name = "USER_ID")
+    private String userId;
 
     /**
      * 创建日期
@@ -76,58 +70,10 @@ public class CmsDocument implements Serializable {
     private String path;
 
     /**
-     * JSP模板路径
-     */
-    @Column(name = "JSP_TEMPLATE")
-    private String jspTemplate;
-
-    /**
-     * 手机端JSP模板
-     */
-    @Column(name = "MOBILE_JSP_TEMPLATE")
-    private String mobileJspTemplate;
-
-    /**
-     * FREEMARKER静态模板
-     */
-    @Column(name = "FREEMARKER_TEMPLATE")
-    private String freemarkerTemplate;
-
-    /**
-     * 手机端FREEMARKER静态模板
-     */
-    @Column(name = "MOBILE_FREEMARKER_TEMPLATE")
-    private String mobileFreemarkerTemplate;
-
-    /**
      * 图标
      */
     @Column(name = "ICON")
     private String icon;
-
-    /**
-     * 文档JSP模板路径
-     */
-    @Column(name = "DOC_JSP_TEMPLATE")
-    private String docJspTemplate;
-
-    /**
-     * 文档手机端JSP模板路基
-     */
-    @Column(name = "DOC_MOBILE__JSP_TEMPLATE")
-    private String docMobileJspTemplate;
-
-    /**
-     * 文档FREEMARKER静态模板
-     */
-    @Column(name = "DOC_FREEMARKER_TEMPLATE")
-    private String docFreemarkerTemplate;
-
-    /**
-     * 文档手机端FREEMARKER静态模板
-     */
-    @Column(name = "DOC_MOBILE_FREEMARKER_TEMPLATE")
-    private String docMobileFreemarkerTemplate;
 
     /**
      * 代码
@@ -211,10 +157,16 @@ public class CmsDocument implements Serializable {
     private String cmsChannelId;
 
     /**
-     * 是否禁用
+     * 作者
      */
-    @Column(name = "DISABLE")
-    private Boolean disable;
+    @Column(name = "AUTHOR")
+    private String author;
+
+    /**
+     * 内容
+     */
+    @Column(name = "CONTENT")
+    private String content;
 
     private static final long serialVersionUID = 1L;
 
@@ -237,24 +189,6 @@ public class CmsDocument implements Serializable {
     }
 
     /**
-     * 获取英文名称
-     *
-     * @return EN_NAME - 英文名称
-     */
-    public String getEnName() {
-        return enName;
-    }
-
-    /**
-     * 设置英文名称
-     *
-     * @param enName 英文名称
-     */
-    public void setEnName(String enName) {
-        this.enName = enName == null ? null : enName.trim();
-    }
-
-    /**
      * 获取名称
      *
      * @return NAME - 名称
@@ -273,21 +207,21 @@ public class CmsDocument implements Serializable {
     }
 
     /**
-     * 获取组织结构表ID，该字段用于过滤数据，不做外键关联
+     * 获取用户ID，不做外键关联
      *
-     * @return ORG_ID - 组织结构表ID，该字段用于过滤数据，不做外键关联
+     * @return USER_ID - 用户ID，不做外键关联
      */
-    public String getOrgId() {
-        return orgId;
+    public String getUserId() {
+        return userId;
     }
 
     /**
-     * 设置组织结构表ID，该字段用于过滤数据，不做外键关联
+     * 设置用户ID，不做外键关联
      *
-     * @param orgId 组织结构表ID，该字段用于过滤数据，不做外键关联
+     * @param userId 用户ID，不做外键关联
      */
-    public void setOrgId(String orgId) {
-        this.orgId = orgId == null ? null : orgId.trim();
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
     }
 
     /**
@@ -417,78 +351,6 @@ public class CmsDocument implements Serializable {
     }
 
     /**
-     * 获取JSP模板路径
-     *
-     * @return JSP_TEMPLATE - JSP模板路径
-     */
-    public String getJspTemplate() {
-        return jspTemplate;
-    }
-
-    /**
-     * 设置JSP模板路径
-     *
-     * @param jspTemplate JSP模板路径
-     */
-    public void setJspTemplate(String jspTemplate) {
-        this.jspTemplate = jspTemplate == null ? null : jspTemplate.trim();
-    }
-
-    /**
-     * 获取手机端JSP模板
-     *
-     * @return MOBILE_JSP_TEMPLATE - 手机端JSP模板
-     */
-    public String getMobileJspTemplate() {
-        return mobileJspTemplate;
-    }
-
-    /**
-     * 设置手机端JSP模板
-     *
-     * @param mobileJspTemplate 手机端JSP模板
-     */
-    public void setMobileJspTemplate(String mobileJspTemplate) {
-        this.mobileJspTemplate = mobileJspTemplate == null ? null : mobileJspTemplate.trim();
-    }
-
-    /**
-     * 获取FREEMARKER静态模板
-     *
-     * @return FREEMARKER_TEMPLATE - FREEMARKER静态模板
-     */
-    public String getFreemarkerTemplate() {
-        return freemarkerTemplate;
-    }
-
-    /**
-     * 设置FREEMARKER静态模板
-     *
-     * @param freemarkerTemplate FREEMARKER静态模板
-     */
-    public void setFreemarkerTemplate(String freemarkerTemplate) {
-        this.freemarkerTemplate = freemarkerTemplate == null ? null : freemarkerTemplate.trim();
-    }
-
-    /**
-     * 获取手机端FREEMARKER静态模板
-     *
-     * @return MOBILE_FREEMARKER_TEMPLATE - 手机端FREEMARKER静态模板
-     */
-    public String getMobileFreemarkerTemplate() {
-        return mobileFreemarkerTemplate;
-    }
-
-    /**
-     * 设置手机端FREEMARKER静态模板
-     *
-     * @param mobileFreemarkerTemplate 手机端FREEMARKER静态模板
-     */
-    public void setMobileFreemarkerTemplate(String mobileFreemarkerTemplate) {
-        this.mobileFreemarkerTemplate = mobileFreemarkerTemplate == null ? null : mobileFreemarkerTemplate.trim();
-    }
-
-    /**
      * 获取图标
      *
      * @return ICON - 图标
@@ -504,78 +366,6 @@ public class CmsDocument implements Serializable {
      */
     public void setIcon(String icon) {
         this.icon = icon == null ? null : icon.trim();
-    }
-
-    /**
-     * 获取文档JSP模板路径
-     *
-     * @return DOC_JSP_TEMPLATE - 文档JSP模板路径
-     */
-    public String getDocJspTemplate() {
-        return docJspTemplate;
-    }
-
-    /**
-     * 设置文档JSP模板路径
-     *
-     * @param docJspTemplate 文档JSP模板路径
-     */
-    public void setDocJspTemplate(String docJspTemplate) {
-        this.docJspTemplate = docJspTemplate == null ? null : docJspTemplate.trim();
-    }
-
-    /**
-     * 获取文档手机端JSP模板路基
-     *
-     * @return DOC_MOBILE__JSP_TEMPLATE - 文档手机端JSP模板路基
-     */
-    public String getDocMobileJspTemplate() {
-        return docMobileJspTemplate;
-    }
-
-    /**
-     * 设置文档手机端JSP模板路基
-     *
-     * @param docMobileJspTemplate 文档手机端JSP模板路基
-     */
-    public void setDocMobileJspTemplate(String docMobileJspTemplate) {
-        this.docMobileJspTemplate = docMobileJspTemplate == null ? null : docMobileJspTemplate.trim();
-    }
-
-    /**
-     * 获取文档FREEMARKER静态模板
-     *
-     * @return DOC_FREEMARKER_TEMPLATE - 文档FREEMARKER静态模板
-     */
-    public String getDocFreemarkerTemplate() {
-        return docFreemarkerTemplate;
-    }
-
-    /**
-     * 设置文档FREEMARKER静态模板
-     *
-     * @param docFreemarkerTemplate 文档FREEMARKER静态模板
-     */
-    public void setDocFreemarkerTemplate(String docFreemarkerTemplate) {
-        this.docFreemarkerTemplate = docFreemarkerTemplate == null ? null : docFreemarkerTemplate.trim();
-    }
-
-    /**
-     * 获取文档手机端FREEMARKER静态模板
-     *
-     * @return DOC_MOBILE_FREEMARKER_TEMPLATE - 文档手机端FREEMARKER静态模板
-     */
-    public String getDocMobileFreemarkerTemplate() {
-        return docMobileFreemarkerTemplate;
-    }
-
-    /**
-     * 设置文档手机端FREEMARKER静态模板
-     *
-     * @param docMobileFreemarkerTemplate 文档手机端FREEMARKER静态模板
-     */
-    public void setDocMobileFreemarkerTemplate(String docMobileFreemarkerTemplate) {
-        this.docMobileFreemarkerTemplate = docMobileFreemarkerTemplate == null ? null : docMobileFreemarkerTemplate.trim();
     }
 
     /**
@@ -827,20 +617,38 @@ public class CmsDocument implements Serializable {
     }
 
     /**
-     * 获取是否禁用
+     * 获取作者
      *
-     * @return DISABLE - 是否禁用
+     * @return AUTHOR - 作者
      */
-    public Boolean getDisable() {
-        return disable;
+    public String getAuthor() {
+        return author;
     }
 
     /**
-     * 设置是否禁用
+     * 设置作者
      *
-     * @param disable 是否禁用
+     * @param author 作者
      */
-    public void setDisable(Boolean disable) {
-        this.disable = disable;
+    public void setAuthor(String author) {
+        this.author = author == null ? null : author.trim();
+    }
+
+    /**
+     * 获取内容
+     *
+     * @return CONTENT - 内容
+     */
+    public String getContent() {
+        return content;
+    }
+
+    /**
+     * 设置内容
+     *
+     * @param content 内容
+     */
+    public void setContent(String content) {
+        this.content = content == null ? null : content.trim();
     }
 }

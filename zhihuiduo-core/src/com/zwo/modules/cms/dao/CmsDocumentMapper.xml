@@ -6,9 +6,8 @@
       WARNING - @mbg.generated
     -->
     <id column="ID" property="id" jdbcType="VARCHAR" />
-    <result column="EN_NAME" property="enName" jdbcType="VARCHAR" />
     <result column="NAME" property="name" jdbcType="VARCHAR" />
-    <result column="ORG_ID" property="orgId" jdbcType="VARCHAR" />
+    <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
     <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
     <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
     <result column="IS_TOOIC" property="isTooic" jdbcType="BIT" />
@@ -16,15 +15,7 @@
     <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
     <result column="UPDATER" property="updater" jdbcType="VARCHAR" />
     <result column="PATH" property="path" jdbcType="VARCHAR" />
-    <result column="JSP_TEMPLATE" property="jspTemplate" jdbcType="VARCHAR" />
-    <result column="MOBILE_JSP_TEMPLATE" property="mobileJspTemplate" jdbcType="VARCHAR" />
-    <result column="FREEMARKER_TEMPLATE" property="freemarkerTemplate" jdbcType="VARCHAR" />
-    <result column="MOBILE_FREEMARKER_TEMPLATE" property="mobileFreemarkerTemplate" jdbcType="VARCHAR" />
     <result column="ICON" property="icon" jdbcType="VARCHAR" />
-    <result column="DOC_JSP_TEMPLATE" property="docJspTemplate" jdbcType="VARCHAR" />
-    <result column="DOC_MOBILE__JSP_TEMPLATE" property="docMobileJspTemplate" jdbcType="VARCHAR" />
-    <result column="DOC_FREEMARKER_TEMPLATE" property="docFreemarkerTemplate" jdbcType="VARCHAR" />
-    <result column="DOC_MOBILE_FREEMARKER_TEMPLATE" property="docMobileFreemarkerTemplate" jdbcType="VARCHAR" />
     <result column="CODE" property="code" jdbcType="VARCHAR" />
     <result column="KEYWORDS" property="keywords" jdbcType="VARCHAR" />
     <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
@@ -39,10 +30,7 @@
     <result column="TO_INDEX" property="toIndex" jdbcType="BIT" />
     <result column="TO_CHANNEL_INDEX" property="toChannelIndex" jdbcType="BIT" />
     <result column="CMS_CHANNEL_ID" property="cmsChannelId" jdbcType="VARCHAR" />
-    <result column="DISABLE" property="disable" jdbcType="BIT" />
-  
-    <result column="EN_CONTENT" property="enContent" jdbcType="LONGVARCHAR" />
-    <result column="M_CONTENT" property="mContent" jdbcType="LONGVARCHAR" />
+    <result column="AUTHOR" property="author" jdbcType="VARCHAR" />
     <result column="CONTENT" property="content" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -110,12 +98,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    ID, EN_NAME, NAME, ORG_ID, CREATE_DATE, UPDATE_DATE, IS_TOOIC, IS_DISABLE, CREATOR, 
-    UPDATER, PATH, JSP_TEMPLATE, MOBILE_JSP_TEMPLATE, FREEMARKER_TEMPLATE, MOBILE_FREEMARKER_TEMPLATE, 
-    ICON, DOC_JSP_TEMPLATE, DOC_MOBILE__JSP_TEMPLATE, DOC_FREEMARKER_TEMPLATE, DOC_MOBILE_FREEMARKER_TEMPLATE, 
-    CODE, KEYWORDS, DESCRIPTION, THUMBNAIL, SORT, CHANNEL_TEMPLATE, MCHANNEL_TEMPLATE, 
+    <!--
+      WARNING - @mbg.generated
+    -->
+    ID, NAME, USER_ID, CREATE_DATE, UPDATE_DATE, IS_TOOIC, IS_DISABLE, CREATOR, UPDATER, 
+    PATH, ICON, CODE, KEYWORDS, DESCRIPTION, THUMBNAIL, SORT, CHANNEL_TEMPLATE, MCHANNEL_TEMPLATE, 
     TITLE_EN, TITLE, SUB_TITLE_EN, SUB_TITLE, TO_INDEX, TO_CHANNEL_INDEX, CMS_CHANNEL_ID, 
-    DISABLE,EN_CONTENT, M_CONTENT, CONTENT
+    AUTHOR
+  </sql>
+  <sql id="Blob_Column_List" >
+    CONTENT
   </sql>
   
 </mapper>
