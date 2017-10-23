@@ -39,12 +39,7 @@
 
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="typeAliasesPackage" value="com.zwo.modules.cms.dao,
-		com.zwo.modules.mall.dao,
-		com.zwo.modules.member.dao,
-		com.zwo.modules.payment.dao,
-		com.zwo.modules.shop.dao,
-		com.zwo.modules.system.dao" />
+		<property name="typeAliasesPackage" value="com.zwo.modules.*.dao" />
 		<property name="plugins">
 			<array>
 				<bean class="com.github.pagehelper.PageHelper">
@@ -66,12 +61,7 @@
 
 	<!-- scan formappers andlet them beautowired org.mybatis.spring.mapper.MapperScannerConfigurer-->
 	<bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.zwo.modules.cms.dao,
-		com.zwo.modules.mall.dao,
-		com.zwo.modules.member.dao,
-		com.zwo.modules.payment.dao,
-		com.zwo.modules.shop.dao,
-		com.zwo.modules.system.dao" />
+		<property name="basePackage" value="com.zwo.modules.*.dao" />
 		<property name="properties">
 	        <value>
 	            mappers=tk.mybatis.mapper.common.Mapper
@@ -96,12 +86,7 @@
 
 	<aop:aspectj-autoproxy/>
 
-	<context:component-scan base-package="com.zwo.modules.cms.service,
-		com.zwo.modules.mall.service,
-		com.zwo.modules.member.service,
-		com.zwo.modules.payment.service,
-		com.zwo.modules.shop.service,
-		com.zwo.modules.system.service">
+	<context:component-scan base-package="com.zwo.modules.*.service">
 		<context:exclude-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
