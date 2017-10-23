@@ -246,6 +246,66 @@ public class TbUserApply implements Serializable {
     @Column(name = "QUANTITY_REPORT_ID")
     private String quantityReportId;
 
+    /**
+     * 0表示未审核，1表示审核通过，2表示驳回
+     */
+    @Column(name = "CHECK_STATUS")
+    private Integer checkStatus;
+
+    /**
+     * 平台使用费
+     */
+    @Column(name = "USE_FEE")
+    private Double useFee;
+
+    /**
+     * 平台保证金
+     */
+    @Column(name = "PROMISE_FEE")
+    private Double promiseFee;
+
+    /**
+     * 商家保证金是否已经支付，0表示未支付，1表示已经支付
+     */
+    @Column(name = "IS_PROMISE_FEE_PAYED")
+    private Integer isPromiseFeePayed;
+
+    /**
+     * 支付宝账户
+     */
+    @Column(name = "ZHIFUBAO_ACCOUNT")
+    private String zhifubaoAccount;
+
+    /**
+     * 微信账户
+     */
+    @Column(name = "WECHAT_ACCOUNT")
+    private String wechatAccount;
+
+    /**
+     * 分成利率
+     */
+    @Column(name = "SHARE_PERCENT")
+    private Double sharePercent;
+
+    /**
+     * 分成数额
+     */
+    @Column(name = "SHARE_ACCOUNT")
+    private Double shareAccount;
+
+    /**
+     * 进驻商等级ID
+     */
+    @Column(name = "LAVEL_ID")
+    private String lavelId;
+
+    /**
+     * 商品种类ID，用户只能够选择一种商品分类进行销售，但是可以申请多个种类进行销售，期间用英文逗号","分割开
+     */
+    @Column(name = "PR_CATEGORY_ID")
+    private String prCategoryId;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -962,5 +1022,185 @@ public class TbUserApply implements Serializable {
      */
     public void setQuantityReportId(String quantityReportId) {
         this.quantityReportId = quantityReportId == null ? null : quantityReportId.trim();
+    }
+
+    /**
+     * 获取0表示未审核，1表示审核通过，2表示驳回
+     *
+     * @return CHECK_STATUS - 0表示未审核，1表示审核通过，2表示驳回
+     */
+    public Integer getCheckStatus() {
+        return checkStatus;
+    }
+
+    /**
+     * 设置0表示未审核，1表示审核通过，2表示驳回
+     *
+     * @param checkStatus 0表示未审核，1表示审核通过，2表示驳回
+     */
+    public void setCheckStatus(Integer checkStatus) {
+        this.checkStatus = checkStatus;
+    }
+
+    /**
+     * 获取平台使用费
+     *
+     * @return USE_FEE - 平台使用费
+     */
+    public Double getUseFee() {
+        return useFee;
+    }
+
+    /**
+     * 设置平台使用费
+     *
+     * @param useFee 平台使用费
+     */
+    public void setUseFee(Double useFee) {
+        this.useFee = useFee;
+    }
+
+    /**
+     * 获取平台保证金
+     *
+     * @return PROMISE_FEE - 平台保证金
+     */
+    public Double getPromiseFee() {
+        return promiseFee;
+    }
+
+    /**
+     * 设置平台保证金
+     *
+     * @param promiseFee 平台保证金
+     */
+    public void setPromiseFee(Double promiseFee) {
+        this.promiseFee = promiseFee;
+    }
+
+    /**
+     * 获取商家保证金是否已经支付，0表示未支付，1表示已经支付
+     *
+     * @return IS_PROMISE_FEE_PAYED - 商家保证金是否已经支付，0表示未支付，1表示已经支付
+     */
+    public Integer getIsPromiseFeePayed() {
+        return isPromiseFeePayed;
+    }
+
+    /**
+     * 设置商家保证金是否已经支付，0表示未支付，1表示已经支付
+     *
+     * @param isPromiseFeePayed 商家保证金是否已经支付，0表示未支付，1表示已经支付
+     */
+    public void setIsPromiseFeePayed(Integer isPromiseFeePayed) {
+        this.isPromiseFeePayed = isPromiseFeePayed;
+    }
+
+    /**
+     * 获取支付宝账户
+     *
+     * @return ZHIFUBAO_ACCOUNT - 支付宝账户
+     */
+    public String getZhifubaoAccount() {
+        return zhifubaoAccount;
+    }
+
+    /**
+     * 设置支付宝账户
+     *
+     * @param zhifubaoAccount 支付宝账户
+     */
+    public void setZhifubaoAccount(String zhifubaoAccount) {
+        this.zhifubaoAccount = zhifubaoAccount == null ? null : zhifubaoAccount.trim();
+    }
+
+    /**
+     * 获取微信账户
+     *
+     * @return WECHAT_ACCOUNT - 微信账户
+     */
+    public String getWechatAccount() {
+        return wechatAccount;
+    }
+
+    /**
+     * 设置微信账户
+     *
+     * @param wechatAccount 微信账户
+     */
+    public void setWechatAccount(String wechatAccount) {
+        this.wechatAccount = wechatAccount == null ? null : wechatAccount.trim();
+    }
+
+    /**
+     * 获取分成利率
+     *
+     * @return SHARE_PERCENT - 分成利率
+     */
+    public Double getSharePercent() {
+        return sharePercent;
+    }
+
+    /**
+     * 设置分成利率
+     *
+     * @param sharePercent 分成利率
+     */
+    public void setSharePercent(Double sharePercent) {
+        this.sharePercent = sharePercent;
+    }
+
+    /**
+     * 获取分成数额
+     *
+     * @return SHARE_ACCOUNT - 分成数额
+     */
+    public Double getShareAccount() {
+        return shareAccount;
+    }
+
+    /**
+     * 设置分成数额
+     *
+     * @param shareAccount 分成数额
+     */
+    public void setShareAccount(Double shareAccount) {
+        this.shareAccount = shareAccount;
+    }
+
+    /**
+     * 获取进驻商等级ID
+     *
+     * @return LAVEL_ID - 进驻商等级ID
+     */
+    public String getLavelId() {
+        return lavelId;
+    }
+
+    /**
+     * 设置进驻商等级ID
+     *
+     * @param lavelId 进驻商等级ID
+     */
+    public void setLavelId(String lavelId) {
+        this.lavelId = lavelId == null ? null : lavelId.trim();
+    }
+
+    /**
+     * 获取商品种类ID，用户只能够选择一种商品分类进行销售，但是可以申请多个种类进行销售，期间用英文逗号","分割开
+     *
+     * @return PR_CATEGORY_ID - 商品种类ID，用户只能够选择一种商品分类进行销售，但是可以申请多个种类进行销售，期间用英文逗号","分割开
+     */
+    public String getPrCategoryId() {
+        return prCategoryId;
+    }
+
+    /**
+     * 设置商品种类ID，用户只能够选择一种商品分类进行销售，但是可以申请多个种类进行销售，期间用英文逗号","分割开
+     *
+     * @param prCategoryId 商品种类ID，用户只能够选择一种商品分类进行销售，但是可以申请多个种类进行销售，期间用英文逗号","分割开
+     */
+    public void setPrCategoryId(String prCategoryId) {
+        this.prCategoryId = prCategoryId == null ? null : prCategoryId.trim();
     }
 }

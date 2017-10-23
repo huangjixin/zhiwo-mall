@@ -2805,6 +2805,646 @@ public class TbUserApplyCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andCheckStatusIsNull() {
+            addCriterion("CHECK_STATUS is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckStatusIsNotNull() {
+            addCriterion("CHECK_STATUS is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckStatusEqualTo(Integer value) {
+            addCriterion("CHECK_STATUS =", value, "checkStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckStatusNotEqualTo(Integer value) {
+            addCriterion("CHECK_STATUS <>", value, "checkStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckStatusGreaterThan(Integer value) {
+            addCriterion("CHECK_STATUS >", value, "checkStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckStatusGreaterThanOrEqualTo(Integer value) {
+            addCriterion("CHECK_STATUS >=", value, "checkStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckStatusLessThan(Integer value) {
+            addCriterion("CHECK_STATUS <", value, "checkStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckStatusLessThanOrEqualTo(Integer value) {
+            addCriterion("CHECK_STATUS <=", value, "checkStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckStatusIn(List<Integer> values) {
+            addCriterion("CHECK_STATUS in", values, "checkStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckStatusNotIn(List<Integer> values) {
+            addCriterion("CHECK_STATUS not in", values, "checkStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckStatusBetween(Integer value1, Integer value2) {
+            addCriterion("CHECK_STATUS between", value1, value2, "checkStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckStatusNotBetween(Integer value1, Integer value2) {
+            addCriterion("CHECK_STATUS not between", value1, value2, "checkStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseFeeIsNull() {
+            addCriterion("USE_FEE is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseFeeIsNotNull() {
+            addCriterion("USE_FEE is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseFeeEqualTo(Double value) {
+            addCriterion("USE_FEE =", value, "useFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseFeeNotEqualTo(Double value) {
+            addCriterion("USE_FEE <>", value, "useFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseFeeGreaterThan(Double value) {
+            addCriterion("USE_FEE >", value, "useFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseFeeGreaterThanOrEqualTo(Double value) {
+            addCriterion("USE_FEE >=", value, "useFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseFeeLessThan(Double value) {
+            addCriterion("USE_FEE <", value, "useFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseFeeLessThanOrEqualTo(Double value) {
+            addCriterion("USE_FEE <=", value, "useFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseFeeIn(List<Double> values) {
+            addCriterion("USE_FEE in", values, "useFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseFeeNotIn(List<Double> values) {
+            addCriterion("USE_FEE not in", values, "useFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseFeeBetween(Double value1, Double value2) {
+            addCriterion("USE_FEE between", value1, value2, "useFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseFeeNotBetween(Double value1, Double value2) {
+            addCriterion("USE_FEE not between", value1, value2, "useFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andPromiseFeeIsNull() {
+            addCriterion("PROMISE_FEE is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPromiseFeeIsNotNull() {
+            addCriterion("PROMISE_FEE is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPromiseFeeEqualTo(Double value) {
+            addCriterion("PROMISE_FEE =", value, "promiseFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andPromiseFeeNotEqualTo(Double value) {
+            addCriterion("PROMISE_FEE <>", value, "promiseFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andPromiseFeeGreaterThan(Double value) {
+            addCriterion("PROMISE_FEE >", value, "promiseFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andPromiseFeeGreaterThanOrEqualTo(Double value) {
+            addCriterion("PROMISE_FEE >=", value, "promiseFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andPromiseFeeLessThan(Double value) {
+            addCriterion("PROMISE_FEE <", value, "promiseFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andPromiseFeeLessThanOrEqualTo(Double value) {
+            addCriterion("PROMISE_FEE <=", value, "promiseFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andPromiseFeeIn(List<Double> values) {
+            addCriterion("PROMISE_FEE in", values, "promiseFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andPromiseFeeNotIn(List<Double> values) {
+            addCriterion("PROMISE_FEE not in", values, "promiseFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andPromiseFeeBetween(Double value1, Double value2) {
+            addCriterion("PROMISE_FEE between", value1, value2, "promiseFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andPromiseFeeNotBetween(Double value1, Double value2) {
+            addCriterion("PROMISE_FEE not between", value1, value2, "promiseFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPromiseFeePayedIsNull() {
+            addCriterion("IS_PROMISE_FEE_PAYED is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPromiseFeePayedIsNotNull() {
+            addCriterion("IS_PROMISE_FEE_PAYED is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPromiseFeePayedEqualTo(Integer value) {
+            addCriterion("IS_PROMISE_FEE_PAYED =", value, "isPromiseFeePayed");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPromiseFeePayedNotEqualTo(Integer value) {
+            addCriterion("IS_PROMISE_FEE_PAYED <>", value, "isPromiseFeePayed");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPromiseFeePayedGreaterThan(Integer value) {
+            addCriterion("IS_PROMISE_FEE_PAYED >", value, "isPromiseFeePayed");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPromiseFeePayedGreaterThanOrEqualTo(Integer value) {
+            addCriterion("IS_PROMISE_FEE_PAYED >=", value, "isPromiseFeePayed");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPromiseFeePayedLessThan(Integer value) {
+            addCriterion("IS_PROMISE_FEE_PAYED <", value, "isPromiseFeePayed");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPromiseFeePayedLessThanOrEqualTo(Integer value) {
+            addCriterion("IS_PROMISE_FEE_PAYED <=", value, "isPromiseFeePayed");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPromiseFeePayedIn(List<Integer> values) {
+            addCriterion("IS_PROMISE_FEE_PAYED in", values, "isPromiseFeePayed");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPromiseFeePayedNotIn(List<Integer> values) {
+            addCriterion("IS_PROMISE_FEE_PAYED not in", values, "isPromiseFeePayed");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPromiseFeePayedBetween(Integer value1, Integer value2) {
+            addCriterion("IS_PROMISE_FEE_PAYED between", value1, value2, "isPromiseFeePayed");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPromiseFeePayedNotBetween(Integer value1, Integer value2) {
+            addCriterion("IS_PROMISE_FEE_PAYED not between", value1, value2, "isPromiseFeePayed");
+            return (Criteria) this;
+        }
+
+        public Criteria andZhifubaoAccountIsNull() {
+            addCriterion("ZHIFUBAO_ACCOUNT is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andZhifubaoAccountIsNotNull() {
+            addCriterion("ZHIFUBAO_ACCOUNT is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andZhifubaoAccountEqualTo(String value) {
+            addCriterion("ZHIFUBAO_ACCOUNT =", value, "zhifubaoAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andZhifubaoAccountNotEqualTo(String value) {
+            addCriterion("ZHIFUBAO_ACCOUNT <>", value, "zhifubaoAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andZhifubaoAccountGreaterThan(String value) {
+            addCriterion("ZHIFUBAO_ACCOUNT >", value, "zhifubaoAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andZhifubaoAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("ZHIFUBAO_ACCOUNT >=", value, "zhifubaoAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andZhifubaoAccountLessThan(String value) {
+            addCriterion("ZHIFUBAO_ACCOUNT <", value, "zhifubaoAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andZhifubaoAccountLessThanOrEqualTo(String value) {
+            addCriterion("ZHIFUBAO_ACCOUNT <=", value, "zhifubaoAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andZhifubaoAccountLike(String value) {
+            addCriterion("ZHIFUBAO_ACCOUNT like", value, "zhifubaoAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andZhifubaoAccountNotLike(String value) {
+            addCriterion("ZHIFUBAO_ACCOUNT not like", value, "zhifubaoAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andZhifubaoAccountIn(List<String> values) {
+            addCriterion("ZHIFUBAO_ACCOUNT in", values, "zhifubaoAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andZhifubaoAccountNotIn(List<String> values) {
+            addCriterion("ZHIFUBAO_ACCOUNT not in", values, "zhifubaoAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andZhifubaoAccountBetween(String value1, String value2) {
+            addCriterion("ZHIFUBAO_ACCOUNT between", value1, value2, "zhifubaoAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andZhifubaoAccountNotBetween(String value1, String value2) {
+            addCriterion("ZHIFUBAO_ACCOUNT not between", value1, value2, "zhifubaoAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountIsNull() {
+            addCriterion("WECHAT_ACCOUNT is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountIsNotNull() {
+            addCriterion("WECHAT_ACCOUNT is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountEqualTo(String value) {
+            addCriterion("WECHAT_ACCOUNT =", value, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountNotEqualTo(String value) {
+            addCriterion("WECHAT_ACCOUNT <>", value, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountGreaterThan(String value) {
+            addCriterion("WECHAT_ACCOUNT >", value, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("WECHAT_ACCOUNT >=", value, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountLessThan(String value) {
+            addCriterion("WECHAT_ACCOUNT <", value, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountLessThanOrEqualTo(String value) {
+            addCriterion("WECHAT_ACCOUNT <=", value, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountLike(String value) {
+            addCriterion("WECHAT_ACCOUNT like", value, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountNotLike(String value) {
+            addCriterion("WECHAT_ACCOUNT not like", value, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountIn(List<String> values) {
+            addCriterion("WECHAT_ACCOUNT in", values, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountNotIn(List<String> values) {
+            addCriterion("WECHAT_ACCOUNT not in", values, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountBetween(String value1, String value2) {
+            addCriterion("WECHAT_ACCOUNT between", value1, value2, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountNotBetween(String value1, String value2) {
+            addCriterion("WECHAT_ACCOUNT not between", value1, value2, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharePercentIsNull() {
+            addCriterion("SHARE_PERCENT is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharePercentIsNotNull() {
+            addCriterion("SHARE_PERCENT is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharePercentEqualTo(Double value) {
+            addCriterion("SHARE_PERCENT =", value, "sharePercent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharePercentNotEqualTo(Double value) {
+            addCriterion("SHARE_PERCENT <>", value, "sharePercent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharePercentGreaterThan(Double value) {
+            addCriterion("SHARE_PERCENT >", value, "sharePercent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharePercentGreaterThanOrEqualTo(Double value) {
+            addCriterion("SHARE_PERCENT >=", value, "sharePercent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharePercentLessThan(Double value) {
+            addCriterion("SHARE_PERCENT <", value, "sharePercent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharePercentLessThanOrEqualTo(Double value) {
+            addCriterion("SHARE_PERCENT <=", value, "sharePercent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharePercentIn(List<Double> values) {
+            addCriterion("SHARE_PERCENT in", values, "sharePercent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharePercentNotIn(List<Double> values) {
+            addCriterion("SHARE_PERCENT not in", values, "sharePercent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharePercentBetween(Double value1, Double value2) {
+            addCriterion("SHARE_PERCENT between", value1, value2, "sharePercent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharePercentNotBetween(Double value1, Double value2) {
+            addCriterion("SHARE_PERCENT not between", value1, value2, "sharePercent");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareAccountIsNull() {
+            addCriterion("SHARE_ACCOUNT is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareAccountIsNotNull() {
+            addCriterion("SHARE_ACCOUNT is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareAccountEqualTo(Double value) {
+            addCriterion("SHARE_ACCOUNT =", value, "shareAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareAccountNotEqualTo(Double value) {
+            addCriterion("SHARE_ACCOUNT <>", value, "shareAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareAccountGreaterThan(Double value) {
+            addCriterion("SHARE_ACCOUNT >", value, "shareAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareAccountGreaterThanOrEqualTo(Double value) {
+            addCriterion("SHARE_ACCOUNT >=", value, "shareAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareAccountLessThan(Double value) {
+            addCriterion("SHARE_ACCOUNT <", value, "shareAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareAccountLessThanOrEqualTo(Double value) {
+            addCriterion("SHARE_ACCOUNT <=", value, "shareAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareAccountIn(List<Double> values) {
+            addCriterion("SHARE_ACCOUNT in", values, "shareAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareAccountNotIn(List<Double> values) {
+            addCriterion("SHARE_ACCOUNT not in", values, "shareAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareAccountBetween(Double value1, Double value2) {
+            addCriterion("SHARE_ACCOUNT between", value1, value2, "shareAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareAccountNotBetween(Double value1, Double value2) {
+            addCriterion("SHARE_ACCOUNT not between", value1, value2, "shareAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andLavelIdIsNull() {
+            addCriterion("LAVEL_ID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLavelIdIsNotNull() {
+            addCriterion("LAVEL_ID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLavelIdEqualTo(String value) {
+            addCriterion("LAVEL_ID =", value, "lavelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLavelIdNotEqualTo(String value) {
+            addCriterion("LAVEL_ID <>", value, "lavelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLavelIdGreaterThan(String value) {
+            addCriterion("LAVEL_ID >", value, "lavelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLavelIdGreaterThanOrEqualTo(String value) {
+            addCriterion("LAVEL_ID >=", value, "lavelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLavelIdLessThan(String value) {
+            addCriterion("LAVEL_ID <", value, "lavelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLavelIdLessThanOrEqualTo(String value) {
+            addCriterion("LAVEL_ID <=", value, "lavelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLavelIdLike(String value) {
+            addCriterion("LAVEL_ID like", value, "lavelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLavelIdNotLike(String value) {
+            addCriterion("LAVEL_ID not like", value, "lavelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLavelIdIn(List<String> values) {
+            addCriterion("LAVEL_ID in", values, "lavelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLavelIdNotIn(List<String> values) {
+            addCriterion("LAVEL_ID not in", values, "lavelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLavelIdBetween(String value1, String value2) {
+            addCriterion("LAVEL_ID between", value1, value2, "lavelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLavelIdNotBetween(String value1, String value2) {
+            addCriterion("LAVEL_ID not between", value1, value2, "lavelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrCategoryIdIsNull() {
+            addCriterion("PR_CATEGORY_ID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrCategoryIdIsNotNull() {
+            addCriterion("PR_CATEGORY_ID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrCategoryIdEqualTo(String value) {
+            addCriterion("PR_CATEGORY_ID =", value, "prCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrCategoryIdNotEqualTo(String value) {
+            addCriterion("PR_CATEGORY_ID <>", value, "prCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrCategoryIdGreaterThan(String value) {
+            addCriterion("PR_CATEGORY_ID >", value, "prCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrCategoryIdGreaterThanOrEqualTo(String value) {
+            addCriterion("PR_CATEGORY_ID >=", value, "prCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrCategoryIdLessThan(String value) {
+            addCriterion("PR_CATEGORY_ID <", value, "prCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrCategoryIdLessThanOrEqualTo(String value) {
+            addCriterion("PR_CATEGORY_ID <=", value, "prCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrCategoryIdLike(String value) {
+            addCriterion("PR_CATEGORY_ID like", value, "prCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrCategoryIdNotLike(String value) {
+            addCriterion("PR_CATEGORY_ID not like", value, "prCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrCategoryIdIn(List<String> values) {
+            addCriterion("PR_CATEGORY_ID in", values, "prCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrCategoryIdNotIn(List<String> values) {
+            addCriterion("PR_CATEGORY_ID not in", values, "prCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrCategoryIdBetween(String value1, String value2) {
+            addCriterion("PR_CATEGORY_ID between", value1, value2, "prCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrCategoryIdNotBetween(String value1, String value2) {
+            addCriterion("PR_CATEGORY_ID not between", value1, value2, "prCategoryId");
+            return (Criteria) this;
+        }
+
         public Criteria andIdLikeInsensitive(String value) {
             addCriterion("upper(ID) like", value.toUpperCase(), "id");
             return (Criteria) this;
@@ -2952,6 +3592,26 @@ public class TbUserApplyCriteria {
 
         public Criteria andQuantityReportIdLikeInsensitive(String value) {
             addCriterion("upper(QUANTITY_REPORT_ID) like", value.toUpperCase(), "quantityReportId");
+            return (Criteria) this;
+        }
+
+        public Criteria andZhifubaoAccountLikeInsensitive(String value) {
+            addCriterion("upper(ZHIFUBAO_ACCOUNT) like", value.toUpperCase(), "zhifubaoAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountLikeInsensitive(String value) {
+            addCriterion("upper(WECHAT_ACCOUNT) like", value.toUpperCase(), "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andLavelIdLikeInsensitive(String value) {
+            addCriterion("upper(LAVEL_ID) like", value.toUpperCase(), "lavelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrCategoryIdLikeInsensitive(String value) {
+            addCriterion("upper(PR_CATEGORY_ID) like", value.toUpperCase(), "prCategoryId");
             return (Criteria) this;
         }
     }

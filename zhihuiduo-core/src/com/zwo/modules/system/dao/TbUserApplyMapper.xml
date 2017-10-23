@@ -45,6 +45,16 @@
     <result column="BUSSINESS_LICENSE_PIC" property="bussinessLicensePic" jdbcType="VARCHAR" />
     <result column="LICENSE_FOR_OPENING_COUNT" property="licenseForOpeningCount" jdbcType="VARCHAR" />
     <result column="QUANTITY_REPORT_ID" property="quantityReportId" jdbcType="VARCHAR" />
+    <result column="CHECK_STATUS" property="checkStatus" jdbcType="INTEGER" />
+    <result column="USE_FEE" property="useFee" jdbcType="DOUBLE" />
+    <result column="PROMISE_FEE" property="promiseFee" jdbcType="DOUBLE" />
+    <result column="IS_PROMISE_FEE_PAYED" property="isPromiseFeePayed" jdbcType="INTEGER" />
+    <result column="ZHIFUBAO_ACCOUNT" property="zhifubaoAccount" jdbcType="VARCHAR" />
+    <result column="WECHAT_ACCOUNT" property="wechatAccount" jdbcType="VARCHAR" />
+    <result column="SHARE_PERCENT" property="sharePercent" jdbcType="DOUBLE" />
+    <result column="SHARE_ACCOUNT" property="shareAccount" jdbcType="DOUBLE" />
+    <result column="LAVEL_ID" property="lavelId" jdbcType="VARCHAR" />
+    <result column="PR_CATEGORY_ID" property="prCategoryId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <!--
@@ -119,6 +129,8 @@
     WEIXIN, REAL_NAME, SORT, ORG_ID, NICKNAME, LOGIN_NAME, TYPE, EMERGECY_CONTACT, IS_CERTIFICATE_INTERNATIONAL, 
     ID_CARD, COOP_NAME, COOP_ADDRESS, BUSSINESS_LICENSE_CODE, ORG_CODE, TAXPAYER, SOCIETY_CODE, 
     LEGAL_REPRESENTATIVE_CARD1, LEGAL_REPRESENTATIVE_CARD2, LEGAL_IDCARD_EFFITIVE, BUSSINESS_LICENSE_PIC, 
-    LICENSE_FOR_OPENING_COUNT, QUANTITY_REPORT_ID
+    LICENSE_FOR_OPENING_COUNT, QUANTITY_REPORT_ID, CHECK_STATUS, USE_FEE, PROMISE_FEE, 
+    IS_PROMISE_FEE_PAYED, ZHIFUBAO_ACCOUNT, WECHAT_ACCOUNT, SHARE_PERCENT, SHARE_ACCOUNT, 
+    LAVEL_ID, PR_CATEGORY_ID
   </sql>
 </mapper>
