@@ -1,8 +1,8 @@
 package com.zwo.modules.system.web;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -117,6 +117,23 @@ public class ResourcesRestController extends BaseController<TbResources> {
 			HttpServletResponse httpServletResponse) {
 		TreeBuilder<TbResources> tb = new TreeBuilder<TbResources>();
 		List<TbResources> list = resourcesService.selectByExample(null);
+		list = tb.buildListToTree(list, false);
+		return list;
+	}
+	
+	@RequiresPermissions("system:resources:view")
+	@RequestMapping(value = "getMenu")
+	public List<TbResources> getMenu(Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		TreeBuilder<TbResources> tb = new TreeBuilder<TbResources>();
+		List<TbResources> list = resourcesService.selectByExample(null);
+		
+		for (Iterator it = list.iterator(); it.hasNext();) {
+			TbResources resources = (TbResources) it.next();
+			if("button".equals(resources.getType().toString())){
+				it.remove();
+			}
+		}
 		list = tb.buildListToTree(list, false);
 		return list;
 	}
