@@ -624,10 +624,10 @@ CREATE TABLE `member_account` (
   `MEMBER_ID` varchar(32) DEFAULT NULL,
   `LOCKED` tinyint(1) DEFAULT '0' COMMENT '是否锁定,0否,1是',
   `BALANCE` double DEFAULT NULL COMMENT '账号余额',
-  `DEPOSIT` double DEFAULT NULL COMMENT '存款金额',
+  `DEPOSIT` double DEFAULT NULL COMMENT '存款变动金额',
   PRIMARY KEY (`ID`),
   KEY `SORTINDEX` (`SORT`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COMMENT='会员账户';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1738,6 +1738,74 @@ LOCK TABLES `tb_user` WRITE;
 /*!40000 ALTER TABLE `tb_user` DISABLE KEYS */;
 INSERT INTO `tb_user` VALUES ('150375229439161','huangjixin','ea48576f30be1669971699c09ad05c94','2017-08-26 15:29:36','2017-08-26 12:58:14','2017-08-26 15:29:36','2017-08-26 12:58:14','517714860@qq.com','13926205227',0,NULL,NULL,NULL,'uassets/2017/8/26/1503761211244.jpg','新建用户为huangjixn,该用户为管理员账户',NULL,NULL,'517714860','13926205227',NULL,NULL,13,NULL,NULL,NULL,NULL,NULL,NULL,'150183679493710',NULL,1,'445202198510308352',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'cooperation');
 /*!40000 ALTER TABLE `tb_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_user_account`
+--
+
+DROP TABLE IF EXISTS `tb_user_account`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_user_account` (
+  `ID` varchar(32) NOT NULL,
+  `CREATE_DATE` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
+  `UPDATE_DATE` timestamp NULL DEFAULT NULL COMMENT '更新日期',
+  `DISABLED` tinyint(1) DEFAULT '0' COMMENT '是否禁用,0否,1是',
+  `DESCRIPTION` varchar(1200) DEFAULT NULL COMMENT '描述',
+  `REAL_NAME` varchar(32) DEFAULT NULL COMMENT '实名',
+  `SORT` int(11) NOT NULL AUTO_INCREMENT COMMENT '排序',
+  `USER_ID` varchar(32) DEFAULT NULL COMMENT '用户ID，关联tb_user表',
+  `LOCKED` tinyint(1) DEFAULT '0' COMMENT '是否锁定,0否,1是',
+  `BALANCE` double DEFAULT NULL COMMENT '账号余额',
+  `DEPOSIT` double DEFAULT NULL COMMENT '存款变动金额',
+  PRIMARY KEY (`ID`),
+  KEY `SORTINDEX` (`SORT`),
+  KEY `fk_tb_user_account_tb_user_idx_idx` (`USER_ID`),
+  CONSTRAINT `fk_tb_user_account_tb_user_idx` FOREIGN KEY (`USER_ID`) REFERENCES `tb_user` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商户佣金账户';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_user_account`
+--
+
+LOCK TABLES `tb_user_account` WRITE;
+/*!40000 ALTER TABLE `tb_user_account` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_user_account` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_user_account_his`
+--
+
+DROP TABLE IF EXISTS `tb_user_account_his`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_user_account_his` (
+  `ID` varchar(32) NOT NULL,
+  `CREATE_DATE` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
+  `UPDATE_DATE` timestamp NULL DEFAULT NULL COMMENT '更新日期',
+  `DISABLED` tinyint(1) DEFAULT '0' COMMENT '是否禁用,0否,1是',
+  `DESCRIPTION` varchar(1200) DEFAULT NULL COMMENT '描述',
+  `REAL_NAME` varchar(32) DEFAULT NULL COMMENT '实名',
+  `SORT` int(11) NOT NULL AUTO_INCREMENT COMMENT '排序',
+  `USER_ID` varchar(32) DEFAULT NULL COMMENT '用户ID，关联tb_user表',
+  `LOCKED` tinyint(1) DEFAULT '0' COMMENT '是否锁定,0否,1是',
+  `BALANCE` double DEFAULT NULL COMMENT '账号余额',
+  `DEPOSIT` double DEFAULT NULL COMMENT '存款变动金额',
+  PRIMARY KEY (`ID`),
+  KEY `SORTINDEX` (`SORT`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='商户佣金账户历史记录表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_user_account_his`
+--
+
+LOCK TABLES `tb_user_account_his` WRITE;
+/*!40000 ALTER TABLE `tb_user_account_his` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_user_account_his` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
