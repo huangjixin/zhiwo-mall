@@ -48,19 +48,6 @@ public class PrCategoryController extends BaseController<PrCategory> {
 		}
 	}
 	
-	/**
-	 * 默认执行方法。
-	 * 
-	 * @param uiModel
-	 * @param httpServletRequest
-	 * @return
-	 */
-	@RequestMapping()
-	String defaultMethod(Model uiModel, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
-		return list(httpServletRequest);
-	}
-	
 	@RequestMapping()
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath + "category_list";
