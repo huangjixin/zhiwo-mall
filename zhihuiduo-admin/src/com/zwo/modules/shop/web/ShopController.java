@@ -37,7 +37,20 @@ public class ShopController extends BaseController<Shop> {
 
 	private static final String basePath = "views/shop/shop/";
 
-	@RequestMapping(value = { "", "list" })
+	/**
+	 * 默认执行方法。
+	 * 
+	 * @param uiModel
+	 * @param httpServletRequest
+	 * @return
+	 */
+	@RequestMapping()
+	String defaultMethod(Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		return list(httpServletRequest);
+	}
+	
+	@RequestMapping(value = {"list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath + "shop_list";
 	}

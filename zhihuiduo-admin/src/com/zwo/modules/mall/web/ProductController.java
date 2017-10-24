@@ -87,8 +87,21 @@ public class ProductController extends BaseController<PrProduct> {
 		}
 	}
 
+	/**
+	 * 默认执行方法。
+	 * 
+	 * @param uiModel
+	 * @param httpServletRequest
+	 * @return
+	 */
+	@RequestMapping()
+	String defaultMethod(Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		return list(httpServletRequest);
+	}
+	
 	@RequiresPermissions("mall:product:view")
-	@RequestMapping(value = { "", "list" })
+	@RequestMapping(value = {"list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath + "product_list";
 	}

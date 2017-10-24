@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.zwo.modules.cms.domain.CmsDocument;
-import com.zwo.modules.cms.domain.CmsDocument;
 import com.zwo.modules.cms.domain.CmsDocumentWithBLOBs;
 import com.zwo.modules.cms.service.ICmsDocumentService;
 import com.zwotech.common.web.BaseController;
@@ -30,7 +29,20 @@ public class CmsDocumentController extends BaseController<CmsDocument> {
 
 	private static final String basePath = "views/cms/document/";
 
-	@RequestMapping(value = { "", "list" })
+	/**
+	 * 默认执行方法。
+	 * 
+	 * @param uiModel
+	 * @param httpServletRequest
+	 * @return
+	 */
+	@RequestMapping()
+	String defaultMethod(Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		return list(httpServletRequest);
+	}
+	
+	@RequestMapping(value = {"list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath + "document_list";
 	}

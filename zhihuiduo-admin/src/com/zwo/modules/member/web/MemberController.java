@@ -28,8 +28,20 @@ public class MemberController extends BaseController<Member> {
 	private IMemberService memberService;
 	
 	private static final String basePath = "views/member/member/";
+	/**
+	 * 默认执行方法。
+	 * 
+	 * @param uiModel
+	 * @param httpServletRequest
+	 * @return
+	 */
+	@RequestMapping()
+	String defaultMethod(Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		return list(httpServletRequest);
+	}
 	
-	@RequestMapping(value = { "", "list" })
+	@RequestMapping(value = {"list" })
 	@RequiresPermissions("member:member:view")
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath+"member_list";

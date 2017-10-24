@@ -29,8 +29,21 @@ public class ProductPropertyValueController extends BaseController<PrProductProp
 	
 	private static final String basePath = "views/mall/productPropertyValue/";
 	
+	/**
+	 * 默认执行方法。
+	 * 
+	 * @param uiModel
+	 * @param httpServletRequest
+	 * @return
+	 */
+	@RequestMapping()
+	String defaultMethod(Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		return list(httpServletRequest);
+	}
+	
 	@RequiresPermissions("mall:productPropertyValue:view")
-	@RequestMapping(value = { "", "list" })
+	@RequestMapping(value = { "list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath+"productPropertyValue_list";
 	}

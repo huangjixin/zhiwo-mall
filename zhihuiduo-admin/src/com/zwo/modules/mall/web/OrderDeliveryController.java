@@ -29,8 +29,21 @@ public class OrderDeliveryController extends BaseController<OrderDelivery> {
 
 	private static final String basePath = "views/mall/orderDelivery/";
 	
+	/**
+	 * 默认执行方法。
+	 * 
+	 * @param uiModel
+	 * @param httpServletRequest
+	 * @return
+	 */
+	@RequestMapping()
+	String defaultMethod(Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		return list(httpServletRequest);
+	}
+	
 	@RequiresPermissions("mall:orderDelivery:view")
-	@RequestMapping(value = { "", "list" })
+	@RequestMapping(value = {"list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath+"orderDelivery_list";
 	}

@@ -13,14 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.fasterxml.jackson.annotation.ObjectIdGenerators.UUIDGenerator;
 import com.zwo.modules.system.domain.TbResources;
 import com.zwo.modules.system.domain.TbRole;
 import com.zwo.modules.system.domain.TbRoleResources;
@@ -41,8 +39,21 @@ public class RoleController extends BaseController<TbRole> {
 
 	private static final String basePath = "views/system/role/";
 	
+	/**
+	 * 默认执行方法。
+	 * 
+	 * @param uiModel
+	 * @param httpServletRequest
+	 * @return
+	 */
+	@RequestMapping()
+	String defaultMethod(Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		return list(httpServletRequest);
+	}
+	
 	@RequiresPermissions("system:role:view")
-	@RequestMapping(value = { "", "list" })
+	@RequestMapping(value = {"list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath + "role_list";
 	}

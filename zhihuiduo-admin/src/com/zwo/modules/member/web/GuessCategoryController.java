@@ -30,8 +30,20 @@ public class GuessCategoryController extends BaseController<GuessCategory> {
 	
 	private static final String basePath = "views/member/guess/";
 	
+	/**
+	 * 默认执行方法。
+	 * 
+	 * @param uiModel
+	 * @param httpServletRequest
+	 * @return
+	 */
+	@RequestMapping()
+	String defaultMethod(Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		return list(httpServletRequest);
+	}
 	
-	@RequestMapping(value = { "", "list" })
+	@RequestMapping(value = { "list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath+"guessCategory_list";
 	}

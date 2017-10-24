@@ -30,11 +30,33 @@ public class PrImageController extends BaseController<PrImage> {
 	
 	/*@Autowired
 	@Lazy(true)*/
-	private RedisTemplate redisTemplate = SpringContextHolder.getBean("redisTemplate");
+	@SuppressWarnings("rawtypes")
+	private RedisTemplate redisTemplate;
 	
 	private static final String basePath = "views/mall/prImage/";
 	
-	@RequestMapping(value = { "", "list" })
+
+	public PrImageController() {
+		super();
+		if(SpringContextHolder.getApplicationContext().containsBean("redisTemplate")){
+			redisTemplate = SpringContextHolder.getBean("redisTemplate");
+		}
+	}
+	
+	/**
+	 * 默认执行方法。
+	 * 
+	 * @param uiModel
+	 * @param httpServletRequest
+	 * @return
+	 */
+	@RequestMapping()
+	String defaultMethod(Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		return list(httpServletRequest);
+	}
+	
+	@RequestMapping(value = {"list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath+"prImage_list";
 	}
@@ -50,17 +72,17 @@ public class PrImageController extends BaseController<PrImage> {
 	public String edit(@RequestParam("id") String id, Model uiModel,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		PrImage prImage = null;
-		ValueOperations<String, Object> valueOperations = null;
+		/*ValueOperations<String, Object> valueOperations = null;
 		if(redisTemplate!=null){
 			valueOperations =redisTemplate.opsForValue();
 			prImage = (PrImage) valueOperations.get(id);
-		}
+		}*/
 		
 		if(prImage==null){
 			prImage=prImageService.selectByPrimaryKey(id);
-			if(valueOperations != null ){
+			/*if(valueOperations != null ){
 				valueOperations.set(id, prImage);
-			}
+			}*/
 		}
 		
 		uiModel.addAttribute("prImage", prImage);

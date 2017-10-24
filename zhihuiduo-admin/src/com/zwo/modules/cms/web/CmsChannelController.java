@@ -28,7 +28,20 @@ public class CmsChannelController extends BaseController<CmsChannel> {
 
 	private static final String basePath = "views/cms/channel/";
 
-	@RequestMapping(value = { "", "list" })
+	/**
+	 * 默认执行方法。
+	 * 
+	 * @param uiModel
+	 * @param httpServletRequest
+	 * @return
+	 */
+	@RequestMapping()
+	String defaultMethod(Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		return list(httpServletRequest);
+	}
+	
+	@RequestMapping(value = { "list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath + "channel_list";
 	}

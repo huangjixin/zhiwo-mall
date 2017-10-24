@@ -30,8 +30,21 @@ public class ResourcesController extends BaseController<TbResources> {
 	
 	private static final String basePath = "views/system/resources/";
 	
+	/**
+	 * 默认执行方法。
+	 * 
+	 * @param uiModel
+	 * @param httpServletRequest
+	 * @return
+	 */
+	@RequestMapping()
+	String defaultMethod(Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		return list(httpServletRequest);
+	}
+	
 	@RequiresPermissions("system:resources:view")
-	@RequestMapping(value = { "", "list" })
+	@RequestMapping(value = { "list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath+"resources_list";
 	}

@@ -41,8 +41,21 @@ public class UserGroupController extends BaseController<TbUserGroup> {
 	
 	private static final String basePath = "views/system/userGroup/";
 	
+	/**
+	 * 默认执行方法。
+	 * 
+	 * @param uiModel
+	 * @param httpServletRequest
+	 * @return
+	 */
+	@RequestMapping()
+	String defaultMethod(Model uiModel, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		return list(httpServletRequest);
+	}
+	
 	@RequiresPermissions("system:userGroup:view")
-	@RequestMapping(value = { "", "list" })
+	@RequestMapping(value = {"list" })
 	public String list(HttpServletRequest httpServletRequest) {
 		return basePath+"userGroup_list";
 	}
