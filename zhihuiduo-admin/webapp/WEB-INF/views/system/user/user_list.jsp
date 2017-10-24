@@ -10,30 +10,18 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>智惠多后台管理平台首页</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css"
-	rel="stylesheet" type="text/css">
-<link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
-	rel="stylesheet" type="text/css">
-<link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
-	rel="stylesheet" type="text/css">
-<link href="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap-reboot.min.css"
-	rel="stylesheet" type="text/css">
-<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"
-	rel="stylesheet" type="text/css">
-<link href="https://cdn.insdep.com/themes/1.0.0/easyui.css"
-	rel="stylesheet" type="text/css">
-<link href="https://cdn.insdep.com/themes/1.0.0/easyui_animation.css"
-	rel="stylesheet" type="text/css">
-<link href="https://cdn.insdep.com/themes/1.0.0/easyui_plus.css"
-	rel="stylesheet" type="text/css">
-<link href="https://cdn.insdep.com/themes/1.0.0/insdep_theme_default.css"
-	rel="stylesheet" type="text/css">
-<link href="https://cdn.insdep.com/themes/1.0.0/icon.css"
-	rel="stylesheet" type="text/css">
-<link href="https://cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css"
-	rel="stylesheet" type="text/css">
-<link href="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css"
-	rel="stylesheet" type="text/css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
+<link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+<link href="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap-reboot.min.css" rel="stylesheet" type="text/css">
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="https://cdn.insdep.com/themes/1.0.0/easyui.css" rel="stylesheet" type="text/css">
+<link href="https://cdn.insdep.com/themes/1.0.0/easyui_animation.css" rel="stylesheet" type="text/css">
+<link href="https://cdn.insdep.com/themes/1.0.0/easyui_plus.css" rel="stylesheet" type="text/css">
+<link href="https://cdn.insdep.com/themes/1.0.0/insdep_theme_default.css" rel="stylesheet" type="text/css">
+<link href="https://cdn.insdep.com/themes/1.0.0/icon.css" rel="stylesheet" type="text/css">
+<link href="https://cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css" rel="stylesheet" type="text/css">
+<link href="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css" rel="stylesheet" type="text/css">
 
 <script type="text/javascript" src="https://cdn.insdep.com/jquery/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="https://cdn.insdep.com/easyui/jquery.easyui-1.5.1.min.js"></script>
