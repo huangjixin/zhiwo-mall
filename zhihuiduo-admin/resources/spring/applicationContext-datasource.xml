@@ -78,7 +78,7 @@
 
 	<!-- 声明式事务配置，transaction-manager属性值默认为 transactionManager -->
 	<tx:annotation-driven transaction-manager="transactionManager"/>
-	<task:annotation-driven />
+	<!--<task:annotation-driven /> -->
 	
 	<context:annotation-config />
 
