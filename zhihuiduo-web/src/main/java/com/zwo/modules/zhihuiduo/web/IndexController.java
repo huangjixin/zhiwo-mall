@@ -66,7 +66,6 @@ public class IndexController extends BaseController {
 	@RequestMapping(value = { "mindex" }, method = RequestMethod.GET)
 	public String index(Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		
 //		List<PrProduct> list = null;
 //		list = prductService.selectAllByStatus(ProductStatus.ONLINE);
 		if (redisTemplate != null) {
