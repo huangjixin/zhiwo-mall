@@ -10,6 +10,7 @@
 <%@ include file="/WEB-INF/include/easyui-js.jsp"%>
 </head>
 <body>
+	<input id="checkStatus" type="hidden" value="${product.checkStatus}"> 
 	<%@ include file="/WEB-INF/include/easyui-toolbar.jsp"%>
 	<div id="toolbar">
 		<nav class="navbar navbar-default" role="navigation">
@@ -43,7 +44,7 @@
 	<table id="tgrid" 
 		title="商品列表" 
 		class="easyui-datagrid"
-		url="${ctx}/product/select" 
+		url="${ctx}/product/select?checkStatus=${product.checkStatus}" 
 		toolbar="#toolbar" 
 		rownumbers="true"
 		fitColumns="true" 
