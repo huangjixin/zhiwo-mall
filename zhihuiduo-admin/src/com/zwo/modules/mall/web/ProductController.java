@@ -91,14 +91,17 @@ public class ProductController extends BaseController<PrProduct> {
 	 * @return
 	 */
 	@RequestMapping()
-	String defaultMethod(Model uiModel, HttpServletRequest httpServletRequest,
+	String defaultMethod(HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		return list(httpServletRequest);
+		return list(httpServletRequest,httpServletResponse,null,null);
 	}
 	
 	@RequiresPermissions("mall:product:view")
 	@RequestMapping(value = {"list" })
-	public String list(HttpServletRequest httpServletRequest) {
+	public String list(HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse,
+			Model uiModel,@ModelAttribute PrProduct product) {
+		uiModel.addAttribute("product", product);
 		return basePath + "product_list";
 	}
 
