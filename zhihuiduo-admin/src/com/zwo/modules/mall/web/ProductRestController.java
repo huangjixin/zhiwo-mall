@@ -162,6 +162,9 @@ public class ProductRestController extends BaseController<PrProduct> {
 		if (null != product.getName() && !"".equals(product.getName())) {
 			criteria.andNameLike("%" + product.getName() + "%");
 		}
+		if (null != product.getCheckStatus() && !"".equals(product.getCheckStatus())) {
+			criteria.andCheckStatusEqualTo(product.getCheckStatus());
+		}
 		
 		if (null != product.getDisable() && !"".equals(product.getDisable())) {
 			criteria.andDisableEqualTo(product.getDisable());

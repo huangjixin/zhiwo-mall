@@ -126,6 +126,8 @@ public class ResourcesRestController extends BaseController<TbResources> {
 	public List<TbResources> getMenu(Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		TreeBuilder<TbResources> tb = new TreeBuilder<TbResources>();
+		TbResourcesCriteria resourcesCriteria = new TbResourcesCriteria();
+		resourcesCriteria.setOrderByClause("sort desc");
 		List<TbResources> list = resourcesService.selectByExample(null);
 		
 		for (Iterator it = list.iterator(); it.hasNext();) {
