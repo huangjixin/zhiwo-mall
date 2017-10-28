@@ -40,6 +40,7 @@
     <result column="SHOP_ICON" property="shopIcon" jdbcType="VARCHAR" />
     <result column="IS_SENT_UNPAY" property="isSentUnpay" jdbcType="INTEGER" />
     <result column="NUMBER_GROUP_PURCSE" property="numberGroupPurcse" />
+    <result column="CHECK_STATUS" property="checkStatus" jdbcType="INTEGER" />
     <collection property="members" column="id"                       
             select="com.zwo.modules.member.dao.MemberMapper.selectBuyerByPid" />
   </resultMap>
@@ -130,7 +131,7 @@
     SORT, IS_DEFAULT, EN_NAME, NAME, DESCRIPTION, ICON, KEYWORDS, THUMBNAIL, CODE, CATEGORY_ID, 
     ALLOW_DISTRIBUTION, DISTRIBUTION_VALUE, SHOP_ID, USER_ID, PURCHASING_COST, DIST_INTRUEDUTION, 
     SUPPLIER_ID, GOURP_SALE_PRICE, INDEPENDENT_PRICE, AUDIT_DESCRIPTION, 
-    STORAGE, STATUS, MARKET_PRICE, TRANSPORT_FEE, SHOP_NAME, SHOP_ICON, IS_SENT_UNPAY
+    STORAGE, STATUS, MARKET_PRICE, TRANSPORT_FEE, SHOP_NAME, SHOP_ICON, IS_SENT_UNPAY,CHECK_STATUS
   </sql>
   <sql id="Blob_Column_List" >
     <!--
@@ -239,7 +240,7 @@
       INDEPENDENT_PRICE, NUMBER_COUNT, AUDIT_DESCRIPTION, 
       STORAGE, STATUS, MARKET_PRICE, 
       TRANSPORT_FEE, SHOP_NAME, SHOP_ICON, 
-      IS_SENT_UNPAY, CONTENT, EN_CONTENT
+      IS_SENT_UNPAY,CHECK_STATUS, CONTENT, EN_CONTENT
       )
     values (#{id,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, 
       #{updater,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, 
@@ -253,7 +254,8 @@
       #{independentPrice,jdbcType=DOUBLE}, #{numberCount,jdbcType=INTEGER}, #{auditDescription,jdbcType=VARCHAR}, 
       #{storage,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, #{marketPrice,jdbcType=DOUBLE}, 
       #{transportFee,jdbcType=DOUBLE}, #{shopName,jdbcType=VARCHAR}, #{shopIcon,jdbcType=VARCHAR}, 
-      #{isSentUnpay,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}, #{enContent,jdbcType=LONGVARCHAR}
+      #{isSentUnpay,jdbcType=INTEGER},
+      #{checkStatus,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}, #{enContent,jdbcType=LONGVARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.zwo.modules.mall.domain.PrProductWithBLOBs" >
@@ -381,6 +383,9 @@
       <if test="enContent != null" >
         EN_CONTENT,
       </if>
+      <if test="checkStatus != null" >
+        CHECK_STATUS,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -499,6 +504,9 @@
       </if>
       <if test="enContent != null" >
         #{enContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="checkStatus != null" >
+        #{checkStatus,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -632,6 +640,9 @@
       <if test="record.isSentUnpay != null" >
         IS_SENT_UNPAY = #{record.isSentUnpay,jdbcType=INTEGER},
       </if>
+      <if test="record.checkStatus != null" >
+        CHECK_STATUS = #{record.checkStatus,jdbcType=INTEGER},
+      </if>
       <if test="record.content != null" >
         CONTENT = #{record.content,jdbcType=LONGVARCHAR},
       </if>
@@ -687,6 +698,7 @@
       SHOP_NAME = #{record.shopName,jdbcType=VARCHAR},
       SHOP_ICON = #{record.shopIcon,jdbcType=VARCHAR},
       IS_SENT_UNPAY = #{record.isSentUnpay,jdbcType=INTEGER},
+      CHECK_STATUS = #{record.checkStatus,jdbcType=INTEGER},
       CONTENT = #{record.content,jdbcType=LONGVARCHAR},
       EN_CONTENT = #{record.enContent,jdbcType=LONGVARCHAR}
     <if test="_parameter != null" >
@@ -736,7 +748,8 @@
       TRANSPORT_FEE = #{record.transportFee,jdbcType=DOUBLE},
       SHOP_NAME = #{record.shopName,jdbcType=VARCHAR},
       SHOP_ICON = #{record.shopIcon,jdbcType=VARCHAR},
-      IS_SENT_UNPAY = #{record.isSentUnpay,jdbcType=INTEGER}
+      IS_SENT_UNPAY = #{record.isSentUnpay,jdbcType=INTEGER},
+      CHECK_STATUS = #{record.checkStatus,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -857,6 +870,9 @@
       <if test="isSentUnpay != null" >
         IS_SENT_UNPAY = #{isSentUnpay,jdbcType=INTEGER},
       </if>
+      <if test="record.checkStatus != null" >
+        CHECK_STATUS = #{record.checkStatus,jdbcType=INTEGER},
+      </if>
       <if test="content != null" >
         CONTENT = #{content,jdbcType=LONGVARCHAR},
       </if>
@@ -909,6 +925,7 @@
       SHOP_NAME = #{shopName,jdbcType=VARCHAR},
       SHOP_ICON = #{shopIcon,jdbcType=VARCHAR},
       IS_SENT_UNPAY = #{isSentUnpay,jdbcType=INTEGER},
+      CHECK_STATUS = #{record.checkStatus,jdbcType=INTEGER}
       CONTENT = #{content,jdbcType=LONGVARCHAR},
       EN_CONTENT = #{enContent,jdbcType=LONGVARCHAR}
     where ID = #{id,jdbcType=VARCHAR}
@@ -955,7 +972,8 @@
       TRANSPORT_FEE = #{transportFee,jdbcType=DOUBLE},
       SHOP_NAME = #{shopName,jdbcType=VARCHAR},
       SHOP_ICON = #{shopIcon,jdbcType=VARCHAR},
-      IS_SENT_UNPAY = #{isSentUnpay,jdbcType=INTEGER}
+      IS_SENT_UNPAY = #{isSentUnpay,jdbcType=INTEGER},
+      CHECK_STATUS = #{record.checkStatus,jdbcType=INTEGER}
     where ID = #{id,jdbcType=VARCHAR}
   </update>
 
