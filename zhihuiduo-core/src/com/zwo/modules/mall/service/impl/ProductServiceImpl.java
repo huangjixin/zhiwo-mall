@@ -7,7 +7,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -727,6 +729,8 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 			e1.printStackTrace();
 		}
 		String title = document.title();
+		Element des = document.select("meta[name=description]").first();
+		String description = des.attr("content");
 		title = title.replace(" - 阿里巴巴", "");// 抓取商品的标题，去掉阿里巴巴的标识。
 
 		// 查找相对应的脚本，该脚本包含了阿里巴巴的SKU属性。
@@ -750,6 +754,8 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 				ScriptEngine engine = manager.getEngineByName("javascript");
 				try {
 					engine.eval(js);
+					ScriptObjectMirror iDetailConfig = (ScriptObjectMirror) engine
+							.get("iDetailConfig");
 					ScriptObjectMirror c = (ScriptObjectMirror) engine
 							.get("iDetailData");
 					ScriptObjectMirror sku = (ScriptObjectMirror) c.get("sku");
@@ -760,7 +766,10 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 					// 这个好像Map对象。
 					ScriptObjectMirror skuMapProps = (ScriptObjectMirror) sku
 							.get("skuMap");
-
+					String refPrice = (String) iDetailConfig.get("refPrice");
+					ScriptObjectMirror priceRange =  (ScriptObjectMirror) sku.get("priceRange");
+					Object pRange = priceRange.getSlot(0);
+					Array array = (Array) pRange;
 					// 商品属性。
 					List<PrProductProperty> properties = productPropertyService
 							.listAll();
@@ -769,6 +778,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 							.replaceAll("-", "");
 					product.setId(id);
 					product.setName(title);
+					product.setDescription(description);
 					this.insertSelective(product);
 
 					int i = 0;
@@ -879,6 +889,8 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 							}
 						}
 					}
+					
+					product.setPurchasingCost(Double.valueOf(refPrice));
 					
 					this.updateByPrimaryKeySelective(product);
 				} catch (ScriptException e) {
