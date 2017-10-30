@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -57,6 +58,7 @@ import com.zwo.modules.mall.service.IPrProductPackagePriceService;
 import com.zwo.modules.mall.service.IPrProductPropertyService;
 import com.zwo.modules.mall.service.IPrProductPropertyValueService;
 import com.zwo.modules.mall.service.IPrductService;
+import com.zwo.modules.webconfig.domain.WebShopConfig;
 import com.zwotech.common.redis.channel.ChannelContance;
 import com.zwotech.common.redis.channel.RedisPushMessage;
 import com.zwotech.common.utils.SpringContextHolder;
@@ -91,6 +93,10 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 
 	@Autowired
 	@Lazy(true)
+	private WebShopConfig webShopConfig;
+	
+	@Autowired
+	@Lazy(true)
 	private PrProductPropertyValueMapper productPropertyValueMapper;
 
 	@Autowired
@@ -116,7 +122,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 
 	@Override
 	public Mapper<PrProduct> getBaseMapper() {
-		return null;
+		return this.productMapper;
 	}
 
 	public ProductServiceImpl() {
@@ -265,6 +271,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
+	@CachePut(value = "PrProduct", key = "#record.id+'_product'")
 	public int insert(PrProduct record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -305,6 +312,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	 */
 
 	@Override
+	@CachePut(value = "PrProduct", key = "#record.id+'_product'")
 	public int insertSelective(PrProduct record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -437,7 +445,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	 * lang.Object)
 	 */
 	@Override
-	@CacheEvict(value = "PrProduct", key = "#record.id+'_product'")
+	@CachePut(value = "PrProduct", key = "#record.id+'_product'")
 	public int updateByPrimaryKey(PrProduct record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -498,13 +506,36 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 
 	@Cacheable(key = "#id+'_product'", value = "PrProduct")
 	@Transactional(readOnly = true)
-	public PrProduct selectByPrimKey(String id) {
+	@Override
+	public PrProduct selectByPrimaryKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询开始");
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询参数为：" + id);
 
+		// 逻辑操作
+		PrProduct product = this.productMapper.selectByPrimaryKey(id);
+		if (null != product && null != product.getContent()
+				&& !"".equals(product.getContent())) {
+			String content = product.getContent();
+			content = HtmlUtils.htmlUnescape(content);
+			product.setContent(content);
+		}
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询结束");
+		return product;
+	}
+	
+	@Cacheable(key = "#id+'_product'", value = "PrProduct")
+	@Transactional(readOnly = true)
+	public PrProduct selectByPrimKey(String id) {
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询参数为：" + id);
+		
 		// 逻辑操作
 		PrProduct product = this.productMapper.selectByPrimaryKey(id);
 		if (null != product && null != product.getContent()
@@ -697,8 +728,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		title = title.replace(" - 阿里巴巴", "");// 抓取商品的标题，去掉阿里巴巴的标识。
 
 		// 查找相对应的脚本，该脚本包含了阿里巴巴的SKU属性。
-		Elements scriptElements = document
-				.select("script[type=text/javascript]");
+		Elements scriptElements = document.select("script[type=text/javascript]");
 		if (scriptElements != null && scriptElements.size() > 0) {
 			Element element = null;
 			for (int i = 0; i < scriptElements.size(); i++) {
@@ -762,12 +792,9 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 										.getSlot(j);
 								String name = (String) valueItem.get("name");
 								PrProductPropertyValue productPropertyValue = new PrProductPropertyValue();
-								productPropertyValue.setId(UUID.randomUUID()
-										.toString().replaceAll("-", ""));
-								productPropertyValue.setProductId(product
-										.getId());
-								productPropertyValue.setPropertyId(property
-										.getId());
+								productPropertyValue.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+								productPropertyValue.setProductId(product.getId());
+								productPropertyValue.setPropertyId(property.getId());
 								productPropertyValue.setName(name);
 
 								// 属性的URL。
@@ -799,7 +826,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 					if (!"".equals(dataTfsUrl)) {
 						Document doc = Jsoup.connect(dataTfsUrl).get();
 						Elements elements = doc.select("img");
-						String content = "";
+						String content = "<p>";
 						for (Element node : elements) {
 							if (node.hasAttr("src")) {
 								String src = node.attr("src");
@@ -812,9 +839,23 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 								PrImage prImage = download(request,
 										product.getId(), PrImageType.DETAIL,
 										src);
-								content += prImage.getUrl();
+								if(prImage!=null){
+									if(webShopConfig!=null){
+										String para = "<img id=\""+prImage.getId()+"\" class=\"img-responsive\" src=\""+webShopConfig.getProImagePath()+"/"+prImage.getUrl()+"\"/>";
+										content += para;
+										if(logger.isInfoEnabled()){
+											logger.info(content);
+										}
+									}else{
+										
+									}
+									
+								}
+								
+								
 							}
 						}
+						content+="</p>";
 						product.setContent(content);
 
 						this.updateByPrimaryKeySelective(product);
