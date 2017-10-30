@@ -30,7 +30,6 @@
 	<table id="treegrid" title="资源树" class="easyui-treegrid" toolbar="#toolbar" 
 				data-options="
 								url: '${ctx}/resources/getResourcesCheckboxTree',
-                                
 								fit:true,
 								method: 'get',
 								rownumbers: false,
