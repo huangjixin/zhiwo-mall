@@ -121,7 +121,7 @@ public class ProductRestController extends BaseController<PrProduct> {
 	public String logicDelete(@RequestParam(value = "id",required=true) String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException {
 		int result = 0;
-		PrProductWithBLOBs product = prductService.selectByPrimKey(id);
+		PrProduct product = prductService.selectByPrimaryKey(id);
 		if(product!=null){
 			PrProductWithBLOBs product1 =  new PrProductWithBLOBs();
 			product1.setId(product.getId());

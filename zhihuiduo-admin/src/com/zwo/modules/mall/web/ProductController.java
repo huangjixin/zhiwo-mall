@@ -1,16 +1,33 @@
 package com.zwo.modules.mall.web;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import jdk.nashorn.api.scripting.ScriptObjectMirror;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.restlet.data.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -74,11 +91,11 @@ public class ProductController extends BaseController<PrProduct> {
 	@SuppressWarnings("rawtypes")
 	private RedisTemplate redisTemplate;
 
-	
 	public ProductController() {
 		super();
 		if (redisTemplate == null) {
-			if(SpringContextHolder.getApplicationContext().containsBean("redisTemplate"))
+			if (SpringContextHolder.getApplicationContext().containsBean(
+					"redisTemplate"))
 				redisTemplate = SpringContextHolder.getBean("redisTemplate");
 		}
 	}
@@ -93,14 +110,15 @@ public class ProductController extends BaseController<PrProduct> {
 	@RequestMapping()
 	String defaultMethod(HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		return list(httpServletRequest,httpServletResponse,null,null);
+		return list(httpServletRequest, httpServletResponse, null, null);
 	}
-	
+
 	@RequiresPermissions("mall:product:view")
-	@RequestMapping(value = {"list" })
+	@RequestMapping(value = { "list" })
 	public String list(HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse,
-			Model uiModel,@ModelAttribute PrProduct product) {
+			HttpServletResponse httpServletResponse, Model uiModel,
+			@ModelAttribute PrProduct product) {
+		if(product!=null)
 		uiModel.addAttribute("product", product);
 		return basePath + "product_list";
 	}
@@ -134,7 +152,7 @@ public class ProductController extends BaseController<PrProduct> {
 			Model uiModel, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 
-		PrProductWithBLOBs product = productService.selectByPrimKey(id);
+		PrProduct product = productService.selectByPrimaryKey(id);
 
 		// 商品属性。
 		List<PrProductProperty> properties = productPropertyService.listAll();
@@ -166,7 +184,7 @@ public class ProductController extends BaseController<PrProduct> {
 		List<PrImage> listSwipers = imageService.selectByProductId(id,
 				PrImageType.SWIPER);
 
-		// 轮播图
+		// 详情图图
 		List<PrImage> listDetails = imageService.selectByProductId(id,
 				PrImageType.DETAIL);
 		uiModel.addAttribute("detailImages", listDetails);
@@ -238,17 +256,16 @@ public class ProductController extends BaseController<PrProduct> {
 			PrProductPropertyValue productProperty = new PrProductPropertyValue();
 			productProperty.setId(jsonObject.getString("id"));
 			productProperty.setProductId(product.getId());
-			productProperty.setPropertyId(jsonObject
-					.getString("propertyId"));
+			productProperty.setPropertyId(jsonObject.getString("propertyId"));
 			productProperty.setName((String) jsonObject.get("name"));
 			productPropertyValueService.insertSelective(productProperty);
 		}
 		if (null != propertyValues && !"".equals(propertyValues)) {
-			
+
 		}
 
 		JSONArray perPriceArray = null;
-		
+
 		perPriceArray = (JSONArray) JSONArray.parse(propertyPrices);
 		for (Object obj : perPriceArray) {
 			JSONObject json = (JSONObject) obj;
@@ -270,7 +287,7 @@ public class ProductController extends BaseController<PrProduct> {
 			packagePriceService.insertSelective(packagePrice);
 		}
 		if (null != propertyPrices && !"".equals(propertyPrices)) {
-			
+
 		}
 		// redirectAttributes.addFlashAttribute("propertyValues",
 		// propertyValues);
@@ -311,65 +328,68 @@ public class ProductController extends BaseController<PrProduct> {
 				.selectByProductId(product.getId());
 
 		perpertyArray = (JSONArray) JSONArray.parse(propertyValues);
-		
-		//是否重新建立关联关系。
+
+		// 是否重新建立关联关系。
 		boolean reConnect = false;
-		//优先判断有没有属性值，如果都没有那不用重新建立
-		if(perpertyArray == null && productPropertyValues.size()==0){
+		// 优先判断有没有属性值，如果都没有那不用重新建立
+		if (perpertyArray == null && productPropertyValues.size() == 0) {
 			reConnect = false;
-		}else if(perpertyArray != null && productPropertyValues.size()==0){
+		} else if (perpertyArray != null && productPropertyValues.size() == 0) {
 			reConnect = true;
-		}else{
-			if(perpertyArray != null){
+		} else {
+			if (perpertyArray != null) {
 				int length = perpertyArray.size();
-				for(int i=0;i<length;i++){
+				for (int i = 0; i < length; i++) {
 					JSONObject jsonObject = (JSONObject) perpertyArray.get(i);
 					String id = jsonObject.getString("id");
-					int length1= productPropertyValues.size();
+					int length1 = productPropertyValues.size();
 					boolean flag = false;
 					for (int j = 0; j < length1; j++) {
-						PrProductPropertyValue propertyValue = productPropertyValues.get(j);
-						if(id.equals(propertyValue.getId())){
+						PrProductPropertyValue propertyValue = productPropertyValues
+								.get(j);
+						if (id.equals(propertyValue.getId())) {
 							flag = true;
 							break;
 						}
 					}
-					
+
 					if (flag == false) {
 						reConnect = true;
 						break;
 					}
 				}
-				
-				if(reConnect == false){
+
+				if (reConnect == false) {
 					length = productPropertyValues.size();
-					for(int i=0;i<length;i++){
-						PrProductPropertyValue propertyValue = productPropertyValues.get(i);
-						int length1= perpertyArray.size();
+					for (int i = 0; i < length; i++) {
+						PrProductPropertyValue propertyValue = productPropertyValues
+								.get(i);
+						int length1 = perpertyArray.size();
 						boolean flag = false;
 						for (int j = 0; j < length1; j++) {
-							JSONObject jsonObject = (JSONObject) perpertyArray.get(j);
+							JSONObject jsonObject = (JSONObject) perpertyArray
+									.get(j);
 							String id = jsonObject.getString("id");
-							if(id.equals(propertyValue.getId())){
+							if (id.equals(propertyValue.getId())) {
 								flag = true;
 								break;
 							}
 						}
-						
+
 						if (flag == false) {
 							reConnect = true;
 							break;
 						}
 					}
 				}
-			}else{
+			} else {
 				reConnect = true;
 			}
 		}
-		
-		if(reConnect == true){
+
+		if (reConnect == true) {
 			productPropertyValueService.deleteByProductId(product.getId());
-			if(perpertyArray!=null){
+			if (perpertyArray != null) {
 				for (Object object : perpertyArray) {
 					JSONObject jsonObject = (JSONObject) object;
 					PrProductPropertyValue productProperty = new PrProductPropertyValue();
@@ -382,71 +402,73 @@ public class ProductController extends BaseController<PrProduct> {
 					productPropertyValueService
 							.insertSelective(productProperty);
 				}
-			}	
+			}
 		}
-		
-		
+
 		// 价格组合
-        ////////////
+		// //////////
 		JSONArray perPriceArray = null;
 		perPriceArray = (JSONArray) JSONArray.parse(propertyPrices);
 		List<PrProductPackagePrice> packagePrices = packagePriceService
 				.selectByProductId(product.getId());
-		if(perPriceArray==null && packagePrices.size()==0){
+		if (perPriceArray == null && packagePrices.size() == 0) {
 			reConnect = false;
-		}else if(perPriceArray != null && packagePrices.size()==0){
+		} else if (perPriceArray != null && packagePrices.size() == 0) {
 			reConnect = true;
-		}else{
-			if(perPriceArray!=null){
+		} else {
+			if (perPriceArray != null) {
 				int length = perPriceArray.size();
-				for(int i=0;i<length;i++){
+				for (int i = 0; i < length; i++) {
 					JSONObject jsonObject = (JSONObject) perPriceArray.get(i);
 					String id = jsonObject.getString("id");
-					int length1= packagePrices.size();
+					int length1 = packagePrices.size();
 					boolean flag = false;
 					for (int j = 0; j < length1; j++) {
-						PrProductPackagePrice packagePrice = packagePrices.get(j);
-						if(id.equals(packagePrice.getId())){
+						PrProductPackagePrice packagePrice = packagePrices
+								.get(j);
+						if (id.equals(packagePrice.getId())) {
 							flag = true;
 							break;
 						}
 					}
-					
+
 					if (flag == false) {
 						reConnect = true;
 						break;
 					}
 				}
-				
-				if(reConnect == false){
+
+				if (reConnect == false) {
 					length = packagePrices.size();
-					for(int i=0;i<length;i++){
-						PrProductPackagePrice packagePrice = packagePrices.get(i);
-						int length1= perpertyArray.size();
+					for (int i = 0; i < length; i++) {
+						PrProductPackagePrice packagePrice = packagePrices
+								.get(i);
+						int length1 = perpertyArray.size();
 						boolean flag = false;
 						for (int j = 0; j < length1; j++) {
-							JSONObject jsonObject = (JSONObject) perPriceArray.get(j);
+							JSONObject jsonObject = (JSONObject) perPriceArray
+									.get(j);
 							String id = jsonObject.getString("id");
-							if(id.equals(packagePrice.getId())){
+							if (id.equals(packagePrice.getId())) {
 								flag = true;
 								break;
 							}
 						}
-						
+
 						if (flag == false) {
 							reConnect = true;
 							break;
 						}
 					}
 				}
-			}else{
+			} else {
 				reConnect = true;
 			}
-			
+
 		}
-		
+
 		// 检查属性有没有改变。
-		if (reConnect == false && perPriceArray!=null) {
+		if (reConnect == false && perPriceArray != null) {
 			for (int i = 0; i < perPriceArray.size(); i++) {
 				JSONObject object = (JSONObject) perPriceArray.get(i);
 				String id = object.getString("id");
@@ -457,8 +479,7 @@ public class ProductController extends BaseController<PrProduct> {
 						String gourpPrice = object.getString("gourpPrice");
 						String independentPrice = object
 								.getString("independentPrice");
-						if (!icon.equals(prProductPackagePrice
-								.getIcon())) {
+						if (!icon.equals(prProductPackagePrice.getIcon())) {
 							changed = true;
 							prProductPackagePrice.setIcon(icon);
 						}
@@ -482,11 +503,10 @@ public class ProductController extends BaseController<PrProduct> {
 				}
 			}
 		}
-		
-		
+
 		if (reConnect == true) {
 			packagePriceService.deleteByProductId(product.getId());
-			if(perPriceArray!=null){
+			if (perPriceArray != null) {
 				for (Object obj : perPriceArray) {
 					JSONObject json = (JSONObject) obj;
 					PrProductPackagePrice packagePrice = new PrProductPackagePrice();
@@ -499,7 +519,7 @@ public class ProductController extends BaseController<PrProduct> {
 					String pId = product.getId();
 					String pValueId = json.getString("propertyValueId");
 					String icon = json.getString("icon");
-//					String disable = json.getString("disable");
+					// String disable = json.getString("disable");
 					String disable = "0";
 					packagePrice.setIcon(icon);
 					packagePrice.setDisable(Byte.valueOf(disable));
@@ -539,5 +559,75 @@ public class ProductController extends BaseController<PrProduct> {
 
 		redirectAttributes.addAttribute("operation", "edit");
 		return "redirect:/product/edit/" + product.getId();
+	}
+
+	/**
+	 * 从阿里巴巴批发网进行商品抓取。
+	 * 
+	 * @param url
+	 * @param httpServletRequest
+	 * @param httpServletResponse
+	 * @return
+	 * @throws IOException 
+	 */
+	@RequiresPermissions("mall:product:create")
+	@RequestMapping(value = "createFromAlibaba", method = RequestMethod.GET)
+	public String createFromAlibaba(@RequestParam String url,
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) throws IOException {
+		PrProduct product = this.productService.fetchAlibabaGoods(url);
+		return "redirect:/product/edit/"+product.getId();
+	}
+
+	//下载图片。
+	private PrImage download(HttpServletRequest httpServletRequest,String productId, String type,
+			String imgurl) {
+		try {
+			Calendar date = Calendar.getInstance();
+			String rootDir = httpServletRequest.getSession().getServletContext().getRealPath("/");
+			rootDir = "D:"+File.separator;
+			String url = "passets/"+productId+"/" + date.get(Calendar.YEAR) + "/" + (date.get(Calendar.MONTH) + 1) + "/"
+					+ date.get(Calendar.DAY_OF_MONTH);
+			String uploadPath = rootDir + "images" + File.separator + "passets";
+			uploadPath = uploadPath+ File.separator+productId+ File.separator + date.get(Calendar.YEAR) + File.separator
+					+ (date.get(Calendar.MONTH) + 1) + File.separator + date.get(Calendar.DAY_OF_MONTH);
+			
+			int index = imgurl.lastIndexOf(".");
+			String datetimeName = new Date().getTime() + ((int) Math.random() * 10000) + "";
+			String name =  datetimeName + imgurl.substring(index, imgurl.length());
+			
+			String imageName = uploadPath+File.separator+name;
+			URL uri = new URL(imgurl);
+			InputStream in = uri.openStream();
+			File file = new File(uploadPath);
+			if(!file.exists()){  
+				file.mkdirs(); 
+		    }  
+			
+			FileOutputStream fo = new FileOutputStream(file.getPath()+File.separator+name);
+			byte[] buf = new byte[1024];
+			int length = 0;
+			System.out.println("开始下载:" + imgurl);
+			while ((length = in.read(buf, 0, buf.length)) != -1) {
+				fo.write(buf, 0, length);
+			}
+			in.close();
+			fo.close();
+			System.out.println(imageName + "下载完成");
+			
+			PrImage assets = new PrImage();
+			assets.setType(type);
+			assets.setIsDefault(false);
+			assets.setProductId(productId);
+			assets.setName(name);
+			assets.setLocation(uploadPath + File.separator + name);
+			assets.setUrl(url + "/" + name);
+			assets.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+			imageService.insertSelective(assets);
+			return assets;
+		} catch (Exception e) {
+			System.out.println("下载失败");
+		}
+		return null;
 	}
 }
