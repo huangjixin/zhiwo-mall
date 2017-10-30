@@ -23,6 +23,7 @@ import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,7 @@ import org.springframework.web.util.HtmlUtils;
 
 import tk.mybatis.mapper.common.Mapper;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zwo.modules.mall.dao.PrImageMapper;
@@ -857,11 +859,28 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 						}
 						content+="</p>";
 						product.setContent(content);
-
-						this.updateByPrimaryKeySelective(product);
 					}
 					// 商品详情图处理结束。
-
+					
+					Elements picElements  = document.select("ul[class=nav nav-tabs fd-clr]");
+					if(picElements!=null && picElements.size()>0){
+						for (Element thumbEle : picElements) {
+							List<Node> childNodes = thumbEle.childNodes();
+							for (Node node : childNodes) {
+								String dataImgs = node.attr("data-imgs");
+								if(!"".equals(dataImgs)){
+									JSONObject jsonObject = JSONObject.parseObject(dataImgs);
+									HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+											.getRequestAttributes()).getRequest();
+									PrImage prImage = download(request,
+											product.getId(), PrImageType.SWIPER,
+											jsonObject.getString("preview"));
+								}
+							}
+						}
+					}
+					
+					this.updateByPrimaryKeySelective(product);
 				} catch (ScriptException e) {
 					e.printStackTrace();
 				}
