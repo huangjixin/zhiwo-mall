@@ -9,14 +9,13 @@ import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductPackagePrice;
 import com.zwo.modules.mall.domain.PrProductProperty;
 import com.zwo.modules.mall.domain.PrProductPropertyValue;
-import com.zwo.modules.mall.domain.PrProductWithBLOBs;
 import com.zwo.modules.member.domain.GroupPurcse;
 import com.zwo.modules.member.domain.GroupPurcseMember;
 import com.zwo.modules.member.domain.Member;
 import com.zwo.modules.member.domain.MemberAddress;
 import com.zwo.modules.shop.domain.Shop;
 
-public class ProductExtention extends PrProductWithBLOBs {
+public class ProductExtention extends PrProduct {
 
 	/**
 	 * 

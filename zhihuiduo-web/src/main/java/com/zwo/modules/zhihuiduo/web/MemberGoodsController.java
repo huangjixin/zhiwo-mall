@@ -118,7 +118,7 @@ public class MemberGoodsController extends BaseController<PrProduct> {
 		String jsonString = null;
 		ProductExtention productExtention = null;
 		List<GroupPurcseMember> groupPurcseMembers = null;
-		PrProductWithBLOBs product = null;
+		PrProduct product = null;
 		Shop shop = null;
 		List<PrProductPackagePrice> packagePrices = null;
 		List<PrProductPropertyValue> productPropertyValues = null;
@@ -130,7 +130,7 @@ public class MemberGoodsController extends BaseController<PrProduct> {
 
 		productExtention = new ProductExtention();
 
-		product = prductService.selectByPrimKey(goodsId);
+		product = prductService.selectByPrimaryKey(goodsId);
 		if (product != null) {
 			try {
 				BeanUtils.copyProperties(productExtention, product);

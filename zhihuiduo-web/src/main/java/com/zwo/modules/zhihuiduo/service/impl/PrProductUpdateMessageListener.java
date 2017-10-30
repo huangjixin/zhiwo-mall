@@ -93,7 +93,7 @@ public class PrProductUpdateMessageListener implements MessageListener {
 		String jsonString = null;
 		ProductExtention productExtention = null;
 		List<GroupPurcseMember> groupPurcseMembers = null;
-		PrProductWithBLOBs product = null;
+		PrProduct product = null;
 		Shop shop = null;
 		List<PrProductPackagePrice> packagePrices = null;
 		List<PrProductPropertyValue> productPropertyValues = null;
@@ -111,7 +111,7 @@ public class PrProductUpdateMessageListener implements MessageListener {
 		Object body = valueSerializer.deserialize(message.getBody());
 		
 		String id = (String) body;
-		product = this.prductService.selectByPrimKey(id);
+		product = this.prductService.selectByPrimaryKey(id);
 		if(product==null){
 			return;
 		}
