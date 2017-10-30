@@ -153,7 +153,12 @@ public class ProductController extends BaseController<PrProduct> {
 			HttpServletResponse httpServletResponse) {
 
 		PrProduct product = productService.selectByPrimaryKey(id);
-
+		if(!"".equals(product.getContent())&&product.getContent()!=null){
+//			String content = product.getContent();
+//			content=content.replace("&","&amp;");
+//			product.setContent(content);
+		}
+		
 		// 商品属性。
 		List<PrProductProperty> properties = productPropertyService.listAll();
 		uiModel.addAttribute("properties", properties);
