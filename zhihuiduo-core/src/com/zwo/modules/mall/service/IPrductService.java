@@ -3,13 +3,11 @@
  */
 package com.zwo.modules.mall.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.github.pagehelper.PageInfo;
-import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.domain.PrProduct;
-import com.zwo.modules.mall.domain.PrProductCriteria;
-import com.zwo.modules.mall.domain.PrProductWithBLOBs;
 import com.zwotech.modules.core.service.IBaseService;
 
 /**
@@ -23,7 +21,7 @@ public interface IPrductService extends IBaseService<PrProduct> {
 	 */
 //	void sendCreateProductTopic(final String msg);
 	
-	int countByExample(PrProductCriteria example);
+	/*int countByExample(PrProductCriteria example);
 
     int insert(PrProductWithBLOBs record);
 
@@ -39,7 +37,7 @@ public interface IPrductService extends IBaseService<PrProduct> {
 
     int updateByPrimaryKeySelective(PrProductWithBLOBs record);
 
-    int updateByPrimaryKeyWithBLOBs(PrProductWithBLOBs record);
+    int updateByPrimaryKeyWithBLOBs(PrProductWithBLOBs record);*/
     
     /**
      * 根据商品ID查询产品图片。
@@ -91,4 +89,12 @@ public interface IPrductService extends IBaseService<PrProduct> {
      * @return
      */
     PageInfo<PrProduct> selectIndex(PageInfo<PrProduct> pageInfo);
+    
+    /**
+     * 抓取阿里巴巴批发网商品。
+     * @param url
+     * @return
+     * @throws IOException 
+     */
+    PrProduct fetchAlibabaGoods(String url) throws IOException;
 }

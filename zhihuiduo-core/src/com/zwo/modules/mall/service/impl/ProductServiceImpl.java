@@ -3,8 +3,27 @@
  */
 package com.zwo.modules.mall.service.impl;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import javax.servlet.http.HttpServletRequest;
+
+import jdk.nashorn.api.scripting.ScriptObjectMirror;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +33,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.HtmlUtils;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -25,11 +46,16 @@ import com.zwo.modules.mall.dao.PrProductMapper;
 import com.zwo.modules.mall.dao.PrProductPackagePriceMapper;
 import com.zwo.modules.mall.dao.PrProductPropertyValueMapper;
 import com.zwo.modules.mall.domain.PrImage;
-import com.zwo.modules.mall.domain.PrImageCriteria;
 import com.zwo.modules.mall.domain.PrImageType;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductCriteria;
+import com.zwo.modules.mall.domain.PrProductProperty;
+import com.zwo.modules.mall.domain.PrProductPropertyValue;
 import com.zwo.modules.mall.domain.PrProductWithBLOBs;
+import com.zwo.modules.mall.service.IPrImageService;
+import com.zwo.modules.mall.service.IPrProductPackagePriceService;
+import com.zwo.modules.mall.service.IPrProductPropertyService;
+import com.zwo.modules.mall.service.IPrProductPropertyValueService;
 import com.zwo.modules.mall.service.IPrductService;
 import com.zwotech.common.redis.channel.ChannelContance;
 import com.zwotech.common.redis.channel.RedisPushMessage;
@@ -70,6 +96,20 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	@Autowired
 	@Lazy(true)
 	private PrProductPackagePriceMapper productPackagePriceMapper;
+
+	@Autowired
+	@Lazy(true)
+	private IPrProductPropertyValueService productPropertyValueService;
+	@Autowired
+	@Lazy(true)
+	private IPrProductPropertyService productPropertyService;
+	@Autowired
+	@Lazy(true)
+	private IPrProductPackagePriceService packagePriceService;
+
+	@Autowired
+	@Lazy(true)
+	private IPrImageService imageService;
 
 	@SuppressWarnings("rawtypes")
 	private RedisTemplate redisTemplate;
@@ -118,8 +158,9 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 
 			removeRedisKey(prProduct.getId() + KEY_GROUP_PURCSE);
 			removeRedisKey(prProduct.getId() + KEY_PRODUCT_WITHOUT_BLOB);
-			
-			RedisPushMessage.publish(redisTemplate,ChannelContance.PRODUCT_DELETE_TOPIC_CHANNEL,
+
+			RedisPushMessage.publish(redisTemplate,
+					ChannelContance.PRODUCT_DELETE_TOPIC_CHANNEL,
 					prProduct.getId());
 		}
 		// 逻辑操作
@@ -160,9 +201,10 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 
 			removeRedisKey(prProduct.getId() + KEY_GROUP_PURCSE);
 			removeRedisKey(prProduct.getId() + KEY_PRODUCT_WITHOUT_BLOB);
-			
-			//发布删除页面的通知。
-			RedisPushMessage.publish(redisTemplate,ChannelContance.PRODUCT_DELETE_TOPIC_CHANNEL,
+
+			// 发布删除页面的通知。
+			RedisPushMessage.publish(redisTemplate,
+					ChannelContance.PRODUCT_DELETE_TOPIC_CHANNEL,
 					prProduct.getId());
 		}
 
@@ -205,10 +247,12 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		removeRedisKey(prProduct.getId() + KEY_PRODUCT_WITHOUT_BLOB);
 		// 逻辑操作
 		int result = this.productMapper.deleteByPrimaryKey(id);
-		//发布删除页面的通知。
-		RedisPushMessage.publish(redisTemplate,ChannelContance.PRODUCT_DELETE_TOPIC_CHANNEL,
-				prProduct.getId());
-		
+		// 发布删除页面的通知。
+		RedisPushMessage
+				.publish(redisTemplate,
+						ChannelContance.PRODUCT_DELETE_TOPIC_CHANNEL,
+						prProduct.getId());
+
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "deleteByPrimaryKey删除结束");
 		return result;
@@ -221,9 +265,35 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	 * com.zwotech.modules.core.service.IBaseService#insert(java.lang.Object)
 	 */
 	@Override
-	@Deprecated
 	public int insert(PrProduct record) {
-		return 0;
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "insert插入开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
+
+		PrProduct prProduct = record;
+		removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT);
+		removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
+
+		if (null != record.getContent() && !"".equals(record.getContent())) {
+			String content = record.getContent();
+			content = HtmlUtils.htmlEscape(content);
+			record.setContent(content);
+		}
+		// 如果数据没有设置id,默认使用时间戳
+		if (null == record.getId() || "".equals(record.getId())) {
+			record.setId(System.currentTimeMillis() + ""
+					+ Math.round(Math.random() * 99));
+		}
+		int result = this.productMapper.insert(record);
+		// 发布生成页面的通知。
+		RedisPushMessage.publish(redisTemplate,
+				ChannelContance.PRODUCT_GENERATION_TOPIC_CHANNEL,
+				record.getId());
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "insert插入结束");
+		return result;
 	}
 
 	/*
@@ -235,9 +305,37 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	 */
 
 	@Override
-	@Deprecated
 	public int insertSelective(PrProduct record) {
-		return 0;
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "insertSelective插入开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "insertSelective插入对象为："
+					+ record.toString());
+		PrProduct prProduct = record;
+		removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT);
+		removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
+
+		if (null != record.getContent() && !"".equals(record.getContent())) {
+			String content = record.getContent();
+			content = HtmlUtils.htmlEscape(content);
+			record.setContent(content);
+		}
+
+		// 如果数据没有设置id,默认使用时间戳
+		if (null == record.getId() || "".equals(record.getId())) {
+			record.setId(System.currentTimeMillis() + ""
+					+ Math.round(Math.random() * 99));
+		}
+		int result = this.productMapper.insertSelective(record);
+		// 发布生成页面的通知。
+		RedisPushMessage.publish(redisTemplate,
+				ChannelContance.PRODUCT_GENERATION_TOPIC_CHANNEL,
+				record.getId());
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "insertSelective插入结束");
+
+		return result;
 	}
 
 	/*
@@ -257,40 +355,41 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.zwotech.modules.core.service.IBaseService#selectByPrimaryKey(java.
-	 * lang.String)
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	@Cacheable(key = "#id+'_product_withoutBlob'", value = "PrProduct")
-	public PrProduct selectByPrimaryKey(String id) {
-		return productMapper.selectByKey(id);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.zwotech.modules.core.service.IBaseService#updateByExampleSelective(
-	 * java.lang.Object, java.lang.Object)
-	 */
-	@Override
-	@Deprecated
-	public int updateByExampleSelective(PrProduct record, Object example) {
-		return 0;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
 	 * com.zwotech.modules.core.service.IBaseService#updateByExample(java.lang.
 	 * Object, java.lang.Object)
 	 */
 	@Override
-	@Deprecated
 	public int updateByExample(PrProduct record, Object example) {
-		return 0;
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExampleWithBLOBs更新开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExampleWithBLOBs更新条件对象为："
+					+ record.toString());
+
+		List<PrProduct> products = this.productMapper.selectByExample(example);
+		for (PrProduct prProduct : products) {
+			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT);
+			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
+
+			removeRedisKey(prProduct.getId() + KEY_PRODUCT_WITHOUT_BLOB);
+			// 发布删除页面的通知。
+			RedisPushMessage.publish(redisTemplate,
+					ChannelContance.PRODUCT_DELETE_TOPIC_CHANNEL,
+					prProduct.getId());
+		}
+
+		if (null != record.getContent() && !"".equals(record.getContent())) {
+			String content = record.getContent();
+			content = HtmlUtils.htmlEscape(content);
+			record.setContent(content);
+		}
+		// 逻辑操作
+		int result = this.productMapper.updateByExample(record, example);
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByExampleWithBLOBs更新结束");
+		return result;
 	}
 
 	/*
@@ -301,9 +400,33 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	 * (java.lang.Object)
 	 */
 	@Override
-	@Deprecated
+	@CacheEvict(value = "PrProduct", key = "#record.id+'_product'")
 	public int updateByPrimaryKeySelective(PrProduct record) {
-		return 0;
+		// 日志记录
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新开始");
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为："
+					+ record.toString());
+
+		removeRedisKey(record.getShopId() + KEY_SHOPID_PRODUCT);
+		removeRedisKey(record.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
+		removeRedisKey(record.getId() + KEY_PRODUCT_WITHOUT_BLOB);
+
+		if (null != record.getContent() && !"".equals(record.getContent())) {
+			String content = record.getContent();
+			content = HtmlUtils.htmlEscape(content);
+			record.setContent(content);
+		}
+		// 逻辑操作
+		int result = this.productMapper.updateByPrimaryKeySelective(record);
+		// 发布生成页面的通知。
+		RedisPushMessage.publish(redisTemplate,
+				ChannelContance.PRODUCT_GENERATION_TOPIC_CHANNEL,
+				record.getId());
+		if (logger.isInfoEnabled())
+			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新结束");
+		return result;
 	}
 
 	/*
@@ -318,18 +441,26 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	public int updateByPrimaryKey(PrProduct record) {
 		// 日志记录
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新开始");
+			logger.info(BASE_MESSAGE + "updateByPrimaryKeyWithBLOBs更新开始");
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新对象为："
+			logger.info(BASE_MESSAGE + "updateByPrimaryKeyWithBLOBs更新对象为："
 					+ record.toString());
+		removeRedisKey(record.getShopId() + KEY_SHOPID_PRODUCT);
+		removeRedisKey(record.getId() + KEY_PRODUCT_WITHOUT_BLOB);
 
+		if (null != record.getContent() && !"".equals(record.getContent())) {
+			String content = record.getContent();
+			content = HtmlUtils.htmlEscape(content);
+			record.setContent(content);
+		}
 		// 逻辑操作
 		int result = this.productMapper.updateByPrimaryKey(record);
-		//发布生成页面的通知。
-		RedisPushMessage.publish(redisTemplate,ChannelContance.PRODUCT_GENERATION_TOPIC_CHANNEL,
+		// 发布生成页面的通知。
+		RedisPushMessage.publish(redisTemplate,
+				ChannelContance.PRODUCT_GENERATION_TOPIC_CHANNEL,
 				record.getId());
 		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByPrimaryKey更新结束");
+			logger.info(BASE_MESSAGE + "updateByPrimaryKeyWithBLOBs更新结束");
 		return result;
 	}
 
@@ -362,76 +493,12 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	}
 
 	public int countByExample(PrProductCriteria example) {
-		return this.productMapper.countByExample(example);
-	}
-
-	// @CachePut(value = "PrProduct", key = "#record.id+'_product'")
-	public int insert(PrProductWithBLOBs record) {
-		// 日志记录
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "insert插入开始");
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "insert插入对象为：" + record.toString());
-
-		PrProduct prProduct = record;
-		removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT);
-		removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
-
-		if (null != record.getContent() && !"".equals(record.getContent())) {
-			String content = record.getContent();
-			content = HtmlUtils.htmlEscape(content);
-			record.setContent(content);
-		}
-		// 如果数据没有设置id,默认使用时间戳
-		if (null == record.getId() || "".equals(record.getId())) {
-			record.setId(System.currentTimeMillis() + ""
-					+ Math.round(Math.random() * 99));
-		}
-		int result = this.productMapper.insert(record);
-		//发布生成页面的通知。
-		RedisPushMessage.publish(redisTemplate,ChannelContance.PRODUCT_GENERATION_TOPIC_CHANNEL,
-						record.getId());
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "insert插入结束");
-		return result;
-	}
-
-	// @CachePut(value = "PrProduct", key = "#record.id+'_product'")
-	public int insertSelective(PrProductWithBLOBs record) {
-		// 日志记录
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "insertSelective插入开始");
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "insertSelective插入对象为："
-					+ record.toString());
-		PrProduct prProduct = record;
-		removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT);
-		removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
-
-		if (null != record.getContent() && !"".equals(record.getContent())) {
-			String content = record.getContent();
-			content = HtmlUtils.htmlEscape(content);
-			record.setContent(content);
-		}
-
-		// 如果数据没有设置id,默认使用时间戳
-		if (null == record.getId() || "".equals(record.getId())) {
-			record.setId(System.currentTimeMillis() + ""
-					+ Math.round(Math.random() * 99));
-		}
-		int result = this.productMapper.insertSelective(record);
-		//发布生成页面的通知。
-		RedisPushMessage.publish(redisTemplate,ChannelContance.PRODUCT_GENERATION_TOPIC_CHANNEL,
-						record.getId());
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "insertSelective插入结束");
-
-		return result;
+		return this.productMapper.selectCountByExample(example);
 	}
 
 	@Cacheable(key = "#id+'_product'", value = "PrProduct")
 	@Transactional(readOnly = true)
-	public PrProductWithBLOBs selectByPrimKey(String id) {
+	public PrProduct selectByPrimKey(String id) {
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询开始");
@@ -439,7 +506,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 			logger.info(BASE_MESSAGE + "selectByPrimaryKey查询参数为：" + id);
 
 		// 逻辑操作
-		PrProductWithBLOBs product = this.productMapper.selectByPrimaryKey(id);
+		PrProduct product = this.productMapper.selectByPrimaryKey(id);
 		if (null != product && null != product.getContent()
 				&& !"".equals(product.getContent())) {
 			String content = product.getContent();
@@ -451,8 +518,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		return product;
 	}
 
-	@CacheEvict(value = "PrProduct", allEntries = true)
-	public int updateByExampleSelective(PrProductWithBLOBs record,
+	public int updateByExampleSelective(PrProduct record,
 			PrProductCriteria example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -466,8 +532,9 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		List<PrProduct> products = this.productMapper.selectByExample(example);
 		for (PrProduct prProduct : products) {
 			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT);
-			//发布删除页面的通知。
-			RedisPushMessage.publish(redisTemplate,ChannelContance.PRODUCT_DELETE_TOPIC_CHANNEL,
+			// 发布删除页面的通知。
+			RedisPushMessage.publish(redisTemplate,
+					ChannelContance.PRODUCT_DELETE_TOPIC_CHANNEL,
 					prProduct.getId());
 		}
 
@@ -485,42 +552,6 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		return result;
 	}
 
-	@CacheEvict(value = "PrProduct", allEntries = true)
-	public int updateByExampleWithBLOBs(PrProductWithBLOBs record,
-			PrProductCriteria example) {
-		// 日志记录
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByExampleWithBLOBs更新开始");
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByExampleWithBLOBs更新条件对象为："
-					+ record.toString());
-
-		List<PrProduct> products = this.productMapper.selectByExample(example);
-		for (PrProduct prProduct : products) {
-			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT);
-			removeRedisKey(prProduct.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
-
-			removeRedisKey(prProduct.getId() + KEY_PRODUCT_WITHOUT_BLOB);
-			//发布删除页面的通知。
-			RedisPushMessage.publish(redisTemplate,ChannelContance.PRODUCT_DELETE_TOPIC_CHANNEL,
-					prProduct.getId());
-		}
-
-		if (null != record.getContent() && !"".equals(record.getContent())) {
-			String content = record.getContent();
-			content = HtmlUtils.htmlEscape(content);
-			record.setContent(content);
-		}
-		// 逻辑操作
-		int result = this.productMapper.updateByExampleWithBLOBs(record,
-				example);
-		// 日志记录
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByExampleWithBLOBs更新结束");
-		return result;
-	}
-
-	@CacheEvict(value = "PrProduct", allEntries = true)
 	public int updateByExample(PrProduct record, PrProductCriteria example) {
 		// 日志记录
 		if (logger.isInfoEnabled())
@@ -540,60 +571,6 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		// 日志记录
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE + "updateByExample更新结束");
-		return result;
-	}
-
-	@CacheEvict(value = "PrProduct", key = "#record.id+'_product'")
-	public int updateByPrimaryKeySelective(PrProductWithBLOBs record) {
-		// 日志记录
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新开始");
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新对象为："
-					+ record.toString());
-
-		removeRedisKey(record.getShopId() + KEY_SHOPID_PRODUCT);
-		removeRedisKey(record.getShopId() + KEY_SHOPID_PRODUCT_COUNT);
-		removeRedisKey(record.getId() + KEY_PRODUCT_WITHOUT_BLOB);
-
-		if (null != record.getContent() && !"".equals(record.getContent())) {
-			String content = record.getContent();
-			content = HtmlUtils.htmlEscape(content);
-			record.setContent(content);
-		}
-		// 逻辑操作
-		int result = this.productMapper.updateByPrimaryKeySelective(record);
-		//发布生成页面的通知。
-		RedisPushMessage.publish(redisTemplate,ChannelContance.PRODUCT_GENERATION_TOPIC_CHANNEL,
-						record.getId());
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByPrimaryKeySelective更新结束");
-		return result;
-	}
-
-	@CacheEvict(value = "PrProduct", key = "#record.id+'_product'")
-	public int updateByPrimaryKeyWithBLOBs(PrProductWithBLOBs record) {
-		// 日志记录
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByPrimaryKeyWithBLOBs更新开始");
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByPrimaryKeyWithBLOBs更新对象为："
-					+ record.toString());
-		removeRedisKey(record.getShopId() + KEY_SHOPID_PRODUCT);
-		removeRedisKey(record.getId() + KEY_PRODUCT_WITHOUT_BLOB);
-
-		if (null != record.getContent() && !"".equals(record.getContent())) {
-			String content = record.getContent();
-			content = HtmlUtils.htmlEscape(content);
-			record.setContent(content);
-		}
-		// 逻辑操作
-		int result = this.productMapper.updateByPrimaryKeyWithBLOBs(record);
-		//发布生成页面的通知。
-		RedisPushMessage.publish(redisTemplate,ChannelContance.PRODUCT_GENERATION_TOPIC_CHANNEL,
-				record.getId());
-		if (logger.isInfoEnabled())
-			logger.info(BASE_MESSAGE + "updateByPrimaryKeyWithBLOBs更新结束");
 		return result;
 	}
 
@@ -623,7 +600,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 					+ "selectPrProductsByShopId根据商铺Id查询商品数量开始，商铺ID为：" + shopId);
 		PrProductCriteria productCriteria = new PrProductCriteria();
 		productCriteria.createCriteria().andShopIdEqualTo(shopId);
-		int count = this.productMapper.countByExample(productCriteria);
+		int count = this.productMapper.selectCountByExample(productCriteria);
 		if (logger.isInfoEnabled())
 			logger.info(BASE_MESSAGE
 					+ "selectPrProductsByShopId根据商铺Id查询商品结束，数量为：" + count);
@@ -691,8 +668,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	}
 
 	/*
-	 * 进入首页的商品必须是可用，库存大于0，上架状态。 (non-Javadoc).
-	 * (non-Javadoc)
+	 * 进入首页的商品必须是可用，库存大于0，上架状态。 (non-Javadoc). (non-Javadoc)
 	 * 
 	 * @see
 	 * com.zwo.modules.mall.service.IPrductService#selectIndex(com.github.pagehelper
@@ -708,6 +684,210 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		return info;
 	}
 
+	@Override
+	public PrProduct fetchAlibabaGoods(String url) throws IOException {
+		Document document = null;
+		PrProduct product = null;
+		try {
+			document = Jsoup.connect(url).get();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		String title = document.title();
+		title = title.replace(" - 阿里巴巴", "");// 抓取商品的标题，去掉阿里巴巴的标识。
+
+		// 查找相对应的脚本，该脚本包含了阿里巴巴的SKU属性。
+		Elements scriptElements = document
+				.select("script[type=text/javascript]");
+		if (scriptElements != null && scriptElements.size() > 0) {
+			Element element = null;
+			for (int i = 0; i < scriptElements.size(); i++) {
+				Element ele = scriptElements.get(i);
+				String html = ele.html();
+				int index = html.indexOf("iDetailData");
+				if (index != -1) {
+					element = ele;
+					break;
+				}
+			}
+
+			if (element != null) {
+				String js = element.html();
+
+				ScriptEngineManager manager = new ScriptEngineManager();
+				ScriptEngine engine = manager.getEngineByName("javascript");
+				try {
+					engine.eval(js);
+					ScriptObjectMirror c = (ScriptObjectMirror) engine
+							.get("iDetailData");
+					ScriptObjectMirror sku = (ScriptObjectMirror) c.get("sku");
+
+					// sku属性。
+					ScriptObjectMirror skuProps = (ScriptObjectMirror) sku
+							.get("skuProps");
+					// 这个好像Map对象。
+					ScriptObjectMirror skuMapProps = (ScriptObjectMirror) sku
+							.get("skuMap");
+
+					// 商品属性。
+					List<PrProductProperty> properties = productPropertyService
+							.listAll();
+					product = new PrProduct();
+					String id = UUID.randomUUID().toString()
+							.replaceAll("-", "");
+					product.setId(id);
+					product.setName(title);
+					this.insertSelective(product);
+
+					int i = 0;
+					while (skuProps.hasSlot(i)) {
+						ScriptObjectMirror o = (ScriptObjectMirror) skuProps
+								.getSlot(i);
+						String pName = (String) o.get("prop");
+						PrProductProperty property = null;
+						for (PrProductProperty prProductProperty : properties) {
+							if (pName.equals(prProductProperty.getName())) {
+								property = prProductProperty;
+								break;
+							}
+						}
+
+						if (property != null) {
+							ScriptObjectMirror value = (ScriptObjectMirror) o
+									.get("value");
+							// 遍历属性值开始；
+							int j = 0;
+							while (value.hasSlot(j)) {
+								ScriptObjectMirror valueItem = (ScriptObjectMirror) value
+										.getSlot(j);
+								String name = (String) valueItem.get("name");
+								PrProductPropertyValue productPropertyValue = new PrProductPropertyValue();
+								productPropertyValue.setId(UUID.randomUUID()
+										.toString().replaceAll("-", ""));
+								productPropertyValue.setProductId(product
+										.getId());
+								productPropertyValue.setPropertyId(property
+										.getId());
+								productPropertyValue.setName(name);
+
+								// 属性的URL。
+								String imageUrl = (String) valueItem
+										.get("imageUrl");
+								if (null != imageUrl && !"".equals(imageUrl)) {
+									HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+											.getRequestAttributes())
+											.getRequest();
+									download(request, product.getId(),
+											PrImageType.PROP, imageUrl);
+								}
+								this.productPropertyValueService
+										.insertSelective(productPropertyValue);
+
+								j++;
+							}
+						}
+
+						i++;
+					}
+
+					// 属性值处理完毕。
+
+					// 商品详情图开始处理。
+					Elements el = document
+							.select("div[id=desc-lazyload-container]");
+					String dataTfsUrl = el.first().attr("data-tfs-url");
+					if (!"".equals(dataTfsUrl)) {
+						Document doc = Jsoup.connect(dataTfsUrl).get();
+						Elements elements = doc.select("img");
+						String content = "";
+						for (Element node : elements) {
+							if (node.hasAttr("src")) {
+								String src = node.attr("src");
+								src = src.replaceAll("\\\"", "");
+								src = src.substring(1, src.length() - 1);
+
+								HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+										.getRequestAttributes()).getRequest();
+
+								PrImage prImage = download(request,
+										product.getId(), PrImageType.DETAIL,
+										src);
+								content += prImage.getUrl();
+							}
+						}
+						product.setContent(content);
+
+						this.updateByPrimaryKeySelective(product);
+					}
+					// 商品详情图处理结束。
+
+				} catch (ScriptException e) {
+					e.printStackTrace();
+				}
+
+			}
+		}
+		return product;
+	}
+
+	// 下载图片。
+	private PrImage download(HttpServletRequest httpServletRequest,
+			String productId, String type, String imgurl) {
+		try {
+			Calendar date = Calendar.getInstance();
+			String rootDir = httpServletRequest.getSession()
+					.getServletContext().getRealPath("/");
+			rootDir = "D:" + File.separator;
+			String url = "passets/" + productId + "/" + date.get(Calendar.YEAR)
+					+ "/" + (date.get(Calendar.MONTH) + 1) + "/"
+					+ date.get(Calendar.DAY_OF_MONTH);
+			String uploadPath = rootDir + "images" + File.separator + "passets";
+			uploadPath = uploadPath + File.separator + productId
+					+ File.separator + date.get(Calendar.YEAR) + File.separator
+					+ (date.get(Calendar.MONTH) + 1) + File.separator
+					+ date.get(Calendar.DAY_OF_MONTH);
+
+			int index = imgurl.lastIndexOf(".");
+			String datetimeName = new Date().getTime()
+					+ ((int) Math.random() * 10000) + "";
+			String name = datetimeName
+					+ imgurl.substring(index, imgurl.length());
+
+			String imageName = uploadPath + File.separator + name;
+			URL uri = new URL(imgurl);
+			InputStream in = uri.openStream();
+			File file = new File(uploadPath);
+			if (!file.exists()) {
+				file.mkdirs();
+			}
+
+			FileOutputStream fo = new FileOutputStream(file.getPath()
+					+ File.separator + name);
+			byte[] buf = new byte[1024];
+			int length = 0;
+			System.out.println("开始下载:" + imgurl);
+			while ((length = in.read(buf, 0, buf.length)) != -1) {
+				fo.write(buf, 0, length);
+			}
+			in.close();
+			fo.close();
+			System.out.println(imageName + "下载完成");
+
+			PrImage assets = new PrImage();
+			assets.setType(type);
+			assets.setIsDefault(false);
+			assets.setProductId(productId);
+			assets.setName(name);
+			assets.setLocation(uploadPath + File.separator + name);
+			assets.setUrl(url + "/" + name);
+			assets.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+			imageService.insertSelective(assets);
+			return assets;
+		} catch (Exception e) {
+			System.out.println("下载失败");
+		}
+		return null;
+	}
 	/*
 	 * @Transactional(readOnly = true)
 	 * 
