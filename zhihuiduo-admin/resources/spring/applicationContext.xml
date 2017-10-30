@@ -18,6 +18,17 @@
                http://www.springframework.org/schema/cache   
         	   http://www.springframework.org/schema/cache/spring-cache.xsd">
 	<bean id="springContextHolder" class="com.zwotech.common.utils.SpringContextHolder"></bean>
+	<bean id="webShopConfig" class="com.zwo.modules.webconfig.domain.WebShopConfig">
+		<property name="name" value="${mall_name}"></property>
+		<property name="title" value="${mall_title}"></property>
+		<property name="keyWorlds" value="${mall_keywords}"></property>
+		<property name="description" value="${mall_description}"></property>
+		<property name="numberCommemt" value="${number_comment}"></property>
+		<property name="indexPagesize" value="${index_pagesize}"></property>
+		<property name="categoryPagesize" value="${category_pagesize}"></property>
+		<property name="proImagePath" value="${pro_image_path}"></property>
+	</bean>
+	
 	<import resource="applicationContext-datasource.xml" />
 	<import resource="applicationContext-cache.xml" />
 	<!-- <import resource="applicationContext-activemq.xml" /> -->
