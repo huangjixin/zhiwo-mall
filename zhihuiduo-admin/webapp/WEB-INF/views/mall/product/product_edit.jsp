@@ -175,7 +175,7 @@ thumbnail.active {
 		<div class="form-group">
 			<label for="isSentUnpay" class="col-sm-2 control-label">是否支持货到付款</label>
 			<div class="col-sm-6">
-				<select id="isSentUnpay" class="easyui-combobox"
+				<select id="isSentUnpay" class="form-control"
 					name="isSentUnpay" style="width: 200px;">
 					<option value="0"
 						<c:if test="${product.isSentUnpay=='0'}">selected=true</c:if>>否</option>
@@ -187,7 +187,7 @@ thumbnail.active {
 		<div class="form-group">
 			<label for="allowDistribution" class="col-sm-2 control-label">是否允许分销</label>
 			<div class="col-sm-6">
-				<select id="allowDistribution" class="easyui-combobox"
+				<select id="allowDistribution" class="form-control"
 					name="allowDistribution" style="width: 200px;">
 					<option value="false"
 						<c:if test="${!product.allowDistribution}">selected=true</c:if>>否</option>
@@ -199,7 +199,7 @@ thumbnail.active {
 		<div class="form-group">
 			<label for="status" class="col-sm-2 control-label">上架/下架</label>
 			<div class="col-sm-6">
-				<select id="status" class="easyui-combobox" name="status"
+				<select id="status" class="form-control" name="status"
 					style="width: 200px;">
 					<option value="online"
 						<c:if test="${product.status=='online'}">selected=true</c:if>>上架</option>
