@@ -95,6 +95,7 @@ public interface IPrductService extends IBaseService<PrProduct> {
      * @param url
      * @return
      * @throws IOException 
+     * @throws Exception 
      */
-    PrProduct fetchAlibabaGoods(String url) throws IOException;
+    PrProduct fetchAlibabaGoods(String url) throws IOException, Exception;
 }

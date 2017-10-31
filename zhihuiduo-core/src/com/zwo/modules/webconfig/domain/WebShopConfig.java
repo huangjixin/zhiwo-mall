@@ -259,4 +259,25 @@ public class WebShopConfig implements Serializable {
     public void setProImagePath(String proImagePath) {
         this.proImagePath = proImagePath == null ? null : proImagePath.trim();
     }
+    
+    public String getProIndepentPrice() {
+		return proIndepentPrice;
+	}
+
+	public void setProIndepentPrice(String proIndepentPrice) {
+		this.proIndepentPrice = proIndepentPrice;
+	}
+
+	public String getProGroupPrice() {
+		return proGroupPrice;
+	}
+
+	public void setProGroupPrice(String proGroupPrice) {
+		this.proGroupPrice = proGroupPrice;
+	}
+
+	@Transient
+	private String proIndepentPrice;
+	@Transient
+    private String proGroupPrice;
 }

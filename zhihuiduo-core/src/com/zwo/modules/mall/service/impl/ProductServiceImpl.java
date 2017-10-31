@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -54,6 +55,7 @@ import com.zwo.modules.mall.domain.PrImage;
 import com.zwo.modules.mall.domain.PrImageType;
 import com.zwo.modules.mall.domain.PrProduct;
 import com.zwo.modules.mall.domain.PrProductCriteria;
+import com.zwo.modules.mall.domain.PrProductPackagePrice;
 import com.zwo.modules.mall.domain.PrProductProperty;
 import com.zwo.modules.mall.domain.PrProductPropertyValue;
 import com.zwo.modules.mall.domain.PrProductWithBLOBs;
@@ -720,7 +722,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	}
 
 	@Override
-	public PrProduct fetchAlibabaGoods(String url) throws IOException {
+	public PrProduct fetchAlibabaGoods(String url) throws Exception {
 		Document document = null;
 		PrProduct product = null;
 		try {
@@ -732,7 +734,14 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		Element des = document.select("meta[name=description]").first();
 		String description = des.attr("content");
 		title = title.replace(" - 阿里巴巴", "");// 抓取商品的标题，去掉阿里巴巴的标识。
-
+		String icon = "";//自动提取第一张作为缩略图。
+		String marketPrice = document.select("td[class=de-value]").first().html();
+		if(marketPrice.indexOf("&yen;")==-1){
+			marketPrice = "0.0";
+		}else{
+			marketPrice = marketPrice.replace("&yen;", "");
+		}
+		
 		// 查找相对应的脚本，该脚本包含了阿里巴巴的SKU属性。
 		Elements scriptElements = document.select("script[type=text/javascript]");
 		if (scriptElements != null && scriptElements.size() > 0) {
@@ -767,9 +776,10 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 					ScriptObjectMirror skuMapProps = (ScriptObjectMirror) sku
 							.get("skuMap");
 					String refPrice = (String) iDetailConfig.get("refPrice");
-					ScriptObjectMirror priceRange =  (ScriptObjectMirror) sku.get("priceRange");
-					Object pRange = priceRange.getSlot(0);
-					Array array = (Array) pRange;
+					String groupPurcseNum =  (String) iDetailConfig.get("beginAmount");
+					String canBookCount = (String) sku.get("canBookCount");
+					Object m = iDetailConfig.getMember("sku");
+					
 					// 商品属性。
 					List<PrProductProperty> properties = productPropertyService
 							.listAll();
@@ -781,6 +791,10 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 					product.setDescription(description);
 					this.insertSelective(product);
 
+					//保存属性值数组。
+					List<PrProductPropertyValue> propertyValueArray = new ArrayList<PrProductPropertyValue>();
+					List<PrProductProperty> propertyArray = new ArrayList<PrProductProperty>();
+					
 					int i = 0;
 					while (skuProps.hasSlot(i)) {
 						ScriptObjectMirror o = (ScriptObjectMirror) skuProps
@@ -795,10 +809,12 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 						}
 
 						if (property != null) {
-							ScriptObjectMirror value = (ScriptObjectMirror) o
-									.get("value");
+							propertyArray.add(property);
+							
+							ScriptObjectMirror value = (ScriptObjectMirror) o.get("value");
 							// 遍历属性值开始；
 							int j = 0;
+							String[] pvalueIds = new String[value.size()];
 							while (value.hasSlot(j)) {
 								ScriptObjectMirror valueItem = (ScriptObjectMirror) value
 										.getSlot(j);
@@ -808,10 +824,9 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 								productPropertyValue.setProductId(product.getId());
 								productPropertyValue.setPropertyId(property.getId());
 								productPropertyValue.setName(name);
-
+								
 								// 属性的URL。
-								String imageUrl = (String) valueItem
-										.get("imageUrl");
+								String imageUrl = (String) valueItem.get("imageUrl");
 								if (null != imageUrl && !"".equals(imageUrl)) {
 									HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
 											.getRequestAttributes())
@@ -819,16 +834,86 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 									download(request, product.getId(),
 											PrImageType.PROP, imageUrl);
 								}
-								this.productPropertyValueService
-										.insertSelective(productPropertyValue);
+								this.productPropertyValueService.insertSelective(productPropertyValue);
 
+								pvalueIds[j]=productPropertyValue.getId();
+								
 								j++;
+								
+								propertyValueArray.add(productPropertyValue);
+							}
+						}
+						i++;
+					}
+					
+					
+					for (i = 0; i < propertyValueArray.size(); i++) {
+						//只有一种属性
+						if (propertyArray.size() == 1) {
+							PrProductPackagePrice price1 = new PrProductPackagePrice();
+							double gPrice = Math.round(Double.valueOf(webShopConfig.getProGroupPrice())*Double.valueOf(refPrice));
+							double iPrice = Math.round(Double.valueOf(webShopConfig.getProIndepentPrice())*Double.valueOf(refPrice));
+							price1.setGourpPrice(gPrice+"");
+							price1.setIndependentPrice(iPrice+"");
+							price1.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+							price1.setProductId(product.getId());
+							PrProductPropertyValue pValue = propertyValueArray.get(i);
+							price1.setPropertyValueId(pValue.getId());
+							price1.setDisable((byte) 0);
+							price1.setIcon("");
+							this.productPackagePriceMapper.insertSelective(price1);
+						}
+						for (int j = i + 1; j < propertyValueArray.size(); j++) {
+							//两种属性
+							if (propertyArray.size() == 2) {
+								if (!propertyValueArray.get(i).getPropertyId().equals(propertyValueArray.get(j).getPropertyId())) {
+									PrProductPackagePrice price2 = new PrProductPackagePrice();
+									double gPrice = Math.round(Double.valueOf(webShopConfig.getProGroupPrice())*Double.valueOf(refPrice));
+									double iPrice = Math.round(Double.valueOf(webShopConfig.getProIndepentPrice())*Double.valueOf(refPrice));
+									price2.setGourpPrice(gPrice+"");
+									price2.setIndependentPrice(iPrice+"");
+									price2.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+									price2.setProductId(product.getId());
+									String propertyValueId = propertyValueArray.get(i).getId()+ "_" + propertyValueArray.get(j).getId();
+									
+									price2.setPropertyValueId(propertyValueId);
+									price2.setDisable((byte) 0);
+									price2.setIcon("");
+									this.productPackagePriceMapper.insertSelective(price2);
+								}
+							}
+							for (int p = j + 1; p < propertyValueArray.size(); p++) {
+								//三种属性
+								if (propertyArray.size() == 3) {
+									if (!propertyValueArray.get(i).getPropertyId().equals(propertyValueArray.get(j).getPropertyId())
+											&& !propertyValueArray.get(i).getPropertyId().equals(propertyValueArray.get(p).getPropertyId())
+											&& !propertyValueArray.get(j).getPropertyId().equals(propertyValueArray.get(p).getPropertyId())) {
+										PrProductPackagePrice price3 = new PrProductPackagePrice();
+										double gPrice = Math.round(Double.valueOf(webShopConfig.getProGroupPrice())*Double.valueOf(refPrice));
+										double iPrice = Math.round(Double.valueOf(webShopConfig.getProIndepentPrice())*Double.valueOf(refPrice));
+										price3.setGourpPrice(gPrice+"");
+										price3.setIndependentPrice(iPrice+"");
+										price3.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+										price3.setProductId(product.getId());
+										String propertyValueId = propertyValueArray.get(i).getId()+ "_" + propertyValueArray.get(j).getId()
+												+ "_" + propertyValueArray.get(p).getId();
+										
+										price3.setPropertyValueId(propertyValueId);
+										price3.setDisable((byte) 0);
+										price3.setIcon("");
+										this.productPackagePriceMapper.insertSelective(price3);
+									}
+								}
 							}
 						}
 
-						i++;
 					}
-
+					
+					//createPackagePrice(productPropertyValues);
+//					if(m!=null){
+//						throw new Exception("");
+//					}
+					
 					// 属性值处理完毕。
 
 					// 商品详情图开始处理。
@@ -885,13 +970,24 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 									PrImage prImage = download(request,
 											product.getId(), PrImageType.SWIPER,
 											jsonObject.getString("preview"));
+									icon = prImage.getUrl();
 								}
 							}
 						}
 					}
 					
+					int numCount = Integer.valueOf(groupPurcseNum);
+					product.setStorage(Integer.valueOf(canBookCount));
+					product.setNumberCount(numCount);
+					product.setCheckStatus(0);
 					product.setPurchasingCost(Double.valueOf(refPrice));
+					double groupPrice = Math.round(Double.valueOf(webShopConfig.getProGroupPrice())*Double.valueOf(refPrice));
+					double indepentPrice = Math.round(Double.valueOf(webShopConfig.getProIndepentPrice())*Double.valueOf(refPrice));
 					
+					product.setIndependentPrice(indepentPrice);
+					product.setGourpSalePrice(groupPrice);
+					product.setIcon(icon);
+					product.setMarketPrice(Double.valueOf(marketPrice));
 					this.updateByPrimaryKeySelective(product);
 				} catch (ScriptException e) {
 					e.printStackTrace();
@@ -902,6 +998,80 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		return product;
 	}
 
+	/**
+	 * 创建组合价。
+	 * @param productPropertyValues
+	 */
+	private void createPackagePrice(List<String[]> productPropertyValues){
+		
+		int size = productPropertyValues.size();
+		
+		String[] add = null;
+		if(size==1){
+			add = turns(productPropertyValues.get(0));
+		}else if(size==2){
+			add = turns(productPropertyValues.get(0),productPropertyValues.get(1));
+		}else if(size==3){
+			add = turns(productPropertyValues.get(0),productPropertyValues.get(1),productPropertyValues.get(2));
+		}
+		
+        for (String string : add) {
+            System.out.println(string);
+        }
+	}
+	
+	/**
+     * 两两遍历
+     * @param array1
+     * @param array2
+     * @return
+     */
+    public static String[] doubleTurns(String [] array1,String[] array2){
+        String [] target=new String[array1.length*array2.length];
+        for (int i = 0,a1=0,a2=0; i <array1.length*array2.length; i++) {
+        	if(array1[a1]!=array2[a2]){
+        		target[i]=array1[a1]+"_"+array2[a2];
+        	}
+            a2++;
+            if(a2==array2.length){
+                 a2=0;
+                 a1++;
+            }
+        	
+        }
+        return target;
+    }
+    
+    /**
+     * 遍历组合
+     * @param arrays
+     * @return
+     */
+    public static String[] turns(String[] ...arrays){
+        if(arrays.length==1){
+            return arrays[0];
+        }
+        if(arrays.length==0){
+            return null;
+        }
+        //获得总结果数
+        int count=0;
+        for (int i = 0; i < arrays.length; i++) {
+            count*=arrays[i].length;
+        }
+        String target[]=new String[count];
+        //两两遍历
+        for (int i = 0; i < arrays.length; i++) {
+            if(i==0){
+                target=doubleTurns(arrays[0],arrays[1]);
+                i++;
+            }else{
+                target=doubleTurns(target,arrays[i]);
+            }
+        }
+        return target;
+    }
+	
 	// 下载图片。
 	private PrImage download(HttpServletRequest httpServletRequest,
 			String productId, String type, String imgurl) {
