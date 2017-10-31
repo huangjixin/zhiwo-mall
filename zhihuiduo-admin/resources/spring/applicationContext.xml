@@ -27,6 +27,8 @@
 		<property name="indexPagesize" value="${index_pagesize}"></property>
 		<property name="categoryPagesize" value="${category_pagesize}"></property>
 		<property name="proImagePath" value="${pro_image_path}"></property>
+		<property name="proIndepentPrice" value="${pro_indepent_price}"></property>
+		<property name="proGroupPrice" value="${pro_group_price}"></property>
 	</bean>
 	
 	<import resource="applicationContext-datasource.xml" />
