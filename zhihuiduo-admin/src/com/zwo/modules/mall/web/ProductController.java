@@ -579,8 +579,14 @@ public class ProductController extends BaseController<PrProduct> {
 	@RequestMapping(value = "createFromAlibaba", method = RequestMethod.GET)
 	public String createFromAlibaba(@RequestParam String url,
 			HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) throws IOException {
-		PrProduct product = this.productService.fetchAlibabaGoods(url);
+			HttpServletResponse httpServletResponse) throws IOException,Exception {
+		PrProduct product = null;
+		try {
+			product = this.productService.fetchAlibabaGoods(url);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return "redirect:/product/edit/"+product.getId();
 	}
 
