@@ -3,6 +3,7 @@
  */
 package com.zwo.modules.mall.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -98,4 +99,13 @@ public interface IPrductService extends IBaseService<PrProduct> {
      * @throws Exception 
      */
     PrProduct fetchAlibabaGoods(String url) throws IOException, Exception;
+    
+    /**
+     * 抓取阿里巴巴批发网商品。
+     * @param url
+     * @return
+     * @throws IOException 
+     * @throws Exception 
+     */
+    PrProduct fetchAlibabaGoodsByCont(File file) throws IOException, Exception;
 }

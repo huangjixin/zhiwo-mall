@@ -735,11 +735,15 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		String description = des.attr("content");
 		title = title.replace(" - 阿里巴巴", "");// 抓取商品的标题，去掉阿里巴巴的标识。
 		String icon = "";//自动提取第一张作为缩略图。
-		String marketPrice = document.select("td[class=de-value]").first().html();
-		if(marketPrice.indexOf("&yen;")==-1){
-			marketPrice = "0.0";
-		}else{
-			marketPrice = marketPrice.replace("&yen;", "");
+		Elements devalues = document.select("td[class=de-value]");
+		String marketPrice = "0.0";
+		if(devalues!=null && devalues.size()>0){
+			marketPrice =  devalues.first().html();
+			if(marketPrice.indexOf("&yen;")==-1){
+				marketPrice = "0.0";
+			}else{
+				marketPrice = marketPrice.replace("&yen;", "");
+			}
 		}
 		
 		// 查找相对应的脚本，该脚本包含了阿里巴巴的SKU属性。
@@ -749,11 +753,16 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 			for (int i = 0; i < scriptElements.size(); i++) {
 				Element ele = scriptElements.get(i);
 				String html = ele.html();
+				System.out.println(html);
 				int index = html.indexOf("iDetailData");
 				if (index != -1) {
 					element = ele;
 					break;
 				}
+			}
+			if(element == null){
+				scriptElements = document.select("script[type=text/ javascript]");
+				
 			}
 
 			if (element != null) {
@@ -795,6 +804,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 					List<PrProductPropertyValue> propertyValueArray = new ArrayList<PrProductPropertyValue>();
 					List<PrProductProperty> propertyArray = new ArrayList<PrProductProperty>();
 					
+					List pValueList = new ArrayList();
 					int i = 0;
 					while (skuProps.hasSlot(i)) {
 						ScriptObjectMirror o = (ScriptObjectMirror) skuProps
@@ -809,6 +819,8 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 						}
 
 						if (property != null) {
+							List<String> pValueIdList = new ArrayList<String>();
+							
 							propertyArray.add(property);
 							
 							ScriptObjectMirror value = (ScriptObjectMirror) o.get("value");
@@ -842,10 +854,13 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 								
 								propertyValueArray.add(productPropertyValue);
 							}
+							
+							pValueList.add(pvalueIds);
 						}
 						i++;
 					}
-					
+				
+//					String [] pvlueIds = createPackagePrice(pValueList);
 					
 					for (i = 0; i < propertyValueArray.size(); i++) {
 						//只有一种属性
@@ -909,7 +924,6 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 
 					}
 					
-					//createPackagePrice(productPropertyValues);
 //					if(m!=null){
 //						throw new Exception("");
 //					}
@@ -1002,22 +1016,14 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	 * 创建组合价。
 	 * @param productPropertyValues
 	 */
-	private void createPackagePrice(List<String[]> productPropertyValues){
+	private String[] createPackagePrice(List productPropertyValues){
 		
-		int size = productPropertyValues.size();
-		
-		String[] add = null;
-		if(size==1){
-			add = turns(productPropertyValues.get(0));
-		}else if(size==2){
-			add = turns(productPropertyValues.get(0),productPropertyValues.get(1));
-		}else if(size==3){
-			add = turns(productPropertyValues.get(0),productPropertyValues.get(1),productPropertyValues.get(2));
-		}
-		
-        for (String string : add) {
+		String[] tagets = (String[]) productPropertyValues.toArray();
+		String[] result =turns(tagets);
+		for (String string : result) {
             System.out.println(string);
         }
+		return result;
 	}
 	
 	/**
@@ -1029,19 +1035,15 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
     public static String[] doubleTurns(String [] array1,String[] array2){
         String [] target=new String[array1.length*array2.length];
         for (int i = 0,a1=0,a2=0; i <array1.length*array2.length; i++) {
-        	if(array1[a1]!=array2[a2]){
-        		target[i]=array1[a1]+"_"+array2[a2];
-        	}
+            target[i]=array1[a1]+"_"+array2[a2];
             a2++;
             if(a2==array2.length){
-                 a2=0;
-                 a1++;
+                a2=0;
+                a1++;
             }
-        	
         }
         return target;
     }
-    
     /**
      * 遍历组合
      * @param arrays
@@ -1146,6 +1148,296 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	 * logger.info(BASE_MESSAGE + "selectByProductId根据商品ID查询图片结束，结果条目数：" +
 	 * list.size()); return list; }
 	 */
+
+	@Override
+	public PrProduct fetchAlibabaGoodsByCont(File file) throws IOException,
+			Exception {
+		Document document = null;
+		PrProduct product = null;
+		
+		document = Jsoup.parse(file,"GBK");
+		
+		String title = document.title();
+		Element des = document.select("meta[name=description]").first();
+		String description = des.attr("content");
+		title = title.replace(" - 阿里巴巴", "");// 抓取商品的标题，去掉阿里巴巴的标识。
+		String icon = "";//自动提取第一张作为缩略图。
+		Elements devalues = document.select("td[class=de-value]");
+		String marketPrice = "0.0";
+		if(devalues!=null && devalues.size()>0){
+			marketPrice =  devalues.first().html();
+			if(marketPrice.indexOf("&yen;")==-1){
+				marketPrice = "0.0";
+			}else{
+				marketPrice = marketPrice.replace("&yen;", "");
+			}
+		}
+		
+		// 查找相对应的脚本，该脚本包含了阿里巴巴的SKU属性。
+		Elements scriptElements = document.select("script[type=text/javascript]");
+		if (scriptElements != null && scriptElements.size() > 0) {
+			Element element = null;
+			for (int i = 0; i < scriptElements.size(); i++) {
+				Element ele = scriptElements.get(i);
+				String html = ele.html();
+				System.out.println(html);
+				int index = html.indexOf("iDetailData");
+				if (index != -1) {
+					element = ele;
+					break;
+				}
+			}
+			if(element == null){
+				scriptElements = document.select("script[type=text/ javascript]");
+				
+			}
+
+			if (element != null) {
+				String js = element.html();
+
+				ScriptEngineManager manager = new ScriptEngineManager();
+				ScriptEngine engine = manager.getEngineByName("javascript");
+				try {
+					engine.eval(js);
+					ScriptObjectMirror iDetailConfig = (ScriptObjectMirror) engine
+							.get("iDetailConfig");
+					ScriptObjectMirror c = (ScriptObjectMirror) engine
+							.get("iDetailData");
+					ScriptObjectMirror sku = (ScriptObjectMirror) c.get("sku");
+
+					// sku属性。
+					ScriptObjectMirror skuProps = (ScriptObjectMirror) sku
+							.get("skuProps");
+					// 这个好像Map对象。
+					ScriptObjectMirror skuMapProps = (ScriptObjectMirror) sku
+							.get("skuMap");
+					String refPrice = (String) iDetailConfig.get("refPrice");
+					String groupPurcseNum =  (String) iDetailConfig.get("beginAmount");
+					String canBookCount = (String) sku.get("canBookCount");
+					Object m = iDetailConfig.getMember("sku");
+					
+					// 商品属性。
+					List<PrProductProperty> properties = productPropertyService
+							.listAll();
+					product = new PrProduct();
+					String id = UUID.randomUUID().toString()
+							.replaceAll("-", "");
+					product.setId(id);
+					product.setName(title);
+					product.setDescription(description);
+					this.insertSelective(product);
+
+					//保存属性值数组。
+					List<PrProductPropertyValue> propertyValueArray = new ArrayList<PrProductPropertyValue>();
+					List<PrProductProperty> propertyArray = new ArrayList<PrProductProperty>();
+					
+					List pValueList = new ArrayList();
+					int i = 0;
+					while (skuProps.hasSlot(i)) {
+						ScriptObjectMirror o = (ScriptObjectMirror) skuProps
+								.getSlot(i);
+						String pName = (String) o.get("prop");
+						PrProductProperty property = null;
+						for (PrProductProperty prProductProperty : properties) {
+							if (pName.equals(prProductProperty.getName())) {
+								property = prProductProperty;
+								break;
+							}
+						}
+
+						if (property != null) {
+							List<String> pValueIdList = new ArrayList<String>();
+							
+							propertyArray.add(property);
+							
+							ScriptObjectMirror value = (ScriptObjectMirror) o.get("value");
+							// 遍历属性值开始；
+							int j = 0;
+							String[] pvalueIds = new String[value.size()];
+							while (value.hasSlot(j)) {
+								ScriptObjectMirror valueItem = (ScriptObjectMirror) value
+										.getSlot(j);
+								String name = (String) valueItem.get("name");
+								PrProductPropertyValue productPropertyValue = new PrProductPropertyValue();
+								productPropertyValue.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+								productPropertyValue.setProductId(product.getId());
+								productPropertyValue.setPropertyId(property.getId());
+								productPropertyValue.setName(name);
+								
+								// 属性的URL。
+								String imageUrl = (String) valueItem.get("imageUrl");
+								if (null != imageUrl && !"".equals(imageUrl)) {
+									HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+											.getRequestAttributes())
+											.getRequest();
+									download(request, product.getId(),
+											PrImageType.PROP, imageUrl);
+								}
+								this.productPropertyValueService.insertSelective(productPropertyValue);
+
+								pvalueIds[j]=productPropertyValue.getId();
+								
+								j++;
+								
+								propertyValueArray.add(productPropertyValue);
+							}
+							
+							pValueList.add(pvalueIds);
+						}
+						i++;
+					}
+					
+//					String [] pvlueIds = createPackagePrice(pValueList);
+					
+					for (i = 0; i < propertyValueArray.size(); i++) {
+						//只有一种属性
+						if (propertyArray.size() == 1) {
+							PrProductPackagePrice price1 = new PrProductPackagePrice();
+							double gPrice = Math.round(Double.valueOf(webShopConfig.getProGroupPrice())*Double.valueOf(refPrice));
+							double iPrice = Math.round(Double.valueOf(webShopConfig.getProIndepentPrice())*Double.valueOf(refPrice));
+							price1.setGourpPrice(gPrice+"");
+							price1.setIndependentPrice(iPrice+"");
+							price1.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+							price1.setProductId(product.getId());
+							PrProductPropertyValue pValue = propertyValueArray.get(i);
+							price1.setPropertyValueId(pValue.getId());
+							price1.setDisable((byte) 0);
+							price1.setIcon("");
+							this.productPackagePriceMapper.insertSelective(price1);
+						}
+						for (int j = i + 1; j < propertyValueArray.size(); j++) {
+							//两种属性
+							if (propertyArray.size() == 2) {
+								if (!propertyValueArray.get(i).getPropertyId().equals(propertyValueArray.get(j).getPropertyId())) {
+									PrProductPackagePrice price2 = new PrProductPackagePrice();
+									double gPrice = Math.round(Double.valueOf(webShopConfig.getProGroupPrice())*Double.valueOf(refPrice));
+									double iPrice = Math.round(Double.valueOf(webShopConfig.getProIndepentPrice())*Double.valueOf(refPrice));
+									price2.setGourpPrice(gPrice+"");
+									price2.setIndependentPrice(iPrice+"");
+									price2.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+									price2.setProductId(product.getId());
+									String propertyValueId = propertyValueArray.get(i).getId()+ "_" + propertyValueArray.get(j).getId();
+									
+									price2.setPropertyValueId(propertyValueId);
+									price2.setDisable((byte) 0);
+									price2.setIcon("");
+									this.productPackagePriceMapper.insertSelective(price2);
+								}
+							}
+							for (int p = j + 1; p < propertyValueArray.size(); p++) {
+								//三种属性
+								if (propertyArray.size() == 3) {
+									if (!propertyValueArray.get(i).getPropertyId().equals(propertyValueArray.get(j).getPropertyId())
+											&& !propertyValueArray.get(i).getPropertyId().equals(propertyValueArray.get(p).getPropertyId())
+											&& !propertyValueArray.get(j).getPropertyId().equals(propertyValueArray.get(p).getPropertyId())) {
+										PrProductPackagePrice price3 = new PrProductPackagePrice();
+										double gPrice = Math.round(Double.valueOf(webShopConfig.getProGroupPrice())*Double.valueOf(refPrice));
+										double iPrice = Math.round(Double.valueOf(webShopConfig.getProIndepentPrice())*Double.valueOf(refPrice));
+										price3.setGourpPrice(gPrice+"");
+										price3.setIndependentPrice(iPrice+"");
+										price3.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+										price3.setProductId(product.getId());
+										String propertyValueId = propertyValueArray.get(i).getId()+ "_" + propertyValueArray.get(j).getId()
+												+ "_" + propertyValueArray.get(p).getId();
+										
+										price3.setPropertyValueId(propertyValueId);
+										price3.setDisable((byte) 0);
+										price3.setIcon("");
+										this.productPackagePriceMapper.insertSelective(price3);
+									}
+								}
+							}
+						}
+
+					}
+					
+//					if(m!=null){
+//						throw new Exception("");
+//					}
+					
+					// 属性值处理完毕。
+
+					// 商品详情图开始处理。
+					Elements el = document
+							.select("div[id=desc-lazyload-container]");
+					String dataTfsUrl = el.first().attr("data-tfs-url");
+					if (!"".equals(dataTfsUrl)) {
+						Document doc = Jsoup.connect(dataTfsUrl).get();
+						Elements elements = doc.select("img");
+						String content = "<p>";
+						for (Element node : elements) {
+							if (node.hasAttr("src")) {
+								String src = node.attr("src");
+								src = src.replaceAll("\\\"", "");
+								src = src.substring(1, src.length() - 1);
+
+								HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+										.getRequestAttributes()).getRequest();
+
+								PrImage prImage = download(request,
+										product.getId(), PrImageType.DETAIL,
+										src);
+								if(prImage!=null){
+									if(webShopConfig!=null){
+										String para = "<img id=\""+prImage.getId()+"\" class=\"img-responsive\" src=\""+webShopConfig.getProImagePath()+"/"+prImage.getUrl()+"\"/>";
+										content += para;
+										if(logger.isInfoEnabled()){
+											logger.info(content);
+										}
+									}else{
+										
+									}
+									
+								}
+								
+								
+							}
+						}
+						content+="</p>";
+						product.setContent(content);
+					}
+					// 商品详情图处理结束。
+					
+					Elements picElements  = document.select("ul[class=nav nav-tabs fd-clr]");
+					if(picElements!=null && picElements.size()>0){
+						for (Element thumbEle : picElements) {
+							List<Node> childNodes = thumbEle.childNodes();
+							for (Node node : childNodes) {
+								String dataImgs = node.attr("data-imgs");
+								if(!"".equals(dataImgs)){
+									JSONObject jsonObject = JSONObject.parseObject(dataImgs);
+									HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+											.getRequestAttributes()).getRequest();
+									PrImage prImage = download(request,
+											product.getId(), PrImageType.SWIPER,
+											jsonObject.getString("preview"));
+									icon = prImage.getUrl();
+								}
+							}
+						}
+					}
+					
+					int numCount = Integer.valueOf(groupPurcseNum);
+					product.setStorage(Integer.valueOf(canBookCount));
+					product.setNumberCount(numCount);
+					product.setCheckStatus(0);
+					product.setPurchasingCost(Double.valueOf(refPrice));
+					double groupPrice = Math.round(Double.valueOf(webShopConfig.getProGroupPrice())*Double.valueOf(refPrice));
+					double indepentPrice = Math.round(Double.valueOf(webShopConfig.getProIndepentPrice())*Double.valueOf(refPrice));
+					
+					product.setIndependentPrice(indepentPrice);
+					product.setGourpSalePrice(groupPrice);
+					product.setIcon(icon);
+					product.setMarketPrice(Double.valueOf(marketPrice));
+					this.updateByPrimaryKeySelective(product);
+				} catch (ScriptException e) {
+					e.printStackTrace();
+				}
+
+			}
+		}
+		return product;
+	}
 
 	/*
 	 * if(result != 0){ if(redisTemplate == null ){ redisTemplate =
