@@ -53,6 +53,18 @@ public class PrProductPackagePrice implements Serializable {
     @Column(name = "ICON")
     private String icon;
 
+    /**
+     * 可以预定的数量
+     */
+    @Column(name = "CAN_BOOK_COUNT")
+    private Integer canBookCount;
+
+    /**
+     * 属性值拼成的名称，用&gt;进行分割
+     */
+    @Column(name = "PROPERTY_NAMES")
+    private String propertyNames;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -203,5 +215,41 @@ public class PrProductPackagePrice implements Serializable {
      */
     public void setIcon(String icon) {
         this.icon = icon == null ? null : icon.trim();
+    }
+
+    /**
+     * 获取可以预定的数量
+     *
+     * @return CAN_BOOK_COUNT - 可以预定的数量
+     */
+    public Integer getCanBookCount() {
+        return canBookCount;
+    }
+
+    /**
+     * 设置可以预定的数量
+     *
+     * @param canBookCount 可以预定的数量
+     */
+    public void setCanBookCount(Integer canBookCount) {
+        this.canBookCount = canBookCount;
+    }
+
+    /**
+     * 获取属性值拼成的名称，用&gt;进行分割
+     *
+     * @return PROPERTY_NAMES - 属性值拼成的名称，用&gt;进行分割
+     */
+    public String getPropertyNames() {
+        return propertyNames;
+    }
+
+    /**
+     * 设置属性值拼成的名称，用&gt;进行分割
+     *
+     * @param propertyNames 属性值拼成的名称，用&gt;进行分割
+     */
+    public void setPropertyNames(String propertyNames) {
+        this.propertyNames = propertyNames == null ? null : propertyNames.trim();
     }
 }

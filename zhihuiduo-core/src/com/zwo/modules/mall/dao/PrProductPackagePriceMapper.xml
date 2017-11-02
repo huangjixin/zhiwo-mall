@@ -2,9 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zwo.modules.mall.dao.PrProductPackagePriceMapper" >
   <resultMap id="BaseResultMap" type="com.zwo.modules.mall.domain.PrProductPackagePrice" >
-    <!--
-      WARNING - @mbg.generated
-    -->
     <id column="ID" property="id" jdbcType="VARCHAR" />
     <result column="PROPERTIES" property="properties" jdbcType="VARCHAR" />
     <result column="INDEPENDENT_PRICE" property="independentPrice" jdbcType="VARCHAR" />
@@ -14,6 +11,8 @@
     <result column="PROPERTY_VAlUE_ID" property="propertyValueId" jdbcType="VARCHAR" />
     <result column="DISABLE" property="disable" jdbcType="TINYINT" />
     <result column="ICON" property="icon" jdbcType="VARCHAR" />
+    <result column="CAN_BOOK_COUNT" property="canBookCount" jdbcType="INTEGER" />
+    <result column="PROPERTY_NAMES" property="propertyNames" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <!--
@@ -48,9 +47,6 @@
     </where>
   </sql>
   <sql id="Update_By_Example_Where_Clause" >
-    <!--
-      WARNING - @mbg.generated
-    -->
     <where >
       <foreach collection="example.oredCriteria" item="criteria" separator="or" >
         <if test="criteria.valid" >
@@ -80,11 +76,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    <!--
-      WARNING - @mbg.generated
-    -->
     ID, PROPERTIES, INDEPENDENT_PRICE, PRODUCT_ID, GOURP_PRICE, PROPERTY_ID, PROPERTY_VAlUE_ID, 
-    DISABLE, ICON
+    DISABLE, ICON, CAN_BOOK_COUNT, PROPERTY_NAMES
   </sql>
- 
 </mapper>

@@ -724,6 +724,136 @@ public class PrProductPackagePriceCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andCanBookCountIsNull() {
+            addCriterion("CAN_BOOK_COUNT is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCanBookCountIsNotNull() {
+            addCriterion("CAN_BOOK_COUNT is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCanBookCountEqualTo(Integer value) {
+            addCriterion("CAN_BOOK_COUNT =", value, "canBookCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCanBookCountNotEqualTo(Integer value) {
+            addCriterion("CAN_BOOK_COUNT <>", value, "canBookCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCanBookCountGreaterThan(Integer value) {
+            addCriterion("CAN_BOOK_COUNT >", value, "canBookCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCanBookCountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("CAN_BOOK_COUNT >=", value, "canBookCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCanBookCountLessThan(Integer value) {
+            addCriterion("CAN_BOOK_COUNT <", value, "canBookCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCanBookCountLessThanOrEqualTo(Integer value) {
+            addCriterion("CAN_BOOK_COUNT <=", value, "canBookCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCanBookCountIn(List<Integer> values) {
+            addCriterion("CAN_BOOK_COUNT in", values, "canBookCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCanBookCountNotIn(List<Integer> values) {
+            addCriterion("CAN_BOOK_COUNT not in", values, "canBookCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCanBookCountBetween(Integer value1, Integer value2) {
+            addCriterion("CAN_BOOK_COUNT between", value1, value2, "canBookCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCanBookCountNotBetween(Integer value1, Integer value2) {
+            addCriterion("CAN_BOOK_COUNT not between", value1, value2, "canBookCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyNamesIsNull() {
+            addCriterion("PROPERTY_NAMES is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyNamesIsNotNull() {
+            addCriterion("PROPERTY_NAMES is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyNamesEqualTo(String value) {
+            addCriterion("PROPERTY_NAMES =", value, "propertyNames");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyNamesNotEqualTo(String value) {
+            addCriterion("PROPERTY_NAMES <>", value, "propertyNames");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyNamesGreaterThan(String value) {
+            addCriterion("PROPERTY_NAMES >", value, "propertyNames");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyNamesGreaterThanOrEqualTo(String value) {
+            addCriterion("PROPERTY_NAMES >=", value, "propertyNames");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyNamesLessThan(String value) {
+            addCriterion("PROPERTY_NAMES <", value, "propertyNames");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyNamesLessThanOrEqualTo(String value) {
+            addCriterion("PROPERTY_NAMES <=", value, "propertyNames");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyNamesLike(String value) {
+            addCriterion("PROPERTY_NAMES like", value, "propertyNames");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyNamesNotLike(String value) {
+            addCriterion("PROPERTY_NAMES not like", value, "propertyNames");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyNamesIn(List<String> values) {
+            addCriterion("PROPERTY_NAMES in", values, "propertyNames");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyNamesNotIn(List<String> values) {
+            addCriterion("PROPERTY_NAMES not in", values, "propertyNames");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyNamesBetween(String value1, String value2) {
+            addCriterion("PROPERTY_NAMES between", value1, value2, "propertyNames");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyNamesNotBetween(String value1, String value2) {
+            addCriterion("PROPERTY_NAMES not between", value1, value2, "propertyNames");
+            return (Criteria) this;
+        }
+
         public Criteria andIdLikeInsensitive(String value) {
             addCriterion("upper(ID) like", value.toUpperCase(), "id");
             return (Criteria) this;
@@ -761,6 +891,11 @@ public class PrProductPackagePriceCriteria {
 
         public Criteria andIconLikeInsensitive(String value) {
             addCriterion("upper(ICON) like", value.toUpperCase(), "icon");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyNamesLikeInsensitive(String value) {
+            addCriterion("upper(PROPERTY_NAMES) like", value.toUpperCase(), "propertyNames");
             return (Criteria) this;
         }
     }

@@ -1160,6 +1160,10 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		String title = document.title();
 		Element des = document.select("meta[name=description]").first();
 		String description = des.attr("content");
+		if(description!=null && !"".equals(description)){
+			description.replace("阿里巴巴", "");
+			description.replace("我们还为您精选了挂钟、壁钟、墙贴钟公司黄页、行业资讯、价格行情、展会信息等，欲了解更多详细信息,请点击访问!", "");
+		}
 		title = title.replace(" - 阿里巴巴", "");// 抓取商品的标题，去掉阿里巴巴的标识。
 		String icon = "";//自动提取第一张作为缩略图。
 		Elements devalues = document.select("td[class=de-value]");
@@ -1239,7 +1243,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 						String pName = (String) o.get("prop");
 						PrProductProperty property = null;
 						for (PrProductProperty prProductProperty : properties) {
-							if (pName.equals(prProductProperty.getName())) {
+							if (pName.indexOf(prProductProperty.getName())!=-1) {
 								property = prProductProperty;
 								break;
 							}
