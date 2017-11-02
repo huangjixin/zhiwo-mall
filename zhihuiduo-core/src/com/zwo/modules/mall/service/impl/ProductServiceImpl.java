@@ -753,7 +753,6 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 			for (int i = 0; i < scriptElements.size(); i++) {
 				Element ele = scriptElements.get(i);
 				String html = ele.html();
-				System.out.println(html);
 				int index = html.indexOf("iDetailData");
 				if (index != -1) {
 					element = ele;
@@ -812,7 +811,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 						String pName = (String) o.get("prop");
 						PrProductProperty property = null;
 						for (PrProductProperty prProductProperty : properties) {
-							if (pName.equals(prProductProperty.getName())) {
+							if (pName.indexOf(prProductProperty.getName())!=-1) {
 								property = prProductProperty;
 								break;
 							}
@@ -1016,11 +1015,13 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	 * 创建组合价。
 	 * @param productPropertyValues
 	 */
-	private String[] createPackagePrice(List productPropertyValues){
-		
-		String[] tagets = (String[]) productPropertyValues.toArray();
-		String[] result =turns(tagets);
-		for (String string : result) {
+	private Object[] intePackagePrice(List productPropertyValues){
+		/*Object[] tagets = new Object[productPropertyValues.size()];
+		for (int i = 0; i < tagets.length; i++) {
+			tagets[i] = productPropertyValues.get(i);
+		}*/
+		Object[] result =turns(productPropertyValues);
+		for (Object string : result) {
             System.out.println(string);
         }
 		return result;
@@ -1032,7 +1033,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
      * @param array2
      * @return
      */
-    public static String[] doubleTurns(String [] array1,String[] array2){
+    public static Object[] doubleTurns(Object [] array1,Object[] array2){
         String [] target=new String[array1.length*array2.length];
         for (int i = 0,a1=0,a2=0; i <array1.length*array2.length; i++) {
             target[i]=array1[a1]+"_"+array2[a2];
@@ -1049,26 +1050,26 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
      * @param arrays
      * @return
      */
-    public static String[] turns(String[] ...arrays){
-        if(arrays.length==1){
-            return arrays[0];
+    public static Object[] turns(List<Object[]>arrays){
+        if(arrays.size()==1){
+            return arrays.get(0);
         }
-        if(arrays.length==0){
+        if(arrays.size()==0){
             return null;
         }
         //获得总结果数
         int count=0;
-        for (int i = 0; i < arrays.length; i++) {
-            count*=arrays[i].length;
+        for (int i = 0; i < arrays.size(); i++) {
+            count*=arrays.get(i).length;
         }
-        String target[]=new String[count];
+        Object target[]=new Object[count];
         //两两遍历
-        for (int i = 0; i < arrays.length; i++) {
+        for (int i = 0; i < arrays.size(); i++) {
             if(i==0){
-                target=doubleTurns(arrays[0],arrays[1]);
+                target=doubleTurns(arrays.get(0),arrays.get(1));
                 i++;
             }else{
-                target=doubleTurns(target,arrays[i]);
+                target=doubleTurns(target,arrays.get(i));
             }
         }
         return target;
@@ -1184,17 +1185,13 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 			for (int i = 0; i < scriptElements.size(); i++) {
 				Element ele = scriptElements.get(i);
 				String html = ele.html();
-				System.out.println(html);
 				int index = html.indexOf("iDetailData");
 				if (index != -1) {
 					element = ele;
 					break;
 				}
 			}
-			if(element == null){
-				scriptElements = document.select("script[type=text/ javascript]");
-				
-			}
+			
 
 			if (element != null) {
 				String js = element.html();
@@ -1210,19 +1207,16 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 					ScriptObjectMirror sku = (ScriptObjectMirror) c.get("sku");
 
 					// sku属性。
-					ScriptObjectMirror skuProps = (ScriptObjectMirror) sku
-							.get("skuProps");
+					ScriptObjectMirror skuProps = (ScriptObjectMirror) sku.get("skuProps");
 					// 这个好像Map对象。
-					ScriptObjectMirror skuMapProps = (ScriptObjectMirror) sku
-							.get("skuMap");
+					ScriptObjectMirror skuMapProps = (ScriptObjectMirror) sku.get("skuMap");
 					String refPrice = (String) iDetailConfig.get("refPrice");
 					String groupPurcseNum =  (String) iDetailConfig.get("beginAmount");
 					String canBookCount = (String) sku.get("canBookCount");
 					Object m = iDetailConfig.getMember("sku");
 					
 					// 商品属性。
-					List<PrProductProperty> properties = productPropertyService
-							.listAll();
+					List<PrProductProperty> properties = productPropertyService.listAll();
 					product = new PrProduct();
 					String id = UUID.randomUUID().toString()
 							.replaceAll("-", "");
@@ -1258,9 +1252,9 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 							// 遍历属性值开始；
 							int j = 0;
 							String[] pvalueIds = new String[value.size()];
+							String[] pvalueNames = new String[value.size()];
 							while (value.hasSlot(j)) {
-								ScriptObjectMirror valueItem = (ScriptObjectMirror) value
-										.getSlot(j);
+								ScriptObjectMirror valueItem = (ScriptObjectMirror) value.getSlot(j);
 								String name = (String) valueItem.get("name");
 								PrProductPropertyValue productPropertyValue = new PrProductPropertyValue();
 								productPropertyValue.setId(UUID.randomUUID().toString().replaceAll("-", ""));
@@ -1280,6 +1274,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 								this.productPropertyValueService.insertSelective(productPropertyValue);
 
 								pvalueIds[j]=productPropertyValue.getId();
+								pvalueNames[j]=productPropertyValue.getName();
 								
 								j++;
 								
@@ -1291,8 +1286,10 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 						i++;
 					}
 					
-//					String [] pvlueIds = createPackagePrice(pValueList);
-					
+					Object [] pvlueIds = intePackagePrice(pValueList);
+					if(pvlueIds!=null){
+						throw new Exception();
+					}
 					for (i = 0; i < propertyValueArray.size(); i++) {
 						//只有一种属性
 						if (propertyArray.size() == 1) {
