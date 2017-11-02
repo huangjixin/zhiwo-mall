@@ -858,8 +858,6 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 						}
 						i++;
 					}
-				
-//					String [] pvlueIds = createPackagePrice(pValueList);
 					
 					for (i = 0; i < propertyValueArray.size(); i++) {
 						//只有一种属性
@@ -1286,10 +1284,11 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 						i++;
 					}
 					
-					Object [] pvlueIds = intePackagePrice(pValueList);
-					if(pvlueIds!=null){
-						throw new Exception();
-					}
+					//Object [] pvlueIds = intePackagePrice(pValueList);
+					
+//					if(pvlueIds!=null){
+//						throw new Exception();
+//					}
 					for (i = 0; i < propertyValueArray.size(); i++) {
 						//只有一种属性
 						if (propertyArray.size() == 1) {
