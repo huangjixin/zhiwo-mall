@@ -389,11 +389,16 @@ body {
 			}
 			
 			if(swiperImages){
+				var length = swiperImages.length;
 				for(var i=0;i<length;i++){
 					var swiperImage= swiperImages[i];
 					
-					var para = '<div class="swiper-slide" id="'+swiperImage.id+'SwiperImage"><img class="img-responsive" src="'+ctx+'/'+swiperImage.url+'"></div>';
-					
+					var para = '';
+					if('id' in swiperImage){
+						para = '<div class="swiper-slide" id="'+swiperImage.id+'SwiperImage"><img class="img-responsive" src="'+ctx+'/'+swiperImage.url+'"></div>';
+					}else{
+						para = '<div class="swiper-slide" ><img class="img-responsive" src="'+ctx+'/'+swiperImage.url+'"></div>';
+					}
 					$('#swiperWrapper').append(para);
 					//$('#'+swiperImage.id+'SwiperImage').fadeIn('slow');
 				}
