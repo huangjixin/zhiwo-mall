@@ -389,6 +389,7 @@ body {
 			}
 			
 			if(swiperImages){
+				var length = swiperImages.length;
 				for(var i=0;i<length;i++){
 					var swiperImage= swiperImages[i];
 					
