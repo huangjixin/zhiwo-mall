@@ -1,7 +1,9 @@
 package com.zwo.modules.mall.web;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -11,23 +13,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.restlet.data.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -39,6 +31,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.alibaba.fastjson.JSONArray;
@@ -589,7 +582,33 @@ public class ProductController extends BaseController<PrProduct> {
 		}
 		return "redirect:/product/edit/"+product.getId();
 	}
+	
+	@RequiresPermissions("mall:product:create")
+	@RequestMapping(value = "createFromAlibabaByCont", method = RequestMethod.POST)
+	public String createFromAlibabaByContent(@RequestParam(value = "file", required = false) MultipartFile  file,
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) throws IOException,Exception {
+		PrProduct product = null;
+		try {
+			 String path="E:/"+file.getOriginalFilename();
+			File myFile =  new File(path);
+			file.transferTo(myFile);
+	        
+			product = this.productService.fetchAlibabaGoodsByCont(myFile);
+		} catch (Exception e) {
+			return "redirect:/product/capture";
+		}
+		return "redirect:/product/edit/"+product.getId();
+	}
 
+//	@RequiresPermissions("mall:product:create")
+	@RequestMapping(value = "capture", method = RequestMethod.GET)
+	public String capture(HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse){
+	
+		return basePath + "capture";
+	}
+	
 	//下载图片。
 	private PrImage download(HttpServletRequest httpServletRequest,String productId, String type,
 			String imgurl) {

@@ -1,15 +1,14 @@
 public class Turns {
     //测试main方法
     public static void main(String[] args) {
-        String [] a={"a","b","c"};
-        String [] b={"a","b","c"};
-//        String [] c={"f","j"};
-//        String [] d={"h","i"};
-        String[] add = new Turns().turns(a, b);
+        String [] a={"白色","黑色","蓝色"};
+        String [] b={"30ml","60ml","90ml"};
+        String [] c={"4米","1米"};
+        String [] d={"中国风","美国风"};
+        String[] add = new Turns().turns(a, b, c, d);
         for (String string : add) {
             System.out.println(string);
         }
-
     }
     /**
      * 两两遍历
@@ -20,7 +19,7 @@ public class Turns {
     public static String[] doubleTurns(String [] array1,String[] array2){
         String [] target=new String[array1.length*array2.length];
         for (int i = 0,a1=0,a2=0; i <array1.length*array2.length; i++) {
-            target[i]=array1[a1]+","+array2[a2];
+            target[i]=array1[a1]+"_"+array2[a2];
             a2++;
             if(a2==array2.length){
                 a2=0;
