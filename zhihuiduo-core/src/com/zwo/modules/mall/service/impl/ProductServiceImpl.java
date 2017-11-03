@@ -714,8 +714,8 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 	@Override
 	public PageInfo<PrProduct> selectIndex(PageInfo<PrProduct> pageInfo) {
 		PrProductCriteria productCriteria = new PrProductCriteria();
-		productCriteria.createCriteria().andDisableEqualTo(false)
-				.andStorageGreaterThan(0).andStatusEqualTo("online");
+		/*productCriteria.createCriteria().andDisableEqualTo(false)
+				.andStorageGreaterThan(0).andStatusEqualTo("online");*/
 		productCriteria.setOrderByClause("create_date desc");
 		PageInfo<PrProduct> info = selectByPageInfo(productCriteria, pageInfo);
 		return info;
@@ -949,7 +949,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 										src);
 								if(prImage!=null){
 									if(webShopConfig!=null){
-										String para = "<img id=\""+prImage.getId()+"\" class=\"img-responsive\" src=\""+webShopConfig.getProImagePath()+"/"+prImage.getUrl()+"\"/>";
+										String para = "<img id=\""+prImage.getId()+"\" class=\"img-responsive\" src=\"/"+prImage.getUrl()+"\"/>";
 										content += para;
 										if(logger.isInfoEnabled()){
 											logger.info(content);
@@ -1160,8 +1160,8 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 		Element des = document.select("meta[name=description]").first();
 		String description = des.attr("content");
 		if(description!=null && !"".equals(description)){
-			description.replace("阿里巴巴", "");
-			description.replace("我们还为您精选了挂钟、壁钟、墙贴钟公司黄页、行业资讯、价格行情、展会信息等，欲了解更多详细信息,请点击访问!", "");
+			description.replaceAll("阿里巴巴", "");
+			description.replaceAll("我们还为您精选了挂钟、壁钟、墙贴钟公司黄页、行业资讯、价格行情、展会信息等，欲了解更多详细信息,请点击访问!", "");
 		}
 		title = title.replace(" - 阿里巴巴", "");// 抓取商品的标题，去掉阿里巴巴的标识。
 		String icon = "";//自动提取第一张作为缩略图。
@@ -1379,7 +1379,7 @@ public class ProductServiceImpl extends BaseService<PrProduct> implements
 										src);
 								if(prImage!=null){
 									if(webShopConfig!=null){
-										String para = "<img id=\""+prImage.getId()+"\" class=\"img-responsive\" src=\""+webShopConfig.getProImagePath()+"/"+prImage.getUrl()+"\"/>";
+										String para = "<img id=\""+prImage.getId()+"\" class=\"img-responsive\" src=\"/"+prImage.getUrl()+"\"/>";
 										content += para;
 										if(logger.isInfoEnabled()){
 											logger.info(content);
