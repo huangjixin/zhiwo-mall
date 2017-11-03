@@ -7,6 +7,7 @@
 <title>商品编辑</title>
 <%@ include file="/WEB-INF/include/easyui-css.jsp"%>
 <%@ include file="/WEB-INF/include/easyui-js.jsp"%>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
 <script type="text/javascript" src="${ctx}/js/jquery-easyui/ajaxfileupload.js"></script>
 <!--<script type="text/javascript" src="https://cdn.bootcss.com/jquery-jcrop/2.0.4/js/Jcrop.min.js"></script>-->
 <style>
@@ -679,6 +680,8 @@ thumbnail.active {
 			getPackagePriceImgs();
 			//获得轮播图。
 			getSwiperImgs();
+			
+			$("img").lazyload({effect: "fadeIn"});
 		});
 		
 		
