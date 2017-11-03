@@ -36,9 +36,9 @@ import com.zwotech.common.web.BaseController;
 @RequestMapping("order")
 @Lazy(true)
 public class OrderRestController extends BaseController<OrderTrade> {
-//	@Autowired
-//	@Lazy(true)
-	private IOrderTradeService orderService = SpringContextHolder.getBean("orderTradeServiceImpl");
+	@Autowired
+	@Lazy(true)
+	private IOrderTradeService orderService;
 	
 	/** 
 	 * @Title: deleteById 
@@ -106,9 +106,12 @@ public class OrderRestController extends BaseController<OrderTrade> {
 		orderCriteria = new OrderTradeCriteria();
 		OrderTradeCriteria.Criteria criteria = orderCriteria.createCriteria();
 		orderCriteria.setOrderByClause("id desc");
-		/*if (null != order.getName() && !"".equals(order.getName())) {
-			criteria.andNameLike("%" + order.getName() + "%");
-		}*/
+		if (null != order.getStatus() && !"".equals(order.getStatus())) {
+			criteria.andStatusEqualTo(order.getStatus());
+		}
+		if (null != order.getId() && !"".equals(order.getId())) {
+			criteria.andIdEqualTo(order.getId());
+		}
 		
 		pageInfo = orderService.selectByPageInfo(orderCriteria, pageInfo);
 		return super.setPage(pageInfo);
