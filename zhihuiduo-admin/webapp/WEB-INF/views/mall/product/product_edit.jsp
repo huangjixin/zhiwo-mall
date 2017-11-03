@@ -381,7 +381,7 @@ thumbnail.active {
 			<div class="col-sm-6">
 				<%@ include file="/WEB-INF/include/easyui-buttonForm.jsp"%>
                 <c:if test="${operation=='edit'}">
-                	<a href="${ctx}/goodsDetail?goodsId=${product.id}" target="_blank">
+                	<a href="${ctx}/goodsDetail/${product.id}" target="_blank">
                     	<button type="button" id="previewBtn" class="btn btn-default">
                    		 <i class="fa fa-floppy-o" aria-hidden="true"></i>&nbsp;&nbsp;预览
                 	</button> 
@@ -1225,7 +1225,7 @@ thumbnail.active {
 								var para = '';
 								for (var i = 0; i < data.assets.length; i++) {
 									var assets = data.assets[i];
-									para = '<div><img id="'+assets.id+'" src="${ctx}/'+assets.url+'" class=".img-responsive" width="50px;"/>&nbsp;&nbsp;<button type="button" class="btn btn-info" onClick="insertIntoUeditor(\''+assets.id+'\')">插入</button></div>';
+									para = '<div><img id="'+assets.id+'" src="/'+assets.url+'" class=".img-responsive" width="50px;"/>&nbsp;&nbsp;<button type="button" class="btn btn-info" onClick="insertIntoUeditor(\''+assets.id+'\')">插入</button></div>';
 									$('#detailImgsDiv').append(para);
 								}
 								//$('#datagrid').datagrid("reload");
