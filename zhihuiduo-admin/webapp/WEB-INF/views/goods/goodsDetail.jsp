@@ -120,7 +120,7 @@ body {
 					<label>&nbsp;</label>
 					<h4 class="media-heading">商品详情</h4>
 					<hr class="hr1" />
-                    <div class="media-body" id="proContent">
+                    <div class="media-body" id="proContent" style="text-align:center;">
                     </div>
 				</div>
 			</div>
@@ -275,7 +275,8 @@ body {
 				 
 				 appendProductPro(ctx,obj);
 				 
-				 queryGroupPurcse();//查询新开的团。
+				 queryGroupPurcse();//查询新开的团，用于弹窗。
+				 queryGroupPurcseByPid();//用于页面展现。
 			}
 			
 			
@@ -347,8 +348,8 @@ body {
 		});
 	
 	
-		//查询该商品的团。
-		function queryGroupPurcse(){
+		//查询该商品的团，用于弹窗。
+		function queryGroupPurcseByPid(){
 			var data = {};
 			$.ajax({  
 					url:ctx+"/memberGroup/getLatestGroupPurcseByPid/"+obj.id,   
@@ -364,13 +365,21 @@ body {
 			});
 		}
 	
-		//HTML反转义
-		function HTMLDecode(text) { 
-			var temp = document.createElement("div"); 
-			temp.innerHTML = text; 
-			var output = temp.innerText || temp.textContent; 
-			temp = null; 
-			return output; 
+		//查询该商品正在拼的团。
+		function queryGroupPurcse(){
+			var data = {};
+			$.ajax({  
+					url:ctx+"/memberGroup/getLatestGroupPurcseByPid/"+obj.id,   
+					type:"get",  
+					success:function(data){  
+						if(newGroupPurcse && newGroupPurcse.length>0){
+							newGroupPurcse = data;
+							$("#p").hide(100,function(){
+									self.setInterval("fadeInOut('p')",6000); 
+							});
+						}
+					}  
+			});
 		}
 		
 		//添加商品属性。
@@ -425,7 +434,7 @@ body {
 			$('#marketPriceLabel').html(product.marketPrice);
 			$('#soldQuantitySpan').html(product.numberCount);
 			
-			var cont = HTMLDecode(product.content);
+			var cont = product.content;
 			$('#proContent').append(cont);
 			$('#productName').html(product.name);
 			$('#productDescription').html(product.description);
