@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zwo.xiyangyang.modules.guess.dao.GuessAccountHisMapper" >
+  <resultMap id="BaseResultMap" type="com.zwo.xiyangyang.modules.guess.domain.GuessAccountHis" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="ENABLED" property="enabled" jdbcType="BIT" />
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+    <result column="REAL_NAME" property="realName" jdbcType="VARCHAR" />
+    <result column="ORG_ID" property="orgId" jdbcType="VARCHAR" />
+    <result column="MEMBER_ID" property="memberId" jdbcType="VARCHAR" />
+    <result column="LOCKED" property="locked" jdbcType="BIT" />
+    <result column="BALANCE" property="balance" jdbcType="DOUBLE" />
+    <result column="DEPOSIT" property="deposit" jdbcType="DOUBLE" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="DEVOTE" property="devote" jdbcType="VARCHAR" />
+    <result column="RATE" property="rate" jdbcType="DOUBLE" />
+  </resultMap>
+</mapper>

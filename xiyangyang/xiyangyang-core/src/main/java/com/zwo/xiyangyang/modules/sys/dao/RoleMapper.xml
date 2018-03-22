@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zwo.xiyangyang.modules.sys.dao.RoleMapper" >
+  <resultMap id="BaseResultMap" type="com.zwo.xiyangyang.modules.sys.domain.Role" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="ENABLED" property="enabled" jdbcType="BIT" />
+    <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+    <result column="UPDATER" property="updater" jdbcType="VARCHAR" />
+    <result column="SORT" property="sort" jdbcType="INTEGER" />
+    <result column="ORG_ID" property="orgId" jdbcType="VARCHAR" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectRoleByUsername" resultType="String">
+  	SELECT 
+	    r.NAME
+	FROM
+	    sys_role r
+	        LEFT JOIN
+	    sys_group_role gr ON r.id = gr.ROLE_ID
+	        LEFT JOIN
+	    sys_user_group ug ON gr.USERGROUP_ID = ug.id
+	        LEFT JOIN
+	    sys_user user ON ug.id = user.USERGROUP_ID
+	WHERE
+	    user.USERNAME = #{username} 
+	UNION 
+	
+	SELECT 
+	     r.NAME
+	FROM
+	    sys_role r 
+	        LEFT JOIN
+	    sys_user_role user_role ON r.id = user_role.ROLE_ID
+	        LEFT JOIN
+	    sys_user user ON user_role.USER_ID = user.ID
+	WHERE
+	    user.USERNAME = #{username}
+  </select>
+</mapper>

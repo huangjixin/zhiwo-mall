@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zwo.xiyangyang.modules.sys.dao.ResourcesMapper" >
+  <resultMap id="BaseResultMap" type="com.zwo.xiyangyang.modules.sys.domain.Resources" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="PARENT_ID" property="parentId" jdbcType="VARCHAR" />
+    <result column="PARENTIDS" property="parentids" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+    <result column="UPDATER" property="updater" jdbcType="VARCHAR" />
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+    <result column="AUTH_NAME" property="authName" jdbcType="VARCHAR" />
+    <result column="PATH" property="path" jdbcType="VARCHAR" />
+    <result column="SORT" property="sort" jdbcType="INTEGER" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="CHECKED" property="checked" jdbcType="BIT" />
+    <result column="TEXT" property="text" jdbcType="VARCHAR" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="ORG_ID" property="orgId" jdbcType="VARCHAR" />
+    <result column="URL" property="url" jdbcType="VARCHAR" />
+    <result column="LEVEL" property="level" jdbcType="INTEGER" />
+  </resultMap>
+  <!-- 根据用户名查询权限名 -->
+  <select id="selectResoucesByUsername" resultType="String">
+  	SELECT 
+	    res.AUTH_NAME
+	FROM
+	    sys_resources res
+	        LEFT JOIN
+	    sys_role_resources role_res ON res.id = role_res.RESOURCES_ID
+	        LEFT JOIN
+	    sys_role r ON role_res.ROLE_ID = r.id
+	        LEFT JOIN
+	    sys_group_role gr ON r.id = gr.ROLE_ID
+	        LEFT JOIN
+	    sys_user_group ug ON gr.USERGROUP_ID = ug.id
+	        LEFT JOIN
+	    sys_user user ON ug.id = user.USERGROUP_ID
+	WHERE
+	    user.USERNAME = #{username} 
+	UNION SELECT 
+	    res.AUTH_NAME
+	FROM
+	    sys_resources res
+	        LEFT JOIN
+	    sys_role_resources role_res ON res.id = role_res.RESOURCES_ID
+	        LEFT JOIN
+	    sys_role r ON role_res.ROLE_ID = r.id
+	        LEFT JOIN
+	    sys_user_role user_role ON r.id = user_role.ROLE_ID
+	        LEFT JOIN
+	    sys_user user ON user_role.USER_ID = user.ID
+	WHERE
+	    user.USERNAME = #{username}
+  </select>
+</mapper>

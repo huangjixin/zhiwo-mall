@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: com.zwo.xiyangyang.XiyangyangApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 4.566 s <<< FAILURE! - in com.zwo.xiyangyang.XiyangyangApplicationTests
+contextLoads(com.zwo.xiyangyang.XiyangyangApplicationTests)  Time elapsed: 0.008 s  <<< ERROR!
+java.lang.NoClassDefFoundError: org/apache/ibatis/annotations/Mapper
+Caused by: java.lang.ClassNotFoundException: org.apache.ibatis.annotations.Mapper
+

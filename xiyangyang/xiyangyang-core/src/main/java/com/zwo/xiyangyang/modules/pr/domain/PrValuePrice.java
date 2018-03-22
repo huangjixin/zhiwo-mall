@@ -1,0 +1,63 @@
+package com.zwo.xiyangyang.modules.pr.domain;
+
+import javax.persistence.*;
+
+@Table(name = "pr_value_price")
+public class PrValuePrice implements java.io.Serializable {
+
+	/**
+	 * @Fields serialVersionUID : 默认系列化版本UID  
+	 */
+	private static final long serialVersionUID = 1L;
+    @Id
+    @Column(name = "ID")
+    private String id;
+
+    @Column(name = "PRODUCT_ID")
+    private String productId;
+
+    @Column(name = "VALUE_ID")
+    private String valueId;
+
+    /**
+     * @return ID
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * @param id
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
+     * @return PRODUCT_ID
+     */
+    public String getProductId() {
+        return productId;
+    }
+
+    /**
+     * @param productId
+     */
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    /**
+     * @return VALUE_ID
+     */
+    public String getValueId() {
+        return valueId;
+    }
+
+    /**
+     * @param valueId
+     */
+    public void setValueId(String valueId) {
+        this.valueId = valueId;
+    }
+}

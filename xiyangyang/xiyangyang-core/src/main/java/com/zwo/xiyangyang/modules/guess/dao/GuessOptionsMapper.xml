@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zwo.xiyangyang.modules.guess.dao.GuessOptionsMapper" >
+  <resultMap id="BaseResultMap" type="com.zwo.xiyangyang.modules.guess.domain.GuessOptions" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="BET_RATE" property="betRate" jdbcType="DOUBLE" />
+    <result column="GUESS_QUESTION_ID" property="guessQuestionId" jdbcType="VARCHAR" />
+    <result column="REAL_QUESTION_ID" property="realQuestionId" jdbcType="VARCHAR" />
+    <result column="IS_RIGHT" property="isRight" jdbcType="BIT" />
+  </resultMap>
+</mapper>
