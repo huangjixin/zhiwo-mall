@@ -13,12 +13,14 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
-import org.crazycake.shiro.RedisSerializer;
 import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
@@ -114,10 +116,10 @@ public class ShiroConfig {
     @Bean  
     public SessionManager sessionManager() {  
         StatelessSessionManager sessionManager = new StatelessSessionManager(); 
-        sessionManager.setGlobalSessionTimeout(3600000);
-        sessionManager.setSessionValidationScheduler(getExecutorServiceSessionValidationScheduler());
-        sessionManager.setSessionValidationSchedulerEnabled(true);
-        sessionManager.setDeleteInvalidSessions(true);
+//        sessionManager.setGlobalSessionTimeout(1800);
+//        sessionManager.setSessionValidationScheduler(getExecutorServiceSessionValidationScheduler());
+//        sessionManager.setSessionValidationSchedulerEnabled(true);
+//        sessionManager.setDeleteInvalidSessions(true);
         sessionManager.setSessionIdCookieEnabled(true);
         sessionManager.setSessionIdCookie(getSessionIdCookie());
         sessionManager.setSessionDAO(redisSessionDAO());  
@@ -127,7 +129,7 @@ public class ShiroConfig {
     @Bean(name = "sessionValidationScheduler")
     public ExecutorServiceSessionValidationScheduler getExecutorServiceSessionValidationScheduler() {
         ExecutorServiceSessionValidationScheduler scheduler = new ExecutorServiceSessionValidationScheduler();
-        scheduler.setInterval(900000);
+        scheduler.setInterval(1000);
         return scheduler;
     }
     
@@ -166,6 +168,7 @@ public class ShiroConfig {
      * 
      * @return 
      */  
+    @Bean
     public RedisManager redisManager() {  
         RedisManager redisManager = new RedisManager();  
         redisManager.setHost(host);  
@@ -192,18 +195,27 @@ public class ShiroConfig {
     }  
   
     /** 
+     * 会话设置不过期。
      * RedisSessionDAO shiro sessionDao层的实现 通过redis 
      * <p> 
      * 使用的是shiro-redis开源插件 
      */  
     @Bean  
     public RedisSessionDAO redisSessionDAO() {  
-        RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
-        redisSessionDAO.setExpire(2592000);
+        RedisSessionDAO redisSessionDAO = new RedisSessionDAO(); 
+        redisSessionDAO.setExpire(60);
         redisSessionDAO.setRedisManager(redisManager());  
         return redisSessionDAO;  
     }  
   
+    @Bean
+    public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory factory) {
+        RedisTemplate<Object, Object> template = new RedisTemplate<Object, Object>();
+        template.setConnectionFactory(factory);
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new JdkSerializationRedisSerializer());
+        return template;
+    }
 
     /**
      *在此重点说明这个方法，如果不设置为静态方法会导致bean对象无法注入进来，

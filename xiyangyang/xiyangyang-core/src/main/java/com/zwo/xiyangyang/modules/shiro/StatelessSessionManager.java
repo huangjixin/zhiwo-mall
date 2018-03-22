@@ -1,18 +1,42 @@
 package com.zwo.xiyangyang.modules.shiro;
-import org.apache.shiro.web.servlet.ShiroHttpServletRequest;  
-import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;  
-import org.apache.shiro.web.util.WebUtils;  
+import java.io.Serializable;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
+import org.apache.shiro.session.ExpiredSessionException;
+import org.apache.shiro.session.InvalidSessionException;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.SessionKey;
+import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.apache.shiro.web.session.mgt.WebSessionManager;
+import org.apache.shiro.web.util.WebUtils;
+import org.crazycake.shiro.ObjectSerializer;
+import org.crazycake.shiro.RedisManager;
+import org.crazycake.shiro.RedisSerializer;
+import org.crazycake.shiro.RedisSessionDAO;
+import org.crazycake.shiro.SerializationException;
+import org.crazycake.shiro.StringSerializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;  
-import javax.servlet.ServletRequest;  
-import javax.servlet.ServletResponse;  
-import java.io.Serializable;  
   
 /** 
  * Created by Administrator on 2017/12/11. 
  * 自定义sessionId获取 
  */  
-public class StatelessSessionManager extends DefaultWebSessionManager {  
+public class StatelessSessionManager extends DefaultWebSessionManager{  
   
+	@Autowired
+	private RedisSessionDAO redisSessionDAO;
+	
+	@Autowired
+	private RedisManager redisManager;
+
+	private RedisSerializer keySerializer = new StringSerializer();
+	private RedisSerializer valueSerializer = new ObjectSerializer();
+	
+	
     private static final String AUTHORIZATION = "Authorization";  
   
     private static final String REFERENCED_SESSION_ID_SOURCE = "Stateless request";  
@@ -35,4 +59,29 @@ public class StatelessSessionManager extends DefaultWebSessionManager {
             return super.getSessionId(request, response);  
         }  
     }  
+    
+
+    /*@Override
+    protected void onInvalidation(Session session, InvalidSessionException ise, SessionKey key) {
+    	System.out.println(key.toString()+","+session.getId());
+    	try {
+    		byte[] bs = redisManager.get(keySerializer.serialize(session.getId()));
+    		if(bs!=null) {
+    			return;
+    		}
+		} catch (SerializationException e) {
+			e.printStackTrace();
+		}
+    	Serializable sId = session.getId();
+    	redisSessionDAO.readSession(sId);
+    	
+        super.onInvalidation(session, ise, key);
+    }
+    
+
+    @Override
+    protected void onExpiration(Session s, ExpiredSessionException ese, SessionKey key) {
+    	System.out.println(key.toString()+","+s.getId());
+        super.onExpiration(s, ese, key);
+    }*/
 } 
