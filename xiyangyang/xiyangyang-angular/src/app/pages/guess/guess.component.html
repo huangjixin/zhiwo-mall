@@ -1,0 +1,10 @@
+<weui-infiniteloader (loadmore)="onLoadMore($event)" #comp>
+
+    <div class="weui-cells">
+      <a *ngFor="let i of items" class="weui-cell weui-cell_access" href="javascript:;">
+        <div class="weui-cell__bd">{{i}}</div>
+        <div class="weui-cell__ft"></div>
+      </a>
+    </div>
+</weui-infiniteloader>
+
