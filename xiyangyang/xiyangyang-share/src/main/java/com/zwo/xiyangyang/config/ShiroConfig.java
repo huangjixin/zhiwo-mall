@@ -23,6 +23,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import com.zwo.xiyangyang.modules.shiro.MyExceptionHandler;
 import com.zwo.xiyangyang.modules.shiro.StatelessSessionManager;
@@ -46,7 +49,25 @@ public class ShiroConfig {
     @Value("${spring.redis.redis.dbIndex}")  
     private int database;  
     /************ Redis 配置结束 **************/
+    @Bean  
+    public WebMvcConfigurer corsConfigurer() {  
+        return new WebMvcConfigurerAdapter() {  
+            @Override  
+            public void addCorsMappings(CorsRegistry registry) {  
+                registry.addMapping("/**")  
+                .allowedOrigins("*")  
+              .allowedMethods("PUT", "DELETE","GET","POST")  
+                .allowedHeaders("*")  
+              .exposedHeaders("access-control-allow-headers",  
+                      "access-control-allow-methods",  
+                      "access-control-allow-origin",  
+                      "access-control-max-age",  
+                      "X-Frame-Options")  
+              .allowCredentials(false).maxAge(3600);  
+            }  
+        };  
     
+    } 
     @Bean  
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {  
         System.out.println("ShiroConfiguration.shirFilter()");  
