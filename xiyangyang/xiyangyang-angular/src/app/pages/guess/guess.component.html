@@ -1,10 +1,34 @@
 <weui-infiniteloader (loadmore)="onLoadMore($event)" #comp>
-
+  <div *ngFor="let question of guessQuestions; let i = index;">
+      <div class="weui-cells__title" >
+        <p style="font-size: 1.2em;font-weight: bold;">{{i+1}}.{{question.name}}</p>
+      </div>
+      <div class="weui-cells" >
+        <a class="weui-cell weui-cell_access" href="javascript:;" *ngFor="let option of question.guessOptions">
+          <div class="weui-cell__bd">
+            <p style="font-size: 1.0em;font-weight: normal;">{{option.name}}</p>
+          </div>
+          <div class="weui-cell__ft">赔率{{option.betRate}}</div>
+        </a>
+      </div>
+    <div class="weui-cells__title" >
+      <i class="fa fa-clock-o" aria-hidden="true"></i>投注截止时间：{{question.questionEndTime | date:'yyyy-MM-dd HH:mm:ss'}}
+    </div>
+  </div>
+  <!--<ng-template ngFor let-question [ngForOf]="guessQuestions" let-i="index">
+    <div class="weui-cells__title">{{index}}.{{question.name}}</div>
+    <div class="weui-cells">
+      <ng-template ngFor let-option [ngForOf]="question.guessOptions">
+        <div class="weui-cell__bd">{{option.name}}</div>
+        <div class="weui-cell__ft"></div>
+      </ng-template>
+    </div>
+  </ng-template>
     <div class="weui-cells">
       <a *ngFor="let question of guessQuestions" class="weui-cell weui-cell_access" href="javascript:;">
         <div class="weui-cell__bd">{{question.name}}</div>
         <div class="weui-cell__ft"></div>
       </a>
-    </div>
+    </div>-->
 </weui-infiniteloader>
 

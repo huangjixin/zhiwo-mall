@@ -12,17 +12,17 @@ import {GuessQuestionEntity} from './GuessQuestionEntity';
   encapsulation: ViewEncapsulation.None
 })
 export class GuessComponent implements OnInit {
-  private pageNum:number  = 1;
-  private pageSize:number = 2;
-  private allDataLoaded;boolean;
+  private pageNum: number  = 1;
+  private pageSize: number = 2;
+  private allDataLoaded; boolean;
 
-  public guessQuestions:GuessQuestionEntity[] = [];
+  public guessQuestions: GuessQuestionEntity[] = [];
 
   constructor() { }
 
   ngOnInit() {
     // this.guessQuestions = [];
-    const url : string = `http://localhost:8080/appguess?pageNum=${this.pageNum}&pageSize=${this.pageSize}`;
+    const url: string = `http://localhost:8080/appguess?pageNum=${this.pageNum}&pageSize=${this.pageSize}`;
     this.loadData(url);
   }
 
@@ -31,28 +31,21 @@ export class GuessComponent implements OnInit {
       method: 'get'
     }).then(response => response.json())
       .then(response => {
-        let length:number = response.length;
-        for(let i:number =0;i<length;i++){
-          let  guessEntity:GuessQuestionEntity = response[i];
+        const length: number = response.length;
+        for (let i: number = 0; i < length; i++) {
+          const guessEntity: GuessQuestionEntity = response[i];
           this.guessQuestions.push(guessEntity);
         }
-
-        /*for (let i:number=0;i<response.length;i++){
-            console.log(guessEntity);
-        }*/
-
-        console.log(this.guessQuestions.length);
-        /*this.guessQuestions.concat(response);
-        c
-        console.log(JSON.stringify(response));*/
       }).catch(function(err) {
-      // 出错了;等价于 then 的第二个参数,但这样更好用更直观 :(
     });
   }
 
-  items: any[] = Array(20).fill(0).map((v: any, i: number) => i);
+  // items: any[] = Array(20).fill(0).map((v: any, i: number) => i);
   onLoadMore(comp: InfiniteLoaderComponent) {
-    Observable.timer(1500).subscribe(() => {
+    this.pageNum+=1;
+    const url : string = `http://localhost:8080/appguess?pageNum=${this.pageNum}&pageSize=${this.pageSize}`;
+    this.loadData(url);
+    /*Observable.timer(1500).subscribe(() => {
 
       this.items.push(...Array(10).fill(this.items.length).map((v, i) => v + i));
 
@@ -61,7 +54,7 @@ export class GuessComponent implements OnInit {
         return;
       }
       comp.resolveLoading();
-    });
+    });*/
   }
 
 }
