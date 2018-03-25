@@ -16,7 +16,7 @@ export class GuessComponent implements OnInit {
   private pageSize:number = 2;
   private allDataLoaded;boolean;
 
-  public guessQuestions:any[] = [];
+  public guessQuestions:GuessQuestionEntity[] = [];
 
   constructor() { }
 
@@ -30,12 +30,16 @@ export class GuessComponent implements OnInit {
     fetch(url, {
       method: 'get'
     }).then(response => response.json())
-      .then(function(response) {
-        for (let i:number=0;i<response.length;i++){
-            let  guessEntity:GuessQuestionEntity = response[i];
-            this.guessQuestions.push(guessEntity);
-            console.log(guessEntity);
+      .then(response => {
+        let length:number = response.length;
+        for(let i:number =0;i<length;i++){
+          let  guessEntity:GuessQuestionEntity = response[i];
+          this.guessQuestions.push(guessEntity);
         }
+
+        /*for (let i:number=0;i<response.length;i++){
+            console.log(guessEntity);
+        }*/
 
         console.log(this.guessQuestions.length);
         /*this.guessQuestions.concat(response);
