@@ -28,5 +28,8 @@
     <result column="GUESS_ANSWER_ID" property="guessAnswerId" jdbcType="VARCHAR" />
     <result column="QUESTION_END_TIME" property="questionEndTime" jdbcType="TIMESTAMP" />
     <result column="CHECKED" property="checked" jdbcType="BIT" />
+    <collection property="guessOptions" column="id"
+         select="com.zwo.xiyangyang.modules.guess.dao.GuessOptionsMapper.selectByQuestionId">
+    </collection>
   </resultMap>
 </mapper>

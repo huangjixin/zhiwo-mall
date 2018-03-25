@@ -12,4 +12,9 @@
     <result column="REAL_QUESTION_ID" property="realQuestionId" jdbcType="VARCHAR" />
     <result column="IS_RIGHT" property="isRight" jdbcType="BIT" />
   </resultMap>
+  
+  <!-- 根据问题id查询 -->
+  <select id="selectByQuestionId" parameterType="String" resultMap="BaseResultMap">
+        select * from guess_options where GUESS_QUESTION_ID=#{questionId}
+  </select>
 </mapper>

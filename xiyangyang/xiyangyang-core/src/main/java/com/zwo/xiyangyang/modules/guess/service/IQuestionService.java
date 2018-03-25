@@ -12,4 +12,5 @@ import com.zwo.xiyangyang.modules.guess.domain.GuessQuestion;
  */
 public interface IQuestionService extends IBaseService<GuessQuestion> {
 	GuessQuestion selectByName(String name);
+	
 }

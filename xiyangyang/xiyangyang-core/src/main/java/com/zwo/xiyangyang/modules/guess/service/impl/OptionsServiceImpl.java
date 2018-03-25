@@ -1,5 +1,7 @@
 package com.zwo.xiyangyang.modules.guess.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -55,6 +57,11 @@ public class OptionsServiceImpl extends BaseServiceImpl<GuessOptions> implements
         criteria.andEqualTo("name", guessOptions.getName());
         int result = optionsMapper.updateByExampleSelective(guessOptions, example);
 		return result;
+	}
+
+	@Override
+	public List<GuessOptions> selectByQuestionId(String questionId) {
+		return optionsMapper.selectByQuestionId(questionId);
 	}
 
 }
