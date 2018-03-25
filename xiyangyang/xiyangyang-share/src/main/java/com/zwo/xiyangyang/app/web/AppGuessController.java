@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
+import com.zwo.xiyangyang.modules.guess.domain.GuessOptions;
 import com.zwo.xiyangyang.modules.guess.domain.GuessQuestion;
+import com.zwo.xiyangyang.modules.guess.service.IOptionsService;
 import com.zwo.xiyangyang.modules.guess.service.IQuestionService;
 
 import tk.mybatis.mapper.entity.Example;
@@ -32,6 +34,8 @@ import tk.mybatis.mapper.entity.Example;
 public class AppGuessController {
 	@Autowired
 	private IQuestionService questionService;
+	@Autowired
+	private IOptionsService optionsService;
 
 	@RequestMapping()
 	@ResponseBody
@@ -42,6 +46,10 @@ public class AppGuessController {
         criteria.andGreaterThanOrEqualTo("questionEndTime", new Date());
         
 		List<GuessQuestion> list = questionService.selectByExample(example, pageInfo);
+		for (GuessQuestion guessQuestion : list) {
+			List<GuessOptions> options = optionsService.selectByQuestionId(guessQuestion.getId());
+			guessQuestion.setGuessOptions(options);
+		}
 		return list;
 	}
 
