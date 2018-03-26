@@ -1,578 +1,23 @@
 package com.zwo.xiyangyang.modules.guess.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 
-@Table(name = "guess_question")
-public class GuessQuestion implements java.io.Serializable {
-
-	/**
-	 * @Fields serialVersionUID : 默认系列化版本UID
-	 */
-	private static final long serialVersionUID = 1L;
-	@Id
-	@Column(name = "ID")
-	private String id;
-
-	/**
-	 * 创建人
-	 */
-	@Column(name = "CREATOR")
-	private String creator;
-
-	/**
-	 * 更新人
-	 */
-	@Column(name = "UPDATER")
-	private String updater;
-
-	/**
-	 * 组织结构表ID，该字段用于过滤数据，不做外键关联
-	 */
-	@Column(name = "ORG_ID")
-	private String orgId;
-
-	/**
-	 * 创建日期
-	 */
-	@Column(name = "CREATE_DATE")
-	private Date createDate;
-
-	/**
-	 * 更新日期
-	 */
-	@Column(name = "UPDATE_DATE")
-	private Date updateDate;
-
-	/**
-	 * 是否禁用
-	 */
-	@Column(name = "ENABLED")
-	private Boolean enabled;
-
-	/**
-	 * 开始时间，用于查询绑定
-	 */
-	@Column(name = "START_TIME")
-	private Date startTime;
-
-	/**
-	 * 结束时间，用于查询绑定
-	 */
-	@Column(name = "END_TIME")
-	private Date endTime;
-
-	/**
-	 * 排序
-	 */
-	@Column(name = "SORT")
-	private Integer sort;
-
-	/**
-	 * 是否为默认，0：非，1：是
-	 */
-	@Column(name = "IS_DEFAULT")
-	private Boolean isDefault;
-
-	/**
-	 * 英文名称
-	 */
-	@Column(name = "EN_NAME")
-	private String enName;
-
-	/**
-	 * 名称
-	 */
-	@Column(name = "NAME")
-	private String name;
-
-	/**
-	 * 描述
-	 */
-	@Column(name = "DESCRIPTION")
-	private String description;
-
-	/**
-	 * 图标
-	 */
-	@Column(name = "ICON")
-	private String icon;
-
-	/**
-	 * 关键字
-	 */
-	@Column(name = "KEYWORDS")
-	private String keywords;
-
-	/**
-	 * 缩略图
-	 */
-	@Column(name = "THUMBNAIL")
-	private String thumbnail;
-
-	/**
-	 * 代码
-	 */
-	@Column(name = "CODE")
-	private String code;
-
-	@Column(name = "USER_ID")
-	private String userId;
-
-	@Column(name = "GUESS_CATEGORY_ID")
-	private String guessCategoryId;
-
-	/**
-	 * 问题答案ID引用
-	 */
-	@Column(name = "GUESS_ANSWER_ID")
-	private String guessAnswerId;
-
-	/**
-	 * 竞猜活动截止时间
-	 */
-	@Column(name = "QUESTION_END_TIME")
-	private Date questionEndTime;
-
-	/**
-	 * 是否已经校对了答案，0：非，1：是
-	 */
-	@Column(name = "CHECKED")
-	private Boolean checked;
-
+public class GuessQuestion implements Serializable {
+	@Transient
+	private GuessCategory guessCategory;
 	@Transient
 	private List<GuessOptions> guessOptions;
-
-	/**
-	 * @return ID
-	 */
-	public String getId() {
-		return id;
+	
+    public GuessCategory getGuessCategory() {
+		return guessCategory;
 	}
 
-	/**
-	 * @param id
-	 */
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	/**
-	 * 获取创建人
-	 *
-	 * @return CREATOR - 创建人
-	 */
-	public String getCreator() {
-		return creator;
-	}
-
-	/**
-	 * 设置创建人
-	 *
-	 * @param creator
-	 *            创建人
-	 */
-	public void setCreator(String creator) {
-		this.creator = creator;
-	}
-
-	/**
-	 * 获取更新人
-	 *
-	 * @return UPDATER - 更新人
-	 */
-	public String getUpdater() {
-		return updater;
-	}
-
-	/**
-	 * 设置更新人
-	 *
-	 * @param updater
-	 *            更新人
-	 */
-	public void setUpdater(String updater) {
-		this.updater = updater;
-	}
-
-	/**
-	 * 获取组织结构表ID，该字段用于过滤数据，不做外键关联
-	 *
-	 * @return ORG_ID - 组织结构表ID，该字段用于过滤数据，不做外键关联
-	 */
-	public String getOrgId() {
-		return orgId;
-	}
-
-	/**
-	 * 设置组织结构表ID，该字段用于过滤数据，不做外键关联
-	 *
-	 * @param orgId
-	 *            组织结构表ID，该字段用于过滤数据，不做外键关联
-	 */
-	public void setOrgId(String orgId) {
-		this.orgId = orgId;
-	}
-
-	/**
-	 * 获取创建日期
-	 *
-	 * @return CREATE_DATE - 创建日期
-	 */
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	/**
-	 * 设置创建日期
-	 *
-	 * @param createDate
-	 *            创建日期
-	 */
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
-
-	/**
-	 * 获取更新日期
-	 *
-	 * @return UPDATE_DATE - 更新日期
-	 */
-	public Date getUpdateDate() {
-		return updateDate;
-	}
-
-	/**
-	 * 设置更新日期
-	 *
-	 * @param updateDate
-	 *            更新日期
-	 */
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
-	}
-
-	/**
-	 * 获取是否禁用
-	 *
-	 * @return ENABLED - 是否禁用
-	 */
-	public Boolean getEnabled() {
-		return enabled;
-	}
-
-	/**
-	 * 设置是否禁用
-	 *
-	 * @param enabled
-	 *            是否禁用
-	 */
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	/**
-	 * 获取开始时间，用于查询绑定
-	 *
-	 * @return START_TIME - 开始时间，用于查询绑定
-	 */
-	public Date getStartTime() {
-		return startTime;
-	}
-
-	/**
-	 * 设置开始时间，用于查询绑定
-	 *
-	 * @param startTime
-	 *            开始时间，用于查询绑定
-	 */
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
-	}
-
-	/**
-	 * 获取结束时间，用于查询绑定
-	 *
-	 * @return END_TIME - 结束时间，用于查询绑定
-	 */
-	public Date getEndTime() {
-		return endTime;
-	}
-
-	/**
-	 * 设置结束时间，用于查询绑定
-	 *
-	 * @param endTime
-	 *            结束时间，用于查询绑定
-	 */
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
-	}
-
-	/**
-	 * 获取排序
-	 *
-	 * @return SORT - 排序
-	 */
-	public Integer getSort() {
-		return sort;
-	}
-
-	/**
-	 * 设置排序
-	 *
-	 * @param sort
-	 *            排序
-	 */
-	public void setSort(Integer sort) {
-		this.sort = sort;
-	}
-
-	/**
-	 * 获取是否为默认，0：非，1：是
-	 *
-	 * @return IS_DEFAULT - 是否为默认，0：非，1：是
-	 */
-	public Boolean getIsDefault() {
-		return isDefault;
-	}
-
-	/**
-	 * 设置是否为默认，0：非，1：是
-	 *
-	 * @param isDefault
-	 *            是否为默认，0：非，1：是
-	 */
-	public void setIsDefault(Boolean isDefault) {
-		this.isDefault = isDefault;
-	}
-
-	/**
-	 * 获取英文名称
-	 *
-	 * @return EN_NAME - 英文名称
-	 */
-	public String getEnName() {
-		return enName;
-	}
-
-	/**
-	 * 设置英文名称
-	 *
-	 * @param enName
-	 *            英文名称
-	 */
-	public void setEnName(String enName) {
-		this.enName = enName;
-	}
-
-	/**
-	 * 获取名称
-	 *
-	 * @return NAME - 名称
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * 设置名称
-	 *
-	 * @param name
-	 *            名称
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * 获取描述
-	 *
-	 * @return DESCRIPTION - 描述
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * 设置描述
-	 *
-	 * @param description
-	 *            描述
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	/**
-	 * 获取图标
-	 *
-	 * @return ICON - 图标
-	 */
-	public String getIcon() {
-		return icon;
-	}
-
-	/**
-	 * 设置图标
-	 *
-	 * @param icon
-	 *            图标
-	 */
-	public void setIcon(String icon) {
-		this.icon = icon;
-	}
-
-	/**
-	 * 获取关键字
-	 *
-	 * @return KEYWORDS - 关键字
-	 */
-	public String getKeywords() {
-		return keywords;
-	}
-
-	/**
-	 * 设置关键字
-	 *
-	 * @param keywords
-	 *            关键字
-	 */
-	public void setKeywords(String keywords) {
-		this.keywords = keywords;
-	}
-
-	/**
-	 * 获取缩略图
-	 *
-	 * @return THUMBNAIL - 缩略图
-	 */
-	public String getThumbnail() {
-		return thumbnail;
-	}
-
-	/**
-	 * 设置缩略图
-	 *
-	 * @param thumbnail
-	 *            缩略图
-	 */
-	public void setThumbnail(String thumbnail) {
-		this.thumbnail = thumbnail;
-	}
-
-	/**
-	 * 获取代码
-	 *
-	 * @return CODE - 代码
-	 */
-	public String getCode() {
-		return code;
-	}
-
-	/**
-	 * 设置代码
-	 *
-	 * @param code
-	 *            代码
-	 */
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	/**
-	 * @return USER_ID
-	 */
-	public String getUserId() {
-		return userId;
-	}
-
-	/**
-	 * @param userId
-	 */
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	/**
-	 * @return GUESS_CATEGORY_ID
-	 */
-	public String getGuessCategoryId() {
-		return guessCategoryId;
-	}
-
-	/**
-	 * @param guessCategoryId
-	 */
-	public void setGuessCategoryId(String guessCategoryId) {
-		this.guessCategoryId = guessCategoryId;
-	}
-
-	/**
-	 * 获取问题答案ID引用
-	 *
-	 * @return GUESS_ANSWER_ID - 问题答案ID引用
-	 */
-	public String getGuessAnswerId() {
-		return guessAnswerId;
-	}
-
-	/**
-	 * 设置问题答案ID引用
-	 *
-	 * @param guessAnswerId
-	 *            问题答案ID引用
-	 */
-	public void setGuessAnswerId(String guessAnswerId) {
-		this.guessAnswerId = guessAnswerId;
-	}
-
-	/**
-	 * 获取竞猜活动截止时间
-	 *
-	 * @return QUESTION_END_TIME - 竞猜活动截止时间
-	 */
-	public Date getQuestionEndTime() {
-		return questionEndTime;
-	}
-
-	/**
-	 * 设置竞猜活动截止时间
-	 *
-	 * @param questionEndTime
-	 *            竞猜活动截止时间
-	 */
-	public void setQuestionEndTime(Date questionEndTime) {
-		this.questionEndTime = questionEndTime;
-	}
-
-	/**
-	 * 获取是否已经校对了答案，0：非，1：是
-	 *
-	 * @return CHECKED - 是否已经校对了答案，0：非，1：是
-	 */
-	public Boolean getChecked() {
-		return checked;
-	}
-
-	/**
-	 * 设置是否已经校对了答案，0：非，1：是
-	 *
-	 * @param checked
-	 *            是否已经校对了答案，0：非，1：是
-	 */
-	public void setChecked(Boolean checked) {
-		this.checked = checked;
+	public void setGuessCategory(GuessCategory guessCategory) {
+		this.guessCategory = guessCategory;
 	}
 
 	public List<GuessOptions> getGuessOptions() {
@@ -582,4 +27,748 @@ public class GuessQuestion implements java.io.Serializable {
 	public void setGuessOptions(List<GuessOptions> guessOptions) {
 		this.guessOptions = guessOptions;
 	}
+
+	/**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.ID
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private String id;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.CREATOR
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private String creator;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.UPDATER
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private String updater;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.ORG_ID
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private String orgId;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.CREATE_DATE
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private Date createDate;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.UPDATE_DATE
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private Date updateDate;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.ENABLED
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private Boolean enabled;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.START_TIME
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private Date startTime;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.END_TIME
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private Date endTime;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.SORT
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private Integer sort;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.IS_DEFAULT
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private Boolean isDefault;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.EN_NAME
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private String enName;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.NAME
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private String name;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.DESCRIPTION
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private String description;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.ICON
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private String icon;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.KEYWORDS
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private String keywords;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.THUMBNAIL
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private String thumbnail;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.CODE
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private String code;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.USER_ID
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private String userId;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.GUESS_CATEGORY_ID
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private String guessCategoryId;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.GUESS_ANSWER_ID
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private String guessAnswerId;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.QUESTION_END_TIME
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private Date questionEndTime;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database column guess_question.CHECKED
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private Boolean checked;
+
+    /**
+     * This field was generated by MyBatis Generator.
+     * This field corresponds to the database table guess_question
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.ID
+     *
+     * @return the value of guess_question.ID
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.ID
+     *
+     * @param id the value for guess_question.ID
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.CREATOR
+     *
+     * @return the value of guess_question.CREATOR
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public String getCreator() {
+        return creator;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.CREATOR
+     *
+     * @param creator the value for guess_question.CREATOR
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.UPDATER
+     *
+     * @return the value of guess_question.UPDATER
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public String getUpdater() {
+        return updater;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.UPDATER
+     *
+     * @param updater the value for guess_question.UPDATER
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setUpdater(String updater) {
+        this.updater = updater == null ? null : updater.trim();
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.ORG_ID
+     *
+     * @return the value of guess_question.ORG_ID
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public String getOrgId() {
+        return orgId;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.ORG_ID
+     *
+     * @param orgId the value for guess_question.ORG_ID
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setOrgId(String orgId) {
+        this.orgId = orgId == null ? null : orgId.trim();
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.CREATE_DATE
+     *
+     * @return the value of guess_question.CREATE_DATE
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.CREATE_DATE
+     *
+     * @param createDate the value for guess_question.CREATE_DATE
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.UPDATE_DATE
+     *
+     * @return the value of guess_question.UPDATE_DATE
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.UPDATE_DATE
+     *
+     * @param updateDate the value for guess_question.UPDATE_DATE
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.ENABLED
+     *
+     * @return the value of guess_question.ENABLED
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.ENABLED
+     *
+     * @param enabled the value for guess_question.ENABLED
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.START_TIME
+     *
+     * @return the value of guess_question.START_TIME
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.START_TIME
+     *
+     * @param startTime the value for guess_question.START_TIME
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.END_TIME
+     *
+     * @return the value of guess_question.END_TIME
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.END_TIME
+     *
+     * @param endTime the value for guess_question.END_TIME
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.SORT
+     *
+     * @return the value of guess_question.SORT
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public Integer getSort() {
+        return sort;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.SORT
+     *
+     * @param sort the value for guess_question.SORT
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.IS_DEFAULT
+     *
+     * @return the value of guess_question.IS_DEFAULT
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public Boolean getIsDefault() {
+        return isDefault;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.IS_DEFAULT
+     *
+     * @param isDefault the value for guess_question.IS_DEFAULT
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setIsDefault(Boolean isDefault) {
+        this.isDefault = isDefault;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.EN_NAME
+     *
+     * @return the value of guess_question.EN_NAME
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public String getEnName() {
+        return enName;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.EN_NAME
+     *
+     * @param enName the value for guess_question.EN_NAME
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setEnName(String enName) {
+        this.enName = enName == null ? null : enName.trim();
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.NAME
+     *
+     * @return the value of guess_question.NAME
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.NAME
+     *
+     * @param name the value for guess_question.NAME
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.DESCRIPTION
+     *
+     * @return the value of guess_question.DESCRIPTION
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.DESCRIPTION
+     *
+     * @param description the value for guess_question.DESCRIPTION
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setDescription(String description) {
+        this.description = description == null ? null : description.trim();
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.ICON
+     *
+     * @return the value of guess_question.ICON
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public String getIcon() {
+        return icon;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.ICON
+     *
+     * @param icon the value for guess_question.ICON
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setIcon(String icon) {
+        this.icon = icon == null ? null : icon.trim();
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.KEYWORDS
+     *
+     * @return the value of guess_question.KEYWORDS
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public String getKeywords() {
+        return keywords;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.KEYWORDS
+     *
+     * @param keywords the value for guess_question.KEYWORDS
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setKeywords(String keywords) {
+        this.keywords = keywords == null ? null : keywords.trim();
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.THUMBNAIL
+     *
+     * @return the value of guess_question.THUMBNAIL
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.THUMBNAIL
+     *
+     * @param thumbnail the value for guess_question.THUMBNAIL
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail == null ? null : thumbnail.trim();
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.CODE
+     *
+     * @return the value of guess_question.CODE
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public String getCode() {
+        return code;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.CODE
+     *
+     * @param code the value for guess_question.CODE
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setCode(String code) {
+        this.code = code == null ? null : code.trim();
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.USER_ID
+     *
+     * @return the value of guess_question.USER_ID
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public String getUserId() {
+        return userId;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.USER_ID
+     *
+     * @param userId the value for guess_question.USER_ID
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.GUESS_CATEGORY_ID
+     *
+     * @return the value of guess_question.GUESS_CATEGORY_ID
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public String getGuessCategoryId() {
+        return guessCategoryId;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.GUESS_CATEGORY_ID
+     *
+     * @param guessCategoryId the value for guess_question.GUESS_CATEGORY_ID
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setGuessCategoryId(String guessCategoryId) {
+        this.guessCategoryId = guessCategoryId == null ? null : guessCategoryId.trim();
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.GUESS_ANSWER_ID
+     *
+     * @return the value of guess_question.GUESS_ANSWER_ID
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public String getGuessAnswerId() {
+        return guessAnswerId;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.GUESS_ANSWER_ID
+     *
+     * @param guessAnswerId the value for guess_question.GUESS_ANSWER_ID
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setGuessAnswerId(String guessAnswerId) {
+        this.guessAnswerId = guessAnswerId == null ? null : guessAnswerId.trim();
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.QUESTION_END_TIME
+     *
+     * @return the value of guess_question.QUESTION_END_TIME
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public Date getQuestionEndTime() {
+        return questionEndTime;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.QUESTION_END_TIME
+     *
+     * @param questionEndTime the value for guess_question.QUESTION_END_TIME
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setQuestionEndTime(Date questionEndTime) {
+        this.questionEndTime = questionEndTime;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column guess_question.CHECKED
+     *
+     * @return the value of guess_question.CHECKED
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public Boolean getChecked() {
+        return checked;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column guess_question.CHECKED
+     *
+     * @param checked the value for guess_question.CHECKED
+     *
+     * @mbggenerated Mon Mar 26 14:23:06 CST 2018
+     */
+    public void setChecked(Boolean checked) {
+        this.checked = checked;
+    }
 }
