@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
@@ -45,6 +46,14 @@ public class GuessQuestionController extends BaseController<GuessQuestion> {
 	@Override
 	protected IBaseService<GuessQuestion> getBaseService() {
 		return (IBaseService)questionService;
+	}
+	
+
+	@RequestMapping("checkQuestion")
+	@ResponseBody
+	void checkQuestion(@RequestParam String questionId,@RequestParam String optionId,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		questionService.checkQuestion(questionId, optionId);
 	}
 
 }
