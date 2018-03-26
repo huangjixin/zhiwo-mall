@@ -568,4 +568,41 @@
 		CHECKED = #{checked,jdbcType=BIT}
 		where ID = #{id,jdbcType=VARCHAR}
 	</update>
+	
+	<update id="updateMememberAcc" parameterType="map">
+		update  guess_account ma 
+		INNER JOIN
+		(SELECT ma.MEMBER_ID,SUM((gmo.BET_VALUE * go.BET_RATE)) AS balance,SUM(go.bet_rate * gmo.BET_VALUE) AS deposit
+		    FROM
+		        guess_options go
+		    LEFT JOIN guess_mem_options gmo ON go.ID = gmo.OPTION_ID
+		    LEFT JOIN guess_question gq ON go.GUESS_QUESTION_ID = gq.id
+		        AND gmo.QUESTION_ID = gq.id
+		    LEFT JOIN guess_account ma ON gmo.MEM_ID = ma.id
+		    WHERE
+		        gq.id = #{questionId} AND gq.CHECKED = 0
+		            AND go.IS_RIGHT = 1
+		    GROUP BY gmo.MEM_ID) AS temp on ma.MEMBER_ID=temp.MEMBER_ID
+		set ma.BALANCE=ma.BALANCE+temp.balance,ma.DEPOSIT=temp.deposit
+	</update>
+	
+	<update id="updateMememberHisAcc" parameterType="map">
+		insert into guess_account_his (description,member_id,balance,deposit,devote,type,content,rate) 
+		(SELECT 
+		   gq.NAME as description,ma.MEMBER_ID,ma.BALANCE as balance, go.bet_rate*gmo.BET_VALUE as deposit,gmo.BET_VALUE as devote,concat('赢',(go.bet_rate*gmo.BET_VALUE)) as type,go.NAME,go.BET_RATE
+		FROM
+			guess_options go
+		        left JOIN
+		     guess_mem_options gmo
+		     ON go.ID = gmo.OPTION_ID
+		        LEFT JOIN
+		    guess_question gq ON go.GUESS_QUESTION_ID = gq.id
+		        AND gmo.QUESTION_ID = gq.id
+				left join
+			guess_account ma on gmo.MEM_ID=ma.id
+			
+		WHERE
+		    gq.id = #{questionId} AND gq.CHECKED = 0
+		        AND go.IS_RIGHT = 1)
+	</update>
 </mapper>

@@ -93,4 +93,20 @@ public interface GuessQuestionMapper {
      * @mbggenerated Mon Mar 26 14:23:06 CST 2018
      */
     int updateByPrimaryKey(GuessQuestion record);
+    
+    /**
+     * 更新猜中会员账号。
+     * @param questionId
+     * @param optionId
+     */
+    void updateMememberAcc(@Param("questionId")String questionId,@Param("optionId")String optionId);
+    
+    /**
+     * 更新猜中会员账号历史记录。
+     * @param questionId
+     * @param optionId
+     */
+    void updateMememberHisAcc(@Param("questionId")String questionId,@Param("optionId")String optionId);
+    
+    
 }

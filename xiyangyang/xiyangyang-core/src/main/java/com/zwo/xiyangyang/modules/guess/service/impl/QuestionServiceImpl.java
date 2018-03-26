@@ -20,7 +20,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.gson.Gson;
 import com.zwo.xiyangyang.modules.core.service.impl.BaseServiceImpl;
+import com.zwo.xiyangyang.modules.guess.dao.GuessOptionsMapper;
 import com.zwo.xiyangyang.modules.guess.dao.GuessQuestionMapper;
+import com.zwo.xiyangyang.modules.guess.domain.GuessOptions;
 import com.zwo.xiyangyang.modules.guess.domain.GuessQuestion;
 import com.zwo.xiyangyang.modules.guess.domain.GuessQuestionCriteria;
 import com.zwo.xiyangyang.modules.guess.service.IQuestionService;
@@ -41,6 +43,9 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 	
 	@Autowired
 	private GuessQuestionMapper questionMapper;
+	
+	@Autowired
+	private GuessOptionsMapper guessOptionsMapper;
 
 	@Override
 	public Mapper<GuessQuestion> getBaseMapper() {
@@ -70,10 +75,13 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 
 	@Override
 	public GuessQuestion selectByName(String name) {
-		Example example = new Example(GuessQuestion.class);
+		GuessQuestionCriteria guessQuestionCriteria = new GuessQuestionCriteria();
+		GuessQuestionCriteria.Criteria criteria= guessQuestionCriteria.createCriteria();
+		criteria.andNameEqualTo(name);
+		/*Example example = new Example(GuessQuestion.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("name", name);
-		List<GuessQuestion> list = questionMapper.selectByExample(example);
+        criteria.andEqualTo("name", name);*/
+		List<GuessQuestion> list = questionMapper.selectByExample(guessQuestionCriteria);
 		return list.size()>0?list.get(0):null;
 	}
 	
@@ -166,9 +174,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 			e.printStackTrace();
 		}
 		if (logger.isInfoEnabled()) {
-			Gson gson = new Gson();
-			String jsonStr = gson.toJson((Object) record);
-			logger.info(getBaseMessage() + "插入开始，参数对象的值是：" + jsonStr);
+			logger.info(getBaseMessage() + "插入开始");
 		}
 
 		int result = questionMapper.insert(record);
@@ -203,9 +209,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 		}
 
 		if (logger.isInfoEnabled()) {
-			Gson gson = new Gson();
-			String jsonStr = gson.toJson((Object) record);
-			logger.info(getBaseMessage() + "插入开始，参数对象的值是：" + jsonStr);
+			logger.info(getBaseMessage() + "插入开始");
 		}
 
 		int result = questionMapper.insertSelective(record);
@@ -240,9 +244,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 	@Override
 	public int updateByExampleSelective(GuessQuestion record, Object example) {
 		if (logger.isInfoEnabled()) {
-			Gson gson = new Gson();
-			String jsonStr = gson.toJson((Object) record);
-			logger.info(getBaseMessage() + "更新记录开始，参数对象是：" + jsonStr);
+			logger.info(getBaseMessage() + "更新记录开始");
 		}
 		int result = questionMapper.updateByExampleSelective(record, (GuessQuestionCriteria) example);
 		if (logger.isInfoEnabled()) {
@@ -260,9 +262,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 	@Override
 	public int updateByPrimaryKeySelective(GuessQuestion record) {
 		if (logger.isInfoEnabled()) {
-			Gson gson = new Gson();
-			String jsonStr = gson.toJson((Object) record);
-			logger.info(getBaseMessage() + "更新开始，参数对象的值是：" + jsonStr);
+			logger.info(getBaseMessage() + "更新开始");
 		}
 
 		int result = questionMapper.updateByPrimaryKeySelective(record);
@@ -274,9 +274,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 	@Override
 	public int updateById(GuessQuestion record) {
 		if (logger.isInfoEnabled()) {
-			Gson gson = new Gson();
-			String jsonStr = gson.toJson((Object) record);
-			logger.info(getBaseMessage() + "更新开始，参数对象的值是：" + jsonStr);
+			logger.info(getBaseMessage() + "更新开始");
 		}
 
 		int result = questionMapper.updateByPrimaryKey(record);
@@ -311,6 +309,33 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 		List list = questionMapper.selectByExample(example);
 		pageInfo.setList(list);
 		return pageInfo;
+	}
+
+	@Override
+	public void checkQuestion(String questionId, String optionId) {
+		// 更新问题的答案为false；
+		GuessOptions guessOptions = new GuessOptions();
+		guessOptions.setIsRight(false);
+		Example example = new Example(GuessOptions.class);
+		Example.Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("guessQuestionId", questionId);
+		guessOptionsMapper.updateByExampleSelective(guessOptions, example);
+		
+		// 更新所有问题的答案为true；
+		criteria.andEqualTo("guessQuestionId", questionId);
+		criteria.andEqualTo("id", optionId);
+		guessOptions.setIsRight(true);
+		guessOptionsMapper.updateByExampleSelective(guessOptions, example);
+		
+		
+		questionMapper.updateMememberAcc(questionId, optionId);
+		questionMapper.updateMememberHisAcc(questionId, optionId);
+		
+		// 更新问题已经合算过了。
+		GuessQuestion guessQuestion = new GuessQuestion();
+		guessQuestion.setId(questionId);
+		guessQuestion.setChecked(true);
+		questionMapper.updateByPrimaryKeySelective(guessQuestion);
 	}
 
 }

@@ -139,6 +139,7 @@ public class GuessCategory extends Node implements java.io.Serializable {
     /**
      * @return ID
      */
+    @Override
     public String getId() {
         return id;
     }
@@ -146,6 +147,7 @@ public class GuessCategory extends Node implements java.io.Serializable {
     /**
      * @param id
      */
+    @Override
     public void setId(String id) {
         this.id = id;
     }
