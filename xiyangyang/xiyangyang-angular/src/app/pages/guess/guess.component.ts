@@ -1,4 +1,5 @@
 import {Component, OnInit, ViewEncapsulation, ViewChild} from '@angular/core';
+import { PopupComponent } from "ngx-weui/popup";
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/timer';
 
@@ -13,10 +14,13 @@ import {GuessQuestionEntity} from './GuessQuestionEntity';
 })
 export class GuessComponent implements OnInit {
   private pageNum: number  = 1;
-  private pageSize: number = 2;
+  private pageSize: number = 4;
   private allDataLoaded; boolean;
 
   public guessQuestions: GuessQuestionEntity[] = [];
+
+  @ViewChild('simple')
+  simplePopup: PopupComponent;
 
   constructor() { }
 

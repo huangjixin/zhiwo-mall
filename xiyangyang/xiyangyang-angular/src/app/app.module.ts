@@ -1,4 +1,5 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { WeUiModule } from 'ngx-weui';
 
@@ -12,7 +13,7 @@ import { GuessComponent } from './pages/guess/guess.component';
     GuessComponent
   ],
   imports: [
-    BrowserModule,WeUiModule.forRoot(),
+    BrowserModule,WeUiModule.forRoot(),BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
