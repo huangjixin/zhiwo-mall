@@ -4,8 +4,8 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-  <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
-    <!-- <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+  <context id="Mysql" >
+    <!-- <plugin type="tk.mybatis.mapper.generator.MapperPlugin">targetRuntime="MyBatis3Simple" defaultModelType="flat"
       <property name="mappers" value="tk.mybatis.mapper.common.Mapper"/>
       <property name="caseSensitive" value="true"/>
     </plugin> -->
