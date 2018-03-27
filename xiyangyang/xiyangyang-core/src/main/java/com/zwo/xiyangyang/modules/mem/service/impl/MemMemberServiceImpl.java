@@ -12,9 +12,12 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.google.gson.Gson;
 import com.zwo.xiyangyang.modules.core.service.impl.BaseServiceImpl;
 import com.zwo.xiyangyang.modules.mem.dao.MemMemberMapper;
+import com.zwo.xiyangyang.modules.mem.domain.MemGuessRecord;
 import com.zwo.xiyangyang.modules.mem.domain.MemMember;
 import com.zwo.xiyangyang.modules.mem.service.IMememberService;
 
@@ -92,6 +95,15 @@ public class MemMemberServiceImpl extends BaseServiceImpl<MemMember> implements 
 		}
 
 		return result;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<MemGuessRecord> selectByMemId(String memId, PageInfo<MemGuessRecord> pageInfo) {
+		if (pageInfo != null && pageInfo.getPageSize() != 0) {
+			PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+		}
+		return memberMapper.selectByMemId(memId);
 	}
 
 }

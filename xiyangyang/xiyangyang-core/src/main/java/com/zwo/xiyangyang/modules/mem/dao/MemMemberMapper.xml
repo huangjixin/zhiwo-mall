@@ -39,7 +39,41 @@
 		<collection property="guessAccount" column="id"
 			select="com.zwo.xiyangyang.modules.guess.dao.GuessAccountMapper.selectByMemId"></collection>
 	</resultMap>
+	<resultMap id="GuessRecordResultMap"
+		type="com.zwo.xiyangyang.modules.mem.domain.MemGuessRecord">
+		<result column="name" property="name"  />
+		<result column="option_name" property="optionName"  />
+		<result column="bet_rate" property="betRate" />
+		<result column="bet_value" property="betValue"  />
+		<result column="result" property="result"  />
+	</resultMap>
 	<select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
 		select * from mem_member where id=#{id}
+	</select>
+	<select id="selectByMemId" parameterType="java.lang.String" resultMap="GuessRecordResultMap">
+		SELECT 
+			gq.name,
+		    go.NAME as option_name,
+		    go.bet_rate,
+		    gmo.bet_value,
+		    CASE
+				WHEN go.IS_RIGHT = '1' and gq.CHECKED=1 THEN concat('赢',go.BET_RATE * gmo.BET_VALUE)
+		        WHEN go.IS_RIGHT = '0' and gq.CHECKED=1 THEN concat('输',go.BET_RATE * gmo.BET_VALUE)
+		        WHEN go.IS_RIGHT = '1' and gq.CHECKED=0 THEN '未开奖'
+		        WHEN go.IS_RIGHT = '0' and gq.CHECKED=0 THEN '未开奖'
+		        WHEN go.IS_RIGHT is null and gq.CHECKED=-1 THEN concat('本期没有开奖，退款',gmo.BET_VALUE)
+		        WHEN go.IS_RIGHT is null and gq.CHECKED=-1 THEN concat('本期没有开奖，退款',gmo.BET_VALUE)
+		    END as result
+		FROM
+		    guess_mem_options gmo
+				LEFT JOIN
+		    mem_member member ON member.id = gmo.MEM_ID
+		        LEFT JOIN
+		    guess_options go ON go.ID = gmo.OPTION_ID
+		        LEFT JOIN
+		    guess_question gq ON gq.id = gmo.QUESTION_ID
+		        AND go.GUESS_QUESTION_ID = gq.id
+		WHERE
+		    member.id = #{id} order by gq.id desc, gq.CREATE_DATE desc
 	</select>
 </mapper>
