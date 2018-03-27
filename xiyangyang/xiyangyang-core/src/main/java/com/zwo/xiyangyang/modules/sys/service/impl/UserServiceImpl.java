@@ -15,12 +15,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import com.google.gson.Gson;
 import com.zwo.xiyangyang.modules.core.service.impl.BaseServiceImpl;
 import com.zwo.xiyangyang.modules.shiro.PasswordHelper;
 import com.zwo.xiyangyang.modules.shiro.service.impl.UserShiroRealm;
 import com.zwo.xiyangyang.modules.sys.dao.ResourcesMapper;
 import com.zwo.xiyangyang.modules.sys.dao.RoleMapper;
 import com.zwo.xiyangyang.modules.sys.dao.UserMapper;
+import com.zwo.xiyangyang.modules.sys.domain.Role;
 import com.zwo.xiyangyang.modules.sys.domain.User;
 import com.zwo.xiyangyang.modules.sys.service.IUserService;
 
@@ -165,14 +167,37 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
 		if (logger.isInfoEnabled())
 			logger.info(MESSAGE+"根据角色名查询权限开始，参数username是："+username);
 				
-		List<String> list = roleMapper.selectRoleByUsername(username);
+		List<Role> list = roleMapper.selectRoleByUsername(username);
 		Set<String> set = new HashSet<String>();
-		for (String name : list) {
-			set.add(name);
+		for (Role role : list) {
+			set.add(role.getName());
 		}
 		if (logger.isInfoEnabled())
 			logger.info(MESSAGE+"根据角色名查询权限结束，结果："+list.size());
 		return set;
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public User selectByPrimaryKey(String id) {
+		if (logger.isInfoEnabled()) {
+			logger.info(getBaseMessage() + "查询单条记录开始，参数id的值是：" + id);
+		}
+
+		User result = this.userMapper.selectById(id);
+		if (logger.isInfoEnabled()) {
+			String jsonStr = null;
+			if (result != null) {
+				Gson gson = new Gson();
+				jsonStr = gson.toJson((Object) result);
+			} else {
+				jsonStr = "查询不到";
+			}
+
+			logger.info(getBaseMessage() + "查询单条记录结果：" + jsonStr);
+		}
+
+		return result;
 	}
 
 }

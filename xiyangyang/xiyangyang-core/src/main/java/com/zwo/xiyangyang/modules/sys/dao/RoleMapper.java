@@ -13,5 +13,5 @@ public interface RoleMapper extends Mapper<Role> {
 	 * @param username
 	 * @return
 	 */
-	List<String> selectRoleByUsername(@Param(value = "username") String username);
+	List<Role> selectRoleByUsername(@Param(value = "username") String username);
 }

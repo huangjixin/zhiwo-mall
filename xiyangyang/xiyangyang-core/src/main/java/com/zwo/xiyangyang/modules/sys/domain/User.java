@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Table(name = "sys_user")
 public class User implements java.io.Serializable {
@@ -22,9 +23,8 @@ public class User implements java.io.Serializable {
     @Column(name = "ID")
     private String id;
 
-    @ManyToMany(fetch=FetchType.EAGER)//立即从数据库中进行加载数据;  
-    @JoinTable(name = "Sys_User_Role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns ={@JoinColumn(name = "role_id") })  
-    private List<Role> roleList;// 一个用户具有多个角色 
+   @Transient
+   private List<Role> roles;// 一个用户具有多个角色 
     
     /**
      * 用户名
@@ -1097,10 +1097,10 @@ public class User implements java.io.Serializable {
     }
 
 	public List<Role> getRoleList() {
-		return roleList;
+		return roles;
 	}
 
 	public void setRoleList(List<Role> roleList) {
-		this.roleList = roleList;
+		this.roles = roleList;
 	}
 }

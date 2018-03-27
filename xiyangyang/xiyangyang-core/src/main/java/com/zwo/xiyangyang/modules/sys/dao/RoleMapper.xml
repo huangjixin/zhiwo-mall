@@ -16,9 +16,9 @@
     <result column="ORG_ID" property="orgId" jdbcType="VARCHAR" />
     <result column="CODE" property="code" jdbcType="VARCHAR" />
   </resultMap>
-  <select id="selectRoleByUsername" resultType="String">
+  <select id="selectRoleByUsername" parameterType="String" resultMap="BaseResultMap">
   	SELECT 
-	    r.NAME
+	    r.*
 	FROM
 	    sys_role r
 	        LEFT JOIN
@@ -32,7 +32,7 @@
 	UNION 
 	
 	SELECT 
-	     r.NAME
+	     r.*
 	FROM
 	    sys_role r 
 	        LEFT JOIN

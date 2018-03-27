@@ -51,5 +51,10 @@
     <result column="LICENSE_FOR_OPENING_COUNT" property="licenseForOpeningCount" jdbcType="VARCHAR" />
     <result column="QUANTITY_REPORT_ID" property="quantityReportId" jdbcType="VARCHAR" />
     <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <collection property="roles" column="username"
+			select="com.zwo.xiyangyang.modules.sys.dao.RoleMapper.selectRoleByUsername"></collection>
   </resultMap>
+  <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select * from sys_user where id=#{id}
+  </select>
 </mapper>
