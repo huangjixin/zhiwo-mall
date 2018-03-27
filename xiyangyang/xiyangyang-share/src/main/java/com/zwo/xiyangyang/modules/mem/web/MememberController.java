@@ -7,11 +7,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.github.pagehelper.PageInfo;
 import com.zwo.xiyangyang.modules.core.service.IBaseService;
 import com.zwo.xiyangyang.modules.core.web.BaseController;
+import com.zwo.xiyangyang.modules.mem.domain.MemGuessRecord;
 import com.zwo.xiyangyang.modules.mem.domain.MemMember;
 import com.zwo.xiyangyang.modules.mem.service.IMememberService;
 
@@ -25,6 +28,13 @@ public class MememberController extends BaseController<MemMember> {
 	@ResponseBody
 	List<MemMember> defaultMethod(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		return null;
+	}
+	
+	@RequestMapping("grecord/{id}")
+	@ResponseBody
+	List<MemGuessRecord> getGuessRecordById(@PathVariable(name = "id") String id,PageInfo<MemGuessRecord> pageInfo,HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		List<MemGuessRecord> records = mememberService.selectByMemId(id,pageInfo);
+		return records;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

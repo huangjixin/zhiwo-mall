@@ -48,6 +48,7 @@ public class AppGuessController {
 		GuessQuestionCriteria guessQuestionCriteria = new GuessQuestionCriteria();
 		GuessQuestionCriteria.Criteria criteria= guessQuestionCriteria.createCriteria();
 		criteria.andQuestionEndTimeGreaterThanOrEqualTo(new Date());
+		guessQuestionCriteria.setOrderByClause("create_date desc");
 		List<GuessQuestion> list = questionService.selectByExample(guessQuestionCriteria, pageInfo);
 		
 		return list;
