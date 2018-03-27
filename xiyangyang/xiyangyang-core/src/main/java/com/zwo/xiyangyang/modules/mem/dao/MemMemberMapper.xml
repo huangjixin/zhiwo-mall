@@ -39,4 +39,7 @@
 		<collection property="guessAccount" column="id"
 			select="com.zwo.xiyangyang.modules.guess.dao.GuessAccountMapper.selectByMemId"></collection>
 	</resultMap>
+	<select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from mem_member where id=#{id}
+	</select>
 </mapper>

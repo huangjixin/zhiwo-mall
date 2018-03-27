@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.gson.Gson;
 import com.zwo.xiyangyang.modules.core.service.impl.BaseServiceImpl;
 import com.zwo.xiyangyang.modules.mem.dao.MemMemberMapper;
 import com.zwo.xiyangyang.modules.mem.domain.MemMember;
@@ -57,6 +58,7 @@ public class MemMemberServiceImpl extends BaseServiceImpl<MemMember> implements 
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public MemMember findByUsername(String username) {
 		if (logger.isInfoEnabled())
 			logger.info(MESSAGE+"根据用户名查询用户开始，参数username是："+username);
@@ -67,6 +69,29 @@ public class MemMemberServiceImpl extends BaseServiceImpl<MemMember> implements 
 		if (logger.isInfoEnabled())
 			logger.info(MESSAGE+"根据用户名查询用户结束，结果："+list.size());
 		return list.size()>0?list.get(0):null;
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public MemMember selectByPrimaryKey(String id) {
+		if (logger.isInfoEnabled()) {
+			logger.info(getBaseMessage() + "查询单条记录开始，参数id的值是：" + id);
+		}
+
+		MemMember result = memberMapper.selectById(id) ;
+		if (logger.isInfoEnabled()) {
+			String jsonStr = null;
+			if (result != null) {
+				Gson gson = new Gson();
+				jsonStr = gson.toJson((Object) result);
+			} else {
+				jsonStr = "查询不到";
+			}
+
+			logger.info(getBaseMessage() + "查询单条记录结果：" + jsonStr);
+		}
+
+		return result;
 	}
 
 }
