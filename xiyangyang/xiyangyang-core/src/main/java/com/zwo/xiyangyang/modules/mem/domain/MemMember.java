@@ -9,6 +9,7 @@ import com.zwo.xiyangyang.modules.guess.domain.GuessAccount;
 
 @Table(name = "mem_member")
 public class MemMember implements java.io.Serializable {
+	@Transient
 	private List<GuessAccount> guessAccount;
 	/**
 	 * @Fields serialVersionUID : 默认系列化版本UID  
