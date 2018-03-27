@@ -1,10 +1,11 @@
 import {Component, OnInit, ViewEncapsulation, ViewChild} from '@angular/core';
 import { PopupComponent } from "ngx-weui/popup";
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/timer';
 
 import { InfiniteLoaderComponent } from 'ngx-weui/infiniteloader';
 import {GuessQuestionEntity} from './GuessQuestionEntity';
+import {GuessOptionsEntity} from './GuessOptionsEntity';
+import {globalConfig} from '../../global.config';
 
 @Component({
   selector: 'app-guess',
@@ -12,21 +13,24 @@ import {GuessQuestionEntity} from './GuessQuestionEntity';
   styleUrls: ['./guess.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class GuessComponent implements OnInit {
+export class GuessComponent implements OnInit{
   private pageNum: number  = 1;
-  private pageSize: number = 4;
+  private pageSize: number = 20;
   private allDataLoaded; boolean;
 
   public guessQuestions: GuessQuestionEntity[] = [];
+  public guessOptionsEntity: GuessOptionsEntity = new GuessOptionsEntity();
 
-  @ViewChild('simple')
-  simplePopup: PopupComponent;
+  public betValue: number = 100;
+
+  @ViewChild('betOptionPopup')
+  betOptionPopup: PopupComponent;
 
   constructor() { }
 
   ngOnInit() {
-    // this.guessQuestions = [];
-    const url: string = `http://localhost:8080/appguess?pageNum=${this.pageNum}&pageSize=${this.pageSize}`;
+    const dataUrl : string = globalConfig.dataUrl;
+    const url: string = dataUrl + `appguess?pageNum=${this.pageNum}&pageSize=${this.pageSize}`;
     this.loadData(url);
   }
 
@@ -36,6 +40,9 @@ export class GuessComponent implements OnInit {
     }).then(response => response.json())
       .then(response => {
         const length: number = response.length;
+        if (length === 0) {
+          this.allDataLoaded = true;
+        }
         for (let i: number = 0; i < length; i++) {
           const guessEntity: GuessQuestionEntity = response[i];
           this.guessQuestions.push(guessEntity);
@@ -44,21 +51,21 @@ export class GuessComponent implements OnInit {
     });
   }
 
-  // items: any[] = Array(20).fill(0).map((v: any, i: number) => i);
+  onOptionClickHandler(guessOptionsEntity: GuessOptionsEntity) {
+    this.guessOptionsEntity = guessOptionsEntity;
+    this.betValue = 100;
+    this.betOptionPopup.show();
+  }
+
   onLoadMore(comp: InfiniteLoaderComponent) {
+    if (this.allDataLoaded === true) {
+      comp.setFinished();
+      return;
+    }
+    comp.resolveLoading();
     this.pageNum+=1;
     const url : string = `http://localhost:8080/appguess?pageNum=${this.pageNum}&pageSize=${this.pageSize}`;
     this.loadData(url);
-    /*Observable.timer(1500).subscribe(() => {
-
-      this.items.push(...Array(10).fill(this.items.length).map((v, i) => v + i));
-
-      if (this.items.length >= 50) {
-        comp.setFinished();
-        return;
-      }
-      comp.resolveLoading();
-    });*/
   }
 
 }
