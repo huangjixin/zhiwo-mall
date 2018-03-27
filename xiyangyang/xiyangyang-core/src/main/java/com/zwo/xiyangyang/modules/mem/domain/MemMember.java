@@ -1,11 +1,15 @@
 package com.zwo.xiyangyang.modules.mem.domain;
 
 import java.util.Date;
+import java.util.List;
+
 import javax.persistence.*;
+
+import com.zwo.xiyangyang.modules.guess.domain.GuessAccount;
 
 @Table(name = "mem_member")
 public class MemMember implements java.io.Serializable {
-
+	private List<GuessAccount> guessAccount;
 	/**
 	 * @Fields serialVersionUID : 默认系列化版本UID  
 	 */
@@ -692,4 +696,13 @@ public class MemMember implements java.io.Serializable {
     public void setBindingWechat(Boolean bindingWechat) {
         this.bindingWechat = bindingWechat;
     }
+
+	public List<GuessAccount> getGuessAccount() {
+		return guessAccount;
+	}
+
+	public void setGuessAccount(List<GuessAccount> guessAccount) {
+		this.guessAccount = guessAccount;
+	}
+
 }

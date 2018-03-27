@@ -18,4 +18,7 @@
     <result column="BALANCE" property="balance" jdbcType="DOUBLE" />
     <result column="DEPOSIT" property="deposit" jdbcType="DOUBLE" />
   </resultMap>
+  <select id="selectByMemId" parameterType="String" resultMap="BaseResultMap">
+  	select * from guess_account where MEMBER_ID=#{memId}
+  </select>
 </mapper>
