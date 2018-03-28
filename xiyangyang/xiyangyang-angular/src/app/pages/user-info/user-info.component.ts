@@ -12,4 +12,9 @@ export class UserInfoComponent implements OnInit {
   ngOnInit() {
   }
 
+  back() {
+    console.log(123);
+    //window.history.go(-1);
+  }
+
 }

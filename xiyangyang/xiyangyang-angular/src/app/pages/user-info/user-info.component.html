@@ -1,5 +1,5 @@
-<div>
-  <div class="weui-cells"   style="font-size: 0.8em;font-weight: normal;">
+<div style="font-size: 1em;font-weight: normal;">
+  <div class="weui-cells">
     <a class="weui-cell weui-cell_access" href="javascript:;">
       <div class="weui-cell__bd">
         <i class="fa fa-map-marker fa-lg" aria-hidden="true" style="color: aqua;"></i>&nbsp;&nbsp;我的地址
@@ -7,13 +7,13 @@
       <div class="weui-cell__ft"></div>
     </a>
     <a class="weui-cell weui-cell_access" href="javascript:;">
-      <div class="weui-cell__bd">
+      <div class="weui-cell__bd" [routerLink]="['/guess-record']">
         <i class="fa fa-google" aria-hidden="true" style="color: aquamarine"></i>&nbsp;&nbsp;我的竞猜记录
       </div>
       <div class="weui-cell__ft"></div>
     </a>
   </div>
-  <div class="weui-cells"   style="font-size: 0.8em;font-weight: normal;">
+  <div class="weui-cells">
     <a class="weui-cell weui-cell_access" href="javascript:;">
       <div class="weui-cell__bd">
         <i class="fa fa-sign-out fa-lg" aria-hidden="true" style="color: red;"></i>&nbsp;&nbsp;注销登录
@@ -22,3 +22,4 @@
     </a>
   </div>
 </div>
+

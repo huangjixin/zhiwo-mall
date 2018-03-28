@@ -1,11 +1,12 @@
-<weui-infiniteloader (loadmore)="onLoadMore($event)" #comp>
+<weui-infiniteloader (loadmore)="onLoadMore($event)" #comp style="font-size: 1em;">
   <div *ngFor="let question of guessQuestions; let i = index;">
     <div class="weui-cells__title" >
-      <p style="font-size: 1.0em;font-weight: bold;">{{i+1}}.{{question.name}}</p>
+      <p style="font-size: 1.2em;color: gray;">{{i+1}}.{{question.name}}</p>
     </div>
     <div class="weui-cells" >
       <ng-template [ngIf]="question.guessOptions.length>0">
-        <a  *ngFor="let option of question.guessOptions" class="weui-cell weui-cell_access"  style="font-size: 0.8em;font-weight: normal;" href="javascript:;" (click)="onOptionClickHandler(option)">
+        <a  *ngFor="let option of question.guessOptions" class="weui-cell weui-cell_access"
+            href="javascript:;" (click)="onOptionClickHandler(option)">
           <div class="weui-cell__bd">
             <p>{{option.name}}</p>
           </div>
@@ -35,7 +36,7 @@
         <button weui-button [weui-mini]="'mini'" (click)="mini=!mini;betValue=1000;" [weui-type]="'warn'" style="text-align: center;width: 80%;">1000</button>
       </div>
     </div>
-    <div style="font-size: 0.6em;padding: 5px;"><p>押{{betValue}}猜中赢{{guessOptionsEntity.betRate*betValue}}竞猜豆</p></div>
+    <div style="font-size: 1em;padding: 5px;"><p>押<label style="color: red">{{betValue}}</label>猜中赢<label style="color: red">{{guessOptionsEntity.betRate*betValue}}</label>竞猜豆</p></div>
     <div style="text-align: center;padding: 4px;">
       <button weui-button [weui-mini]="'mini'" (click)="mini=!mini" style="text-align: center;width: 30%;">马上竞猜</button>
     </div>

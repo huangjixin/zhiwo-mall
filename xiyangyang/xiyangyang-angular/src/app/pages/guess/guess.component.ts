@@ -63,8 +63,9 @@ export class GuessComponent implements OnInit{
       return;
     }
     comp.resolveLoading();
-    this.pageNum+=1;
-    const url : string = `http://localhost:8080/appguess?pageNum=${this.pageNum}&pageSize=${this.pageSize}`;
+    this.pageNum += 1;
+    const dataUrl: string = globalConfig.dataUrl;
+    const url: string = dataUrl + `appguess?pageNum=${this.pageNum}&pageSize=${this.pageSize}`;
     this.loadData(url);
   }
 
