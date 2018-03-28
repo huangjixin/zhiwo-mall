@@ -155,6 +155,15 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
 		Example example = new Example(User.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("username", username);
+        
+        Example.Criteria mobileCriteria = example.createCriteria();
+        criteria.andEqualTo("mobilPhone", username);
+        
+        Example.Criteria emailCriteria = example.createCriteria();
+        criteria.andEqualTo("email", username);
+        
+        example.or(mobileCriteria);
+        example.or(emailCriteria);
 		List<User> list = userMapper.selectByExample(example);
 		if (logger.isInfoEnabled())
 			logger.info(MESSAGE+"根据用户名查询用户结束，结果："+list.size());

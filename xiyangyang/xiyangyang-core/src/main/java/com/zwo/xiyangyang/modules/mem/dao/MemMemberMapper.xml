@@ -46,6 +46,7 @@
 		<result column="bet_rate" property="betRate" />
 		<result column="bet_value" property="betValue"  />
 		<result column="result" property="result"  />
+		<result column="create_date" property="createDate"  />
 	</resultMap>
 	<select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
 		select * from mem_member where id=#{id}
@@ -57,13 +58,14 @@
 		    go.bet_rate,
 		    gmo.bet_value,
 		    CASE
-				WHEN go.IS_RIGHT = '1' and gq.CHECKED=1 THEN concat('赢',go.BET_RATE * gmo.BET_VALUE)
-		        WHEN go.IS_RIGHT = '0' and gq.CHECKED=1 THEN concat('输',go.BET_RATE * gmo.BET_VALUE)
-		        WHEN go.IS_RIGHT = '1' and gq.CHECKED=0 THEN '未开奖'
-		        WHEN go.IS_RIGHT = '0' and gq.CHECKED=0 THEN '未开奖'
+				WHEN go.IS_RIGHT = '1' and gq.CHECKED=1 THEN concat('+',go.BET_RATE * gmo.BET_VALUE)
+		        WHEN go.IS_RIGHT = '0' and gq.CHECKED=1 THEN concat('-',go.BET_RATE * gmo.BET_VALUE)
+		        WHEN go.IS_RIGHT = '1' and gq.CHECKED=0 THEN '未开'
+		        WHEN go.IS_RIGHT = '0' and gq.CHECKED=0 THEN '未开'
 		        WHEN go.IS_RIGHT is null and gq.CHECKED=-1 THEN concat('本期没有开奖，退款',gmo.BET_VALUE)
 		        WHEN go.IS_RIGHT is null and gq.CHECKED=-1 THEN concat('本期没有开奖，退款',gmo.BET_VALUE)
-		    END as result
+		    END as result,
+		    gmo.create_date
 		FROM
 		    guess_mem_options gmo
 				LEFT JOIN

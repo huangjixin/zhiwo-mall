@@ -1,6 +1,7 @@
 package com.zwo.xiyangyang.modules.mem.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 竞猜记录模型。
@@ -19,6 +20,7 @@ public class MemGuessRecord implements Serializable {
 	private double betRate;
 	private int betValue;
 	private String result;
+	private Date createDate;
 	
 	public String getName() {
 		return name;
@@ -49,5 +51,11 @@ public class MemGuessRecord implements Serializable {
 	}
 	public void setResult(String result) {
 		this.result = result;
+	}
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 }
