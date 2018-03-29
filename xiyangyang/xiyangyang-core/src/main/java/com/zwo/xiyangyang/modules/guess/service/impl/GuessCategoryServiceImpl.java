@@ -31,13 +31,16 @@ import tk.mybatis.mapper.entity.Example;
 @Lazy(true)
 @Transactional(readOnly = false)
 public class GuessCategoryServiceImpl extends BaseServiceImpl<GuessCategory> implements IGuessCategoryService {
-	private static Logger logger;
+	private static Logger logger = LoggerFactory.getLogger(GuessCategoryServiceImpl.class);
+	
+	@Override
+	public Logger getLogger() {
+		return logger;
+	}
+	
 	@Autowired
 	private GuessCategoryMapper guessCategoryMapper ;
 
-	public GuessCategoryServiceImpl() {
-		logger = LoggerFactory.getLogger(this.getImplClass());
-	}
 	
 	@Override
 	public Mapper<GuessCategory> getBaseMapper() {

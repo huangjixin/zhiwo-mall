@@ -3,6 +3,8 @@
  */
 package com.zwo.xiyangyang.modules.mem.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,13 @@ public class MemAddressServiceImpl extends BaseServiceImpl<MemAddress> implement
 
 	@Autowired
 	private MemAddressMapper addressMapper ;
-
+	
+	private static Logger logger = LoggerFactory.getLogger(MemAddressServiceImpl.class);
+	
+	@Override
+	public Logger getLogger() {
+		return logger;
+	}
 	@Override
 	public Mapper<MemAddress> getBaseMapper() {
 		return addressMapper;

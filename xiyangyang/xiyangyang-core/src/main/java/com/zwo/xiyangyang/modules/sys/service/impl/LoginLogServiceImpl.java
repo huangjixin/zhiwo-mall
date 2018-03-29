@@ -3,12 +3,15 @@
  */
 package com.zwo.xiyangyang.modules.sys.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zwo.xiyangyang.modules.core.service.impl.BaseServiceImpl;
+import com.zwo.xiyangyang.modules.guess.service.impl.QuestionServiceImpl;
 import com.zwo.xiyangyang.modules.sys.dao.LoginLogMapper;
 import com.zwo.xiyangyang.modules.sys.domain.LoginLog;
 import com.zwo.xiyangyang.modules.sys.service.ILoginLogService;
@@ -23,7 +26,12 @@ import tk.mybatis.mapper.common.Mapper;
 @Lazy(true)
 @Transactional(readOnly = false)
 public class LoginLogServiceImpl extends BaseServiceImpl<LoginLog> implements ILoginLogService {
-
+	private static Logger logger = LoggerFactory.getLogger(LoginLogServiceImpl.class);
+	
+	@Override
+	public Logger getLogger() {
+		return logger;
+	}
 	@Autowired
 	private LoginLogMapper loginLogMapper;
 	

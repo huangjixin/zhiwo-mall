@@ -28,7 +28,7 @@ import tk.mybatis.mapper.entity.Example;
  */
 public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 
-	private static Logger logger;
+//	private static Logger logger;
 
 	protected abstract Mapper<T> getBaseMapper();
 
@@ -40,8 +40,10 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 	@SuppressWarnings("rawtypes")
 	public abstract Class getTypeClass();
 	
+	public abstract Logger getLogger();
+	
 	public BaseServiceImpl() {
-		logger = LoggerFactory.getLogger(this.getImplClass());
+//		logger = LoggerFactory.getLogger(this.getImplClass());
 	}
 
 	@Override
@@ -65,26 +67,26 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 
 	@Override
 	public int deleteByExample(Object example) {
-		if (logger.isInfoEnabled()) {
-			logger.info(getBaseMessage() + "删除开始");
+		if (getLogger().isInfoEnabled()) {
+			getLogger().info(getBaseMessage() + "删除开始");
 		}
 
 		int result = getBaseMapper().deleteByExample(example);
-		if (logger.isInfoEnabled())
-			logger.info(getBaseMessage() + "删除" + (result != 0 ? "成功" : "失败"));
+		if (getLogger().isInfoEnabled())
+			getLogger().info(getBaseMessage() + "删除" + (result != 0 ? "成功" : "失败"));
 
 		return result;
 	}
 
 	@Override
 	public int deleteById(String id) {
-		if (logger.isInfoEnabled()) {
-			logger.info(getBaseMessage() + "删除开始，参数id的值是：" + id);
+		if (getLogger().isInfoEnabled()) {
+			getLogger().info(getBaseMessage() + "删除开始，参数id的值是：" + id);
 		}
 
 		int result = getBaseMapper().deleteByPrimaryKey(id);
-		if (logger.isInfoEnabled())
-			logger.info(getBaseMessage() + "插入" + (result == 1 ? "成功" : "失败"));
+		if (getLogger().isInfoEnabled())
+			getLogger().info(getBaseMessage() + "插入" + (result == 1 ? "成功" : "失败"));
 
 		return result;
 	}
@@ -125,15 +127,15 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
-		if (logger.isInfoEnabled()) {
+		if (getLogger().isInfoEnabled()) {
 			Gson gson = new Gson();
 			String jsonStr = gson.toJson((Object) record);
-			logger.info(getBaseMessage() + "插入开始，参数对象的值是：" + jsonStr);
+			getLogger().info(getBaseMessage() + "插入开始，参数对象的值是：" + jsonStr);
 		}
 
 		int result = getBaseMapper().insert(record);
-		if (logger.isInfoEnabled())
-			logger.info(getBaseMessage() + "插入" + (result == 1 ? "成功" : "失败"));
+		if (getLogger().isInfoEnabled())
+			getLogger().info(getBaseMessage() + "插入" + (result == 1 ? "成功" : "失败"));
 		return result;
 	}
 
@@ -162,27 +164,27 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 			e.printStackTrace();
 		}
 
-		if (logger.isInfoEnabled()) {
+		if (getLogger().isInfoEnabled()) {
 			Gson gson = new Gson();
 			String jsonStr = gson.toJson((Object) record);
-			logger.info(getBaseMessage() + "插入开始，参数对象的值是：" + jsonStr);
+			getLogger().info(getBaseMessage() + "插入开始，参数对象的值是：" + jsonStr);
 		}
 
 		int result = getBaseMapper().insertSelective(record);
-		if (logger.isInfoEnabled())
-			logger.info(getBaseMessage() + "插入" + (result == 1 ? "成功" : "失败"));
+		if (getLogger().isInfoEnabled())
+			getLogger().info(getBaseMessage() + "插入" + (result == 1 ? "成功" : "失败"));
 		return result;
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public T selectByPrimaryKey(String id) {
-		if (logger.isInfoEnabled()) {
-			logger.info(getBaseMessage() + "查询单条记录开始，参数id的值是：" + id);
+		if (getLogger().isInfoEnabled()) {
+			getLogger().info(getBaseMessage() + "查询单条记录开始，参数id的值是：" + id);
 		}
 
 		T result = getBaseMapper().selectByPrimaryKey(id);
-		if (logger.isInfoEnabled()) {
+		if (getLogger().isInfoEnabled()) {
 			String jsonStr = null;
 			if (result != null) {
 				Gson gson = new Gson();
@@ -191,7 +193,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 				jsonStr = "查询不到";
 			}
 
-			logger.info(getBaseMessage() + "查询单条记录结果：" + jsonStr);
+			getLogger().info(getBaseMessage() + "查询单条记录结果：" + jsonStr);
 		}
 
 		return result;
@@ -199,14 +201,14 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 
 	@Override
 	public int updateByExampleSelective(T record, Object example) {
-		if (logger.isInfoEnabled()) {
+		if (getLogger().isInfoEnabled()) {
 			Gson gson = new Gson();
 			String jsonStr = gson.toJson((Object) record);
-			logger.info(getBaseMessage() + "更新记录开始，参数对象是：" + jsonStr);
+			getLogger().info(getBaseMessage() + "更新记录开始，参数对象是：" + jsonStr);
 		}
 		int result = getBaseMapper().updateByExampleSelective(record, example);
-		if (logger.isInfoEnabled()) {
-			logger.info(getBaseMessage() + "更新记录结束");
+		if (getLogger().isInfoEnabled()) {
+			getLogger().info(getBaseMessage() + "更新记录结束");
 		}
 
 		return result;
@@ -219,29 +221,29 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 
 	@Override
 	public int updateByPrimaryKeySelective(T record) {
-		if (logger.isInfoEnabled()) {
+		if (getLogger().isInfoEnabled()) {
 			Gson gson = new Gson();
 			String jsonStr = gson.toJson((Object) record);
-			logger.info(getBaseMessage() + "更新开始，参数对象的值是：" + jsonStr);
+			getLogger().info(getBaseMessage() + "更新开始，参数对象的值是：" + jsonStr);
 		}
 
 		int result = getBaseMapper().updateByPrimaryKeySelective(record);
-		if (logger.isInfoEnabled())
-			logger.info(getBaseMessage() + "更新" + (result == 1 ? "成功" : "失败"));
+		if (getLogger().isInfoEnabled())
+			getLogger().info(getBaseMessage() + "更新" + (result == 1 ? "成功" : "失败"));
 		return result;
 	}
 
 	@Override
 	public int updateById(T record) {
-		if (logger.isInfoEnabled()) {
+		if (getLogger().isInfoEnabled()) {
 			Gson gson = new Gson();
 			String jsonStr = gson.toJson((Object) record);
-			logger.info(getBaseMessage() + "更新开始，参数对象的值是：" + jsonStr);
+			getLogger().info(getBaseMessage() + "更新开始，参数对象的值是：" + jsonStr);
 		}
 
 		int result = getBaseMapper().updateByPrimaryKey(record);
-		if (logger.isInfoEnabled())
-			logger.info(getBaseMessage() + "更新" + (result == 1 ? "成功" : "失败"));
+		if (getLogger().isInfoEnabled())
+			getLogger().info(getBaseMessage() + "更新" + (result == 1 ? "成功" : "失败"));
 		return result;
 	}
 

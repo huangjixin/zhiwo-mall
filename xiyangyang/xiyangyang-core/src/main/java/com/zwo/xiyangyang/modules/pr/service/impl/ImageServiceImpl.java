@@ -3,6 +3,8 @@
  */
 package com.zwo.xiyangyang.modules.pr.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -23,7 +25,12 @@ import tk.mybatis.mapper.common.Mapper;
 @Lazy(true)
 @Transactional(readOnly = false)
 public class ImageServiceImpl extends BaseServiceImpl<PrImage> implements IImageService {
-
+	private static Logger logger = LoggerFactory.getLogger(ImageServiceImpl.class);
+	
+	@Override
+	public Logger getLogger() {
+		return logger;
+	}
 	@Autowired
 	private PrImageMapper categoryMapper ;
 

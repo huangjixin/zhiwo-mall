@@ -3,6 +3,8 @@
  */
 package com.zwo.xiyangyang.modules.mem.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -47,6 +49,13 @@ public class MemAccountHisServiceImpl extends BaseServiceImpl<GuessAccountHis> i
 	@Override
 	protected String getBaseMessage() {
 		return "竞猜账号历史基础操作";
+	}
+
+	private static Logger logger = LoggerFactory.getLogger(MemAccountHisServiceImpl.class);
+	
+	@Override
+	public Logger getLogger() {
+		return logger;
 	}
 
 }

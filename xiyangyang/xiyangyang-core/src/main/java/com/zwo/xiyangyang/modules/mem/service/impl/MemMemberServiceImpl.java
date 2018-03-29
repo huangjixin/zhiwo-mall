@@ -32,7 +32,13 @@ import tk.mybatis.mapper.entity.Example;
 @Lazy(true)
 @Transactional(readOnly = false)
 public class MemMemberServiceImpl extends BaseServiceImpl<MemMember> implements IMememberService {
-	private static Logger logger = LoggerFactory.getLogger(MemMemberServiceImpl.class);;
+	private static Logger logger = LoggerFactory.getLogger(MemMemberServiceImpl.class);
+	
+	@Override
+	public Logger getLogger() {
+		return logger;
+	}
+	
 	private static final String MESSAGE="会员基础操作";
 	
 	@Autowired

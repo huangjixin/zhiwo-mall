@@ -38,8 +38,12 @@ import tk.mybatis.mapper.entity.Example;
 @Lazy(true)
 @Transactional(readOnly = false)
 public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implements IQuestionService {
-
-	private static Logger logger;
+	private static Logger logger = LoggerFactory.getLogger(QuestionServiceImpl.class);
+	
+	@Override
+	public Logger getLogger() {
+		return logger;
+	}
 	
 	@Autowired
 	private GuessQuestionMapper questionMapper;
@@ -50,10 +54,6 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 	@Override
 	public Mapper<GuessQuestion> getBaseMapper() {
 		return null;
-	}
-
-	public QuestionServiceImpl() {
-		logger = LoggerFactory.getLogger(this.getImplClass());
 	}
 	
 	@SuppressWarnings("rawtypes")

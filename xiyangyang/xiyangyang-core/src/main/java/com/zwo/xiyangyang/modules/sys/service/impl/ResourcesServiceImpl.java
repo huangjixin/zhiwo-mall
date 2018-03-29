@@ -30,14 +30,14 @@ import tk.mybatis.mapper.entity.Example;
 @Lazy(true)
 @Transactional(readOnly = false)
 public class ResourcesServiceImpl extends BaseServiceImpl<Resources> implements IResourcesService {
-
+	private static Logger logger = LoggerFactory.getLogger(ResourcesServiceImpl.class);
+	
+	@Override
+	public Logger getLogger() {
+		return logger;
+	}
 	@Autowired
 	private ResourcesMapper resourcesMapper;
-	private static Logger logger;
-
-	public ResourcesServiceImpl() {
-		logger = LoggerFactory.getLogger(this.getImplClass());
-	}
 	
 	@Override
 	public Mapper<Resources> getBaseMapper() {

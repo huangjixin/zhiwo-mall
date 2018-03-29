@@ -2,6 +2,8 @@ package com.zwo.xiyangyang.modules.guess.service.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -23,7 +25,12 @@ import tk.mybatis.mapper.entity.Example;
 @Lazy(true)
 @Transactional(readOnly = false)
 public class OptionsServiceImpl extends BaseServiceImpl<GuessOptions> implements IOptionsService {
-
+	private static Logger logger = LoggerFactory.getLogger(OptionsServiceImpl.class);
+	
+	@Override
+	public Logger getLogger() {
+		return logger;
+	}
 	@Autowired
 	private GuessOptionsMapper optionsMapper ;
 

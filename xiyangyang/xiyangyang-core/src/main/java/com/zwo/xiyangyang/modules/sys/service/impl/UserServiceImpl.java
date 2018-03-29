@@ -18,7 +18,6 @@ import org.springframework.util.StringUtils;
 import com.google.gson.Gson;
 import com.zwo.xiyangyang.modules.core.service.impl.BaseServiceImpl;
 import com.zwo.xiyangyang.modules.shiro.PasswordHelper;
-import com.zwo.xiyangyang.modules.shiro.service.impl.UserShiroRealm;
 import com.zwo.xiyangyang.modules.sys.dao.ResourcesMapper;
 import com.zwo.xiyangyang.modules.sys.dao.RoleMapper;
 import com.zwo.xiyangyang.modules.sys.dao.UserMapper;
@@ -37,7 +36,13 @@ import tk.mybatis.mapper.entity.Example;
 @Lazy(true)
 @Transactional(readOnly = false)
 public class UserServiceImpl extends BaseServiceImpl<User> implements IUserService {
-	private static Logger logger = LoggerFactory.getLogger(UserShiroRealm.class);;
+	private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+	
+	@Override
+	public Logger getLogger() {
+		return logger;
+	}
+	
 	private static final String MESSAGE="系统用户基础操作";
 	
 	@Autowired

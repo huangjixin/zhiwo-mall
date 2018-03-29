@@ -30,8 +30,12 @@ import tk.mybatis.mapper.entity.Example;
 @Lazy(true)
 @Transactional(readOnly = false)
 public class CategoryServiceImpl extends BaseServiceImpl<PrCategory> implements ICategoryService {
-	private static Logger logger;
+	private static Logger logger = LoggerFactory.getLogger(CategoryServiceImpl.class);
 	
+	@Override
+	public Logger getLogger() {
+		return logger;
+	}
 	@Autowired
 	private PrCategoryMapper categoryMapper ;
 
