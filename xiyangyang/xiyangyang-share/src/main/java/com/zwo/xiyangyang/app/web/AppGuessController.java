@@ -1,11 +1,8 @@
 package com.zwo.xiyangyang.app.web;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,10 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
-import com.zwo.xiyangyang.modules.guess.domain.GuessOptions;
 import com.zwo.xiyangyang.modules.guess.domain.GuessQuestion;
 import com.zwo.xiyangyang.modules.guess.domain.GuessQuestionCriteria;
-import com.zwo.xiyangyang.modules.guess.service.IOptionsService;
 import com.zwo.xiyangyang.modules.guess.service.IQuestionService;
 import com.zwo.xiyangyang.modules.mem.domain.MemAddress;
 import com.zwo.xiyangyang.modules.mem.domain.MemGuessRecord;
