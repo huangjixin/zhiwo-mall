@@ -1,16 +1,16 @@
 <weui-infiniteloader (loadmore)="onLoadMore($event)" #comp style="font-size: 1em;">
   <div *ngFor="let question of guessQuestions; let i = index;">
     <div class="weui-cells__title" >
-      <p style="font-size: 1.2em;color: gray;">{{i+1}}.{{question.name}}</p>
+      <p style="font-size: 1.0em;color: gray;">{{i+1}}.{{question.name}}</p>
     </div>
     <div class="weui-cells" >
       <ng-template [ngIf]="question.guessOptions.length>0">
         <a  *ngFor="let option of question.guessOptions" class="weui-cell weui-cell_access"
             href="javascript:;" (click)="onOptionClickHandler(option)">
           <div class="weui-cell__bd">
-            <p>{{option.name}}</p>
+            <p style="font-size: 0.8em;">{{option.name}}</p>
           </div>
-          <div class="weui-cell__ft">赔率{{option.betRate}}</div>
+          <div style="font-size: 0.8em;" class="weui-cell__ft">赔率{{option.betRate}}</div>
         </a>
       </ng-template>
     </div>

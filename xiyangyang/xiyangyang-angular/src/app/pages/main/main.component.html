@@ -4,9 +4,10 @@
     <app-guess #guess></app-guess>
   </weui-tab>
   <weui-tab heading="首页"  icon="<i class='fa fa-home' aria-hidden='true'></i>">
-    <i class="fa fa-home" ></i>
+    <router-outlet name="index"></router-outlet>
   </weui-tab>
   <weui-tab heading="我的" icon="<i class='fa fa-user' aria-hidden='true'></i>">
-    <app-user-info></app-user-info>
+    <router-outlet  name="userInfo"></router-outlet>
+    <!--<app-user-info></app-user-info>-->
   </weui-tab>
 </weui-tabbar>

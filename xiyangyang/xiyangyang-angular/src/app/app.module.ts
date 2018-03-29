@@ -15,15 +15,17 @@ import { AddressComponent } from './pages/address/address.component';
 import { AddressDetailComponent } from './pages/address-detail/address-detail.component';
 import { MainComponent } from './pages/main/main.component';
 import {HashLocationStrategy, LocationStrategy} from '@angular/common';
+import { PersonalComponent } from './pages/personal/personal.component';
 
 export const routes = [
   { path: '', redirectTo: '/index', pathMatch: 'full' },
-  { path: 'index', component: MainComponent },
+  { path: 'index', component: MainComponent, children: [
+      {path: '', outlet: 'userInfo', component: UserInfoComponent},
+      {path: 'guess-record', outlet: 'userInfo', component: GuessRecordComponent } ] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'collection', component: MyCollectionComponent },
-  { path: 'guess-record', component: GuessRecordComponent }
-];
+  { path: 'personal', component: PersonalComponent}
+  ]
 
 @NgModule({
   declarations: [
@@ -36,7 +38,8 @@ export const routes = [
     MyCollectionComponent,
     AddressComponent,
     AddressDetailComponent,
-    MainComponent
+    MainComponent,
+    PersonalComponent
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule, RouterModule, WeUiModule.forRoot(), RouterModule.forRoot(routes,{ enableTracing: true })

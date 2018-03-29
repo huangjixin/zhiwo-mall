@@ -1,17 +1,18 @@
+<!--我的竞猜记录-->
 <weui-infiniteloader (loadmore)="onLoadMore($event)" #guessRecord style="font-size: 1em;">
   <div *ngFor="let memGuessRecord of memGuessRecords; let i = index;">
     <div class="weui-cells__title" >
-      <p style="font-size: 1.2em;color: gray;">{{i+1}}.{{memGuessRecord.name}}</p>
+      <p style="font-size: 1.0em;color: gray;">{{i+1}}.{{memGuessRecord.name}}</p>
     </div>
 
     <div class="weui-cells" >
       <a  class="weui-cell weui-cell_access"
           href="javascript:;">
         <div class="weui-cell__bd">
-          <p style="color: orange"><i class="fa fa-jpy" aria-hidden="true"></i>&nbsp;&nbsp;金额:{{memGuessRecord.betValue}}</p>
-          <p style="padding-left: 20px;">赔率:{{memGuessRecord.betRate}}</p>
-          <p style="color: green;padding-left: 20px;">结果:{{memGuessRecord.result}}</p>
-          <p style="font-size: 0.8em;"><i class="fa fa-clock-o" aria-hidden="true"></i>投注时间:&nbsp;{{memGuessRecord.createDate | date:'yyyy-MM-dd HH:mm:ss'}}</p>
+          <p style="color: orange;font-size: 0.8em;"><i class="fa fa-jpy" aria-hidden="true"></i>&nbsp;&nbsp;金额:{{memGuessRecord.betValue}}</p>
+          <p style="padding-left: 16px;font-size: 0.8em;">赔率:{{memGuessRecord.betRate}}</p>
+          <p style="color: green;padding-left: 16px;font-size: 0.8em;">结果:{{memGuessRecord.result}}</p>
+          <p style="font-size: 0.6em;"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;&nbsp;投注时间:&nbsp;{{memGuessRecord.createDate | date:'yyyy-MM-dd HH:mm:ss'}}</p>
 
         </div>
       </a>
