@@ -29,13 +29,6 @@ public class MememberController extends BaseController<MemMember> {
 	List<MemMember> defaultMethod(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		return null;
 	}
-	
-	@RequestMapping("grecord/{id}")
-	@ResponseBody
-	List<MemGuessRecord> getGuessRecordById(@PathVariable(name = "id") String id,PageInfo<MemGuessRecord> pageInfo,HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		List<MemGuessRecord> records = mememberService.selectByMemId(id,pageInfo);
-		return records;
-	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
