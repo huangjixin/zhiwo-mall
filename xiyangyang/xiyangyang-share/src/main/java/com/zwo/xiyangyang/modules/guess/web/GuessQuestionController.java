@@ -28,7 +28,7 @@ import com.zwo.xiyangyang.modules.guess.service.IQuestionService;
  */
 @Controller
 @Lazy(value=true)
-@RequestMapping("question")
+@RequestMapping("gquestion")
 public class GuessQuestionController extends BaseController<GuessQuestion> {
 
 	@Autowired
