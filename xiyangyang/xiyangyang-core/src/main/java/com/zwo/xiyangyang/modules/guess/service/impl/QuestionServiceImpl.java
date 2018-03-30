@@ -177,7 +177,22 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 			logger.info(getBaseMessage() + "插入开始");
 		}
 
+		if (getLogger().isInfoEnabled()) {
+			try {
+				String jsonStr = null;
+				if (record != null) {
+					Gson gson = new Gson();
+					jsonStr = gson.toJson((Object) record);
+				}
+
+				getLogger().info(getBaseMessage() + "插入开始：" + jsonStr);
+			} catch (Exception e) {
+				getLogger().info("系统打印参数序列化的时候发生了异常，该异常不会影响数据库操作");
+			}
+			
+		}
 		int result = questionMapper.insert(record);
+		
 		if (logger.isInfoEnabled())
 			logger.info(getBaseMessage() + "插入" + (result == 1 ? "成功" : "失败"));
 		return result;
@@ -208,10 +223,20 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 			e.printStackTrace();
 		}
 
-		if (logger.isInfoEnabled()) {
-			logger.info(getBaseMessage() + "插入开始");
-		}
+		if (getLogger().isInfoEnabled()) {
+			try {
+				String jsonStr = null;
+				if (record != null) {
+					Gson gson = new Gson();
+					jsonStr = gson.toJson((Object) record);
+				}
 
+				getLogger().info(getBaseMessage() + "插入开始：" + jsonStr);
+			} catch (Exception e) {
+				getLogger().info("系统打印参数序列化的时候发生了异常，该异常不会影响数据库操作");
+			}
+			
+		}
 		int result = questionMapper.insertSelective(record);
 		if (logger.isInfoEnabled())
 			logger.info(getBaseMessage() + "插入" + (result == 1 ? "成功" : "失败"));
@@ -226,17 +251,23 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 		}
 
 		GuessQuestion result = questionMapper.selectByPrimaryKey(id);
-		if (logger.isInfoEnabled()) {
-			String jsonStr = null;
-			if (result != null) {
-				Gson gson = new Gson();
-				jsonStr = gson.toJson((Object) result);
-			} else {
-				jsonStr = "查询不到";
-			}
+		if (getLogger().isInfoEnabled()) {
+			try {
+				String jsonStr = null;
+				if (result != null) {
+					Gson gson = new Gson();
+					jsonStr = gson.toJson((Object) result);
+				} else {
+					jsonStr = "查询不到";
+				}
 
-			logger.info(getBaseMessage() + "查询单条记录结果：" + jsonStr);
+				getLogger().info(getBaseMessage() + "查询单条记录结果：" + jsonStr);
+			} catch (Exception e) {
+				getLogger().info("系统打印参数序列化的时候发生了异常，该异常不会影响数据库操作");
+			}
+			
 		}
+		
 
 		return result;
 	}
