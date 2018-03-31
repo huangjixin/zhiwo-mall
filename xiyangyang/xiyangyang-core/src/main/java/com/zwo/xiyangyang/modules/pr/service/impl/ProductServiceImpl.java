@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.HtmlUtils;
 
+import com.google.gson.Gson;
 import com.zwo.xiyangyang.modules.core.service.impl.BaseServiceImpl;
 import com.zwo.xiyangyang.modules.pr.dao.PrProductMapper;
 import com.zwo.xiyangyang.modules.pr.domain.PrProduct;
@@ -127,10 +128,31 @@ public class ProductServiceImpl extends BaseServiceImpl<PrProduct> implements IP
 		return result;	
 	}
 	
+	
 	@Override
+	@Transactional(readOnly = true)
 	public PrProduct selectByPrimaryKey(String id) {
-		PrProduct record = super.selectByPrimaryKey(id);
+		if (getLogger().isInfoEnabled()) {
+			getLogger().info(getBaseMessage() + "查询单条记录开始，参数id的值是：" + id);
+		}
 		
+		PrProduct record = this.productMapper.selectById(id);
+		if (getLogger().isInfoEnabled()) {
+			try {
+				String jsonStr = null;
+				if (record != null) {
+					Gson gson = new Gson();
+					jsonStr = gson.toJson((Object) record);
+				} else {
+					jsonStr = "查询不到";
+				}
+
+				getLogger().info(getBaseMessage() + "查询单条记录结果：" + jsonStr);
+			} catch (Exception e) {
+				getLogger().info("系统打印参数序列化的时候发生了异常，该异常不会影响数据库操作");
+			}
+			
+		}
 		String content = record.getContent();
 		if (!StringUtils.isEmpty(content)) {
 			content = HtmlUtils.htmlUnescape(content);

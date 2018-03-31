@@ -2,9 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zwo.xiyangyang.modules.pr.dao.PrProductMapper" >
   <resultMap id="BaseResultMap" type="com.zwo.xiyangyang.modules.pr.domain.PrProduct" >
-    <!--
-      WARNING - @mbg.generated
-    -->
     <id column="ID" property="id" jdbcType="VARCHAR" />
     <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
     <result column="ORG_ID" property="orgId" jdbcType="VARCHAR" />
@@ -48,5 +45,26 @@
     <result column="SALE_COUNT" property="saleCount" jdbcType="INTEGER" />
     <result column="TO_INDEX" property="toIndex" jdbcType="BIT" />
     <result column="TO_SUB_INDEX" property="toSubIndex" jdbcType="BIT" />
+    <collection property="shops"  ofType="com.zwo.xiyangyang.modules.pr.domain.Shop">
+		<id property="id" column="o_id"/>
+            <result property="betRate" column="BET_RATE"/>
+            <result property="guessQuestionId" column="GUESS_QUESTION_ID"/>
+            <result property="isRight" column="IS_RIGHT"/>
+            <result property="name" column="O_NAME"/>
+            <result property="realQuestionId" column="REAL_QUESTION_ID"/>
+		</collection>
+	<association property="shop" resultMap="shopMap" ></association>
   </resultMap>
+  <resultMap type="com.zwo.xiyangyang.modules.pr.domain.Shop" id="shopMap">
+  	
+  </resultMap>
+  <select id="selectById" parameterType="String" resultMap="BaseResultMap">
+  	SELECT 
+	    p.*, s.id AS shop_id, s.NAME AS shop_name
+	FROM
+	    pr_product p
+	        LEFT JOIN
+	    shop s ON p.SHOP_ID = s.id
+	where p.id=#{id}
+  </select>
 </mapper>

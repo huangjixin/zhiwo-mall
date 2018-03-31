@@ -1,6 +1,8 @@
 package com.zwo.xiyangyang.modules.pr.domain;
 
 import java.util.Date;
+import java.util.List;
+
 import javax.persistence.*;
 
 @Table(name = "pr_product")
@@ -10,6 +12,9 @@ public class PrProduct implements java.io.Serializable {
 	 * @Fields serialVersionUID : 默认系列化版本UID  
 	 */
 	private static final long serialVersionUID = 1L;
+	@Transient
+	private Shop shop;
+	
     @Id
     @Column(name = "ID")
     private String id;
@@ -1028,4 +1033,13 @@ public class PrProduct implements java.io.Serializable {
     public void setToSubIndex(Boolean toSubIndex) {
         this.toSubIndex = toSubIndex;
     }
+
+	public Shop getShop() {
+		return shop;
+	}
+
+	public void setShop(Shop shop) {
+		this.shop = shop;
+	}
+
 }
