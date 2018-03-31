@@ -200,15 +200,20 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
 
 		User result = this.userMapper.selectById(id);
 		if (logger.isInfoEnabled()) {
-			String jsonStr = null;
-			if (result != null) {
-				Gson gson = new Gson();
-				jsonStr = gson.toJson((Object) result);
-			} else {
-				jsonStr = "查询不到";
-			}
+			try {
+				String jsonStr = null;
+				if (result != null) {
+					Gson gson = new Gson();
+					jsonStr = gson.toJson((Object) result);
+				} else {
+					jsonStr = "查询不到";
+				}
 
-			logger.info(getBaseMessage() + "查询单条记录结果：" + jsonStr);
+				logger.info(getBaseMessage() + "查询单条记录结果：" + jsonStr);
+			} catch (Exception e) {
+				logger.info(getBaseMessage() + "查询单条记录结果在转换成对象打印日志的时候发生了异常，不影响查询结果");
+			}
+			
 		}
 
 		return result;

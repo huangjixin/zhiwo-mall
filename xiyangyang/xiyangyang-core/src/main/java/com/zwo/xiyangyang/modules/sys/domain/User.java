@@ -25,7 +25,9 @@ public class User implements java.io.Serializable {
 
    @Transient
    private List<Role> roles;// 一个用户具有多个角色 
-    
+   
+   @Transient
+   private List<Resources> resourceses;
     /**
      * 用户名
      */
@@ -1102,5 +1104,13 @@ public class User implements java.io.Serializable {
 
 	public void setRoleList(List<Role> roleList) {
 		this.roles = roleList;
+	}
+
+	public List<Resources> getResources() {
+		return resourceses;
+	}
+
+	public void setResources(List<Resources> resources) {
+		this.resourceses = resources;
 	}
 }

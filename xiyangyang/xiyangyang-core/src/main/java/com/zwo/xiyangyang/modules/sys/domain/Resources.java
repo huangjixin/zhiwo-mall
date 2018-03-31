@@ -437,7 +437,7 @@ public class Resources extends Node implements java.io.Serializable {
     /**
      * @return LEVEL
      */
-    public int getLevel() {
+    public Integer getLevel() {
         return level;
     }
 

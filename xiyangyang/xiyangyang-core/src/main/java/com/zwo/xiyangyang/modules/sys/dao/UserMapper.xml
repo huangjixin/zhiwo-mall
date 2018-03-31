@@ -51,10 +51,81 @@
     <result column="LICENSE_FOR_OPENING_COUNT" property="licenseForOpeningCount" jdbcType="VARCHAR" />
     <result column="QUANTITY_REPORT_ID" property="quantityReportId" jdbcType="VARCHAR" />
     <result column="TYPE" property="type" jdbcType="VARCHAR" />
-    <collection property="roles" column="username"
-			select="com.zwo.xiyangyang.modules.sys.dao.RoleMapper.selectRoleByUsername"></collection>
+    <!-- <collection property="roles" column="username"
+			select="com.zwo.xiyangyang.modules.sys.dao.RoleMapper.selectRoleByUsername">
+	</collection> -->
+	<collection property="roles" ofType="com.zwo.xiyangyang.modules.sys.domain.Role">
+			<id property="id" column="role_id"/>
+            <result property="name" column="role_name"/>
+	</collection>
+	<collection property="resourceses" ofType="com.zwo.xiyangyang.modules.sys.domain.Resources">
+			<id property="id" column="res_id"/>
+			<id property="parentId" column="res_parent_id"/>
+            <result property="authName" column="res_name"/>
+	</collection>
   </resultMap>
   <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
-  	select * from sys_user where id=#{id}
+  	SELECT 
+    	user.*,
+	    r.id   as role_id,
+	    r.name as role_name,
+	    res.id as res_id,
+	    res.PARENT_ID as res_parent_id,
+	    res.AUTH_NAME as res_name
+	FROM
+	    sys_user user
+	        LEFT JOIN
+	    sys_user_role user_role ON user_role.USER_ID = user.ID
+	        LEFT JOIN
+	    sys_role r ON r.id = user_role.ROLE_ID
+	        LEFT JOIN
+	    sys_role_resources role_res ON role_res.ROLE_ID = r.id
+	        LEFT JOIN
+	    sys_resources res ON res.id = role_res.RESOURCES_ID
+	WHERE
+	    user.id=#{id}
+  </select>
+  
+  <!-- 根据用户名查询用户角色权限名 -->
+  <select id="selectUserRoleResoucesByUsername" resultType="String" resultMap="BaseResultMap">
+  	SELECT 
+    	user.*,
+	    r.id   as role_id,
+	    r.name as role_name,
+	    res.id as res_id,
+	    res.PARENT_ID as res_parent_id,
+	    res.AUTH_NAME as res_name
+	FROM
+	    sys_user user
+	        LEFT JOIN
+	    sys_user_role user_role ON user_role.USER_ID = user.ID
+	        LEFT JOIN
+	    sys_role r ON r.id = user_role.ROLE_ID
+	        LEFT JOIN
+	    sys_role_resources role_res ON role_res.ROLE_ID = r.id
+	        LEFT JOIN
+	    sys_resources res ON res.id = role_res.RESOURCES_ID
+	WHERE
+	    user.USERNAME = #{username} or user.MOBIL_PHONE= #{username} or user.EMAIL=#{username}
+	    
+	    union
+	    
+	 SELECT 
+	    res.AUTH_NAME
+	FROM
+	    sys_user user
+	        LEFT JOIN
+		sys_user_group ug on user.USERGROUP_ID = ug.id 
+			LEFT JOIN
+	    sys_group_role gr ON ug.id=gr.USERGROUP_ID
+	        LEFT JOIN
+	    sys_role r ON r.id = gr.ROLE_ID
+	        LEFT JOIN
+	    sys_role_resources role_res ON role_res.ROLE_ID = r.id
+	        LEFT JOIN
+	    sys_resources res ON res.id = role_res.RESOURCES_ID
+	WHERE
+	    user.USERNAME = #{username}  or user.MOBIL_PHONE= #{username} or user.EMAIL=#{username}   
+  	
   </select>
 </mapper>

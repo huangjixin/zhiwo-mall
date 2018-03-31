@@ -12,4 +12,6 @@ public interface UserMapper extends Mapper<User> {
 	 * @return
 	 */
 	User selectById(@Param("id") String id);
+	
+	User selectUserRoleResoucesByUsername(@Param("username") String username);
 }

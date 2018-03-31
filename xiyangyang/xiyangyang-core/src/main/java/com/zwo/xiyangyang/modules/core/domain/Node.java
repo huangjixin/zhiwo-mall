@@ -31,7 +31,7 @@ public class Node implements java.io.Serializable {
 
 	private String name;
 	@Transient
-	private int level;
+	private Integer level;
 
 	private Integer sort;
 	
@@ -96,11 +96,11 @@ public class Node implements java.io.Serializable {
 		this.name = name;
 	}
 
-	public int getLevel() {
+	public Integer getLevel() {
 		return level;
 	}
 
-	public void setLevel(int level) {
+	public void setLevel(Integer level) {
 		this.level = level;
 	}
 
