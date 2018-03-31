@@ -45,22 +45,15 @@
     <result column="SALE_COUNT" property="saleCount" jdbcType="INTEGER" />
     <result column="TO_INDEX" property="toIndex" jdbcType="BIT" />
     <result column="TO_SUB_INDEX" property="toSubIndex" jdbcType="BIT" />
-    <collection property="shops"  ofType="com.zwo.xiyangyang.modules.pr.domain.Shop">
-		<id property="id" column="o_id"/>
-            <result property="betRate" column="BET_RATE"/>
-            <result property="guessQuestionId" column="GUESS_QUESTION_ID"/>
-            <result property="isRight" column="IS_RIGHT"/>
-            <result property="name" column="O_NAME"/>
-            <result property="realQuestionId" column="REAL_QUESTION_ID"/>
-		</collection>
-	<association property="shop" resultMap="shopMap" ></association>
+	<association property="shop" resultMap="shopMap"  javaType="com.zwo.xiyangyang.modules.pr.domain.Shop" ></association>
   </resultMap>
   <resultMap type="com.zwo.xiyangyang.modules.pr.domain.Shop" id="shopMap">
-  	
+  	<id property="id" column="shop_id"/>
+    <result property="name" column="s_name"/>
   </resultMap>
   <select id="selectById" parameterType="String" resultMap="BaseResultMap">
   	SELECT 
-	    p.*, s.id AS shop_id, s.NAME AS shop_name
+	    p.*, s.id shop_id, s.NAME s_name
 	FROM
 	    pr_product p
 	        LEFT JOIN
