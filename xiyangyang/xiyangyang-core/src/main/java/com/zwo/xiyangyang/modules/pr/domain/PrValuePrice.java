@@ -9,6 +9,13 @@ public class PrValuePrice implements java.io.Serializable {
 	 * @Fields serialVersionUID : 默认系列化版本UID  
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	@Transient
+	private PrProduct product;
+	
+	@Transient
+	private PrPropertyValue propertyValue;
+	
     @Id
     @Column(name = "ID")
     private String id;
@@ -60,4 +67,20 @@ public class PrValuePrice implements java.io.Serializable {
     public void setValueId(String valueId) {
         this.valueId = valueId;
     }
+
+	public PrProduct getProduct() {
+		return product;
+	}
+
+	public void setProduct(PrProduct product) {
+		this.product = product;
+	}
+
+	public PrPropertyValue getPropertyValue() {
+		return propertyValue;
+	}
+
+	public void setPropertyValue(PrPropertyValue propertyValue) {
+		this.propertyValue = propertyValue;
+	}
 }

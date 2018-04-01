@@ -9,6 +9,9 @@ public class PrPropertyValue implements java.io.Serializable {
 	 * @Fields serialVersionUID : 默认系列化版本UID  
 	 */
 	private static final long serialVersionUID = 1L;
+	@Transient
+	private PrProduct product;
+	
     @Id
     @Column(name = "ID")
     private String id;
@@ -163,4 +166,12 @@ public class PrPropertyValue implements java.io.Serializable {
     public void setProductId(String productId) {
         this.productId = productId;
     }
+
+	public PrProduct getProduct() {
+		return product;
+	}
+
+	public void setProduct(PrProduct product) {
+		this.product = product;
+	}
 }
