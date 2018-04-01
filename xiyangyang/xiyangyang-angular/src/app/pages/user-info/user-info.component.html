@@ -1,8 +1,11 @@
 <div style="font-weight: normal;">
+  <div style="height: 6em;line-height:6em;background: red;width: 100%;">
+    <img style="width: 4em;height: 4em; border-radius: 2em;" src="http://avatar.yangkeduo.com/a/4f12fc2521b71e13ca2721bf748fed03efe1fcf0-1519704602?x-oss-process=image/resize,w_100">
+  </div>
   <div class="weui-cells">
     <a class="weui-cell weui-cell_access" href="javascript:;">
-      <div class="weui-cell__bd" style="font-size: 0.8em;">
-        <i class="fa fa-map-marker fa-lg" aria-hidden="true" style="color: aqua;"></i>&nbsp;&nbsp;我的地址
+      <div class="weui-cell__bd"  [routerLink]="[{ outlets: { userInfo: ['address'] } }]" style="font-size: 0.8em;">
+        <i class="fa fa-map-marker fa-lg" aria-hidden="true" style="color: aqua;"></i>&nbsp;&nbsp;我的收货地址
       </div>
       <div class="weui-cell__ft"></div>
     </a>

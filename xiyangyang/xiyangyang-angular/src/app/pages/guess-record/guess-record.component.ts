@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Location} from '@angular/common';
-import {GuessQuestionEntity} from '../guess/GuessQuestionEntity';
 import {MemGuessRecord} from './MemGuessRecord';
 import {globalConfig} from '../../global.config';
 import {InfiniteLoaderComponent} from 'ngx-weui/infiniteloader';
@@ -26,7 +25,7 @@ export class GuessRecordComponent implements OnInit {
 
   ngOnInit() {
     const dataUrl : string = globalConfig.dataUrl;
-    const url: string = dataUrl + `memember/grecord/3?pageNum=${this.pageNum}&pageSize=${this.pageSize}`;
+    const url: string = dataUrl + `appguess/grecord/3?pageNum=${this.pageNum}&pageSize=${this.pageSize}`;
     this.loadData(url);
   }
 

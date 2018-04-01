@@ -16,12 +16,18 @@ import { AddressDetailComponent } from './pages/address-detail/address-detail.co
 import { MainComponent } from './pages/main/main.component';
 import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 import { PersonalComponent } from './pages/personal/personal.component';
+import { AddredssComponentComponent } from './pages/addredss-component/addredss-component.component';
 
 export const routes = [
   { path: '', redirectTo: '/index', pathMatch: 'full' },
   { path: 'index', component: MainComponent, children: [
       {path: '', outlet: 'userInfo', component: UserInfoComponent},
-      {path: 'guess-record', outlet: 'userInfo', component: GuessRecordComponent } ] },
+      {path: 'guess-record', outlet: 'userInfo', component: GuessRecordComponent },
+      {path: 'address', outlet: 'userInfo', component: AddredssComponentComponent, children: [
+          {path: '', outlet: 'addressComponent', component: AddressComponent },
+          {path: 'address-detail', outlet: 'addressComponent', component: AddressDetailComponent }
+        ]} ,
+       ] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'personal', component: PersonalComponent}
@@ -39,7 +45,8 @@ export const routes = [
     AddressComponent,
     AddressDetailComponent,
     MainComponent,
-    PersonalComponent
+    PersonalComponent,
+    AddredssComponentComponent
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule, RouterModule, WeUiModule.forRoot(), RouterModule.forRoot(routes,{ enableTracing: true })

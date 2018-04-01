@@ -1,3 +1,35 @@
-<p>
-  address works!
-</p>
+<!--我的地址记录-->
+<div style="background-color: #F3F3F3;line-height: 2.3em; height: 2.3em;
+padding:0 0.4em;color: gray;position: fixed;left: 0;right: 0; z-index: 999;">
+  <div class="weui-flex">
+    <div class="weui-flex__item">
+      <label (click)="redirectToUesrInfo()"><i class="fa fa-angle-left" aria-hidden="true"></i>&nbsp;返回</label>
+    </div>
+    <div class="weui-flex__item" style="text-align: center;">
+      <label>我的收货地址</label>
+    </div>
+    <div class="weui-flex__item" style="text-align: right;">
+      <label style="text-align: center;width: 100%;"></label>
+    </div>
+  </div>
+</div>
+<weui-infiniteloader (loadmore)="onLoadMore($event)" #guessRecord style="font-size: 1em;padding-top: 2.3em;">
+  <div *ngFor="let address of memAddresses; let i = index;">
+    <div class="weui-cells" >
+      <a  class="weui-cell weui-cell_access"
+          href="javascript:;">
+        <div class="weui-cell__bd">
+          <p style="font-size: 0.8em;">{{address.name}},{{address.mobilPhone}}</p>
+          <p style="font-size: 0.8em;">{{address.province}} {{address.city}} {{address.area}} {{address.street}}</p>
+          <div class="weui-cells__title" style="padding-left: 0">
+            <label><i class="fa fa-check-square-o" aria-hidden="true"></i> 设为默认</label>
+            <label style="width: 50%">&nbsp;&nbsp;</label>
+            <label  [routerLink]="[{ outlets: { addressComponent: ['address-detail'] } }]" [queryParams]="{id: address.id}"  routerLinkActive="active">
+              <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 编辑</label>
+            <!--<button weui-button [weui-mini]="'mini'" (click)="mini=!mini" style="text-align: center;"> 编辑</button>-->
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</weui-infiniteloader>

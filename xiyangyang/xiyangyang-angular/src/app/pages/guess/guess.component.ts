@@ -30,7 +30,7 @@ export class GuessComponent implements OnInit{
 
   ngOnInit() {
     const dataUrl : string = globalConfig.dataUrl;
-    const url: string = dataUrl + `appguess?pageNum=${this.pageNum}&pageSize=${this.pageSize}`;
+    const url: string = dataUrl + `appguess/gquestions?pageNum=${this.pageNum}&pageSize=${this.pageSize}`;
     this.loadData(url);
   }
 
@@ -65,7 +65,7 @@ export class GuessComponent implements OnInit{
     comp.resolveLoading();
     this.pageNum += 1;
     const dataUrl: string = globalConfig.dataUrl;
-    const url: string = dataUrl + `appguess?pageNum=${this.pageNum}&pageSize=${this.pageSize}`;
+    const url: string = dataUrl + `appguess/gquestions?pageNum=${this.pageNum}&pageSize=${this.pageSize}`;
     this.loadData(url);
   }
 
