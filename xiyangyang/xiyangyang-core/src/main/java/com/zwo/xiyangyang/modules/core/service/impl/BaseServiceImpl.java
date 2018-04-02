@@ -280,10 +280,26 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 	@Override
 	@Transactional(readOnly = true)
 	public List<T> selectByExample(Object example, PageInfo pageInfo) {
+		if (getLogger().isInfoEnabled()) {
+			try {
+				if (getLogger().isInfoEnabled()) {
+					Gson gson = new Gson();
+					String jsonStr = gson.toJson((Object) pageInfo);
+					getLogger().info(getBaseMessage() + "查询列表开始，参数对象是：" + jsonStr);
+				}
+			} catch (Exception e) {
+				getLogger().info("系统打印参数序列化的时候发生了异常，该异常不会影响数据库操作");
+			}
+			
+		}
 		if (pageInfo != null && pageInfo.getPageSize() != 0) {
 			PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
 		}
-		return getBaseMapper().selectByExample(example);
+		List<T> list =  getBaseMapper().selectByExample(example);
+		if (getLogger().isInfoEnabled()) {
+			getLogger().info(getBaseMessage() + "查询列表结束，结果条目数是：" + list.size());
+		}
+		return list;
 	}
 
 	@Override
