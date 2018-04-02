@@ -74,6 +74,16 @@ public class MemMemberServiceImpl extends BaseServiceImpl<MemMember> implements 
 		Example example = new Example(MemMember.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("username", username);
+        
+        Example.Criteria mobileCriteria = example.createCriteria();
+        criteria.andEqualTo("mobilPhone", username);
+        
+        Example.Criteria emailCriteria = example.createCriteria();
+        criteria.andEqualTo("email", username);
+        
+        example.or(mobileCriteria);
+        example.or(emailCriteria);
+        
 		List<MemMember> list = memberMapper.selectByExample(example);
 		if (logger.isInfoEnabled())
 			logger.info(MESSAGE+"根据用户名查询用户结束，结果："+list.size());
