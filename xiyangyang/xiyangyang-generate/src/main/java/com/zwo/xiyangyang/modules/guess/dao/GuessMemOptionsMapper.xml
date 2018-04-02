@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zwo.xiyangyang.modules.guess.dao.GuessMemOptionsMapper" >
+  <resultMap id="BaseResultMap" type="com.zwo.xiyangyang.modules.guess.domain.GuessMemOptions" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="OPTION_ID" property="optionId" jdbcType="VARCHAR" />
+    <result column="MEM_ID" property="memId" jdbcType="VARCHAR" />
+    <result column="QUESTION_ID" property="questionId" jdbcType="VARCHAR" />
+    <result column="BET_VALUE" property="betValue" jdbcType="INTEGER" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="GUESS_OPTIONS_COMBINE_ID" property="guessOptionsCombineId" jdbcType="VARCHAR" />
+  </resultMap>
+</mapper>
