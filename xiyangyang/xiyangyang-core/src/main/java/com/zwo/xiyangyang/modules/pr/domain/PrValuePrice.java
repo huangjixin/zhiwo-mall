@@ -1,5 +1,7 @@
 package com.zwo.xiyangyang.modules.pr.domain;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 @Table(name = "pr_value_price")
@@ -26,6 +28,9 @@ public class PrValuePrice implements java.io.Serializable {
     @Column(name = "VALUE_ID")
     private String valueId;
 
+
+    @Transient
+    private List<PrPrice> prices;
     /**
      * @return ID
      */
@@ -82,5 +87,13 @@ public class PrValuePrice implements java.io.Serializable {
 
 	public void setPropertyValue(PrPropertyValue propertyValue) {
 		this.propertyValue = propertyValue;
+	}
+
+	public List<PrPrice> getPrices() {
+		return prices;
+	}
+
+	public void setPrices(List<PrPrice> prices) {
+		this.prices = prices;
 	}
 }
