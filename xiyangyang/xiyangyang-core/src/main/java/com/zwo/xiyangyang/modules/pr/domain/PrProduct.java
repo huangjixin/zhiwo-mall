@@ -3,7 +3,10 @@ package com.zwo.xiyangyang.modules.pr.domain;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Table(name = "pr_product")
 public class PrProduct implements java.io.Serializable {

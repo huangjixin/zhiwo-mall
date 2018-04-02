@@ -1,17 +1,10 @@
 package com.zwo.xiyangyang.modules.pr.domain;
 
+import java.io.Serializable;
 import javax.persistence.*;
 
 @Table(name = "pr_property_value")
-public class PrPropertyValue implements java.io.Serializable {
-
-	/**
-	 * @Fields serialVersionUID : 默认系列化版本UID  
-	 */
-	private static final long serialVersionUID = 1L;
-	@Transient
-	private PrProduct product;
-	
+public class PrPropertyValue implements Serializable {
     @Id
     @Column(name = "ID")
     private String id;
@@ -49,6 +42,11 @@ public class PrPropertyValue implements java.io.Serializable {
     @Column(name = "PRODUCT_ID")
     private String productId;
 
+    @Column(name = "PROPERTY_ID")
+    private String propertyId;
+
+    private static final long serialVersionUID = 1L;
+
     /**
      * @return ID
      */
@@ -60,7 +58,7 @@ public class PrPropertyValue implements java.io.Serializable {
      * @param id
      */
     public void setId(String id) {
-        this.id = id;
+        this.id = id == null ? null : id.trim();
     }
 
     /**
@@ -78,7 +76,7 @@ public class PrPropertyValue implements java.io.Serializable {
      * @param name 属性名称
      */
     public void setName(String name) {
-        this.name = name;
+        this.name = name == null ? null : name.trim();
     }
 
     /**
@@ -96,7 +94,7 @@ public class PrPropertyValue implements java.io.Serializable {
      * @param code 英文代码
      */
     public void setCode(String code) {
-        this.code = code;
+        this.code = code == null ? null : code.trim();
     }
 
     /**
@@ -114,7 +112,7 @@ public class PrPropertyValue implements java.io.Serializable {
      * @param description 属性表描述
      */
     public void setDescription(String description) {
-        this.description = description;
+        this.description = description == null ? null : description.trim();
     }
 
     /**
@@ -132,7 +130,7 @@ public class PrPropertyValue implements java.io.Serializable {
      * @param imageId 属性值对应的图片
      */
     public void setImageId(String imageId) {
-        this.imageId = imageId;
+        this.imageId = imageId == null ? null : imageId.trim();
     }
 
     /**
@@ -164,14 +162,20 @@ public class PrPropertyValue implements java.io.Serializable {
      * @param productId
      */
     public void setProductId(String productId) {
-        this.productId = productId;
+        this.productId = productId == null ? null : productId.trim();
     }
 
-	public PrProduct getProduct() {
-		return product;
-	}
+    /**
+     * @return PROPERTY_ID
+     */
+    public String getPropertyId() {
+        return propertyId;
+    }
 
-	public void setProduct(PrProduct product) {
-		this.product = product;
-	}
+    /**
+     * @param propertyId
+     */
+    public void setPropertyId(String propertyId) {
+        this.propertyId = propertyId == null ? null : propertyId.trim();
+    }
 }

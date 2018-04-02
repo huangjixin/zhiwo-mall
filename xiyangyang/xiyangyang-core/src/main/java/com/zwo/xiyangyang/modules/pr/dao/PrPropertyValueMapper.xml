@@ -2,9 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zwo.xiyangyang.modules.pr.dao.PrPropertyValueMapper" >
   <resultMap id="BaseResultMap" type="com.zwo.xiyangyang.modules.pr.domain.PrPropertyValue" >
-    <!--
-      WARNING - @mbg.generated
-    -->
     <id column="ID" property="id" jdbcType="VARCHAR" />
     <result column="NAME" property="name" jdbcType="VARCHAR" />
     <result column="CODE" property="code" jdbcType="VARCHAR" />
@@ -12,5 +9,6 @@
     <result column="IMAGE_ID" property="imageId" jdbcType="VARCHAR" />
     <result column="ENABLED" property="enabled" jdbcType="BIT" />
     <result column="PRODUCT_ID" property="productId" jdbcType="VARCHAR" />
+    <result column="PROPERTY_ID" property="propertyId" jdbcType="VARCHAR" />
   </resultMap>
 </mapper>
