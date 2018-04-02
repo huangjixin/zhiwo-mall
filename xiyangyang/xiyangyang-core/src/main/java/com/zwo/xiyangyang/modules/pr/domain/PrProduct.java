@@ -21,6 +21,9 @@ public class PrProduct implements java.io.Serializable {
 	@Transient
 	private List<PrPropertyValue> propertyValues;
 	
+	@Transient
+    private List<PrPrice> prices;
+	
     @Id
     @Column(name = "ID")
     private String id;
@@ -1054,6 +1057,14 @@ public class PrProduct implements java.io.Serializable {
 
 	public void setPropertyValues(List<PrPropertyValue> propertyValues) {
 		this.propertyValues = propertyValues;
+	}
+
+	public List<PrPrice> getPrices() {
+		return prices;
+	}
+
+	public void setPrices(List<PrPrice> prices) {
+		this.prices = prices;
 	}
 
 }
