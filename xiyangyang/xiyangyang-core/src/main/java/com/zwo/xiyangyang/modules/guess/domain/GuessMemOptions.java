@@ -1,14 +1,11 @@
 package com.zwo.xiyangyang.modules.guess.domain;
 
+import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "guess_mem_options")
-public class GuessMemOptions implements java.io.Serializable {
-
-	/**
-	 * @Fields serialVersionUID : 默认系列化版本UID  
-	 */
-	private static final long serialVersionUID = 1L;
+public class GuessMemOptions implements Serializable {
     @Id
     @Column(name = "ID")
     private String id;
@@ -38,6 +35,17 @@ public class GuessMemOptions implements java.io.Serializable {
     private Integer betValue;
 
     /**
+     * 创建日期
+     */
+    @Column(name = "CREATE_DATE")
+    private Date createDate;
+
+    @Column(name = "GUESS_OPTIONS_COMBINE_ID")
+    private String guessOptionsCombineId;
+
+    private static final long serialVersionUID = 1L;
+
+    /**
      * @return ID
      */
     public String getId() {
@@ -48,7 +56,7 @@ public class GuessMemOptions implements java.io.Serializable {
      * @param id
      */
     public void setId(String id) {
-        this.id = id;
+        this.id = id == null ? null : id.trim();
     }
 
     /**
@@ -66,7 +74,7 @@ public class GuessMemOptions implements java.io.Serializable {
      * @param optionId 名称竞猜选项ID
      */
     public void setOptionId(String optionId) {
-        this.optionId = optionId;
+        this.optionId = optionId == null ? null : optionId.trim();
     }
 
     /**
@@ -84,7 +92,7 @@ public class GuessMemOptions implements java.io.Serializable {
      * @param memId 会员ID
      */
     public void setMemId(String memId) {
-        this.memId = memId;
+        this.memId = memId == null ? null : memId.trim();
     }
 
     /**
@@ -102,7 +110,7 @@ public class GuessMemOptions implements java.io.Serializable {
      * @param questionId 竞猜问题ID
      */
     public void setQuestionId(String questionId) {
-        this.questionId = questionId;
+        this.questionId = questionId == null ? null : questionId.trim();
     }
 
     /**
@@ -121,5 +129,37 @@ public class GuessMemOptions implements java.io.Serializable {
      */
     public void setBetValue(Integer betValue) {
         this.betValue = betValue;
+    }
+
+    /**
+     * 获取创建日期
+     *
+     * @return CREATE_DATE - 创建日期
+     */
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    /**
+     * 设置创建日期
+     *
+     * @param createDate 创建日期
+     */
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    /**
+     * @return GUESS_OPTIONS_COMBINE_ID
+     */
+    public String getGuessOptionsCombineId() {
+        return guessOptionsCombineId;
+    }
+
+    /**
+     * @param guessOptionsCombineId
+     */
+    public void setGuessOptionsCombineId(String guessOptionsCombineId) {
+        this.guessOptionsCombineId = guessOptionsCombineId == null ? null : guessOptionsCombineId.trim();
     }
 }

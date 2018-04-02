@@ -1,23 +1,10 @@
 package com.zwo.xiyangyang.modules.pr.domain;
 
-import java.util.List;
-
+import java.io.Serializable;
 import javax.persistence.*;
 
 @Table(name = "pr_value_price")
-public class PrValuePrice implements java.io.Serializable {
-
-	/**
-	 * @Fields serialVersionUID : 默认系列化版本UID  
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	@Transient
-	private PrProduct product;
-	
-	@Transient
-	private PrPropertyValue propertyValue;
-	
+public class PrValuePrice implements Serializable {
     @Id
     @Column(name = "ID")
     private String id;
@@ -28,9 +15,14 @@ public class PrValuePrice implements java.io.Serializable {
     @Column(name = "VALUE_ID")
     private String valueId;
 
+    /**
+     * 联合VALUE_ID,是多个value_id的联合，例如123 1234 456。
+     */
+    @Column(name = "COMBINE_ID")
+    private String combineId;
 
-    @Transient
-    private List<PrPrice> prices;
+    private static final long serialVersionUID = 1L;
+
     /**
      * @return ID
      */
@@ -42,7 +34,7 @@ public class PrValuePrice implements java.io.Serializable {
      * @param id
      */
     public void setId(String id) {
-        this.id = id;
+        this.id = id == null ? null : id.trim();
     }
 
     /**
@@ -56,7 +48,7 @@ public class PrValuePrice implements java.io.Serializable {
      * @param productId
      */
     public void setProductId(String productId) {
-        this.productId = productId;
+        this.productId = productId == null ? null : productId.trim();
     }
 
     /**
@@ -70,30 +62,24 @@ public class PrValuePrice implements java.io.Serializable {
      * @param valueId
      */
     public void setValueId(String valueId) {
-        this.valueId = valueId;
+        this.valueId = valueId == null ? null : valueId.trim();
     }
 
-	public PrProduct getProduct() {
-		return product;
-	}
+    /**
+     * 获取联合VALUE_ID,是多个value_id的联合，例如123 1234 456。
+     *
+     * @return COMBINE_ID - 联合VALUE_ID,是多个value_id的联合，例如123 1234 456。
+     */
+    public String getCombineId() {
+        return combineId;
+    }
 
-	public void setProduct(PrProduct product) {
-		this.product = product;
-	}
-
-	public PrPropertyValue getPropertyValue() {
-		return propertyValue;
-	}
-
-	public void setPropertyValue(PrPropertyValue propertyValue) {
-		this.propertyValue = propertyValue;
-	}
-
-	public List<PrPrice> getPrices() {
-		return prices;
-	}
-
-	public void setPrices(List<PrPrice> prices) {
-		this.prices = prices;
-	}
+    /**
+     * 设置联合VALUE_ID,是多个value_id的联合，例如123 1234 456。
+     *
+     * @param combineId 联合VALUE_ID,是多个value_id的联合，例如123 1234 456。
+     */
+    public void setCombineId(String combineId) {
+        this.combineId = combineId == null ? null : combineId.trim();
+    }
 }
