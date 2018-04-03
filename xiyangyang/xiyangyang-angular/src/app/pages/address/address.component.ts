@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Location} from '@angular/common';
 import {globalConfig} from '../../global.config';
 import {InfiniteLoaderComponent} from 'ngx-weui/infiniteloader';
+import {DialogComponent} from 'ngx-weui/dialog';
 import {MemAddress} from './MemAddress';
 
 @Component({
@@ -18,6 +19,8 @@ export class AddressComponent implements OnInit {
   public memAddresses: MemAddress[] = [];
   private mememberId: string = '1';
   private methodUrl: string = 'appguess/maddress/';
+  @ViewChild('addressDialog')
+  addressDialog: DialogComponent;
 
   constructor( private route: ActivatedRoute,
                private router: Router,
@@ -73,6 +76,10 @@ export class AddressComponent implements OnInit {
   redirectToUesrInfo() {
     this.location.back();
     // this.router.navigate([]);
+  }
+
+  showAddressDialog(address: MemAddress):void{
+    this.addressDialog.show();
   }
 
 }

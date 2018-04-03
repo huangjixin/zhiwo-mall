@@ -1,7 +1,7 @@
 import { BrowserModule, } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, RouteReuseStrategy } from '@angular/router';
 import { WeUiModule } from 'ngx-weui';
 
 import { AppComponent } from './app.component';
@@ -14,9 +14,10 @@ import { MyCollectionComponent } from './pages/my-collection/my-collection.compo
 import { AddressComponent } from './pages/address/address.component';
 import { AddressDetailComponent } from './pages/address-detail/address-detail.component';
 import { MainComponent } from './pages/main/main.component';
-import {HashLocationStrategy, LocationStrategy} from '@angular/common';
+// import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 import { PersonalComponent } from './pages/personal/personal.component';
 import { AddredssComponentComponent } from './pages/addredss-component/addredss-component.component';
+import {SimpleReuseStrategy} from './SimpleReuseStrategy';
 
 export const routes = [
   { path: '', redirectTo: '/index', pathMatch: 'full' },
@@ -31,7 +32,7 @@ export const routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'personal', component: PersonalComponent}
-  ]
+  ];
 
 @NgModule({
   declarations: [
@@ -51,7 +52,7 @@ export const routes = [
   imports: [
     BrowserModule, BrowserAnimationsModule, RouterModule, WeUiModule.forRoot(), RouterModule.forRoot(routes,{ enableTracing: true })
   ],
-  providers: [],
+  providers: [{provide : RouteReuseStrategy, useClass: SimpleReuseStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

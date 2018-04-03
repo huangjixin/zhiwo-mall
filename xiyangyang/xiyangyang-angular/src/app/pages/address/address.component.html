@@ -19,12 +19,12 @@ padding:0 0.4em;color: gray;position: fixed;left: 0;right: 0; z-index: 999; ">
       <a  class="weui-cell weui-cell_access"
           href="javascript:;">
         <div class="weui-cell__bd">
-          <p style="font-size: 0.8em;">{{address.name}},{{address.mobilPhone}}</p>
+          <p style="font-size: 0.8em;">{{i+1}}.{{address.name}},{{address.mobilPhone}}</p>
           <p style="font-size: 0.8em;">{{address.province}} {{address.city}} {{address.area}} {{address.street}}</p>
           <div class="weui-cells__title" style="padding-left: 0">
             <label><i class="fa fa-check-square-o" aria-hidden="true"></i> 设为默认</label>
             <label style="width: 50%">&nbsp;&nbsp;</label>
-            <label  [routerLink]="[{ outlets: { addressComponent: ['address-detail'] } }]" [queryParams]="{id: address.id}"  routerLinkActive="active">
+            <label  [routerLink]="[{ outlets: { addressComponent: ['address-detail'] } }]" [queryParams]="{id: address.id}"  queryParamsHandling="merge"  routerLinkActive="active">
               <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 编辑</label>
             <!--<button weui-button [weui-mini]="'mini'" (click)="mini=!mini" style="text-align: center;"> 编辑</button>-->
           </div>
@@ -33,3 +33,10 @@ padding:0 0.4em;color: gray;position: fixed;left: 0;right: 0; z-index: 999; ">
     </div>
   </div>
 </weui-infiniteloader>
+<!--<weui-dialog title="弹窗标题"
+             content="弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内"
+             btnNOText="辅助操作" btnOKText="主操作"></weui-dialog>-->
+<weui-dialog #addressDialog title="弹窗标题"
+             content="弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内"
+             btnNOText="取消" btnOKText="确定"></weui-dialog>
+

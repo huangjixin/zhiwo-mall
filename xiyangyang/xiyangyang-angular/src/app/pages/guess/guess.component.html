@@ -27,18 +27,18 @@
         <button weui-button [weui-mini]="true" (click)="betValue=100;" [weui-type]="'warn'" style="text-align: center;width: 80%;">100</button>
       </div>
       <div class="weui-flex__item">
-        <button weui-button (click)="betValue=200;" [weui-type]="'warn'" style="text-align: center;width: 80%;">200</button>
+        <button weui-button [weui-mini]="true" (click)="betValue=200;" [weui-type]="'warn'" style="text-align: center;width: 80%;">200</button>
       </div>
       <div class="weui-flex__item">
-        <button weui-button (click)="betValue=500;" [weui-type]="'warn'" style="text-align: center;width: 80%;">500</button>
+        <button weui-button [weui-mini]="true" (click)="betValue=500;" [weui-type]="'warn'" style="text-align: center;width: 80%;">500</button>
       </div>
       <div class="weui-flex__item">
-        <button weui-button (click)="betValue=1000;" [weui-type]="'warn'" style="text-align: center;width: 80%;">1000</button>
+        <button weui-button [weui-mini]="true" (click)="betValue=1000;" [weui-type]="'warn'" style="text-align: center;width: 80%;">1000</button>
       </div>
     </div>
     <div style="font-size: 1em;padding: 5px;"><p>押<label style="color: red">{{betValue}}</label>猜中赢<label style="color: red">{{guessOptionsEntity.betRate*betValue}}</label>竞猜豆</p></div>
     <div style="text-align: center;padding: 4px;">
-      <button weui-button style="text-align: center;width: 30%;">马上竞猜</button>
+      <button weui-button [weui-mini]="true" style="text-align: center;width: 30%;">马上竞猜</button>
     </div>
 
   </div>

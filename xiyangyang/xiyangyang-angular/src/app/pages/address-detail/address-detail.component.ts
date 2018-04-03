@@ -17,6 +17,7 @@ export class AddressDetailComponent implements OnInit {
 
   constructor(private router: Router, public activeRouter: ActivatedRoute, private location: Location) {
     // console.log('Routes: ', JSON.stringify(router.config, undefined, 2));
+    // localStorage.setItem();
   }
 
   ngOnInit() {
