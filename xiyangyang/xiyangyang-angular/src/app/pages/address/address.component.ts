@@ -78,7 +78,7 @@ export class AddressComponent implements OnInit {
     // this.router.navigate([]);
   }
 
-  showAddressDialog(address: MemAddress):void{
+  showAddressDialog(address: MemAddress):void {
     this.addressDialog.show();
   }
 

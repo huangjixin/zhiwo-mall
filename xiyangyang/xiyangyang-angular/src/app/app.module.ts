@@ -2,7 +2,7 @@ import { BrowserModule, } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes, RouteReuseStrategy } from '@angular/router';
-import { WeUiModule } from 'ngx-weui';
+import { WeUIModule } from 'angular4-weui';
 
 import { AppComponent } from './app.component';
 import { GuessComponent } from './pages/guess/guess.component';
@@ -50,7 +50,7 @@ export const routes = [
     AddredssComponentComponent
   ],
   imports: [
-    BrowserModule, BrowserAnimationsModule, RouterModule, WeUiModule.forRoot(), RouterModule.forRoot(routes,{ enableTracing: true })
+    BrowserModule, BrowserAnimationsModule, RouterModule, WeUIModule, RouterModule.forRoot(routes,{ enableTracing: true })
   ],
   providers: [{provide : RouteReuseStrategy, useClass: SimpleReuseStrategy}],
   bootstrap: [AppComponent]
