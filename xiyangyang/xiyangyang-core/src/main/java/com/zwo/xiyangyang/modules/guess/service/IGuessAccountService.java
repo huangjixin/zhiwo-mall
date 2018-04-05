@@ -12,5 +12,10 @@ import com.zwo.xiyangyang.modules.guess.domain.GuessAccount;
  *
  */
 public interface IGuessAccountService extends IBaseService<GuessAccount> {
-	
+	/**
+	 * 根据会员查询竞猜账号。
+	 * @param mid
+	 * @return
+	 */
+	GuessAccount selectByMid(String mid);
 }
