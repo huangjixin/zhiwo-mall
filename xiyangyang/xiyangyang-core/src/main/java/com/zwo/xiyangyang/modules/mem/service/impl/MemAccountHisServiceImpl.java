@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zwo.xiyangyang.modules.core.service.impl.BaseServiceImpl;
-import com.zwo.xiyangyang.modules.guess.dao.GuessAccountHisMapper;
-import com.zwo.xiyangyang.modules.guess.domain.GuessAccountHis;
-import com.zwo.xiyangyang.modules.guess.service.IGuessAccountHisService;
+import com.zwo.xiyangyang.modules.mem.dao.MemAccountHisMapper;
+import com.zwo.xiyangyang.modules.mem.domain.MemAccountHis;
+import com.zwo.xiyangyang.modules.mem.service.IMemAccountHisService;
 
 import tk.mybatis.mapper.common.Mapper;
 
@@ -24,14 +24,14 @@ import tk.mybatis.mapper.common.Mapper;
 @Service
 @Lazy(true)
 @Transactional(readOnly = false)
-public class MemAccountHisServiceImpl extends BaseServiceImpl<GuessAccountHis> implements IGuessAccountHisService {
+public class MemAccountHisServiceImpl extends BaseServiceImpl<MemAccountHis> implements IMemAccountHisService {
 
 	@Autowired
-	private GuessAccountHisMapper accountHisMapper ;
+	private MemAccountHisMapper memAccountHisMapper ;
 
 	@Override
-	public Mapper<GuessAccountHis> getBaseMapper() {
-		return accountHisMapper;
+	public Mapper<MemAccountHis> getBaseMapper() {
+		return memAccountHisMapper;
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -43,12 +43,12 @@ public class MemAccountHisServiceImpl extends BaseServiceImpl<GuessAccountHis> i
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Class getTypeClass() {
-		return GuessAccountHis.class;
+		return MemAccountHis.class;
 	}
 
 	@Override
 	protected String getBaseMessage() {
-		return "竞猜账号历史基础操作";
+		return "会员账号历史基础操作";
 	}
 
 	private static Logger logger = LoggerFactory.getLogger(MemAccountHisServiceImpl.class);

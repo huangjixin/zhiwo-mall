@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.zwo.xiyangyang.modules.core.service.impl.BaseServiceImpl;
 import com.zwo.xiyangyang.modules.guess.dao.GuessAccountMapper;
 import com.zwo.xiyangyang.modules.guess.domain.GuessAccount;
-import com.zwo.xiyangyang.modules.guess.domain.GuessQuestionApi;
 import com.zwo.xiyangyang.modules.guess.service.IGuessAccountService;
 
 import tk.mybatis.mapper.common.Mapper;

@@ -14,7 +14,6 @@ import com.zwo.xiyangyang.modules.core.service.impl.BaseServiceImpl;
 import com.zwo.xiyangyang.modules.guess.dao.GuessAccountHisMapper;
 import com.zwo.xiyangyang.modules.guess.domain.GuessAccountHis;
 import com.zwo.xiyangyang.modules.guess.service.IGuessAccountHisService;
-import com.zwo.xiyangyang.modules.pr.service.impl.ValuePriceServiceImpl;
 
 import tk.mybatis.mapper.common.Mapper;
 
