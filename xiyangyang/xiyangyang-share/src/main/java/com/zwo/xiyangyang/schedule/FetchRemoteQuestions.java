@@ -5,9 +5,7 @@ package com.zwo.xiyangyang.schedule;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
@@ -21,7 +19,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,8 +39,8 @@ import com.zwo.xiyangyang.modules.guess.service.IQuestionService;
  * @author 黄记新
  *
  */
-@Transactional
-@Lazy(true)
+@Transactional(readOnly=false)
+//@Lazy(true)
 @Component
 public class FetchRemoteQuestions {
 	@Autowired
@@ -74,6 +71,7 @@ public class FetchRemoteQuestions {
 	 * @param name
 	 * @param categoryCode
 	 */
+	@Transactional(readOnly=false)
 	public void get(String url, String type, String name, String categoryCode) {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		CloseableHttpResponse response = null;
@@ -90,31 +88,35 @@ public class FetchRemoteQuestions {
 			System.out.println(response.getStatusLine());
 			if (entity != null) {
 				String content = EntityUtils.toString(entity);
+				if (content.indexOf("请求频率过快") > -1) {
+					return;
+				}
 				// 此处的代码逻辑是：根据类型查询列表，取到第一个
 				List<GuessQuestionApi> list = apiService.selectByType(type);
 				GuessQuestionApi api = null;
 				if (list.size() != 0) {
 					api = list.get(0);
 					if (!content.equals(api.getContent())) {
-						chectData(content, type, name, categoryCode);
+//						chectData(content, type, name, categoryCode);
+						api.setUpdateDate(new Date());
 						api.setContent(content);
 						apiService.updateByPrimaryKeySelective(api);
 					}
+				}else {
+					api = new GuessQuestionApi();
+					api.setContent(content);
+					api.setName(name);
+					api.setType(type);
+					apiService.insertSelective(api);
 				}
 
-				if (api == null) {
+				/*if (api == null) {
 					chectData(content, type, name, categoryCode);
-					if (content.indexOf("请求频率过快") == -1) {
-						api = new GuessQuestionApi();
-						api.setContent(content);
-						api.setName(name);
-						api.setType(type);
-						apiService.insert(api);
-					}
-				}
+					
+				}*/
 
 				// 打印响应内容
-				System.out.println("Response content: " + EntityUtils.toString(entity));
+				//System.out.println("Response content: " + EntityUtils.toString(entity));
 			}
 			System.out.println("------------------------------------");
 			try {
@@ -166,11 +168,12 @@ public class FetchRemoteQuestions {
 					// 如果该问题还没有检验校对答案。
 					if (!question.getChecked()) {
 						String openCode = null;
-						if (guessData.getOpencode().indexOf("+") != -1) {
+						if (guessData.getOpencode().indexOf("+") > -1) {
 							openCode = guessData.getOpencode().replaceAll("+", ",");
 						} else {
 							openCode = guessData.getOpencode();
 						}
+						
 						String[] openCodeArray = openCode.split(",");
 						int result = 0;
 						for (String codeStr : openCodeArray) {
@@ -221,8 +224,8 @@ public class FetchRemoteQuestions {
 						for (int j = 0; j < 2; j++) {
 							GuessOptions options = new GuessOptions();
 							options.setBetRate(1.8D);
+							options.setIsRight(null);
 							options.setGuessQuestionId(guessQuestion.getId());
-							options.setIsRight(false);
 							options.setName(j == 0 ? "偶数" : "奇数");
 							optionsService.insert(options);
 						}
