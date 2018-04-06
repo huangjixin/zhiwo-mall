@@ -58,7 +58,7 @@ public class FetchRemoteQuestions {
 //	@Scheduled(fixedRate = 5000)
 	public void fixedRateJob() {
 		// get("http://f.apiplus.net/gd11x5-2.json","gd11x5","广东11选5","gd11x5");
-		get("http://f.apiplus.net/gd11x5-2.json", "gd11x5", "广东11选5", "gd11x5");
+		get("http://f.apiplus.net/gd11x5-5.json", "gd11x5", "广东11选5", "gd11x5");
 		// System.out.println("hello,world,this is a fixed rate job");
 	}
 
@@ -75,6 +75,7 @@ public class FetchRemoteQuestions {
 	public void get(String url, String type, String name, String categoryCode) {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		CloseableHttpResponse response = null;
+		String content = null;
 		try {
 			// 创建httpget.
 			HttpGet httpget = new HttpGet(url);
@@ -87,36 +88,7 @@ public class FetchRemoteQuestions {
 			// 打印响应状态
 			System.out.println(response.getStatusLine());
 			if (entity != null) {
-				String content = EntityUtils.toString(entity);
-				if (content.indexOf("请求频率过快") > -1) {
-					return;
-				}
-				// 此处的代码逻辑是：根据类型查询列表，取到第一个
-				List<GuessQuestionApi> list = apiService.selectByType(type);
-				GuessQuestionApi api = null;
-				if (list.size() != 0) {
-					api = list.get(0);
-					if (!content.equals(api.getContent())) {
-//						chectData(content, type, name, categoryCode);
-						api.setUpdateDate(new Date());
-						api.setContent(content);
-						apiService.updateByPrimaryKeySelective(api);
-					}
-				}else {
-					api = new GuessQuestionApi();
-					api.setContent(content);
-					api.setName(name);
-					api.setType(type);
-					apiService.insertSelective(api);
-				}
-
-				/*if (api == null) {
-					chectData(content, type, name, categoryCode);
-					
-				}*/
-
-				// 打印响应内容
-				//System.out.println("Response content: " + EntityUtils.toString(entity));
+				content = EntityUtils.toString(entity);
 			}
 			System.out.println("------------------------------------");
 			try {
@@ -142,6 +114,32 @@ public class FetchRemoteQuestions {
 					e1.printStackTrace();
 				}
 		}
+		
+		if(content == null) {
+			return;
+		}
+		
+		if (content.indexOf("请求频率过快") > -1) {
+			return;
+		}
+		// 此处的代码逻辑是：根据类型查询列表，取到第一个
+		List<GuessQuestionApi> list = apiService.selectByType(type);
+		GuessQuestionApi api = null;
+		if (list.size() != 0) {
+			api = list.get(0);
+			if (!content.equals(api.getContent())) {
+				chectData(content, type, name, categoryCode);
+				api.setUpdateDate(new Date());
+				api.setContent(content);
+				apiService.updateByPrimaryKeySelective(api);
+			}
+		}else {
+			api = new GuessQuestionApi();
+			api.setContent(content);
+			api.setName(name);
+			api.setType(type);
+			apiService.insertSelective(api);
+		}
 	}
 
 	/**
@@ -166,7 +164,7 @@ public class FetchRemoteQuestions {
 				 */
 				if (question != null) {
 					// 如果该问题还没有检验校对答案。
-					if (!question.getChecked()) {
+					if (question.getChecked() ==0) {
 						String openCode = null;
 						if (guessData.getOpencode().indexOf("+") > -1) {
 							openCode = guessData.getOpencode().replaceAll("+", ",");
@@ -179,16 +177,23 @@ public class FetchRemoteQuestions {
 						for (String codeStr : openCodeArray) {
 							result += Integer.valueOf(codeStr);
 						}
+						
 						String resu = result % 2 == 0 ? "偶数" : "奇数";
+						for (GuessOptions option : question.getGuessOptions()) {
+							if(option.getName().equals(resu)) {
+								option.setIsRight(true);
+								optionsService.updateByPrimaryKeySelective(option);
+								this.questionService.checkQuestion(question.getId(), option.getId());
+							}
+						}
+						/*
 						GuessOptions guessOptions = new GuessOptions();
 						guessOptions.setGuessQuestionId(question.getId());
 						guessOptions.setIsRight(true);
 						guessOptions.setName(resu);
 						this.optionsService.checkOption(guessOptions);
-						// optionsService.se
-						// 校验好问题。
-						question.setChecked(true);
-						questionService.updateById(question);
+						question.setChecked(1);
+						questionService.updateById(question);*/
 					}
 				}
 
@@ -209,7 +214,7 @@ public class FetchRemoteQuestions {
 						if (type.equals("fc3d") || type.equals("pl3") || type.equals("pl5")) {
 							questionEndTime = new Date(guessData.getOpentime().getTime() + 24 * 60 * 59000);
 						} else if (type.equals("gd11x5")) {// 广东11选5 高频彩，所以时间必须在十分钟。
-							questionEndTime = new Date(guessData.getOpentime().getTime() + 540000);
+							questionEndTime = new Date(guessData.getOpentime().getTime() + 600000);
 						}
 
 						if (category != null) {
@@ -217,9 +222,9 @@ public class FetchRemoteQuestions {
 						}
 						guessQuestion.setQuestionEndTime(questionEndTime);
 						guessQuestion.setName(expect + "");
-						guessQuestion.setChecked(false);
+						guessQuestion.setChecked(0);
 						guessQuestion.setDescription(expect + "期" + name + "所有开奖数字累计结果相加是");
-						questionService.insert(guessQuestion);
+						questionService.insertSelective(guessQuestion);
 
 						for (int j = 0; j < 2; j++) {
 							GuessOptions options = new GuessOptions();
