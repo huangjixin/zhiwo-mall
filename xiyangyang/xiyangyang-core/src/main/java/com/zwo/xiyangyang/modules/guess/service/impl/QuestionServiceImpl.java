@@ -75,13 +75,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 
 	@Override
 	public GuessQuestion selectByName(String name) {
-		GuessQuestionCriteria guessQuestionCriteria = new GuessQuestionCriteria();
-		GuessQuestionCriteria.Criteria criteria= guessQuestionCriteria.createCriteria();
-		criteria.andNameEqualTo(name);
-		/*Example example = new Example(GuessQuestion.class);
-        Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("name", name);*/
-		List<GuessQuestion> list = questionMapper.selectByExample(guessQuestionCriteria);
+		List<GuessQuestion> list = questionMapper.selectByName(name);
 		return list.size()>0?list.get(0):null;
 	}
 	
@@ -353,6 +347,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 		guessOptionsMapper.updateByExampleSelective(guessOptions, example);
 		
 		// 更新所有问题的答案为true；
+		criteria = example.createCriteria();
 		criteria.andEqualTo("guessQuestionId", questionId);
 		criteria.andEqualTo("id", optionId);
 		guessOptions.setIsRight(true);
@@ -363,9 +358,8 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 		questionMapper.updateMememberHisAcc(questionId, optionId);
 		
 		// 更新问题已经合算过了。
-		GuessQuestion guessQuestion = new GuessQuestion();
-		guessQuestion.setId(questionId);
-		guessQuestion.setChecked(true);
+		GuessQuestion guessQuestion = questionMapper.selectByPrimaryKey(questionId);
+		guessQuestion.setChecked(1);
 		questionMapper.updateByPrimaryKeySelective(guessQuestion);
 	}
 

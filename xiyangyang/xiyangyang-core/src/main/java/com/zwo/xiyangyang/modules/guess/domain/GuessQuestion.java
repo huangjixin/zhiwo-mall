@@ -210,7 +210,7 @@ public class GuessQuestion implements Serializable {
      *
      * @mbggenerated Mon Mar 26 14:23:06 CST 2018
      */
-    private Boolean checked;
+    private Integer checked;
 
     private String parentId;
     /**
@@ -757,7 +757,7 @@ public class GuessQuestion implements Serializable {
      *
      * @mbggenerated Mon Mar 26 14:23:06 CST 2018
      */
-    public Boolean getChecked() {
+    public Integer getChecked() {
         return checked;
     }
 
@@ -769,7 +769,7 @@ public class GuessQuestion implements Serializable {
      *
      * @mbggenerated Mon Mar 26 14:23:06 CST 2018
      */
-    public void setChecked(Boolean checked) {
+    public void setChecked(Integer checked) {
         this.checked = checked;
     }
 

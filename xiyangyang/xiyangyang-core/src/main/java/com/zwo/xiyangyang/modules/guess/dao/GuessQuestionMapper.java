@@ -108,5 +108,11 @@ public interface GuessQuestionMapper {
      */
     void updateMememberHisAcc(@Param("questionId")String questionId,@Param("optionId")String optionId);
     
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    List<GuessQuestion> selectByName(@Param("name")String name);
     
 }
