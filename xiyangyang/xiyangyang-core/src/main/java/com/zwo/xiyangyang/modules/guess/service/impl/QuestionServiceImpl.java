@@ -72,12 +72,6 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 	protected String getBaseMessage() {
 		return "竞猜问题基础操作";
 	}
-
-	@Override
-	public GuessQuestion selectByName(String name) {
-		List<GuessQuestion> list = questionMapper.selectByName(name);
-		return list.size()>0?list.get(0):null;
-	}
 	
 	@Override
 	public int deteleBatch(List<GuessQuestion> list) {
@@ -337,6 +331,12 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 	}
 
 	@Override
+	public GuessQuestion selectByName(String name,String type) {
+		List<GuessQuestion> list = questionMapper.selectByName(name,type);
+		return list.size()>0?list.get(0):null;
+	}
+	
+	@Override
 	public void checkQuestion(String questionId, String optionId) {
 		// 更新问题的答案为false；
 		GuessOptions guessOptions = new GuessOptions();
@@ -361,6 +361,15 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 		GuessQuestion guessQuestion = questionMapper.selectByPrimaryKey(questionId);
 		guessQuestion.setChecked(1);
 		questionMapper.updateByPrimaryKeySelective(guessQuestion);
+	}
+
+	@Override
+	public List<GuessQuestion> selectQuestions(GuessQuestion guessQuestion, PageInfo<GuessQuestion> pageInfo) {
+		if (pageInfo != null && pageInfo.getPageSize() != 0) {
+			PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+		}
+		List<GuessQuestion> list = questionMapper.selectQuestions(guessQuestion);
+		return list;
 	}
 
 }

@@ -113,6 +113,7 @@ public interface GuessQuestionMapper {
      * @param name
      * @return
      */
-    List<GuessQuestion> selectByName(@Param("name")String name);
+    List<GuessQuestion> selectByName(@Param("name")String name,@Param("code")String code);
     
+    List<GuessQuestion> selectQuestions(GuessQuestion guessQuestion);
 }
