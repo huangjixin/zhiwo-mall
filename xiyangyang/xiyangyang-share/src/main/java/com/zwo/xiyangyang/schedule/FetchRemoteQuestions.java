@@ -4,6 +4,7 @@
 package com.zwo.xiyangyang.schedule;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,10 +56,24 @@ public class FetchRemoteQuestions {
 	private String[] apiArray = { "http://f.apiplus.net/dlt.json", "http://f.apiplus.net/fc3d.json",
 			"http://f.apiplus.net/pl3.json", "http://f.apiplus.net/pl5.json", "http://f.apiplus.net/qlc.json" };
 
-//	@Scheduled(fixedRate = 5000)
+	@Scheduled(fixedRate = 60000)
 	public void fixedRateJob() {
+		/*for (int i = 0; i < apiArray.length; i++) {
+			try {
+				Thread.sleep(Long.valueOf(3000));
+			} catch (InterruptedException e) {
+				
+				e.printStackTrace();
+			}
+			get("http://f.apiplus.net/gd11x5-20.json", "gd11x5", "广东11选5", "gd11x5");
+		}*/
 		// get("http://f.apiplus.net/gd11x5-2.json","gd11x5","广东11选5","gd11x5");
-		get("http://f.apiplus.net/gd11x5-5.json", "gd11x5", "广东11选5", "gd11x5");
+		get("http://f.apiplus.net/gs11x5-20.json", "gs11x5", "甘肃11选5", "gs11x5");
+		get("http://f.apiplus.net/fj11x5-20.json", "fj11x5", "福建11选5", "fj11x5");
+		get("http://f.apiplus.net/ah11x5-20.json", "ah11x5", "安徽11选5", "ah11x5");
+		get("http://f.apiplus.net/bj11x5-20.json", "bj11x5", "北京11选5", "bj11x5");
+		get("http://f.apiplus.net/gx11x5-20.json", "gx11x5", "广西11选5", "gx11x5");
+		get("http://f.apiplus.net/gd11x5-20.json", "gd11x5", "广东11选5", "gd11x5");
 		// System.out.println("hello,world,this is a fixed rate job");
 	}
 
@@ -128,11 +143,12 @@ public class FetchRemoteQuestions {
 		if (list.size() != 0) {
 			api = list.get(0);
 			if (!content.equals(api.getContent())) {
-				chectData(content, type, name, categoryCode);
-				api.setUpdateDate(new Date());
-				api.setContent(content);
-				apiService.updateByPrimaryKeySelective(api);
+				
 			}
+			chectData(content, type, name, categoryCode);
+			api.setUpdateDate(new Date());
+			api.setContent(content);
+			apiService.updateByPrimaryKeySelective(api);
 		}else {
 			api = new GuessQuestionApi();
 			api.setContent(content);
@@ -156,7 +172,7 @@ public class FetchRemoteQuestions {
 				Object obj = jsonArray.get(i);
 				Gson gson = new Gson();
 				GuessData guessData = gson.fromJson(obj.toString(), GuessData.class);
-				GuessQuestion question = this.questionService.selectByName(guessData.getExpect());
+				GuessQuestion question = this.questionService.selectByName(guessData.getExpect(),type);
 
 				/*
 				 * 第一条竞猜数据格式是这样的：data:[ { expect: "2018069", opencode: "1,1,9", opentime:
@@ -186,26 +202,22 @@ public class FetchRemoteQuestions {
 								this.questionService.checkQuestion(question.getId(), option.getId());
 							}
 						}
-						/*
-						GuessOptions guessOptions = new GuessOptions();
-						guessOptions.setGuessQuestionId(question.getId());
-						guessOptions.setIsRight(true);
-						guessOptions.setName(resu);
-						this.optionsService.checkOption(guessOptions);
-						question.setChecked(1);
-						questionService.updateById(question);*/
 					}
 				}
 
 				if (i == 0) {
+					int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+					if(hour>=23 || hour<9) {
+						return;
+					}
+					
 					Integer expect = Integer.valueOf(guessData.getExpect());
 					expect += 1;
 
-					question = this.questionService.selectByName(expect + "");
+					question = this.questionService.selectByName(expect + "",type);
 					// 如果数据库里面还没有插入了
 					if (question == null) {
 						GuessCategory category = this.categoryService.selectByCode(categoryCode);
-
 						GuessQuestion guessQuestion = new GuessQuestion();
 						guessQuestion.setCreateDate(new Date());
 						// 开彩前一分钟截止。
@@ -213,8 +225,14 @@ public class FetchRemoteQuestions {
 						// 福彩3d
 						if (type.equals("fc3d") || type.equals("pl3") || type.equals("pl5")) {
 							questionEndTime = new Date(guessData.getOpentime().getTime() + 24 * 60 * 59000);
-						} else if (type.equals("gd11x5")) {// 广东11选5 高频彩，所以时间必须在十分钟。
-							questionEndTime = new Date(guessData.getOpentime().getTime() + 600000);
+						} else if (type.equals("gs11x5") || 
+								type.equals("fj11x5") || 
+								type.equals("ah11x5") || 
+								type.equals("gd11x5") || 
+								type.equals("bj11x5")|| 
+								type.equals("gx11x5") ) {// 广东11选5 高频彩，所以时间必须在十分钟。
+							long endTime = guessData.getOpentime().getTime() + 600000;
+							questionEndTime = new Date(endTime);
 						}
 
 						if (category != null) {
@@ -222,6 +240,7 @@ public class FetchRemoteQuestions {
 						}
 						guessQuestion.setQuestionEndTime(questionEndTime);
 						guessQuestion.setName(expect + "");
+						guessQuestion.setCode(type);
 						guessQuestion.setChecked(0);
 						guessQuestion.setDescription(expect + "期" + name + "所有开奖数字累计结果相加是");
 						questionService.insertSelective(guessQuestion);

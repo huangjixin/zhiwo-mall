@@ -75,13 +75,15 @@ public class AppGuessController {
 		 * = example.createCriteria();
 		 * criteria.andGreaterThanOrEqualTo("questionEndTime", new Date());
 		 */
-		GuessQuestionCriteria guessQuestionCriteria = new GuessQuestionCriteria();
+		/*GuessQuestionCriteria guessQuestionCriteria = new GuessQuestionCriteria();
 		GuessQuestionCriteria.Criteria criteria = guessQuestionCriteria.createCriteria();
 		criteria.andQuestionEndTimeGreaterThanOrEqualTo(new Date());
 		criteria.andCheckedEqualTo(false);
-		guessQuestionCriteria.setOrderByClause("create_date asc");
-		List<GuessQuestion> list = questionService.selectByExample(guessQuestionCriteria, pageInfo);
-
+		guessQuestionCriteria.setOrderByClause("create_date desc");
+		List<GuessQuestion> list = questionService.selectByExample(guessQuestionCriteria, pageInfo);*/
+		GuessQuestion guessQuestion = new GuessQuestion();
+		guessQuestion.setChecked(0);
+		List<GuessQuestion> list = questionService.selectQuestions(guessQuestion, pageInfo);
 		return list;
 	}
 
