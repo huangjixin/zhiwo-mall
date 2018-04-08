@@ -23,6 +23,8 @@ import { PersonalComponent } from './pages/personal/personal.component';
 
 import { SwiperModule, SwiperConfigInterface, SWIPER_CONFIG } from 'ngx-swiper-wrapper';
 import { GuessComponent } from './pages/guess/guess.component';
+import {AuthService} from './service/auth.service';
+import {AuthGuard } from './service/auth-guard.service';
 
 const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
   observer: true,
@@ -36,12 +38,12 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
 export const routes = [
   { path: '', redirectTo: '/index', pathMatch: 'full' },
   { path: 'index', component: MainComponent, children: [
-      {path: '', outlet: 'userInfo', component: UserInfoComponent},
+      {path: '', canActivate: [AuthGuard], outlet: 'userInfo', component: UserInfoComponent},
       {path: 'guess-record', outlet: 'userInfo', component: GuessRecordComponent },
       {path: 'address', outlet: 'userInfo', component: AddredssComponentComponent, children: [
           {path: '', outlet: 'addressComponent', component: AddressComponent },
           {path: 'address-detail', outlet: 'addressComponent', component: AddressDetailComponent }
-        ]} ,
+        ]}
     ] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
@@ -65,7 +67,8 @@ export const routes = [
     SwiperModule, FormsModule, BrowserModule, InfiniteScrollModule,
     BrowserAnimationsModule, RouterModule, WeUIModule,  RouterModule.forRoot(routes,{ enableTracing: true })
   ],
-  providers: [{provide : RouteReuseStrategy, useClass: SimpleReuseStrategy}, { provide: SWIPER_CONFIG, useValue: DEFAULT_SWIPER_CONFIG
+    providers: [AuthService, AuthGuard,
+      {provide : RouteReuseStrategy, useClass: SimpleReuseStrategy}, { provide: SWIPER_CONFIG, useValue: DEFAULT_SWIPER_CONFIG
   }],
   bootstrap: [AppComponent]
 })
