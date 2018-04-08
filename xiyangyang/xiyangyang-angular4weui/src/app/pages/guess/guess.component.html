@@ -1,0 +1,120 @@
+<div >
+  <!--style="position: fixed; left: 0; right: 0; top:0; z-index: 100;"-->
+ <!-- <div class="wrapper wrapper01" id="retr">
+    <div class="scroller">
+      <ul class="clearfix">
+        <li><a href="javascript:void(0)">全部科目</a></li>
+        <li><a href="javascript:void(0)">会计从业</a></li>
+        <li><a href="javascript:void(0)">会计职称</a></li>
+        <li><a href="javascript:void(0)">注会</a></li>
+        <li><a href="javascript:void(0)">税务师</a></li>
+        <li><a href="javascript:void(0)">国际证书</a></li>
+        <li><a href="javascript:void(0)">更多</a></li>
+        <li><a href="javascript:void(0)">更多注会</a></li>
+        <li><a href="javascript:void(0)">国际证书2</a></li>
+        <li><a href="javascript:void(0)">更多4</a></li>
+        <li><a href="javascript:void(0)">更多5</a></li>
+      </ul>
+    </div>
+  </div>-->
+  <div class="wrapper wrapper02" id="wrapper02">
+    <div class="scroller">
+      <ul class="clearfix">
+        <li><a href="javascript:void(0)">全部</a></li>
+        <li><a href="javascript:void(0)">足球</a></li>
+        <li><a href="javascript:void(0)">篮球</a></li>
+        <li><a href="javascript:void(0)">奇偶数</a></li>
+        <li><a href="javascript:void(0)">其它</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<!--<div class="wrapper wrapper03" id="wrapper03">
+  <div class="scroller">
+    <ul class="clearfix">
+      <li><a href="javascript:void(0)">全部科目</a></li>
+      <li><a href="javascript:void(0)">会计从业</a></li>
+      <li><a href="javascript:void(0)">会计职称</a></li>
+      <li><a href="javascript:void(0)">注会</a></li>
+      <li><a href="javascript:void(0)">税务师</a></li>
+      <li><a href="javascript:void(0)">国际证书</a></li>
+      <li><a href="javascript:void(0)">更多</a></li>
+      <li><a href="javascript:void(0)">更多注会</a></li>
+      <li><a href="javascript:void(0)">国际证书2</a></li>
+      <li><a href="javascript:void(0)">更多4</a></li>
+      <li><a href="javascript:void(0)">更多5</a></li>
+    </ul>
+  </div>
+</div>-->
+
+<div #scrollContainer>
+  <div *ngFor="let question of guessQuestions; let i = index;">
+      <div class="weui-cells__title" >
+        <p style="font-size: 1.0em;color: gray;">{{i+1}}.{{question.description}}</p>
+      </div>
+      <div class="weui-cells" >
+        <ng-template [ngIf]="question.guessOptions.length>0">
+          <a  *ngFor="let option of question.guessOptions" class="weui-cell weui-cell_access"
+              href="javascript:;" (click)="onOptionClickHandler(option)">
+            <div class="weui-cell__bd">
+              <p style="font-size: 0.8em;">{{option.name}}</p>
+            </div>
+            <div style="font-size: 0.8em;" class="weui-cell__ft">赔率{{option.betRate}}</div>
+          </a>
+        </ng-template>
+      </div>
+      <div class="weui-cells__title" >
+        <i class="fa fa-clock-o" aria-hidden="true"></i>投注截止时间：{{question.questionEndTime | date:'yyyy-MM-dd HH:mm:00'}}
+      </div>
+  </div>
+  <weui-loadmore style="font-size: 1.2em;" [loading]="isLoading" (click)="loadMore()">{{isLoading ? '正在加载':(allDataLoaded?'加载完毕':'加载更多')}}</weui-loadmore>
+  <div style="height: 50px"></div>
+</div>
+<!--<weui-infiniteloader (loadmore)="onLoadMore($event)" #comp style="font-size: 1em;">
+  <div *ngFor="let question of guessQuestions; let i = index;">
+    <div class="weui-cells__title" >
+      <p style="font-size: 1.0em;color: gray;">{{i+1}}.{{question.name}}</p>
+    </div>
+    <div class="weui-cells" >
+      <ng-template [ngIf]="question.guessOptions.length>0">
+        <a  *ngFor="let option of question.guessOptions" class="weui-cell weui-cell_access"
+            href="javascript:;" (click)="onOptionClickHandler(option)">
+          <div class="weui-cell__bd">
+            <p style="font-size: 0.8em;">{{option.name}}</p>
+          </div>
+          <div style="font-size: 0.8em;" class="weui-cell__ft">赔率{{option.betRate}}</div>
+        </a>
+      </ng-template>
+    </div>
+    <div class="weui-cells__title" >
+      <i class="fa fa-clock-o" aria-hidden="true"></i>投注截止时间：{{question.questionEndTime | date:'yyyy-MM-dd HH:mm:ss'}}
+    </div>
+  </div>
+</weui-infiniteloader>
+<weui-popup #betOptionPopup>
+  <div style="text-align: center;padding: 10px;">
+    <div><p>{{guessOptionsEntity.name}}赔率：{{guessOptionsEntity.betRate}}</p></div>
+    <div class="weui-flex">
+      <div class="weui-flex__item">
+        <button weui-button [weui-mini]="true" (click)="betValue=100;" [weui-type]="'warn'" style="text-align: center;width: 80%;">100</button>
+      </div>
+      <div class="weui-flex__item">
+        <button weui-button [weui-mini]="true" (click)="betValue=200;" [weui-type]="'warn'" style="text-align: center;width: 80%;">200</button>
+      </div>
+      <div class="weui-flex__item">
+        <button weui-button [weui-mini]="true" (click)="betValue=500;" [weui-type]="'warn'" style="text-align: center;width: 80%;">500</button>
+      </div>
+      <div class="weui-flex__item">
+        <button weui-button [weui-mini]="true" (click)="betValue=1000;" [weui-type]="'warn'" style="text-align: center;width: 80%;">1000</button>
+      </div>
+    </div>
+    <div style="font-size: 1em;padding: 5px;"><p>押<label style="color: red">{{betValue}}</label>猜中赢<label style="color: red">{{guessOptionsEntity.betRate*betValue}}</label>竞猜豆</p></div>
+    <div style="text-align: center;padding: 4px;">
+      <button weui-button [weui-mini]="true" style="text-align: center;width: 30%;">马上竞猜</button>
+    </div>
+
+  </div>
+</weui-popup>-->
+
