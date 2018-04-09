@@ -46,6 +46,9 @@ export class GuessComponent implements OnInit{
     }).then(response => response.json())
       .then(response => {
         const length: Number = response.length;
+        if( length < this.pageSize ){
+          this.allDataLoaded = true;
+        }
         if (length === 0) {
           this.allDataLoaded = true;
         }

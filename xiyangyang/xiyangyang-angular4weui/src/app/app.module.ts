@@ -38,7 +38,7 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
 export const routes = [
   { path: '', redirectTo: '/index', pathMatch: 'full' },
   { path: 'index', component: MainComponent, children: [
-      {path: '', canActivate: [AuthGuard], outlet: 'userInfo', component: UserInfoComponent},
+      {path: 'userInfo', canActivate: [AuthGuard], outlet: 'userInfo', component: UserInfoComponent},
       {path: 'guess-record', outlet: 'userInfo', component: GuessRecordComponent },
       {path: 'address', outlet: 'userInfo', component: AddredssComponentComponent, children: [
           {path: '', outlet: 'addressComponent', component: AddressComponent },
