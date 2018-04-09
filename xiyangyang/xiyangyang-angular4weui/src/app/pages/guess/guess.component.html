@@ -48,30 +48,38 @@
     </ul>
   </div>
 </div>-->
-
-<div #scrollContainer>
-  <div *ngFor="let question of guessQuestions; let i = index;">
-      <div class="weui-cells__title" >
-        <p style="font-size: 1.0em;color: gray;">{{i+1}}.{{question.description}}</p>
+<swiper class="swiper-container" [config]="swiperConfig" [disabled]="false" [index]="0">
+  <div class="swiper-slide">
+    <div>1</div>
+    <div #scrollContainer>
+      <div *ngFor="let question of guessQuestions; let i = index;">
+        <div class="weui-cells__title" >
+          <p style="font-size: 1.0em;color: gray;">{{i+1}}.{{question.description}}</p>
+        </div>
+        <div class="weui-cells" >
+          <ng-template [ngIf]="question.guessOptions.length>0">
+            <a  *ngFor="let option of question.guessOptions" class="weui-cell weui-cell_access"
+                href="javascript:;" (click)="onOptionClickHandler(option)">
+              <div class="weui-cell__bd">
+                <p style="font-size: 0.8em;">{{option.name}}</p>
+              </div>
+              <div style="font-size: 0.8em;" class="weui-cell__ft">赔率{{option.betRate}}</div>
+            </a>
+          </ng-template>
+        </div>
+        <div class="weui-cells__title" >
+          <i class="fa fa-clock-o" aria-hidden="true"></i>投注截止时间：{{question.questionEndTime | date:'yyyy-MM-dd HH:mm:00'}}
+        </div>
       </div>
-      <div class="weui-cells" >
-        <ng-template [ngIf]="question.guessOptions.length>0">
-          <a  *ngFor="let option of question.guessOptions" class="weui-cell weui-cell_access"
-              href="javascript:;" (click)="onOptionClickHandler(option)">
-            <div class="weui-cell__bd">
-              <p style="font-size: 0.8em;">{{option.name}}</p>
-            </div>
-            <div style="font-size: 0.8em;" class="weui-cell__ft">赔率{{option.betRate}}</div>
-          </a>
-        </ng-template>
-      </div>
-      <div class="weui-cells__title" >
-        <i class="fa fa-clock-o" aria-hidden="true"></i>投注截止时间：{{question.questionEndTime | date:'yyyy-MM-dd HH:mm:00'}}
-      </div>
+      <weui-loadmore style="font-size: 1.2em;" [loading]="isLoading" (click)="loadMore()">{{isLoading ? '正在加载':(allDataLoaded?'加载完毕':'加载更多')}}</weui-loadmore>
+      <div style="height: 50px"></div>
+    </div>
   </div>
-  <weui-loadmore style="font-size: 1.2em;" [loading]="isLoading" (click)="loadMore()">{{isLoading ? '正在加载':(allDataLoaded?'加载完毕':'加载更多')}}</weui-loadmore>
-  <div style="height: 50px"></div>
-</div>
+  <div class="swiper-slide">
+    <div>2</div>
+  </div>
+</swiper>
+
 <!--<weui-infiniteloader (loadmore)="onLoadMore($event)" #comp style="font-size: 1em;">
   <div *ngFor="let question of guessQuestions; let i = index;">
     <div class="weui-cells__title" >

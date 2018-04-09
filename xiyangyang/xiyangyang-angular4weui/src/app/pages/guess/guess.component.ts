@@ -5,6 +5,8 @@ import { InfiniteLoaderComponent, PopupComponent } from 'ngx-weui';
 import {GuessQuestionEntity} from './GuessQuestionEntity';
 import {GuessOptionsEntity} from './GuessOptionsEntity';
 import {globalConfig} from '../../global.config';
+import { SwiperComponent, SwiperDirective, SwiperConfigInterface,
+  SwiperScrollbarInterface, SwiperPaginationInterface } from 'ngx-swiper-wrapper';
 
 declare var $:any;
 
@@ -29,6 +31,17 @@ export class GuessComponent implements OnInit{
   @ViewChild('scrollContainer')
   // 获取元素
   public scrollContainer: ElementRef;
+
+  public swiperConfig: SwiperConfigInterface = {
+    direction: 'horizontal',
+    slidesPerView: 1,
+    keyboard: false,
+    mousewheel: false,
+    scrollbar: false,
+    navigation: false,
+    pagination: false,
+    allowTouchMove: true
+  };
 
   constructor() { }
 
