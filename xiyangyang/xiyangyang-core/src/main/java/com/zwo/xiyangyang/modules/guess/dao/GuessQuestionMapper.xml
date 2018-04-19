@@ -31,8 +31,8 @@
 		<result column="CHECKED" property="checked" jdbcType="INTEGER" />
 		<result column="PARENT_ID" property="parentId" jdbcType="VARCHAR" />
 		<!-- 跟一对一一样用association标签,实体类定义的成员,要跟数据库字段名对应上 -->
-		<association property="guessCategory" column="GUESS_CATEGORY_ID"
-			select="com.zwo.xiyangyang.modules.guess.dao.GuessCategoryMapper.selectByPrimaryKey" />
+		<!-- <association property="guessCategory" column="GUESS_CATEGORY_ID"
+			select="com.zwo.xiyangyang.modules.guess.dao.GuessCategoryMapper.selectByPrimaryKey" /> -->
 		<!-- <collection property="guessOptions" column="id"
 			select="com.zwo.xiyangyang.modules.guess.dao.GuessOptionsMapper.selectByQuestionId">
 		</collection> -->
