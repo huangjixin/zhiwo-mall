@@ -1,0 +1,29 @@
+<eui-layout style="width:100%;height:100%;">
+  <eui-layout-panel region="north" style="height:80px;" split="true">
+      <div class="title" [routerLink]="[{ outlets: { main: ['srole'] } }]">North Region</div>
+  </eui-layout-panel>
+  <eui-layout-panel region="west" style="width:20%;" split="true" fit="true">
+      <eui-treegrid style="padding: 3px;width:100%;"
+            [data]="treeData" idField="id" treeField="name"
+            [(selection)]="selection"
+            (selectionChange)="selectNodeHandler($event)">
+        <eui-grid-column field="name" title="菜单名称"></eui-grid-column>
+      </eui-treegrid>
+  </eui-layout-panel>
+  <eui-layout-panel region="center" style="width:100%;height:100%;min-height: 500px;padding: 3px;">
+      <router-outlet  name="main"></router-outlet>
+      <!-- <div class="title" style="padding: 3px;">
+        <h2>Basic DataGrid</h2>
+        <eui-datagrid [data]="data" style="width:100%;height:100%;">
+            <eui-grid-column field="itemid" title="Item ID"></eui-grid-column>
+            <eui-grid-column field="name" title="Name"></eui-grid-column>
+            <eui-grid-column field="listprice" title="List Price" align="right"></eui-grid-column>
+            <eui-grid-column field="unitcost" title="Unit Cost" align="right"></eui-grid-column>
+            <eui-grid-column field="attr" title="Attribute" width="30%"></eui-grid-column>
+            <eui-grid-column field="status" title="Status" align="center"></eui-grid-column>
+        </eui-datagrid>
+      </div> -->
+  </eui-layout-panel>
+</eui-layout>
+
+
