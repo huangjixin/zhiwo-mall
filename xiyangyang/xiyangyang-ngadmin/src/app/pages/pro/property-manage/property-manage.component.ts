@@ -1,3 +1,4 @@
+import { PropertyService } from './../property.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PropertyManageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private service: PropertyService) { }
 
   ngOnInit() {
   }

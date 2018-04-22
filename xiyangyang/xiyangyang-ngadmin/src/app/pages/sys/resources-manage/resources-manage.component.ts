@@ -1,3 +1,4 @@
+import { ResourcesService } from './../resources.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ResourcesManageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private service: ResourcesService) { }
 
   ngOnInit() {
   }

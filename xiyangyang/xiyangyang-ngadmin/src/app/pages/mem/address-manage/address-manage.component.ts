@@ -1,3 +1,4 @@
+import { AddressService } from './../address.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddressManageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private service: AddressService) { }
 
   ngOnInit() {
   }

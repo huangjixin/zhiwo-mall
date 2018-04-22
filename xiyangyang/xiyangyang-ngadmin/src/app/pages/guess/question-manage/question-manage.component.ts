@@ -1,3 +1,4 @@
+import { QuestionService } from './../question.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class QuestionManageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private service: QuestionService) { }
 
   ngOnInit() {
   }

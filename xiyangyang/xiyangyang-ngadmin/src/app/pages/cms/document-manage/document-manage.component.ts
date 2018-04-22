@@ -1,3 +1,4 @@
+import { DocumentService } from './../document.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DocumentManageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private service: DocumentService) { }
 
   ngOnInit() {
   }

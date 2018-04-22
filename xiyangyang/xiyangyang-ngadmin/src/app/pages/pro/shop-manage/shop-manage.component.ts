@@ -1,3 +1,4 @@
+import { ShopService } from './../shop.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ShopManageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private service: ShopService) { }
 
   ngOnInit() {
   }

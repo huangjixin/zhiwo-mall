@@ -1,3 +1,4 @@
+import { RoleService } from './../role.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RoleManageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private service: RoleService) { }
 
   ngOnInit() {
   }

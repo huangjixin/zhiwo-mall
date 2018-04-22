@@ -1,3 +1,23 @@
+import { GuessCategoryService } from './pages/guess/guess-category.service';
+import { GuessAccountService } from './pages/guess/guess-account.service';
+import { GuessHisAccountService } from './pages/guess/guess-his-account.service';
+import { QuestionService } from './pages/guess/question.service';
+import { MemberService } from './pages/mem/member.service';
+import { MemCategoryService } from './pages/mem/mem-category.service';
+import { AddressService } from './pages/mem/address.service';
+import { ProCategoryService } from './pages/pro/pro-category.service';
+import { ProductService } from './pages/pro/product.service';
+import { PropertyService } from './pages/pro/property.service';
+import { ShopService } from './pages/pro/shop.service';
+import { LogService } from './pages/sys/log.service';
+import { ResourcesService } from './pages/sys/resources.service';
+import { RoleService } from './pages/sys/role.service';
+import { UserService } from './pages/sys/user.service';
+import { LogServiceService } from './pages/sys/log-service.service';
+import { ResourcesServiceService } from './pages/sys/resources-service.service';
+import { RoleServiceService } from './pages/sys/role-service.service';
+import { UserServiceService } from './pages/sys/user-service.service';
+import { UserManageComponent } from './pages/sys/user-manage/user-manage.component';
 import { ResourcesManageComponent } from './pages/sys/resources-manage/resources-manage.component';
 import { LogManageComponent } from './pages/sys/log-manage/log-manage.component';
 import { ShopManageComponent } from './pages/pro/shop-manage/shop-manage.component';
@@ -28,7 +48,6 @@ import { SimpleReuseStrategy } from './SimpleReuseStrategy';
 
 import { AppComponent } from './app.component';
 import { RoleManageComponent } from './pages/sys/role-manage/role-manage.component';
-import { UserManageComponent } from './page/sys/user-manage/user-manage.component';
 
 export const routes = [
   { path: '', redirectTo: 'index', pathMatch: 'full' },
@@ -89,7 +108,22 @@ export const routes = [
     EasyUIModule,
     RouterModule.forRoot(routes, { enableTracing: true })
   ],
-  providers: [{provide : RouteReuseStrategy, useClass: SimpleReuseStrategy}],
+  providers: [UserService,
+              RoleService,
+              ResourcesService,
+              LogService,
+              ShopService,
+              PropertyService,
+              ProductService,
+              ProCategoryService,
+              AddressService,
+              MemCategoryService,
+              MemberService,
+              QuestionService,
+              GuessHisAccountService,
+              GuessCategoryService,
+              GuessAccountService,
+              {provide : RouteReuseStrategy, useClass: SimpleReuseStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

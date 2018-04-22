@@ -1,3 +1,4 @@
+import { GuessHisAccountService } from './../guess-his-account.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GuessHisAccountManageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private service: GuessHisAccountService) { }
 
   ngOnInit() {
   }

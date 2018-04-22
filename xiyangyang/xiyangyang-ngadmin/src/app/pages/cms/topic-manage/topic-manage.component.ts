@@ -1,3 +1,4 @@
+import { TopicService } from './../topic.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TopicManageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private service: TopicService) { }
 
   ngOnInit() {
   }

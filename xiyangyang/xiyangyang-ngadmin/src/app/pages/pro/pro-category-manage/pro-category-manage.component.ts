@@ -1,3 +1,4 @@
+import { ProCategoryService } from './../pro-category.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProCategoryManageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private service: ProCategoryService) { }
 
   ngOnInit() {
   }
