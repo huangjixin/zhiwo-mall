@@ -28,6 +28,7 @@ import { SimpleReuseStrategy } from './SimpleReuseStrategy';
 
 import { AppComponent } from './app.component';
 import { RoleManageComponent } from './pages/sys/role-manage/role-manage.component';
+import { UserManageComponent } from './page/sys/user-manage/user-manage.component';
 
 export const routes = [
   { path: '', redirectTo: 'index', pathMatch: 'full' },
@@ -49,7 +50,8 @@ export const routes = [
     {path: 'pshop', outlet: 'main', component: ShopManageComponent},
     {path: 'slog', outlet: 'main', component: LogManageComponent},
     {path: 'sresources', outlet: 'main', component: ResourcesManageComponent},
-    {path: 'srole', outlet: 'main', component: RoleManageComponent}
+    {path: 'srole', outlet: 'main', component: RoleManageComponent},
+    {path: 'suser', outlet: 'main', component: UserManageComponent}
     ] },
   { path: 'login', component: LoginComponent },
   ];
@@ -74,9 +76,10 @@ export const routes = [
     LogManageComponent,
     ResourcesManageComponent,
     RoleManageComponent,
+    UserManageComponent,
     LoginComponent,
     MainComponent,
-    AppComponent
+    AppComponent,
   ],
   imports: [
     RouterModule,
