@@ -1,3 +1,7 @@
+import { TopicService } from './pages/cms/topic.service';
+import { DocumentService } from './pages/cms/document.service';
+import { CmsCategoryService } from './pages/cms/cms-category.service';
+import { CommentService } from './pages/cms/comment.service';
 import { GuessCategoryService } from './pages/guess/guess-category.service';
 import { GuessAccountService } from './pages/guess/guess-account.service';
 import { GuessHisAccountService } from './pages/guess/guess-his-account.service';
@@ -119,6 +123,10 @@ export const routes = [
               GuessHisAccountService,
               GuessCategoryService,
               GuessAccountService,
+              CommentService,
+              CmsCategoryService,
+              DocumentService,
+              TopicService,
               {provide : RouteReuseStrategy, useClass: SimpleReuseStrategy}],
   bootstrap: [AppComponent]
 })
