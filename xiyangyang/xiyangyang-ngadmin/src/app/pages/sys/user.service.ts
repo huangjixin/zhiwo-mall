@@ -10,7 +10,7 @@ export class UserService {
   constructor() {
     for (let i = 0; i <= 200; i++) {
       const user = new User();
-      user.id =  1000 + i;
+      user.id = '' + (1000 + i);
       user.username = 'Jack' + i;
       user.email = 'email' + i + '@163.com';
       user.mobilPhone = '137126561' + i;

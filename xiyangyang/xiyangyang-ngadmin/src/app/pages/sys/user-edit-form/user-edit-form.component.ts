@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 import {Validators, FormGroup, FormBuilder, FormControl} from '@angular/forms';
 
 @Component({
@@ -31,11 +31,14 @@ export class UserEditFormComponent implements OnInit {
 
   }
 
+  ngOnInit() {
+  }
+
   onSave() {
-    if (this.formGroup.valid) {
-      Object.assign(this.row, this.formGroup.value);
-      this.save.emit(this.row);
-    }
+    // if (this.formGroup.valid) {
+    //   Object.assign(this.row, this.formGroup.value);
+    //   this.save.emit(this.row);
+    // }
 
   }
 
