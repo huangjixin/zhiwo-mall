@@ -48,6 +48,8 @@ import { SimpleReuseStrategy } from './SimpleReuseStrategy';
 
 import { AppComponent } from './app.component';
 import { RoleManageComponent } from './pages/sys/role-manage/role-manage.component';
+import { ProCategoryEditFormComponent } from './pages/pro/pro-category-edit-form/pro-category-edit-form.component';
+import { UserEditFormComponent } from './pages/sys/user-edit-form/user-edit-form.component';
 
 export const routes = [
   { path: '', redirectTo: 'index', pathMatch: 'full' },
@@ -99,6 +101,8 @@ export const routes = [
     LoginComponent,
     MainComponent,
     AppComponent,
+    ProCategoryEditFormComponent,
+    UserEditFormComponent,
   ],
   imports: [
     RouterModule,
