@@ -51,6 +51,8 @@ import { RoleManageComponent } from './pages/sys/role-manage/role-manage.compone
 import { ProCategoryEditFormComponent } from './pages/pro/pro-category-edit-form/pro-category-edit-form.component';
 import { UserEditFormComponent } from './pages/sys/user-edit-form/user-edit-form.component';
 import { ShopEditFormComponent } from './pages/pro/shop-edit-form/shop-edit-form.component';
+import { ProductEditFormComponent } from './pages/pro/product-edit-form/product-edit-form.component';
+import { PropertyEditFormComponent } from './pages/pro/property-edit-form/property-edit-form.component';
 
 export const routes = [
   { path: '', redirectTo: 'index', pathMatch: 'full' },
@@ -108,6 +110,8 @@ export const routes = [
     ProCategoryEditFormComponent,
     UserEditFormComponent,
     ShopEditFormComponent,
+    ProductEditFormComponent,
+    PropertyEditFormComponent,
   ],
   imports: [
     RouterModule,
