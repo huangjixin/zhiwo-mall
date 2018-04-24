@@ -1,3 +1,30 @@
-<p>
-  user-manage works!
-</p>
+<h2>用户管理</h2>
+<eui-linkbutton (click)="onAddRow()" iconCls="icon-add" style="margin-bottom:10px">新增用户</eui-linkbutton>
+<eui-datagrid style="height:250px"
+              [pagination]="true"
+              [lazy]="true"
+              [data]="data"
+              [total]="total"
+              [pageNumber]="pageNumber"
+              [pageSize]="pageSize"
+              [pagePosition]="pagePosition"
+              [loading]="loading"
+              (pageChange)="onPageChange($event)">
+  <eui-grid-column title="id" field="id"></eui-grid-column>
+  <eui-grid-column title="用户名" field="username"></eui-grid-column>
+  <eui-grid-column title="邮箱" field="email" align="right"></eui-grid-column>
+  <eui-grid-column title="电话" field="mobilPhone" align="right"></eui-grid-column>
+  <eui-grid-column title="描述" field="description" align="right"></eui-grid-column>
+  <eui-grid-column title="年龄" field="age"></eui-grid-column>
+  <eui-grid-column title="操作" align="center" width="100">
+    <ng-template euiCellTemplate let-row>
+      <eui-linkbutton btnCls="c5" (click)="onEditRow(row)">修改</eui-linkbutton>
+      <eui-linkbutton btnCls="c1" (click)="onDeleteRow(row)">删除</eui-linkbutton>
+    </ng-template>
+  </eui-grid-column>
+  <app-user-edit-form [closed]="closed" [isNewRow]="isNewRow" [row]="editingRow" (save)="onSaveRow($event)" (cancel)="closed=true">
+  </app-user-edit-form>
+
+</eui-datagrid>
+
+

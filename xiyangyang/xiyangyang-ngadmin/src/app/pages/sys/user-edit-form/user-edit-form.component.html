@@ -1,3 +1,28 @@
-<p>
-  user-edit-form works!
-</p>
+<eui-dialog [closed]="closed" [draggable]="true" [modal]="true" [title]="isNewRow ? 'Add' : 'Edit'">
+  <form style="padding:20px 40px">
+    <div style="margin-bottom:20px">
+      <label [for]="id">Item ID:</label>
+      <eui-textbox #id    style="width:200px"></eui-textbox>
+    </div>
+    <div style="margin-bottom:20px">
+      <label [for]="name">Name:</label>
+      <eui-textbox #username  style="width:200px"></eui-textbox>
+    </div>
+    <div style="margin-bottom:20px">
+      <label [for]="name">email:</label>
+      <eui-textbox #email  style="width:200px"></eui-textbox>
+    </div>
+    <div style="margin-bottom:20px">
+      <label [for]="name">mobilPhone:</label>
+      <eui-textbox #mobilPhone style="width:200px"></eui-textbox>
+    </div>
+    <div style="margin-bottom:20px">
+      <label [for]="name">description:</label>
+      <eui-textbox #description  style="width:200px"></eui-textbox>
+    </div>
+  </form>
+  <div class="dialog-button">
+    <eui-linkbutton (click)="onSave()" style="width:80px">Save</eui-linkbutton>
+    <eui-linkbutton (click)="onCancel()" style="width:80px">Cancel</eui-linkbutton>
+  </div>
+</eui-dialog>
