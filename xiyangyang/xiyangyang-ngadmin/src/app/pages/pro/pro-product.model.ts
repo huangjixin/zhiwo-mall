@@ -1,9 +1,11 @@
+import { Shop } from './shop.model';
+import { PropertyValue } from './property-value.model';
+import { ProPrice } from './pro-price.model';
 export class Product {
-    //Shop shop: ;
-	
-	//List<PrPropertyValue> propertyValues: ;
-    //List<PrPrice> prices: ;
-	
+    shop: Shop;
+    propertyValues: Array<PropertyValue>;
+    prices: Array<ProPrice>;
+
     id: String;
 
     /**
@@ -214,5 +216,5 @@ export class Product {
      toSubIndex: Boolean;
 
     constructor() {}
-    
+
 }
