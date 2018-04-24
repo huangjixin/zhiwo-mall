@@ -53,6 +53,10 @@ import { UserEditFormComponent } from './pages/sys/user-edit-form/user-edit-form
 import { ShopEditFormComponent } from './pages/pro/shop-edit-form/shop-edit-form.component';
 import { ProductEditFormComponent } from './pages/pro/product-edit-form/product-edit-form.component';
 import { PropertyEditFormComponent } from './pages/pro/property-edit-form/property-edit-form.component';
+import { GuessCategoryEditFormComponent } from './pages/guess/guess-category-edit-form/guess-category-edit-form.component';
+import { GuessQuestionEditFormComponent } from './pages/guess/guess-question-edit-form/guess-question-edit-form.component';
+import { GuessAccountEditFormComponent } from './pages/guess/guess-account-edit-form/guess-account-edit-form.component';
+import { GuessOptionsEditFormComponent } from './pages/guess/guess-options-edit-form/guess-options-edit-form.component';
 
 export const routes = [
   { path: '', redirectTo: 'index', pathMatch: 'full' },
@@ -71,14 +75,17 @@ export const routes = [
     {path: 'pcategory', outlet: 'main', component: ProCategoryManageComponent},
     {path: 'pproduct', outlet: 'main', component: ProductManageComponent},
     {path: 'pproperty', outlet: 'main', component: PropertyManageComponent},
-    {path: 'pshop', outlet: 'main', component: ShopManageComponent, children:[
-      {path: 'new', outlet: 'main', component: ShopEditFormComponent},
+    {path: 'pshop', outlet: 'main', component: ShopManageComponent, children: [
+      {path: 'shop-new', outlet: 'main', component: ShopEditFormComponent},
       {path: 'edit/:id', outlet: 'main', component: ShopEditFormComponent}
     ]},
     {path: 'slog', outlet: 'main', component: LogManageComponent},
     {path: 'sresources', outlet: 'main', component: ResourcesManageComponent},
     {path: 'srole', outlet: 'main', component: RoleManageComponent},
-    {path: 'suser', outlet: 'main', component: UserManageComponent}
+    {path: 'suser', outlet: 'main', component: UserManageComponent, children:[
+      {path: 'new', outlet: 'main', component: UserEditFormComponent},
+      {path: 'edit/:id', outlet: 'main', component: UserEditFormComponent}
+    ]}
     ] },
   { path: 'login', component: LoginComponent },
   ];
@@ -112,6 +119,10 @@ export const routes = [
     ShopEditFormComponent,
     ProductEditFormComponent,
     PropertyEditFormComponent,
+    GuessCategoryEditFormComponent,
+    GuessQuestionEditFormComponent,
+    GuessAccountEditFormComponent,
+    GuessOptionsEditFormComponent,
   ],
   imports: [
     RouterModule,

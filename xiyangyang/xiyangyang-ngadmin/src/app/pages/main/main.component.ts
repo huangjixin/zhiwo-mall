@@ -137,6 +137,7 @@ export class MainComponent implements OnInit {
       // [{ outlets: { userInfo: ['guess-record'] } }]
       const link: String =  node.link;
       this.router.navigate(['/index', { outlets: { main: [node.link] }}]);
+      // this.router.navigate(['/index/pshop', { outlets: { main: ['shop-new'] }}]);
     }
     console.log('123456');
   }
