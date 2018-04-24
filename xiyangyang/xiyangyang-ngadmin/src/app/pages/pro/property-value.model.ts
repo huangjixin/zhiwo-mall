@@ -1,6 +1,6 @@
+import { PrValuePrice } from './pro-value-price.model';
+import { Product } from './pro-product.model';
 import { Property } from './property.model';
-import { Product } from './product.model';
-import { PrValuePrice } from './value-price.model';
 
 export class PropertyValue {
      id: String;

@@ -1,5 +1,5 @@
-import { PrValuePrice } from './value-price.model';
-import { Product } from './product.model';
+import { PrValuePrice } from './pro-value-price.model';
+import { Product } from './pro-product.model';
 
 export class ProPrice {
 

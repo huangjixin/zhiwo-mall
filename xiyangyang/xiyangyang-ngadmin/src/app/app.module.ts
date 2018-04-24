@@ -69,7 +69,10 @@ export const routes = [
     {path: 'pcategory', outlet: 'main', component: ProCategoryManageComponent},
     {path: 'pproduct', outlet: 'main', component: ProductManageComponent},
     {path: 'pproperty', outlet: 'main', component: PropertyManageComponent},
-    {path: 'pshop', outlet: 'main', component: ShopManageComponent},
+    {path: 'pshop', outlet: 'main', component: ShopManageComponent, children:[
+      {path: 'new', outlet: 'main', component: ShopEditFormComponent},
+      {path: 'edit/:id', outlet: 'main', component: ShopEditFormComponent}
+    ]},
     {path: 'slog', outlet: 'main', component: LogManageComponent},
     {path: 'sresources', outlet: 'main', component: ResourcesManageComponent},
     {path: 'srole', outlet: 'main', component: RoleManageComponent},
