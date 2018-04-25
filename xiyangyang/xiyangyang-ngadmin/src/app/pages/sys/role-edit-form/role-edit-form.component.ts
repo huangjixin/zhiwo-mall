@@ -1,4 +1,7 @@
+import { ActivatedRouteSnapshot, Router, ParamMap, ActivatedRoute } from '@angular/router';
+import { RoleService } from './../role.service';
 import { Component, OnInit } from '@angular/core';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-role-edit-form',
@@ -7,9 +10,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RoleEditFormComponent implements OnInit {
 
-  constructor() { }
+  id: String;
+
+  constructor(public activeRoute: ActivatedRoute,
+    private router: Router, private roleService: RoleService) { }
 
   ngOnInit() {
+    const ids: String = this.activeRoute.snapshot.params['id'];
+    console.log(ids);
+    // this.activeRoute.queryParams.subscribe(params => {
+    //   this.id = params['id'];
+    //   console.log(this.id);
+    // });
+    // const id: String = this.route.paramMap.get('id');
+    // console.log(id);
   }
 
 }

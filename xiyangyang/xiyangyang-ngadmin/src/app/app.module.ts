@@ -1,3 +1,4 @@
+import { PropertyListComponent } from './pages/pro/property-list/property-list.component';
 import { MemberEditFormComponent } from './pages/mem/member-edit-form/member-edit-form.component';
 import { MemberListComponent } from './pages/mem/member-list/member-list.component';
 import { TopicService } from './pages/cms/topic.service';
@@ -103,10 +104,17 @@ export const routes = [
     ]},
     {path: 'pcategory', outlet: 'main', component: ProCategoryManageComponent},
     {path: 'pproduct', outlet: 'main', component: ProductManageComponent},
-    {path: 'pproperty', outlet: 'main', component: PropertyManageComponent},
-    {path: 'pshop', outlet: 'main', component: ShopManageComponent, children: [
-      {path: 'shop-new', outlet: 'shop', component: ShopEditFormComponent},
-      {path: 'edit/:id', outlet: 'shop', component: ShopEditFormComponent}
+    {path: 'pproperty', outlet: 'main', component: ListManageComponent, children: [
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      {path: 'list', outlet: 'list', component: PropertyListComponent},
+      {path: 'new', outlet: 'list', component: PropertyEditFormComponent},
+      {path: 'edit/:id', outlet: 'list', component: PropertyEditFormComponent}
+    ]},
+    {path: 'pshop', outlet: 'main', component: ListManageComponent, children: [
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      {path: 'list', outlet: 'list', component: ShopListComponent},
+      {path: 'new', outlet: 'list', component: ShopEditFormComponent},
+      {path: 'edit/:id', outlet: 'list', component: ShopEditFormComponent}
     ]},
     {path: 'slog', outlet: 'main', component: ListManageComponent, children:[
       { path: '', redirectTo: 'list', pathMatch: 'full' },
@@ -155,32 +163,41 @@ export const routes = [
     ResourcesManageComponent,
     RoleManageComponent,
     UserManageComponent,
+
     LoginComponent,
     MainComponent,
     AppComponent,
-    ProCategoryEditFormComponent,
-    UserEditFormComponent,
-    ShopEditFormComponent,
-    ProductEditFormComponent,
-    PropertyEditFormComponent,
+    ListManageComponent,
+
+    
     GuessCategoryEditFormComponent,
     GuessQuestionEditFormComponent,
     GuessAccountEditFormComponent,
     GuessOptionsEditFormComponent,
+
     ShopListComponent,
+    PropertyListComponent,
+    ShopEditFormComponent,
+    ProductEditFormComponent,
+    ProCategoryEditFormComponent,
+    PropertyEditFormComponent,
+
     UserListComponent,
     RoleListComponent,
+    LogListComponent,
     ResourcesListComponent,
+    UserEditFormComponent,
     RoleEditFormComponent,
     ResourcesEditFormComponent,
-    LogListComponent,
+    
     AddressListComponent,
-    AddressEditFormComponent,
-    MemCategoryEditFormComponent,
     MemCategoryListComponent,
     MemberListComponent,
+    AddressEditFormComponent,
+    MemCategoryEditFormComponent,
     MemberEditFormComponent,
-    ListManageComponent,
+    
+    
   ],
   imports: [
     RouterModule,
