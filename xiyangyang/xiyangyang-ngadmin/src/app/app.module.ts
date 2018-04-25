@@ -86,6 +86,7 @@ import { AddressEditFormComponent } from './pages/mem/address-edit-form/address-
 import { MemCategoryEditFormComponent } from './pages/mem/mem-category-edit-form/mem-category-edit-form.component';
 import { MemCategoryListComponent } from './pages/mem/mem-category-list/mem-category-list.component';
 import { ListManageComponent } from './pages/list-manage/list-manage.component';
+import { HttpModule } from '@angular/http';
 
 export const routes = [
   { path: '', redirectTo: 'index', pathMatch: 'full' },
@@ -273,6 +274,7 @@ export const routes = [
 
   ],
   imports: [
+    HttpModule,
     RouterModule,
     FormsModule,
     BrowserModule,

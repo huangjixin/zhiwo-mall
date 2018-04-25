@@ -1,3 +1,20 @@
-<p>
-  guess-question-list works!
-</p>
+<div style="padding:3px;">
+    <eui-linkbutton (click)="onAddRow()" iconCls="icon-add" style="margin-bottom:10px">新增</eui-linkbutton>
+    <eui-datagrid
+                    [pagination]="true"
+                    [data]="data"
+                    [total]="total"
+                    [pageNumber]="pageNumber"
+                    [pageSize]="pageSize"
+                    pagePosition="bottom">
+                <eui-grid-column field="id" title="id" align="center" hidden="true"></eui-grid-column>
+                <eui-grid-column field="name" title="竞猜题目" align="center"></eui-grid-column>
+                <eui-grid-column field="questionEndTime" title="截止日期" align="center"></eui-grid-column>
+                <eui-grid-column title="" align="center" width="100" height="50">
+                    <ng-template euiCellTemplate let-row>
+                      <eui-linkbutton btnCls="c5" (click)="onEditRow(row)">编辑</eui-linkbutton>
+                      <eui-linkbutton btnCls="c1" (click)="onDeleteRow(row)">删除</eui-linkbutton>
+                    </ng-template>
+                </eui-grid-column>
+    </eui-datagrid>
+</div>

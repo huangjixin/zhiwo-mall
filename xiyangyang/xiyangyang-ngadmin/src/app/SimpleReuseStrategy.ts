@@ -18,6 +18,10 @@ export class SimpleReuseStrategy implements RouteReuseStrategy {
 
   /** 表示对所有路由允许复用 如果你有路由不想利用可以在这加一些业务逻辑判断 */
   public shouldDetach(route: ActivatedRouteSnapshot): boolean {
+    const index: number = route.routeConfig.path.indexOf('edit/:id');
+    if (index > -1) {
+      return false;
+    }
     return true;
   }
 
@@ -28,6 +32,11 @@ export class SimpleReuseStrategy implements RouteReuseStrategy {
       SimpleReuseStrategy.waitDelete = null;
       return;
     }
+    const index: number = route.routeConfig.path.indexOf('edit/:id');
+    if (index > -1) {
+      return;
+    }
+
     SimpleReuseStrategy.handlers[this.getRouteUrl(route)] = handle;
   }
 
