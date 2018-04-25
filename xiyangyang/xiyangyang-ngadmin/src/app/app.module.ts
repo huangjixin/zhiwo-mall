@@ -1,3 +1,17 @@
+import { CommentEditFormComponent } from './pages/cms/comment-edit-form/comment-edit-form.component';
+import { CommentListComponent } from './pages/cms/comment-list/comment-list.component';
+import { DocumentEditFormComponent } from './pages/cms/document-edit-form/document-edit-form.component';
+import { DocumentListComponent } from './pages/cms/document-list/document-list.component';
+import { CmsCategoryEditFormComponent } from './pages/cms/cms-category-edit-form/cms-category-edit-form.component';
+import { CmsCategoryListComponent } from './pages/cms/cms-category-list/cms-category-list.component';
+import { TopicEditFormComponent } from './pages/cms/topic-edit-form/topic-edit-form.component';
+import { TopicListComponent } from './pages/cms/topic-list/topic-list.component';
+import { GuessAccountListComponent } from './pages/guess/guess-account-list/guess-account-list.component';
+import { GuessCategoryListComponent } from './pages/guess/guess-category-list/guess-category-list.component';
+import { GuessHisAccountListComponent } from './pages/guess/guess-his-account-list/guess-his-account-list.component';
+import { ProCategoryListComponent } from './pages/pro/pro-category-list/pro-category-list.component';
+import { ProductListComponent } from './pages/pro/product-list/product-list.component';
+import { GuessQuestionListComponent } from './pages/guess/guess-question-list/guess-question-list.component';
 import { PropertyListComponent } from './pages/pro/property-list/property-list.component';
 import { MemberEditFormComponent } from './pages/mem/member-edit-form/member-edit-form.component';
 import { MemberListComponent } from './pages/mem/member-list/member-list.component';
@@ -76,14 +90,52 @@ import { ListManageComponent } from './pages/list-manage/list-manage.component';
 export const routes = [
   { path: '', redirectTo: 'index', pathMatch: 'full' },
   { path: 'index', component: MainComponent, children: [
-    {path: 'ccomment', outlet: 'main', component: CommentManageComponent},
-    {path: 'ccategory', outlet: 'main', component: CmsCategoryManageComponent},
-    {path: 'cdocument', outlet: 'main', component: DocumentManageComponent},
-    {path: 'ctopic', outlet: 'main', component: TopicManageComponent},
-    {path: 'gaccount', outlet: 'main', component: GuessAccountManageComponent},
-    {path: 'gcateogry', outlet: 'main', component: GuessCateogryManageComponent},
-    {path: 'ghaccount', outlet: 'main', component: GuessHisAccountManageComponent},
-    {path: 'gquestion', outlet: 'main', component: QuestionManageComponent},
+    {path: 'ccomment', outlet: 'main', component: ListManageComponent, children: [
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      {path: 'list', outlet: 'list', component: CommentListComponent},
+      {path: 'new', outlet: 'list', component: CommentEditFormComponent},
+      {path: 'edit/:id', outlet: 'list', component: CommentEditFormComponent}
+    ]},
+    {path: 'ccategory', outlet: 'main', component: ListManageComponent, children: [
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      {path: 'list', outlet: 'list', component: CmsCategoryListComponent},
+      {path: 'new', outlet: 'list', component: CmsCategoryEditFormComponent},
+      {path: 'edit/:id', outlet: 'list', component: CmsCategoryEditFormComponent}
+    ]},
+    {path: 'cdocument', outlet: 'main', component: ListManageComponent, children: [
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      {path: 'list', outlet: 'list', component: DocumentListComponent},
+      {path: 'new', outlet: 'list', component: DocumentEditFormComponent},
+      {path: 'edit/:id', outlet: 'list', component: DocumentEditFormComponent}
+    ]},
+    {path: 'ctopic', outlet: 'main', component: ListManageComponent, children: [
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      {path: 'list', outlet: 'list', component: TopicListComponent},
+      {path: 'new', outlet: 'list', component: TopicEditFormComponent},
+      {path: 'edit/:id', outlet: 'list', component: TopicEditFormComponent}
+    ]},
+    {path: 'gaccount', outlet: 'main', component: ListManageComponent, children: [
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      {path: 'list', outlet: 'list', component: GuessAccountListComponent},
+      {path: 'new', outlet: 'list', component: GuessAccountEditFormComponent},
+      {path: 'edit/:id', outlet: 'list', component: GuessAccountEditFormComponent}
+    ]},
+    {path: 'gcateogry', outlet: 'main', component: ListManageComponent, children: [
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      {path: 'list', outlet: 'list', component: GuessCategoryListComponent},
+      {path: 'new', outlet: 'list', component: GuessCategoryEditFormComponent},
+      {path: 'edit/:id', outlet: 'list', component: GuessCategoryEditFormComponent}
+    ]},
+    {path: 'ghaccount', outlet: 'main', component: ListManageComponent, children:[
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      {path: 'list', outlet: 'list', component: GuessHisAccountListComponent}
+    ]},
+    {path: 'gquestion', outlet: 'main', component: ListManageComponent, children:[
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      {path: 'list', outlet: 'list', component: GuessQuestionListComponent},
+      {path: 'new', outlet: 'list', component: GuessQuestionEditFormComponent},
+      {path: 'edit/:id', outlet: 'list', component: GuessQuestionEditFormComponent}
+    ]},
     {path: 'maddress', outlet: 'main', component: ListManageComponent, children:[
       { path: '', redirectTo: 'list', pathMatch: 'full' },
       {path: 'list', outlet: 'list', component: AddressListComponent},
@@ -102,8 +154,18 @@ export const routes = [
       {path: 'new', outlet: 'list', component: MemberEditFormComponent},
       {path: 'edit/:id', outlet: 'list', component: MemberEditFormComponent}
     ]},
-    {path: 'pcategory', outlet: 'main', component: ProCategoryManageComponent},
-    {path: 'pproduct', outlet: 'main', component: ProductManageComponent},
+    {path: 'pcategory', outlet: 'main', component: ListManageComponent, children: [
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      {path: 'list', outlet: 'list', component: ProCategoryListComponent},
+      {path: 'new', outlet: 'list', component: ProCategoryEditFormComponent},
+      {path: 'edit/:id', outlet: 'list', component: ProCategoryEditFormComponent}
+    ]},
+    {path: 'pproduct', outlet: 'main', component: ListManageComponent, children: [
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      {path: 'list', outlet: 'list', component: ProductListComponent},
+      {path: 'new', outlet: 'list', component: ProductEditFormComponent},
+      {path: 'edit/:id', outlet: 'list', component: ProductEditFormComponent}
+    ]},
     {path: 'pproperty', outlet: 'main', component: ListManageComponent, children: [
       { path: '', redirectTo: 'list', pathMatch: 'full' },
       {path: 'list', outlet: 'list', component: PropertyListComponent},
@@ -141,40 +203,52 @@ export const routes = [
     ] },
   { path: 'login', component: LoginComponent },
   ];
-
+  // CommentManageComponent,
+  // CmsCategoryManageComponent,
+  // DocumentManageComponent,
+  // TopicManageComponent,
+  // GuessAccountManageComponent,
+  // GuessCateogryManageComponent,
+  // GuessHisAccountManageComponent,
+  // QuestionManageComponent,
+  // AddressManageComponent,
+  // MemCategoryManageComponent,
+  // MemberManageComponent,
+  // ProCategoryManageComponent,
+  // ProductManageComponent,
+  // PropertyManageComponent,
+  // ShopManageComponent,
+  // LogManageComponent,
+  // ResourcesManageComponent,
+  // RoleManageComponent,
+  // UserManageComponent,
 @NgModule({
   declarations: [
-    CommentManageComponent,
-    CmsCategoryManageComponent,
-    DocumentManageComponent,
-    TopicManageComponent,
-    GuessAccountManageComponent,
-    GuessCateogryManageComponent,
-    GuessHisAccountManageComponent,
-    QuestionManageComponent,
-    AddressManageComponent,
-    MemCategoryManageComponent,
-    MemberManageComponent,
-    ProCategoryManageComponent,
-    ProductManageComponent,
-    PropertyManageComponent,
-    ShopManageComponent,
-    LogManageComponent,
-    ResourcesManageComponent,
-    RoleManageComponent,
-    UserManageComponent,
-
     LoginComponent,
     MainComponent,
     AppComponent,
     ListManageComponent,
 
-    
+    CmsCategoryListComponent,
+    CmsCategoryEditFormComponent,
+    DocumentListComponent,
+    DocumentEditFormComponent,
+    CommentListComponent,
+    CommentEditFormComponent,
+    TopicListComponent,
+    TopicEditFormComponent,
+
+    GuessAccountListComponent,
+    GuessCategoryListComponent,
+    GuessHisAccountListComponent,
+    GuessQuestionListComponent,
     GuessCategoryEditFormComponent,
     GuessQuestionEditFormComponent,
     GuessAccountEditFormComponent,
     GuessOptionsEditFormComponent,
 
+    ProCategoryListComponent,
+    ProductListComponent,
     ShopListComponent,
     PropertyListComponent,
     ShopEditFormComponent,
@@ -189,15 +263,14 @@ export const routes = [
     UserEditFormComponent,
     RoleEditFormComponent,
     ResourcesEditFormComponent,
-    
+
     AddressListComponent,
     MemCategoryListComponent,
     MemberListComponent,
     AddressEditFormComponent,
     MemCategoryEditFormComponent,
     MemberEditFormComponent,
-    
-    
+
   ],
   imports: [
     RouterModule,
