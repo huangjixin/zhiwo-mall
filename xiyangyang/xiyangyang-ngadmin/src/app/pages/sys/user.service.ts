@@ -7,10 +7,12 @@ import 'rxjs/add/observable/of';
 export class UserService {
 
   dbData = [];
+  total = 200;
+
   constructor() {
-    for (let i = 0; i <= 200; i++) {
+    for (let i = 0; i < 200; i++) {
       const user = new User();
-      user.id = '' + (1000 + i);
+      user.id = '' + i;
       user.username = 'Jack' + i;
       user.email = 'email' + i + '@163.com';
       user.mobilPhone = '137126561' + i;
@@ -21,7 +23,7 @@ export class UserService {
   }
 
   getData(pageNumber: number, pageSize: number) {
-    const total = 200;
+
     const data = [];
 
     const endIndex = pageSize * pageNumber;
@@ -33,10 +35,25 @@ export class UserService {
     }
     return Observable.of({
       rows: data,
-      total: total,
+      total: this.total,
       pageNumber: pageNumber,
       pageSize: pageSize,
     });
 
+  }
+
+  saveOrUpdate(user: User) {
+    if (user.id !== null && user.id !== undefined) {
+      const index = parseInt(user.id);
+      this.dbData[index] = user;
+    } else {
+      this.total++;
+      user.id = '' + this.total;
+      this.dbData.push(user);
+
+      console.log('***************************');
+      console.log(user.id);
+      console.log(this.dbData.length);
+    }
   }
 }

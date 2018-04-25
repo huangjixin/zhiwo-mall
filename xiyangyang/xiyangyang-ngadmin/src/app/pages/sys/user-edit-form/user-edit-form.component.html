@@ -1,28 +1,34 @@
-<eui-dialog [closed]="closed" [draggable]="true" [modal]="true" [title]="isNewRow ? 'Add' : 'Edit'">
-  <form style="padding:20px 40px">
-    <div style="margin-bottom:20px">
-      <label [for]="id">Item ID:</label>
-      <eui-textbox #id    style="width:200px"></eui-textbox>
-    </div>
-    <div style="margin-bottom:20px">
-      <label [for]="name">Name:</label>
-      <eui-textbox #username  style="width:200px"></eui-textbox>
-    </div>
-    <div style="margin-bottom:20px">
-      <label [for]="name">email:</label>
-      <eui-textbox #email  style="width:200px"></eui-textbox>
-    </div>
-    <div style="margin-bottom:20px">
-      <label [for]="name">mobilPhone:</label>
-      <eui-textbox #mobilPhone style="width:200px"></eui-textbox>
-    </div>
-    <div style="margin-bottom:20px">
-      <label [for]="name">description:</label>
-      <eui-textbox #description  style="width:200px"></eui-textbox>
-    </div>
-  </form>
-  <div class="dialog-button">
-    <eui-linkbutton (click)="onSave()" style="width:80px">Save</eui-linkbutton>
+<h2>角色管理</h2>
+<form novalidate (ngSubmit)="submitForm(user.value)">
+  <table  border="1" bordercolor="#DDDDDD" style="border-collapse:collapse;">
+    <tr>
+      <td>
+        <label  align="top">用户名:</label>
+        <eui-textbox #username name="username" [(ngModel)]="user.username"></eui-textbox>
+      </td>
+      <td>
+        <label align="top">邮箱:</label>
+        <eui-textbox  #email name="email" [(ngModel)]="user.email" ></eui-textbox>
+      </td>
+      <td>
+        <label align="top">电话:</label>
+        <eui-textbox   #mobilPhone name="mobilPhone" [(ngModel)]="user.mobilPhone"></eui-textbox>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label  align="top">年龄:</label>
+        <eui-textbox  #age name="age" [(ngModel)]="user.age"></eui-textbox>
+      </td>
+    </tr>
+  </table>
+  <div style="width: 75%">
+    <label align="top">描述:</label>
+    <eui-textbox #description name="description" [(ngModel)]="user.description" [multiline]="true" style="width:100%;height:120px"></eui-textbox>
+  </div>
+
+  <div >
+    <eui-linkbutton (click)="submitForm()" style="width:80px">Save</eui-linkbutton>
     <eui-linkbutton (click)="onCancel()" style="width:80px">Cancel</eui-linkbutton>
   </div>
-</eui-dialog>
+</form>

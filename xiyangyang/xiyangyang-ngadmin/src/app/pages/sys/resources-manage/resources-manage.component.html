@@ -1,4 +1,29 @@
-<!-- <p>
-  resources-manage works!
-</p> -->
 <router-outlet  name="sresources"></router-outlet>
+<h2>资源管理</h2>
+<eui-linkbutton (click)="onAddRow()" iconCls="icon-add" style="margin-bottom:10px">新增用户</eui-linkbutton>
+<eui-datagrid style="height:250px"
+              [pagination]="true"
+              [lazy]="true"
+              [data]="data"
+              [total]="total"
+              [pageNumber]="pageNumber"
+              [pageSize]="pageSize"
+              [pagePosition]="pagePosition"
+              [loading]="loading"
+              (pageChange)="onPageChange($event)">
+  <eui-grid-column title="id" field="id"></eui-grid-column>
+  <eui-grid-column title="资源名称" field="name"></eui-grid-column>
+  <eui-grid-column title="描述" field="description" align="right"></eui-grid-column>
+  <eui-grid-column title="类型" field="type" align="right"></eui-grid-column>
+  <eui-grid-column title="代码" field="code" align="right"></eui-grid-column>
+  <eui-grid-column title="操作" align="center" width="100">
+    <ng-template euiCellTemplate let-row>
+      <eui-linkbutton btnCls="c5" (click)="onEditRow(row)">修改</eui-linkbutton>
+      <eui-linkbutton btnCls="c1" (click)="onDeleteRow(row)">删除</eui-linkbutton>
+    </ng-template>
+  </eui-grid-column>
+
+
+</eui-datagrid>
+
+
