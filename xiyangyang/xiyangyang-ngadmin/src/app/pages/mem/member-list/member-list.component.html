@@ -1,3 +1,24 @@
-<p>
-  member-list works!
-</p>
+<h2>Pagination</h2>
+<eui-linkbutton (click)="onAddRow()" iconCls="icon-add" style="margin-bottom:10px">Add New</eui-linkbutton>
+<eui-datagrid style="height:250px"
+              [pagination]="true"
+              [data]="data"
+              [total]="total"
+              [pageNumber]="pageNumber"
+              [pageSize]="pageSize"
+              [pagePosition]="pagePosition">
+  <eui-grid-column field="username" title="用户名"></eui-grid-column>
+  <eui-grid-column field="email" title="邮箱"></eui-grid-column>
+  <eui-grid-column field="mobilPhone" title="手机"></eui-grid-column>
+  <eui-grid-column field="sex" title="性别"></eui-grid-column>
+  <eui-grid-column field="nickname" title="昵称"></eui-grid-column>
+  <eui-grid-column field="realName" title="实名"></eui-grid-column>
+  <eui-grid-column field="weixin" title="微信"></eui-grid-column>
+  <eui-grid-column field="qq" title="QQ"></eui-grid-column>
+  <eui-grid-column title="操作" align="center" width="100">
+    <ng-template euiCellTemplate let-row>
+      <eui-linkbutton btnCls="c5" (click)="onEditRow(row)">Edit</eui-linkbutton>
+      <eui-linkbutton btnCls="c1" (click)="onDeleteRow(row)">Delete</eui-linkbutton>
+    </ng-template>
+  </eui-grid-column>
+</eui-datagrid>

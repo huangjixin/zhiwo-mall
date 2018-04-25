@@ -1,3 +1,64 @@
-<p>
-  member-edit-form works!
-</p>
+<h2 style="margin-left: 30px">新增会员</h2>
+<div style="margin-bottom:20px;width: 850px;">
+  <div style="margin-left: 30px">
+    <label align="top">用户名:</label>
+    <eui-textbox #username style="margin-left: 20px"></eui-textbox>
+    <label align="top" style="margin-left: 30px">昵称:</label>
+    <eui-textbox #nickname  style="margin-left: 35px"></eui-textbox>
+    <label align="top" style="margin-left: 30px">实名:</label>
+    <eui-textbox #realName style="margin-left: 55px"></eui-textbox>
+  </div>
+  <div style="margin-left: 30px;margin-top: 20px;">
+    <label align="top" >创建人:</label>
+    <eui-textbox #creator style="margin-left: 20px"></eui-textbox>
+    <label align="top"  style="margin-left: 30px">更新人:</label>
+    <eui-textbox #updater style="margin-left: 21px"></eui-textbox>
+    <label align="top" style="margin-left: 30px">性别:</label>
+    <eui-textbox #sex style="margin-left: 55px"></eui-textbox>
+  </div>
+  <div style="margin-left: 30px;margin-top: 20px;">
+    <label align="top">登录日期:</label>
+    <eui-textbox #loginDate style="margin-left: 7px"></eui-textbox>
+    <label align="top"  style="margin-left: 30px">创建日期:</label>
+    <eui-textbox #createDate style="margin-left: 6px"></eui-textbox>
+    <label align="top" style="margin-left: 30px">更新日期:</label>
+    <eui-textbox #updateDate  style="margin-left: 27px"></eui-textbox>
+  </div>
+  <div style="margin-left: 30px;margin-top: 20px;">
+    <label align="top">手机:</label>
+    <eui-textbox #mobilPhone  style="margin-left: 35px"></eui-textbox>
+    <label align="top" style="margin-left: 30px">邮箱:</label>
+    <eui-textbox #email  style="margin-left: 35px"></eui-textbox>
+    <label align="top" style="margin-left: 30px">是否禁用:</label>
+    <eui-textbox #enabled style="margin-left: 27px"></eui-textbox>
+  </div>
+  <div style="margin-left: 30px;margin-top: 20px;">
+    <label align="top">身高:</label>
+    <eui-textbox #age style="margin-left: 35px"></eui-textbox>
+    <label align="top" style="margin-left: 30px">体重:</label>
+    <eui-textbox #weight style="margin-left: 35px"></eui-textbox>
+    <label align="top" style="margin-left: 30px">上次登录日期:</label>
+    <eui-textbox #lastLoginDate></eui-textbox>
+  </div>
+  <div style="margin-left: 30px;margin-top: 20px;">
+    <label align="top">QQ:</label>
+    <eui-textbox #qq style="margin-left: 41px"></eui-textbox>
+    <label align="top"style="margin-left: 30px">微信:</label>
+    <eui-textbox #weixin style="margin-left: 35px"></eui-textbox>
+    <label align="top"style="margin-left: 30px">是否绑定微信:</label>
+    <eui-textbox #bindingWechat></eui-textbox>
+  </div>
+  <div style="margin-left: 30px;margin-top: 20px;">
+    <label align="top">登录次数:</label>
+    <eui-textbox #loginCount style="margin-left: 7px"></eui-textbox>
+    <label align="top" style="margin-left: 30px">头像:</label>
+    <eui-filebutton (select)="onFileSelect($event)" style="width:150px;margin-left: 35px">上传图片</eui-filebutton>
+  </div>
+  <div style="margin-left: 30px;margin-top: 20px;">
+    <label align="top">描述:</label>
+    <eui-textbox #description  style="margin-left: 35px;width:440px;height:120px" [multiline]="true"></eui-textbox>
+    <!--<div style="">
+      <img [src]="files.url" style="width:120px;height:120px">
+    </div>-->
+  </div>
+</div>
