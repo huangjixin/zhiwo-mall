@@ -74,7 +74,6 @@ export class MemberService {
   }
 
   getDataById(id: String): any {
-    debugger;
     const member: Member = new Member();
     this.data = this.data.map(r => {
       if (r.id === id) {
