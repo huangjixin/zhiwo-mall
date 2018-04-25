@@ -1,3 +1,5 @@
+import { MemberEditFormComponent } from './pages/mem/member-edit-form/member-edit-form.component';
+import { MemberListComponent } from './pages/mem/member-list/member-list.component';
 import { TopicService } from './pages/cms/topic.service';
 import { DocumentService } from './pages/cms/document.service';
 import { CmsCategoryService } from './pages/cms/cms-category.service';
@@ -57,6 +59,18 @@ import { GuessCategoryEditFormComponent } from './pages/guess/guess-category-edi
 import { GuessQuestionEditFormComponent } from './pages/guess/guess-question-edit-form/guess-question-edit-form.component';
 import { GuessAccountEditFormComponent } from './pages/guess/guess-account-edit-form/guess-account-edit-form.component';
 import { GuessOptionsEditFormComponent } from './pages/guess/guess-options-edit-form/guess-options-edit-form.component';
+import { ShopListComponent } from './pages/pro/shop-list/shop-list.component';
+import { UserListComponent } from './pages/sys/user-list/user-list.component';
+import { RoleListComponent } from './pages/sys/role-list/role-list.component';
+import { ResourcesListComponent } from './pages/sys/resources-list/resources-list.component';
+import { RoleEditFormComponent } from './pages/sys/role-edit-form/role-edit-form.component';
+import { ResourcesEditFormComponent } from './pages/sys/resources-edit-form/resources-edit-form.component';
+import { LogListComponent } from './pages/sys/log-list/log-list.component';
+import { AddressListComponent } from './pages/mem/address-list/address-list.component';
+import { AddressEditFormComponent } from './pages/mem/address-edit-form/address-edit-form.component';
+import { MemCategoryEditFormComponent } from './pages/mem/mem-category-edit-form/mem-category-edit-form.component';
+import { MemCategoryListComponent } from './pages/mem/mem-category-list/mem-category-list.component';
+import { ListManageComponent } from './pages/list-manage/list-manage.component';
 
 export const routes = [
   { path: '', redirectTo: 'index', pathMatch: 'full' },
@@ -69,9 +83,24 @@ export const routes = [
     {path: 'gcateogry', outlet: 'main', component: GuessCateogryManageComponent},
     {path: 'ghaccount', outlet: 'main', component: GuessHisAccountManageComponent},
     {path: 'gquestion', outlet: 'main', component: QuestionManageComponent},
-    {path: 'maddress', outlet: 'main', component: AddressManageComponent},
-    {path: 'mcategory', outlet: 'main', component: MemCategoryManageComponent},
-    {path: 'mmember', outlet: 'main', component: MemberManageComponent},
+    {path: 'maddress', outlet: 'main', component: ListManageComponent, children:[
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      {path: 'list', outlet: 'list', component: AddressListComponent},
+      {path: 'new', outlet: 'list', component: AddressEditFormComponent},
+      {path: 'edit/:id', outlet: 'list', component: AddressEditFormComponent}
+    ]},
+    {path: 'mcategory', outlet: 'main', component: ListManageComponent, children:[
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      {path: 'list', outlet: 'list', component: MemCategoryListComponent},
+      {path: 'new', outlet: 'list', component: MemCategoryEditFormComponent},
+      {path: 'edit/:id', outlet: 'list', component: MemCategoryEditFormComponent}
+    ]},
+    {path: 'mmember', outlet: 'main', component: ListManageComponent, children:[
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      {path: 'list', outlet: 'list', component: MemberListComponent},
+      {path: 'new', outlet: 'list', component: MemberEditFormComponent},
+      {path: 'edit/:id', outlet: 'list', component: MemberEditFormComponent}
+    ]},
     {path: 'pcategory', outlet: 'main', component: ProCategoryManageComponent},
     {path: 'pproduct', outlet: 'main', component: ProductManageComponent},
     {path: 'pproperty', outlet: 'main', component: PropertyManageComponent},
@@ -79,12 +108,27 @@ export const routes = [
       {path: 'shop-new', outlet: 'shop', component: ShopEditFormComponent},
       {path: 'edit/:id', outlet: 'shop', component: ShopEditFormComponent}
     ]},
-    {path: 'slog', outlet: 'main', component: LogManageComponent},
-    {path: 'sresources', outlet: 'main', component: ResourcesManageComponent},
-    {path: 'srole', outlet: 'main', component: RoleManageComponent},
-    {path: 'suser', outlet: 'main', component: UserManageComponent, children:[
-      {path: 'new', outlet: 'main', component: UserEditFormComponent},
-      {path: 'edit/:id', outlet: 'main', component: UserEditFormComponent}
+    {path: 'slog', outlet: 'main', component: ListManageComponent, children:[
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      {path: 'list', outlet: 'list', component: LogListComponent}
+    ]},
+    {path: 'sresources', outlet: 'main', component: ListManageComponent, children:[
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      {path: 'list', outlet: 'list', component: ResourcesListComponent},
+      {path: 'new', outlet: 'list', component: ResourcesEditFormComponent},
+      {path: 'edit/:id', outlet: 'list', component: ResourcesEditFormComponent}
+    ]},
+    {path: 'srole', outlet: 'main', component: ListManageComponent, children:[
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      {path: 'list', outlet: 'list', component: RoleListComponent},
+      {path: 'new', outlet: 'list', component: RoleEditFormComponent},
+      {path: 'edit/:id', outlet: 'list', component: RoleEditFormComponent}
+    ]},
+    {path: 'suser', outlet: 'main', component: ListManageComponent, children:[
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      {path: 'list', outlet: 'list', component: UserListComponent},
+      {path: 'new', outlet: 'list', component: UserEditFormComponent},
+      {path: 'edit/:id', outlet: 'list', component: UserEditFormComponent}
     ]}
     ] },
   { path: 'login', component: LoginComponent },
@@ -123,6 +167,20 @@ export const routes = [
     GuessQuestionEditFormComponent,
     GuessAccountEditFormComponent,
     GuessOptionsEditFormComponent,
+    ShopListComponent,
+    UserListComponent,
+    RoleListComponent,
+    ResourcesListComponent,
+    RoleEditFormComponent,
+    ResourcesEditFormComponent,
+    LogListComponent,
+    AddressListComponent,
+    AddressEditFormComponent,
+    MemCategoryEditFormComponent,
+    MemCategoryListComponent,
+    MemberListComponent,
+    MemberEditFormComponent,
+    ListManageComponent,
   ],
   imports: [
     RouterModule,

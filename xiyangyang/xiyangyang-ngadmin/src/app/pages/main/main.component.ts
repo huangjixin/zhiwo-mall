@@ -136,8 +136,8 @@ export class MainComponent implements OnInit {
     if (node.link != null || node.link !== undefined ) {
       // [{ outlets: { userInfo: ['guess-record'] } }]
       const link: String =  node.link;
-      this.router.navigate(['/index', { outlets: { main: [node.link] }}]);
-      // this.router.navigate(['/index', { outlets: { main: ['pshop', {outlets: {shop: ['shop-new']}}] }}]);
+      // this.router.navigate(['/index', { outlets: { main: [node.link] }}]);
+      this.router.navigate(['/index', { outlets: { main: [link, {outlets: {list : ['list']}}] }}]);
     }
     console.log('123456');
   }
