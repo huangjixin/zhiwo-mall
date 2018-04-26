@@ -98,7 +98,7 @@ export class MainComponent implements OnInit {
       'name': '角色管理',
       'link': 'srole'
     }, {
-      'id': 13,
+      'id': 113,
       'name': '资源管理',
       'link': 'sresources'
     }, {
