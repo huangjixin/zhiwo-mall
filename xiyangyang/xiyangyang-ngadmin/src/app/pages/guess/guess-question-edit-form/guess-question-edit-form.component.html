@@ -1,5 +1,4 @@
 <div style="padding:3px;">
-  <eui-linkbutton (click)="back()" style="margin-bottom:10px">返回</eui-linkbutton>
   <form>
     <table>
       <tr>
@@ -9,7 +8,7 @@
         <td>
           <eui-textbox class="textbox" #name [(ngModel)]="question.name" name="name" placeholder="请填入竞猜标题"></eui-textbox>
         </td>
-      
+
         <td>
           <label class="td-label">*</label>竞猜代号:
         </td>
@@ -24,20 +23,33 @@
         <td>
           <eui-textbox class="textbox" #description [(ngModel)]="question.description" name="description" placeholder="请填入竞猜描述"></eui-textbox>
         </td>
+        <td>
+          <label class="td-label">*</label>类别:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #guessCategoryId [(ngModel)]="question.guessCategoryId" name="guessCategoryId" placeholder="请填入竞猜类别"></eui-textbox>
+        </td>
       </tr>
       <tr>
         <td>
           <label class="td-label">*</label>截止日期:
         </td>
         <td>
-          <eui-textbox #name [(ngModel)]="question.questionEndTime" name="questionEndTime" placeholder="请填入截止日期"></eui-textbox>
+          <eui-textbox #questionEndTime [(ngModel)]="question.questionEndTime" name="questionEndTime" placeholder="请填入截止日期"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>是否已经校验过答案:
+        </td>
+        <td>
+          <eui-combobox #checked [(ngModel)]="question.checked"></eui-combobox>
         </td>
       </tr>
       <tr>
         <td>
         </td>
         <td>
-          <eui-linkbutton>保存</eui-linkbutton>
+          <eui-linkbutton>保存</eui-linkbutton>&nbsp;
+          <eui-linkbutton (click)="back()">返回</eui-linkbutton>
         </td>
       </tr>
     </table>

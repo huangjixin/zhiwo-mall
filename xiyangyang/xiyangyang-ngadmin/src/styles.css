@@ -2,3 +2,36 @@
 @import '~ng-easyui/themes/material/easyui.css';
 @import '~ng-easyui/themes/angular.css';
 @import '~ng-easyui/themes/icon.css';
+
+body{
+    font-size: 14px;
+}
+.main-center{
+    font-size: 14px;
+    width:100%;
+    min-height: 500px;
+    /* height: 500px; */
+    padding: 3px;
+}
+
+.main-list{
+    font-size: 14px;
+    padding: 3px;
+    width: 100%;
+    min-height: 500px;
+}
+
+.td-label{
+    color: red;
+}
+
+.textbox{
+    width: 300px;
+    border-width: 0px;
+    border-bottom-width: 1px;
+    border-radius: 0;
+}
+
+.data-grid{
+    height: 480px;
+}
