@@ -3,7 +3,9 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {GuessCategoryService} from './../guess-category.service';
 import {Component, OnInit} from '@angular/core';
 
-@Component({selector: 'app-guess-category-list', templateUrl: './guess-category-list.component.html', styleUrls: ['./guess-category-list.component.css']})
+@Component({selector: 'app-guess-category-list',
+templateUrl: './guess-category-list.component.html',
+ styleUrls: ['./guess-category-list.component.css']})
 export class GuessCategoryListComponent implements OnInit {
   total : Number = 0;
   pageNumber : Number = 1;
@@ -64,7 +66,7 @@ export class GuessCategoryListComponent implements OnInit {
     }
   ];
 
-  constructor(public activeRoute : ActivatedRoute, private router : Router, private categoryService : GuessCategoryService) {}
+  constructor(public activeRoute: ActivatedRoute, private router: Router, private categoryService: GuessCategoryService) {}
 
   ngOnInit() {}
 
@@ -72,43 +74,18 @@ export class GuessCategoryListComponent implements OnInit {
    * 新增
    */
   onAddRow() {
-    this
-      .router
-      .navigate([
-        '/index', {
-          outlets: {
-            main: [
-              'gcategory', {
-                outlets: {
-                  list: ['new']
-                }
-              }
-            ]
-          }
-        }
-      ]);
+    this.router.navigate(['/index', {outlets: {main: ['gcategory', {outlets: {list: ['new']}}]}}]);
   }
 
   /**
    * 跳转到编辑界面。
-   * @param row
    */
-  onEditRow(row) {
-    this
-      .router
-      .navigate([
-        '/index', {
-          outlets: {
-            main: [
-              'gcategory', {
-                outlets: {
-                  list: ['edit', row.id]
-                }
-              }
-            ]
-          }
-        }
-      ]);
+  onEditRow() {
+    if ( this.guessCategory.id === null || this.guessCategory.id === undefined){
+      return;
+    }
+    const id: String = this.guessCategory.id;
+    this.router.navigate(['/index', {outlets: {main: ['gcategory', {outlets: {list: ['edit', id]}}]}}]);
   }
 
   /**
@@ -121,10 +98,9 @@ export class GuessCategoryListComponent implements OnInit {
 
   // 点击选中菜单处理函数。
   selectNodeHandler(node : any) : void {
-    if(this.guessCategory == null || this.guessCategory == undefined) {
+    if (this.guessCategory == null || this.guessCategory == undefined) {
       this.guessCategory = new GuessCategory();
     }
     this.guessCategory.id = node.id;
-    console.log('123456');
   }
 }

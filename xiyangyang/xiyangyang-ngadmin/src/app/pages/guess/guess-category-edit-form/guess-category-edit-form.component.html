@@ -1,6 +1,6 @@
 <div style="padding:3px;">
     <form>
-        <input type="hidden" [(ngModel)]="category.id" name="id"/>
+      <input type="hidden" [(ngModel)]="category.id" name="id" />
       <table>
         <tr>
           <td>
@@ -9,7 +9,7 @@
           <td>
             <eui-textbox class="textbox" #name [(ngModel)]="category.name" name="name" placeholder="请填入名称"></eui-textbox>
           </td>
-  
+
           <td>
             <label class="td-label">*</label>代号:
           </td>
@@ -28,7 +28,11 @@
             <label class="td-label">*</label>父亲节点:
           </td>
           <td>
-            <eui-textbox class="textbox" #guessCategoryId [(ngModel)]="category.parentId" name="parentId" placeholder="请填入类别"></eui-textbox>
+            <eui-combotree [(ngModel)]="category.parentId" name="parentId" [data]="treeData" placeholder="不选为根节点">
+              <eui-tree></eui-tree>
+            </eui-combotree>
+            <eui-linkbutton iconCls="icon-cancel" (click)="back()">取消选择</eui-linkbutton>
+            <!-- <eui-textbox class="textbox" #guessCategoryId [(ngModel)]="category.parentId" name="parentId" placeholder="请填入类别"></eui-textbox> -->
           </td>
         </tr>
         <tr>

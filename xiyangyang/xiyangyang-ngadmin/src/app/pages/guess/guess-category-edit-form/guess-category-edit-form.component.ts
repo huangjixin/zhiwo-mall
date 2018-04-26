@@ -16,6 +16,63 @@ export class GuessCategoryEditFormComponent implements OnInit {
   public id : String;
   public category : GuessCategory;
   public categoryFormGroup : FormGroup;
+
+  treeData = [
+    {
+      'id': '',
+      'text': ''},
+    {
+      'id': 1,
+      'text': '足球',
+      'children': [
+        {
+          'id': 3,
+          'text': '西甲',
+          'link': 'pproduct'
+        }, {
+          'id': 4,
+          'text': '德甲',
+          'link': 'pcategory'
+        }, {
+          'id': 5,
+          'text': '英超',
+          'link': 'pproperty'
+        }, {
+          'id': 23,
+          'text': '其它',
+          'link': 'pshop'
+        }
+      ]
+    }, {
+      'id': 6,
+      'text': '篮球',
+      'children': [
+        {
+          'id': 7,
+          'text': 'NBA',
+          'link': 'gquestion'
+        }, {
+          'id': 8,
+          'text': 'CBA'
+        }
+      ]
+    }, {
+      'id': 15,
+      'text': '趣味奇偶数',
+      'children': [
+        {
+          'id': 16,
+          'text': '广东十选1',
+          'link': 'mmember'
+        }, {
+          'id': 17,
+          'text': '福建十选1',
+          'link': 'mcategory'
+        }
+      ]
+    }
+  ];
+
   constructor(public activeRoute : ActivatedRoute,
      private router : Router,
      private location : Location, private categoryService : GuessCategoryService) {}
