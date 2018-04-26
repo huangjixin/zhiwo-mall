@@ -9,13 +9,28 @@
         <td>
           <eui-textbox class="textbox" #name [(ngModel)]="question.name" name="name" placeholder="请填入竞猜标题"></eui-textbox>
         </td>
+      
+        <td>
+          <label class="td-label">*</label>竞猜代号:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #code [(ngModel)]="question.code" name="code" placeholder="请填入竞猜代号"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>描述:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #description [(ngModel)]="question.description" name="description" placeholder="请填入竞猜描述"></eui-textbox>
+        </td>
       </tr>
       <tr>
         <td>
           <label class="td-label">*</label>截止日期:
         </td>
         <td>
-          <eui-textbox  #name [(ngModel)]="question.questionEndTime" name="questionEndTime" placeholder="请填入截止日期"></eui-textbox>
+          <eui-textbox #name [(ngModel)]="question.questionEndTime" name="questionEndTime" placeholder="请填入截止日期"></eui-textbox>
         </td>
       </tr>
       <tr>

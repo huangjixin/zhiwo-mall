@@ -2,77 +2,55 @@ import {GuessCategory} from './guess-category.model';
 
 export class GuessQuestion {
 
-  guessCategory: GuessCategory;
-  guessOptions: Array<GuessQuestion>;
+  guessCategory : GuessCategory;
+  guessOptions : Array < GuessQuestion >;
 
-  id: String;
+  id : String;
 
+  creator : String;
 
-creator: String;
+  updater : String;
 
+  orgId : String;
 
-updater: String;
+  createDate : Date;
 
+  updateDate : Date;
 
-orgId: String;
+  enabled : Boolean;
 
+  startTime : Date;
 
-createDate: Date;
+  endTime : Date;
 
+  sort : number;
 
-updateDate: Date;
+  isDefault : Boolean;
 
+  enName : String;
 
-enabled: Boolean;
+  name : String;
 
+  description : String;
 
-startTime: Date;
+  icon : String;
 
+  keywords : String;
 
-endTime: Date;
+  thumbnail : String;
 
+  code : String;
 
-sort: number;
+  userId : String;
 
+  guessCategoryId : String;
 
-isDefault: Boolean;
+  guessAnswerId : String;
 
+  questionEndTime : Date;
 
-enName: String;
+  checked : Number;
 
-
-name: String;
-
-
-description: String;
-
-
-icon: String;
-
-
-keywords: String;
-
-
-thumbnail: String;
-
-
-code: String;
-
-
-userId: String;
-
-
-guessCategoryId: String;
-
-
-guessAnswerId: String;
-
-
-questionEndTime: Date;
-
-
-checked: Number;
-
-parentId: String;
+  parentId : String;
   constructor() {}
 }
