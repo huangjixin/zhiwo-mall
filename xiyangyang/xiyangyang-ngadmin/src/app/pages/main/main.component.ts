@@ -40,7 +40,7 @@ export class MainComponent implements OnInit {
   }, {
     'id': 20,
     'name': '竞猜分类管理',
-    'link': 'gcateogry'
+    'link': 'gcategory'
   }, {
     'id': 21,
     'name': '竞猜账户管理',

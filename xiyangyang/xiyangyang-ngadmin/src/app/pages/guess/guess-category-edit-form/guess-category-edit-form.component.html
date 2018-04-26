@@ -1,3 +1,44 @@
-<p>
-  guess-category-edit-form works!
-</p>
+<div style="padding:3px;">
+    <form>
+        <input type="hidden" [(ngModel)]="category.id" name="id"/>
+      <table>
+        <tr>
+          <td>
+            <label class="td-label">*</label>名称:
+          </td>
+          <td>
+            <eui-textbox class="textbox" #name [(ngModel)]="category.name" name="name" placeholder="请填入名称"></eui-textbox>
+          </td>
+  
+          <td>
+            <label class="td-label">*</label>代号:
+          </td>
+          <td>
+            <eui-textbox class="textbox" #code [(ngModel)]="category.code" name="code" placeholder="请填入代号"></eui-textbox>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label class="td-label">*</label>描述:
+          </td>
+          <td>
+            <eui-textbox class="textbox" #description [(ngModel)]="category.description" name="description" placeholder="请填入描述"></eui-textbox>
+          </td>
+          <td>
+            <label class="td-label">*</label>父亲节点:
+          </td>
+          <td>
+            <eui-textbox class="textbox" #guessCategoryId [(ngModel)]="category.parentId" name="parentId" placeholder="请填入类别"></eui-textbox>
+          </td>
+        </tr>
+        <tr>
+          <td>
+          </td>
+          <td>
+            <eui-linkbutton iconCls="icon-save">保存</eui-linkbutton>&nbsp;
+            <eui-linkbutton iconCls="icon-back" (click)="back()">返回</eui-linkbutton>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>

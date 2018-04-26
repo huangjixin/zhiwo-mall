@@ -123,7 +123,7 @@ export const routes = [
       {path: 'new', outlet: 'list', component: GuessAccountEditFormComponent},
       {path: 'edit/:id', outlet: 'list', component: GuessAccountEditFormComponent}
     ]},
-    {path: 'gcateogry', outlet: 'main', component: ListManageComponent, children: [
+    {path: 'gcategory', outlet: 'main', component: ListManageComponent, children: [
       { path: '', redirectTo: 'list', pathMatch: 'full' },
       {path: 'list', outlet: 'list', component: GuessCategoryListComponent},
       {path: 'new', outlet: 'list', component: GuessCategoryEditFormComponent},

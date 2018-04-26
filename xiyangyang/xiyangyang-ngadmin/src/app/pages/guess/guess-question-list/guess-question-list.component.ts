@@ -13,7 +13,7 @@ export class GuessQuestionListComponent implements OnInit {
   total: Number = 0;
   pageNumber = 1;
   pageSize = 15;
-  data = [];
+  data: any = [];
 
   constructor(public activeRoute: ActivatedRoute,
     private router: Router, private questionService: QuestionService) { }
