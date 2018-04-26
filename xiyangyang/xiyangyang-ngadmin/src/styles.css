@@ -9,7 +9,7 @@ body{
 .main-center{
     font-size: 14px;
     width:100%;
-    min-height: 500px;
+    min-height: 550px;
     /* height: 500px; */
     padding: 3px;
 }
@@ -18,7 +18,7 @@ body{
     font-size: 14px;
     padding: 3px;
     width: 100%;
-    min-height: 500px;
+    min-height: 550px;
 }
 
 .td-label{
@@ -33,5 +33,5 @@ body{
 }
 
 .data-grid{
-    height: 480px;
+    height: 550px;
 }
