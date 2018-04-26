@@ -1,3 +1,5 @@
+import { OrgEditFormComponent } from './pages/sys/org-edit-form/org-edit-form.component';
+import { OrgListComponent } from './pages/sys/org-list/org-list.component';
 import { CommentEditFormComponent } from './pages/cms/comment-edit-form/comment-edit-form.component';
 import { CommentListComponent } from './pages/cms/comment-list/comment-list.component';
 import { DocumentEditFormComponent } from './pages/cms/document-edit-form/document-edit-form.component';
@@ -264,6 +266,8 @@ export const routes = [
     UserEditFormComponent,
     RoleEditFormComponent,
     ResourcesEditFormComponent,
+    OrgListComponent,
+    OrgEditFormComponent,
 
     AddressListComponent,
     MemCategoryListComponent,
