@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {UserService} from '../user.service';
-import { Router } from '@angular/router';
+import {Router} from '@angular/router';
 import {User} from '../user.model';
 
 @Component({
@@ -11,41 +11,37 @@ import {User} from '../user.model';
 })
 export class UserListComponent implements OnInit {
 
-
   total: Number = 0;
   pageNumber = 1;
-  pageSize = 10;
+  pageSize = 15;
   data = [];
   loading: boolean = false;
   pagePosition: String = 'bottom';
-  isNewRow = false;
-  editingRow = null;
-  closed = true;
 
   constructor(private userService: UserService, private router: Router) {
   }
 
   ngOnInit() {
     this.loadPage(this.pageNumber, this.pageSize);
-    this.initRow();
   }
 
   onPageChange(event) {
     this.loadPage(event.pageNumber, event.pageSize);
   }
 
-  initRow() {
-    this.editingRow = new User();
+  onEditRow(row) {
+    const id = row.id;
+    this.router.navigate(['/index', {outlets: {main: ['suser', {outlets: {list: ['edit', id]}}]}}]);
   }
 
-  onEditRow(row) {
-    this.isNewRow = false;
-    this.editingRow = row;
-    this.closed = false;
+  onDeleteRow(row){
+    this.userService.delete(row.id);
   }
+
   onAddRow() {
-    this.router.navigate(['/index', { outlets: { main: ['suser', {outlets: {list : ['new']}}] }}]);
+    this.router.navigate(['/index', {outlets: {main: ['suser', {outlets: {list: ['new']}}]}}]);
   }
+
 
   loadPage(pageNumber: number, pageSize: number) {
     this.loading = true;
@@ -54,7 +50,7 @@ export class UserListComponent implements OnInit {
       this.data = data.rows;
       this.loading = false;
       this.total = data.total;
-      this.pageSize=data.pageSize;
+      this.pageSize = data.pageSize;
     });
   }
 }

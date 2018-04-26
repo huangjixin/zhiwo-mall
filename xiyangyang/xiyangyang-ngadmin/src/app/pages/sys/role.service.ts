@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import  {Role} from './role.model';
 import {Observable} from '../../../../node_modules/rxjs';
+import {User} from './user.model';
 
 @Injectable()
 export class RoleService {
@@ -9,7 +10,7 @@ export class RoleService {
   constructor() {
     for (let i = 0; i <= 200; i++) {
       const role = new Role();
-      role.id = '' + (1000 + i);
+      role.id = '' + i;
       role.name = 'Role' + i;
       role.code = 'code' + i ;
       role.updater = 'updater' + i;
@@ -36,6 +37,21 @@ export class RoleService {
       pageSize: pageSize,
     });
 
+  }
+  findById(id: String) {
+    const index =parseInt(id.toString(),10);
+    return this.dbData[index];
+  }
+
+  saveOrUpdate(role: Role) {
+    // if (user.id !== null && user.id !== undefined) {
+    //   const index = parseInt(user.id);
+    //   this.dbData[index] = user;
+    // } else {
+    //   this.total++;
+    //   user.id = '' + this.total;
+    //   this.dbData.push(user);
+    // }
   }
 
 }

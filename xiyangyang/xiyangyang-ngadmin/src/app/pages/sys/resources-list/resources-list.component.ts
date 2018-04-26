@@ -1,27 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ResourcesService} from '../resources.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Resource} from '../resource.model';
+import {RoleService} from '../role.service';
+
 
 @Component({
   selector: 'app-resources-list',
   templateUrl: './resources-list.component.html',
   styleUrls: ['./resources-list.component.css'],
-  providers:[ResourcesService]
+  providers: [ResourcesService]
 })
 export class ResourcesListComponent implements OnInit {
 
-
+  resource: Resource;
 
   total: Number = 0;
   pageNumber = 1;
-  pageSize = 10;
+  pageSize = 15;
   data = [];
   loading: boolean = false;
   pagePosition: String = 'bottom';
-
-  isNewRow = false;
-  editingRow = null;
-  closed = true;
 
   constructor(private resourcesService: ResourcesService, private router: Router) { }
 
@@ -30,14 +29,15 @@ export class ResourcesListComponent implements OnInit {
   }
 
   onEditRow(row) {
-    this.isNewRow = false;
-    this.editingRow = row;
-    this.closed = false;
+    const id = row.id;
+    this.router.navigate(['/index', {outlets: {main: ['sresources', {outlets: {list: ['edit', id]}}]}}]);
   }
   onAddRow() {
+    this.router.navigate(['/index', {outlets: {main: ['sresources', {outlets: {list: ['new']}}]}}]);
+  }
 
-    this.isNewRow = true;
-    this.closed = false;
+  onDeleteRow(row) {
+
   }
 
   onPageChange(event) {
@@ -53,4 +53,5 @@ export class ResourcesListComponent implements OnInit {
       this.total = data.total;
     });
   }
+
 }

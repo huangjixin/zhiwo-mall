@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {RoleService} from '../role.service';
 import {Router} from '@angular/router';
 
@@ -13,30 +13,29 @@ export class RoleListComponent implements OnInit {
 
   total: Number = 0;
   pageNumber = 1;
-  pageSize = 10;
+  pageSize = 15;
   data = [];
   loading: boolean = false;
   pagePosition: String = 'bottom';
 
-  isNewRow = false;
-  editingRow = null;
-  closed = true;
-
-  constructor(private roleService: RoleService, private router: Router) { }
+  constructor(private roleService: RoleService, private router: Router) {
+  }
 
   ngOnInit() {
     this.loadPage(this.pageNumber, this.pageSize);
   }
 
   onEditRow(row) {
-    this.isNewRow = false;
-    this.editingRow = row;
-    this.closed = false;
+    const id = row.id;
+    this.router.navigate(['/index', {outlets: {main: ['srole', {outlets: {list: ['edit', id]}}]}}]);
   }
-  onAddRow() {
 
-    this.isNewRow = true;
-    this.closed = false;
+  onAddRow() {
+    this.router.navigate(['/index', {outlets: {main: ['srole', {outlets: {list: ['new']}}]}}]);
+  }
+
+  onDeleteRow(row) {
+
   }
 
   onPageChange(event) {

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {Observable} from '../../../../node_modules/rxjs';
 import {Resource} from './resource.model';
 
+
 @Injectable()
 export class ResourcesService {
 
@@ -9,7 +10,7 @@ export class ResourcesService {
   constructor() {
     for (let i = 0; i <= 200; i++) {
       const resource = new Resource();
-      resource.id = '' + (1000 + i);
+      resource.id = '' + i;
       resource.name = 'Resource' + i;
       resource.code = 'code' + i ;
       resource.description = 'description' + i;
@@ -36,6 +37,21 @@ export class ResourcesService {
       pageSize: pageSize,
     });
 
+  }
+  findById(id: String) {
+    const index =parseInt(id.toString(),10);
+    return this.dbData[index];
+  }
+
+  saveOrUpdate(resource: Resource) {
+    // if (user.id !== null && user.id !== undefined) {
+    //   const index = parseInt(user.id);
+    //   this.dbData[index] = user;
+    // } else {
+    //   this.total++;
+    //   user.id = '' + this.total;
+    //   this.dbData.push(user);
+    // }
   }
 
 }

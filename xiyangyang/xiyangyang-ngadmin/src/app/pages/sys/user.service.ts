@@ -42,18 +42,22 @@ export class UserService {
 
   }
 
-  saveOrUpdate(user: User) {
-    if (user.id !== null && user.id !== undefined) {
-      const index = parseInt(user.id);
-      this.dbData[index] = user;
-    } else {
-      this.total++;
-      user.id = '' + this.total;
-      this.dbData.push(user);
+  findById(id: String) {
+    const index = parseInt(id.toString(), 10);
+    return this.dbData[index];
+  }
 
-      console.log('***************************');
-      console.log(user.id);
-      console.log(this.dbData.length);
-    }
+  delete(id: String) {
+  }
+
+  saveOrUpdate(user: User) {
+    // if (user.id !== null && user.id !== undefined) {
+    //   const index = parseInt(user.id);
+    //   this.dbData[index] = user;
+    // } else {
+    //   this.total++;
+    //   user.id = '' + this.total;
+    //   this.dbData.push(user);
+    // }
   }
 }

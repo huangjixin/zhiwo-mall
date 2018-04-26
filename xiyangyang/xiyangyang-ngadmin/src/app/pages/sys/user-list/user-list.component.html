@@ -1,7 +1,7 @@
-<router-outlet  name="list"></router-outlet>
+<div style="padding:3px;">
  <h2>用户管理</h2>
 <eui-linkbutton (click)="onAddRow()" iconCls="icon-add" style="margin-bottom:10px">新增用户</eui-linkbutton>
-<eui-datagrid style="height:250px"
+<eui-datagrid
               [pagination]="true"
               [lazy]="true"
               [data]="data"
@@ -10,7 +10,8 @@
               [pageSize]="pageSize"
               [pagePosition]="pagePosition"
               [loading]="loading"
-              (pageChange)="onPageChange($event)">
+              (pageChange)="onPageChange($event)"
+              class="data-grid">
   <eui-grid-column title="id" field="id"></eui-grid-column>
   <eui-grid-column title="用户名" field="username"></eui-grid-column>
   <eui-grid-column title="邮箱" field="email" align="right"></eui-grid-column>
@@ -26,4 +27,5 @@
 
 </eui-datagrid>
 
+</div>
 

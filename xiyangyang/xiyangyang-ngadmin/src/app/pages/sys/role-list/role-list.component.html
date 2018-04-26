@@ -1,7 +1,7 @@
 <router-outlet  name="srole"></router-outlet>
 <h2>角色管理</h2>
-<eui-linkbutton (click)="onAddRow()" iconCls="icon-add" style="margin-bottom:10px">新增用户</eui-linkbutton>
-<eui-datagrid style="height:250px"
+<eui-linkbutton (click)="onAddRow()" iconCls="icon-add" style="margin-bottom:10px">新增角色</eui-linkbutton>
+<eui-datagrid class="data-grid"
               [pagination]="true"
               [lazy]="true"
               [data]="data"
