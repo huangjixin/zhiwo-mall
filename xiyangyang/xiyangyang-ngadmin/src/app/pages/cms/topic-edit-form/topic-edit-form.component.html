@@ -1,3 +1,86 @@
-<p>
-  topic-edit-form works!
-</p>
+<div style="padding:3px;">
+  <input type="hidden" [(ngModel)]="cmsTopic.id" name="id" >
+  <form>
+    <table>
+      <tr>
+        <td>
+          <label class="td-label">*</label>名称:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #name name="name" [(ngModel)]="cmsTopic.name" placeholder="请填入名称"></eui-textbox>
+        </td>
+
+        <td>
+          <label class="td-label">*</label>用户ID:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #userId name="userId" [(ngModel)]="cmsTopic.userId" placeholder="请填入用户ID"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>创建日期:
+        </td>
+        <td>
+          <eui-textbox #createDate name="createDate"  [(ngModel)]="cmsTopic.createDate"  placeholder="请填入创建日期"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>更新日期:
+        </td>
+        <td>
+          <eui-textbox #updateDate name="updateDate" [(ngModel)]="cmsTopic.updateDate" placeholder="请填入创建日期"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>路径:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #path name="path" [(ngModel)]="cmsTopic.path"  placeholder="请填入路径"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>图标:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #icon name="icon" [(ngModel)]="cmsTopic.icon" placeholder="请填入图标"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>关键字:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #keywords name="keywords" [(ngModel)]="cmsTopic.keywords" placeholder="请填入关键字"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>代码:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #code name="code"  [(ngModel)]="cmsTopic.code" placeholder="请填入代码"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>缩略图:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #thumbnail name="thumbnail"  [(ngModel)]="cmsTopic.thumbnail" placeholder="请填入缩略图"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>描述:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #description name="description"  [(ngModel)]="cmsTopic.description" placeholder="请填入描述"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <eui-linkbutton  iconCls="icon-save">保存</eui-linkbutton>&nbsp;
+          <eui-linkbutton iconCls="icon-back" (click)="back()">返回</eui-linkbutton>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>

@@ -75,11 +75,35 @@ export class MemberService {
 
   getDataById(id: String): any {
     const member: Member = new Member();
-    this.data = this.data.map(r => {
-      if (r.id === id) {
-        return r;
-      }
-    });
-    return member;
+    member.id = id,
+      member.username = '用户名' + id,
+      member.password = '123456' + 1,
+      member.loginDate = new Date(),
+      member.createDate = new Date(),
+      member.updateDate = new Date(),
+      member.lastLoginDate = new Date(),
+      member.email = 'wenminge@wen.ming',
+      member.mobilPhone = '12345678923',
+      member.enabled = false,
+      member.creator = 'wenimng',
+      member.updater = 'wenimng',
+      member.sex = true,
+      member.icon = 'httt:baidu.com',
+      member.description = '小丑逼',
+      member.age = 666,
+      member.weight = 888,
+      member.qq = '2422650408',
+      member.weixin = 'weixin',
+      member.realName = 'Evan',
+      member.loginCount = 8888,
+      member.sort = 1,
+      member.orgId = '123',
+      member.parentId = '123',
+      member.parentids = '123',
+      member.memCategoryId = '456',
+      member.nickname = '我来搞笑的',
+      member.openId = 'openId:s23423423sdfaerwe3534534534dasdfasdfsad',
+      member.bindingWechat = false
+      return member;
   }
 }

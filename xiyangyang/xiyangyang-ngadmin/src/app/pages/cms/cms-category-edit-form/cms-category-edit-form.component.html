@@ -1,3 +1,131 @@
-<p>
-  cms-category-edit-form works!
-</p>
+<div style="padding:3px;">
+  <input type="hidden" [(ngModel)]="cmsCategory.id" name="id" >
+  <form>
+    <table>
+      <tr>
+        <td>
+          <label class="td-label">*</label>英文名称:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #enName name="enName" [(ngModel)]="cmsCategory.enName" placeholder="请填入英文名称"></eui-textbox>
+        </td>
+
+        <td>
+          <label class="td-label">*</label>名称:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #name name="name" [(ngModel)]="cmsCategory.name" placeholder="请填入名称"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+      <td>
+        <label class="td-label">*</label>关键字:
+      </td>
+      <td>
+        <eui-textbox class="textbox" #keywords name="keywords" [(ngModel)]="cmsCategory.keywords" placeholder="请填入关键字"></eui-textbox>
+      </td>
+
+      <td>
+        <label class="td-label">*</label>组织结构:
+      </td>
+      <td>
+        <eui-textbox class="textbox" #orgId name="orgId" [(ngModel)]="cmsCategory.orgId"  placeholder="请填入组织结构"></eui-textbox>
+      </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>创建日期:
+        </td>
+        <td>
+          <eui-textbox #createDate name="createDate"  [(ngModel)]="cmsCategory.createDate"  placeholder="请填入创建日期"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>更新日期:
+        </td>
+        <td>
+          <eui-textbox #updateDate name="updateDate" [(ngModel)]="cmsCategory.updateDate" placeholder="请填入创建日期"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>是否为专题:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #isTooic name="isTooic" [(ngModel)]="cmsCategory.isTooic" placeholder="请填入是否为专题"></eui-textbox>
+        </td>
+
+        <td>
+          <label class="td-label">*</label>是否可用:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #enabled name="enabled"  [(ngModel)]="cmsCategory.enabled" placeholder="请填入是否可用"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>创建人:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #creator name="creator" [(ngModel)]="cmsCategory.creator" placeholder="请填入创建人"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>更新人:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #updater name="updater" [(ngModel)]="cmsCategory.updater" placeholder="请填入更新人"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>路径:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #path name="path" [(ngModel)]="cmsCategory.path"  placeholder="请填入路径"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>图标:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #icon name="icon" [(ngModel)]="cmsCategory.icon" placeholder="请填入图标"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>代码:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #code name="code"  [(ngModel)]="cmsCategory.code" placeholder="请填入代码"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>描述:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #description name="description"  [(ngModel)]="cmsCategory.description" placeholder="请填入描述"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>父类ID:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #parentId name="parentId"  [(ngModel)]="cmsCategory.parentId" placeholder="请填入父类ID"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>缩略图:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #thumbnail name="thumbnail"  [(ngModel)]="cmsCategory.thumbnail" placeholder="请填入缩略图"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <eui-linkbutton  iconCls="icon-save">保存</eui-linkbutton>&nbsp;
+          <eui-linkbutton iconCls="icon-back" (click)="back()">返回</eui-linkbutton>
+        </td>
+      </tr>
+    </table>
+  </form>
+
+</div>

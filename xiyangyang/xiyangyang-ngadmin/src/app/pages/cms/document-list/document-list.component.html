@@ -1,3 +1,26 @@
-<p>
-  document-list works!
-</p>
+<div style="padding:3px;">
+  <eui-linkbutton (click)="onAddRow()" iconCls="icon-add" style="margin-bottom:10px">新增</eui-linkbutton>
+  <eui-datagrid
+    [pagination]="true"
+    [data]="data"
+    [total]="total"
+    [pageNumber]="pageNumber"
+    [pageSize]="pageSize"
+    pagePosition="bottom"
+    class="data-grid">
+    <eui-grid-column field="id" title="id" align="center" hidden="true"></eui-grid-column>
+    <eui-grid-column field="name" title="名称" align="center"></eui-grid-column>
+    <eui-grid-column field="createDate" title="创建日期" align="center"></eui-grid-column>
+    <eui-grid-column field="updateDate" title="更新日期" align="center"></eui-grid-column>
+    <eui-grid-column field="title" title="标题" align="center"></eui-grid-column>
+    <eui-grid-column field="subTitle" title="副标题" align="center"></eui-grid-column>
+    <eui-grid-column field="creator" title="创建人" align="center"></eui-grid-column>
+    <eui-grid-column field="updater" title="更新人" align="center"></eui-grid-column>
+    <eui-grid-column title="" align="center" width="100" height="50">
+      <ng-template euiCellTemplate let-row>
+        <eui-linkbutton btnCls="c5" (click)="onEditRow(row)">编辑</eui-linkbutton>
+        <eui-linkbutton btnCls="c1" (click)="onDeleteRow(row)">删除</eui-linkbutton>
+      </ng-template>
+    </eui-grid-column>
+  </eui-datagrid>
+</div>

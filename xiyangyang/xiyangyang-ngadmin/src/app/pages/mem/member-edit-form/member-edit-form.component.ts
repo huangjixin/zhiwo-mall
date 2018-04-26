@@ -24,7 +24,6 @@ export class MemberEditFormComponent implements OnInit {
 
     this.id = id;
     if (this.id !== null && this.id !== undefined) {
-      debugger;
       const member: Member = this.memberService.getDataById(this.id);
       if (member !== null) {
         this.member = member;
