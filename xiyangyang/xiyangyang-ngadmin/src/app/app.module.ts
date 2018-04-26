@@ -202,6 +202,12 @@ export const routes = [
       {path: 'list', outlet: 'list', component: UserListComponent},
       {path: 'new', outlet: 'list', component: UserEditFormComponent},
       {path: 'edit/:id', outlet: 'list', component: UserEditFormComponent}
+    ]},
+    {path: 'sorg', outlet: 'main', component: ListManageComponent, children:[
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      {path: 'list', outlet: 'list', component: OrgListComponent},
+      {path: 'new', outlet: 'list', component: OrgEditFormComponent},
+      {path: 'edit/:id', outlet: 'list', component: OrgEditFormComponent}
     ]}
     ] },
   { path: 'login', component: LoginComponent },

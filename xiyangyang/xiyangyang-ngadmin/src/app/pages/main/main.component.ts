@@ -102,6 +102,10 @@ export class MainComponent implements OnInit {
       'name': '资源管理',
       'link': 'sresources'
     }, {
+      'id': 13,
+      'name': '组织管理',
+      'link': 'sorg'
+    }, {
       'id': 14,
       'name': '登录日志管理',
       'link': 'slog'

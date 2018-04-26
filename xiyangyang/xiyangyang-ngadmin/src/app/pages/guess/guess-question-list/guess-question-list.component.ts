@@ -12,7 +12,7 @@ import { NgModule } from '@angular/core';
 export class GuessQuestionListComponent implements OnInit {
   total: Number = 0;
   pageNumber = 1;
-  pageSize = 20;
+  pageSize = 15;
   data = [];
 
   constructor(public activeRoute: ActivatedRoute,

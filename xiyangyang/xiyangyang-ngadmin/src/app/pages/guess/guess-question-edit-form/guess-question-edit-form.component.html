@@ -1,13 +1,31 @@
-<div style="padding:3px;width: 100%;">
-    <eui-linkbutton (click)="back()" style="margin-bottom:10px">返回</eui-linkbutton>
-    <form>
-        <div style="margin-bottom:20px">
-            <label [for]="name" align="top">竞猜名称:</label>
-            <eui-textbox #name [(ngModel)]="question.name" name="name" placeholder="请填入竞猜标题"></eui-textbox>
-        </div>  
-        <div style="margin-bottom:20px">
-            <eui-linkbutton>保存</eui-linkbutton>
-        </div>
-    </form>
-        
+<div style="padding:3px;">
+  <eui-linkbutton (click)="back()" style="margin-bottom:10px">返回</eui-linkbutton>
+  <form>
+    <table>
+      <tr>
+        <td>
+          <label class="td-label">*</label>竞猜名称:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #name [(ngModel)]="question.name" name="name" placeholder="请填入竞猜标题"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>截止日期:
+        </td>
+        <td>
+          <eui-textbox  #name [(ngModel)]="question.questionEndTime" name="questionEndTime" placeholder="请填入截止日期"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <eui-linkbutton>保存</eui-linkbutton>
+        </td>
+      </tr>
+    </table>
+  </form>
+
 </div>
