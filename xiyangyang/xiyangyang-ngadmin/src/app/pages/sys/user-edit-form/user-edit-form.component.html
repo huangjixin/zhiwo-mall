@@ -4,31 +4,22 @@
     <table>
       <tr>
         <td><label class="td-label">*</label>用户名:</td><td><eui-textbox class="textbox" #username [ngModel]="user.username" name="username" placeholder="请填入用户名"></eui-textbox></td>
-        <td><label class="td-label">*</label>登录日期:</td><td><eui-textbox class="textbox" #loginDate [ngModel]="user.loginDate" name="loginDate" placeholder="请填入登录日期"></eui-textbox></td>
-      </tr>
-      <tr>
-        <td><label class="td-label">*</label>创建日期:</td><td><eui-textbox class="textbox" #createDate [ngModel]="user.createDate" name="createDate" placeholder="请填入创建日期"></eui-textbox></td>
-        <td><label class="td-label">*</label>更新日期:</td><td><eui-textbox class="textbox" #updateDate [ngModel]="user.updateDate" name="updateDate" placeholder="请填入更新日期"></eui-textbox></td>
-      </tr>
-      <tr>
-        <td><label class="td-label">*</label>上次登录日期:</td><td><eui-textbox class="textbox" #lastLoginDate [ngModel]="user.lastLoginDate" name="lastLoginDate" placeholder="请填入上次登录日期"></eui-textbox></td>
         <td><label class="td-label">*</label>邮箱:</td><td><eui-textbox class="textbox" #email [ngModel]="user.email" name="email" placeholder="请填入邮箱"></eui-textbox></td>
       </tr>
       <tr>
         <td><label class="td-label">*</label>手机:</td><td><eui-textbox class="textbox" #mobilPhone [ngModel]="user.mobilPhone" name="mobilPhone" placeholder="请填入手机"></eui-textbox></td>
-        <td><label class="td-label">*</label>是否禁用:</td><td><eui-textbox class="textbox" #enabled [ngModel]="user.enabled" name="enabled" placeholder="请填入是否禁用"></eui-textbox></td>
+        <td><label class="td-label">*</label>昵称:</td><td><eui-textbox class="textbox" #nickname [ngModel]="user.nickname" name="nickname" placeholder="请填入昵称"></eui-textbox></td>
       </tr>
       <tr>
-        <td><label class="td-label">*</label>创建人:</td><td><eui-textbox class="textbox" #creator [ngModel]="user.creator" name="creator" placeholder="请填入创建人"></eui-textbox></td>
-        <td><label class="td-label">*</label>更新人:</td><td><eui-textbox class="textbox" #updater [ngModel]="user.updater" name="updater" placeholder="请填入更新人"></eui-textbox></td>
-      </tr>
-      <tr>
-        <td><label class="td-label">*</label>性别:</td><td><eui-textbox class="textbox" #sex [ngModel]="user.sex" name="sex" placeholder="请填入性别"></eui-textbox></td>
+        <td><label class="td-label">*</label>性别:</td>
+        <td>
+          <eui-combobox #sex [(ngModel)]="user.sex" [data]="[{value: 0, text: '男'},{value: 1, text: '女'}]" placeholder="请选择性别"></eui-combobox>
+        </td>
         <td><label class="td-label">*</label>头像:</td><td><eui-textbox class="textbox" #icon [ngModel]="user.icon" name="icon" placeholder="请填入头像"></eui-textbox></td>
       </tr>
       <tr>
-        <td><label class="td-label">*</label>体重:</td><td><eui-textbox class="textbox" #weight [ngModel]="user.weight" name="weight" placeholder="请填入体重"></eui-textbox></td>
-        <td><label class="td-label">*</label>身高:</td><td><eui-textbox class="textbox" #age [ngModel]="user.age" name="age" placeholder="请填入身高"></eui-textbox></td>
+        <td><label class="td-label">*</label>体重:</td><td><eui-textbox class="textbox" #weight [ngModel]="user.age" name="weight" placeholder="请填入体重"></eui-textbox></td>
+        <td><label class="td-label">*</label>身高:</td><td><eui-textbox class="textbox" #age [ngModel]="user.weight" name="age" placeholder="请填入身高"></eui-textbox></td>
       </tr>
       <tr>
         <td><label class="td-label">*</label>QQ:</td><td><eui-textbox class="textbox" #qq [ngModel]="user.qq" name="qq" placeholder="请填入QQ"></eui-textbox></td>
@@ -36,31 +27,30 @@
       </tr>
       <tr>
         <td><label class="td-label">*</label>实名:</td><td><eui-textbox class="textbox" #realName [ngModel]="user.realName" name="realName" placeholder="请填入实名"></eui-textbox></td>
-        <td><label class="td-label">*</label>登录次数:</td><td><eui-textbox class="textbox" #loginCount [ngModel]="user.loginCount" name="loginCount" placeholder="请填入登录次数"></eui-textbox></td>
-      </tr>
-      <tr>
-        <td><label class="td-label">*</label>排序:</td><td><eui-textbox class="textbox" #sort [ngModel]="user.sort" name="sort" placeholder="请填入排序"></eui-textbox></td>
-        <td><label class="td-label">*</label>组织结构表:</td><td><eui-textbox class="textbox" #orgId [ngModel]="user.orgId" name="orgId" placeholder="请填入组织结构表"></eui-textbox></td>
-      </tr>
-      <tr>
-        <td><label class="td-label">*</label>父类ID:</td><td><eui-textbox class="textbox" #parentId [ngModel]="user.parentId" name="parentId" placeholder="请填入父类ID"></eui-textbox></td>
-        <td><label class="td-label">*</label>昵称:</td><td><eui-textbox class="textbox" #nickname [ngModel]="user.nickname" name="nickname" placeholder="请填入昵称"></eui-textbox></td>
-      </tr>
-      <tr>
         <td><label class="td-label">*</label>登录名:</td><td><eui-textbox class="textbox" #loginName [ngModel]="user.loginName" name="loginName" placeholder="请填入登录名"></eui-textbox></td>
+      </tr>
+      <tr>
+        <td><label class="td-label">*</label>身份证号码:</td><td><eui-textbox class="textbox" #idCard [ngModel]="user.idCard" name="idCard" placeholder="请填入身份证号码"></eui-textbox></td>
         <td><label class="td-label">*</label>紧急情况联系人:</td><td><eui-textbox class="textbox" #emergecyContact [ngModel]="user.emergecyContact" name="emergecyContact" placeholder="请填入紧急情况联系人"></eui-textbox></td>
       </tr>
       <tr>
-        <td><label class="td-label">*</label>是否是国内企业证件照:</td><td><eui-textbox class="textbox" #isCertificateInternational [ngModel]="user.isCertificateInternational" name="isCertificateInternational" placeholder="请填入是否是国内企业证件照"></eui-textbox></td>
-        <td><label class="td-label">*</label>身份证号码:</td><td><eui-textbox class="textbox" #idCard [ngModel]="user.idCard" name="idCard" placeholder="请填入身份证号码"></eui-textbox></td>
+        <td><label class="td-label">*</label>是否是国内企业证件照:</td>
+        <td>
+          <eui-radiobutton name="type" [inputId]="type" [value]=1 [(ngModel)]="user.type"></eui-radiobutton>是
+          <eui-radiobutton name="type" [inputId]="type" [value]=0 [(ngModel)]="user.type"></eui-radiobutton>否
+        </td>
+        <td><label class="td-label">*</label>商户类型:</td>
+        <td>
+          <eui-combobox #type [(ngModel)]="user.type" [data]="[{value: 'cooperation', text: '企业'},{value: 'person', text: '个人'}]" placeholder="请选择商户类型"></eui-combobox>
+        </td>
+      </tr>
+      <tr>
+        <td><label class="td-label">*</label>组织:</td><td><eui-textbox class="textbox" #orgId [ngModel]="user.orgId" name="orgId" placeholder="请填入组织"></eui-textbox></td>
+        <td><label class="td-label">*</label>组织机构代码:</td><td><eui-textbox class="textbox" #orgCode [ngModel]="user.orgCode" name="orgCode" placeholder="请填入组织机构代码"></eui-textbox></td>
       </tr>
       <tr>
         <td><label class="td-label">*</label>公司名称:</td><td><eui-textbox class="textbox" #coopName [ngModel]="user.coopName" name="coopName" placeholder="请填入公司名称"></eui-textbox></td>
         <td><label class="td-label">*</label>公司经营地址:</td><td><eui-textbox class="textbox" #coopAddress [ngModel]="user.coopAddress" name="coopAddress" placeholder="请填入公司经营地址"></eui-textbox></td>
-      </tr>
-      <tr>
-        <td><label class="td-label">*</label>营业执照注册号:</td><td><eui-textbox class="textbox" #bussinessLicenseCode [ngModel]="user.bussinessLicenseCode" name="bussinessLicenseCode" placeholder="请填入营业执照注册号"></eui-textbox></td>
-        <td><label class="td-label">*</label>组织机构代码:</td><td><eui-textbox class="textbox" #orgCode [ngModel]="user.orgCode" name="orgCode" placeholder="请填入组织机构代码"></eui-textbox></td>
       </tr>
       <tr>
         <td><label class="td-label">*</label>纳税人识别码:</td><td><eui-textbox class="textbox" #taxpayer [ngModel]="user.taxpayer" name="taxpayer" placeholder="请填入纳税人识别码"></eui-textbox></td>
@@ -76,10 +66,10 @@
       </tr>
       <tr>
         <td><label class="td-label">*</label>开户许可证:</td><td><eui-textbox class="textbox" #licenseForOpeningCount [ngModel]="user.licenseForOpeningCount" name="licenseForOpeningCount" placeholder="请填入开户许可证"></eui-textbox></td>
-        <td><label class="td-label">*</label>质检报告:</td><td><eui-textbox class="textbox" #quantityReportId [ngModel]="user.quantityReportId" name="quantityReportId" placeholder="请填入质检报告"></eui-textbox></td>
+        <td><label class="td-label">*</label>营业执照注册号:</td><td><eui-textbox class="textbox" #bussinessLicenseCode [ngModel]="user.bussinessLicenseCode" name="bussinessLicenseCode" placeholder="请填入营业执照注册号"></eui-textbox></td>
       </tr>
       <tr>
-        <td><label class="td-label">*</label>商户类型:</td><td><eui-textbox class="textbox" #type [ngModel]="user.type" name="type" placeholder="请填入商户类型"></eui-textbox></td>
+        <td><label class="td-label">*</label>质检报告:</td><td><eui-textbox class="textbox" #quantityReportId [ngModel]="user.quantityReportId" name="quantityReportId" placeholder="请填入质检报告"></eui-textbox></td>
         <td><label class="td-label">*</label>描述:</td><td><eui-textbox class="textbox" #description [ngModel]="user.description" name="description" placeholder="请填入描述"></eui-textbox></td>
       </tr>
 
