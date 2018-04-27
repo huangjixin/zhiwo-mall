@@ -45,7 +45,11 @@
         </td>
       </tr>
       <tr>
-        <td><label class="td-label">*</label>组织:</td><td><eui-textbox class="textbox" #orgId [ngModel]="user.orgId" name="orgId" placeholder="请填入组织"></eui-textbox></td>
+        <td><label class="td-label">*</label>组织:</td><td>
+          <eui-combotree [(ngModel)]="user.parentId" [data]="orgTreeData" placeholder="不选为根节点">
+            <eui-tree ></eui-tree>
+          </eui-combotree>
+        </td>
         <td><label class="td-label">*</label>组织机构代码:</td><td><eui-textbox class="textbox" #orgCode [ngModel]="user.orgCode" name="orgCode" placeholder="请填入组织机构代码"></eui-textbox></td>
       </tr>
       <tr>
@@ -75,8 +79,8 @@
 
     </table>
     <div >
-      <eui-linkbutton (click)="submitForm()" style="width:80px">Save</eui-linkbutton>
-      <eui-linkbutton (click)="onCancel()" style="width:80px">Cancel</eui-linkbutton>
+      <eui-linkbutton (click)="submitForm()" style="width:80px">保存</eui-linkbutton>
+      <eui-linkbutton (click)="onCancel()" style="width:80px">返回</eui-linkbutton>
     </div>
   </form>
 

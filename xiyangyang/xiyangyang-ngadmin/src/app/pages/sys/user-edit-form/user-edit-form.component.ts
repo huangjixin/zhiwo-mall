@@ -3,19 +3,22 @@ import {UserService} from '../user.service';
 import {User} from '../user.model';
 import {Location} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
-import {GuessQuestion} from '../../guess/guess-question.model';
+import {OrgService} from '../org.service';
 
 @Component({
   selector: 'app-user-edit-form',
   templateUrl: './user-edit-form.component.html',
   styleUrls: ['./user-edit-form.component.css'],
-  providers: [UserService]
+  providers: [UserService,OrgService]
 })
 export class UserEditFormComponent implements OnInit {
   user: User;
+  orgTreeData: any;
 
   constructor(public activeRoute: ActivatedRoute,
-              private userService: UserService, private location: Location, private router: Router) {
+              private userService: UserService,
+              private orgService: OrgService,
+              private location: Location, private router: Router) {
     this.user = new User();
   }
 
@@ -26,6 +29,8 @@ export class UserEditFormComponent implements OnInit {
     } else {
       this.user = new User();
     }
+
+    this.orgTreeData = this.orgService.getComboData();
   }
 
   back(): void {

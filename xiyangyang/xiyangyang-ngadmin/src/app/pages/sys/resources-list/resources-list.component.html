@@ -1,7 +1,9 @@
 <router-outlet  name="sresources"></router-outlet>
 <h2>资源管理</h2>
-<eui-linkbutton (click)="onAddRow()" iconCls="icon-add" style="margin-bottom:10px">新增资源</eui-linkbutton>
-<eui-datagrid class="data-grid"
+<eui-linkbutton (click)="onAddRow()" iconCls="icon-add">新增资源</eui-linkbutton>
+<eui-linkbutton  iconCls="icon-remove">批量删除</eui-linkbutton>
+<eui-datagrid style="margin-top: 5px;"
+              class="data-grid"
               [pagination]="true"
               [lazy]="true"
               [data]="data"
@@ -11,15 +13,15 @@
               [pagePosition]="pagePosition"
               [loading]="loading"
               (pageChange)="onPageChange($event)">
-  <eui-grid-column title="id" field="id"></eui-grid-column>
-  <eui-grid-column title="资源名称" field="name"></eui-grid-column>
-  <eui-grid-column title="描述" field="description" align="right"></eui-grid-column>
-  <eui-grid-column title="类型" field="type" align="right"></eui-grid-column>
-  <eui-grid-column title="代码" field="code" align="right"></eui-grid-column>
-  <eui-grid-column title="操作" align="center" width="100">
+  <eui-grid-column align="center" title="id" field="id"></eui-grid-column>
+  <eui-grid-column align="center" title="资源名称" field="name"></eui-grid-column>
+  <eui-grid-column align="center" title="描述" field="description"></eui-grid-column>
+  <eui-grid-column align="center" title="类型" field="type" ></eui-grid-column>
+  <eui-grid-column align="center" title="代码" field="code" ></eui-grid-column>
+  <eui-grid-column align="center" title="操作"  >
     <ng-template euiCellTemplate let-row>
-      <eui-linkbutton btnCls="c5" (click)="onEditRow(row)">修改</eui-linkbutton>
-      <eui-linkbutton btnCls="c1" (click)="onDeleteRow(row)">删除</eui-linkbutton>
+      <eui-linkbutton iconCls="icon-edit" (click)="onEditRow(row)">修改</eui-linkbutton>
+      <eui-linkbutton iconCls="icon-remove" (click)="onDeleteRow(row)">删除</eui-linkbutton>
     </ng-template>
   </eui-grid-column>
 

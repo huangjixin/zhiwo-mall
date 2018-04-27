@@ -4,27 +4,21 @@
     <table>
       <tr>
         <td><label class="td-label">*</label>角色名称:</td><td><eui-textbox class="textbox" #name [ngModel]="role.name" name="name" placeholder="请填入角色名称"></eui-textbox></td>
-        <td><label class="td-label">*</label>创建日期:</td><td><eui-textbox class="textbox" #createDate [ngModel]="role.createDate" name="createDate" placeholder="请填入创建日期"></eui-textbox></td>
-      </tr>
-      <tr>
-        <td><label class="td-label">*</label>更新日期:</td><td><eui-textbox class="textbox" #updateDate [ngModel]="role.updateDate" name="updateDate" placeholder="请填入更新日期"></eui-textbox></td>
-        <td><label class="td-label">*</label>是否可用:</td><td><eui-textbox class="textbox" #enabled [ngModel]="role.enabled" name="enabled" placeholder="请填入是否可用"></eui-textbox></td>
-      </tr>
-      <tr>
-        <td><label class="td-label">*</label>创建人:</td><td><eui-textbox class="textbox" #creator [ngModel]="role.creator" name="creator" placeholder="请填入创建人"></eui-textbox></td>
-        <td><label class="td-label">*</label>更新人:</td><td><eui-textbox class="textbox" #updater [ngModel]="role.updater" name="updater" placeholder="请填入更新人"></eui-textbox></td>
-      </tr>
-      <tr>
-        <td><label class="td-label">*</label>排序:</td><td><eui-textbox class="textbox" #sort [ngModel]="role.sort" name="sort" placeholder="请填入排序"></eui-textbox></td>
-        <td><label class="td-label">*</label>组织结构表:</td><td><eui-textbox class="textbox" #orgId [ngModel]="role.orgId" name="orgId" placeholder="请填入组织结构表"></eui-textbox></td>
-      </tr>
-      <tr>
         <td><label class="td-label">*</label>代码:</td><td><eui-textbox class="textbox" #code [ngModel]="role.code" name="code" placeholder="请填入代码"></eui-textbox></td>
+      </tr>
+      <tr>
+        <td><label class="td-label">*</label>排序:</td>
+        <td>
+          <eui-combotree [(ngModel)]="role.parentId" [data]="orgTreeData" placeholder="不选为根节点">
+            <eui-tree ></eui-tree>
+          </eui-combotree>
+        </td>
+        <td><label class="td-label">*</label>组织:</td><td><eui-textbox class="textbox" #orgId [ngModel]="role.orgId" name="orgId" placeholder="请填入组织结构表"></eui-textbox></td>
       </tr>
     </table>
     <div >
-      <eui-linkbutton (click)="submitForm()" style="width:80px">Save</eui-linkbutton>
-      <eui-linkbutton (click)="onCancel()" style="width:80px">Cancel</eui-linkbutton>
+      <eui-linkbutton (click)="submitForm()" style="width:80px">保存</eui-linkbutton>
+      <eui-linkbutton (click)="onCancel()" style="width:80px">返回</eui-linkbutton>
     </div>
   </form>
 

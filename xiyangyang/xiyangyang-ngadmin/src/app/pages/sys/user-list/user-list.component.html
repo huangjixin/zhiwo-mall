@@ -1,9 +1,9 @@
-<div style="padding:3px;">
  <h2>用户管理</h2>
-<eui-linkbutton (click)="onAddRow()" iconCls="icon-add" style="margin-bottom:10px">新增用户</eui-linkbutton>
-<eui-datagrid
+<eui-linkbutton (click)="onAddRow()" iconCls="icon-add" >新增用户</eui-linkbutton>
+<eui-linkbutton  iconCls="icon-remove">批量删除</eui-linkbutton>
+<eui-datagrid style="margin-top: 5px;"
               [pagination]="true"
-              [lazy]="true"
+              [lazy]="true"align="center"
               [data]="data"
               [total]="total"
               [pageNumber]="pageNumber"
@@ -12,20 +12,18 @@
               [loading]="loading"
               (pageChange)="onPageChange($event)"
               class="data-grid">
-  <eui-grid-column title="id" field="id"></eui-grid-column>
-  <eui-grid-column title="用户名" field="username"></eui-grid-column>
-  <eui-grid-column title="邮箱" field="email" align="right"></eui-grid-column>
-  <eui-grid-column title="电话" field="mobilPhone" align="right"></eui-grid-column>
-  <eui-grid-column title="描述" field="description" align="right"></eui-grid-column>
-  <eui-grid-column title="年龄" field="age"></eui-grid-column>
-  <eui-grid-column title="操作" align="center" width="100">
+  <eui-grid-column align="center" title="id" field="id"></eui-grid-column>
+  <eui-grid-column align="center" title="用户名" field="username"></eui-grid-column>
+  <eui-grid-column align="center" title="邮箱" field="email" ></eui-grid-column>
+  <eui-grid-column align="center" title="电话" field="mobilPhone" ></eui-grid-column>
+  <eui-grid-column align="center" title="描述" field="description" ></eui-grid-column>
+  <eui-grid-column align="center" title="年龄" field="age"></eui-grid-column>
+  <eui-grid-column align="center" title="操作" >
     <ng-template euiCellTemplate let-row>
-      <eui-linkbutton btnCls="c5" (click)="onEditRow(row)">修改</eui-linkbutton>
-      <eui-linkbutton btnCls="c1" (click)="onDeleteRow(row)">删除</eui-linkbutton>
+      <eui-linkbutton iconCls="icon-edit" (click)="onEditRow(row)">修改</eui-linkbutton>
+      <eui-linkbutton iconCls="icon-remove" (click)="onDeleteRow(row)">删除</eui-linkbutton>
     </ng-template>
   </eui-grid-column>
-
 </eui-datagrid>
 
-</div>
 

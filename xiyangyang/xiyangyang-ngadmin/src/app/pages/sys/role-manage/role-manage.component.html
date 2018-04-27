@@ -1,6 +1,7 @@
 <router-outlet  name="srole"></router-outlet>
 <h2>角色管理</h2>
 <eui-linkbutton (click)="onAddRow()" iconCls="icon-add" style="margin-bottom:10px">新增用户</eui-linkbutton>
+<eui-linkbutton  iconCls="icon-remove">批量删除</eui-linkbutton>
 <eui-datagrid style="height:250px"
               [pagination]="true"
               [lazy]="true"
@@ -18,8 +19,8 @@
   <eui-grid-column title="更新人" field="updater" align="right"></eui-grid-column>
   <eui-grid-column title="操作" align="center" width="100">
     <ng-template euiCellTemplate let-row>
-      <eui-linkbutton btnCls="c5" (click)="onEditRow(row)">修改</eui-linkbutton>
-      <eui-linkbutton btnCls="c1" (click)="onDeleteRow(row)">删除</eui-linkbutton>
+      <eui-linkbutton iconCls="icon-edit" (click)="onEditRow(row)">修改</eui-linkbutton>
+      <eui-linkbutton iconCls="icon-remove" (click)="onDeleteRow(row)">删除</eui-linkbutton>
     </ng-template>
   </eui-grid-column>
 

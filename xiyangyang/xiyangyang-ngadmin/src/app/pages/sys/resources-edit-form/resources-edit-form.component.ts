@@ -3,18 +3,22 @@ import {Resource} from '../resource.model';
 import {ResourcesService} from '../resources.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Location} from '@angular/common';
+import {OrgService} from '../org.service';
 
 @Component({
   selector: 'app-resources-edit-form',
   templateUrl: './resources-edit-form.component.html',
   styleUrls: ['./resources-edit-form.component.css'],
-  providers: [ResourcesService]
+  providers: [ResourcesService, OrgService]
 })
 export class ResourcesEditFormComponent implements OnInit {
   resource: Resource;
+  orgTreeData: any;
 
   constructor(public activeRoute: ActivatedRoute,
-              private resourcesService: ResourcesService, private location: Location, private router: Router) {
+              private resourcesService: ResourcesService,
+              private orgService: OrgService,
+              private location: Location, private router: Router) {
   }
 
   ngOnInit() {
@@ -24,6 +28,8 @@ export class ResourcesEditFormComponent implements OnInit {
     } else {
       this.resource = new Resource();
     }
+
+    this.orgTreeData = this.orgService.getComboData();
   }
 
   back(): void {

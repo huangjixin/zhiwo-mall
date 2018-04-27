@@ -1,3 +1,38 @@
-<p>
-  org-edit-form works!
-</p>
+<div style="padding:3px;">
+  <form>
+    <input type="hidden" [(ngModel)]="org.id" name="id">
+    <table>
+      <tr>
+        <td><label class="td-label">*</label>英文名称:</td><td><eui-textbox class="textbox" #enName [ngModel]="org.enName" name="enName" placeholder="请填入英文名称"></eui-textbox></td>
+        <td><label class="td-label">*</label>名称:</td><td><eui-textbox class="textbox" #name [ngModel]="org.name" name="name" placeholder="请填入名称"></eui-textbox></td>
+      </tr>
+      <tr>
+        <td><label class="td-label">*</label>路径:</td><td><eui-textbox class="textbox" #path [ngModel]="org.path" name="path" placeholder="请填入路径"></eui-textbox></td>
+        <td><label class="td-label">*</label>图标:</td><td><eui-textbox class="textbox" #icon [ngModel]="org.icon" name="icon" placeholder="请填入图标"></eui-textbox></td>
+      </tr>
+      <tr>
+        <td><label class="td-label">*</label>父类:</td>
+          <td>
+            <eui-combotree [(ngModel)]="org.parentId" [data]="treeData" placeholder="不选为根节点">
+              <eui-tree ></eui-tree>
+            </eui-combotree>
+            <eui-linkbutton iconCls="icon-cancel" (click)="back()">取消选择</eui-linkbutton>
+          </td>
+        <td><label class="td-label">*</label>代码:</td><td><eui-textbox class="textbox" #code [ngModel]="org.code" name="code" placeholder="请填入代码"></eui-textbox></td>
+      </tr>
+      <tr>
+        <td><label class="td-label">*</label>关键字:</td><td><eui-textbox class="textbox" #keywords [ngModel]="org.keywords" name="keywords" placeholder="请填入关键字"></eui-textbox></td>
+        <td><label class="td-label">*</label>描述:</td><td><eui-textbox class="textbox" #description [ngModel]="org.description" name="description" placeholder="请填入描述"></eui-textbox></td>
+      </tr>
+      <tr>
+        <td><label class="td-label">*</label>缩略图:</td><td><eui-textbox class="textbox" #thumbnail [ngModel]="org.thumbnail" name="thumbnail" placeholder="请填入缩略图"></eui-textbox></td>
+      </tr>
+    </table>
+    <div >
+      <eui-linkbutton (click)="submitForm()" style="width:80px">保存</eui-linkbutton>
+      <eui-linkbutton (click)="onCancel()" style="width:80px">返回</eui-linkbutton>
+    </div>
+  </form>
+
+</div>
+

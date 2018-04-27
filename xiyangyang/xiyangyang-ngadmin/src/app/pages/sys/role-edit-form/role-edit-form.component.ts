@@ -5,19 +5,23 @@ import { switchMap } from 'rxjs/operators';
 
 import {Location} from '@angular/common';
 import {Role} from '../role.model';
+import {OrgService} from '../org.service';
 
 @Component({
   selector: 'app-role-edit-form',
   templateUrl: './role-edit-form.component.html',
   styleUrls: ['./role-edit-form.component.css'],
-  providers:[RoleService]
+  providers:[RoleService,OrgService]
 })
 export class RoleEditFormComponent implements OnInit {
 
   role: Role;
+  orgTreeData: any;
 
   constructor(public activeRoute: ActivatedRoute,
-              private roleService: RoleService, private location: Location, private router: Router) { }
+              private roleService: RoleService,
+              private orgService: OrgService,
+              private location: Location, private router: Router) { }
 
   ngOnInit() {
     const id: String = this.activeRoute.snapshot.params['id'];
@@ -26,6 +30,8 @@ export class RoleEditFormComponent implements OnInit {
     } else {
       this.role = new Role();
     }
+
+    this.orgTreeData = this.orgService.getComboData();
   }
 
   back(): void {

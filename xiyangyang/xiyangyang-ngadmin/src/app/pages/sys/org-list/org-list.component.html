@@ -1,3 +1,13 @@
-<p>
-  org-list works!
-</p>
+<div>
+  <eui-linkbutton (click)="onAddRow()" iconCls="icon-add">新增</eui-linkbutton>&nbsp;
+  <eui-linkbutton (click)="onEditRow()" iconCls="icon-edit">编辑</eui-linkbutton>
+  <eui-linkbutton (click)="onDelRow()" iconCls="icon-remove">删除</eui-linkbutton>
+</div>
+<eui-treegrid style="width:100%;margin-top: 3px;"
+              [data]="treeData"
+              idField="id"
+              treeField="name"
+              (selectionChange)="selectNodeHandler($event)">
+  <eui-grid-column field="name" title="组织分类名称"></eui-grid-column>
+  <!-- [(selection)]="selection" -->
+</eui-treegrid>
