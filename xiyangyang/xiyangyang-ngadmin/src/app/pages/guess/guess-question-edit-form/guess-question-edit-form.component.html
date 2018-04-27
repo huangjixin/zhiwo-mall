@@ -35,23 +35,46 @@
           <label class="td-label">*</label>截止日期:
         </td>
         <td>
-          <eui-textbox #questionEndTime [(ngModel)]="question.questionEndTime" name="questionEndTime" placeholder="请填入截止日期"></eui-textbox>
+          <eui-datebox #questionEndTime [(ngModel)]="question.questionEndTime" name="questionEndTime"></eui-datebox>
+          <!-- <eui-textbox #questionEndTime [(ngModel)]="question.questionEndTime" name="questionEndTime" placeholder="请填入截止日期"></eui-textbox> -->
         </td>
         <td>
           <label class="td-label">*</label>是否已经校验过答案:
         </td>
         <td>
-          <eui-combobox #checked [(ngModel)]="question.checked"></eui-combobox>
+          <eui-combobox #checked [(ngModel)]="question.checked" name="checked"></eui-combobox>
         </td>
       </tr>
       <tr>
         <td>
         </td>
         <td>
-          <eui-linkbutton>保存</eui-linkbutton>&nbsp;
-          <eui-linkbutton (click)="back()">返回</eui-linkbutton>
+          <eui-linkbutton iconCls="icon-save">保存</eui-linkbutton>&nbsp;
+          <eui-linkbutton iconCls="icon-back" (click)="back()">返回</eui-linkbutton>
         </td>
       </tr>
     </table>
+
+    <eui-datalist style="width: 650px;margin-top:10px;" [data]="question.guessOptions" [(selection)]="guessOptionSelection" selectionMode="single"
+      *ngIf="question.guessOptions.length>0">
+      <!--  -->
+      <ng-template euiItemTemplate let-row>
+        <div style="border-bottom:1px #DDDDDD solid;padding: 5px 10px;">
+          <div>
+            <div style="width: 200px;text-align: center;float: left; vertical-align: middle;">
+              <label>{{row.name}}</label>
+            </div>
+            <div style="width: 200px;text-align: center;float: left;">
+              <label>{{row.betRate}}</label>
+            </div>
+            <div style="width: 200px;text-align: center;float: left;">
+                <eui-linkbutton  iconCls="icon-edit" (click)="onEditRow(row)">编辑</eui-linkbutton>
+                <eui-linkbutton  iconCls="icon-remove" (click)="onDeleteRow(row)">删除</eui-linkbutton>
+            </div>
+            <div style="clear: both;"></div>
+          </div>
+        </div>
+      </ng-template>
+    </eui-datalist>
   </form>
 </div>

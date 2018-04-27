@@ -311,7 +311,7 @@ export const routes = [
               CmsCategoryService,
               DocumentService,
               TopicService,
-              {provide : RouteReuseStrategy, useClass: SimpleReuseStrategy}],
+              ], // {provide : RouteReuseStrategy, useClass: SimpleReuseStrategy}
   bootstrap: [AppComponent]
 })
 export class AppModule { }

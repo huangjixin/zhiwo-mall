@@ -1,3 +1,4 @@
+import { GuessOptions } from './../guess-options.model';
 import { GuessQuestion } from './../guess-question.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuestionService } from './../question.service';
@@ -17,6 +18,8 @@ export class GuessQuestionEditFormComponent implements OnInit {
   public question: GuessQuestion;
   public questionFormGroup: FormGroup;
 
+  public guessOptionSelection: any;
+
   constructor(public activeRoute: ActivatedRoute,
     private router: Router, private location: Location, private questionService: QuestionService) {
       // this.questionFormGroup = fb.group({
@@ -35,6 +38,14 @@ export class GuessQuestionEditFormComponent implements OnInit {
        if ( question !== null ) {
           this.question = question;
        }
+    } else {
+      // 模拟数据。
+      for (let index = 0; index < 3; index++) {
+        const option: GuessOptions = new GuessOptions();
+        option.name = 'test' + index;
+        option.betRate = 1.8;
+        this.question.guessOptions.push(option);
+      }
     }
   }
 

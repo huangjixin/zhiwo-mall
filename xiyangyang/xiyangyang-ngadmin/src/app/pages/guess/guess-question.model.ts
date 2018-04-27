@@ -1,9 +1,10 @@
+import { GuessOptions } from './guess-options.model';
 import {GuessCategory} from './guess-category.model';
 
 export class GuessQuestion {
 
-  guessCategory : GuessCategory;
-  guessOptions : Array < GuessQuestion >;
+  guessCategory : GuessCategory = new GuessCategory();
+  guessOptions : Array < GuessOptions > = new Array<GuessOptions>();
 
   id : String;
 
