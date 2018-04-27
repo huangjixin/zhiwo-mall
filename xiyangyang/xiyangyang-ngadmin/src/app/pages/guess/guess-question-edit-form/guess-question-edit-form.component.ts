@@ -80,7 +80,7 @@ treeData = [
       ]
     }
   ];
-  
+
   constructor(public activeRoute : ActivatedRoute,
      private router : Router, private location : Location, private questionService : QuestionService) {
     // this.questionFormGroup = fb.group({    'name': [null, Validators.required]
@@ -164,7 +164,9 @@ treeData = [
     } else if (this.mode === 'edit') {
 
     }
-
   }
 
+  onSubmit(): void{
+    alert(JSON.stringify(this.question));
+  }
 }
