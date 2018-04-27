@@ -27,7 +27,10 @@
           <label class="td-label">*</label>类别:
         </td>
         <td>
-          <eui-textbox class="textbox" #guessCategoryId [(ngModel)]="question.guessCategoryId" name="guessCategoryId" placeholder="请填入竞猜类别"></eui-textbox>
+          <eui-combotree [(ngModel)]="question.guessCategoryId" name="guessCategoryId" [data]="treeData" placeholder="不选为根节点">
+            <eui-tree></eui-tree>
+          </eui-combotree>
+          <!-- <eui-textbox class="textbox" #guessCategoryId [(ngModel)]="question.guessCategoryId" name="guessCategoryId" placeholder="请填入竞猜类别"></eui-textbox> -->
         </td>
       </tr>
       <tr>
@@ -50,7 +53,8 @@
         </td>
         <td>
           <eui-linkbutton iconCls="icon-save">保存</eui-linkbutton>&nbsp;
-          <eui-linkbutton iconCls="icon-back" (click)="back()">返回</eui-linkbutton>
+          <eui-linkbutton iconCls="icon-back" (click)="back()">返回</eui-linkbutton>&nbsp;
+          <eui-linkbutton iconCls="icon-add" (click)="addOtpion()">添加选项</eui-linkbutton>
         </td>
       </tr>
     </table>
@@ -68,13 +72,37 @@
               <label>{{row.betRate}}</label>
             </div>
             <div style="width: 200px;text-align: center;float: left;">
-                <eui-linkbutton  iconCls="icon-edit" (click)="onEditRow(row)">编辑</eui-linkbutton>
-                <eui-linkbutton  iconCls="icon-remove" (click)="onDeleteRow(row)">删除</eui-linkbutton>
+                <eui-linkbutton  iconCls="icon-edit" (click)="onOptionEditRow(row)">编辑</eui-linkbutton>
+                <eui-linkbutton  iconCls="icon-remove" (click)="onOptionDeleteRow(row)">删除</eui-linkbutton>
             </div>
             <div style="clear: both;"></div>
           </div>
         </div>
       </ng-template>
     </eui-datalist>
+    <table style="margin-top: 10px;" *ngIf="showOptionForm === true">
+        <tr>
+          <td>
+            <label class="td-label">*</label>名称:
+          </td>
+          <td>
+            <eui-textbox class="textbox" [(ngModel)]="option.name" name="option_name" placeholder="请填入名称"></eui-textbox>
+          </td>
+  
+          <td>
+            <label class="td-label">*</label>赔率:
+          </td>
+          <td>
+            <eui-textbox class="textbox" [(ngModel)]="option.betRate" name="option_betRate" placeholder="请填入赔率"></eui-textbox>
+          </td>
+        </tr>
+        <tr>
+            <td>
+            </td>
+            <td>
+              <eui-linkbutton iconCls="icon-save" (click)="saveOption()">{{mode == 'new' ? '新增保存':'编辑保存'}}</eui-linkbutton>
+            </td>
+          </tr>
+    </table>
   </form>
 </div>
