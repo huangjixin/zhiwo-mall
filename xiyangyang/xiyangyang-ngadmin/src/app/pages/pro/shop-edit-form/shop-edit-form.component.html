@@ -1,3 +1,57 @@
-<p>
-  shop-edit-form works!
-</p>
+<div style="padding:3px;">
+  <form>
+    <table>
+      <tr>
+        <td>
+          <label class="td-label">*</label>商铺名称:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #name [(ngModel)]="shop.name" name="name" placeholder="请填入商铺名称"></eui-textbox>
+        </td>
+
+        <td>
+          <label class="td-label">*</label>联系人号码:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #contactTelephone [(ngModel)]="shop.contactTelephone" name="contactTelephone" placeholder="请填入联系人号码"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>商铺描述:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #description [(ngModel)]="shop.description" name="description" placeholder="请填入商铺描述"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>英文名:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #enName [(ngModel)]="shop.enName" name="enContent" placeholder="请填入英文名"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>截止日期:
+        </td>
+        <td>
+          <eui-datebox #endTime [(ngModel)]="shop.endTime" name="endTime"></eui-datebox>
+        </td>
+        <td>
+          <label class="td-label">*</label>是否被禁用:
+        </td>
+        <td>
+          <eui-combobox #enabled [(ngModel)]="shop.enabled"></eui-combobox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <eui-linkbutton iconCls="icon-save" (click)="submitForm()">保存</eui-linkbutton>&nbsp;
+          <eui-linkbutton iconCls="icon-back" (click)="back()">返回</eui-linkbutton>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
