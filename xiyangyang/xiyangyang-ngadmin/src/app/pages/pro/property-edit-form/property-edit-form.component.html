@@ -1,3 +1,36 @@
-<p>
-  property-edit-form works!
-</p>
+<div style="padding:3px;">
+  <form>
+    <table>
+      <tr>
+        <td>
+          <label class="td-label">*</label>属性名称:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #name [(ngModel)]="property.name" name="name" placeholder="请填入属性名称"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>英文代码:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #code [(ngModel)]="property.code" name="code" placeholder="请填入英文代码"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>属性表描述:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #description [(ngModel)]="property.description" name="description" placeholder="请填入属性表描述"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <eui-linkbutton iconCls="icon-save" (click)="submitForm()">保存</eui-linkbutton>&nbsp;
+          <eui-linkbutton iconCls="icon-back" (click)="back()">返回</eui-linkbutton>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
