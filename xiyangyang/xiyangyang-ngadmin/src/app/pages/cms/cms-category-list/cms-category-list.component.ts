@@ -13,6 +13,58 @@ export class CmsCategoryListComponent implements OnInit {
   pageNumber = 1;
   pageSize = 15;
   data = [];
+  treeData = [
+    {
+      'id': 1,
+      'name': '娱乐',
+      'children': [
+        {
+          'id': 3,
+          'name': '赵丽颖',
+          'link': 'pproduct'
+        }, {
+          'id': 4,
+          'name': '李易峰',
+          'link': 'pcategory'
+        }, {
+          'id': 5,
+          'name': '李沁',
+          'link': 'pproperty'
+        }, {
+          'id': 23,
+          'name': '林允儿',
+          'link': 'pshop'
+        }
+      ]
+    }, {
+      'id': 6,
+      'name': '科技',
+      'children': [
+        {
+          'id': 7,
+          'name': '中国十大黑科技',
+          'link': 'gquestion'
+        }, {
+          'id': 8,
+          'name': '公鸡中的战斗机'
+        }
+      ]
+    }, {
+      'id': 15,
+      'name': '老司机专场',
+      'children': [
+        {
+          'id': 16,
+          'name': '中国老司机',
+          'link': 'mmember'
+        }, {
+          'id': 17,
+          'name': '小司机',
+          'link': 'mcategory'
+        }
+      ]
+    }
+  ];
 
   constructor(public activeRoute: ActivatedRoute,
               private router: Router, private cmsCategoryService: CmsCategoryService) {

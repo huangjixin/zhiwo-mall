@@ -10,7 +10,7 @@ import {Router} from '@angular/router';
 export class MemberListComponent implements OnInit {
   total: number = 0;
   pageNumber = 1;
-  pageSize = 20;
+  pageSize = 15;
   data = [];
   isNewRow = false;
   editingRow = null;

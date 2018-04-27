@@ -13,7 +13,8 @@
           <label class="td-label">*</label>是否可用:
         </td>
         <td>
-          <eui-textbox class="textbox" #enabled name="enabled"  [(ngModel)]="cmsComment.enabled" placeholder="请填入是否可用"></eui-textbox>
+          <eui-radiobutton name="enabled" [inputId]="enabled" [value]=1 [(ngModel)]="cmsComment.enabled"></eui-radiobutton>是
+          <eui-radiobutton name="enabled" [inputId]="enabled" [value]=0 [(ngModel)]="cmsComment.enabled"></eui-radiobutton>否
         </td>
       </tr>
       <tr>
@@ -60,25 +61,26 @@
       </tr>
       <tr>
         <td>
-          <label class="td-label">*</label>父类ID:
+          <label class="td-label">*</label>父亲节点:
         </td>
         <td>
-          <eui-textbox class="textbox" #parentId name="parentId"  [(ngModel)]="cmsComment.parentId" placeholder="请填入父类ID"></eui-textbox>
+          <eui-combotree [(ngModel)]="cmsComment.parentId" name="parentId" [data]="treeData" placeholder="不选为根节点">
+            <eui-tree></eui-tree>
+          </eui-combotree>
+          <eui-linkbutton iconCls="icon-cancel" (click)="back()">取消选择</eui-linkbutton>
         </td>
         <td>
-          <label class="td-label">*</label>父类IDS:
+          <label class="td-label">*</label>文档节点:
         </td>
         <td>
-          <eui-textbox class="textbox" #parentids name="parentids"  [(ngModel)]="cmsComment.parentids" placeholder="请填入父类IDS"></eui-textbox>
+          <eui-combotree [(ngModel)]="cmsComment.cmsDocumentId" name="cmsDocumentId" [data]="treeData" placeholder="不选为根节点">
+            <eui-tree></eui-tree>
+          </eui-combotree>
+          <eui-linkbutton iconCls="icon-cancel" (click)="back()">取消选择</eui-linkbutton>
         </td>
       </tr>
       <tr>
-        <td>
-          <label class="td-label">*</label>分类ID:
-        </td>
-        <td>
-          <eui-textbox class="textbox" #cmsDocumentId name="cmsDocumentId" [(ngModel)]="cmsComment.cmsDocumentId" placeholder="请填入关键字"></eui-textbox>
-        </td>
+
 
         <td>
           <label class="td-label">*</label>内容:

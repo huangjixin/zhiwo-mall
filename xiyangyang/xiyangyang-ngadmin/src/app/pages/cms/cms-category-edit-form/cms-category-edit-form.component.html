@@ -51,14 +51,15 @@
           <label class="td-label">*</label>是否为专题:
         </td>
         <td>
-          <eui-textbox class="textbox" #isTooic name="isTooic" [(ngModel)]="cmsCategory.isTooic" placeholder="请填入是否为专题"></eui-textbox>
+          <eui-radiobutton name="isTooic" [inputId]="isTooic" [value]=1 [(ngModel)]="cmsCategory.isTooic"></eui-radiobutton>是
+          <eui-radiobutton name="isTooic" [inputId]="isTooic" [value]=0 [(ngModel)]="cmsCategory.isTooic"></eui-radiobutton>否
         </td>
-
         <td>
           <label class="td-label">*</label>是否可用:
         </td>
         <td>
-          <eui-textbox class="textbox" #enabled name="enabled"  [(ngModel)]="cmsCategory.enabled" placeholder="请填入是否可用"></eui-textbox>
+          <eui-radiobutton name="enabled" [inputId]="enabled" [value]=1 [(ngModel)]="cmsCategory.enabled"></eui-radiobutton>是
+          <eui-radiobutton name="enabled" [inputId]="enabled" [value]=0 [(ngModel)]="cmsCategory.enabled"></eui-radiobutton>否
         </td>
       </tr>
       <tr>
@@ -105,10 +106,13 @@
       </tr>
       <tr>
         <td>
-          <label class="td-label">*</label>父类ID:
+          <label class="td-label">*</label>父亲节点:
         </td>
         <td>
-          <eui-textbox class="textbox" #parentId name="parentId"  [(ngModel)]="cmsCategory.parentId" placeholder="请填入父类ID"></eui-textbox>
+          <eui-combotree [(ngModel)]="cmsCategory.parentId" name="parentId" [data]="treeData" placeholder="不选为根节点">
+            <eui-tree></eui-tree>
+          </eui-combotree>
+          <eui-linkbutton iconCls="icon-cancel" (click)="back()">取消选择</eui-linkbutton>
         </td>
         <td>
           <label class="td-label">*</label>缩略图:

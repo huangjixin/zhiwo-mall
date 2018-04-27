@@ -1,24 +1,25 @@
-<h2>Pagination</h2>
-<eui-linkbutton (click)="onAddRow()" iconCls="icon-add" style="margin-bottom:10px">Add New</eui-linkbutton>
-<eui-datagrid style="height:250px"
-              [pagination]="true"
-              [data]="data"
-              [total]="total"
-              [pageNumber]="pageNumber"
-              [pageSize]="pageSize"
-              [pagePosition]="pagePosition">
-  <eui-grid-column field="username" title="用户名"></eui-grid-column>
-  <eui-grid-column field="email" title="邮箱"></eui-grid-column>
-  <eui-grid-column field="mobilPhone" title="手机"></eui-grid-column>
-  <eui-grid-column field="sex" title="性别"></eui-grid-column>
-  <eui-grid-column field="nickname" title="昵称"></eui-grid-column>
-  <eui-grid-column field="realName" title="实名"></eui-grid-column>
-  <eui-grid-column field="weixin" title="微信"></eui-grid-column>
-  <eui-grid-column field="qq" title="QQ"></eui-grid-column>
-  <eui-grid-column title="操作" align="center" width="100">
-    <ng-template euiCellTemplate let-row>
-      <eui-linkbutton btnCls="c5" (click)="onEditRow(row)">Edit</eui-linkbutton>
-      <eui-linkbutton btnCls="c1" (click)="onDeleteRow(row)">Delete</eui-linkbutton>
-    </ng-template>
-  </eui-grid-column>
-</eui-datagrid>
+<div style="padding:3px;">
+  <eui-linkbutton (click)="onAddRow()" iconCls="icon-add" style="margin-bottom:10px">新增</eui-linkbutton>
+  <eui-linkbutton  iconCls="icon-remove" style="margin-bottom:10px">批量删除</eui-linkbutton>
+  <eui-datagrid
+    [pagination]="true"
+    [data]="data"
+    [total]="total"
+    [pageNumber]="pageNumber"
+    [pageSize]="pageSize"
+    pagePosition="bottom"
+    class="data-grid">
+    <eui-grid-column field="username" title="用户名" align="center" ></eui-grid-column>
+    <eui-grid-column field="email" title="邮箱" align="center" ></eui-grid-column>
+    <eui-grid-column field="mobilPhone" title="手机" align="center" ></eui-grid-column>
+    <eui-grid-column field="sex" title="性别" align="center" ></eui-grid-column>
+    <eui-grid-column field="nickname" title="昵称" align="center" ></eui-grid-column>
+    <eui-grid-column field="realName" title="实名" align="center" ></eui-grid-column>
+    <eui-grid-column title="" align="center" height="50">
+      <ng-template euiCellTemplate let-row>
+        <eui-linkbutton btnCls="c5" iconCls="icon-edit" (click)="onEditRow(row)">编辑</eui-linkbutton>
+        <eui-linkbutton btnCls="c1" iconCls="icon-remove" (click)="onDeleteRow(row)">删除</eui-linkbutton>
+      </ng-template>
+    </eui-grid-column>
+  </eui-datagrid>
+</div>

@@ -36,14 +36,16 @@
           <label class="td-label">*</label>是否为专题:
         </td>
         <td>
-          <eui-textbox class="textbox" #isTooic name="isTooic" [(ngModel)]="cmsDocument.isTooic" placeholder="请填入是否为专题"></eui-textbox>
+          <eui-radiobutton name="isTooic" [inputId]="isTooic" [value]=1 [(ngModel)]="cmsDocument.isTooic"></eui-radiobutton>是
+          <eui-radiobutton name="isTooic" [inputId]="isTooic" [value]=0 [(ngModel)]="cmsDocument.isTooic"></eui-radiobutton>否
         </td>
 
         <td>
           <label class="td-label">*</label>是否可用:
         </td>
         <td>
-          <eui-textbox class="textbox" #enabled name="enabled"  [(ngModel)]="cmsDocument.enabled" placeholder="请填入是否可用"></eui-textbox>
+          <eui-radiobutton name="enabled" [inputId]="enabled" [value]=1 [(ngModel)]="cmsDocument.enabled"></eui-radiobutton>是
+          <eui-radiobutton name="enabled" [inputId]="enabled" [value]=0 [(ngModel)]="cmsDocument.enabled"></eui-radiobutton>否
         </td>
       </tr>
       <tr>
@@ -149,23 +151,16 @@
           <label class="td-label">*</label>是否推荐到首页:
         </td>
         <td>
-          <eui-textbox class="textbox" #toIndex name="toIndex"  [(ngModel)]="cmsDocument.toIndex" placeholder="请填入是否推荐到首页"></eui-textbox>
+          <eui-radiobutton name="toIndex" [inputId]="toIndex" [value]=1 [(ngModel)]="cmsDocument.toIndex"></eui-radiobutton>是
+          <eui-radiobutton name="toIndex" [inputId]="toIndex" [value]=0 [(ngModel)]="cmsDocument.toIndex"></eui-radiobutton>否
         </td>
         <td>
           <label class="td-label">*</label>是否推荐到频道首页:
         </td>
         <td>
-          <eui-textbox class="textbox" #toChannelIndex name="toChannelIndex"  [(ngModel)]="cmsDocument.toChannelIndex" placeholder="请填入是否推荐到频道首页"></eui-textbox>
+          <eui-radiobutton name="toChannelIndex" [inputId]="toChannelIndex" [value]=1 [(ngModel)]="cmsDocument.toChannelIndex"></eui-radiobutton>是
+          <eui-radiobutton name="toChannelIndex" [inputId]="toChannelIndex" [value]=0 [(ngModel)]="cmsDocument.toChannelIndex"></eui-radiobutton>否
         </td>
-      </tr>
-      <tr>
-        <td>
-          <label class="td-label">*</label>分类ID:
-        </td>
-        <td>
-          <eui-textbox class="textbox" #cmsCategoryId name="cmsCategoryId"  [(ngModel)]="cmsDocument.cmsCategoryId" placeholder="请填入作者"></eui-textbox>
-        </td>
-
       </tr>
       <tr>
         <td>
@@ -181,7 +176,17 @@
           <eui-textbox class="textbox" #content name="content"  [(ngModel)]="cmsDocument.content" placeholder="请填入内容"></eui-textbox>
         </td>
       </tr>
-
+      <tr>
+        <td>
+          <label class="td-label">*</label>父亲节点:
+        </td>
+        <td>
+          <eui-combotree [(ngModel)]="cmsDocument.cmsCategoryId" name="cmsCategoryId" [data]="treeData" placeholder="不选为根节点">
+            <eui-tree></eui-tree>
+          </eui-combotree>
+          <eui-linkbutton iconCls="icon-cancel" (click)="back()">取消选择</eui-linkbutton>
+        </td>
+      </tr>
       <tr>
         <td>
         </td>
