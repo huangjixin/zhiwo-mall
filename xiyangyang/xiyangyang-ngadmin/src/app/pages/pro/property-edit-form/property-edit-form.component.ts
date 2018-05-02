@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import {Property} from '../property.model';
-import {FormGroup} from '@angular/forms';
-import {PropertyService} from '../property.service';
-import {Location} from '@angular/common';
+import { PropertyService } from './../property.service';
+import { Property } from './../property.model';
 import {ActivatedRoute, Router} from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {NgModule} from '@angular/core';
+import {Location} from '@angular/common';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-property-edit-form',
@@ -11,32 +12,33 @@ import {ActivatedRoute, Router} from '@angular/router';
   styleUrls: ['./property-edit-form.component.css']
 })
 export class PropertyEditFormComponent implements OnInit {
+// ID
+public id : String;
+public property : Property;
+public propertyFormGroup : FormGroup;
 
-  // ID
-  public id: String;
-  public property: Property;
-  public shopFormGroup: FormGroup;
-  constructor(public activeRoute: ActivatedRoute,
-              private router: Router, private location: Location, private propertyService: PropertyService) { }
+constructor(public activeRoute : ActivatedRoute,
+   private router : Router,
+   private location : Location, private propertyService : PropertyService) {}
 
-  ngOnInit() {
-    this.property = new Property();
-    const id: String = this.activeRoute.snapshot.params['id'];
+ngOnInit() {
+  this.property = new Property();
+  const id : String = this.activeRoute.snapshot.params['id'];
 
-    this.id = id;
-    if (this.id !== null && this.id !== undefined) {
-      const property: Property =  this.propertyService.getDataById(this.id);
-      if ( property !== null ) {
-        this.property = property;
-      }
+  this.id = id;
+  if (this.id !== null && this.id !== undefined) {
+    const property : Property = new Property();
+    if (property !== null) {
+      this.property = property;
     }
   }
-// 返回上一级目录。
-  back(): void {
-    this.location.back();
-  }
+}
 
-  submitForm() {
-    alert(JSON.stringify(this.property));
-  }
+/**
+ * 返回
+ */
+back(): void {
+  this.location.back();
+}
+
 }
