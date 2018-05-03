@@ -1,3 +1,95 @@
-<p>
-  product-edit-form works!
-</p>
+<div style="padding:3px;">
+  <form>
+    <input type="hidden" [(ngModel)]="product.id" name="id" />
+    <input type="hidden" [(ngModel)]="product.userId" name="userId" />
+    <table>
+      <tr>
+        <td>
+          <label class="td-label">*</label>名称:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #name [(ngModel)]="product.name" name="name" placeholder="请填入名称"></eui-textbox>
+        </td>
+
+        <td>
+          <label class="td-label">*</label>代号:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #code [(ngModel)]="product.code" name="code" placeholder="请填入代号"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>描述:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #description [(ngModel)]="product.description" name="description" placeholder="请填入描述"></eui-textbox>
+        </td>
+        <td>
+          <!-- <label class="td-label">*</label>父亲节点: -->
+        </td>
+        <td>
+          <!-- <eui-combotree [(ngModel)]="product.parentId" name="parentId" [data]="treeData" placeholder="不选为根节点">
+            <eui-tree></eui-tree>
+          </eui-combotree>
+          <eui-linkbutton iconCls="icon-cancel" (click)="back()">取消选择</eui-linkbutton> -->
+          <!-- <eui-textbox class="textbox" #guessproductId [(ngModel)]="product.parentId" name="parentId" placeholder="请填入类别"></eui-textbox> -->
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <eui-linkbutton iconCls="icon-save" (click)="onSubmit()">保存</eui-linkbutton>&nbsp;
+          <eui-linkbutton iconCls="icon-back" (click)="back()">返回</eui-linkbutton>
+          <eui-linkbutton iconCls="icon-add" (click)="addPropertyValue()">添加属性</eui-linkbutton>
+        </td>
+      </tr>
+    </table>
+
+    <eui-datalist style="width: 650px;margin-top:10px;" [data]="product.propertyValues" selectionMode="single"
+      *ngIf="product.propertyValues.length>0">
+      <ng-template euiItemTemplate let-row>
+        <div style="border-bottom:1px #DDDDDD solid;padding: 5px 10px;">
+          <div>
+            <div style="width: 200px;text-align: center;float: left; vertical-align: middle;">
+              <label>{{row.name}}</label>
+            </div>
+            <div style="width: 200px;text-align: center;float: left;">
+              <label>{{row.property.name}}</label>
+            </div>
+            <div style="width: 200px;text-align: center;float: left;">
+                <eui-linkbutton  iconCls="icon-edit" (click)="onPValueEditRow(row)">编辑</eui-linkbutton>
+                <eui-linkbutton  iconCls="icon-remove" (click)="onPValueDeleteRow(row)">删除</eui-linkbutton>
+            </div>
+            <div style="clear: both;"></div>
+          </div>
+        </div>
+      </ng-template>
+    </eui-datalist>
+    <table style="margin-top: 10px;" *ngIf="showPValueForm === true">
+        <tr>
+          <td>
+            <label class="td-label">*</label>
+          </td>
+          <td>
+            <eui-combobox [selection]="property" [(ngModel)]="propertyId" name="propertyId" [data]="properties" ></eui-combobox>
+          </td>
+  
+          <td>
+            <label class="td-label">*</label>属性值名称:
+          </td>
+          <td>
+            <eui-textbox class="textbox" [(ngModel)]="propertyValue.name" name="name" placeholder="请填入属性值名称"></eui-textbox>
+          </td>
+        </tr>
+        <tr>
+            <td>
+            </td>
+            <td>
+              <eui-linkbutton iconCls="icon-save" (click)="savePValue()">保存</eui-linkbutton>
+            </td>
+          </tr>
+    </table>
+  </form>
+</div>

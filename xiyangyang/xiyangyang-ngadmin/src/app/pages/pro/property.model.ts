@@ -15,4 +15,6 @@ export class Property {
      * 属性表描述
      */
     description: String;
+    value: String;
+    text: String;
 }

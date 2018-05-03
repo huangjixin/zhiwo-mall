@@ -3,7 +3,7 @@ import { PropertyValue } from './property-value.model';
 import { ProPrice } from './pro-price.model';
 export class Product {
     shop: Shop;
-    propertyValues: Array<PropertyValue>;
+    propertyValues: Array<PropertyValue> = new Array<PropertyValue>();
     prices: Array<ProPrice>;
 
     id: String;

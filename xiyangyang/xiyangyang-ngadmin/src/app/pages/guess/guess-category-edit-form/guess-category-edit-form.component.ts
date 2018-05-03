@@ -96,4 +96,9 @@ export class GuessCategoryEditFormComponent implements OnInit {
   back(): void {
     this.location.back();
   }
+
+
+  onSubmit(): void {
+    alert(JSON.stringify(this.category));
+  }
 }

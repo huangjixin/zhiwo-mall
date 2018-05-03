@@ -166,7 +166,7 @@ treeData = [
     }
   }
 
-  onSubmit(): void{
+  onSubmit(): void {
     alert(JSON.stringify(this.question));
   }
 }

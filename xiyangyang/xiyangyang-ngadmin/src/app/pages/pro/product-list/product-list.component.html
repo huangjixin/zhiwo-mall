@@ -1,3 +1,26 @@
-<p>
-  product-list works!
-</p>
+<div style="padding:3px;">
+  <eui-linkbutton (click)="onAddRow()" iconCls="icon-add">新增</eui-linkbutton>&nbsp;
+  <eui-linkbutton  iconCls="icon-remove">批量删除</eui-linkbutton>
+
+  <eui-datagrid style="margin-top: 5px;"
+                [pagination]="true"
+                [data]="data"
+                [total]="total"
+                [pageNumber]="pageNumber"
+                [pageSize]="pageSize"
+                pagePosition="bottom"
+                selectionMode="multiple"
+                class="data-grid">
+    <!-- <eui-grid-column field="ck" checkbox="true"></eui-grid-column> -->
+    <eui-grid-column field="id" title="id" align="center" hidden="true"></eui-grid-column>
+    <eui-grid-column field="name" title="属性名称" align="center"></eui-grid-column>
+    <eui-grid-column field="code" title="英文代码" align="center"></eui-grid-column>
+    <eui-grid-column field="description" title="属性描述" align="center"></eui-grid-column>
+    <eui-grid-column title="" align="center" width="140" style="padding: 3px;">
+      <ng-template euiCellTemplate let-row>
+        <eui-linkbutton  iconCls="icon-edit" (click)="onEditRow(row)">编辑</eui-linkbutton>
+        <eui-linkbutton  iconCls="icon-remove" (click)="onDeleteRow(row)">删除</eui-linkbutton>
+      </ng-template>
+    </eui-grid-column>
+  </eui-datagrid>
+</div>
