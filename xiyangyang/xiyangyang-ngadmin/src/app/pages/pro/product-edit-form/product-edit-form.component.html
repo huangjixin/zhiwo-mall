@@ -52,11 +52,11 @@
       <ng-template euiItemTemplate let-row>
         <div style="border-bottom:1px #DDDDDD solid;padding: 5px 10px;">
           <div>
+            <div style="width: 200px;text-align: center;float: left;">
+                <label>{{row.property.name}}</label>
+            </div>
             <div style="width: 200px;text-align: center;float: left; vertical-align: middle;">
               <label>{{row.name}}</label>
-            </div>
-            <div style="width: 200px;text-align: center;float: left;">
-              <label>{{row.property.name}}</label>
             </div>
             <div style="width: 200px;text-align: center;float: left;">
                 <eui-linkbutton  iconCls="icon-edit" (click)="onPValueEditRow(row)">编辑</eui-linkbutton>

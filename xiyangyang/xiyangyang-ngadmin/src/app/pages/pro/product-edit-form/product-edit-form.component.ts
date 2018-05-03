@@ -115,10 +115,14 @@ export class ProductEditFormComponent implements OnInit {
       if (this.propertyValue.name === '') {
         return;
       }
+      if (this.propertyId === null || this.propertyId === undefined ) {
+        return;
+      }
+
       this.propertyValue.propertyId = this.propertyId;
 
       this.properties.forEach(prop => {
-        if(prop.id === this.propertyId){
+        if (prop.id === this.propertyId) {
           this.property = prop;
         }
       });
