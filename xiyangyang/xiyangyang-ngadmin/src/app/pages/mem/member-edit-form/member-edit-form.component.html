@@ -1,64 +1,220 @@
-<h2 style="margin-left: 30px">新增会员</h2>
-<div style="margin-bottom:20px;width: 850px;">
-  <div style="margin-left: 30px">
-    <label align="top">用户名:</label>
-    <eui-textbox #username style="margin-left: 20px"></eui-textbox>
-    <label align="top" style="margin-left: 30px">昵称:</label>
-    <eui-textbox #nickname  style="margin-left: 35px"></eui-textbox>
-    <label align="top" style="margin-left: 30px">实名:</label>
-    <eui-textbox #realName style="margin-left: 55px"></eui-textbox>
-  </div>
-  <div style="margin-left: 30px;margin-top: 20px;">
-    <label align="top" >创建人:</label>
-    <eui-textbox #creator style="margin-left: 20px"></eui-textbox>
-    <label align="top"  style="margin-left: 30px">更新人:</label>
-    <eui-textbox #updater style="margin-left: 21px"></eui-textbox>
-    <label align="top" style="margin-left: 30px">性别:</label>
-    <eui-textbox #sex style="margin-left: 55px"></eui-textbox>
-  </div>
-  <div style="margin-left: 30px;margin-top: 20px;">
-    <label align="top">登录日期:</label>
-    <eui-textbox #loginDate style="margin-left: 7px"></eui-textbox>
-    <label align="top"  style="margin-left: 30px">创建日期:</label>
-    <eui-textbox #createDate style="margin-left: 6px"></eui-textbox>
-    <label align="top" style="margin-left: 30px">更新日期:</label>
-    <eui-textbox #updateDate  style="margin-left: 27px"></eui-textbox>
-  </div>
-  <div style="margin-left: 30px;margin-top: 20px;">
-    <label align="top">手机:</label>
-    <eui-textbox #mobilPhone  style="margin-left: 35px"></eui-textbox>
-    <label align="top" style="margin-left: 30px">邮箱:</label>
-    <eui-textbox #email  style="margin-left: 35px"></eui-textbox>
-    <label align="top" style="margin-left: 30px">是否禁用:</label>
-    <eui-textbox #enabled style="margin-left: 27px"></eui-textbox>
-  </div>
-  <div style="margin-left: 30px;margin-top: 20px;">
-    <label align="top">身高:</label>
-    <eui-textbox #age style="margin-left: 35px"></eui-textbox>
-    <label align="top" style="margin-left: 30px">体重:</label>
-    <eui-textbox #weight style="margin-left: 35px"></eui-textbox>
-    <label align="top" style="margin-left: 30px">上次登录日期:</label>
-    <eui-textbox #lastLoginDate></eui-textbox>
-  </div>
-  <div style="margin-left: 30px;margin-top: 20px;">
-    <label align="top">QQ:</label>
-    <eui-textbox #qq style="margin-left: 41px"></eui-textbox>
-    <label align="top"style="margin-left: 30px">微信:</label>
-    <eui-textbox #weixin style="margin-left: 35px"></eui-textbox>
-    <label align="top"style="margin-left: 30px">是否绑定微信:</label>
-    <eui-textbox #bindingWechat></eui-textbox>
-  </div>
-  <div style="margin-left: 30px;margin-top: 20px;">
-    <label align="top">登录次数:</label>
-    <eui-textbox #loginCount style="margin-left: 7px"></eui-textbox>
-    <label align="top" style="margin-left: 30px">头像:</label>
-    <eui-filebutton (select)="onFileSelect($event)" style="width:150px;margin-left: 35px">上传图片</eui-filebutton>
-  </div>
-  <div style="margin-left: 30px;margin-top: 20px;">
-    <label align="top">描述:</label>
-    <eui-textbox #description  style="margin-left: 35px;width:440px;height:120px" [multiline]="true"></eui-textbox>
-    <!--<div style="">
-      <img [src]="files.url" style="width:120px;height:120px">
-    </div>-->
-  </div>
+<div style="padding:3px;">
+  <input type="hidden" [(ngModel)]="member.id" name="id" >
+  <form>
+    <table>
+      <tr>
+        <td>
+          <label class="td-label">*</label>用户名:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #username name="username" [(ngModel)]="member.username" placeholder="请填入用户名"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>密码:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #password name="password" [(ngModel)]="member.password" placeholder="请填入密码"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>登录日期:
+        </td>
+        <td>
+          <eui-textbox #loginDate name="loginDate"  [(ngModel)]="member.loginDate"  placeholder="请填入登录日期"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>上次登录日期:
+        </td>
+        <td>
+          <eui-textbox #lastLoginDate name="lastLoginDate" [(ngModel)]="member.lastLoginDate" placeholder="请填入上次登录日期"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>创建日期:
+        </td>
+        <td>
+          <eui-textbox #createDate name="createDate"  [(ngModel)]="member.createDate"  placeholder="请填入创建日期"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>更新日期:
+        </td>
+        <td>
+          <eui-textbox #updateDate name="updateDate" [(ngModel)]="member.updateDate" placeholder="请填入创建日期"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>创建人:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #creator name="creator" [(ngModel)]="member.creator" placeholder="请填入创建人"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>更新人:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #updater name="updater" [(ngModel)]="member.updater" placeholder="请填入更新人"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>邮箱:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #email name="email" [(ngModel)]="member.email"  placeholder="请填入邮箱"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>手机:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #mobilPhone name="mobilPhone" [(ngModel)]="member.mobilPhone" placeholder="请填入手机"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>是否可用:
+        </td>
+        <td>
+          <eui-radiobutton name="enabled" [inputId]="enabled" [value]=1 [(ngModel)]="member.enabled"></eui-radiobutton>是
+          <eui-radiobutton name="enabled" [inputId]="enabled" [value]=0 [(ngModel)]="member.enabled"></eui-radiobutton>否
+        </td>
+        <td>
+          <label class="td-label">*</label>性别:
+        </td>
+        <td>
+          <eui-radiobutton name="sex" [inputId]="sex" [value]=1 [(ngModel)]="member.sex"></eui-radiobutton>男
+          <eui-radiobutton name="sex" [inputId]="sex" [value]=0 [(ngModel)]="member.sex"></eui-radiobutton>女
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>描述:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #description name="description" [(ngModel)]="member.description"  placeholder="请填入描述"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>头像:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #icon name="icon" [(ngModel)]="member.icon"  placeholder="请填入内容"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>身高:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #age name="age" [(ngModel)]="member.age" placeholder="请填入身高"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>体重:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #weight name="weight" [(ngModel)]="member.weight" placeholder="请填入体重"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>QQ:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #qq name="qq" [(ngModel)]="member.qq" placeholder="请填入QQ"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>微信:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #weixin name="weixin" [(ngModel)]="member.weixin" placeholder="请填入微信号"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>实名:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #realName name="realName" [(ngModel)]="member.realName" placeholder="请填入实名"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>登录次数:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #loginCount name="loginCount" [(ngModel)]="member.loginCount" placeholder="请填入登录次数"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>实名:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #realName name="realName" [(ngModel)]="member.realName" placeholder="请填入实名"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>登录次数:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #loginCount name="loginCount" [(ngModel)]="member.loginCount" placeholder="请填入登录次数"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>排序:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #sort name="sort" [(ngModel)]="member.sort" placeholder="请填入排序"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>昵称:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #nickname name="nickname" [(ngModel)]="member.nickname" placeholder="请填入昵称"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>微信的open_id:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #openId name="openId" [(ngModel)]="member.openId" placeholder="请填入微信的open_id"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>是否绑定微信:
+        </td>
+        <td>
+          <eui-radiobutton name="bindingWechat" [inputId]="bindingWechat" [value]=1 [(ngModel)]="member.bindingWechat"></eui-radiobutton>是
+          <eui-radiobutton name="bindingWechat" [inputId]="bindingWechat" [value]=0 [(ngModel)]="member.bindingWechat"></eui-radiobutton>否
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>父亲节点:
+        </td>
+        <td>
+          <eui-combotree [(ngModel)]="member.parentId" name="parentId" [data]="treeData" placeholder="不选为根节点">
+            <eui-tree></eui-tree>
+          </eui-combotree>
+          <eui-linkbutton iconCls="icon-cancel" (click)="back()">取消选择</eui-linkbutton>
+        </td>
+        <td>
+          <label class="td-label">*</label>会员节点:
+        </td>
+        <td>
+          <eui-combotree [(ngModel)]="member.memCategoryId" name="memCategoryId" [data]="treeData" placeholder="不选为根节点">
+            <eui-tree></eui-tree>
+          </eui-combotree>
+          <eui-linkbutton iconCls="icon-cancel" (click)="back()">取消选择</eui-linkbutton>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <eui-linkbutton  iconCls="icon-save">保存</eui-linkbutton>&nbsp;
+          <eui-linkbutton iconCls="icon-back" (click)="back()">返回</eui-linkbutton>
+        </td>
+      </tr>
+    </table>
+  </form>
 </div>

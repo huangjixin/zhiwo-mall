@@ -1,3 +1,98 @@
-<p>
-  address-edit-form works!
-</p>
+<div style="padding:3px;">
+  <input type="hidden" [(ngModel)]="address.id" name="id" >
+  <form>
+    <table>
+      <tr>
+        <td>
+          <label class="td-label">*</label>姓名:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #name name="name" [(ngModel)]="address.name" placeholder="请填入姓名"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>手机:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #mobilPhone name="mobilPhone" [(ngModel)]="address.mobilPhone" placeholder="请填入手机号码"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>省:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #province name="province" [(ngModel)]="address.province" placeholder="请填入省份"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>市:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #city name="city" [(ngModel)]="address.city" placeholder="请填入市"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>区:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #area name="area" [(ngModel)]="address.area" placeholder="请填入区"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>街道:
+        </td>
+        <td>
+          <eui-textbox class="textbox" #street name="street" [(ngModel)]="address.street" placeholder="请填入街道"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>是否设置为默认:
+        </td>
+        <td>
+          <eui-radiobutton name="isDefault" [inputId]="isDefault" [value]=1 [(ngModel)]="address.isDefault"></eui-radiobutton>是
+          <eui-radiobutton name="isDefault" [inputId]="isDefault" [value]=0 [(ngModel)]="address.isDefault"></eui-radiobutton>否
+        </td>
+        <td>
+          <label class="td-label">*</label>是否启用:
+        </td>
+        <td>
+          <eui-radiobutton name="enabled" [inputId]="enabled" [value]=1 [(ngModel)]="address.enabled"></eui-radiobutton>是
+          <eui-radiobutton name="enabled" [inputId]="enabled" [value]=0 [(ngModel)]="address.enabled"></eui-radiobutton>否
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>创建日期:
+        </td>
+        <td>
+          <eui-textbox #createDate name="createDate"  [(ngModel)]="address.createDate"  placeholder="请填入创建日期"></eui-textbox>
+        </td>
+        <td>
+          <label class="td-label">*</label>更新日期:
+        </td>
+        <td>
+          <eui-textbox #updateDate name="updateDate" [(ngModel)]="address.updateDate" placeholder="请填入创建日期"></eui-textbox>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="td-label">*</label>会员节点:
+        </td>
+        <td>
+          <eui-combotree [(ngModel)]="address.memberId" name="memberId" [data]="treeData" placeholder="不选为根节点">
+            <eui-tree></eui-tree>
+          </eui-combotree>
+          <eui-linkbutton iconCls="icon-cancel" (click)="back()">取消选择</eui-linkbutton>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <eui-linkbutton  iconCls="icon-save">保存</eui-linkbutton>&nbsp;
+          <eui-linkbutton iconCls="icon-back" (click)="back()">返回</eui-linkbutton>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>

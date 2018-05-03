@@ -1,3 +1,12 @@
-<p>
-  mem-category-list works!
-</p>
+<div style="padding:3px;">
+  <eui-linkbutton (click)="onAddRow()" iconCls="icon-add" style="margin-bottom:10px">新增</eui-linkbutton>
+  <eui-linkbutton  iconCls="icon-remove" style="margin-bottom:10px">批量删除</eui-linkbutton>
+</div>
+<eui-treegrid style="width:100%;margin-top: 3px;"
+              [data]="treeData"
+              idField="id"
+              treeField="name"
+              (selectionChange)="selectNodeHandler($event)">
+  <eui-grid-column field="name" title="会员分类名称"></eui-grid-column>
+  <!-- [(selection)]="selection" -->
+</eui-treegrid>

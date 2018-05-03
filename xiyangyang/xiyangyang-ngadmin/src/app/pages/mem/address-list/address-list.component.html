@@ -1,3 +1,25 @@
-<p>
-  address-list works!
-</p>
+<div style="padding:3px;">
+  <eui-linkbutton (click)="onAddRow()" iconCls="icon-add" style="margin-bottom:10px">新增</eui-linkbutton>
+  <eui-linkbutton  iconCls="icon-remove" style="margin-bottom:10px">批量删除</eui-linkbutton>
+  <eui-datagrid
+    [pagination]="true"
+    [data]="data"
+    [total]="total"
+    [pageNumber]="pageNumber"
+    [pageSize]="pageSize"
+    pagePosition="bottom"
+    class="data-grid">
+    <eui-grid-column field="name" title="姓名" align="center" ></eui-grid-column>
+    <eui-grid-column field="province" title="省" align="center" ></eui-grid-column>
+    <eui-grid-column field="city" title="市" align="center" ></eui-grid-column>
+    <eui-grid-column field="area" title="区" align="center" ></eui-grid-column>
+    <eui-grid-column field="street" title="街道" align="center" ></eui-grid-column>
+    <eui-grid-column field="mobilPhone" title="手机" align="center" ></eui-grid-column>
+    <eui-grid-column title="" align="center" height="50">
+      <ng-template euiCellTemplate let-row>
+        <eui-linkbutton btnCls="c5" iconCls="icon-edit" (click)="onEditRow(row)">编辑</eui-linkbutton>
+        <eui-linkbutton btnCls="c1" iconCls="icon-remove" (click)="onDeleteRow(row)">删除</eui-linkbutton>
+      </ng-template>
+    </eui-grid-column>
+  </eui-datagrid>
+</div>
