@@ -1,0 +1,23 @@
+[
+  {
+    "path": "stars:>1",
+    "name": "工作经历证明",
+    "short_name": "ALL",
+    "checked": true
+  },
+  {
+    "path": "Android",
+    "name": "荣誉证明",
+    "checked": true
+  },
+  {
+    "path": "iOS",
+    "name": "工作经历证明",
+    "checked": true
+  },
+  {
+    "path": "react-native",
+    "name": "荣誉证明",
+    "checked": false
+  }
+]

@@ -1,0 +1,648 @@
+{
+  "myApplyTobeCheckList": [
+  {"id":"  ",
+"description":"活在当下",
+"type":0,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+"agentCode": " ",
+"createDatetime":"2018/01/01",
+"status":"0", //0 表示正在审批当中了；1表示结束；2驳回。
+"name":"黄晓明", //申请人名字
+"startTime": " ",//请假开始时间
+"endTime": " ",//请假结束时间
+"endDatetime": " ",
+"leaveType": " ", //请假类型
+"leaveOff": " ",//请假天数
+"title":"世界太大，想去看看",//标题
+"imcomeproveMonth": " ",//收入证明时长
+"currentGrade": " ",//
+"upGrade": " "},
+    {"id":" ",
+  "description": " ",
+  "type":1,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+  "agentCode": " ",
+  "createDatetime": " ",
+  "status":"0", //0 表示正在审批当中了；1表示结束；2驳回。name":黄晓明", //申请人名字
+  "name":"黄晓明", //申请人名字
+  "startTime":"2018-05-18",
+  "endTime":"2018-05-19",
+  "endDatetime": " ",
+  "leaveType":0,
+  "leaveOff": " ",
+  "title": " ",
+  "imcomeproveMonth": " ",
+  "currentGrade": " ",
+  "upGrade": " "},
+    {"id":"  ",
+  "description": " ",
+  "type":2,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+  "agentCode": " ",
+  "createDatetime":"2018/01/01",
+  "status":"0", //0 表示正在审批当中了；1表示结束；2驳回。
+  "name":"黄晓明", //申请人名字
+  "startTime": " ",
+  "endTime": " ",
+  "endDatetime": " ",
+  "leaveType": " ",
+  "leaveOff": " ",
+  "title": " ",
+  "imcomeproveMonth": " ",
+  "currentGrade":"LA",
+  "upGrade":"SM"},
+    {"id": " ",
+  "description":"之前的表现一直不错，感觉后期可以重用，所以之前的表现一直不错",
+  "type":3,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+  "agentCode": " ",
+  "createDatetime":"2018/01/01",
+  "status":"0", //0 表示正在审批当中了；1表示结束；2驳回。
+  "name":"黄晓明", //申请人名字
+  "startTime": " ",
+  "endTime": " ",
+  "endDatetime": " ",
+  "leaveType": " ",
+  "leaveOff": " ",
+  "title":"林心如",
+  "imcomeproveMonth": " ",
+  "currentGrade": " ",
+  "upGrade": " "},
+//    {"id": " ",
+//      "description":"之前的表现一直不错，感觉后期可以重用，所以之前的表现一直不错",
+//      "type":4,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+//      "agentCode": " ",
+//      "createDatetime":"2018/01/01",
+//      "status":"0", //0 表示正在审批当中了；1表示结束；2驳回。
+//      "name":"黄晓明", //申请人名字
+//      "startTime": " ",
+//      "endTime": " ",
+//      "endDatetime": " ",
+//      "leaveType": " ",
+//      "leaveOff": " ",
+//      "title":"林心如",
+//      "imcomeproveMonth": " ",
+//      "currentGrade": " ",
+//      "upGrade": " "},
+//    {"id": " ",
+//      "description":"之前的表现一直不错，感觉后期可以重用，所以之前的表现一直不错",
+//      "type":5,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+//      "agentCode": " ",
+//      "createDatetime":"2018/01/01",
+//      "status":"0", //0 表示正在审批当中了；1表示结束；2驳回。
+//      "name":"黄晓明", //申请人名字
+//      "startTime": " ",
+//      "endTime": " ",
+//      "endDatetime": " ",
+//      "leaveType": " ",
+//      "leaveOff": " ",
+//      "title":"林心如",
+//      "imcomeproveMonth": " ",
+//      "currentGrade": " ",
+//      "upGrade": " "},
+//    {"id": " ",
+//      "description":"之前的表现一直不错，感觉后期可以重用，所以之前的表现一直不错",
+//      "type":6,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+//      "agentCode": " ",
+//      "createDatetime":"2018/01/01",
+//      "status":"0", //0 表示正在审批当中了；1表示结束；2驳回。
+//      "name":"黄晓明", //申请人名字
+//      "startTime": " ",
+//      "endTime": " ",
+//      "endDatetime": " ",
+//      "leaveType": " ",
+//      "leaveOff": " ",
+//      "title":"林心如",
+//      "imcomeproveMonth": " ",
+//      "currentGrade": " ",
+//      "upGrade": " "},
+    {"id": " ",
+      "description":"中国银行房屋贷款",
+      "type":7,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"0", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title":"林心如",
+      "imcomeproveMonth": "1",
+      "currentGrade": " ",
+      "upGrade": " "},
+    {"id": " ",
+      "description":"中国银行房屋贷款",
+      "type":8,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"0", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title":"林心如",
+      "imcomeproveMonth": " ",
+      "currentGrade": " ",
+      "upGrade": " "},
+    {"id": " ",
+      "description":"中国银行房屋贷款",
+      "type":9,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"0", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title":"林心如",
+      "imcomeproveMonth": " ",
+      "currentGrade": " ",
+      "upGrade": " "}],
+  "myApplyTobeAuditedList":
+  [
+    {"id":"  ",
+      "description":"活在当下",
+      "type":0,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"1", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",//请假开始时间
+      "endTime": " ",//请假结束时间
+      "endDatetime": " ",
+      "leaveType": " ", //请假类型
+      "leaveOff": " ",//请假天数
+      "title":"世界太大，想去看看",//标题
+      "imcomeproveMonth": " ",//收入证明时长
+      "currentGrade": " ",//
+      "upGrade": " "},
+    {"id":" ",
+      "description": " ",
+      "type":1,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime": " ",
+      "status":"1", //0 表示正在审批当中了；1表示结束；2驳回。name":黄晓明", //申请人名字
+      "name":"黄晓明", //申请人名字
+      "startTime":"2018-05-18",
+      "endTime":"2018-05-19",
+      "endDatetime": " ",
+      "leaveType":0,
+      "leaveOff": " ",
+      "title": " ",
+      "imcomeproveMonth": " ",
+      "currentGrade": " ",
+      "upGrade": " "},
+    {"id":"  ",
+      "description": " ",
+      "type":2,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"3", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title": " ",
+      "imcomeproveMonth": " ",
+      "currentGrade":"LA",
+      "upGrade":"SM"},
+    {"id": " ",
+      "description":"之前的表现一直不错，感觉后期可以重用，所以之前的表现一直不错",
+      "type":3,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"2", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title":"林心如",
+      "imcomeproveMonth": " ",
+      "currentGrade": " ",
+      "upGrade": " "},
+    {"id": " ",
+      "description":"之前的表现一直不错，感觉后期可以重用，所以之前的表现一直不错",
+      "type":4,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"1", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title":"林心如",
+      "imcomeproveMonth": " ",
+      "currentGrade": " ",
+      "upGrade": " "},
+    {"id": " ",
+      "description":"之前的表现一直不错，感觉后期可以重用，所以之前的表现一直不错",
+      "type":5,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"1", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title":"林心如",
+      "imcomeproveMonth": " ",
+      "currentGrade": " ",
+      "upGrade": " "},
+    {"id": " ",
+      "description":"之前的表现一直不错，感觉后期可以重用，所以之前的表现一直不错",
+      "type":6,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"1", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title":"林心如",
+      "imcomeproveMonth": " ",
+      "currentGrade": " ",
+      "upGrade": " "},
+    {"id": " ",
+      "description":"中国银行房屋贷款",
+      "type":7,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"1", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title":"林心如",
+      "imcomeproveMonth": "1",
+      "currentGrade": " ",
+      "upGrade": " "},
+    {"id": " ",
+      "description":"中国银行房屋贷款",
+      "type":8,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"1", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title":"林心如",
+      "imcomeproveMonth": " ",
+      "currentGrade": " ",
+      "upGrade": " "},
+    {"id": " ",
+      "description":"中国银行房屋贷款",
+      "type":9,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"1", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title":"林心如",
+      "imcomeproveMonth": " ",
+      "currentGrade": " ",
+      "upGrade": " "}],
+  "myApprovalTobeCheckList": [
+    {"id":"  ",
+      "description":"活在当下",
+      "type":0,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"0", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",//请假开始时间
+      "endTime": " ",//请假结束时间
+      "endDatetime": " ",
+      "leaveType": " ", //请假类型
+      "leaveOff": " ",//请假天数
+      "title":"世界太大，想去看看",//标题
+      "imcomeproveMonth": " ",//收入证明时长
+      "currentGrade": " ",//
+      "upGrade": " "},
+    {"id":" ",
+      "description": " ",
+      "type":1,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime": " ",
+      "status":"0", //0 表示正在审批当中了；1表示结束；2驳回。name":黄晓明", //申请人名字
+      "name":"黄晓明", //申请人名字
+      "startTime":"2018-05-18",
+      "endTime":"2018-05-19",
+      "endDatetime": " ",
+      "leaveType":0,
+      "leaveOff": " ",
+      "title": " ",
+      "imcomeproveMonth": " ",
+      "currentGrade": " ",
+      "upGrade": " "},
+    {"id":"  ",
+      "description": " ",
+      "type":2,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"0", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title": " ",
+      "imcomeproveMonth": " ",
+      "currentGrade":"LA",
+      "upGrade":"SM"},
+    {"id": " ",
+      "description":"之前的表现一直不错，感觉后期可以重用，所以之前的表现一直不错",
+      "type":3,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"0", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title":"林心如",
+      "imcomeproveMonth": " ",
+      "currentGrade": " ",
+      "upGrade": " "},
+//    {"id": " ",
+//      "description":"之前的表现一直不错，感觉后期可以重用，所以之前的表现一直不错",
+//      "type":4,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+//      "agentCode": " ",
+//      "createDatetime":"2018/01/01",
+//      "status":"0", //0 表示正在审批当中了；1表示结束；2驳回。
+//      "name":"黄晓明", //申请人名字
+//      "startTime": " ",
+//      "endTime": " ",
+//      "endDatetime": " ",
+//      "leaveType": " ",
+//      "leaveOff": " ",
+//      "title":"林心如",
+//      "imcomeproveMonth": " ",
+//      "currentGrade": " ",
+//      "upGrade": " "},
+//    {"id": " ",
+//      "description":"之前的表现一直不错，感觉后期可以重用，所以之前的表现一直不错",
+//      "type":5,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+//      "agentCode": " ",
+//      "createDatetime":"2018/01/01",
+//      "status":"0", //0 表示正在审批当中了；1表示结束；2驳回。
+//      "name":"黄晓明", //申请人名字
+//      "startTime": " ",
+//      "endTime": " ",
+//      "endDatetime": " ",
+//      "leaveType": " ",
+//      "leaveOff": " ",
+//      "title":"林心如",
+//      "imcomeproveMonth": " ",
+//      "currentGrade": " ",
+//      "upGrade": " "},
+//    {"id": " ",
+//      "description":"之前的表现一直不错，感觉后期可以重用，所以之前的表现一直不错",
+//      "type":6,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+//      "agentCode": " ",
+//      "createDatetime":"2018/01/01",
+//      "status":"0", //0 表示正在审批当中了；1表示结束；2驳回。
+//      "name":"黄晓明", //申请人名字
+//      "startTime": " ",
+//      "endTime": " ",
+//      "endDatetime": " ",
+//      "leaveType": " ",
+//      "leaveOff": " ",
+//      "title":"林心如",
+//      "imcomeproveMonth": " ",
+//      "currentGrade": " ",
+//      "upGrade": " "},
+    {"id": " ",
+      "description":"中国银行房屋贷款",
+      "type":7,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"0", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title":"林心如",
+      "imcomeproveMonth": "1",
+      "currentGrade": " ",
+      "upGrade": " "},
+    {"id": " ",
+      "description":"中国银行房屋贷款",
+      "type":8,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"0", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title":"林心如",
+      "imcomeproveMonth": " ",
+      "currentGrade": " ",
+      "upGrade": " "},
+    {"id": " ",
+      "description":"中国银行房屋贷款",
+      "type":9,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"0", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title":"林心如",
+      "imcomeproveMonth": " ",
+      "currentGrade": " ",
+      "upGrade": " "}],
+  "myApprovalTobeAuditedList":
+  [
+    {"id":"  ",
+      "description":"活在当下",
+      "type":0,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"1", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",//请假开始时间
+      "endTime": " ",//请假结束时间
+      "endDatetime": " ",
+      "leaveType": " ", //请假类型
+      "leaveOff": " ",//请假天数
+      "title":"世界太大，想去看看",//标题
+      "imcomeproveMonth": " ",//收入证明时长
+      "currentGrade": " ",//
+      "upGrade": " "},
+    {"id":" ",
+      "description": " ",
+      "type":1,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime": " ",
+      "status":"1", //0 表示正在审批当中了；1表示结束；2驳回。name":黄晓明", //申请人名字
+      "name":"黄晓明", //申请人名字
+      "startTime":"2018-05-18",
+      "endTime":"2018-05-19",
+      "endDatetime": " ",
+      "leaveType":0,
+      "leaveOff": " ",
+      "title": " ",
+      "imcomeproveMonth": " ",
+      "currentGrade": " ",
+      "upGrade": " "},
+    {"id":"  ",
+      "description": " ",
+      "type":2,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"2", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title": " ",
+      "imcomeproveMonth": " ",
+      "currentGrade":"LA",
+      "upGrade":"SM"},
+    {"id": " ",
+      "description":"之前的表现一直不错，感觉后期可以重用，所以之前的表现一直不错",
+      "type":3,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"2", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title":"林心如",
+      "imcomeproveMonth": " ",
+      "currentGrade": " ",
+      "upGrade": " "},
+    {"id": " ",
+      "description":"之前的表现一直不错，感觉后期可以重用，所以之前的表现一直不错",
+      "type":4,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"1", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title":"林心如",
+      "imcomeproveMonth": " ",
+      "currentGrade": " ",
+      "upGrade": " "},
+    {"id": " ",
+      "description":"之前的表现一直不错，感觉后期可以重用，所以之前的表现一直不错",
+      "type":5,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"1", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title":"林心如",
+      "imcomeproveMonth": " ",
+      "currentGrade": " ",
+      "upGrade": " "},
+    {"id": " ",
+      "description":"之前的表现一直不错，感觉后期可以重用，所以之前的表现一直不错",
+      "type":6,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"1", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title":"林心如",
+      "imcomeproveMonth": " ",
+      "currentGrade": " ",
+      "upGrade": " "},
+    {"id": " ",
+      "description":"中国银行房屋贷款",
+      "type":7,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"1", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title":"林心如",
+      "imcomeproveMonth": "1",
+      "currentGrade": " ",
+      "upGrade": " "},
+    {"id": " ",
+      "description":"中国银行房屋贷款",
+      "type":8,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"1", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title":"林心如",
+      "imcomeproveMonth": " ",
+      "currentGrade": " ",
+      "upGrade": " "},
+    {"id": " ",
+      "description":"中国银行房屋贷款",
+      "type":9,//0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+      "agentCode": " ",
+      "createDatetime":"2018/01/01",
+      "status":"1", //0 表示正在审批当中了；1表示结束；2驳回。
+      "name":"黄晓明", //申请人名字
+      "startTime": " ",
+      "endTime": " ",
+      "endDatetime": " ",
+      "leaveType": " ",
+      "leaveOff": " ",
+      "title":"林心如",
+      "imcomeproveMonth": " ",
+      "currentGrade": " ",
+      "upGrade": " "}]
+}
