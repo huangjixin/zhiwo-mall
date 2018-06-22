@@ -54,7 +54,7 @@ export class MyApplyToBeCheck extends React.Component {
         }
     }
     componentDidUpdate (){
-            isTest=false
+        isTest=false
     }
     componentWillUnmount(){
         myApplyToBeCheckListCache = this.state.myApplyToBeCheckList;
@@ -87,27 +87,27 @@ export class MyApplyToBeCheck extends React.Component {
             .then((response) => response.json())
             .then((responseData) => {
 
-            if (isToLoad){
-                let oldData = this.state.myApplyToBeCheckList.concat(responseData);
-                this.setState({
-                    myApplyToBeCheckList:oldData,
-                    showFoot:0,
-                });
-            }else {
-                pageNo=1;
-                this.setState({
-                    myApplyToBeCheckList:responseData,
-                    myApplyToBeCheckAllLoaded:false,
-                    showFoot:0,
-                });
-            }
+                if (isToLoad){
+                    let oldData = this.state.myApplyToBeCheckList.concat(responseData);
+                    this.setState({
+                        myApplyToBeCheckList:oldData,
+                        showFoot:0,
+                    });
+                }else {
+                    pageNo=1;
+                    this.setState({
+                        myApplyToBeCheckList:responseData,
+                        myApplyToBeCheckAllLoaded:false,
+                        showFoot:0,
+                    });
+                }
                 if(responseData.length<size){
                     this.setState({
                         myApplyToBeCheckAllLoaded:true,
                         showFoot:1,
                     });
                 }
-            // console.log(responseData);
+                // console.log(responseData);
                 // 真正做的时候改。
                 // let data = this.state.myApplyToBeCheckList.concat(responseData.movies);
 
@@ -259,6 +259,8 @@ export class MyApplyToBeCheck extends React.Component {
                                                 </View>
                                                 <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                     <Text style={{fontSize:15,flex:7,}}>详细说明：{item.description}</Text>
+                                                    {/*<Text style={{fontSize:15,flex:2.3,}}>详细说明：</Text>*/}
+                                                    {/*<Text style={{fontSize:15,flex:4.7,backgroundColor:'red',}}>{item.description}</Text>*/}
                                                     <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.agentName}</Text>
                                                 </View>
                                             </View>
@@ -301,6 +303,7 @@ export class MyApplyToBeCheck extends React.Component {
                                                             </View>
                                                             <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                                 <Text style={{fontSize:15,flex:7,}}>详细说明：{item.description}</Text>
+                                                                <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.agentName}</Text>
                                                             </View>
                                                         </View>
 

@@ -1,76 +1,81 @@
- {
-    "LA": {
-      "childEnName":"LA",
-      "currentName": "寿险顾问",
-      "child":[
-        {
-          "childEnName":"AM",
-          "childName":"业务经理"
-        },{
-          "childEnName":"SM",
-          "childName":"销售经理"
-        }
-      ]
-    },
-    "AM": {
-      "childEnName":"AM",
-      "currentName": "业务经理",
-      "child":[
-        {
-          "childEnName":"SAM",
-          "childName":"资深业务经理"
-        }
-      ]
-    },
-    "SAM": {
-      "childEnName":"SAM",
-      "currentName": "资深业务经理",
-      "child":[
-        {
-          "childEnName":"AD",
-          "childName":"总监"
-        }
-      ]
-    },
-    "SM": {
-      "childEnName":"SM",
-      "currentName": "销售经理",
-      "child":[
-        {
-          "childEnName":"SMM",
-          "childName":"资深销售经理"
-        },{
-          "childEnName":"AM",
-          "childName":"业务经理"
-        }
-      ]
-    },
-    "SSM": {
-      "childEnName":"SSM",
-      "currentName": "资深销售经理",
-      "child":[
-        {
-          "childEnName":"AM",
-          "childName":"业务经理"
-        },{
-          "childEnName":"SD",
-          "childName":"销售总监"
-        }
-      ]
-    },
-    "SD": {
-      "childEnName":"SD",
-      "currentName": "销售总监",
-      "child":[
-        {
-          "childEnName":"AM",
-          "childName":"业务经理"
-        }
-      ]
-    },
-    "AD": {
-      "childEnName":"AD",
-      "currentName": "总监",
-      "child":[]
-    }
+{
+  "LA": {
+    "childEnName":"LA",
+    "currentName": "寿险顾问",
+    "child":[
+      {
+        "childEnName":"AM",
+        "childName":"业务经理"
+      },{
+        "childEnName":"SM",
+        "childName":"销售经理"
+      }
+    ]
+  },
+  "AM": {
+    "childEnName":"AM",
+    "currentName": "业务经理",
+    "child":[
+      {
+        "childEnName":"SAM",
+        "childName":"资深业务经理"
+      }
+    ]
+  },
+  "SAM": {
+    "childEnName":"SAM",
+    "currentName": "资深业务经理",
+    "child":[
+      {
+        "childEnName":"AD",
+        "childName":"总监"
+      }
+    ]
+  },
+  "SM": {
+    "childEnName":"SM",
+    "currentName": "销售经理",
+    "child":[
+      {
+        "childEnName":"SMM",
+        "childName":"资深销售经理"
+      },{
+        "childEnName":"AM",
+        "childName":"业务经理"
+      }
+    ]
+  },
+  "SSM": {
+    "childEnName":"SSM",
+    "currentName": "资深销售经理",
+    "child":[
+      {
+        "childEnName":"AM",
+        "childName":"业务经理"
+      },{
+        "childEnName":"SD",
+        "childName":"销售总监"
+      }
+    ]
+  },
+  "SD": {
+    "childEnName":"SD",
+    "currentName": "销售总监",
+    "child":[
+      {
+        "childEnName":"AM",
+        "childName":"业务经理"
+      }
+    ]
+  },
+  "AD": {
+    "childEnName":"AD",
+    "currentName": "总监",
+    "child":[]
+  },
+  "SMM": {
+    "childEnName":"SMM",
+    "currentName": "资深销售经理",
+    "child":[]
   }
+}

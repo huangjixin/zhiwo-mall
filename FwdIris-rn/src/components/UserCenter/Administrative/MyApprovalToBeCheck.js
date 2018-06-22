@@ -74,47 +74,47 @@ export class MyApprovalToBeCheck extends React.Component {
         var typeStr = Array.from(this.state.modelItem).toString();
         var status = 0;
         var agentCode='10000';
-        var size = 4;
+        var pageSize = 4;
         var url;
         if(typeStr==='11'|| typeStr===''){
-            url = RequestURL.HOST+'applyForm/approval/pending?status='+status+'&agentCode='+agentCode+'&page='+page+'&size='+size;
+            url = RequestURL.HOST+'applyForm/approval/pending?agentCode='+agentCode+'&pageSize='+pageSize+'&curPage='+page;
         }else {
-            url = RequestURL.HOST+'applyForm/approval/pending?status='+status+'&agentCode='+agentCode+'&page='+page+'&size='+size+'&types='+typeStr;
+            url = RequestURL.HOST+'applyForm/approval/pending?agentCode='+agentCode+'&pageSize='+pageSize+'&curPage='+page+'&types='+typeStr;
         }
         fetch(url, {
         })
             .then((response) => response.json())
             .then((responseData) => {
 
-                if (isToLoad){
-                    let oldData = this.state.myApprovalToBeCheckList.concat(responseData);
-                    this.setState({
-                        myApprovalToBeCheckList:oldData,
-                        showFoot:0,
-                    });
+                if(responseData.code=='1'){
+                    if (isToLoad){
+                        let oldData = this.state.myApprovalToBeCheckList.concat(responseData.data.records);
+                        this.setState({
+                            myApprovalToBeCheckList:oldData,
+                            showFoot:0,
+                        });
+                    }else {
+                        pageNo=1;
+                        this.setState({
+                            myApprovalToBeCheckList:responseData.data.records,
+                            myApprovalToBeCheckAllLoaded:false,
+                            showFoot:0,
+                        });
+                    }
+                    if(responseData.data.records.length<pageSize){
+                        this.setState({
+                            myApprovalToBeCheckAllLoaded:true,
+                            showFoot:1,
+                        });
+                    }
                 }else {
-                    pageNo=1;
-                    this.setState({
-                        myApprovalToBeCheckList:responseData,
-                        myApprovalToBeCheckAllLoaded:false,
-                        showFoot:0,
-                    });
+                    console.log(responseData.msg);
+                    alert('网络异常，请稍后再试');
                 }
-                if(responseData.length<size){
-                    this.setState({
-                        myApprovalToBeCheckAllLoaded:true,
-                        showFoot:1,
-                    });
-                }
-                // console.log(responseData);
-                // 真正做的时候改。
-                // let data = this.state.myApplyToBeCheckList.concat(responseData.movies);
-
-                // this.setState( {
-                //     myApplyToBeCheckList:data,
-                //     selectedIndex:0,
-                // })
-            }).done();
+            }).catch((err) => {//2
+            console.error(err);
+            alert('网络异常，请稍后再试');
+        }).done();
     }
     //为了处理item头部信息
     judgeData(value){
@@ -217,7 +217,7 @@ export class MyApprovalToBeCheck extends React.Component {
 
                     renderItem={({item}) =>
                         //{/* 循环数组，根据Type去把信息给显示出来 */}
-                        <TouchableWithoutFeedback onPress={this.administrativeToOaApplyFormDetail.bind(this,{type:item.type,status:item.status,baseStatus:1,})}>
+                        <TouchableWithoutFeedback onPress={this.administrativeToOaApplyFormDetail.bind(this,{itemData:item,baseStatus:0,})}>
                             <View>
                                 {/*//4 地址 5手机号 6银行卡*/}
                                 {item.type==4||item.type==5||item.type==6 ?(
@@ -289,6 +289,7 @@ export class MyApprovalToBeCheck extends React.Component {
                                                             </View>
                                                             <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                                 <Text style={{fontSize:15,flex:7,}}>详细说明：{item.description}</Text>
+                                                                <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.agentName}</Text>
                                                             </View>
                                                         </View>
 

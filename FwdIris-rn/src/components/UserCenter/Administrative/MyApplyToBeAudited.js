@@ -215,7 +215,7 @@ export class MyApplyToBeAudited extends React.Component {
 
                     renderItem={({item}) =>
                         //{/* 循环数组，根据Type去把信息给显示出来 */}
-                        <TouchableWithoutFeedback onPress={this.administrativeToOaApplyFormDetail.bind(this,{type:item.type,status:item.status,baseStatus:0,})}>
+                        <TouchableWithoutFeedback onPress={this.administrativeToOaApplyFormDetail.bind(this,{itemData:item,baseStatus:0,})}>
                             <View>
                                 {/*//4 地址 5手机号 6银行卡*/}
                                 {item.type==4||item.type==5||item.type==6 ?(
@@ -287,6 +287,7 @@ export class MyApplyToBeAudited extends React.Component {
                                                             </View>
                                                             <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                                 <Text style={{fontSize:15,flex:7,}}>详细说明：{item.description}</Text>
+                                                                <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.agentName}</Text>
                                                             </View>
                                                         </View>
 

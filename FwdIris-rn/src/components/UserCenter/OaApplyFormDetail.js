@@ -1,48 +1,50 @@
 import React from 'react';
 import {StyleSheet, ScrollView, Text,View,Image,TextInput,TouchableWithoutFeedback,DeviceEventEmitter,Button,TouchableOpacity,FlatList,Picker } from 'react-native';
 
+import * as RequestURL from "../../common/RequestURL";
+import PromotionList from '../achievement/Promotion.json';
 //请假UI
 class LeaveUI extends React.Component {
     render() {
         return (
             <View style={{marginTop:10,paddingLeft:12,paddingRight:12,paddingBottom:10,paddingTop:10}}>
-                    <View style={styles.applyFormDetail}>
-                        <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
-                            <Text style={{flex:3,textAlign:'right',fontSize:16}}>请假类型</Text>
-                            <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>事假</Text>
-                        </View>
+                <View style={styles.applyFormDetail}>
+                    <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
+                        <Text style={{flex:3,textAlign:'right',fontSize:16}}>请假类型</Text>
+                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>事假</Text>
+                    </View>
 
-                        <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
-                            <Text style={{flex:3,textAlign:'right',fontSize:16}}>开始时间</Text>
-                            <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>2018-05-18 上午</Text>
-                        </View>
+                    <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
+                        <Text style={{flex:3,textAlign:'right',fontSize:16}}>开始时间</Text>
+                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>2018-05-18 上午</Text>
+                    </View>
 
-                        <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
-                            <Text style={{flex:3,textAlign:'right',fontSize:16}}>结束时间</Text>
-                            <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>2018-05-18 下午</Text>
-                        </View>
+                    <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
+                        <Text style={{flex:3,textAlign:'right',fontSize:16}}>结束时间</Text>
+                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>2018-05-18 下午</Text>
+                    </View>
 
-                        <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
-                            <Text style={{flex:3,textAlign:'right',fontSize:16}}>时长</Text>
-                            <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>1.0 天</Text>
-                        </View>
+                    <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
+                        <Text style={{flex:3,textAlign:'right',fontSize:16}}>时长</Text>
+                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>1.0 天</Text>
+                    </View>
 
-                        <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
-                            <Text style={{flex:3,textAlign:'right',fontSize:16}}>详细说明</Text>
-                            <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>宝宝发烧，送孩子去医院</Text>
-                        </View>
-                        <View style={{flexDirection: 'row',paddingTop:10,}}>
-                            <Text style={{flex:3,textAlign:'right',fontSize:16}}>图片</Text>
-                            <View style={{flexWrap:'wrap',flex:8,paddingLeft:20,flexDirection: 'row',alignItems:'center',}}>
-                                <Image style={{width: 80, height: 80,margin:5,}} source={require('../../../img/UserCenter/UserImage.jpeg')}/>
-                                <Image style={{width: 80, height: 80,margin:5,}} source={require('../../../img/UserCenter/UserImage.jpeg')}/>
-                            </View>
+                    <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
+                        <Text style={{flex:3,textAlign:'right',fontSize:16}}>详细说明</Text>
+                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>宝宝发烧，送孩子去医院</Text>
+                    </View>
+                    <View style={{flexDirection: 'row',paddingTop:10,}}>
+                        <Text style={{flex:3,textAlign:'right',fontSize:16}}>图片</Text>
+                        <View style={{flexWrap:'wrap',flex:8,paddingLeft:20,flexDirection: 'row',alignItems:'center',}}>
+                            <Image style={{width: 80, height: 80,margin:5,}} source={require('../../../img/UserCenter/UserImage.jpeg')}/>
+                            <Image style={{width: 80, height: 80,margin:5,}} source={require('../../../img/UserCenter/UserImage.jpeg')}/>
                         </View>
                     </View>
                 </View>
-      );
+            </View>
+        );
     }
-  }
+}
 
 //离职的UI
 class ResignUI extends React.Component {
@@ -54,56 +56,15 @@ class ResignUI extends React.Component {
         // let title = this.props.title;
         return (
             <View style={{marginTop:10,paddingLeft:10,paddingRight:10,paddingBottom:10,paddingTop:10}}>
-                    <View style={styles.applyFormDetail}>
-                        <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
-                            <Text style={{flex:3,textAlign:'right',fontSize:16}}>离职原因</Text>
-                            <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>{this.props.title}</Text>
-                        </View>
-
-                        <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-start'}}>
-                            <Text style={{flex:3,textAlign:'right',fontSize:16}}>详细说明</Text>
-                            <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>离职是不需要原因的，活在当下最重要，谁能预知明天在哪个星球</Text>
-                        </View>
-                    </View>
-                </View>
-      );
-    }
-  }
-
-//晋级的UI
-class PromotionUI extends React.Component {
-    render() {
-        return (
-            <View style={{marginTop:10,paddingLeft:10,paddingRight:10,paddingBottom:10,paddingTop:10}}>
-                    <View style={styles.applyFormDetail}>
-                        <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
-                            <Text style={{flex:3,textAlign:'right',fontSize:16}}>当前职级</Text>
-                            <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>LA</Text>
-                        </View>
-
-                        <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
-                            <Text style={{flex:3,textAlign:'right',fontSize:16}}>申请职级</Text>
-                            <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>SM</Text>
-                        </View>
-                    </View>
-                </View>
-      );
-    }
-  }
-//复效的UI
-class RevivalUI extends React.Component {
-    render() {
-        return (
-            <View style={{marginTop:10,paddingLeft:10,paddingRight:10,paddingBottom:10,paddingTop:10}}>
                 <View style={styles.applyFormDetail}>
                     <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
-                        <Text style={{flex:3,textAlign:'right',fontSize:16}}>复效人员</Text>
-                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>林心如</Text>
+                        <Text style={{flex:3,textAlign:'right',fontSize:16}}>离职原因</Text>
+                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>{this.props.title}</Text>
                     </View>
 
                     <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-start'}}>
                         <Text style={{flex:3,textAlign:'right',fontSize:16}}>详细说明</Text>
-                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>之前的表现一直不错，感觉后期可以重用。所以申请复效</Text>
+                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>{this.props.description}</Text>
                     </View>
                 </View>
             </View>
@@ -111,34 +72,132 @@ class RevivalUI extends React.Component {
     }
 }
 
+//晋级的UI
+class PromotionUI extends React.Component {
+    constructor(props){
+        var agentGradeArr = PromotionList;
+        super(props);
+        this.state={
+            currentGradeEn:this.props.currentGrade,
+            currentGradeCn:agentGradeArr[this.props.currentGrade]["currentName"],
+            upGradeEn:this.props.upGrade,
+            upGradeCn:agentGradeArr[this.props.upGrade]["currentName"],
+        }
+        // props.username = '';
+    }
+    render() {
+        return (
+            <View style={{marginTop:10,paddingLeft:10,paddingRight:10,paddingBottom:10,paddingTop:10}}>
+                <View style={styles.applyFormDetailPromotion}>
+                    <View style={{flex:1.5}}></View>
+                    <View style={{flex:2.5,alignItems:'center',}}>
+                        <Text style={{fontSize:28,color:'#252525'}}>{this.state.currentGradeEn}</Text>
+                        <Text style={{fontSize:15,color:'#727272',marginTop:10,}}>{this.state.currentGradeCn}</Text>
+                    </View>
+                    <View style={{flex:2,alignItems:'center',justifyContent:'center',}}>
+                        <Image style={{width:39,height:21,}} source={require('../../../img/achievement/promDirec.png')}/>
+                    </View>
+                    <View style={{flex:2.5,alignItems:'center',}}>
+                        <Text style={{fontSize:28,color:'#A4A4A4'}}>{this.state.upGradeEn}</Text>
+                        <Text style={{fontSize:15,color:'#B4B4B4',marginTop:10,}}>{this.state.upGradeCn}</Text>
+                    </View>
+                    <View style={{flex:1.5}}></View>
+                    {/*<View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
+                        <Text style={{flex:3,textAlign:'right',fontSize:16}}>当前职级</Text>
+                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>LA</Text>
+                    </View>
 
+                    <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
+                        <Text style={{flex:3,textAlign:'right',fontSize:16}}>申请职级</Text>
+                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>SM</Text>
+                    </View>*/}
+                </View>
+            </View>
+        );
+    }
+}
+//复效的UI
+class RevivalUI extends React.Component {
+    constructor(props){
+        super(props);
+        // props.username = '';
+    }
+    render() {
+        return (
+            <View style={{marginTop:10,paddingLeft:10,paddingRight:10,paddingBottom:10,paddingTop:10}}>
+                <View style={styles.applyFormDetail}>
+                    <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
+                        <Text style={{flex:3,textAlign:'right',fontSize:16}}>复效人员</Text>
+                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>{this.props.name}</Text>
+                    </View>
+
+                    <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-start'}}>
+                        <Text style={{flex:3,textAlign:'right',fontSize:16}}>详细说明</Text>
+                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>{this.props.description}</Text>
+                    </View>
+                </View>
+            </View>
+        );
+    }
+}
+
+const withoutApproval = require('../../../img/UserCenter/withoutApproval.png');//不通过
+const defaultStatus = require('../../../img/UserCenter/defaultStatus.png')//默认--》提交申请
+const inApproval = require('../../../img/UserCenter/inApproval.png')//审批中
+const passApproval = require('../../../img/UserCenter/passApproval.png')//审批通过
 export class OaApplyFormDetail extends React.Component {
 
     constructor(props){
-            super(props);
+        super(props);
         let { params } = this.props.navigation.state;
+        let id =0;
         let type = 0;
         let status = '0';
+        let title='';
+        let description='';
         let baseStatus = '';
-
+        let currentGrade = '';
+        let upGrade = '';
+        let name = '';
         if(params != undefined){
             if(params.hasOwnProperty('value')){
-                let obj = params['value'];
-                if(obj.hasOwnProperty('type')){
-                    type = params.value.type;
+                let objData = params['value'];
+                if(objData.hasOwnProperty('itemData')){
+                    let obj = objData['itemData'];
+                    if(obj.hasOwnProperty('id')){
+                        id = params.value.itemData.id;
+                    }
+                    if(obj.hasOwnProperty('type')){
+                        type = params.value.itemData.type;
+                    }
+                    if(obj.hasOwnProperty('status')){
+                        status = params.value.itemData.status;
+                    }
+                    if(obj.hasOwnProperty('title')){
+                        title = params.value.itemData.title;
+                    }
+                    if(obj.hasOwnProperty('description')){
+                        description = params.value.itemData.description;
+                    }
+                    if(obj.hasOwnProperty('currentGrade')){
+                        currentGrade = params.value.itemData.currentGrade;
+                    }
+                    if(obj.hasOwnProperty('upGrade')){
+                        upGrade = params.value.itemData.upGrade;
+                    }
+                    if(obj.hasOwnProperty('name')){
+                        name = params.value.itemData.name;
+                    }
                 }
-                if(obj.hasOwnProperty('status')){
-                    status = params.value.status;
-                }
-                if(obj.hasOwnProperty('baseStatus')){
-                    baseStatus = params.value.baseStatus;
+                if(objData.hasOwnProperty('baseStatus')){
+                    baseStatus=params.value.baseStatus;
                 }
             }
         }
-         
-            this.state = {
-            id:'',
-            description:'',
+
+        this.state = {
+            id:id,
+            description:description,
             type:type,  //0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
             agentCode:'',
             createDatetime:'',
@@ -148,30 +207,96 @@ export class OaApplyFormDetail extends React.Component {
             endDatetime:'',
             leaveType:'',
             leaveOff:'',
-            title:'台湾还没有回归，心情不好',
+            title:title,
             imcomeproveMonth:'',
-            currentGrade:'',
-            upGrade:'',
+            currentGrade:currentGrade,
+            upGrade:upGrade,
+            name:name,
+            agentName:'JohnnyZ',
             showAgreedAndDismiss:baseStatus,
             showNatationAndAgreed:0,
-            dataSource:[]
+            processList:[],
         }
-        this.fetchData = this.fetchData.bind(this);
+    }
+    componentWillMount() {
+        this.fetchData();
     }
     // 网络请求
     fetchData() {
-        fetch('https://facebook.github.io/react-native/movies.json', {
+        let url = RequestURL.HOST+'applyForm/'+this.state.id+'/approvalRecord';
+        fetch(url, {
         })
             .then((response) => response.json())
             .then((responseData) => {
-                let data = this.state.dataSource.concat(responseData.movies);
-
-                this.setState( {
-                    dataSource:data
-                })
-            }).done();
+                if(responseData.code=='1'){
+                    let data = responseData.data;
+                    this.setState( {
+                        processList:data
+                    })
+                }else{
+                    console.log(responseData.msg);
+                    alert('网络异常，请稍后再试');
+                }
+            }).catch((err) => {//2
+            console.error(err);
+            alert('网络异常，请稍后再试');
+        }).done();
     }
 
+    //时间转换
+    timeTwistsIntoDate=(timeTwists)=>{
+        let standardTime = new Date(timeTwists);
+        let year = standardTime.getFullYear();
+        let month = standardTime.getMonth()+1;
+        let date = standardTime.getDate();
+        let hours = standardTime.getHours();
+        let minutes = standardTime.getMinutes();
+
+        let currentTime = new Date();
+
+        let backDate='';
+        let backTime='';
+        if (timeTwists) {
+            if (year == currentTime.getFullYear() && (month == currentTime.getMonth() + 1) && date == currentTime.getDate()) {
+                backDate = '今天';
+            } else if (year == currentTime.getFullYear() && (month == currentTime.getMonth() + 1) && (date == currentTime.getDate() - 1)) {
+                backDate = '昨天';
+            } else {
+                let lessMonth = '';
+                let lessDate = '';
+                if (month < 10){lessMonth = '0' + month;}
+                if (date < 10){lessDate = '0' + date;}
+                backDate = lessMonth + '-' + lessDate;
+            }
+            let lessHours = '';
+            let lessMinutes = '';
+            if(hours<10){lessHours='0'+hours;}else{lessHours=hours;}
+            if(minutes<10){lessMinutes='0'+minutes;}else{lessMinutes=minutes;}
+            backTime = lessHours + ':' + lessMinutes;
+        }else {
+            backDate = '今天';
+            let lessHours = '';
+            let lessMinutes = '';
+            if(currentTime.getHours()<10){lessHours='0'+currentTime.getHours();}else{lessHours=currentTime.getHours();}
+            if(currentTime.getMinutes()<10){lessMinutes='0'+currentTime.getMinutes();}else{lessMinutes=currentTime.getMinutes();}
+            backTime = lessHours + ':' + lessMinutes;
+        }
+
+        return {backDate,backTime};
+    }
+    //时间转换
+    stateTransferDict=(state)=>{
+        var titleText;
+        var titleImage;
+        switch(state){
+            case '0':titleText='进行中';titleImage= inApproval;break;
+            case '1':titleText='通过';titleImage= passApproval;break;
+            case '2':titleText='不通过';titleImage= withoutApproval;break;
+            case '3':titleText='其他';titleImage= defaultStatus;break;
+            default:
+        }
+        return {titleImage,titleText};
+    }
     agreedClick=()=>{
         this.setState( {
             showAgreedAndDismiss:0,
@@ -183,7 +308,7 @@ export class OaApplyFormDetail extends React.Component {
         this.setState( {
             showAgreedAndDismiss:0,
             showNatationAndAgreed:1
-    })
+        })
     }
     natationAgreedClick=()=>{
         alert('审批同意');
@@ -206,11 +331,11 @@ export class OaApplyFormDetail extends React.Component {
                         </TouchableWithoutFeedback>
                     </View>
                     <Text style={{flex:6,fontSize:22,color:'#000000'}}>
-                    {this.state.type==0?'离职详情':
-                        (this.state.type==1?'请假详情':
-                            (this.state.type==2?'晋升详情':
-                                (this.state.type==3?'复效详情':'详情')))}
-                     </Text>
+                        {this.state.type==0?'离职详情':
+                            (this.state.type==1?'请假详情':
+                                (this.state.type==2?'晋升详情':
+                                    (this.state.type==3?'复效详情':'详情')))}
+                    </Text>
                 </View>
 
                 <View style={{backgroundColor:'#FFDD00',flexDirection: 'row',alignItems:'center',paddingBottom:20,paddingTop:20}}>
@@ -223,36 +348,90 @@ export class OaApplyFormDetail extends React.Component {
                     </View>
                     <View style={{flex:1,paddingRight:20, flexDirection: 'row',justifyContent: 'flex-end'}}>
                         <Text style={{fontSize:14,color:'#000000',backgroundColor:'#FFDD00',
-                        borderRadius:20,textAlign:'center',fontSize:18,borderColor:'#D7BA00',borderWidth:1,
-                        paddingTop:5,paddingBottom:5,paddingLeft:15,paddingRight:15}}>
-                        {this.state.status=='0'?'审批中':(this.state.status=='1'?'通过':(this.state.status=='2'?'驳回':'待签约'))}</Text>
+                            borderRadius:20,textAlign:'center',fontSize:18,borderColor:'#D7BA00',borderWidth:1,
+                            paddingTop:5,paddingBottom:5,paddingLeft:15,paddingRight:15}}>
+                            {this.state.status=='0'?'审批中':(this.state.status=='1'?'通过':(this.state.status=='2'?'驳回':'待签约'))}</Text>
                     </View>
                 </View>
 
-                {
+                {//离职的UI
                     (this.state.type==0) && (
-                        <ResignUI title={this.state.title}></ResignUI>
+                        <ResignUI title={this.state.title} description={this.state.description}></ResignUI>
                     )
                 }
-                
-                {
+
+                {//请假UI
                     (this.state.type==1) && (
                         <LeaveUI></LeaveUI>
                     )
                 }
-                
-                {
+
+                {//晋级的UI
                     (this.state.type==2) && (
-                        <PromotionUI></PromotionUI>
+                        <PromotionUI currentGrade={this.state.currentGrade} upGrade={this.state.upGrade}></PromotionUI>
                     )
                 }
-                {
+                {//复效的UI
                     (this.state.type==3) && (
-                        <RevivalUI></RevivalUI>
+                        <RevivalUI description={this.state.description} name={this.state.name}></RevivalUI>
                     )
                 }
                 <View style={styles.process}>
-                    <View style={{flexDirection: 'row',alignItems:'center',}}>
+                    <FlatList
+                        style={{}}
+                        initialNumToRender ={10}
+                        data={this.state.processList.reverse()}
+
+                        renderItem={({item,index}) =>
+                            <View style={{flexDirection: 'row',alignItems:'center',}}>
+                                <View style={{flex:1.2,alignItems:'flex-end',}}>
+                                    <Text style={{color:'#9E9E9E',}}>{this.timeTwistsIntoDate(item.handleDate).backTime}</Text>
+                                    <Text style={{color:'#9E9E9E',}}>{this.timeTwistsIntoDate(item.handleDate).backDate}</Text>
+                                </View>
+
+                                {index+1==this.state.processList.length?
+                                    <View style={{flex:8.8,flexDirection: 'row',alignItems:'center',}}>
+                                        <View style={{flex:0.9,alignItems:'center',}}>
+                                            <View style={{marginLeft:0,backgroundColor:'#EAEAEA',height:30,width:1,alignItems:'center',}}></View>
+                                            <Image style={{marginLeft:0,width: 20, height: 20,borderRadius:25,}} source={require('../../../img/UserCenter/defaultStatus.png')} />
+                                            <View style={{marginLeft:0,backgroundColor:'#EAEAEA',height:30,width:1,alignItems:'center',}}></View>
+                                        </View>
+                                        <View style={{flex:9.1,}}>
+                                            <Text style={{}}>提交申请</Text>
+                                        </View>
+                                    </View>
+                                    :
+                                    <View style={{flex:8.8,flexDirection: 'row',alignItems:'center',}}>
+
+                                        <View style={{flex:1.1,alignItems:'center',}}>
+                                            <View style={{marginLeft:0,backgroundColor:'#EAEAEA',height:30,width:1,alignItems:'center',}}></View>
+                                            <Image style={{marginLeft:0,width: 20, height: 20,borderRadius:25,}} source={this.stateTransferDict(item.state).titleImage} />
+                                            <View style={{marginLeft:0,backgroundColor:'#EAEAEA',height:30,width:1,alignItems:'center',}}></View>
+                                        </View>
+
+                                        <View style={{flex:2,}}>
+                                            <Image style={{width:40, height:40,borderRadius:20,}} source={require('../../../img/UserCenter/UserImage.jpeg')} />
+                                        </View>
+                                        <View style={{flex:9.2,}}>
+                                            <View style={{flexDirection: 'row',alignItems:'center',}}>
+                                                <Text style={{flex:2}}>节点{index+1}</Text>
+                                                <Text style={{flex:3}}>{item.userId}</Text>
+                                                <Text style={{flex:5,color:item.state=='0'?'#EB8B43':item.state=='1'?'#4AA54A':item.state=='2'?'#D1071F':''}}>{this.stateTransferDict(item.state).titleText}</Text>
+                                            </View>
+                                            <Text style={{color:'#B1B1B1',textAlign:'left'}}>{item.comment}</Text>
+                                        </View>
+                                    </View>
+                                }
+
+
+
+
+
+                            </View>
+                        }
+                    />
+
+                    {/* <View style={{flexDirection: 'row',alignItems:'center',}}>
                         <View style={{flex:1.2,alignItems:'flex-end',}}>
                             <Text style={{color:'#9E9E9E',}}>08:00</Text>
                             <Text style={{color:'#9E9E9E',}}>早上</Text>
@@ -331,10 +510,10 @@ export class OaApplyFormDetail extends React.Component {
                             <Image style={{marginLeft:0,width: 20, height: 20,borderRadius:25,}} source={require('../../../img/UserCenter/defaultStatus.png')} />
                             <View style={{marginLeft:0,backgroundColor:'#EAEAEA',height:30,width:1,alignItems:'center',}}></View>
                         </View>
-                        <View style={{flex:8.3,}}>
+                        <View style={{flex:7.8,}}>
                             <Text style={{}}>提交申请</Text>
                         </View>
-                    </View>
+                    </View>*/}
                 </View>
                 {this.state.showNatationAndAgreed==1?
                     <View style={{ paddingTop: 20}}>
@@ -355,8 +534,8 @@ export class OaApplyFormDetail extends React.Component {
                             <Text style={{flex:2.5}}></Text>
                             <TouchableOpacity style={{flex:5,}} onPress={this.natationAgreedClick.bind(this)}>
                                 <Text style={{fontSize:20,lineHeight:40,borderRadius:5,textAlign:'center',
-                                fontWeight:'900',backgroundColor:'#FFDD00',color:'#282300'}}
-                                 >同意</Text>
+                                    fontWeight:'900',backgroundColor:'#FFDD00',color:'#282300'}}
+                                >同意</Text>
                             </TouchableOpacity>
                             <Text style={{flex:2.5}}></Text>
                         </View>
@@ -400,6 +579,15 @@ export class OaApplyFormDetail extends React.Component {
 
 
 const styles = StyleSheet.create({
+    applyFormDetailPromotion: {
+        backgroundColor:'white',borderRadius:20,flexDirection: 'row',justifyContent:'center',
+        paddingLeft:0,paddingRight:10,paddingBottom:40,paddingTop:30,
+        shadowColor:'black',shadowOpacity: 0.1,shadowRadius: StyleSheet.hairlineWidth,
+        shadowOffset: {
+            height: StyleSheet.hairlineWidth,
+        },
+        elevation: 4
+    },
     applyFormDetail: {
         backgroundColor:'white',borderRadius:20,
         paddingLeft:0,paddingRight:10,paddingBottom:12,paddingTop:10,
@@ -426,4 +614,4 @@ const styles = StyleSheet.create({
         },
         elevation: 4
     },
-  });
+});

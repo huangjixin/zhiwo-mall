@@ -70,47 +70,46 @@ export class MyApprovalToBeAudited extends React.Component {
         var typeStr = Array.from(this.state.modelItem).toString();
         var status = 0;
         var agentCode='10000';
-        var size = 4;
+        var pageSize = 4;
         var url;
         if(typeStr==='11'|| typeStr===''){
-            url = RequestURL.HOST+'applyForm/approval/processed?status='+status+'&agentCode='+agentCode+'&page='+page+'&size='+size;
+            url = RequestURL.HOST+'applyForm/approval/pending?agentCode='+agentCode+'&pageSize='+pageSize+'&curPage='+page;
         }else {
-            url = RequestURL.HOST+'applyForm/approval/processed?status='+status+'&agentCode='+agentCode+'&page='+page+'&size='+size+'&types='+typeStr;
+            url = RequestURL.HOST+'applyForm/approval/pending?agentCode='+agentCode+'&pageSize='+pageSize+'&curPage='+page+'&types='+typeStr;
         }
         fetch(url, {
         })
             .then((response) => response.json())
             .then((responseData) => {
-
-                if (isToLoad){
-                    let oldData = this.state.myApprovalToBeAuditedList.concat(responseData);
-                    this.setState({
-                        myApprovalToBeAuditedList:oldData,
-                        showFoot:0,
-                    });
+                if(responseData.code=='1'){
+                    if (isToLoad){
+                        let oldData = this.state.myApprovalToBeAuditedList.concat(responseData.data.records);
+                        this.setState({
+                            myApprovalToBeAuditedList:oldData,
+                            showFoot:0,
+                        });
+                    }else {
+                        pageNo=1;
+                        this.setState({
+                            myApprovalToBeAuditedList:responseData.data.records,
+                            myApprovalToBeAuditedAllLoaded:false,
+                            showFoot:0,
+                        });
+                    }
+                    if(responseData.data.records.length<pageSize){
+                        this.setState({
+                            myApprovalToBeAuditedAllLoaded:true,
+                            showFoot:1,
+                        });
+                    }
                 }else {
-                    pageNo=1;
-                    this.setState({
-                        myApprovalToBeAuditedList:responseData,
-                        myApprovalToBeAuditedAllLoaded:false,
-                        showFoot:0,
-                    });
+                    console.log(responseData.msg);
+                    alert('网络异常，请稍后再试');
                 }
-                if(responseData.length<size){
-                    this.setState({
-                        myApprovalToBeAuditedAllLoaded:true,
-                        showFoot:1,
-                    });
-                }
-                // console.log(responseData);
-                // 真正做的时候改。
-                // let data = this.state.myApplyToBeCheckList.concat(responseData.movies);
-
-                // this.setState( {
-                //     myApplyToBeCheckList:data,
-                //     selectedIndex:0,
-                // })
-            }).done();
+            }).catch((err) => {//2
+            console.error(err);
+            alert('网络异常，请稍后再试');
+        }).done();
     }
     //选中的item跳转到详情页
     administrativeToOaApplyFormDetail=(value)=>{
@@ -199,134 +198,135 @@ export class MyApprovalToBeAudited extends React.Component {
                             <Text style={{fontSize:16,}}>筛选▼</Text>
                         </TouchableOpacity>
                     </View>
-                <FlatList
-                    style={{}}
-                    initialNumToRender ={10}
-                    data={this.state.myApprovalToBeAuditedList}
+                    <FlatList
+                        style={{}}
+                        initialNumToRender ={10}
+                        data={this.state.myApprovalToBeAuditedList}
 
-                    //添加头尾布局
-                    // ListHeaderComponent={this.header}
+                        //添加头尾布局
+                        // ListHeaderComponent={this.header}
 
-                    //下拉刷新，必须设置refreshing状态
-                    onRefresh={this.onRefresh}
-                    refreshing={this.state.refreshing}
+                        //下拉刷新，必须设置refreshing状态
+                        onRefresh={this.onRefresh}
+                        refreshing={this.state.refreshing}
 
-                    //上拉加载数据
-                    ListFooterComponent={this._renderFooter.bind(this)}
-                    onEndReached={this._onEndReached.bind(this)}
-                    onEndReachedThreshold={0.1}
+                        //上拉加载数据
+                        ListFooterComponent={this._renderFooter.bind(this)}
+                        onEndReached={this._onEndReached.bind(this)}
+                        onEndReachedThreshold={0.1}
 
-                    renderItem={({item}) =>
-                        //{/* 循环数组，根据Type去把信息给显示出来 */}
-                        <TouchableWithoutFeedback onPress={this.administrativeToOaApplyFormDetail.bind(this,{type:item.type,status:item.status,baseStatus:0,})}>
-                            <View>
-                                {/*//4 地址 5手机号 6银行卡*/}
-                                {item.type==4||item.type==5||item.type==6 ?(
-                                    <View style={{marginTop:15,backgroundColor:'#FFFFFF',marginLeft:20,marginRight:20,borderRadius:10,paddingBottom:20,paddingTop:10,}}>
-                                        <View style={{alignItems:'center',flexDirection: 'row',marginLeft:15,marginRight:15,}}>
-                                            <Image style={{width:50, height:50,marginRight:10,}} source={this.judgeData(item.type).titleImage} />
-                                            <Text style={{fontSize:18,flex:7,color:'#0D0D0D',}}>{this.judgeData(item.type).titleText}</Text>
-                                            <Text style={{fontSize:18,flex:3,textAlign:'right',color:item.status=="0"?'#EC8C44':item.status=="1"?"#0F6B72":"#DC4254",fontWeight:'bold'}}>{item.status=="0"?'待审批':
-                                                (item.status=="1"?'审批通过':'不通过')}</Text>
-                                        </View>
-                                    </View>
-                                ):(
-                                    //0离职 1请假 2晋升 3复效 7收入证明 8工作证明 9其它收入证明
-                                    <View style={{marginTop:15,backgroundColor:'#FFFFFF',marginLeft:20,marginRight:20,borderRadius:10,paddingBottom:20,paddingTop:10,}}>
-                                        <View style={{alignItems:'center',flexDirection: 'row',marginLeft:15,marginRight:15, borderBottomWidth:0.5,borderBottomColor:'#CCCCCC',paddingBottom:10,}}>
-                                            <Image style={{width:35, height:35,marginRight:10,}} source={this.judgeData(item.type).titleImage} />
-                                            <Text style={{fontSize:18,flex:7,color:'#0D0D0D',}}>{this.judgeData(item.type).titleText}</Text>
-                                            <Text style={{fontSize:18,flex:3,textAlign:'right',color:item.status=="0"?'#EC8C44':item.status=="1"?"#0F6B72":"#DC4254",fontWeight:'bold'}}>{item.status==0?'待审批':
-                                                (item.status==1?'审批通过':'不通过')}</Text>
-                                        </View>
-                                        {/*//0离职*/}
-                                        {item.type==0?(
-                                            <View>
-                                                <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
-                                                    <Text style={{fontSize:15,flex:7,}}>离职原因：{item.title}</Text>
-                                                    <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{this.timeTwistsIntoDate(item.createDatetime)}</Text>
-                                                </View>
-                                                <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
-                                                    <Text style={{fontSize:15,flex:7,}}>详细说明：{item.description}</Text>
-                                                    <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.agentName}</Text>
-                                                </View>
+                        renderItem={({item}) =>
+                            //{/* 循环数组，根据Type去把信息给显示出来 */}
+                            <TouchableWithoutFeedback onPress={this.administrativeToOaApplyFormDetail.bind(this,{itemData:item,baseStatus:0,})}>
+                                <View>
+                                    {/*//4 地址 5手机号 6银行卡*/}
+                                    {item.type==4||item.type==5||item.type==6 ?(
+                                        <View style={{marginTop:15,backgroundColor:'#FFFFFF',marginLeft:20,marginRight:20,borderRadius:10,paddingBottom:20,paddingTop:10,}}>
+                                            <View style={{alignItems:'center',flexDirection: 'row',marginLeft:15,marginRight:15,}}>
+                                                <Image style={{width:50, height:50,marginRight:10,}} source={this.judgeData(item.type).titleImage} />
+                                                <Text style={{fontSize:18,flex:7,color:'#0D0D0D',}}>{this.judgeData(item.type).titleText}</Text>
+                                                <Text style={{fontSize:18,flex:3,textAlign:'right',color:item.status=="0"?'#EC8C44':item.status=="1"?"#0F6B72":"#DC4254",fontWeight:'bold'}}>{item.status=="0"?'待审批':
+                                                    (item.status=="1"?'审批通过':'不通过')}</Text>
                                             </View>
-                                        ):(// 1请假
-                                            item.type==1?(
+                                        </View>
+                                    ):(
+                                        //0离职 1请假 2晋升 3复效 7收入证明 8工作证明 9其它收入证明
+                                        <View style={{marginTop:15,backgroundColor:'#FFFFFF',marginLeft:20,marginRight:20,borderRadius:10,paddingBottom:20,paddingTop:10,}}>
+                                            <View style={{alignItems:'center',flexDirection: 'row',marginLeft:15,marginRight:15, borderBottomWidth:0.5,borderBottomColor:'#CCCCCC',paddingBottom:10,}}>
+                                                <Image style={{width:35, height:35,marginRight:10,}} source={this.judgeData(item.type).titleImage} />
+                                                <Text style={{fontSize:18,flex:7,color:'#0D0D0D',}}>{this.judgeData(item.type).titleText}</Text>
+                                                <Text style={{fontSize:18,flex:3,textAlign:'right',color:item.status=="0"?'#EC8C44':item.status=="1"?"#0F6B72":"#DC4254",fontWeight:'bold'}}>{item.status==0?'待审批':
+                                                    (item.status==1?'审批通过':'不通过')}</Text>
+                                            </View>
+                                            {/*//0离职*/}
+                                            {item.type==0?(
                                                 <View>
                                                     <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
-                                                        <Text style={{fontSize:15,flex:7,}}>请假类型：{item.type==0?'病假':
-                                                            (item.type==1?'婚假':
-                                                                (item.type==2?'产假':
-                                                                    (item.type==3?'陪产假':'丧假')))}</Text>
-                                                        <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.createDatetime}</Text>
+                                                        <Text style={{fontSize:15,flex:7,}}>离职原因：{item.title}</Text>
+                                                        <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{this.timeTwistsIntoDate(item.createDatetime)}</Text>
                                                     </View>
                                                     <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
-                                                        <Text style={{fontSize:15,flex:7,}}>开始时间：{item.startTime}</Text>
-                                                    </View>
-                                                    <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
-                                                        <Text style={{fontSize:15,flex:7,}}>结束时间：{item.endTime}</Text>
+                                                        <Text style={{fontSize:15,flex:7,}}>详细说明：{item.description}</Text>
                                                         <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.agentName}</Text>
                                                     </View>
                                                 </View>
-                                            ):(//2晋升
-                                                item.type==2?(
+                                            ):(// 1请假
+                                                item.type==1?(
                                                     <View>
                                                         <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
-                                                            <Text style={{fontSize:15,flex:7,}}>当前职级：{item.currentGrade}</Text>
+                                                            <Text style={{fontSize:15,flex:7,}}>请假类型：{item.type==0?'病假':
+                                                                (item.type==1?'婚假':
+                                                                    (item.type==2?'产假':
+                                                                        (item.type==3?'陪产假':'丧假')))}</Text>
                                                             <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.createDatetime}</Text>
                                                         </View>
                                                         <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
-                                                            <Text style={{fontSize:15,flex:7,}}>晋级职级：{item.upGrade}</Text>
+                                                            <Text style={{fontSize:15,flex:7,}}>开始时间：{item.startTime}</Text>
+                                                        </View>
+                                                        <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
+                                                            <Text style={{fontSize:15,flex:7,}}>结束时间：{item.endTime}</Text>
                                                             <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.agentName}</Text>
                                                         </View>
-                                                    </View>):(
-                                                    // 3复效
-                                                    item.type==3?(
+                                                    </View>
+                                                ):(//2晋升
+                                                    item.type==2?(
                                                         <View>
                                                             <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
-                                                                <Text style={{fontSize:15,flex:7,}}>复效人员：{item.name}</Text>
+                                                                <Text style={{fontSize:15,flex:7,}}>当前职级：{item.currentGrade}</Text>
                                                                 <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.createDatetime}</Text>
                                                             </View>
                                                             <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
-                                                                <Text style={{fontSize:15,flex:7,}}>详细说明：{item.description}</Text>
+                                                                <Text style={{fontSize:15,flex:7,}}>晋级职级：{item.upGrade}</Text>
+                                                                <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.agentName}</Text>
                                                             </View>
-                                                        </View>
+                                                        </View>):(
+                                                        // 3复效
+                                                        item.type==3?(
+                                                            <View>
+                                                                <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
+                                                                    <Text style={{fontSize:15,flex:7,}}>复效人员：{item.name}</Text>
+                                                                    <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.createDatetime}</Text>
+                                                                </View>
+                                                                <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
+                                                                    <Text style={{fontSize:15,flex:7,}}>详细说明：{item.description}</Text>
+                                                                    <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.agentName}</Text>
+                                                                </View>
+                                                            </View>
 
-                                                    ):(item.type==7?(// 7收入证明 imcomeproveMonth
-                                                        <View>
-                                                            <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
-                                                                <Text style={{fontSize:15,flex:7,}}>时间：{item.imcomeproveMonth==0?(3):(item.imcomeproveMonth==1?(6):(item.imcomeproveMonth==2?(9):(12)))}个月</Text>
-                                                                <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.createDatetime}</Text>
+                                                        ):(item.type==7?(// 7收入证明 imcomeproveMonth
+                                                            <View>
+                                                                <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
+                                                                    <Text style={{fontSize:15,flex:7,}}>时间：{item.imcomeproveMonth==0?(3):(item.imcomeproveMonth==1?(6):(item.imcomeproveMonth==2?(9):(12)))}个月</Text>
+                                                                    <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.createDatetime}</Text>
+                                                                </View>
+                                                                <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
+                                                                    <Text style={{fontSize:15,flex:7,}}>用途：{item.description}</Text>
+                                                                </View>
                                                             </View>
+                                                        ):(item.type==8?(//8工作证明
                                                             <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                                 <Text style={{fontSize:15,flex:7,}}>用途：{item.description}</Text>
+                                                                <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.createDatetime}</Text>
                                                             </View>
-                                                        </View>
-                                                    ):(item.type==8?(//8工作证明
-                                                        <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
-                                                            <Text style={{fontSize:15,flex:7,}}>用途：{item.description}</Text>
-                                                            <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.createDatetime}</Text>
-                                                        </View>
-                                                    ):(
-                                                        //9其它收入证明
-                                                        <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
-                                                            <Text style={{fontSize:15,flex:7,}}>用途：{item.description}</Text>
-                                                            <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.createDatetime}</Text>
-                                                        </View>
-                                                    ))))))}
-                                    </View>
-                                )}
-                            </View>
-                        </TouchableWithoutFeedback>
+                                                        ):(
+                                                            //9其它收入证明
+                                                            <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
+                                                                <Text style={{fontSize:15,flex:7,}}>用途：{item.description}</Text>
+                                                                <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.createDatetime}</Text>
+                                                            </View>
+                                                        ))))))}
+                                        </View>
+                                    )}
+                                </View>
+                            </TouchableWithoutFeedback>
 
 
 
-                    }
-                />
+                        }
+                    />
 
 
-                {/*
+                    {/*
                         <TouchableWithoutFeedback onPress={this.administrativeToOaApplyFormDetail.bind(this,{type:1,status:1,baseStatus:0,})}>
                         <View style={{marginTop:15,backgroundColor:'#FFFFFF',marginLeft:20,marginRight:20,borderRadius:10,paddingBottom:20,paddingTop:10,}}>
                             <View style={{alignItems:'center',paddingBottom:10,flexDirection: 'row',borderBottomWidth:0.5,borderBottomStyle:'sold',borderBottomColor:'#CCCCCC',marginLeft:15,marginRight:15,}}>
@@ -444,7 +444,7 @@ export class MyApprovalToBeAudited extends React.Component {
                         </Modal>
                     </View>
 
-            </View>
+                </View>
             </View>
         );
     }
