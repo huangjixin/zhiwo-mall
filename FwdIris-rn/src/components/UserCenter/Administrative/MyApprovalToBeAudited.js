@@ -151,6 +151,22 @@ export class MyApprovalToBeAudited extends React.Component {
 
         return year+'/'+month+'/'+date;
     }
+    //时间转换(具体到上下午)
+    timeTwistsIntoAmToPm=(timeTwists)=>{
+        let standardTime = new Date(timeTwists);
+        let year = standardTime.getFullYear();
+        let month = standardTime.getMonth()+1;
+        let date = standardTime.getDate();
+        let hours = standardTime.getHours();
+        let AmToPm='';
+        if(0<=hours<12){
+            AmToPm='上午';
+        }else {
+            AmToPm='下午';
+        }
+
+        return year+'/'+month+'/'+date+' '+AmToPm;
+    }
     onRequestClose() {
         this.setState({
             isFilterCondition:false
@@ -261,10 +277,10 @@ export class MyApprovalToBeAudited extends React.Component {
                                                             <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.createDatetime}</Text>
                                                         </View>
                                                         <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
-                                                            <Text style={{fontSize:15,flex:7,}}>开始时间：{item.startTime}</Text>
+                                                            <Text style={{fontSize:15,flex:7,}}>开始时间：{this.timeTwistsIntoAmToPm(item.startTime)}</Text>
                                                         </View>
                                                         <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
-                                                            <Text style={{fontSize:15,flex:7,}}>结束时间：{item.endTime}</Text>
+                                                            <Text style={{fontSize:15,flex:7,}}>结束时间：{this.timeTwistsIntoAmToPm(item.endTime)}</Text>
                                                             <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.agentName}</Text>
                                                         </View>
                                                     </View>

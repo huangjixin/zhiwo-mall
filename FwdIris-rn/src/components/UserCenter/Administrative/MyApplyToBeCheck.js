@@ -149,6 +149,22 @@ export class MyApplyToBeCheck extends React.Component {
 
         return year+'/'+month+'/'+date;
     }
+    //时间转换(具体到上下午)
+    timeTwistsIntoAmToPm=(timeTwists)=>{
+        let standardTime = new Date(timeTwists);
+        let year = standardTime.getFullYear();
+        let month = standardTime.getMonth()+1;
+        let date = standardTime.getDate();
+        let hours = standardTime.getHours();
+        let AmToPm='';
+        if(0<=hours<12){
+            AmToPm='上午';
+        }else {
+            AmToPm='下午';
+        }
+
+        return year+'/'+month+'/'+date+' '+AmToPm;
+    }
     //点击筛选 model展示
     filterCondition=()=>{
         //alert('筛选');
@@ -268,17 +284,17 @@ export class MyApplyToBeCheck extends React.Component {
                                             item.type==1?(
                                                 <View>
                                                     <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
-                                                        <Text style={{fontSize:15,flex:7,}}>请假类型：{item.type==0?'病假':
-                                                            (item.type==1?'婚假':
-                                                                (item.type==2?'产假':
-                                                                    (item.type==3?'陪产假':'丧假')))}</Text>
+                                                        <Text style={{fontSize:15,flex:7,}}>请假类型：{item.leaveType==0?'病假':
+                                                            (item.leaveType==1?'婚假':
+                                                                (item.leaveType==2?'产假':
+                                                                    (item.leaveType==3?'陪产假':'丧假')))}</Text>
                                                         <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{this.timeTwistsIntoDate(item.createDatetime)}</Text>
                                                     </View>
                                                     <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
-                                                        <Text style={{fontSize:15,flex:7,}}>开始时间：{item.startTime}</Text>
+                                                        <Text style={{fontSize:15,flex:7,}}>开始时间：{this.timeTwistsIntoAmToPm(item.startTime)}</Text>
                                                     </View>
                                                     <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
-                                                        <Text style={{fontSize:15,flex:7,}}>结束时间：{item.endTime}</Text>
+                                                        <Text style={{fontSize:15,flex:7,}}>结束时间：{this.timeTwistsIntoAmToPm(item.endTime)}</Text>
                                                         <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.agentName}</Text>
                                                     </View>
                                                 </View>
@@ -291,7 +307,7 @@ export class MyApplyToBeCheck extends React.Component {
                                                         </View>
                                                         <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                             <Text style={{fontSize:15,flex:7,}}>晋级职级：{item.upGrade}</Text>
-                                                            <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.agentName}</Text>
+                                                            {/*<Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.agentName}</Text>*/}
                                                         </View>
                                                     </View>):(
                                                     // 3复效
