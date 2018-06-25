@@ -359,8 +359,6 @@ export class OaApplyForm extends React.Component {
     }
     //提交数据
     submitData = () => {
-        this.upload1();
-        return;
         if (this.state.leaveTypeArry.length == 0) {
             alert('请选择请假类型');
             return;

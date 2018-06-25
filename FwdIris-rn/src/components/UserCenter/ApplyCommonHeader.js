@@ -24,7 +24,7 @@ export class ApplyCommonHeader extends React.Component {
                                 <Image style={{width:11,height:18,}}source={require('../../../img/UserCenter/GoBackBlack.png')}/>
                         </View>
                     </TouchableWithoutFeedback>
-                    <View style={{flex:1,justifyContent: 'center',alignItems: 'center',}}>
+                    <View style={{flex:1.5,justifyContent: 'center',alignItems: 'center',}}>
                         <Text style={{color:'#000000',fontSize:22}}>{title}</Text>
                     </View>
                     <TouchableWithoutFeedback onPress={onAction}>

@@ -3,39 +3,68 @@ import {StyleSheet, ScrollView, Text,View,Image,TextInput,TouchableWithoutFeedba
 
 import * as RequestURL from "../../common/RequestURL";
 import PromotionList from '../achievement/Promotion.json';
+import {JobProof} from "./apply/JobProof";
+import {OtherProof} from "./apply/OtherProof";
+import {ApplyCommonHeader} from "./ApplyCommonHeader";
 //请假UI
 class LeaveUI extends React.Component {
+    constructor(props){
+        super(props);
+        // props.username = '';
+    }
+// <LeaveUI description={this.state.description} startTime={this.state.startTime} endTime={this.state.endTime}
+// leaveOff={this.state.leaveOff} leaveType={this.state.leaveType} // files={this.state.files}
+    //时间转换(具体到上下午)
+    timeTwistsIntoAmToPm=(timeTwists)=>{
+        let standardTime = new Date(timeTwists);
+        let year = standardTime.getFullYear();
+        let month = standardTime.getMonth()+1;
+        let date = standardTime.getDate();
+        let hours = standardTime.getHours();
+        let AmToPm='';
+        if(0<=hours<12){
+            AmToPm='上午';
+        }else {
+            AmToPm='下午';
+        }
+
+        return year+'/'+month+'/'+date+' '+AmToPm;
+    }
     render() {
         return (
             <View style={{marginTop:10,paddingLeft:12,paddingRight:12,paddingBottom:10,paddingTop:10}}>
                 <View style={styles.applyFormDetail}>
                     <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
                         <Text style={{flex:3,textAlign:'right',fontSize:16}}>请假类型</Text>
-                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>事假</Text>
+                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>{this.props.leaveType==0?'病假':
+                            (this.props.leaveType==1?'婚假':
+                                (this.props.leaveType==2?'产假':
+                                    (this.props.leaveType==3?'陪产假':'丧假')))}</Text>
                     </View>
 
                     <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
                         <Text style={{flex:3,textAlign:'right',fontSize:16}}>开始时间</Text>
-                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>2018-05-18 上午</Text>
+                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>{this.timeTwistsIntoAmToPm(this.props.startTime)}</Text>
                     </View>
 
                     <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
                         <Text style={{flex:3,textAlign:'right',fontSize:16}}>结束时间</Text>
-                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>2018-05-18 下午</Text>
+                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>{this.timeTwistsIntoAmToPm(this.props.endTime)}</Text>
                     </View>
 
                     <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
                         <Text style={{flex:3,textAlign:'right',fontSize:16}}>时长</Text>
-                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>1.0 天</Text>
+                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>{this.props.leaveOff} 天</Text>
                     </View>
 
                     <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
                         <Text style={{flex:3,textAlign:'right',fontSize:16}}>详细说明</Text>
-                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>宝宝发烧，送孩子去医院</Text>
+                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>{this.props.description}</Text>
                     </View>
                     <View style={{flexDirection: 'row',paddingTop:10,}}>
                         <Text style={{flex:3,textAlign:'right',fontSize:16}}>图片</Text>
                         <View style={{flexWrap:'wrap',flex:8,paddingLeft:20,flexDirection: 'row',alignItems:'center',}}>
+                            {/*//<Text>{this.props.files}</Text>*/}
                             <Image style={{width: 80, height: 80,margin:5,}} source={require('../../../img/UserCenter/UserImage.jpeg')}/>
                             <Image style={{width: 80, height: 80,margin:5,}} source={require('../../../img/UserCenter/UserImage.jpeg')}/>
                         </View>
@@ -140,6 +169,86 @@ class RevivalUI extends React.Component {
         );
     }
 }
+//收入证明的UI
+class ProofUI extends React.Component {
+    constructor(props){
+        super(props);
+        // props.username = '';
+    }
+    render() {
+        return (
+            <View style={{marginTop:10,paddingLeft:10,paddingRight:10,paddingBottom:10,paddingTop:10}}>
+                <View style={styles.applyFormDetail}>
+                    <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
+                        <Text style={{flex:3,textAlign:'right',fontSize:16}}>时间</Text>
+                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>{this.props.imcomeproveMonth==0?(3):(this.props.imcomeproveMonth==1?(6):(this.props.imcomeproveMonth==2?(9):(12)))}个月</Text>
+                    </View>
+
+                    <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-start'}}>
+                        <Text style={{flex:3,textAlign:'right',fontSize:16}}>用途</Text>
+                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>{this.props.description}</Text>
+                    </View>
+                </View>
+            </View>
+        );
+    }
+}
+
+//在职证明的UI
+class JobProofUI extends React.Component {
+    constructor(props){
+        super(props);
+        // props.username = '';
+    }
+    render() {
+        return (
+            <View style={{marginTop:10,paddingLeft:10,paddingRight:10,paddingBottom:10,paddingTop:10}}>
+                <View style={styles.applyFormDetail}>
+
+                    <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-start'}}>
+                        <Text style={{flex:3,textAlign:'right',fontSize:16}}>用途</Text>
+                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>{this.props.description}</Text>
+                    </View>
+                </View>
+            </View>
+        );
+    }
+}
+//其他证明的UI
+class OtherProofUI extends React.Component {
+    constructor(props){
+        super(props);
+        // props.username = '';
+    }
+    render() {
+        return (
+            <View style={{marginTop:10,paddingLeft:10,paddingRight:10,paddingBottom:10,paddingTop:10}}>
+                <View style={styles.applyFormDetail}>
+                    <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-end'}}>
+                        <Text style={{flex:3,textAlign:'right',fontSize:16}}>材料类型</Text>
+                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>{this.props.title}</Text>
+                    </View>
+
+                    <View style={{flexDirection: 'row',paddingTop:10,alignItems:'flex-start'}}>
+                        <Text style={{flex:3,textAlign:'right',fontSize:16}}>用途</Text>
+                        <Text style={{flex:8,paddingLeft:20,color:'#575756',fontSize:18}}>{this.props.description}</Text>
+                    </View>
+
+                    <View style={{flexDirection: 'row',paddingTop:10,}}>
+                        <Text style={{flex:3,textAlign:'right',fontSize:16}}>图片</Text>
+                        <View style={{flexWrap:'wrap',flex:8,paddingLeft:20,flexDirection: 'row',alignItems:'center',}}>
+                            {/*//<Text>{this.props.files}</Text>*/}
+                            <Image style={{width: 80, height: 80,margin:5,}} source={require('../../../img/UserCenter/UserImage.jpeg')}/>
+                            <Image style={{width: 80, height: 80,margin:5,}} source={require('../../../img/UserCenter/UserImage.jpeg')}/>
+                        </View>
+                    </View>
+
+
+                </View>
+            </View>
+        );
+    }
+}
 
 const withoutApproval = require('../../../img/UserCenter/withoutApproval.png');//不通过
 const defaultStatus = require('../../../img/UserCenter/defaultStatus.png')//默认--》提交申请
@@ -159,6 +268,16 @@ export class OaApplyFormDetail extends React.Component {
         let currentGrade = '';
         let upGrade = '';
         let name = '';
+        let agentCode = '';
+        let createDatetime = '';
+        let startTime = '';
+        let endTime = '';
+        let endDatetime = '';
+        let leaveType = '';
+        let leaveOff = '';
+        let agentName = '';
+        let imcomeproveMonth = '';
+        let files = [];
         if(params != undefined){
             if(params.hasOwnProperty('value')){
                 let objData = params['value'];
@@ -188,6 +307,37 @@ export class OaApplyFormDetail extends React.Component {
                     if(obj.hasOwnProperty('name')){
                         name = params.value.itemData.name;
                     }
+                    if(obj.hasOwnProperty('agentCode')){
+                        agentCode = params.value.itemData.agentCode;
+                    }
+                    if(obj.hasOwnProperty('createDatetime')){
+                        createDatetime = params.value.itemData.createDatetime;
+                    }
+                    if(obj.hasOwnProperty('startTime')){
+                        startTime = params.value.itemData.startTime;
+                    }
+                    if(obj.hasOwnProperty('endTime')){
+                        endTime = params.value.itemData.endTime;
+                    }
+                    if(obj.hasOwnProperty('endDatetime')){
+                        endDatetime = params.value.itemData.endDatetime;
+                    }
+                    if(obj.hasOwnProperty('leaveType')){
+                        leaveType = params.value.itemData.leaveType;
+                    }
+                    if(obj.hasOwnProperty('leaveOff')){
+                        leaveOff = params.value.itemData.leaveOff;
+                    }
+                    if(obj.hasOwnProperty('agentName')){
+                        agentName = params.value.itemData.agentName;
+                    }
+                    if(obj.hasOwnProperty('file')){
+                        files = params.value.itemData.file;
+                    }
+                    if(obj.hasOwnProperty('imcomeproveMonth')){
+                        imcomeproveMonth = params.value.itemData.imcomeproveMonth;
+                    }
+
                 }
                 if(objData.hasOwnProperty('baseStatus')){
                     baseStatus=params.value.baseStatus;
@@ -199,23 +349,24 @@ export class OaApplyFormDetail extends React.Component {
             id:id,
             description:description,
             type:type,  //0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
-            agentCode:'',
-            createDatetime:'',
+            agentCode:agentCode,
+            createDatetime:createDatetime,
             status:status, //0 表示正在审批当中了；1表示结束；2驳回 3待签约。
-            startTime:'',
-            endTime:'',
-            endDatetime:'',
-            leaveType:'',
-            leaveOff:'',
+            startTime:startTime,
+            endTime:endTime,
+            endDatetime:endDatetime,
+            leaveType:leaveType,
+            leaveOff:leaveOff,
             title:title,
-            imcomeproveMonth:'',
+            imcomeproveMonth:imcomeproveMonth,
             currentGrade:currentGrade,
             upGrade:upGrade,
             name:name,
-            agentName:'JohnnyZ',
+            agentName:agentName,
             showAgreedAndDismiss:baseStatus,
             showNatationAndAgreed:0,
             processList:[],
+            files:files,
         }
     }
     componentWillMount() {
@@ -324,20 +475,30 @@ export class OaApplyFormDetail extends React.Component {
     render() {
         return (
             <ScrollView style={{backgroundColor:'#F9F9F9',}}>
-                <View style={{backgroundColor:'#FFDD00',height:50,flexDirection: 'row',justifyContent:'flex-start',alignItems:'center',}}>
-                    <View style={{flex:4,paddingLeft:10,}}>
-                        <TouchableWithoutFeedback style={{width:30,height:30,}}  onPress={() => this.props.navigation.goBack()}>
-                            <Image style={{width:11,height:22,}} source={require('../../../img/UserCenter/GoBackBlack.png')}/>
-                        </TouchableWithoutFeedback>
-                    </View>
-                    <Text style={{flex:6,fontSize:22,color:'#000000'}}>
-                        {this.state.type==0?'离职详情':
-                            (this.state.type==1?'请假详情':
-                                (this.state.type==2?'晋升详情':
-                                    (this.state.type==3?'复效详情':'详情')))}
-                    </Text>
-                </View>
 
+                <ApplyCommonHeader title={this.state.type==0?'离职详情':
+                    (this.state.type==1?'请假详情':
+                        (this.state.type==2?'晋升详情':
+                            (this.state.type==3?'复效详情':
+                                (this.state.type==7?'收入证明详情':
+                                    (this.state.type==8?'工作证明详情':'其它证明详情')))))}
+                                   onReturn={() => this.props.navigation.goBack()}/>
+
+                {/*<View style={{backgroundColor:'#FFDD00',height:50,flexDirection: 'row',justifyContent:'flex-start',alignItems:'center',}}>*/}
+                    {/*<View style={{flex:4,paddingLeft:10,}}>*/}
+                        {/*<TouchableWithoutFeedback style={{width:30,height:30,}}  onPress={() => this.props.navigation.goBack()}>*/}
+                            {/*<Image style={{width:11,height:22,}} source={require('../../../img/UserCenter/GoBackBlack.png')}/>*/}
+                        {/*</TouchableWithoutFeedback>*/}
+                    {/*</View>*/}
+                    {/*<Text style={{flex:6,fontSize:22,color:'#000000'}}>*/}
+                        {/*{this.state.type==0?'离职详情':*/}
+                            {/*(this.state.type==1?'请假详情':*/}
+                                {/*(this.state.type==2?'晋升详情':*/}
+                                    {/*(this.state.type==3?'复效详情':*/}
+                                        {/*(this.state.type==7?'收入证明详情':*/}
+                                            {/*(this.state.type==8?'工作证明详情':'其它证明详情')))))}*/}
+                    {/*</Text>*/}
+                {/*</View>*/}
                 <View style={{backgroundColor:'#FFDD00',flexDirection: 'row',alignItems:'center',paddingBottom:20,paddingTop:20}}>
                     <View>
                         <Image style={{marginLeft:20,width: 80, height: 80,borderRadius:40,}} source={require('../../../img/UserCenter/UserImage.jpeg')} />
@@ -362,7 +523,9 @@ export class OaApplyFormDetail extends React.Component {
 
                 {//请假UI
                     (this.state.type==1) && (
-                        <LeaveUI></LeaveUI>
+                        <LeaveUI description={this.state.description} startTime={this.state.startTime} endTime={this.state.endTime}
+                                 leaveOff={this.state.leaveOff} leaveType={this.state.leaveType} files={this.state.files}
+                        ></LeaveUI>
                     )
                 }
 
@@ -374,6 +537,21 @@ export class OaApplyFormDetail extends React.Component {
                 {//复效的UI
                     (this.state.type==3) && (
                         <RevivalUI description={this.state.description} name={this.state.name}></RevivalUI>
+                    )
+                }
+                {//收入证明的UI
+                    (this.state.type==7) && (
+                        <ProofUI description={this.state.description} imcomeproveMonth={this.state.imcomeproveMonth}></ProofUI>
+                    )
+                }
+                {//在职证明的UI
+                    (this.state.type==8) && (
+                        <JobProofUI description={this.state.description}></JobProofUI>
+                    )
+                }
+                {//其他证明的UI
+                    (this.state.type==9) && (
+                        <OtherProofUI description={this.state.description} title={this.state.title}  files={this.state.files}></OtherProofUI>
                     )
                 }
                 <View style={styles.process}>
