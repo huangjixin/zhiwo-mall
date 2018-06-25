@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="cloud-web-manage-1.0">
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/.apt_generated"/>
+        <dependent-module archiveName="cloud-api-system-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/cloud-api-system/cloud-api-system">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="cloud-util-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/cloud-util/cloud-util">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="cloud-api-security-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/cloud-api-security/cloud-api-security">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="FWD-api-personnel-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/FWD-api-personnel/FWD-api-personnel">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="FWD-api-paper-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/FWD-api-paper/FWD-api-paper">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="FWD-api-flow-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/FWD-api-flow/FWD-api-flow">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="FWD-api-material-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/FWD-api-material/FWD-api-material">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="cloud-core-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/cloud-core/cloud-core">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="cloud-lib-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/cloud-lib/cloud-lib">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="FWD-api-plan-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/FWD-api-plan/FWD-api-plan">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="FWD-api-course-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/FWD-api-course/FWD-api-course">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="FWD-api-message-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/FWD-api-message/FWD-api-message">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="FW-api-calendar-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/FW-api-calendar/FW-api-calendar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="FWD-api-webservice-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/FWD-api-webservice/FWD-api-webservice">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="FWD-api-information-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/FWD-api-information/FWD-api-information">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="cloud-web-manage"/>
+        <property name="java-output-path" value="/cloud-web-manage/target/classes"/>
+    </wb-module>
+</project-modules>

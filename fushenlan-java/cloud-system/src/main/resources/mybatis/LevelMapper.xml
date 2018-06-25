@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.LevelMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fulan.api.system.domain.Level">
+        <id column="id" property="id" />
+        <result column="level_name" property="levelName" />
+        <result column="level_type" property="levelType" />
+        <result column="level_code" property="levelCode" />
+         <result column="level_hierarchy" property="levelHierarchy" />
+          <result column="seq" property="seq" />
+        <result column="parent_id" property="parentId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, level_name AS levelName, level_type AS levelType, remark
+    </sql>
+    
+    <select id="selectByAll" resultMap="BaseResultMap">
+         select * from level 
+    </select>
+    
+    
+    <select id="selectByLevelCode" resultMap="BaseResultMap">
+         select * from level where level_code =#{levelCode}
+    </select>
+    
+    
+    <select id="getLevelList" resultMap="BaseResultMap">
+        select id, level_name, level_type ,level_code,level_hierarchy ,seq ,parent_id
+        from level
+    </select>
+
+  <select id="getLevelListDeve" resultMap="BaseResultMap">
+        SELECT  id,level_name,level_type,seq,parent_id,level_code,level_hierarchy  FROM  level where level_type=#{type} order by seq desc
+
+    </select>
+</mapper>

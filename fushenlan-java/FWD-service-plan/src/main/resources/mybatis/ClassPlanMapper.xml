@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.ClassPlanMapper">
+  <resultMap id="BaseResultMap" type="com.fulan.api.plan.domain.ClassPlan" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="group_id" property="groupId" jdbcType="BIGINT" />
+    <result column="tag_id" property="tagId" jdbcType="BIGINT" />
+    <result column="is_training_new" property="isTrainingNew" jdbcType="BIT" />
+    <result column="is_training_agent" property="isTrainingAgent" jdbcType="BIT" />
+    <result column="is_training_staff" property="isTrainingStaff" jdbcType="BIT" />
+    <result column="is_sign" property="isSign" jdbcType="BIT" />
+    <result column="user_limit" property="userLimit" jdbcType="TINYINT" />
+    <result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
+    <result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="is_free" property="isFree" jdbcType="TINYINT" />
+    <result column="exchange_point" property="exchangePoint" jdbcType="SMALLINT" />
+    <result column="is_reward_point" property="isRewardPoint" jdbcType="TINYINT" />
+    <result column="is_reward_certification" property="isRewardCertification" jdbcType="TINYINT" />
+    <result column="is_reward_qualification" property="isRewardQualification" jdbcType="TINYINT" />
+    <result column="reward_point" property="rewardPoint" jdbcType="SMALLINT" />
+    <result column="certification_id" property="certificationId" jdbcType="BIGINT" />
+    <result column="qualification_id" property="qualificationId" jdbcType="BIGINT" />
+    <result column="is_allow_expired" property="isAllowExpired" jdbcType="TINYINT" />
+    <result column="state" property="state" jdbcType="TINYINT" />
+    <result column="is_expired_alarm" property="isExpiredAlarm" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="modify_user" property="modifyUser" jdbcType="BIGINT" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="plan_type" property="planType" jdbcType="BIT" />
+    <result column="open_range" property="openRange" jdbcType="BIT" />
+    <result column="is_seq" property="isSeq" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, code, description, group_id, tag_id, is_training_new, is_training_agent, 
+    is_training_staff, is_sign, user_limit, start_date, end_date, is_free, exchange_point, 
+    is_reward_point, is_reward_certification, is_reward_qualification, reward_point, 
+    certification_id, qualification_id, is_allow_expired, state, is_expired_alarm, create_user, 
+    gmt_create, modify_user, gmt_modified, plan_type, open_range, is_seq
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  	</sql>
+	<select id="classPlanFM" resultType="com.fulan.api.plan.vo.ClassPlanVo">
+		select ecp.id ,ecp.code ,ecp.name ,
+		ecp.group_id as groupId ,ecp.tag_id as tagId ,ecp.state ,
+		   (SELECT count(*) FROM el_plan_course WHERE plan_id = ecp.id AND course_type = 5) as classNum,
+			ecp.start_date as startDate ,ecp.end_date as endDate 
+			from el_class_plan ecp
+			where 1=1
+			<if test="code != null and code != ''">
+				and ecp.code like CONCAT(CONCAT('%', #{code,jdbcType=VARCHAR}),'%')
+			</if>
+			<if test="name != null and name != ''">
+				and ecp.name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}),'%')
+			</if>
+			<if test="tagId != null and tagId != ''">
+				and ecp.tag_id = #{tagId}
+			</if>
+	</select>
+	<select id="classPlanFMCount" resultType="Integer">
+		select count(*)
+			from el_class_plan ecp
+			where 1=1
+			<if test="code != null and code != ''">
+				and ecp.code like CONCAT(CONCAT('%', #{code,jdbcType=VARCHAR}),'%')
+			</if>
+			<if test="name != null and name != ''">
+				and ecp.name like  CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}),'%')
+			</if>
+			<if test="tagId != null and tagId != ''">
+				and ecp.tag_id = #{tagId}
+			</if>
+	</select>
+	<select id="searchClassPlan" resultType="com.fulan.api.plan.vo.ClassPlanDto" parameterType="java.util.Map">
+		SELECT cp.id, cp.name, cp.code, cp.description,
+		cp.group_id AS groupId, cp.tag_id AS tagId, cp.is_training_new AS isTrainingNew,
+		cp.is_training_agent AS isTrainingAgent, cp.is_training_staff AS isTrainingStaff, cp.is_sign AS isSign,
+		cp.user_limit AS userLimit, cp.start_date AS startDate, cp.end_date AS endDate, cp.is_free AS isFree,
+		cp.exchange_point AS exchangePoint, cp.is_reward_point AS isRewardPoint, cp.is_reward_certification AS isRewardCertification,
+		cp.is_reward_qualification AS isRewardQualification, cp.reward_point AS rewardPoint,
+		cp.certification_id AS certificationId, cp.qualification_id AS qualificationId,
+		cp.is_allow_expired AS isAllowExpired, cp.state, cp.is_expired_alarm AS isExpiredAlarm,
+		cp.create_user AS createUser, cp.gmt_create AS gmtCreate, cp.modify_user AS modifyUser,
+		cp.gmt_modified AS gmtModified,if(cpee.enterNum IS NULL,0,cpee.enterNum) AS enterNum
+		<if test="userId != null and userId != ''">
+		,if(cpeee.enterFlag IS NULL,0,cpeee.enterFlag) AS enterFlag
+		</if>
+		FROM el_class_plan cp
+		LEFT JOIN (SELECT count(cpe.id) AS enterNum,cpe.plan_id
+		FROM el_class_plan_enter cpe
+		GROUP BY plan_id
+		) cpee
+		ON cpee.plan_id = cp.id
+		<if test="userId != null and userId != ''">
+		LEFT JOIN (SELECT count( cpe.id ) AS enterFlag, cpe.plan_id
+		FROM el_class_plan_enter cpe
+		WHERE user_id = #{userId}) cpeee
+		ON cpeee.plan_id = cp.id
+		</if>
+		where 1=1
+		<if test="isTrainingNew != null and isTrainingNew != ''">
+			AND cp.is_training_new=#{isTrainingNew}
+		</if>
+		<if test="state != null and state != ''">
+			AND cp.state=#{state}
+		</if>
+        <if test="isRecruit !=null and isRecruit !=''">
+            <if test="userId != null and userId != ''">
+                AND (cpeee.enterFlag is null or cpeee.enterFlag=0)
+            </if>
+        <![CDATA[ AND (cpee.enterNum is null or cpee.enterNum<cp.user_limit)
+            AND cp.start_date >NOW() ]]>
+        </if>
+		ORDER BY cp.gmt_modified DESC
+	</select>
+	<select id="selePlanCourseById" resultType="com.fulan.api.plan.vo.PlanCourseVo">
+		select epc.id as id , epc.plan_id as planId ,epc.course_type as courseType,epc.associate_id as associateId,
+		epc.associate_type as associateType,epc.is_compulsory as isCompulsory,epc.stage as stage,epc.seq as seq,
+		epc.start_time as startTime,epc.end_time as endTime,epc.sign_address as signAddress
+		from el_class_plan ecp
+		left join el_plan_course epc 
+		on ecp.id = epc.plan_id 
+		left join el_course ec 
+		on epc.associate_id = ec.id
+		where ecp.id = #{id}
+	</select> 
+	<select id="seleCourseById" resultType="com.fulan.api.course.domain.Course" >
+		select ec.id as id, ec.name as name, ec.description as description,ec.type as type
+		from el_course
+	</select>
+	<resultMap id="BaseResultMapVo" type="com.fulan.api.plan.vo.ClassPlanFwVo">
+		<result column="stage" property="stage"/>
+		<collection column="{planId=id,stage=stage}" property="planCourseDtoFMVo" select="com.fulan.application.mapper.PlanCourseMapper.seleByPlanIdAndstage" fetchType="eager"></collection>
+	</resultMap>
+	<select id="seleStageById" resultMap="BaseResultMapVo">
+		<![CDATA[select ecp.id as id,epc.stage as stage
+		from el_class_plan ecp 
+		left join el_plan_course epc
+		on ecp.id = epc.plan_id
+		where ecp.id = #{id} 
+		and epc.course_type = 5 
+		group by epc.stage 
+		]]>
+	</select>
+	<insert id="insertSelective" parameterType="com.fulan.api.plan.domain.ClassPlan" >
+    insert into el_class_plan
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="groupId != null" >
+        group_id,
+      </if>
+      <if test="tagId != null" >
+        tag_id,
+      </if>
+      <if test="isTrainingNew != null" >
+        is_training_new,
+      </if>
+      <if test="isTrainingAgent != null" >
+        is_training_agent,
+      </if>
+      <if test="isTrainingStaff != null" >
+        is_training_staff,
+      </if>
+      <if test="isSign != null" >
+        is_sign,
+      </if>
+      <if test="userLimit != null" >
+        user_limit,
+      </if>
+      <if test="startDate != null" >
+        start_date,
+      </if>
+      <if test="endDate != null" >
+        end_date,
+      </if>
+      <if test="isFree != null" >
+        is_free,
+      </if>
+      <if test="exchangePoint != null" >
+        exchange_point,
+      </if>
+      <if test="isRewardPoint != null" >
+        is_reward_point,
+      </if>
+      <if test="isRewardCertification != null" >
+        is_reward_certification,
+      </if>
+      <if test="isRewardQualification != null" >
+        is_reward_qualification,
+      </if>
+      <if test="rewardPoint != null" >
+        reward_point,
+      </if>
+      <if test="certificationId != null" >
+        certification_id,
+      </if>
+      <if test="qualificationId != null" >
+        qualification_id,
+      </if>
+      <if test="isAllowExpired != null" >
+        is_allow_expired,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="isExpiredAlarm != null" >
+        is_expired_alarm,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="modifyUser != null" >
+        modify_user,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+      <if test="planType != null" >
+        plan_type,
+      </if>
+      <if test="openRange != null" >
+        open_range,
+      </if>
+      <if test="isSeq != null" >
+        is_seq,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null" >
+        #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="tagId != null" >
+        #{tagId,jdbcType=BIGINT},
+      </if>
+      <if test="isTrainingNew != null" >
+        #{isTrainingNew,jdbcType=BIT},
+      </if>
+      <if test="isTrainingAgent != null" >
+        #{isTrainingAgent,jdbcType=BIT},
+      </if>
+      <if test="isTrainingStaff != null" >
+        #{isTrainingStaff,jdbcType=BIT},
+      </if>
+      <if test="isSign != null" >
+        #{isSign,jdbcType=BIT},
+      </if>
+      <if test="userLimit != null" >
+        #{userLimit,jdbcType=TINYINT},
+      </if>
+      <if test="startDate != null" >
+        #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isFree != null" >
+        #{isFree,jdbcType=TINYINT},
+      </if>
+      <if test="exchangePoint != null" >
+        #{exchangePoint,jdbcType=SMALLINT},
+      </if>
+      <if test="isRewardPoint != null" >
+        #{isRewardPoint,jdbcType=TINYINT},
+      </if>
+      <if test="isRewardCertification != null" >
+        #{isRewardCertification,jdbcType=TINYINT},
+      </if>
+      <if test="isRewardQualification != null" >
+        #{isRewardQualification,jdbcType=TINYINT},
+      </if>
+      <if test="rewardPoint != null" >
+        #{rewardPoint,jdbcType=SMALLINT},
+      </if>
+      <if test="certificationId != null" >
+        #{certificationId,jdbcType=BIGINT},
+      </if>
+      <if test="qualificationId != null" >
+        #{qualificationId,jdbcType=BIGINT},
+      </if>
+      <if test="isAllowExpired != null" >
+        #{isAllowExpired,jdbcType=TINYINT},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=TINYINT},
+      </if>
+      <if test="isExpiredAlarm != null" >
+        #{isExpiredAlarm,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUser != null" >
+        #{modifyUser,jdbcType=BIGINT},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="planType != null" >
+        #{planType,jdbcType=BIT},
+      </if>
+      <if test="openRange != null" >
+        #{openRange,jdbcType=BIT},
+      </if>
+      <if test="isSeq != null" >
+        #{isSeq,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update el_class_plan
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.code != null" >
+        code = #{record.code,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null" >
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.groupId != null" >
+        group_id = #{record.groupId,jdbcType=BIGINT},
+      </if>
+      <if test="record.tagId != null" >
+        tag_id = #{record.tagId,jdbcType=BIGINT},
+      </if>
+      <if test="record.isTrainingNew != null" >
+        is_training_new = #{record.isTrainingNew,jdbcType=BIT},
+      </if>
+      <if test="record.isTrainingAgent != null" >
+        is_training_agent = #{record.isTrainingAgent,jdbcType=BIT},
+      </if>
+      <if test="record.isTrainingStaff != null" >
+        is_training_staff = #{record.isTrainingStaff,jdbcType=BIT},
+      </if>
+      <if test="record.isSign != null" >
+        is_sign = #{record.isSign,jdbcType=BIT},
+      </if>
+      <if test="record.userLimit != null" >
+        user_limit = #{record.userLimit,jdbcType=TINYINT},
+      </if>
+      <if test="record.startDate != null" >
+        start_date = #{record.startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endDate != null" >
+        end_date = #{record.endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isFree != null" >
+        is_free = #{record.isFree,jdbcType=TINYINT},
+      </if>
+      <if test="record.exchangePoint != null" >
+        exchange_point = #{record.exchangePoint,jdbcType=SMALLINT},
+      </if>
+      <if test="record.isRewardPoint != null" >
+        is_reward_point = #{record.isRewardPoint,jdbcType=TINYINT},
+      </if>
+      <if test="record.isRewardCertification != null" >
+        is_reward_certification = #{record.isRewardCertification,jdbcType=TINYINT},
+      </if>
+      <if test="record.isRewardQualification != null" >
+        is_reward_qualification = #{record.isRewardQualification,jdbcType=TINYINT},
+      </if>
+      <if test="record.rewardPoint != null" >
+        reward_point = #{record.rewardPoint,jdbcType=SMALLINT},
+      </if>
+      <if test="record.certificationId != null" >
+        certification_id = #{record.certificationId,jdbcType=BIGINT},
+      </if>
+      <if test="record.qualificationId != null" >
+        qualification_id = #{record.qualificationId,jdbcType=BIGINT},
+      </if>
+      <if test="record.isAllowExpired != null" >
+        is_allow_expired = #{record.isAllowExpired,jdbcType=TINYINT},
+      </if>
+      <if test="record.state != null" >
+        state = #{record.state,jdbcType=TINYINT},
+      </if>
+      <if test="record.isExpiredAlarm != null" >
+        is_expired_alarm = #{record.isExpiredAlarm,jdbcType=TINYINT},
+      </if>
+      <if test="record.createUser != null" >
+        create_user = #{record.createUser,jdbcType=BIGINT},
+      </if>
+      <if test="record.gmtCreate != null" >
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifyUser != null" >
+        modify_user = #{record.modifyUser,jdbcType=BIGINT},
+      </if>
+      <if test="record.gmtModified != null" >
+        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.planType != null" >
+        plan_type = #{record.planType,jdbcType=BIT},
+      </if>
+      <if test="record.openRange != null" >
+        open_range = #{record.openRange,jdbcType=BIT},
+      </if>
+      <if test="record.isSeq != null" >
+        is_seq = #{record.isSeq,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <select id="selectByIdFW" resultMap="BaseResultMap">
+  	select * from el_class_plan where id = #{id,jdbcType=BIGINT}
+  </select>
+	<select id="findClassPlanDetailById" parameterType="java.lang.Long" resultMap="BaseResultMap" >
+		select * from el_class_plan where id=#{id}
+	</select>
+</mapper>

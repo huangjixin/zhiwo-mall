@@ -1,0 +1,111 @@
+.paper-type {
+    width: 100%;
+    background-color: #EEEEEE;
+    padding: 0 16px 20px;
+}
+.paper-type-content {
+    width: 100%;
+    padding: 24px 36px;
+}
+.subject-list {
+    width: 100%;
+}
+.subject-list .subject-item {
+    width: 100%;
+    margin-bottom: 20px;
+}
+.subject-list .subject-item .item-title {
+    width: 100%;
+    color: #333333;
+}
+.subject-list .subject-item .item-setting {
+    position: relative;
+    width: 100%;
+    margin: 15px 0 12px;
+    height: 40px;
+}
+.total-points {
+    font-size: 14px;
+    color: #575756; 
+    margin-right: 10px;
+}
+.need-nowrap {
+    display: inline-block;
+    width: auto;
+    margin-left: 20px;
+}
+.integral {
+    font-size: 12px;
+    color: #8F8F8F;
+    margin-left: 8px;
+}
+.about-topic {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.about-topic button {
+    width: 86px;
+    height: 28px;
+    line-height: 28px;
+    font-size: 12px;
+    color: #575756;
+    background-color: #FAFAFA;
+    border: 1px solid #E4E4E4;
+    border-radius: 5px;
+}
+.about-topic button i, .about-topic button span {
+    display: inline-block;
+    vertical-align: middle;
+}
+.about-topic .add-topic {
+    background-color: #06B08E;
+}
+.about-topic .select-topic {
+    background-color: #0097A9;
+}
+.active i, .active span {
+    color: #FFFFFF;
+}
+.about-topic button .btn-icon {
+    margin-right: 5px;
+}
+.item-table {
+    width: 100%;
+}
+.item-table .table-header, .item-table .table-item {
+    width: 100%;
+    border: 1px solid #DEDEDE;
+    font-size: 14px;
+}
+.item-table .table-header {
+    padding: 12px 0;
+}
+
+.item-table .table-item {
+    padding: 15px 0;
+}
+.item-table .table-header, .item-table .table-item {
+    display: flex;
+}
+.item-table .table-body {
+    width: 100%;
+}
+.item-table .table-body .table-item:nth-child(even) {
+    background-color: #FCFCFC;
+}
+.item-table .table-header p, .item-table .table-item p {
+    width: 20%;
+    text-align: center;
+}
+.item-table .table-header p:first-child, .item-table .table-item p:first-child {
+    width: 60%;
+    text-align: left;
+    text-indent: 20px
+}
+.item-table .table-header {
+    background-color: #F4F4F4;
+}
+.item-table .table-item {
+    border-top: none;
+}

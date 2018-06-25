@@ -1,0 +1,51 @@
+{
+    "message": "查询保单详情",
+    "code": "1",
+    "data": {
+        "policy": {
+            "policyID": "u33333333",
+            "policyStatus": "核保中",
+            "policyName": "C花开富贵年金保险（分红型）",
+            "policyDate": "2012,8,1-2017,8,1"
+        },
+        "customer": {
+            "applicant": "刘德华",
+            "recognizee": "郭富城",
+            "Beneficiary": "法定"
+        },
+        "productExt": {
+            "list": [
+                {
+                    "policyName": "全佑一生（倍呵护）重大疾病保险",
+                    "policyDetail": "首次第二类重大疾病基础保障,第二次第二类重大疾病基础保障,第三次第二类重大疾病基础保障"
+                },
+                {
+                    "policyName": "五合一”儿童豁免保险费疾病保险",
+                    "policyDetail": "身故豁免保险费,全残豁免保险费,重大疾病豁免保险费,疾病终末期状态豁免保险费,老年长期护理豁免保险费"
+                }
+            ]
+        },
+        "payment": {
+            "cardGenre": "工商银行",
+            "cardNumber": "131234516412312",
+            "cardName": "张三"
+        },
+        "Interest": [
+            {
+                "policyName": "身故保险金",
+                "money": "200000000000",
+                "status": "已支付"
+            },
+            {
+                "policyName": "全残保险金",
+                "money": "2000000000",
+                "status": ""
+            },
+            {
+                "policyName": "累计红利",
+                "money": "2000000000",
+                "status": "已支付"
+            }
+        ]
+    }
+}

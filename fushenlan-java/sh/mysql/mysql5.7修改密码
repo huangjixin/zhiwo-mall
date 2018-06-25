@@ -1,0 +1,7 @@
+通过登录mysql系统，
+mysql -uroot -pBHU*9ol.
+
+mysql> use mysql;
+mysql> update user set authentication_string=PASSWORD('CSpa2s_acmp') where User='root';
+mysql> flush privileges;
+mysql> exit;      

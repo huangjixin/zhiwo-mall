@@ -1,0 +1,30 @@
+{{~it:value:index}}
+<div class="list-item" data-id="{{=value.personnel.id}}">
+    <div class="item-portrait">
+        <img src="{{=value.picUrl ? value.picUrl : '../../images/client.png'}}" alt="">
+    </div>
+    <div class="item-info">
+        <h1 class="personnel-name">{{=value.personnel.name ? value.personnel.name : ''}}</h1>
+        <div class="personnel-info">
+            <i class="icon-users"></i>
+            <span class="personnel-sex">{{=value.personnel.sex ==='M' ? '男' : value.personnel.sex ==='F' ? '女' : '男'}}</span>
+            <span class="personnel-age">{{=value.personnel.age ?value.personnel.age : 0}}岁</span>
+            <i class="icon-iconorderdetailscellphone self-cellphone"></i>
+            <span class="personnel-phone">{{=value.personnel.cellphone || ''}}</span>
+        </div>
+           <div class="item-lable">
+	            <div class="single-label">
+	            	 {{?value.tagList.length > 0}}
+			                {{~value.tagList:item:key}}
+			                    <span>{{=item.tagName}}</span>
+			                {{~}}
+	                  {{?}}
+	                
+	            </div>
+	            <div class="initiate">
+	                <button type="button" class="initiate-btn">发起招募</button>
+	            </div>
+            </div>
+    </div>
+</div>
+{{~}}

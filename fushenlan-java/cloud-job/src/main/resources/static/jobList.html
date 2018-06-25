@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Job任务列表</title>
+<link rel="stylesheet" type="text/css" href="/static/jquery-easyui-1.3.3/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="/static/jquery-easyui-1.3.3/themes/icon.css">
+<script type="text/javascript" src="/static/jquery-easyui-1.3.3/jquery.min.js"></script>
+<script type="text/javascript" src="/static/jquery-easyui-1.3.3/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/static/jquery-easyui-1.3.3/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="/static/js/jquery-form.js"></script>
+
+
+<style>
+.tb_tr_header{background-color:#d31135; height:24px; color:#fff;}
+.tb_tr_header td{ border-right:1px solid #fff;}
+.table_red { text-align:center !important; background: #0058BC!important; color: #FFF!important; font-weight:normal!important; }
+.tb_tr_content td{border-right:1px solid #ccc; border-bottom:1px solid #ccc;}
+.tb_tr_content_font{ text-align:left;border-bottom:0px; border-right:1px solid #ccc; line-height:18px; padding:5px;}
+.tb_tr_content span{ padding:0px 4px;}
+</style>
+
+<script type="text/javascript">
+function changeType(type){
+	  $("#type").val(type);
+}
+
+</script>
+</head>
+<body>
+	<!--内页主体结构开始 -->
+	<div id="sear" class="easyui-panel" title="任务清单" style="padding: 10px">
+	<div style="width: 99.5%;">
+	<div class="" style=" width:100%; margin:0 auto;">
+		<h2>任务列表：</h2>
+		<div id="con2" style="width: 100%;">
+			<div id="tagContent" style="height: auto; width: 100%; padding-bottom: 30px;">
+				<div>
+				  <a style="font-size:16px;text-align: center;" href="/scheduleman/list" class="easyui-linkbutton" iconCls="icon-refresh" plain="true">刷新任务清单</a>
+				</div>
+				
+				<div class="" id="tagContent0">
+					<form id="searchForm" action="/scheduleman/list.do" method="get">
+						<table cellpadding="0" cellspacing="0" style="margin: 10px 0px 10px 0px;">
+							<tr>
+								<td>任务名：</td>
+								<td><input type="text" class="text" name="queryJobName"
+									id="queryJobName" value="${queryJobName!}" />
+								</td>
+								<td width="10px"></td>
+								<td>
+									<input  style="background-color:#0058BC;color:#fff;cursor:pointer; " type="submit" value="查 询" class="button_bg2" />
+									<input  style="background-color:#0058BC;color:#fff;cursor:pointer; " type="button" value="添加" 
+										onclick="window.location='/scheduleman/showadd'" class="button_bg2" />
+								</td>
+							</tr>
+						</table>
+					</form>
+					<form method='post' action="scheduleman/pauseOrRunAllJobs.do?queryJobName=${queryJobName!}">
+					<div style="width:100%; overflow-x:auto;*padding-bottom:18px;*overflow-y:hidden;">
+						<table  class=""  border="0" align="center" cellpadding="2"	cellspacing="2"  style=" width:100%; margin:0 auto; border:1px solid #D2D2D2;">
+						<tr style="height:70px;">
+							<td style="text-align: left; height:45px; display:none;" colspan="2"><span class="fl">&nbsp;&nbsp;
+							</td>
+							<td style="font-size:18px;font-weight:bold; " colspan="6">&nbsp;&nbsp;总共查询出<span
+								style="color:red;" >${count!}</span>条数据，正在执行的任务<span style="color:red;">${executingJobCount!}</span>个。&nbsp;&nbsp;</td>
+						</tr>
+						<tr class="tb_tr_header">
+							<td class="table_red">序号 </td>
+							<td class="table_red">名称</td>
+							<td class="table_red">类名</td>
+							<td class="table_red">参数</td>
+							<td class="table_red">触发器状态</td>
+							<td class="table_red">相关操作</td>
+						</tr>
+						<#list jobList as jobInfoMap>
+						<tr class="tb_tr_content">
+							<td>${jobInfoMap_index+1}</td>
+							<td>${jobInfoMap.jobDetail.key}</td>
+							<td>${jobInfoMap.jobDetail.jobClass}<br>
+								${jobInfoMap.crondesc}<br>
+							     上次：${jobInfoMap.preFire}
+							     下次：${jobInfoMap.nextFire}
+							</td>
+							<td>
+								 <#assign  keys=jobInfoMap.jobDetail.jobDataMap?keys/>
+								 <#list keys as key>
+								    ${key}=jobInfoMap.jobDetail.jobDataMap["${key}"]
+								 </#list>
+							</td>
+							<td>
+								${jobInfoMap.isRunning} 
+							</td>
+							<td>
+								<span style=" display:block; width:120px;">
+									<a href="/scheduleman/interruptJob?jobKey=${jobInfoMap.jobDetail.key}&queryJobName=${queryJobName!}"
+										onclick="return confirm('您确定要中止此任务执行么?');" class="easyui-linkbutton" iconCls="icon-redo" plain="true">中止</a> 
+									<a href="/scheduleman/executeOnce?jobKey=${jobInfoMap.jobDetail.key}&queryJobName=${queryJobName!}"
+										onclick="return confirm('您确定要执行一次此任务么?');"  class="easyui-linkbutton" iconCls="icon-reload" plain="true">执行</a> 
+									<a href="/scheduleman/showEditJob?jobKey=${jobInfoMap.jobDetail.key}&queryJobName=${queryJobName!}" 
+										class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a>
+									<a class="easyui-linkbutton" iconCls="icon-cancel" plain="true"  href="/scheduleman/deleteJob?jobKey=${jobInfoMap.jobDetail.key}&queryJobName=${queryJobName!}"
+										onclick="return confirm('您确定要删除此任务么?');">删除</a>
+								</span>
+							</td>
+						</tr>
+						</#list>
+					</table>
+					</div>
+					<input type="hidden" name="type" id="type" />
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	</div>
+</body>
+</html> 

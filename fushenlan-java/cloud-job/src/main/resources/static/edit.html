@@ -1,0 +1,235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html decorator="null">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>修改计划任务</title>
+<link rel="stylesheet" type="text/css" href="/static/jquery-easyui-1.3.3/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="/static/jquery-easyui-1.3.3/themes/icon.css">
+<script type="text/javascript" src="/static/jquery-easyui-1.3.3/jquery.min.js"></script>
+<script type="text/javascript" src="/static/jquery-easyui-1.3.3/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/static/jquery-easyui-1.3.3/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="/static/js/jquery-form.js"></script>
+
+<script type="text/javascript">
+$(function(){
+	$('#saveForm').ajaxForm(function(msg){
+		if(msg.success == "1"){
+			alert(msg.msg);
+			window.location.href="/scheduleman/list.do?time="+new Date;
+		}else{
+	    }
+	});
+});
+
+function  backList(){
+	window.location.href="/scheduleman/list.do?time="+new Date;
+}
+	function displayFields(){
+		var triggerType = $("input[name='triggerType']:checked").val();
+		if (triggerType == 1) {
+			$("#simpleTriggerTable").show();
+			$("#cronTriggerTable").hide();
+		} else if (triggerType == 2){
+			$("#simpleTriggerTable").hide();
+			$("#cronTriggerTable").show();
+		}else{
+			$("#simpleTriggerTable").hide();
+			$("#cronTriggerTable").hide();
+		}
+	}
+	$(document).ready(
+	function(){				
+		$("#submitButton").click(function(){
+			triggerType = $("input[name='triggerType']:checked").val();
+			rate=$.trim($("#rate").val());
+			times=$.trim($("#times").val());
+			secondField=$.trim($("#secondField").val());
+			minutesField=$.trim($("#minutesField").val());
+			hourField=$.trim($("#hourField").val());
+			dayField=$.trim($("#dayField").val());
+			monthField=$.trim($("#monthField").val());
+			weekField=$.trim($("#weekField").val());
+			yearField=$.trim($("#yearField").val());
+			if(triggerType==1){
+				if(!rate){
+					alert("请填写执行频率!");
+					return false;
+				}
+				if(!/^(\-?)(\d+)$/.test(rate)){
+					 alert("频率请填写数字!");
+					 return false;
+				}
+				if(!times){
+					alert("请填写执行次数");
+					return false;
+				}
+				if(!/^(\-?)(\d+)$/.test(times)){
+					 alert("执行次数请填写数字!");
+					 return false;
+				}
+			}
+			if(triggerType==2){
+				if(!secondField){
+					alert("请填写秒字段!");
+					return false;
+				}
+				if(!minutesField){
+					alert("请填写分字段!");
+					return false;
+				}
+				if(!hourField){
+					alert("请填写小时字段!");
+					return false;			
+				}
+				if(!dayField){
+					alert("请填写日字段!");
+					return false;
+				}
+				if(!monthField){
+					alert("请填写月字段!");
+					return false;
+				}
+				if(!weekField){
+					alert("请填写周字段!");
+					return false;
+				}
+				if (!yearField) {
+					alert("请填写年字段!");
+					return false;
+				}
+			}
+			return true;
+		});
+		displayFields();
+	});
+</script>
+</head>
+<body>
+	<div id="update" class="easyui-panel" title="任务清单" style="padding: 10px">
+		<form id="saveForm" action="/scheduleman/editJob" method="post">
+			<input type="hidden" name="jobKey" value="${jobDetail.key!}" /> 
+			<input type="hidden" name="queryJobName" value="${queryJobName!}" />
+			<table cellpadding="0" cellspacing="0"
+				style="width: 100%; line-height: 28px; margin-top: 0px;">
+				<tr>
+					<td colspan="2" height="10px" class="red1"><b>请注意：</b>任务名称、任务组可使用中文命名，任务参数可为空，参数名请使用英文字符和数字，参数值可以为中文，任务描述可以为中文。</td>
+				</tr>
+				<tr>
+					<td class="text_right">组名称：</td>
+					<td>
+						<span id="groupSpan" style="display: block;"> 
+							<select id="jobGroup" name="jobGroup">
+							 <#list jobGroups as group>
+							 	 <option value="${group}">${group}</option>
+							 </#list>
+							</select>
+						</span> 
+					</td>
+				</tr>
+				<tr>
+					<td class="text_right">任务名称：</td>
+					<td>
+						<input id="jobName"  style="width:400px;" name="jobName" type="text" disabled=disabled
+						 value="${jobDetail.key.name!}" class="text_wd400" />
+					 </td>
+				</tr>
+				<tr>
+					<td class="text_right">任务class：</td>
+					<td><input type="text"  style="width:400px;" id="jobClassName"
+					 value="${jobDetail.jobClass.name!}" disabled=disabled
+						name="jobClassName" value="" /> 
+					</td>
+				</tr>
+				<tr>
+					<td class="text_right">任务参数：</td>
+					<td>
+					 	<table id="paramsTable">
+					 	<#assign  keys=jobDetail.jobDataMap?keys/>
+					 	<#list keys as key>
+					 		<tr>
+								<td><input type="text" name="argsNames" value="${key}"  class="input1 in_w_5" disabled=disabled /></td>
+								<td><input type="text" name="argsValues" value="jobDetail.jobDataMap["${key}"]"   class="input1 in_w_5" disabled=disabled /></td>							
+							</tr>
+					 	</#list>
+					 	 </table>
+					</td>
+				</tr>
+				<tr>
+					<td class="text_right">触发器设置：</td>
+					<td>
+						<input type="radio" name="triggerType" value="2" 
+						onclick="displayFields();" class="radio" />&nbsp;cron表达式触发器
+						<input type="radio" name="triggerType" value="3" checked
+						onclick="displayFields();" class="radio" />&nbsp;手动触发
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<table id="simpleTriggerTable" style="display: block;">
+							<tr>
+								<td></td>
+								<td>执行频率：<input type="text" class="text" id="rate"
+									name="rate" />&nbsp;分钟执行一次</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>执行次数：<input type="text" class="text" id="times"
+									name="times" />&nbsp;次(-1表示永远执行下去)</td>
+							</tr>
+						</table>
+						<table id="cronTriggerTable" style="display: none;">
+							<tr>
+								<td></td>
+								<td>秒：<input type="text" class="text" id="secondField"
+									name="secondField" value="0" />  允许输入字符：0-59 , - * /</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>分：<input type="text" class="text" id="minutesField"
+									name="minutesField" value="*" /> 允许输入字符：0-59 , - * /</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>时：<input type="text" class="text" id="hourField"
+									name="hourField" value="*" /> 允许输入字符： 0-23 , - * /</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>日：<input type="text" class="text" id="dayField"
+									name="dayField" value="*" /> 允许输入字符： 1-31 , - * ? </td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>月：<input type="text" class="text" id="monthField"
+									name="monthField" value="*" /> 允许输入字符： 1-12 , - * ? /</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>周：<input type="text" id="weekField" name="weekField"
+									class="text" value="?" /> 允许输入字符： 1-7 , - * ? /</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>年：<input type="text" id="yearField" name="yearField"
+									class="text" value="*" /> 允许输入字符： 1970－2099 , - * ? /</td>
+							</tr>
+						</table></td>
+				</tr>
+				<tr>
+					<td colspan="2" height="10px"></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input type="submit" value="提 交" id="submitButton"
+						class="search_btn" />
+					</td>
+				</tr>
+			</table>
+		</form>
+		<div style="margin-left:400px;">
+			<a  href="javascript:backList()" class="easyui-linkbutton" iconCls="icon-redo" plain="true">返回</a>
+        </div>  
+	</div>
+</body>
+</html>

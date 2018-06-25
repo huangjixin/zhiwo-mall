@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.PaperMapper">
+  <resultMap id="BaseResultMap" type="com.fulan.api.paper.domain.er.Paper">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="paper_name" jdbcType="VARCHAR" property="paperName" />
+    <result column="paper_type" jdbcType="INTEGER" property="paperType" />
+    <result column="paper_desc" jdbcType="VARCHAR" property="paperDesc" />
+    <result column="org_id" jdbcType="VARCHAR" property="orgId" />
+    <result column="head_flag" jdbcType="VARCHAR" property="headFlag" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="create_time" jdbcType="DATE" property="createTime" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="update_time" jdbcType="DATE" property="updateTime" />
+    <result column="update_user" jdbcType="BIGINT" property="updateUser" />
+  </resultMap>
+  
+   <resultMap id="BaseResultMap2" type="com.fulan.api.paper.vo.PaperPVo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="paper_name" jdbcType="VARCHAR" property="paperName" />
+    <result column="paper_type" jdbcType="INTEGER" property="paperType" />
+    <result column="paper_desc" jdbcType="VARCHAR" property="paperDesc" />
+    <result column="org_id" jdbcType="VARCHAR" property="orgId" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="create_time" jdbcType="DATE" property="createTime" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="update_time" jdbcType="DATE" property="updateTime" />
+    <result column="update_user" jdbcType="BIGINT" property="updateUser" />
+    <result column="evaluate" jdbcType="INTEGER" property="evaluate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, paper_name, paper_type, paper_desc, org_id, head_flag, seq, create_time, create_user, update_time, 
+    update_user
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from er_paper
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from er_paper
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.fulan.api.paper.domain.er.Paper">
+    insert into er_paper (id, paper_name, paper_type, 
+      paper_desc, org_id, seq, 
+      create_time, create_user, update_time, 
+      update_user)
+    values (#{id,jdbcType=BIGINT}, #{paperName,jdbcType=VARCHAR}, #{paperType,jdbcType=INTEGER}, 
+      #{paperDesc,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{seq,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=DATE}, #{createUser,jdbcType=BIGINT}, #{updateTime,jdbcType=DATE}, 
+      #{updateUser,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fulan.api.paper.domain.er.Paper">
+    insert into er_paper
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="paperName != null">
+        paper_name,
+      </if>
+      <if test="paperType != null">
+        paper_type,
+      </if>
+      <if test="paperDesc != null">
+        paper_desc,
+      </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="seq != null">
+        seq,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="paperName != null">
+        #{paperName,jdbcType=VARCHAR},
+      </if>
+      <if test="paperType != null">
+        #{paperType,jdbcType=INTEGER},
+      </if>
+      <if test="paperDesc != null">
+        #{paperDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null">
+        #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=DATE},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fulan.api.paper.domain.er.Paper">
+    update er_paper
+    <set>
+      <if test="paperName != null">
+        paper_name = #{paperName,jdbcType=VARCHAR},
+      </if>
+      <if test="paperType != null">
+        paper_type = #{paperType,jdbcType=INTEGER},
+      </if>
+      <if test="paperDesc != null">
+        paper_desc = #{paperDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null">
+        org_id = #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null">
+        seq = #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=DATE},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=DATE},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fulan.api.paper.domain.er.Paper">
+    update er_paper
+    set paper_name = #{paperName,jdbcType=VARCHAR},
+      paper_type = #{paperType,jdbcType=INTEGER},
+      paper_desc = #{paperDesc,jdbcType=VARCHAR},
+      org_id = #{orgId,jdbcType=VARCHAR},
+      seq = #{seq,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=DATE},
+      create_user = #{createUser,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=DATE},
+      update_user = #{updateUser,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+	<select id="paperManageSerch" resultType="com.fulan.api.paper.vo.PaperManageVo" >
+		SELECT a.id AS id,a.paper_Name AS paperName, a.paper_desc AS
+		paperDesc,a.paper_type as paperType,
+		a.org_Id AS orgId, COUNT(b.id) AS paperNum, SUM(b.total_score) AS
+		paperScore
+		FROM er_paper a
+		LEFT JOIN er_paper_item b ON a.id = b.paper_id
+		WHERE 1=1
+		<if test="orgId != null and orgId != ''">
+			and a.org_id LIKE CONCAT(CONCAT('%', #{orgId}),'%')
+			
+		</if>
+		<if test="keyWord != null and keyWord != ''">
+			and a.paper_name LIKE CONCAT(CONCAT('%', #{keyWord}),'%')
+		</if>
+		GROUP BY a.id
+	</select>
+	
+	<select id="paperManageSerchCount" parameterType="java.util.Map" resultType="int">
+	 SELECT count(*)
+		FROM er_paper a
+		WHERE 1=1
+		<if test="orgId != null and orgId != ''">
+			and a.org_id LIKE CONCAT(CONCAT('%', #{orgId}),'%')
+			
+		</if>
+		<if test="keyWord != null and keyWord != ''">
+			and a.paper_name LIKE CONCAT(CONCAT('%', #{keyWord}),'%')
+		</if>
+   </select>
+	
+	<resultMap id="PaperVoMap" type="com.fulan.api.paper.vo.PaperVo" >
+		<collection property="paper" ofType="com.fulan.api.paper.domain.er.Paper" select="com.fulan.application.mapper.PaperMapper.selectByMap" column="id"></collection>
+		<collection property="paperItemVo" ofType="com.fulan.api.paper.vo.PaperItemVo" select="com.fulan.application.mapper.PaperItemMapper.selectByPaperId" column="id"></collection>
+	</resultMap>
+	
+	<resultMap id="PaperVoMap2" type="com.fulan.api.paper.vo.PaperTempVo" >
+		<collection property="paperPVo" ofType="com.fulan.api.paper.vo.PaperPVo" select="com.fulan.application.mapper.PaperMapper.selectByMap2" column="{id=id,personnelId=personnelId}"></collection>
+		<collection property="paperItemVo" ofType="com.fulan.api.paper.vo.PaperItemVo" select="com.fulan.application.mapper.PaperItemMapper.selectByPaperId2" column="{id=id,personnelId=personnelId}"></collection>
+	</resultMap>
+	
+	<select id="paperCheckById" resultMap="PaperVoMap" parameterType="com.fulan.api.paper.domain.er.Paper">
+		select 
+   		id   from er_paper
+   		 where  1=1
+   		 <if test="id != null and id !=''">
+   		 	and id = #{id,jdbcType=BIGINT}
+   		 </if>
+   		 <if test="paperType != null and paperType !=''">
+   			 and paper_type = #{paperType} and head_flag = 'Y'
+   		 </if>
+	</select>
+	<delete id="deletePaperVo">
+		DELETE er_paper,er_paper_item_info,er_paper_item
+		FROM er_paper
+		LEFT JOIN er_paper_item ON er_paper_item.paper_id = er_paper.id
+		LEFT JOIN er_paper_item_info ON er_paper_item_info.paper_item_id = er_paper_item.id
+		WHERE er_paper.id = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+  <!--查询结果用于增员提交预览功能  -->
+  <resultMap id="PersonnelManageInfoVoMap" type="com.fulan.api.paper.vo.PaperDetailVo">
+    <result column="paper_name" jdbcType="VARCHAR" property="paperName" />
+    <result column="paper_type" jdbcType="INTEGER" property="paperType" />
+    <result column="evaluate" jdbcType="VARCHAR" property="evaluate" />
+  	<collection ofType="com.fulan.api.paper.vo.PaperInfoVo" property="paperInfoList" select="com.fulan.application.mapper.PaperItemMapper.selectByRecord" column="{paperId=paperId,personnelId=personnelId}"/>
+  </resultMap>
+	<select id="selectPaperDetailList" resultMap="PersonnelManageInfoVoMap">
+		select 
+   			ep.paper_name as paper_name,ep.paper_type as paper_type, ep.id as paperId,epp.personnel_id as personnelId  ,epp.evaluate as evaluate
+   		from
+   			er_personnel_paper epp
+   			left  join er_paper ep on epp.paper_id = ep.id
+   		where 
+   		<if test="personnelId !='' and personnelId != null">
+   		epp.personnel_id = #{personnelId,jdbcType=BIGINT} and 
+   		</if>
+   		<if test="flowItemId !='' and flowItemId != null">
+   			ep.paper_type=#{flowItemId} and
+   		</if>
+   		1=1
+	</select>
+	<!-- 查询结果用于增员试题 -->
+	<select id="getPaperByPaperType" parameterType="java.util.Map" resultMap="PaperVoMap2">
+		select 
+   			er.id as id,#{personnelId} as personnelId
+   		    from er_paper er
+			left join er_personnel_paper epp on er.id = epp.paper_id
+			 <if test="personnelId != null and personnelId != ''">
+		 		and epp.personnel_id = #{personnelId} 
+			</if>
+			left join er_flow_item efi on epp.flow_item_id = efi.id
+		where 
+		<if test="paperType != null and paperType != ''">
+		 	er.paper_type = #{paperType} and
+		</if>
+		<if test="flowItemId != null and flowItemId != ''">
+		   efi.id=#{flowItemId} and
+		 </if>
+		 <if test="orgId != null and orgId != ''">
+		   case (select count(*) from er_paper where org_id=#{orgId} )
+					when 0 
+					then 
+						er.head_flag="Y"
+					else
+					 	er.org_id =#{orgId}
+					end
+			 and
+		 </if>
+		 <if test="orgId == null or orgId == ''">
+		  	er.head_flag="Y" and
+		 </if>
+		 1=1
+	</select>
+	
+	 <select id="selectByMap"  resultMap="BaseResultMap">
+	    select 
+	   ep.id as id, ep.paper_name as paper_name,ep.paper_type as paper_type , ep.paper_desc as paper_desc, ep.org_id as org_id, ep.seq as seq,ep.create_time as create_time, ep.create_user as create_user, ep.update_time as update_time, 
+   ep.update_user as update_user
+	    from er_paper ep 
+	    left join er_personnel_paper epp on ep.id = epp.paper_id 
+	    where ep.id = #{id,jdbcType=BIGINT} 
+	     GROUP BY ep.id
+	  </select>
+	  
+	  <select id="selectByMap2" parameterType="java.util.Map" resultMap="BaseResultMap2">
+	    select 
+	    ep.id as id, ep.paper_name as paper_name,ep.paper_type as paper_type , ep.paper_desc as paper_desc, ep.org_id as org_id, ep.seq as seq,ep.create_time as create_time, ep.create_user as create_user, ep.update_time as update_time, 
+        ep.update_user as update_user,epp.evaluate as evaluate
+	    from er_paper ep 
+	    left join er_personnel_paper epp on ep.id = epp.paper_id 
+ 		<if test="personnelId != null and personnelId != ''">
+ 		and epp.personnel_id = #{personnelId} 
+ 		</if>
+	    where ep.id = #{id,jdbcType=BIGINT} 
+	  </select>
+	  
+	 
+</mapper>

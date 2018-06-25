@@ -1,0 +1,48 @@
+<div class="last-message">
+    <div class="detail-right-each width-work">
+        <span class="content_type">原保险公司工作经历</span>
+        <span class="content_get">{{=it.isInsuranceCompany=='1'?'是':'否'}}</span>
+        <span class="content_get">{{=it.isQuit=='1'?'已离职':'未离职'}}</span>
+    </div>
+    {{?it.isInsuranceCompany=='1'}}
+    <div class="detail-right-each">
+        <span class="content_type name-organization">原保险机构名称</span>
+        <span class="content_get">{{=it.originalCompany || ''}}</span>
+        <span class="content_type">是否离职</span>
+        <span class="content_get">{{=it.isQuit=='1'?'是':'否'}}</span>
+        <span class="content_type">离职日期</span>
+        <span class="content_get">{{=it.departureDate || ''}}</span>
+    </div>
+    {{?}}
+</div>
+{{?it.workExperience.length > 0}}
+{{~it.workExperience:val:index}}
+<div class="work-list">
+    <p class="work-list-head">工作经历{{=index + 1}}</p>
+    <div class="work-message-all">
+        <div class="work-message-each w-one">
+            <span class="work-message-type">开始年月</span>
+            <span class="">{{=val.startTime?common.getFormatDate(new Date(val.startTime)): ''}}</span>
+        </div>
+        <div class="work-message-each w-one">
+            <span class="work-message-type">结束年月</span>
+            <span class="">{{=val.endTime?common.getFormatDate(new Date(val.endTime)): ''}}</span>
+        </div>
+        <div class="work-message-each w-two">
+            <span class="work-message-type">职业</span>
+            <span class="">{{=val.occupation || ''}}</span>
+        </div>
+        <div class="work-message-each w-two">
+            <span class="work-message-type">职位</span>
+            <span class="">{{=val.post || ''}}</span>
+        </div>
+        <div class="work-message-each w-one">
+            <span class="work-message-type">单位名称</span>
+            <span class="">{{=val.company || ''}}</span>
+        </div>
+    </div>
+</div>
+{{~}}
+{{??}}
+<div>暂无工作经历</div>
+{{?}}

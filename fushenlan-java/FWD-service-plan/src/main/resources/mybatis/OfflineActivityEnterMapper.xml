@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.OfflineActivityEnterMapper">
+	<resultMap id="BaseResultMap" type="com.fulan.api.plan.vo.OfflineActivityVO">
+		<id column="eoaId" property="id" />
+		<id column="eoaName" property="name" />
+		<id column="eoaStartDate" property="startDate" />
+		<id column="eoaEndDate" property="endDate" />
+		<id column="eoaBannerPath" property="bannerPath" />
+		<id column="eoaAddress" property="address" />
+		<id column="eoaLimitEnter" property="limitEnter" />
+		<id column="eoaRewardPoint" property="rewardPoint" />
+		<id column="elLecturer" property="lecturer" />
+		<id column="epcStartDate" property="courseStartTime" />
+		<id column="ecDescription" property="courseDescription" />
+		<id column="eccId" property="courseCollectId" />
+		<id column="epcEndDate" property="courseEndTime" />
+		<id column="eaeId" property="signId" />
+		<id column="eoasId" property="enterId" />
+		<id column="eaeSignNumber" property="signUpNumber" />
+		<id column="eqName" property="qualificationName" />
+		<id column="ecfName" property="certificateName" />
+		<id column="ecfPath" property="certificatePath" />
+		<id column="ecId" property="courseId" />
+		<id column="eoaBeforeBegin" property="beforeBegin" />
+		<id column="eoaAfterBegin" property="afterBegin" />
+		<id column="eoaSignTimeType" property="signTimeType" />
+		<id column="eoaEnterStartDate" property="enterStartTime" />
+		<id column="eoaEnterEndDate" property="enterEndTime" />
+		<id column="openClassType" property="openClassType" />
+	</resultMap>
+
+	<resultMap id="SingResultMap" type="com.fulan.api.plan.vo.SignTypeDto">
+		<id column="is_need_sign" property="isNeedSign" />
+		<id column="is_need_enter" property="isNeedEnter" />
+		<id column="is_noneed_enter" property="isNoneedEnter" />
+	</resultMap>
+
+	<insert id="insert">
+		INSERT INTO el_offline_activity_enter (id,course_id,user_id,user_name,gmt_create,gmt_modified)
+		VALUES (#{id},#{courseId},#{userId},#{userName},#{gmtCreate},#{gmtModified})
+	</insert>
+
+	<select id="selectEnterTime" resultType="java.util.Date">
+		SELECT gmt_create FROM el_offline_activity_enter WHERE user_id=#{id}
+	</select>
+
+	<select id="countCourse" resultType="java.lang.Integer">
+		select count(id) from el_offline_activity_enter where course_id = #{course_id}
+	</select>
+
+	<select id="selectSignType" resultMap="SingResultMap">
+
+		SELECT is_need_sign,is_need_enter,is_noneed_enter FROM el_offline_activity WHERE id=#{activityId}
+	</select>
+
+
+	<select id="queryForCount" resultType="java.lang.Integer">
+			SELECT COUNT(actity.eoaId) FROM( <include refid="sql_where"/>
+
+			GROUP BY eoa.id
+			HAVING (eoa.start_date &gt;= NOW() OR eoa.open_class_type =0)
+		)actity
+	</select>
+	<select id="selectBeginActivity" resultMap="BaseResultMap">
+		<include refid="sql_where"/>
+
+		GROUP BY eoa.id
+		HAVING (eoa.start_date &gt;= NOW() OR eoa.open_class_type =0)
+	    ORDER BY epcEndDate ASC,eoaEnterStartDate ASC
+				Limit #{start},#{pageSize}
+
+
+	</select>
+
+	<select id="queryForEndCount" resultType="java.lang.Integer">
+		SELECT COUNT(actity.eoaId) FROM( <include refid="sql_where"/>
+
+		GROUP BY eoa.id
+		HAVING eoa.end_date &lt; NOW()
+		)actity
+	</select>
+
+	<select id="selectEndActivity" resultMap="BaseResultMap">
+		<include refid="sql_where"/>
+
+		GROUP BY eoa.id
+		HAVING  eoa.end_date &lt; NOW()
+		ORDER BY epc.end_time DESC
+		Limit #{start},#{pageSize}
+	</select>
+
+	<sql id="sql_where">
+		SELECT
+			eoa.id AS eoaId,
+			eoa.before_begin AS eoaBeforeBegin,
+			eoa.enter_start_date AS  eoaEnterStartDate,
+			eoa.enter_end_date AS  eoaEnterEndDate,
+			eoa.after_begin AS eoaAfterBegin,
+			eoa.sign_time_type AS eoaSignTimeType,
+			eq.`name` AS eqName,
+			ecf.`name` AS ecfName ,
+			ecf.path ecfPath,
+			COUNT(DISTINCT(eae.id)) AS eaeSignNumber,
+			eoa.name AS eoaName,eoa.start_date AS eoaStartDate,
+			eoa.end_date AS eoaEndDate,eoa.banner_path AS eoaBannerPath,
+			eoa.address AS eoaAddress, eoa.limit_enter AS eoaLimitEnter,eoa.reward_point AS eoaRewardPoint,
+			ec.id AS ecId,
+			eoa.open_class_type AS openClassType,
+			ec.lecturer AS elLecturer,
+			eae.id AS eaeId, eoas.id AS eoasId, ec.description AS ecDescription, epc.start_time AS epcStartDate,
+			epc.end_time AS epcEndDate,
+			ecc.id AS eccId FROM el_offline_activity eoa
+				LEFT JOIN el_course ec ON eoa.course_id=ec.id
+				LEFT JOIN el_plan_course epc ON ec.is_online=epc.associate_type
+				LEFT JOIN el_offline_activity_enter eae ON eoa.id=eae.course_id
+				LEFT JOIN el_offline_activity_sign eoas ON eoas.course_id=eoa.id
+				LEFT JOIN el_plan_collect ecc ON  ecc.plan_id=eoa.id
+				LEFT JOIN el_qualification eq ON eq.id=eoa.qualification_id
+        		LEFT JOIN el_certificate ecf ON ecf.id=eoa.certification_id
+
+	</sql>
+
+	<select id="selectSignNumber" resultType="java.lang.Integer">
+		SELECT COUNT(id)
+		FROM  el_offline_activity_enter  WHERE course_id=#{id}
+
+	</select>
+
+	<select id="selectEnterCount" resultType="java.lang.Integer">
+		SELECT limit_enter FROM el_offline_activity WHERE id=#{id}
+	</select>
+
+	<select id="selectSignCount" resultType="java.lang.Integer">
+		SELECT COUNT(id) FROM el_offline_activity_enter WHERE course_id=#{id}
+	</select>
+
+
+
+
+
+
+</mapper>

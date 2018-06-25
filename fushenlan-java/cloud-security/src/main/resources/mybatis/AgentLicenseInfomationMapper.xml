@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fulan.application.mapper.AgentLicenseInfomationMapper" >
+  <resultMap id="BaseResultMap" type="com.fulan.api.security.domain.AgentLicenseInfomation" >
+    <id column="agent_license_id" property="agentLicenseId" jdbcType="BIGINT" />
+    <result column="agent_id" property="agentId" jdbcType="VARCHAR" />
+    <result column="license_type" property="licenseType" jdbcType="VARCHAR" />
+    <result column="agent_license_status" property="agentLicenseStatus" jdbcType="VARCHAR" />
+    <result column="license_from_date" property="licenseFromDate" jdbcType="DATE" />
+    <result column="license_to_date" property="licenseToDate" jdbcType="DATE" />
+    <result column="license_num" property="licenseNum" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_by_name" property="createByName" jdbcType="VARCHAR" />
+    <result column="create_by_id" property="createById" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_by_name" property="updateByName" jdbcType="VARCHAR" />
+    <result column="update_by_id" property="updateById" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    agent_license_id, agent_id, license_type, agent_license_status, license_from_date, 
+    license_to_date, license_num, create_time, create_by_name, create_by_id, update_time, 
+    update_by_name, update_by_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from agent_license_infomation
+    where agent_license_id = #{agentLicenseId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from agent_license_infomation
+    where agent_id = #{agentId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fulan.api.security.domain.AgentLicenseInfomation" >
+    insert into agent_license_infomation (agent_license_id, agent_id, license_type, 
+      agent_license_status, license_from_date, license_to_date, 
+      license_num, create_time, create_by_name, 
+      create_by_id, update_time, update_by_name, 
+      update_by_id)
+    values (#{agentLicenseId,jdbcType=BIGINT}, #{agentId,jdbcType=VARCHAR}, #{licenseType,jdbcType=VARCHAR}, 
+      #{agentLicenseStatus,jdbcType=VARCHAR}, #{licenseFromDate,jdbcType=DATE}, #{licenseToDate,jdbcType=DATE}, 
+      #{licenseNum,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createByName,jdbcType=VARCHAR}, 
+      #{createById,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateByName,jdbcType=VARCHAR}, 
+      #{updateById,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fulan.api.security.domain.AgentLicenseInfomation" >
+    insert into agent_license_infomation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="agentLicenseId != null" >
+        agent_license_id,
+      </if>
+      <if test="agentId != null" >
+        agent_id,
+      </if>
+      <if test="licenseType != null" >
+        license_type,
+      </if>
+      <if test="agentLicenseStatus != null" >
+        agent_license_status,
+      </if>
+      <if test="licenseFromDate != null" >
+        license_from_date,
+      </if>
+      <if test="licenseToDate != null" >
+        license_to_date,
+      </if>
+      <if test="licenseNum != null" >
+        license_num,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createByName != null" >
+        create_by_name,
+      </if>
+      <if test="createById != null" >
+        create_by_id,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateByName != null" >
+        update_by_name,
+      </if>
+      <if test="updateById != null" >
+        update_by_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="agentLicenseId != null" >
+        #{agentLicenseId,jdbcType=BIGINT},
+      </if>
+      <if test="agentId != null" >
+        #{agentId,jdbcType=VARCHAR},
+      </if>
+      <if test="licenseType != null" >
+        #{licenseType,jdbcType=VARCHAR},
+      </if>
+      <if test="agentLicenseStatus != null" >
+        #{agentLicenseStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="licenseFromDate != null" >
+        #{licenseFromDate,jdbcType=DATE},
+      </if>
+      <if test="licenseToDate != null" >
+        #{licenseToDate,jdbcType=DATE},
+      </if>
+      <if test="licenseNum != null" >
+        #{licenseNum,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createByName != null" >
+        #{createByName,jdbcType=VARCHAR},
+      </if>
+      <if test="createById != null" >
+        #{createById,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateByName != null" >
+        #{updateByName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateById != null" >
+        #{updateById,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fulan.api.security.domain.AgentLicenseInfomation" >
+    update agent_license_infomation
+    <set >
+      <if test="agentId != null" >
+        agent_id = #{agentId,jdbcType=VARCHAR},
+      </if>
+      <if test="licenseType != null" >
+        license_type = #{licenseType,jdbcType=VARCHAR},
+      </if>
+      <if test="agentLicenseStatus != null" >
+        agent_license_status = #{agentLicenseStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="licenseFromDate != null" >
+        license_from_date = #{licenseFromDate,jdbcType=DATE},
+      </if>
+      <if test="licenseToDate != null" >
+        license_to_date = #{licenseToDate,jdbcType=DATE},
+      </if>
+      <if test="licenseNum != null" >
+        license_num = #{licenseNum,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createByName != null" >
+        create_by_name = #{createByName,jdbcType=VARCHAR},
+      </if>
+      <if test="createById != null" >
+        create_by_id = #{createById,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateByName != null" >
+        update_by_name = #{updateByName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateById != null" >
+        update_by_id = #{updateById,jdbcType=BIGINT},
+      </if>
+    </set>
+    where agent_license_id = #{agentLicenseId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fulan.api.security.domain.AgentLicenseInfomation" >
+    update agent_license_infomation
+    set agent_id = #{agentId,jdbcType=VARCHAR},
+      license_type = #{licenseType,jdbcType=VARCHAR},
+      agent_license_status = #{agentLicenseStatus,jdbcType=VARCHAR},
+      license_from_date = #{licenseFromDate,jdbcType=DATE},
+      license_to_date = #{licenseToDate,jdbcType=DATE},
+      license_num = #{licenseNum,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by_name = #{createByName,jdbcType=VARCHAR},
+      create_by_id = #{createById,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by_name = #{updateByName,jdbcType=VARCHAR},
+      update_by_id = #{updateById,jdbcType=BIGINT}
+    where agent_license_id = #{agentLicenseId,jdbcType=BIGINT}
+  </update>
+</mapper>

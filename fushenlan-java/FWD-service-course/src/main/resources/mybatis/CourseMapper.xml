@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.CourseMapper">
+  <resultMap id="BaseResultMap" type="com.fulan.api.course.domain.Course">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="is_online" jdbcType="TINYINT" property="isOnline" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="banner_path" jdbcType="VARCHAR" property="bannerPath" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="tag_id" jdbcType="BIGINT" property="tagId" />
+    <result column="learning_time" jdbcType="TINYINT" property="learningTime" />
+    <result column="lecturer" jdbcType="BIGINT" property="lecturer" />
+    <result column="is_share" jdbcType="TINYINT" property="isShare" />
+    <result column="is_relate_plan" jdbcType="TINYINT" property="isRelatePlan" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="modify_user" jdbcType="BIGINT" property="modifyUser" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, is_online, description, banner_path, type, group_id, tag_id, learning_time, 
+    lecturer, is_share, is_relate_plan, create_user, gmt_create, modify_user, gmt_modified
+  </sql>
+  <sql id="Base_Column_List_VO">
+    ec.id as id, ec.name as name, ec.is_online as isOnline, ec.description as description, ec.banner_path as bannerPath, ec.type as type, ec.group_id as groupId, ec.tag_id as tagId, ec.learning_time as learningTime, 
+    ec.lecturer as lecturer, ec.is_share as isShare, ec.is_relate_plan as isRelatePlan, ec.create_user as createUser, ec.gmt_create as gmtCreate, ec.modify_user as modifyUser, ec.gmt_modified as gmtModified
+  </sql>
+  <sql id="Base_Column_List_Plan">
+    ID, PLAN_ID, COURSE_TYPE, ASSOCIATE_ID, ASSOCIATE_TYPE, 
+        IS_COMPULSORY, STAGE, SEQ, START_TIME, END_TIME, 
+        SIGN_ADDRESS, CREATE_USER, GMT_CREATE, MODIFY_USER, GMT_MODIFIED
+  </sql>
+    
+    
+    <select id="getMaterialList" parameterType="java.lang.String" resultType="com.fulan.api.material.domain.Material">
+    select elm.* from el_course elc 
+      LEFT JOIN el_course_material elcm on elc.id = elcm.course_id
+      LEFT JOIN el_material elm on elm.id = elcm.material_id 
+      where elc.id = #{id}
+  </select>
+  
+   <select id="selectByCId" resultType="com.fulan.api.course.vo.CourseManageVo">
+       select elpc.seq AS seq, elpc.id AS id,elc.is_online AS isLine,elpc.plan_id AS planId,elpc.course_type AS courseType,elpc.associate_id AS associateId ,elpc.associate_type AS associateType, elc.name AS name from el_course elc 
+       LEFT JOIN el_plan_course elpc on  elc.id = elpc.associate_id
+       where 
+       elpc.plan_id =#{cId}
+       ORDER BY elpc.seq ASC
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from el_course
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <resultMap id="BaseResultMapPlan" type="com.fulan.api.course.vo.CourseAndPlanVo">
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="PLAN_ID" property="planId" jdbcType="BIGINT" />
+        <result column="COURSE_TYPE" property="courseType" jdbcType="TINYINT" />
+        <result column="ASSOCIATE_ID" property="associateId" jdbcType="BIGINT" />
+        <result column="ASSOCIATE_TYPE" property="associateType" jdbcType="TINYINT" />
+        <result column="IS_COMPULSORY" property="isCompulsory" jdbcType="TINYINT" />
+        <result column="STAGE" property="stage" jdbcType="TINYINT" />
+        <result column="SEQ" property="seq" jdbcType="TINYINT" />
+        <result column="START_TIME" property="startTime" jdbcType="TIMESTAMP" />
+        <result column="END_TIME" property="endTime" jdbcType="TIMESTAMP" />
+        <result column="SIGN_ADDRESS" property="signAddress" jdbcType="VARCHAR" />
+        <result column="CREATE_USER" property="createUser" jdbcType="BIGINT" />
+        <result column="GMT_CREATE" property="gmtCreate" jdbcType="TIMESTAMP" />
+        <result column="MODIFY_USER" property="modifyUser" jdbcType="BIGINT" />
+        <result column="GMT_MODIFIED" property="gmtModified" jdbcType="TIMESTAMP" />
+    </resultMap>
+  <select id="findElClassPlanByCourseId" parameterType="java.lang.Long" resultMap="BaseResultMapPlan">
+    select  
+    <include refid="Base_Column_List_Plan" />
+    from el_plan_course
+    where associate_id = #{courseId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from el_course
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.fulan.api.course.domain.Course">
+    insert into el_course (id, name, is_online, 
+      description, banner_path, type, 
+      group_id, tag_id, learning_time, 
+      lecturer, is_share, is_relate_plan, 
+      create_user, gmt_create, modify_user, 
+      gmt_modified)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{isOnline,jdbcType=TINYINT}, 
+      #{description,jdbcType=VARCHAR}, #{bannerPath,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
+      #{groupId,jdbcType=BIGINT}, #{tagId,jdbcType=BIGINT}, #{learningTime,jdbcType=TINYINT}, 
+      #{lecturer,jdbcType=BIGINT}, #{isShare,jdbcType=TINYINT}, #{isRelatePlan,jdbcType=TINYINT}, 
+      #{createUser,jdbcType=BIGINT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{modifyUser,jdbcType=BIGINT}, 
+      #{gmtModified,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fulan.api.course.domain.Course">
+    insert into el_course
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="isOnline != null">
+        is_online,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="bannerPath != null">
+        banner_path,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="tagId != null">
+        tag_id,
+      </if>
+      <if test="learningTime != null">
+        learning_time,
+      </if>
+      <if test="lecturer != null">
+        lecturer,
+      </if>
+      <if test="isShare != null">
+        is_share,
+      </if>
+      <if test="isRelatePlan != null">
+        is_relate_plan,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="modifyUser != null">
+        modify_user,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="isOnline != null">
+        #{isOnline,jdbcType=TINYINT},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="bannerPath != null">
+        #{bannerPath,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="tagId != null">
+        #{tagId,jdbcType=BIGINT},
+      </if>
+      <if test="learningTime != null">
+        #{learningTime,jdbcType=TINYINT},
+      </if>
+      <if test="lecturer != null">
+        #{lecturer,jdbcType=BIGINT},
+      </if>
+      <if test="isShare != null">
+        #{isShare,jdbcType=TINYINT},
+      </if>
+      <if test="isRelatePlan != null">
+        #{isRelatePlan,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUser != null">
+        #{modifyUser,jdbcType=BIGINT},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fulan.api.course.domain.Course">
+    update el_course
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="isOnline != null">
+        is_online = #{isOnline,jdbcType=TINYINT},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="bannerPath != null">
+        banner_path = #{bannerPath,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="groupId != null">
+        group_id = #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="tagId != null">
+        tag_id = #{tagId,jdbcType=BIGINT},
+      </if>
+      <if test="learningTime != null">
+        learning_time = #{learningTime,jdbcType=TINYINT},
+      </if>
+      <if test="lecturer != null">
+        lecturer = #{lecturer,jdbcType=BIGINT},
+      </if>
+      <if test="isShare != null">
+        is_share = #{isShare,jdbcType=TINYINT},
+      </if>
+      <if test="isRelatePlan != null">
+        is_relate_plan = #{isRelatePlan,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUser != null">
+        modify_user = #{modifyUser,jdbcType=BIGINT},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fulan.api.course.domain.Course">
+    update el_course
+    set name = #{name,jdbcType=VARCHAR},
+      is_online = #{isOnline,jdbcType=TINYINT},
+      description = #{description,jdbcType=VARCHAR},
+      banner_path = #{bannerPath,jdbcType=VARCHAR},
+      type = #{type,jdbcType=TINYINT},
+      group_id = #{groupId,jdbcType=BIGINT},
+      tag_id = #{tagId,jdbcType=BIGINT},
+      learning_time = #{learningTime,jdbcType=TINYINT},
+      lecturer = #{lecturer,jdbcType=BIGINT},
+      is_share = #{isShare,jdbcType=TINYINT},
+      is_relate_plan = #{isRelatePlan,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=BIGINT},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      modify_user = #{modifyUser,jdbcType=BIGINT},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <sql id="conditionSql">
+  			<if test="keyWord != null and keyWord != '' ">
+	  			and ec.name like CONCAT('%',#{keyWord},'%') 
+	  		</if>
+	  		<if  test="type != null and type != '' ">
+	  			and ec.type = #{type}
+	  		</if>
+	  		<if test="isOnline != null and isOnline != '' ">
+	  			and ec.is_online = #{isOnline}
+	  		</if>
+	  		<if test="uploadTimeBegin != null and uploadTimeBegin !='' ">
+	  			<![CDATA[ and DATE_FORMAT(ec.gmt_create,'%Y-%m-%d')>= #{uploadTimeBegin}]]>  
+	  		</if>
+	  		<if test="uploadTimeEnd !=null and uploadTimeEnd !='' ">
+	  			<![CDATA[ and DATE_FORMAT(ec.gmt_create,'%Y-%m-%d')<= #{uploadTimeEnd}]]>  
+	  		</if>
+  </sql>
+<!--  <select id="courseManageSearch" resultMap="BaseResultMap">
+  	<choose>
+  		<when test="pubType == 1"> 
+  			select 
+    			ec.*
+   			from el_course ec
+	    	where 1=1
+	    	<if test="submitter !=null and submitter != '' ">
+	    		and ec.create_user =  #{submitter}
+	    	</if>
+  		 	<include refid="conditionSql" />
+	    	order by ec.gmt_create desc
+	  	</when>
+  		<otherwise> 讲师公共库
+  			select ec.*
+	    	from el_course_share ecs 
+	    	left join el_course ec on ec.id = ecs.course_id
+	    	where ecs.group_id = #{submitter}
+	    	<include refid="conditionSql" />
+			 order by ec.gmt_create desc
+  		</otherwise>
+  	</choose>
+  </select> -->
+  
+  
+  <select id="courseManageSearch" resultType="com.fulan.api.course.vo.CourseCMSVo">
+  	<choose>
+  		<when test="pubType == 1"> 
+  			select 
+    			<include refid="Base_Column_List_VO" />
+   			from el_course ec
+	    	where 1=1
+	    	<if test="submitter !=null and submitter != '' ">
+	    		and ec.create_user =  #{submitter}
+	    	</if>
+  		 	<include refid="conditionSql" />
+	    	order by ec.gmt_create desc
+	  	</when>
+  		<when test="pubType == 2"> 
+  			select distinct ecs.course_id, <include refid="Base_Column_List_VO" />
+	    	from el_course_share ecs 
+	    	left join el_course ec on ec.id = ecs.course_id
+	    	where 1=1
+	    	<if test="keyWord != null and keyWord != '' ">
+	  			and ec.name like CONCAT('%',#{keyWord},'%') 
+	  		</if>
+	  		<if  test="type != null and type != '' ">
+	  			and ec.type = #{type}
+	  		</if>
+	  		<if test="isOnline != null and isOnline != '' ">
+	  			and ec.is_online = #{isOnline}
+	  		</if>
+	  		<if test="groupId != null and groupId != '' ">
+	  			and ec.group_id = #{groupId}
+	  		</if>
+	  		<if test="tagId != null and tagId != '' ">
+	  			and ec.tag_id = #{tagId}
+	  		</if>
+	  		<if test="uploadTimeBegin != null and uploadTimeBegin !='' ">
+	  			<![CDATA[ and DATE_FORMAT(ec.gmt_create,'%Y-%m-%d')>= #{uploadTimeBegin}]]>  
+	  		</if>
+	  		<if test="uploadTimeEnd !=null and uploadTimeEnd !='' ">
+	  			<![CDATA[ and DATE_FORMAT(ec.gmt_create,'%Y-%m-%d')<= #{uploadTimeEnd}]]>  
+	  		</if>
+	    	
+	    	
+	    	<!-- where ecs.group_id = #{submitter}
+	    	<include refid="conditionSql" />
+			 order by ec.gmt_create desc -->
+  		</when>
+  	</choose>
+  </select> 
+  <select id="courseManageSearchCount" resultType="int">
+  		<choose>
+  		<when test="pubType == 1"> 
+  			select 
+    			count(*)
+   			from el_course ec
+	    	where 1=1
+	    	<if test="submitter !=null and submitter != '' ">
+	    		and ec.create_user =  #{submitter}
+	    	</if>
+  		 	<include refid="conditionSql" />
+	  	</when>
+  		<otherwise> <!-- 讲师公共库 -->
+  			select count(ec.id)
+	    	from el_course_share ecs 
+	    	left join el_course ec on ec.id = ecs.course_id
+	    	where ecs.group_id = #{submitter}
+	    	<include refid="conditionSql" />
+  		</otherwise>
+  	</choose>
+  </select>
+  <resultMap id="CourseVoMap" extends="BaseResultMap" type="com.fulan.api.course.vo.CourseVo">
+  	<collection property="materials" ofType="com.fulan.api.material.domain.Material">
+  		<id column="material_id" jdbcType="BIGINT" property="id" />
+	    <result column="material_name" jdbcType="VARCHAR" property="name" />
+	    <result column="material_type" jdbcType="TINYINT" property="type" />
+	    <result column="material_description" jdbcType="VARCHAR" property="description" />
+	    <result column="material_group_id" jdbcType="BIGINT" property="groupId" />
+	    <result column="material_tag_id" jdbcType="BIGINT" property="tagId" />
+	    <result column="material_is_share" jdbcType="TINYINT" property="isShare" />
+	    <result column="material_is_relate_plan" jdbcType="TINYINT" property="isRelatePlan" />
+	    <result column="material_create_user" jdbcType="BIGINT" property="createUser" />
+	    <result column="material_gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+  	</collection>
+  	<collection property="courseShares" ofType="com.fulan.api.course.domain.CourseShare">
+  		<id column="share_id" jdbcType="BIGINT" property="id"/>
+  		<result column="share_group_id" jdbcType="BIGINT" property="groupId"/>
+  	</collection>
+  </resultMap>
+  <select id="checkCourseVoInfo" resultMap="CourseVoMap">
+  	select  ece.id as id, ece.name as name, ece.is_online as is_online, 
+  			ece.description as description,ece.banner_path as banner_path, 
+  			ece.type as type, ece.group_id as group_id, ece.tag_id as tag_id, 
+  			ece.learning_time as learning_time, ece.lecturer as lecturer, 
+  			ece.is_share as is_share,ece.is_relate_plan as is_relate_plan, 
+  			ece.create_user as create_user,ece.gmt_create as gmt_create, 
+  			ece.modify_user as modify_user, ece.gmt_modified as gmt_modified,
+  			eml.id as material_id, eml.name as material_name, eml.type as material_type, 
+  			eml.description as material_description,eml.group_id as material_group_id, 
+  			eml.tag_id as material_tag_id, eml.is_share as material_is_share, 
+  			eml.is_relate_plan as material_is_relate_plan, 
+  			eml.create_user as material_create_user,eml.gmt_create as material_gmt_create,
+  			ecs.id as share_id,ecs.group_id as share_group_id
+  	from el_course ece 
+  	left join el_course_material ecm on ecm.course_id = ece.id
+  	left join el_material eml on  eml.id= ecm.material_id
+  	left join el_course_share ecs on ecs.course_id = ece.id
+  	where ece.id=#{id}
+  </select>
+  <select id="selectCourseAndPlanRe" resultType="int">
+  	select count(*) from el_plan_course where el_plan_course.associate_id = #{id}
+  </select>
+  <delete id="deleteRelation" parameterType="java.util.List">
+  	delete el_course_share,el_course_material,el_course from el_course
+  	left join el_course_share on el_course_share.course_id = el_course.id
+  	left join el_course_material on el_course_material.course_id = el_course.id
+  	where el_course.id in
+  	 <foreach collection="list" item="employeeId" index="index"
+    		open="(" close=")" separator=",">
+   			 #{employeeId}
+  	  </foreach>
+  </delete>
+   <insert id="share" parameterType="java.util.Map">
+  	  insert into el_course_share (id, group_id, course_id, 
+      gmt_create)
+  	  values(#{id},#{groupId},#{courseId},now())
+  </insert>
+  <delete id="deleteShar">
+  	delete from el_course_share where course_id = #{courseId}
+  </delete>
+  <delete id="deleteRelationById" parameterType="java.lang.String">
+  	delete el_course_share,el_course_material,el_course from el_course
+  	left join el_course_share on el_course_share.course_id = el_course.id
+  	left join el_course_material on el_course_material.course_id = el_course.id
+  	where el_course.id = #{id}
+  </delete>
+  <select id="OnlineCourseNotStudy" resultMap="BaseResultMap"  parameterType="java.util.Map">  <!--map 预留条件  -->
+  	SELECT  <include refid="Base_Column_List" /> FROM EL_COURSE 
+  	WHERE IS_ONLINE = 1 AND 
+  	id NOT IN
+  	(SELECT EPC.ASSOCIATE_ID FROM  EL_PLAN_COURSE EPC WHERE EPC.COURSE_TYPE = 2)  <!-- 学习计划 -->
+  	<if test="keyWord != null and keyWord !='' "> <!--模糊查询  -->
+  		and name LIKE CONCAT('%',#{keyWord},'%')
+  	</if>
+  	<if test="type !=null and type !='' ">
+  		and type = #{type}
+  	</if>
+  	<if test="submiter != null and submiter !='' ">
+  		and create_user =#{submiter}
+  	</if>
+  	<if test="groupId !=null and groupId !='' ">
+  		and group_id = #{groupId}
+  	</if>
+  	<if test="tagId !=null and tagId !='' ">
+  		and tag_id = #{tagId}
+  	</if>
+  	<if test="uploadTimeBegin != null and uploadTimeBegin !='' ">
+		<![CDATA[ and DATE_FORMAT(gmt_create,'%Y-%m-%d')>= #{uploadTimeBegin}]]>  
+	</if>
+	<if test="uploadTimeEnd !=null and uploadTimeEnd !='' ">
+		<![CDATA[ and DATE_FORMAT(gmt_create,'%Y-%m-%d')<= #{uploadTimeEnd}]]>  
+	</if>	
+  </select>
+   <select id="getAllShared" resultType="String">
+  	select group_id from  el_course_share where course_id = #{courseId}
+    </select>
+    
+    <resultMap id="CourseShareResultMap" type="com.fulan.api.course.domain.CourseShare">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="group_id" jdbcType="BIGINT" property="groupId" />
+        <result column="course_id" jdbcType="BIGINT" property="courseId" />
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    </resultMap>
+    <select id="listCourseShareByCourseId" resultMap="CourseShareResultMap">
+        select * from el_course_share 
+            where course_id in (${courseIdStr})
+    </select>
+    
+    <resultMap id="CourseVoCMSResultMap" type="com.fulan.api.course.vo.CourseCMSVo">
+	    <id column="id" jdbcType="BIGINT" property="id" />
+	    <result column="name" jdbcType="VARCHAR" property="name" />
+	    <result column="is_online" jdbcType="TINYINT" property="isOnline" />
+	    <result column="description" jdbcType="VARCHAR" property="description" />
+	    <result column="banner_path" jdbcType="VARCHAR" property="bannerPath" />
+	    <result column="type" jdbcType="TINYINT" property="type" />
+	    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+	    <result column="tag_id" jdbcType="BIGINT" property="tagId" />
+	    <result column="learning_time" jdbcType="TINYINT" property="learningTime" />
+	    <result column="lecturer" jdbcType="BIGINT" property="lecturer" />
+	    <result column="is_share" jdbcType="TINYINT" property="isShare" />
+	    <result column="is_relate_plan" jdbcType="TINYINT" property="isRelatePlan" />
+	    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+	    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+	    <result column="modify_user" jdbcType="BIGINT" property="modifyUser" />
+	    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+	    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+        <result column="tag_name" jdbcType="VARCHAR" property="tagName" />
+	  </resultMap>
+    
+    <select id="listCourseByPage" resultMap="CourseVoCMSResultMap" >
+         <choose>
+            <!-- 私人课程库 -->
+             <when test="pubType == 1">
+                select ec.* from el_course ec where ec.create_user = #{loginUser}
+                <include refid="conditionSql"/>
+                order by ec.gmt_create desc
+             </when>
+             <otherwise>
+               <!-- 管理员显示 -->
+                <if test="groupId ==null or groupId == '' ">
+                    select 
+                    ec.*
+                from el_course ec
+                where 1=1   <include refid="conditionSql" />
+                order by ec.gmt_create desc
+                </if>
+                <!--公共课程库   -->
+                <if test="groupId !=null and groupId != '' ">
+                    select ec.* from el_course ec
+                          where ec.id in (select distinct(ecs.course_id) from el_course_share ecs where ecs.group_id = #{groupId}) 
+                    <include refid="conditionSql" />
+                    order by ec.gmt_create desc 
+                </if>
+             </otherwise>
+         </choose>
+  </select>
+  
+  <select id="getCourseCount" resultType="java.lang.Integer" >
+        <choose>
+            <!-- 私人课程库 -->
+             <when test="pubType == 1">
+                select count(ec.id) from el_course ec where ec.create_user = #{loginUser}
+                <include refid="conditionSql"/>
+                order by ec.gmt_create desc
+             </when>
+             <otherwise>
+               <!-- 管理员显示 -->
+                <if test="groupId ==null or groupId == '' ">
+                    select 
+                    count(ec.id)
+                from el_course ec
+                where 1=1   <include refid="conditionSql" />
+                order by ec.gmt_create desc
+                </if>
+                <!--公共课程库   -->
+                <if test="groupId !=null and groupId != '' ">
+                    select count(ec.id) from el_course ec 
+                          where ec.id in (select distinct(ecs.course_id) from el_course_share ecs where ecs.group_id = #{groupId}) 
+                    <include refid="conditionSql" />
+                    order by ec.gmt_create desc 
+                </if>
+             </otherwise>
+         </choose>
+  </select>
+  
+</mapper>

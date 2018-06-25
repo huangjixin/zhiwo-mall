@@ -1,0 +1,136 @@
+<div class="content_family">
+    <div class="family-header">
+        <!--tap导航-->
+        <div class="materials-header">
+            <div class="mater-top-flag form-header-tap">
+                <ul class="mater-flag">
+                    <li class="already" data-type="personnelInfo"><i class="icon-users"></i>个人信息</li>
+                    <li class="active" data-type="family"><i class="icon-jiatingfang"></i>家庭信息</li>
+                    <li class="future" data-type="showEducation"><i class="icon-jiaoyu"></i>教育信息</li>
+                    <li class="future" data-type="workExperience"><i class="icon-gongzuojingli"></i>工作经历</li>
+                    <li class="future" data-type="plan"><i class="icon-jihuashucur"></i>计划申请</li>
+                    <li class="future" data-type="preview"><i class="icon-2yulan"></i>提交预览</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主体区域-->
+    {{~it:val:index}}
+    <div class="content_body clearfix">
+        <strong class="title">家庭成员{{=index+1}}</strong>
+        <div class="close-btn {{=it.length==1?'hidden': ''}}">
+            <i class="icon-close"></i>
+        </div>
+        <ul class="ui-form grid-row">
+            <li class="col-md-6">
+                <strong>
+                    <span class="mustWrite">*</span>
+                    <span>关系</span>
+                </strong>
+                <div class="ipt-select">
+                    <i class="icon-arrow-full-down"></i>
+                    <input type="text" class="ipt-text" placeholder="请选择关系" readonly>
+                    <select name="relationship">
+                    </select>
+                </div>
+            </li>
+            <li class="col-md-6">
+                <strong>
+                    <span class="mustWrite">*</span>
+                    <span>姓名</span>
+                </strong>
+                <div class="ipt-text">
+                    <input type="text" maxlength="50" placeholder="请输入姓名" class="ipt-text check-vali" name="name" value="{{=val.name || ''}}">
+                </div>
+            </li>
+            <li class="col-md-6">
+                <strong>
+                    <span class="mustWrite">*</span>
+                    <span>联系电话</span>
+                </strong>
+                <div class="ipt-text">
+                    <input type="text" maxlength="11" class="ipt-text check-vali" placeholder="请输入联系电话" name="telephone" value="{{=val.telephone || ''}}">
+                </div>
+            </li>
+            <li class="col-md-6">
+                <strong>
+                    <span class="mustWrite">*</span>
+                    <span>公司名称</span>
+                </strong>
+                <div class="ipt-text">
+                    <input type="text" placeholder="请输入公司名称" class="ipt-text check-vali" name="company" value="{{=val.company || ''}}">
+                </div>
+            </li>
+            <li class="col-md-6">
+                <strong>
+                    <span class="mustWrite">*</span>
+                    <span>职业</span>
+                </strong>
+                <div class="ipt-text">
+                    <input type="text" placeholder="请输入职业" class="ipt-text" value="{{=val.post || ''}}" name="post">
+                </div>
+            </li>
+        </ul>
+    </div>
+    {{~}}
+    <div class="content_body clearfix hidden" id="family-part">
+        <strong class="title">家庭成员</strong>
+        <div class="close-btn">
+            <i class="icon-close"></i>
+        </div>
+        <ul class="ui-form grid-row">
+            <li class="col-md-6">
+                <strong>
+                    <span class="mustWrite">*</span>
+                    <span>关系</span>
+                </strong>
+                <div class="ipt-select">
+                    <i class="icon-arrow-full-down"></i>
+                    <input type="text" class="ipt-text" placeholder="请选择关系" readonly>
+                    <select name="relationship">
+                    </select>
+                </div>
+            </li>
+            <li class="col-md-6">
+                <strong>
+                    <span class="mustWrite">*</span>
+                    <span>姓名</span>
+                </strong>
+                <div class="ipt-text">
+                    <input type="text" placeholder="请输入姓名" class="ipt-text check-vali" name="name">
+                </div>
+            </li>
+            <li class="col-md-6">
+                <strong>
+                    <span class="mustWrite">*</span>
+                    <span>联系电话</span>
+                </strong>
+                <div class="ipt-text">
+                    <input type="text" placeholder="请输入联系电话" class="ipt-text check-vali" name="telephone">
+                </div>
+            </li>
+            <li class="col-md-6">
+                <strong>
+                    <span class="mustWrite">*</span>
+                    <span>公司名称</span>
+                </strong>
+                <div class="ipt-text">
+                    <input type="text" placeholder="请输入公司名称" class="ipt-text check-vali" name="company">
+                </div>
+            </li>
+            <li class="col-md-6">
+                <strong>
+                    <span class="mustWrite">*</span>
+                    <span>职业</span>
+                </strong>
+                <div class="ipt-text">
+                    <input type="text" placeholder="请输入职业" class="ipt-text" name="post">
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="add">
+        <i>+</i>其他家庭成员
+    </div>
+</div>

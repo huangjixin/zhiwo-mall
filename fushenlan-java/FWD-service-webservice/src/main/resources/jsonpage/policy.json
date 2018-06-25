@@ -1,0 +1,76 @@
+{
+	"message": "查询历史保单成功",
+	"code": "1",
+	"data": {
+		"productDictVo": [
+			{
+				"productId": "1",
+				"policyType": "AA01",
+				"productName": "重疾",
+				"guaranteeProject": "恶性肿瘤",
+				"isGuarantee": "2000",
+				"guaranteeGap": "0"
+			},
+			{
+				"productId": "1",
+				"policyType": "AA02",
+				"productName": "医疗",
+				"guaranteeProject": "住院津贴保险金",
+				"isGuarantee": "2000",
+				"guaranteeGap": "0"
+			},
+			{
+				"productId": "1",
+				"policyType": "AA03",
+				"productName": "教育或者养老",
+				"guaranteeProject": "教育保险金",
+				"isGuarantee": "2000",
+				"guaranteeGap": "0"
+			},
+			{
+				"productId": "1",
+				"policyType": "AA04",
+				"productName": "身故",
+				"guaranteeProject": "身故保险金",
+				"isGuarantee": "2000",
+				"guaranteeGap": "0"
+			},
+			{
+				"productId": "1",
+				"policyType": "AA05",
+				"productName": "意外",
+				"guaranteeProject": "意外身故保险金",
+				"isGuarantee": "2000",
+				"guaranteeGap": "0"
+			}
+		],
+		"productExt": {
+			"list": [
+				{
+					"policyID":"u11111111",
+					"policyStatus":"保障中",
+					"policyName": "A花开富贵年金保险（分红型）",
+					"policyDate": "2017-8-1",
+					"policyAssociates": "贾衣玫/罗伊人",
+					"policyDetail": "A花开富贵年金保险详情"
+				},
+				{
+					"policyID":"u222222222",
+					"policyStatus":"待投保",
+					"policyName": "B花开富贵年金保险（分红型）",
+					"policyDate": "2016-8-1",
+					"policyAssociates": "郑秋冬/罗伊人/佳琪",
+					"policyDetail": "B花开富贵年金保险详情"
+				},
+				{
+					"policyID":"u33333333",
+					"policyStatus":"待投保",
+					"policyName": "C花开富贵年金保险（分红型）",
+					"policyDate": "2015-8-1",
+					"policyAssociates": "刘德华/郭富城",
+					"policyDetail": "C花开富贵年金保险详情"
+				}
+			]
+		}
+	}
+}

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fulan.application.mapper.CalendarBookMapper" >
+  <resultMap id="BaseResultMap" type="com.fulan.api.calendar.domain.CalendarBook" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="calendar_name" property="calendarName" jdbcType="VARCHAR" />
+    <result column="calendar_date" property="calendarDate" jdbcType="BIGINT" />
+    <result column="purpose" property="purpose" jdbcType="VARCHAR" />
+    <result column="is_global_scope" property="isGlobalScope" jdbcType="TINYINT" />
+    <result column="org_id" property="orgId" jdbcType="BIGINT" />
+    <result column="operate_user" property="operateUser" jdbcType="BIGINT" />
+    <result column="operate_date" property="operateDate" jdbcType="DATE" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="gmt_time" property="gmtTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="modify_user" property="modifyUser" jdbcType="BIGINT" />
+    <result column="deleted" property="deleted" jdbcType="TINYINT" />
+    <result column="bak1" property="bak1" jdbcType="VARCHAR" />
+    <result column="bak2" property="bak2" jdbcType="VARCHAR" />
+    <result column="bak3" property="bak3" jdbcType="VARCHAR" />
+    <result column="bak4" property="bak4" jdbcType="VARCHAR" />
+    <result column="bak5" property="bak5" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, code, calendar_name,calendar_date,purpose, is_global_scope, org_id, operate_user, operate_date,
+    remark, gmt_time, create_user, gmt_modified, modify_user, deleted, bak1, bak2, bak3, 
+    bak4, bak5
+  </sql>
+  
+  
+  <!-- 日历详情  -->
+  <resultMap id="CalendarBookDetail" type="com.fulan.api.calendar.vo.CalendarBookDetailVo" extends="BaseResultMap">
+  	<collection property="calendarDailyTransactionList" ofType="com.fulan.api.calendar.domain.CalendarDailyTransaction" > 
+  		<id column="icdt.id" property="id" jdbcType="BIGINT" />
+	    <result column="icdt.calendar_id" property="calendarId" jdbcType="BIGINT" />
+	    <result column="icdt.day" property="day" jdbcType="DATE" />
+	    <result column="icdt.day_of_week" property="dayOfWeek" jdbcType="INTEGER" />
+	    <result column="icdt.transation_type" property="transationType" jdbcType="TINYINT" />
+  	</collection>
+  </resultMap>
+  <!-- 选择日历详情  -->
+  <select id="selectCalendarBookDetail" resultMap="CalendarBookDetail">
+  	SELECT
+  	icb.*,icdt.id as 'icdt.id',icdt.calendar_id as 'icdt.calendar_id',icdt.day as 'icdt.day',
+  	icdt.day_of_week as 'icdt.day_of_week',icdt.transation_type as 'icdt.transation_type'
+  	FROM iris_calendar_book icb
+  	LEFT JOIN iris_calendar_daily_transaction icdt
+  	ON icb.id = icdt.calendar_id
+  	WHERE  icb.id = #{calendarId}
+  	ORDER BY icdt.day ESC
+  </select>
+
+</mapper>

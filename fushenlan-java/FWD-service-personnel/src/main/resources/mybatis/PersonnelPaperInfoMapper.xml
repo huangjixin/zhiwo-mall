@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fulan.application.mapper.PersonnelPaperInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.fulan.api.personnel.domain.PersonnelPaperInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="personnel_id" property="personnelId" jdbcType="BIGINT" />
+    <result column="paper_id" property="paperId" jdbcType="BIGINT" />
+    <result column="paper_item_id" property="paperItemId" jdbcType="BIGINT" />
+    <result column="score" property="score" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="DATE" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="DATE" />
+    <result column="update_user" property="updateUser" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, personnel_id, paper_id, paper_item_id, score, create_time, create_user, update_time, 
+    update_user
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from er_personnel_paper_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from er_personnel_paper_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.fulan.api.personnel.domain.PersonnelPaperInfo" >
+    insert into er_personnel_paper_info (id, personnel_id, paper_id, 
+      paper_item_id, score, create_time, 
+      create_user, update_time, update_user
+      )
+    values (#{id,jdbcType=BIGINT}, #{personnelId,jdbcType=BIGINT}, #{paperId,jdbcType=BIGINT}, 
+      #{paperItemId,jdbcType=BIGINT}, #{score,jdbcType=INTEGER}, #{createTime,jdbcType=DATE}, 
+      #{createUser,jdbcType=BIGINT}, #{updateTime,jdbcType=DATE}, #{updateUser,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.fulan.api.personnel.domain.PersonnelPaperInfo" >
+    insert into er_personnel_paper_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="personnelId != null" >
+        personnel_id,
+      </if>
+      <if test="paperId != null" >
+        paper_id,
+      </if>
+      <if test="paperItemId != null" >
+        paper_item_id,
+      </if>
+      <if test="score != null" >
+        score,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="personnelId != null" >
+        #{personnelId,jdbcType=BIGINT},
+      </if>
+      <if test="paperId != null" >
+        #{paperId,jdbcType=BIGINT},
+      </if>
+      <if test="paperItemId != null" >
+        #{paperItemId,jdbcType=BIGINT},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=DATE},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fulan.api.personnel.domain.PersonnelPaperInfo" >
+    update er_personnel_paper_info
+    <set >
+      <if test="personnelId != null" >
+        personnel_id = #{personnelId,jdbcType=BIGINT},
+      </if>
+      <if test="paperId != null" >
+        paper_id = #{paperId,jdbcType=BIGINT},
+      </if>
+      <if test="paperItemId != null" >
+        paper_item_id = #{paperItemId,jdbcType=BIGINT},
+      </if>
+      <if test="score != null" >
+        score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=DATE},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=DATE},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fulan.api.personnel.domain.PersonnelPaperInfo" >
+    update er_personnel_paper_info
+    set personnel_id = #{personnelId,jdbcType=BIGINT},
+      paper_id = #{paperId,jdbcType=BIGINT},
+      paper_item_id = #{paperItemId,jdbcType=BIGINT},
+      score = #{score,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=DATE},
+      create_user = #{createUser,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=DATE},
+      update_user = #{updateUser,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+   <select id="getPersonnelPaperInfoList" resultMap="BaseResultMap" parameterType="com.fulan.api.personnel.domain.PersonnelPaperInfo" >
+    select 
+    <include refid="Base_Column_List" />
+    from er_personnel_paper_info
+    where
+    <if test="id != null and id != ''">
+    	 id = #{id,jdbcType=BIGINT} and
+    </if>
+     <if test="personnelId != null and personnelId != ''">
+    	 personnel_id = #{personnelId,jdbcType=BIGINT} and
+    </if>
+    <if test="paperId != null and paperId != ''">
+    	 paper_id = #{paper_id,jdbcType=BIGINT} and
+    </if>
+    <if test="paperItemId != null and paperItemId != ''">
+    	 paper_item_id = #{paperItemId,jdbcType=BIGINT} and
+    </if>
+    <if test="score != null and score != ''">
+    	 score = #{personnelId,jdbcType=BIGINT} and
+    </if>
+    <if test="personnelId != null and personnelId != ''">
+    	 personnel_id = #{score,jdbcType=BIGINT} and
+    </if>
+    1=1
+  </select>
+  
+  <!-- 批量插入操作 -->
+   <insert id="insertByList" parameterType="java.util.List" >
+   	INSERT INTO er_personnel_paper_info (
+		id,
+		personnel_id,
+		paper_id,
+		paper_item_id,
+		score,
+		create_time,
+		create_user,
+		update_time,
+		update_user
+		)
+	VALUES
+	<foreach collection="list" item="item" index="index" separator=",">
+		(
+		#{item.id,jdbcType=BIGINT},
+		#{item.personnelId,jdbcType=BIGINT},
+	    #{item.paperId,jdbcType=BIGINT},
+	    #{item.paperItemId,jdbcType=BIGINT},
+	    #{item.score,jdbcType=INTEGER},
+	    #{item.createTime,jdbcType=DATE},
+	    #{item.createUser,jdbcType=BIGINT},
+	    #{item.updateTime,jdbcType=DATE},
+	    #{item.updateUser,jdbcType=BIGINT}
+		)
+    </foreach>
+  </insert>
+  <delete id="deleteByRecord" parameterType="com.fulan.api.personnel.domain.PersonnelPaper" >
+	   <if test="personnelId != null and personnelId != '' and paperId != null and paperId != ''" >
+		    delete from er_personnel_paper_info
+		    where  
+		    personnel_id = #{personnelId,jdbcType=BIGINT} and  paper_id = #{paperId,jdbcType=BIGINT}
+	   </if>
+  </delete>
+</mapper>

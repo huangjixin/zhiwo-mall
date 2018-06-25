@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fulan.application.mapper.AgentBranchInfomationMapper" >
+  <resultMap id="BaseResultMap" type="com.fulan.api.security.domain.AgentBranchInfomation" >
+    <id column="agent_branch_id" property="agentBranchId" jdbcType="BIGINT" />
+    <result column="agent_id" property="agentId" jdbcType="VARCHAR" />
+    <result column="branch_tier" property="branchTier" jdbcType="CHAR" />
+    <result column="branch_type" property="branchType" jdbcType="VARCHAR" />
+    <result column="branch_code" property="branchCode" jdbcType="VARCHAR" />
+    <result column="branch_name" property="branchName" jdbcType="VARCHAR" />
+    <result column="branch_orgno" property="branchOrgNo" jdbcType="VARCHAR" />
+    <result column="branch_province" property="branchProvince" jdbcType="VARCHAR" />
+    <result column="branch_city" property="branchCity" jdbcType="VARCHAR" />
+    <result column="branch_district" property="branchDistrict" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_by_name" property="createByName" jdbcType="VARCHAR" />
+    <result column="create_by_id" property="createById" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_by_name" property="updateByName" jdbcType="VARCHAR" />
+    <result column="update_by_id" property="updateById" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    agent_branch_id, agent_id, branch_tier, branch_type, branch_code, branch_name, branch_orgno, 
+    branch_province, branch_city, branch_district, create_time, create_by_name, create_by_id, 
+    update_time, update_by_name, update_by_id
+  </sql>
+  <sql id="breachName_Column_List" >
+   agent_id, branch_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from agent_branch_infomation
+    where agent_branch_id = #{agentBranchId,jdbcType=BIGINT}
+  </select>
+  <select id="getAgentBranchInfoById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from agent_branch_infomation
+    where agent_id = #{agentId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from agent_branch_infomation
+    where agent_id = #{agentId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fulan.api.security.domain.AgentBranchInfomation" >
+    insert into agent_branch_infomation (agent_branch_id, agent_id, branch_tier, 
+      branch_type, branch_code, branch_name, 
+      branch_orgno, branch_province, branch_city, 
+      branch_district, create_time, create_by_name, 
+      create_by_id, update_time, update_by_name, 
+      update_by_id)
+    values (#{agentBranchId,jdbcType=BIGINT}, #{agentId,jdbcType=VARCHAR}, #{branchTier,jdbcType=CHAR}, 
+      #{branchType,jdbcType=VARCHAR}, #{branchCode,jdbcType=VARCHAR}, #{branchName,jdbcType=VARCHAR}, 
+      #{branchOrgno,jdbcType=VARCHAR}, #{branchProvince,jdbcType=VARCHAR}, #{branchCity,jdbcType=VARCHAR}, 
+      #{branchDistrict,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createByName,jdbcType=VARCHAR}, 
+      #{createById,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateByName,jdbcType=VARCHAR}, 
+      #{updateById,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fulan.api.security.domain.AgentBranchInfomation" >
+    insert into agent_branch_infomation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="agentBranchId != null" >
+        agent_branch_id,
+      </if>
+      <if test="agentId != null" >
+        agent_id,
+      </if>
+      <if test="branchTier != null" >
+        branch_tier,
+      </if>
+      <if test="branchType != null" >
+        branch_type,
+      </if>
+      <if test="branchCode != null" >
+        branch_code,
+      </if>
+      <if test="branchName != null" >
+        branch_name,
+      </if>
+      <if test="branchOrgno != null" >
+        branch_orgno,
+      </if>
+      <if test="branchProvince != null" >
+        branch_province,
+      </if>
+      <if test="branchCity != null" >
+        branch_city,
+      </if>
+      <if test="branchDistrict != null" >
+        branch_district,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createByName != null" >
+        create_by_name,
+      </if>
+      <if test="createById != null" >
+        create_by_id,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateByName != null" >
+        update_by_name,
+      </if>
+      <if test="updateById != null" >
+        update_by_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="agentBranchId != null" >
+        #{agentBranchId,jdbcType=BIGINT},
+      </if>
+      <if test="agentId != null" >
+        #{agentId,jdbcType=VARCHAR},
+      </if>
+      <if test="branchTier != null" >
+        #{branchTier,jdbcType=CHAR},
+      </if>
+      <if test="branchType != null" >
+        #{branchType,jdbcType=VARCHAR},
+      </if>
+      <if test="branchCode != null" >
+        #{branchCode,jdbcType=VARCHAR},
+      </if>
+      <if test="branchName != null" >
+        #{branchName,jdbcType=VARCHAR},
+      </if>
+      <if test="branchOrgno != null" >
+        #{branchOrgno,jdbcType=VARCHAR},
+      </if>
+      <if test="branchProvince != null" >
+        #{branchProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="branchCity != null" >
+        #{branchCity,jdbcType=VARCHAR},
+      </if>
+      <if test="branchDistrict != null" >
+        #{branchDistrict,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createByName != null" >
+        #{createByName,jdbcType=VARCHAR},
+      </if>
+      <if test="createById != null" >
+        #{createById,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateByName != null" >
+        #{updateByName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateById != null" >
+        #{updateById,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fulan.api.security.domain.AgentBranchInfomation" >
+    update agent_branch_infomation
+    <set >
+      <if test="agentId != null" >
+        agent_id = #{agentId,jdbcType=VARCHAR},
+      </if>
+      <if test="branchTier != null" >
+        branch_tier = #{branchTier,jdbcType=CHAR},
+      </if>
+      <if test="branchType != null" >
+        branch_type = #{branchType,jdbcType=VARCHAR},
+      </if>
+      <if test="branchCode != null" >
+        branch_code = #{branchCode,jdbcType=VARCHAR},
+      </if>
+      <if test="branchName != null" >
+        branch_name = #{branchName,jdbcType=VARCHAR},
+      </if>
+      <if test="branchOrgno != null" >
+        branch_orgno = #{branchOrgno,jdbcType=VARCHAR},
+      </if>
+      <if test="branchProvince != null" >
+        branch_province = #{branchProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="branchCity != null" >
+        branch_city = #{branchCity,jdbcType=VARCHAR},
+      </if>
+      <if test="branchDistrict != null" >
+        branch_district = #{branchDistrict,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createByName != null" >
+        create_by_name = #{createByName,jdbcType=VARCHAR},
+      </if>
+      <if test="createById != null" >
+        create_by_id = #{createById,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateByName != null" >
+        update_by_name = #{updateByName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateById != null" >
+        update_by_id = #{updateById,jdbcType=BIGINT},
+      </if>
+    </set>
+    where agent_branch_id = #{agentBranchId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fulan.api.security.domain.AgentBranchInfomation" >
+    update agent_branch_infomation
+    set agent_id = #{agentId,jdbcType=VARCHAR},
+      branch_tier = #{branchTier,jdbcType=CHAR},
+      branch_type = #{branchType,jdbcType=VARCHAR},
+      branch_code = #{branchCode,jdbcType=VARCHAR},
+      branch_name = #{branchName,jdbcType=VARCHAR},
+      branch_orgno = #{branchOrgno,jdbcType=VARCHAR},
+      branch_province = #{branchProvince,jdbcType=VARCHAR},
+      branch_city = #{branchCity,jdbcType=VARCHAR},
+      branch_district = #{branchDistrict,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by_name = #{createByName,jdbcType=VARCHAR},
+      create_by_id = #{createById,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by_name = #{updateByName,jdbcType=VARCHAR},
+      update_by_id = #{updateById,jdbcType=BIGINT}
+    where agent_branch_id = #{agentBranchId,jdbcType=BIGINT}
+  </update>
+  <select id="selectAllAgentBranchInformation" resultMap="BaseResultMap">
+  select  <include refid="breachName_Column_List" />
+  from agent_branch_infomation
+  </select>
+</mapper>

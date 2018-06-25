@@ -1,0 +1,33 @@
+{
+    "message": "查询保单集合成功",
+    "code": "1",
+    "data": [
+        {
+            "policyID": "u11111111",
+            "policyStatus": "已承保",
+            "policyName": "A花开富贵年金保险（分红型）",
+            "policyStart": "2010/8/1",
+            "policyEnd": "2017/8/1",
+            "applicant": "贾衣玫",
+            "recognizee": "罗伊人"
+        },
+        {
+            "policyID": "u222222222",
+            "policyStatus": "已承保",
+            "policyName": "B花开富贵年金保险（分红型）",
+            "policyStart": "2008/9/1",
+            "policyEnd": "2015/9/1",
+            "applicant": "郑秋冬",
+            "recognizee": "罗伊人/"
+        },
+        {
+            "policyID": "u33333333",
+            "policyStatus": "核保中",
+            "policyName": "C花开富贵年金保险（分红型）",
+            "policyStart": "2012/8/1",
+            "policyEnd": "2017/8/1",
+            "applicant": "刘德华",
+            "recognizee": "郭富城"
+        }
+    ]
+}

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fulan.application.oa.mapper.ActivitiMapper" >
+	
+	<resultMap id="ApprovalRecordMap" type="com.fulan.application.oa.vo.ApprovalRecordVo" >
+	    <id column="ID_" property="taskId" jdbcType="INTEGER" />
+	    <result column="NAME_" property="nodeName" jdbcType="VARCHAR" />
+	    <result column="ASSIGNEE_" property="userId" jdbcType="VARCHAR" />
+	    <result column="MESSAGE_" property="comment" jdbcType="VARCHAR" />
+	    <result column="HANDLE_DATE" property="handleDate" jdbcType="TIMESTAMP"/>
+	    <result column="STATE" property="state" jdbcType="VARCHAR" />
+	  </resultMap>
+
+	<select id="selectApprovalRecord" resultMap='ApprovalRecordMap'>
+		select t.ID_ ,t.NAME_ , t.ASSIGNEE_ ,c.MESSAGE_  ,t.END_TIME_ as HANDLE_DATE, 
+			case 
+				when t.END_TIME_ is null then '0' 
+			    when t.END_TIME_ is not null and t.DELETE_REASON_ ='completed' then '1' 
+			    when t.END_TIME_ is not null and t.DELETE_REASON_ ='reject' then '2' 
+			    else '3'
+			end as STATE
+		from act_hi_taskinst  t 
+		left join act_hi_comment  c on t.PROC_INST_ID_ = c.PROC_INST_ID_ and t.ID_ = c.TASK_ID_ 
+		where 1=1 
+		 	and t.PROC_INST_ID_ = #{processInstanceId}
+		order by t.START_TIME_ asc
+	</select>
+  
+  <select id="selectProcessedApproval" resultType="java.lang.Integer"  >
+    select OAF.id 
+	from FWD_OA_APPLY_FORM OAF
+	inner join ACT_HI_PROCINST RES  on RES.BUSINESS_KEY_ = OAF.ID
+	inner join ACT_HI_TASKINST AHT on AHT.PROC_INST_ID_ = RES.PROC_INST_ID_ 
+	inner join ACT_HI_VARINST VAR ON VAR.PROC_INST_ID_ = RES.PROC_INST_ID_ and VAR.NAME_ = 'last_update_date' 
+	where 1=1
+		and AHT.ASSIGNEE_ = #{userId}
+		and AHT.END_TIME_ is not null 
+		
+		<if test="types != null" >
+			and OAF.type in 
+			<foreach collection="types" index="index" item="item" open="(" separator="," close=")">  
+		        #{item}  
+		    </foreach> 
+		</if>
+		
+	order by VAR.LAST_UPDATED_TIME_ desc, RES.END_TIME_ desc 
+	
+	<if test="start != null and  pageSize != null " >
+		LIMIT #{start} , #{pageSize}
+	</if>
+  </select>
+  
+  
+   <select id="selectPendingApproval" resultType="java.lang.Integer">
+    select OAF.id 
+	from FWD_OA_APPLY_FORM OAF 
+	inner join ACT_RU_EXECUTION RES  on RES.BUSINESS_KEY_ = OAF.ID
+	inner join ACT_RU_TASK ART on ART.PROC_INST_ID_ = RES.PROC_INST_ID_
+	where 1=1
+	 and ART.ASSIGNEE_ = #{userId}
+	 
+	 <if test="types != null" >
+			and OAF.type in 
+			<foreach collection="types" index="index" item="item" open="(" separator="," close=")">  
+		        #{item}  
+		    </foreach> 
+	 </if>
+	 
+	order by OAF.CREATE_DATETIME desc
+	
+	<if test="start != null and  pageSize != null " >
+		LIMIT #{start} , #{pageSize}
+	</if>
+  </select>
+  
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.OfflineActivitySignMapper">
+	<resultMap id="BaseMap" type="com.fulan.api.plan.domain.OfflineActivitySign">
+		<id column="id" property="id" />
+
+	</resultMap>
+
+	<insert id="insert">
+		INSERT INTO el_offline_activity_sign (id,course_id,course_time_id,user_id,user_name,is_enter,sign_time,
+		enter_time,gmt_create,gmt_modified)
+		VALUES (#{id},#{courseId},#{courseTimeId},#{userId},#{userName},
+		#{isEnter},#{signTime},#{enterTime},#{gmtCreate},#{gmtModified})
+	</insert>
+
+	<select id="hasSignd" resultType="java.util.Map">
+		SELECT id FROM el_offline_activity_sign WHERE user_id=#{userId}
+		AND course_id = #{courseId} AND plan_type = #{courseType}
+	</select>
+
+
+</mapper>

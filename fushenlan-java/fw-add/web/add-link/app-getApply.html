@@ -1,0 +1,44 @@
+{{?it}}
+    <div class="program-app box-border">
+      <!--人才计划-->
+      <div class="plan">
+        <div class="person-plan">
+          <div class="plan-left">
+            <img src="../../images/info.png" alt="">
+          </div>
+          <div class="plan-right plan-start">
+            <span class="fon-size">申请人才计划</span>
+            <span class="color-ccc">{{=it.talentPlan}}</span>
+          </div>
+        </div>
+      </div>
+      <!--推荐人信息-->
+      <div class="plan">
+        <div class="person-plan">
+          <div class="plan-left">
+            <img src="../../images/info.png" alt="">
+          </div>
+          <div class="plan-right">
+            <span class="fon-size">推荐人信息</span>
+            <span class="color-ccc">推荐人姓名：{{=it.refereeName || ""}}</span>
+            <span class="color-ccc">推荐人证件号码：{{=it.refereeNo || ""}}</span>
+          </div>
+        </div>
+      </div>
+      <!--引荐关系确认-->
+      <div class="plan">
+        <div class="person-plan">
+          <div class="plan-left">
+            <img src="../../images/info.png" alt="">
+          </div>
+          <div class="plan-right">
+            <span class="fon-size"> 签署声明 </span>
+            <div class="plan-state">
+              <i class="a color-ccc"> 签署声明 </i>
+            </div>
+            <span class="color-ccc">引荐关系开始日期：{{=it.createTime || ''}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+{{?}}

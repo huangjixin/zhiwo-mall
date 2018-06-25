@@ -1,0 +1,67 @@
+
+<!------------------------------------------初审面试：基础信息------------------------------>
+
+<div class="baseInfo-wraper">
+    <!--顶部tab栏-->
+    <div class="bg-top">
+        <!-- tab导航区 -->
+        <div class="materials-header">
+            <div class="mater-top-flag">
+                <ul class="mater-flag">
+                    {{?it.progress==='3'}}
+                    <li class="active" data-type="basicInfo"><i class="iconfont icon-wenjianfile65"></i>基础信息</li>
+                    <li class="future" data-type="personBackground"><i class="iconfont icon-wenhao"></i>甄选问卷</li>
+                    <li class="future" data-type="declaration"><i class="iconfont icon-tianjiawenjian"></i>声明与告知</li>
+                    <li class="future" data-type="pickInterview"><i class="iconfont icon-wenjiangongxiangicon"></i>提交预览</li>
+                    {{??}}
+                    <li class="active"data-type="reMaterials"><i class="iconfont icon-wenjianfile65"></i>基础信息</li>
+                    <li class="future" data-type="personBackground"><i class="iconfont icon-wenhao"></i>决定问卷</li>
+                    <li class="future" data-type="declaration"><i class="iconfont icon-tianjiawenjian"></i>声明与告知</li>
+                    <li class="future" data-type="pickInterview"><i class="iconfont icon-wenjiangongxiangicon"></i>提交预览</li>
+                    {{?}}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--信息内容区-->
+    <div class="basicInfo-content">
+        <!--个人信息-->
+        <div class="detil-content" id="per-info">
+            <div class="detail-left">
+                <div><span>个人<br>信息</span></div>
+            </div>
+
+        </div>
+        <!--家庭信息-->
+        <div class="detil-content" id="per-home">
+            <div class="detail-left">
+                <div><span>家庭<br>信息</span></div>
+            </div>
+        </div>
+        <!--教育信息-->
+        <div class="detil-content" id="per-edu">
+            <div class="detail-left">
+                <div><span>教育<br>信息</span></div>
+            </div>
+        </div>
+        <!--工作信息-->
+        <div class="detil-content">
+            <div class="detail-left detail-left-last">
+                <div><span>工作<br>信息</span></div>
+            </div>
+            <div class="work-message-right" id="per-work">
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--底部按钮-->
+<!--<div class="bot-button">-->
+    <!--<div class="buttonGroup">-->
+        <!--<button type="button" class="savePersonalInfo"></button>-->
+        <!--<button type="button" class="goNext">下一步</button>-->
+    <!--</div>-->
+<!--</div>-->
+

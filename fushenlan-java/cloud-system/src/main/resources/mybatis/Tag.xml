@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.TagMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fulan.api.system.domain.Tag">
+        <id column="id" property="id" />
+        <result column="tag_name" property="tagName" />
+        <result column="parent_id" property="parentId" />
+        <result column="catagory" property="catagory" />
+        <result column="moudle" property="moudle" />
+        <result column="create_user" property="createUser" />
+        <result column="create_time" property="createTime" />
+        <result column="modify_user" property="modifyUser" />
+        <result column="modify_time" property="modifyTime" />
+    </resultMap>
+    
+    <!-- SingleTagVo映射结果 -->
+    <resultMap id="SingleTagVoResultMap" type="com.fulan.api.system.Vo.SingleTagVo">
+    	<id column="id" property="id" />
+        <result column="tag_name" property="tagName" />
+        <result column="parent_id" property="parentId" />
+        <result column="catagory" property="catagory" />
+        <result column="moudle" property="moudle" />
+        <result column="create_user" property="createUser" />
+        <result column="create_time" property="createTime" />
+        <result column="modify_user" property="modifyUser" />
+        <result column="modify_time" property="modifyTime" />
+    	<result column="parentTagName" property="parentTagName"/>
+    </resultMap>
+    <!-- TagVo映射结果 -->
+    <resultMap id="TagVoResultMap" type="com.fulan.api.system.Vo.TagVo" extends="BaseResultMap">
+    	<collection property="tagTwoList" ofType="com.fulan.api.system.Vo.TagTwoVo" >
+    		<id column="tagTwoList.id" property="id" />
+	        <result column="tagTwoList.tag_name" property="tagName" />
+	        <result column="tagTwoList.parent_id" property="parentId" />
+	        <result column="tagTwoList.catagory" property="catagory" />
+	        <result column="tagTwoList.moudle" property="moudle" />
+	        <result column="tagTwoList.create_user" property="createUser" />
+	        <result column="tagTwoList.create_time" property="createTime" />
+	        <result column="tagTwoList.modify_user" property="modifyUser" />
+	        <result column="tagTwoList.modify_time" property="modifyTime" />
+    	</collection>
+    </resultMap>
+    
+  	<sql id="Base_Column_List">
+        id, tag_name, parent_id , catagory,moudle,create_user,create_time ,modify_user,modify_time
+    </sql>
+
+	<select id="findBymoudle" resultMap="BaseResultMap" >
+        SELECT   
+        <include refid="Base_Column_List" />
+         FROM  
+        tag where moudle ='2'
+    </select>
+
+
+	<select id="findByparentId" resultMap="BaseResultMap">
+        SELECT   
+        <include refid="Base_Column_List" />
+         FROM  
+        tag where 
+        1=1
+        <if test="parentId == null or parentId =='' or parentId==0">
+			 and parent_id is null
+		</if>
+        <if test="parentId != null and  parentId !=''">
+			and parent_id =  #{parentId}
+		</if>
+		<if test="catagory != null and  catagory !=''">
+			and catagory =  #{catagory}
+		</if>
+    </select>
+    
+	<!-- 二级标签模糊查询方法 -->
+	<select id="findByTagName" resultMap="SingleTagVoResultMap">
+		SELECT   
+        t.id, t.tag_name, t.parent_id , t.catagory,t.moudle,t.create_user,t.create_time ,t.modify_user,t.modify_time,
+        tt.tag_name as parentTagName
+        FROM tag  t 
+        INNER JOIN tag  tt ON t.parent_id = tt.id
+        where  1=1
+        <if test="tagName != null and  tagName !=''">
+			 and t.tag_name like  CONCAT('%', #{tagName}, '%')
+		</if>
+		<if test="parentTagName != null and  parentTagName !=''">
+			 and tt.tag_name like  CONCAT('%', #{parentTagName}, '%')
+		</if>
+        <if test="catagory != null and  catagory !=''">
+			and t.catagory =  #{catagory,jdbcType=TINYINT}
+		</if>
+	</select>
+	
+	<!-- 二级标签模糊总数查询 -->
+	<select id="countByTagName" resultType="java.lang.Integer">
+		SELECT   
+        count(t.id)
+        FROM tag  t 
+        INNER JOIN tag  tt ON t.parent_id = tt.id
+        where  1=1
+        <if test="tagName != null and  tagName !=''">
+			 and t.tag_name like  CONCAT('%', #{tagName}, '%')
+		</if>
+		<if test="parentTagName != null and  parentTagName !=''">
+			 and tt.tag_name like  CONCAT('%', #{parentTagName}, '%')
+		</if>
+        <if test="catagory != null and  catagory !=''">
+			and t.catagory =  #{catagory,jdbcType=TINYINT}
+		</if>
+	</select>
+	
+	<!-- 一级标签模糊查询方法 -->
+	<select id="findByParentTagName" resultMap="TagVoResultMap">
+		SELECT   
+        t.id, t.tag_name, t.parent_id , t.catagory,t.moudle,t.create_user,t.create_time ,t.modify_user,t.modify_time,
+        tt.id as "tagTwoList.id" , tt.tag_name as "tagTwoList.tag_name" , tt.parent_id as "tagTwoList.parent_id" , 
+        tt.catagory as "tagTwoList.catagory",tt.moudle as "tagTwoList.moudle" ,tt.create_user as "tagTwoList.create_user",
+        tt.create_time as "tagTwoList.create_time" ,tt.modify_user as "tagTwoList.modify_user",tt.modify_time as "tagTwoList.modify_time"
+        FROM tag  t 
+        INNER JOIN tag  tt ON tt.parent_id = t.id
+        where  1=1
+        <!-- 查询对应关键字的一级标签 -->
+        <if test="parentTagName != null and  parentTagName !=''">
+			 and t.tag_name like  CONCAT('%', #{parentTagName}, '%')
+		</if>
+		<!-- 若无关键字则查询全部一级标签 -->
+		<if test="parentTagName == null or  parentTagName !=''">
+			 and t.parent_id is null
+		</if>
+        <if test="catagory != null and  catagory !=''">
+			and t.catagory =  #{catagory,jdbcType=TINYINT}
+		</if>
+	</select>
+	
+	<!-- 一级标签模糊总数查询方法 -->
+	<select id="countByParentTagName" resultType="java.lang.Integer">
+		SELECT   
+        count(DISTINCT t.id)
+        FROM tag  t 
+        INNER JOIN tag  tt ON tt.parent_id = t.id
+        where  1=1
+        <!-- 查询对应关键字的一级标签 -->
+        <if test="parentTagName != null and  parentTagName !=''">
+			 and t.tag_name like  CONCAT('%', #{parentTagName}, '%')
+		</if>
+		<!-- 若无关键字则查询全部一级标签 -->
+		<if test="parentTagName == null or  parentTagName !=''">
+			 and t.parent_id is null
+		</if>
+        <if test="catagory != null and  catagory !=''">
+			and t.catagory =  #{catagory,jdbcType=TINYINT}
+		</if>
+	</select>
+
+
+</mapper>

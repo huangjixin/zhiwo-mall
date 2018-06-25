@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fulan.application.mapper.SmsNewsMapper" >
+  <resultMap id="BaseResultMap" type="com.fulan.api.message.domain.SmsNews" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="BIGINT" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="result" property="result" jdbcType="VARCHAR" />
+    <result column="channel_code" property="channelCode" jdbcType="VARCHAR" />
+    <result column="system_code" property="systemCode" jdbcType="VARCHAR" />
+    <result column="biz_id" property="bizId" jdbcType="VARCHAR" />
+    <result column="finish_count" property="finishCount" jdbcType="BIGINT" />
+    <result column="target_count" property="targetCount" jdbcType="BIGINT" />
+    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+    <result column="send_user_id" property="sendUserId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, content,result,type,phone,channel_code,system_code,biz_id,status, finish_count, target_count, send_time, send_user_id,
+    create_time, create_user_id
+  </sql>
+
+  <sql id="month_List" >
+    SELECT DATE_FORMAT(n.create_time, '%Y年%m月') name,COUNT(*) smsCount, SUM(n.STATUS = 1) smsSuccessCount,SUM(n.STATUS = 2) smsFailCount,SUM(n.STATUS = 3) smsUnknownCount
+        FROM sms_news n 
+	    <where>
+	      <if test="startDate != null and startDate != '' ">
+	        <![CDATA[ and DATE_FORMAT(n.create_time,'%Y-%m-%d')>= #{startDate}]]>
+	      </if>
+	      <if test="endDate !=null and endDate != ''">
+	        <![CDATA[ and DATE_FORMAT(n.create_time,'%Y-%m-%d')<= #{endDate}]]>
+	      </if>
+	    </where>
+	        
+        GROUP BY DATE_FORMAT(n.create_time, '%Y-%m');
+  </sql>
+
+  <sql id="system_List" >
+    SELECT s.name name,
+        COUNT(*) smsCount, SUM(n.STATUS = 1) smsSuccessCount,SUM(n.STATUS = 2) smsFailCount,SUM(n.STATUS = 3) smsUnknownCount
+        FROM sms_news n left join sms_system s on n.system_code =  s.id 
+        <where>
+	      <if test="systemCode != null and systemCode != ''">
+	        n.system_code = #{systemCode}
+	      </if>
+	      <if test="startDate != null and startDate != '' ">
+	        <![CDATA[ and DATE_FORMAT(n.create_time,'%Y-%m-%d')>= #{startDate}]]>
+	      </if>
+	      <if test="endDate !=null and endDate != ''">
+	        <![CDATA[ and DATE_FORMAT(n.create_time,'%Y-%m-%d')<= #{endDate}]]>
+	      </if>
+	    </where>
+	        
+        GROUP BY n.system_code
+  </sql>
+
+  <sql id="channel_List" >
+    SELECT c.name name,
+        COUNT(*) smsCount, SUM(n.STATUS = 1) smsSuccessCount,SUM(n.STATUS = 2) smsFailCount,SUM(n.STATUS = 3) smsUnknownCount
+        FROM sms_news n left join sms_channel c on n.channel_code =  c.code 
+        <where>
+	      <if test="channelCode != null and channelCode != ''">
+	        and n.channel_code = #{channelCode}
+	      </if>
+	      <if test="startDate != null and startDate != '' ">
+	        <![CDATA[ and DATE_FORMAT(n.create_time,'%Y-%m-%d')>= #{startDate}]]>
+	      </if>
+	      <if test="endDate !=null and endDate != ''">
+	        <![CDATA[ and DATE_FORMAT(n.create_time,'%Y-%m-%d')<= #{endDate}]]>
+	      </if>
+	    </where>
+        GROUP BY n.channel_code
+  </sql>
+
+  <select id="selectSmsNews" resultType="com.fulan.api.message.vo.SmsNewsResultVO" parameterType="com.fulan.api.message.vo.SmsNewsVO" >
+    select sn.id, sn.content,sn.result,sn.type, sn.phone, sn.status, sn.finish_count, sn.target_count, sn.send_time, sn.send_user_id,
+    sn.biz_id,sn.channelCode,sn.systemCode,sn.create_time, sn.create_user_id from sms_news sn
+    left join sms_channel sc on sn.channel_code = sc.code
+    left join sms_system ss on sn.system_code = ss.code
+    <where>
+      <if test="phone != null and phone != ''">
+            sn.phone like CONCAT('%',#{phone},'%')
+      </if>
+      <if test="content != null and content != ''">
+        and sn.content like CONCAT('%',#{content},'%')
+      </if>
+      <if test="status != null and status != ''">
+        and sn.status = #{status}
+      </if>
+      <if test="type != null and type != ''">
+        and sn.type = #{type}
+      </if>
+      <if test="channelCode != null and channelCode != ''">
+      and sn.channel_code = #{channelCode}
+    </if>
+      <if test="systemCode != null and systemCode != ''">
+        and sn.system_code = #{systemCode}
+      </if>
+      <if test="channelName != null and channelName != ''">
+        and sc.name like CONCAT('%',#{channelName},'%')
+      </if>
+      <if test="systemName != null and systemName != ''">
+        and ss.name like CONCAT('%',#{systemName},'%')
+      </if>
+      <if test="startDate != null and startDate != '' ">
+        <![CDATA[ and DATE_FORMAT(create_time,'%Y-%m-%d')>= #{startDate}]]>
+      </if>
+      <if test="endDate !=null and endDate != ''">
+        <![CDATA[ and DATE_FORMAT(create_time,'%Y-%m-%d')<= #{endDate}]]>
+      </if>
+    </where>
+  </select>
+
+  <select id="selectSmsNewsStatistics" resultType="com.fulan.api.message.vo.SmsNewsStatisticsResultVO" parameterType="com.fulan.api.message.vo.SmsNewsStatisticsVO" >
+    <choose>
+      <when test="statisticsParameter=='month'">
+        <include refid="month_List" />
+      </when>
+      <when test="statisticsParameter=='channel_code'">
+        <include refid="channel_List" />
+      </when>
+      <when test="statisticsParameter=='system_code'">
+        <include refid="system_List" />
+      </when>
+      <otherwise>
+        <include refid="system_List" />
+      </otherwise>
+    </choose>
+  </select>
+
+  <select id="listForManageCount"  resultType="Integer">
+		select count(*) from sms_news where type=#{type}
+		<if test="content != null and content != '' ">
+			and content LIKE CONCAT('%', #{content},'%')
+		</if> 
+		<if test="phone != null and phone != '' ">
+			and phone LIKE CONCAT('%', #{phone},'%')
+		</if> 
+		<if test="systemCode != null and systemCode != '' ">
+			and system_code LIKE CONCAT('%', #{systemCode},'%')
+		</if> 
+		<if test="channelCode != null and channelCode != '' ">
+			and channel_code LIKE CONCAT('%', #{channelCode},'%')
+		</if> 
+		<if test="status != null and status != '' ">
+			 and status=#{status}
+		</if> 
+	</select>
+
+
+<select id="listForManage" resultType="com.fulan.api.message.vo.SmsNewsResultVO">
+   select sn.id, sn.content,sn.result,sn.type, sn.phone, sn.status, sn.finish_count as finishCount, sn.target_count as targetCount, sn.send_time as sendTime, sn.send_user_id as sendUserId,
+    sn.channel_code as channelCode,sn.system_code as systemCode,sn.create_time as createTime, sn.create_user_id as createUserId,sc.name as channelName,ss.name as systemName from sms_news sn
+    left join sms_channel sc on sn.channel_code = sc.code
+    left join sms_system ss on sn.system_code = ss.code where sn.type=#{type}
+		<if test="content != null and content != '' "> 
+			and sn.content LIKE CONCAT(CONCAT('%', #{content}),'%')
+		</if> 
+		<if test="phone != null and phone != '' "> 
+			and sn.phone LIKE CONCAT(CONCAT('%', #{phone}),'%')
+		</if> 
+		<if test="systemCode != null and systemCode != '' "> 
+			and sn.system_code LIKE CONCAT(CONCAT('%', #{systemCode}),'%')
+		</if> 
+		<if test="channelCode != null and channelCode != '' "> 
+			and sn.channel_code LIKE CONCAT(CONCAT('%', #{channelCode}),'%')
+		</if> 
+		<if test="status != null and status != '' ">
+			 and sn.status=#{status}
+		</if> 
+		order by sn.create_time desc
+	</select>
+
+
+
+</mapper>

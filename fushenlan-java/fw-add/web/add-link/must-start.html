@@ -1,0 +1,66 @@
+<section class="OA_offline_mine">
+    <ul class="OA_course_details">
+        {{?it.length > 0}}
+            {{~it:val:index}}
+                <li>
+                    <div class="OA_con">
+                        <div class="OA_course_left">
+                            <img src="../../images/list-img1.png"/>
+                        </div>
+                        <div class="OA_course_mid">
+                            <p class="OA_title"><span>{{=val.name}}</span>
+                                <i class="icon-jifen  OA_jifen"></i>
+                                <i class="icon-tongxunlu  OA_tongxunlu"></i>
+                                <i class="icon-zigerenzheng  OA_zigerenzheng"></i>
+                            </p>
+
+                            <p class="OA_timer" data-state="{{=val.state}}">
+                                <i class="icon-rili"></i>
+                                <span class="startDate">{{=val.startDate}}</span>
+                                <span class="endDate">{{=val.endDate}}</span>
+                            </p>
+                            <p class="address clearfix"><i class="icon-ditu00"></i>
+                                <span>上海市黄浦区云南南路108号恺腾大厦12楼</span>
+                            </p>
+                            <div class="OA_isFull">
+                                <p><i class="icon-icontouxiang"></i><span class="OA_has">{{=val.enterNum}}</span>/<span
+                                        class="OA_total">{{=val.userLimit}}</span></p>
+                            </div>
+                        </div>
+                        <div class="OA_course_right">
+                            <div>
+                                <a class="registerNow" data-id="{{=val.id}}">马上报名</a>
+                                <p class="time_more">
+                                    <span>剩余时间：</span>
+                                    <span class="residue">00:00:00</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            {{~}}
+        {{??}}
+        <li>暂无可报名课程！</li>
+        {{?}}
+    </ul>
+    <!--/-E选项卡内容-->
+
+    <!--/-S下面的底线提示-->
+    <p>
+        <span></span>
+        <span>我也是有底线的哦！</span>
+    </p>
+    <!--/-E下面的底线提示-->
+</section>
+
+
+<!--<script id="tpl" type="text/x-dot-template">-->
+
+
+<!--{{=it.data}}-->
+
+
+<!--</script>-->
+<!--<div class="OA_tpl_up">-->
+
+<!--</div>-->

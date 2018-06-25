@@ -1,0 +1,72 @@
+
+<!----------------------甄选面试-提交预览------------------------------>
+
+<!--头部背景区-->
+<div class="interview-wrapper">
+    <!-- tab导航区 -->
+    <div class="bg-top">
+        <!-- tab导航区 -->
+        <div class="materials-header">
+            <div class="mater-top-flag">
+                <ul class="mater-flag">
+                    <li class="already" data-type="basicInfo"><i class="iconfont icon-wenjianfile65"></i>基础信息</li>
+                    <li class="already" data-type="personBackground"><i class="iconfont icon-wenhao"></i>{{=it.progress==3?'甄选问卷':'决定问卷'}}</li>
+                    <li class="already" data-type="declaration"><i class="iconfont icon-tianjiawenjian"></i>声明与告知</li>
+                    <li class="active"  data-type="pickInterview"><i class="iconfont icon-wenjiangongxiangicon"></i>提交预览</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="score-wrapper">
+        <!--进度条-->
+        <div class="get-score">
+            <p>甄选评估总得分：<span class="score-one">{{=it.score || 0}}</span><span class="score-two">/ {{=it.totalScore || 0}}分</span></p>
+            <div class="get-rang"> <div class="get-rang-son"> </div></div>
+            <p class="score-three">{{=it.totalScore || 0}}分</p>
+        </div>
+
+        <!--Paper-->
+        {{~it.paperList:value:index}}
+        <div class="preson-bg {{=index!=0?'hide-paper':''}}">
+            <div class="preson-bg-top">
+                <div class="bg-top-left">
+                    <span class="icon-wenjian"></span> <span style="padding-left: 16px">{{=value.paperName  || ''}}</span>
+                </div>
+                <div class="bg-top-right">
+                    <span class="">{{=value.nowScore || 0}} </span><span>/ {{=value.nowTotalPoints || 0}} 分</span>
+                    <i class="bg-gouxian icon-gouxuan"></i>
+                    <i class="bg-arrowup icon-xiajiantou {{=index===0?'bg-arrow-down':''}}"></i>
+                </div>
+            </div>
+            <div class="shrink-area">
+                {{~value.objArray:items:item}}
+                <div class="preson-bg-list">
+                    <strong>{{=items.paperItemName  || ''}}</strong>
+                    <ul class='stars-list'>
+                        <li class="{{=items.score>=1 ? 'per-star':''}}"><i class="icon-stars"></i><span>1分</span></li>
+                        <li class="{{=items.score>=2 ? 'per-star':''}}"><i class="icon-stars"></i><span>2分</span></li>
+                        <li class="{{=items.score>=3 ? 'per-star':''}}"><i class="icon-stars"></i><span>3分</span></li>
+                        <li class="{{=items.score>=4 ? 'per-star':''}}"><i class="icon-stars"></i><span>4分</span></li>
+                        <li class="{{=items.score>=5 ? 'per-star':''}}"><i class="icon-stars"></i><span>5分</span></li>
+                    </ul>
+                </div>
+                {{~}}
+                <div class="preson-bg-asses">
+                    <strong>评价</strong>
+                    <p>{{=value.evaluate}}</p>
+                </div>
+            </div>
+        </div>
+        {{~}}
+    </div>
+</div>
+
+<!--底部按钮-->
+<!--<div class="bot-button pick-bot">-->
+    <!--<button type="button" class="editPlan">修改人才计划</button>-->
+    <!--<div class="buttonGroup">-->
+        <!--<button type="button" class="savePersonalInfo">不通过</button>-->
+        <!--<button type="button" class="goNext pickConfirm">通过</button>-->
+    <!--</div>-->
+<!--</div>-->

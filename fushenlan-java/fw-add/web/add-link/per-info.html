@@ -1,0 +1,48 @@
+{{?it}}
+<div class="detail-right">
+    <div class="detail-right-each width-one">
+        <span class="content_type">证件类型</span>
+        <span class="content_get">{{=it.identityType=='111'?'身份证':it.identityType=='414'?'护照':it.identityType=='117'?'出生证':it.identityType=='114'?'军人证':it.identityType=='511'?'台胞证':it.identityType=='516'?'港澳回乡证':''}}</span>
+    </div>
+    <div class="detail-right-each width-num">
+        <span class="content_type">证件号码</span>
+        <span class="content_get">{{=it.identityCode || ''}}</span>
+    </div>
+    <div class="detail-right-each width-four">
+        <span class="content_type">证件有效期至</span>
+        <span class="content_get">{{=it.ctfexpireDate || ''}}</span>
+    </div>
+    <div class="detail-right-each width-one">
+        <span class="content_type">姓名</span>
+        <span class="content_get">{{=it.name || ''}}</span>
+    </div>
+    <div class="detail-right-each width-two">
+        <span class="content_type">性别</span>
+        <span class="content_get">{{=it.sex==='M'?'男':it.sex==='F'?'女':''}}</span>
+    </div>
+    <div class="detail-right-each width-three">
+        <span class="content_type width-three">年龄</span>
+        <span class="content_get">{{=it.birthday || ''}}</span>
+    </div>
+    <div class="detail-right-each width-four">
+        <span class="content_type">生日</span>
+        <span class="content_get">10月21日</span>
+    </div>
+    <div class="detail-right-each width-one">
+        <span class="content_type">民族</span>
+        <span class="content_get">{{=it.nation || ''}}</span>
+    </div>
+    <div class="detail-right-each width-two">
+        <span class="content_type">政治面貌</span>
+        <span class="content_get">{{=it.political || ''}}</span>
+    </div>
+    <div class="detail-right-each width-three">
+        <span class="content_type">新人来源</span>
+        <span class="content_get">{{=it.source || ''}}</span>
+    </div>
+    <div class="detail-right-each width-four">
+        <span class="content_type">来源渠道</span>
+        <span class="content_get">{{=it.channel || ''}}</span>
+    </div>
+</div>
+{{?}}

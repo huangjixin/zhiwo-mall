@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.ElPaperMapper">
+  <resultMap id="BaseResultMap" type="com.fulan.api.paper.domain.el.Paper">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="discription" jdbcType="VARCHAR" property="discription" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="exam_time" jdbcType="DATE" property="examTime" />
+    <result column="full_mark" jdbcType="INTEGER" property="fullMark" />
+    <result column="pass_mark" jdbcType="INTEGER" property="passMark" />
+    <result column="test_num" jdbcType="INTEGER" property="testNum" />
+    <result column="is_artificial_mark" jdbcType="INTEGER" property="isArtificialMark" />
+    <result column="is_share" jdbcType="INTEGER" property="isShare" />
+    <result column="is_see_answer" jdbcType="INTEGER" property="isSeeAnswer" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="tag_id" jdbcType="BIGINT" property="tagId" />
+    <result column="is_random" jdbcType="INTEGER" property="isRandom" />
+    <result column="is_question_shuffle" jdbcType="INTEGER" property="isQuestionShuffle" />
+    <result column="is_question_item_shuffle" jdbcType="INTEGER" property="isQuestionItemShuffle" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="gmt_create" jdbcType="DATE" property="gmtCreate" />
+    <result column="modify_user" jdbcType="BIGINT" property="modifyUser" />
+    <result column="gmt_modified" jdbcType="DATE" property="gmtModified" />
+  </resultMap>
+  <sql id="Base_Column_List">
+  	ep.id , ep.name, ep.discription, ep.type, ep.exam_time, ep.full_mark, ep.is_see_answer, ep.pass_mark, ep.test_num, ep.is_artificial_mark, 
+  	ep.is_share,ep.group_id, ep.tag_id, ep.is_random, ep.is_question_shuffle, ep.is_question_item_shuffle, 
+  	ep.create_user, ep.gmt_create, ep.modify_user, ep.gmt_modified 
+  </sql>
+  <sql id="Base_Column_ListOne">
+  	ep.id , ep.name, ep.discription, ep.type, ep.exam_time, ep.full_mark, ep.is_see_answer, ep.pass_mark, ep.is_artificial_mark, 
+  	ep.is_share,ep.group_id, ep.tag_id, ep.is_random, ep.is_question_shuffle, ep.is_question_item_shuffle, 
+  	ep.create_user, ep.gmt_create, ep.modify_user, ep.gmt_modified 
+  </sql>
+  <sql id="condition">
+  		<if test="name != null and name != ''">
+			and ep.name LIKE CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}),'%')
+		</if> 
+		<if test="createUser != null and createUser != ''">
+			and ep.create_user = #{createUser,jdbcType=BIGINT}
+		</if>  
+		<if test="groupId != null and groupId != ''">
+			and ep.group_id = #{groupId,jdbcType=BIGINT}
+		</if> 
+		<if test="tagId != null and tagId != ''">
+			and ep.tag_id = #{tagId,jdbcType=INTEGER}
+		</if> 
+  	</sql>
+  	
+  	<delete id="deleteShar">
+    	delete from el_course_share where course_id = #{courseId}
+    </delete>
+  	
+  	<insert id="share" parameterType="java.util.Map">
+  	  insert into el_course_share (id, group_id, course_id, 
+      gmt_create)
+  	  values(#{id},#{groupId},#{courseId},now())
+    </insert>
+    
+    <insert id="shareOther" parameterType="java.util.Map">
+  	  insert into el_paper_ques_share (id, group_id, host_id,type,
+      gmt_create)
+  	  values(#{id},#{groupId},#{hostId},#{type},now())
+    </insert>
+  	
+  	
+  	
+  	
+  	<select id="selectBycId" resultType="com.fulan.api.paper.vo.PaperManageMinVo">
+       select elpc.seq AS seq, elpc.id AS id,elpc.plan_id AS planId,elpc.course_type AS courseType,elpc.associate_id AS associateId ,elpc.associate_type AS associateType, elp.name AS name from el_paper elp 
+       LEFT JOIN el_plan_course elpc on elp.id = elpc.associate_id
+       where 
+       elpc.plan_id =#{cId}
+       ORDER BY elpc.seq ASC
+    </select>
+  	
+  	<resultMap id="BaseResultMapVoS" extends="BaseResultMap" type="com.fulan.api.paper.vo.ElPaperVo">
+  		<result column="classNum" jdbcType="VARCHAR" property="classNum"/>
+  		<result column="isNotShare" jdbcType="VARCHAR" property="isNotShare"/>
+  		<result column="isNotRelation" jdbcType="VARCHAR" property="isNotRelation"/>
+  		<collection column="id" property="userExam" select="com.fulan.application.mapper.ElPaperMapper.seleByIdUserExam" fetchType="eager"></collection>
+  	</resultMap>
+  	<select id="listForManage" resultMap="BaseResultMapVoS">
+		<choose>
+	  		<when test="pubType == 1">
+	  		 	select <include refid="Base_Column_List" />
+	  		 	,(select count(*) 
+	  		 	from el_paper_question epq 
+	  		 	left join el_question eq 
+	  		 	on epq.question_id = eq.id
+	  		 	where epq.paper_id=ep.id) as classNum,
+	  		 	(CASE (
+				SELECT COUNT(*)
+				FROM el_paper_ques_share epqss
+				WHERE epqss.host_id = ep.id AND epqss.type = 2) WHEN 0 THEN '否' ELSE '是' END) as isNotShare,
+				(CASE (
+				SELECT COUNT(*)
+				FROM el_plan_course  epc
+				WHERE epc.associate_id = ep.id AND epc.associate_type = 1) WHEN 0 THEN '否' ELSE '是' END) as isNotRelation
+	  		 	from el_paper ep
+				where 1=1
+			  	<if test="submitter !=null and submitter != '' ">
+				    and ep.group_id =  #{submitter}
+				</if>
+			    <include refid="condition"/>
+			    group by ep.id
+			    order by ep.gmt_create desc
+	  		</when>
+	  		<otherwise>
+	  		 	select <include refid="Base_Column_ListOne" />,
+	  		 	(select count(*) 
+	  		 	from el_paper_question epq 
+	  		 	left join el_question eq 
+	  		 	on epq.question_id = eq.id
+	  		 	where epq.paper_id=ep.id) as classNum,
+	  		 	(CASE (
+				SELECT COUNT(*)
+				FROM el_paper_ques_share epqss
+				WHERE epqss.host_id = ep.id AND epqss.type = 2) WHEN 0 THEN '否' ELSE '是' END) as isNotShare,
+				(CASE (
+				SELECT COUNT(*)
+				FROM el_plan_course  epc
+				WHERE epc.associate_id = ep.id AND epc.associate_type = 1) WHEN 0 THEN '否' ELSE '是' END) as isNotRelation
+	  		 	from 
+	  		 	el_paper_ques_share epqs 
+	  		 	inner join el_paper ep on ep.id = epqs.host_id
+	  		 	where epqs.group_id = #{submitter} and epqs.type = '2'
+	  		 	<include refid="condition"/>
+	  		 	group by ep.id
+	  		 	order by ep.gmt_create desc
+	  		</otherwise>
+	  	</choose>
+	</select>
+	<select id="listForManageCount" resultType="Integer">
+		<choose>
+	  		<when test="pubType == 1">
+	  		 	select count(*) from el_paper ep
+				where 1=1
+			  	<if test="submitter !=null and submitter != '' ">
+				    and ep.group_id =  #{submitter}
+				</if>
+			    <include refid="condition"/>
+	  		</when>
+	  		<otherwise>
+	  		 	select count(ep.id) from 
+	  		 	 el_paper_ques_share epqs 
+	  		 	inner join el_paper ep on ep.id  = epqs.host_id 
+	  		 	where epqs.group_id = #{submitter} and epqs.type = '2'
+	  		 	<include refid="condition"/>
+	  		</otherwise>
+	  	</choose>
+	</select>
+	<sql id="sqlForReview">
+	     eue.paper_id,eue.question_id,eue.question_type,eue.question_seq
+	     ,eue.question_score,eue.answer_id,
+	     eue.answer_seq,eue.user_id,eue.user_name,
+	     eue.answer, eue.score, eue.exam_num
+	</sql>
+	<resultMap type="com.fulan.api.paper.vo.ElPaperVo" id="BaseResultMapForReview" extends="BaseResultMap">
+  		<!-- <id column="id" jdbcType="BIGINT" property="id" /> -->
+	    <result column="paper_id" jdbcType="BIGINT" property="paperId" />
+	    <result column="question_id" jdbcType="BIGINT" property="questionId" />
+	    <result column="question_type" jdbcType="INTEGER" property="questionType" />
+	    <result column="question_seq" jdbcType="INTEGER" property="questionSeq" />
+	    <result column="question_score" jdbcType="INTEGER" property="questionScore" />
+	    <result column="answer_id" jdbcType="BIGINT" property="answerId" />
+	    <result column="answer_seq" jdbcType="INTEGER" property="answerSeq" />
+	    <result column="user_id" jdbcType="BIGINT" property="userId" />
+	    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+	    <result column="answer" jdbcType="VARCHAR" property="answer" />
+	    <result column="score" jdbcType="VARCHAR" property="score" />
+	    <result column="exam_num" jdbcType="INTEGER" property="examNum" />
+	    <result column="classNum" jdbcType="VARCHAR" property="classNum"/>
+  		<result column="isNotShare" jdbcType="VARCHAR" property="isNotShare"/>
+  		<result column="isNotRelation" jdbcType="VARCHAR" property="isNotRelation"/>
+  	</resultMap>
+  	<!-- <resultMap type="" id="BaseResultMapForReview">
+  		<result column="classNum" jdbcType="VARCHAR" property="classNum"/>
+  		<result column="isNotShare" jdbcType="VARCHAR" property="isNotShare"/>
+  		<result column="isNotRelation" jdbcType="VARCHAR" property="isNotRelation"/>
+  	</resultMap> -->
+	<select id="waitForReview" resultMap="BaseResultMapForReview">
+		select <include refid="Base_Column_ListOne" />,eue.paper_state as paperState,eue.plan_course_id as planCourseId,
+				(select count(*) 
+	  		 	from el_paper_question epq 
+	  		 	left join el_question eq 
+	  		 	on epq.question_id = eq.id
+	  		 	where epq.paper_id=ep.id) as classNum,
+	  		 	(CASE (
+				SELECT COUNT(*)
+				FROM el_paper_ques_share epqss
+				WHERE epqss.host_id = ep.id AND epqss.type = 2) WHEN 0 THEN '否' ELSE '是' END) as isNotShare,
+				(CASE (
+				SELECT COUNT(*)
+				FROM el_plan_course  epc
+				WHERE epc.associate_id = ep.id AND epc.associate_type = 1) WHEN 0 THEN '否' ELSE '是' END) as isNotRelation,
+				<include refid="sqlForReview" />
+		    from 
+	  			el_paper ep 
+				right join el_user_exam eue on eue.paper_id = ep.id 
+				where 1=1
+				<if test="name != null and name != ''">
+					and ep.name LIKE CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}),'%')
+				</if> 
+				<if test="groupId != null and groupId != ''">
+					and ep.group_id = #{groupId,jdbcType=BIGINT}
+				</if> 
+				<if test="tagId != null and tagId != ''">
+					and ep.tag_id = #{tagId,jdbcType=INTEGER}
+				</if> 
+				<if test="userName != null and userName != ''">
+				   and eue.user_name LIKE CONCAT(CONCAT('%', #{userName,jdbcType=VARCHAR}),'%')
+				</if>
+				<if test="paperState != null and paperState != ''">
+				   and eue.paper_state = #{paperState}
+				</if>
+				group by eue.paper_id, eue.user_id,eue.exam_num
+				order by ep.gmt_create desc
+	</select>
+	<select id="waitForReviewCount" resultType="Integer">
+		select count(*) from (
+			select ep.*,eue.paper_state as paperState from 
+	  			el_paper ep 
+				right join el_user_exam eue on eue.paper_id = ep.id 
+				where 1=1 
+				<if test="name != null and name != ''">
+					and ep.name LIKE CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}),'%')
+				</if> 
+				<if test="groupId != null and groupId != ''">
+					and ep.group_id = #{groupId,jdbcType=BIGINT}
+				</if> 
+				<if test="tagId != null and tagId != ''">
+					and ep.tag_id = #{tagId,jdbcType=INTEGER}
+				</if> 
+				<if test="userName != null and userName != ''">
+				   and eue.user_name LIKE CONCAT(CONCAT('%', #{userName,jdbcType=VARCHAR}),'%')
+				</if>
+				<if test="paperState != null and paperState != ''">
+				   and eue.paper_state = #{paperState}
+				</if>
+				group by eue.paper_id, eue.user_id,eue.exam_num
+		) epp
+	</select>
+	<select id="seleByQuestionId" resultType="java.util.Map">
+		select ep.name from el_paper ep 
+		left join el_paper_question epq on ep.id = epq.paper_id
+		where epq.question_id = #{id}
+	</select>
+	<delete id="deleBatchRelation">
+		delete from el_paper_question
+		where  paper_id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+	</delete>
+	<delete id="deleBatchRelationEPQS">
+		delete from el_paper_ques_share
+		where  host_id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+	</delete>
+	<update id="updateByIdList">
+	    update el_paper set is_share = #{isShare} where id in
+	    <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+	</update>
+	
+	<resultMap id="BaseResultMapVo" extends="BaseResultMapVoS" type="com.fulan.api.paper.vo.ElPaperVo">
+		<collection column="id" property="userExam" select="com.fulan.application.mapper.ElPaperMapper.seleByIdUserExam" fetchType="eager"></collection>
+	</resultMap>
+	<select id="seleByIdVo" resultMap="BaseResultMapVo">
+	    select * from el_paper where id = #{id}
+	</select>
+	<resultMap id="BaseResultMapVoSOne" extends="BaseResultMapVoS" type="com.fulan.api.paper.vo.ElPaperVo">
+		<collection column="id" property="questionVo" select="com.fulan.application.mapper.QuestionMapper.questionAndAnswerVoS" fetchType="eager"></collection>
+		<collection column="id" property="mapName" select="com.fulan.application.mapper.ElPaperMapper.seleByIdPublicPlanName" fetchType="eager"></collection>
+	</resultMap>
+	<select id="seleByIdPublic" resultMap="BaseResultMapVoSOne">
+		select *,(CASE (
+				SELECT COUNT(*)
+				FROM el_paper_ques_share epqss
+				WHERE epqss.host_id = id) WHEN 0 THEN '否' ELSE '是' END) as isNotShare
+		from el_paper 
+		where id = #{id}
+	</select>
+	<resultMap id="BaseResultMapVoSTWO" extends="BaseResultMapVoS" type="com.fulan.api.paper.vo.ElPaperVo">
+		<collection column="id" property="questionVo" select="com.fulan.application.mapper.QuestionMapper.questionAndAnswerVoWF" fetchType="eager"></collection>
+		<collection column="id" property="mapName" select="com.fulan.application.mapper.ElPaperMapper.seleByIdPublicPlanName" fetchType="eager"></collection>
+	</resultMap>
+	<select id="seleByIdWaitFor" resultMap="BaseResultMapVoSTWO">
+		select *,(CASE (
+				SELECT COUNT(*)
+				FROM el_paper_ques_share epqss
+				WHERE epqss.host_id = id) WHEN 0 THEN '否' ELSE '是' END) as isNotShare
+		from el_paper 
+		where id = #{id}
+	</select>
+	<resultMap id="BaseResultMapVoEue" extends="BaseResultMapForReview" type="com.fulan.api.paper.vo.ElPaperVo">
+		<collection column="{id=id,userId=user_id,examNum=exam_num,planCourseId=plan_course_id}" property="questionVo" select="com.fulan.application.mapper.QuestionMapper.questionAndAnswerVoWFTWO" fetchType="eager"></collection>
+		<collection column="{id=id,userId=user_id,examNum=exam_num,planCourseId=plan_course_id}" property="userExam" select="com.fulan.application.mapper.ElPaperMapper.seleByIdUserId" fetchType="eager"></collection>
+	</resultMap>
+	<select id="seleByIdWaitForManage" resultMap="BaseResultMapVoEue">
+		select ep.*,eue.user_id,eue.exam_num,eue.user_name,eue.plan_course_id
+		from el_paper ep 
+		LEFT join el_user_exam eue on ep.id = eue.paper_id
+		where ep.id = #{id} and eue.user_id = #{userId} and eue.exam_num = #{examNum} and eue.plan_course_id =#{planCourseId}
+		group by ep.id
+	</select>
+	<select id="seleByIdPublicPlanName" resultType="java.util.Map">
+		select ecp.name as name from el_plan_course epc left join el_class_plan ecp on epc.plan_id = ecp.id where epc.associate_id = #{id} group by ecp.name
+	</select>
+	<resultMap id="BaseResultMapUEVo" type="com.fulan.api.paper.vo.UserExamVo">
+		<id column="id" jdbcType="BIGINT" property="id" />
+	    <result column="paper_id" jdbcType="BIGINT" property="paperId" />
+	    <result column="question_id" jdbcType="BIGINT" property="questionId" />
+	    <result column="question_type" jdbcType="INTEGER" property="questionType" />
+	    <result column="question_seq" jdbcType="INTEGER" property="questionSeq" />
+	    <result column="question_score" jdbcType="INTEGER" property="questionScore" />
+	    <result column="answer_id" jdbcType="BIGINT" property="answerId" />
+	    <result column="answer_seq" jdbcType="INTEGER" property="answerSeq" />
+	    <result column="user_id" jdbcType="BIGINT" property="userId" />
+	    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+	    <result column="answer" jdbcType="VARCHAR" property="answer" />
+	    <result column="score" jdbcType="VARCHAR" property="score" />
+	    <result column="gmt_create" jdbcType="DATE" property="gmtCreate" />
+	    <result column="gmt_Modified" jdbcType="DATE" property="gmtModified" />
+	    <result column="exam_num" jdbcType="INTEGER" property="examNum" />
+	</resultMap>
+	<resultMap type="com.fulan.api.paper.vo.UserExamVo" extends="BaseResultMapUEVo" id="BaseResultMapUEVOS">
+		 <collection column="question_id" columnPrefix="questionId" property="question" select="com.fulan.application.mapper.QuestionMapper.questionAndAnswerVo" fetchType="eager"></collection>
+	</resultMap>
+	<select id="seleByIdUserExam" resultMap="BaseResultMapUEVOS">
+		select * from el_user_exam where paper_id = #{id}
+	</select>
+	<select id="seleByIdUserId" resultMap="BaseResultMapUEVo">
+		select * from el_user_exam where paper_id = #{id} and user_id = #{userId} and exam_num = #{examNum} and plan_course_id=#{planCourseId}
+	</select>
+	
+	<select id="seleByGroupId" resultMap="BaseResultMap">
+		SELECT * from 
+		(SELECT ep.*
+		FROM el_paper ep 
+		WHERE 1 = 1 AND ep.group_id = #{submitter}
+		UNION
+		SELECT ep.*
+		FROM el_paper_ques_share epqs 
+		INNER JOIN el_paper ep 
+		ON ep.id = epqs.host_id 
+		WHERE epqs.group_id = #{submitter} AND epqs.type = '2'
+		) AS el_paper
+		WHERE 1=1
+		<if test="name != null and name != ''">
+		and	NAME LIKE CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}),'%')
+		</if>
+		<if test="type != null and type != ''">
+		 AND type = #{type}
+		 </if>
+		ORDER BY gmt_create DESC
+	</select>
+	
+	<select id="selectPlanName" resultType="com.fulan.api.paper.vo.PaperPlanNameVo">
+		select ecp.name as ClassName,etp.name as publicName,et.name as studyName,epd.name as postName,ecoc.name as compulsoryName  from el_plan_course epc 
+		left join el_class_plan ecp on epc.plan_id=ecp.id
+		left join el_study_plan et on epc.plan_id=et.id
+		left join el_post_development epd on epc.plan_id=epd.id
+		left join el_compulsory_cplan ecoc on epc.plan_id=ecoc.id
+		left join el_public_class ep on epc.plan_id=ep.id left join el_study_plan etp on ep.plan_id=etp.id 
+		where epc.associate_id  in 
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+	</select>
+	
+	<select id="listPaperByPage" resultType="com.fulan.api.paper.vo.ElPaperVo"> 
+	   select ep.id as id,
+            ep.name as name,
+          (select count(*) 
+                from el_paper_question epq 
+                where epq.paper_id=ep.id) as classNum, 
+            ep.pass_mark as passMark,
+            ep.full_mark as fullMark,
+            eue.user_name as userName,
+            eue.user_id as userId,
+            eue.paper_state as paperState,
+            ep.exam_time as examTime,
+            eue.exam_num as examNum,
+            eue.plan_course_id as planCourseId,
+            (select b.allScore from (select sum(score) as allScore,exam_num,plan_course_id,user_id  from el_user_exam  
+                        GROUP BY exam_num,plan_course_id,user_id) b 
+                            where b.exam_num = eue.exam_num and b.plan_course_id = eue.plan_course_id and b.user_id = eue.user_id ) as score
+                    from el_paper ep 
+                RIGHT JOIN el_user_exam eue on ep.id = eue.paper_id 
+       where 1=1 
+        <if test="name != null and name != ''">
+            and ep.name LIKE CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}),'%')
+        </if> 
+        <if test="userName != null and userName != ''">
+           and eue.user_name LIKE CONCAT(CONCAT('%', #{userName,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="paperState != null and paperState != ''">
+           and eue.paper_state = #{paperState}
+        </if>
+            group by eue.plan_course_id, eue.user_id,eue.exam_num
+                order by ep.gmt_create desc
+	</select>
+	
+	<select id="listPaperCount" resultType="Integer">
+        select count(*) from (
+            select ep.id from 
+                el_paper ep 
+                right join el_user_exam eue on eue.paper_id = ep.id 
+                where 1=1 
+                <if test="name != null and name != ''">
+                    and ep.name LIKE CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}),'%')
+                </if> 
+                <if test="userName != null and userName != ''">
+                   and eue.user_name LIKE CONCAT(CONCAT('%', #{userName,jdbcType=VARCHAR}),'%')
+                </if>
+                <if test="paperState != null and paperState != ''">
+                   and eue.paper_state = #{paperState}
+                </if>
+                group by eue.plan_course_id, eue.user_id,eue.exam_num
+                    order by ep.gmt_create desc
+        ) epp
+    </select>
+</mapper>

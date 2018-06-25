@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fulan.application.mapper.SmsTemplateMapper" >
+  <resultMap id="BaseResultMap" type="com.fulan.api.message.domain.SmsTemplate" >
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="parameter_type" property="parameterType" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="master_status" property="masterStatus" jdbcType="BIGINT" />
+    <result column="slave_status" property="slaveStatus" jdbcType="BIGINT" />
+    <result column="master_channel_code" property="masterChannelCode" jdbcType="VARCHAR" />
+    <result column="slave_channel_code" property="slaveChannelCode" jdbcType="VARCHAR" />
+    <result column="retry_count" property="retryCount" jdbcType="BIGINT" />
+    <result column="interval_time" property="intervalTime" jdbcType="BIGINT" />
+    <result column="interval_time_type" property="intervalTimeType" jdbcType="BIGINT" />
+    <result column="master_temp_id" property="masterTempId" jdbcType="VARCHAR" />
+    <result column="slave_temp_id" property="slaveTempId" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user_id" property="updateUserId" jdbcType="BIGINT" />
+  </resultMap>
+
+  <select id="selectSmsTemplate" resultType="com.fulan.api.message.vo.SmsTemplateResultVO" parameterType="com.fulan.api.message.vo.SmsTemplateVO" >
+    select t.id id, t.code code,t.title title,t.type type,t.parameter_type parameterType,t.content content, t.master_status masterStatus,
+    t.slave_status slaveStatus,t.retry_count retryCount, t.interval_time intervalTime,t.interval_time_type intervalTimeType,
+    t.create_time createTime,t.create_user_id createUserId,t.update_time updateTime,t.update_user_id updateUserId,
+    mc.name masterChannelName,mc.code masterChannelCode,
+    sc.name slaveChannelName,sc.code slaveChannelCode
+    from sms_template t left join sms_channel mc on t.master_channel_id = mc.id
+    left join sms_channel sc on t.slave_channel_id = sc.id
+    <where>
+      <if test="title != null and title != ''">
+        and title like CONCAT('%',#{title},'%')
+      </if>
+      <if test="content != null and content != ''">
+        and content like CONCAT('%',#{content},'%')
+      </if>
+      <if test="type != null and type != ''">
+        and type = #{type}
+      </if>
+      <if test="parameterType != null and parameterType != ''">
+        and parameter_type = #{parameterType}
+      </if>
+      <if test="code != null and code != ''">
+        and code = #{code}
+      </if>
+      <if test="startDate != null and startDate != '' ">
+        <![CDATA[ and DATE_FORMAT(create_time,'%Y-%m-%d')>= #{startDate}]]>
+      </if>
+      <if test="endDate !=null and endDate != ''">
+        <![CDATA[ and DATE_FORMAT(create_time,'%Y-%m-%d')<= #{endDate}]]>
+      </if>
+    </where>
+  </select>
+  
+   <select id="listForManageCount"  resultType="Integer">
+		select count(*) from sms_template where 1=1
+		<if test="title != null and title != '' ">
+			and title LIKE CONCAT('%', #{title},'%')
+		</if> 
+		<if test="code != null and code != '' ">
+			and code LIKE CONCAT('%', #{code},'%')
+		</if> 
+		<if test="masterCode != null and masterCode != '' ">
+			and master_channel_code LIKE CONCAT('%', #{masterCode},'%')
+		</if> 
+		<if test="type != null and type != '' ">
+			 and type=#{type}
+		</if> 
+	</select>
+
+  <select id="listForManage" resultType="com.fulan.api.message.vo.SmsTemplateResultVO" >
+	select t.id id, t.code code,t.title title,t.type type,t.parameter_type parameterType,t.content content,t.master_status as masterStatus,t.slave_status as slaveStatus,
+     t.retry_count retryCount, t.interval_time intervalTime,t.interval_time_type intervalTimeType,
+    t.create_time createTime,t.create_user_id createUserId,t.update_time updateTime,t.update_user_id updateUserId,
+    mc.name masterChannelName,mc.code masterChannelCode,
+    sc.name slaveChannelName,sc.code slaveChannelCode
+    from sms_template t left join sms_channel mc on t.master_channel_code = mc.code
+    left join sms_channel sc on t.slave_channel_code = sc.code where 1=1
+		<if test="title != null and title != '' "> 
+			and t.title LIKE CONCAT(CONCAT('%', #{title}),'%')
+		</if> 
+		<if test="code != null and code != '' "> 
+			and t.code LIKE CONCAT(CONCAT('%', #{code}),'%')
+		</if> 
+		<if test="masterCode != null and masterCode != '' "> 
+			and t.phomaster_channel_codene LIKE CONCAT(CONCAT('%', #{masterCode}),'%')
+		</if> 
+		<if test="type != null and type != '' ">
+			 and t.type=#{type}
+		</if> 
+	</select>
+
+    <select id="getSmsTemplateByTempId" resultType="com.fulan.api.message.domain.SmsTemplate" >
+        SELECT id,CODE,title,TYPE,master_channel_code,slave_channel_code,parameter_type,content,master_status,
+        slave_status,master_temp_id,slave_temp_id,retry_count,interval_time,interval_time_type,
+        create_time createTime,create_user_id,update_time,update_user_id
+        from sms_template
+        <where>
+            <if test="tempId != null and tempId != '' ">
+               ((master_channel_code=#{tempId} and master_status=#{status})
+                or (slave_channel_code=#{tempId} and slave_status=#{status}))
+            </if>
+        </where>
+    </select>
+
+</mapper>

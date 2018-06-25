@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.LearningProgressMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fulan.api.plan.domain.LearningProgress">
+        <id column="id" property="id" />
+        <result column="plan_id" property="planId" />
+        <result column="type" property="type" />
+        <result column="course_id" property="courseId" />
+        <result column="learning_time" property="learningTime" />
+        <result column="user_id" property="userId" />
+        <result column="user_name" property="userName" />
+        <result column="gmt_create" property="gmtCreate" />
+        <result column="gmt_modified" property="gmtModified" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       play_time AS playTime, id, plan_id AS planId, type, course_id AS courseId, learning_time AS learningTime, user_id AS userId, user_name AS userName, gmt_create AS gmtCreate, gmt_modified AS gmtModified
+    </sql>
+
+
+    <select id="getLearningProgress" parameterType="java.util.Map" resultType="com.fulan.api.plan.domain.LearningProgress">
+
+        SELECT
+        id, plan_id AS planId, type, course_id AS courseId,
+        learning_time AS learningTime, user_id AS userId, user_name AS userName,
+        gmt_create AS gmtCreate, gmt_modified AS gmtModified,
+        play_time AS playTime
+        FROM
+        el_learning_progress lp
+        WHERE
+        1 = 1
+        <if test="planId != null and planId != '' ">
+            AND  lp.plan_id=#{planId}
+        </if>
+        <if test="planType != null and planType != '' ">
+            AND lp.type=#{planType}
+        </if>
+        <if test="userId != null and userId != '' ">
+            AND lp.user_id=#{userId}
+        </if>
+        <if test="courseId != null and courseId != '' ">
+            AND lp.course_id=#{courseId}
+        </if>
+        ORDER BY
+        lp.gmt_create DESC
+        LIMIT 1
+    </select>
+</mapper>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fulan.application.mapper.AccountAgentMapper" >
+  <resultMap id="BaseResultMap" type="com.fulan.api.security.domain.AccountAgent" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="account_id" property="accountId" jdbcType="BIGINT" />
+    <result column="agent_id" property="agentId" jdbcType="VARCHAR" />
+    <result column="agent_type" property="agentType" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_by_id" property="createById" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_by_id" property="updateById" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, account_id, agent_id,agent_type,create_time, create_by_id, update_time, update_by_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from account_agent
+    where agent_id = #{agentId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from account_agent
+    where agent_id = #{agentId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fulan.api.security.domain.AccountAgent" >
+    insert into account_agent (id, account_id, agent_id,agent_type,
+      create_time, create_by_id, update_time, 
+      update_by_id)
+    values (#{id,jdbcType=BIGINT}, #{accountId,jdbcType=BIGINT}, #{agentId,jdbcType=VARCHAR},
+      #{agentType,jdbcType=CHAR},#{createTime,jdbcType=TIMESTAMP}, #{createById,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP},
+      #{updateById,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fulan.api.security.domain.AccountAgent" >
+    insert into account_agent
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="accountId != null" >
+        account_id,
+      </if>
+      <if test="agentId != null" >
+        agent_id,
+      </if>
+      <if test="agentType != null" >
+        agent_type,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createById != null" >
+        create_by_id,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateById != null" >
+        update_by_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="accountId != null" >
+        #{accountId,jdbcType=BIGINT},
+      </if>
+      <if test="agentId != null" >
+        #{agentId,jdbcType=VARCHAR},
+      </if>
+      <if test="agentType != null" >
+        #{agentType,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createById != null" >
+        #{createById,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateById != null" >
+        #{updateById,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fulan.api.security.domain.AccountAgent" >
+    update account_agent
+    <set >
+      <if test="accountId != null" >
+        account_id = #{accountId,jdbcType=BIGINT},
+      </if>
+      <if test="agentId != null" >
+        agent_id = #{agentId,jdbcType=VARCHAR},
+      </if>
+      <if test="agentType != null" >
+        agent_type = #{agentType,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createById != null" >
+        create_by_id = #{createById,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateById != null" >
+        update_by_id = #{updateById,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fulan.api.security.domain.AccountAgent" >
+    update account_agent
+    set account_id = #{accountId,jdbcType=BIGINT},
+      agent_id = #{agentId,jdbcType=VARCHAR},
+      agent_type = #{agentType,jdbcType=CHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by_id = #{createById,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by_id = #{updateById,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

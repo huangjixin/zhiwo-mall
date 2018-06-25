@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.InformationMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fulan.api.information.domain.Activity">
+    <id column="id" property="id" />
+    <result column="code" property="code" />
+    <result column="title" property="title" />
+    <result column="path" property="path" />
+    <result column="content" property="gmtCreate" />
+    <result column="content_type" property="contentType" />
+    <result column="activity_address" property="activityAddress" />
+    <result column="act_start_date" property="actStartDate" />
+    <result column="act_end_date" property="actEndDate" />
+    <result column="sign_up_start_date" property="signUpStartDate" />
+    <result column="sign_up_end_date" property="signUpEndDate" />
+    <result column="sign_up_set" property="signUpSet" />
+    <result column="limit_number" property="limitNumber" />
+    <result column="sign_up_object" property="signUpObject" />
+    <result column="specity_type" property="specityType" />
+    <result column="send_type" property="sendType" />
+    <result column="timing" property="timing" />
+    <result column="is_active" property="isActive" />
+    <result column="create_user" property="createUser" />
+    <result column="gmt_create" property="gmtCreate" />
+    <result column="modify_user" property="modifyUser" />
+    <result column="gmt_modified" property="gmtModified" />
+    <result column="deleted" property="deleted" />
+    <result column="remark" property="remark" />
+
+
+</resultMap>
+
+    <resultMap id="NewsBaseResultMap" type="com.fulan.api.information.domain.News">
+        <id column="id" property="id" />
+        <result column="code" property="code" />
+        <result column="title" property="title" />
+        <result column="content" property="gmtCreate" />
+        <result column="type" property="type" />
+        <result column="content_type" property="contentType" />
+        <result column="schedule_time" property="scheduleTime" />
+        <result column="content" property="content" />
+        <result column="is_secret" property="isSecret" />
+        <result column="open_share" property="openShare" />
+        <result column="msg_type" property="msgType" />
+        <result column="status" property="status" />
+        <result column="external_link_url" property="externalLinkUrl" />
+        <result column="is_active" property="isActive" />
+        <result column="create_user" property="createUser" />
+        <result column="gmt_create" property="gmtCreate" />
+        <result column="modify_user" property="modifyUser" />
+        <result column="gmt_modified" property="gmtModified" />
+        <result column="deleted" property="deleted" />
+        <result column="remark" property="remark" />
+    </resultMap>
+
+
+    <!-- 通用查询结果列 -->
+
+    <select id="queryInformationListByInformationType" resultType="com.fulan.api.information.vo.InformationVO">
+        SELECT * FROM ((SELECT 2 AS infoNewsType, ia.path AS infoPath,ia.limit_number AS signUpCount,ia.id AS
+        InformationId, ia.title AS content,ia.timing AS issueTime
+        FROM iris_activity ia LEFT JOIN iris_activity_member_mapping iamm
+        ON ia.id=iamm.activity_id
+        WHERE
+        (<if test="accountId!=null">
+        iamm.agent_code = #{accountId}
+    </if>
+        <if test="deptId!=null">
+            OR iamm.org_id =#{deptId}
+        </if>
+        <if test="companyId!=null">
+            OR iamm.company_id=#{companyId}
+        </if>
+        <if test="branchCompanyId!=null">
+            OR iamm.company_id=#{branchCompanyId}
+        </if>
+        )
+       AND ia.type=#{informationType}  AND ia.status=#{status}
+        )
+        UNION (SELECT 1 AS infoNewsType,ine.path AS infoPath, 0 AS signUpCount
+        ,ine.id AS InformationId, ine.title AS content, ine.schedule_time AS issueTime
+        FROM iris_news ine
+        LEFT JOIN iris_message_dept_mapping imdm
+        ON ine.id=imdm.news_id
+        WHERE
+        (<if test="accountId!=null">
+        imdm.agent_code = #{accountId}
+    </if>
+        <if test="deptId!=null">
+            OR imdm.dept_id =#{deptId}
+        </if>
+
+        <if test="companyId!=null ">
+            OR (imdm.company_id=#{companyId})
+        </if>
+
+        <if test="branchCompanyId!=null">
+            OR imdm.company_id=#{branchCompanyId}
+        </if>
+        )
+        AND
+        ine.type=#{informationType} AND ine.status=#{status}
+
+        )
+        ) AS iris
+        ORDER BY issueTime DESC
+    </select>
+
+
+    <select id="selectActivitySignUp"  resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM iris_apply_detail WHERE activity_id=#{activityId}
+    </select>
+
+    <select id="queryHasSignUp" resultType="java.lang.Long">
+        SELECT id  FROM iris_apply_detail  WHERE agent_code=#{accountId} AND  activity_id=#{activityId}
+    </select>
+
+    <select id="queryReadCount" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM iris_news_view_details WHERE news_id=#{informationId} AND type=#{type}
+    </select>
+
+
+    <select id="queryActivityCount" resultType="java.lang.Integer">
+        SELECT  limit_number FROM iris_activity WHERE id=#{activityId}
+    </select>
+
+
+    <select id="queryHasSignUpPerson" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM iris_apply_detail WHERE activity_id=#{activityId}
+    </select>
+
+    <insert id="insertSignUp" >
+        INSERT INTO iris_apply_detail
+        (id,activity_id,agent_code,acount_name,company_id,company_name,
+
+        branch_company_id,branch_company_name,org_id,org_name,level_id,apply_date)
+        VALUES (#{id},#{activityId},#{agentCode},#{acountName},#{companyId},#{companyName},
+
+        #{branchCompanyId},#{branchCompanyName},#{orgId},#{orgName},#{levelId},#{applyDate})
+    </insert>
+
+    <select id="queryInfoContent" resultType="com.fulan.api.information.vo.InformationContentVO">
+        SELECT content AS content,attachment_path AS path  FROM iris_activity WHERE  id=#{informationId}
+    </select>
+
+    <select id="queryNewsContent" resultType="com.fulan.api.information.vo.InformationContentVO">
+        SELECT content AS content,attachment_path AS  path  FROM iris_news WHERE  id=#{informationId}
+    </select>
+
+    <insert id="insertReadCount" >
+        INSERT INTO iris_news_view_details (id,news_id,agent_code,view_count,type) VALUES
+        (#{id},#{newsId},#{agentCode},#{viewCount},#{type})
+    </insert>
+
+
+    <select id="queryHasActivity" resultType="java.lang.Long">
+        SELECT id FROM iris_activity WHERE  id=#{activityId}
+    </select>
+
+
+
+</mapper>

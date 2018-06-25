@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <div class="content content_bg">
+        <!-- 头部区域-->
+        <div class="header clearfix">
+            <div class="wrap fr">
+                <div class="text">
+                    申请信息填写进度 : <em>80%</em>
+                </div>
+                <div class="rang">
+                    <div class="rang-son">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <ul class="content-body">
+            <!-- 申请人计划-->
+            <li>
+                <i>申请人才计划</i>
+                <div class="list">
+                    <em>人才计划</em>
+                    <div class="ipt_select ipt-select"> <i class="icon-arrow-full-down"></i>
+                        <input type="text" class="ipt-text" placeholder="请选择处理方式" readonly="">
+                        <select name="talentPlan">
+                            <option disabled="" selected="" value="">请选择政治面貌</option>
+                            <option value="党员">HA</option> <option value="团员">团员</option>
+                        </select>
+                    </div>
+                </div>
+            </li>
+            <!--推荐人信息 -->
+            <li>
+                <i>推荐人信息</i>
+                <ul class="list clearfix ui-form form">
+                    <li class="col-md-6">
+                        <strong>
+                            <span class="mustWrite">*</span>
+                            <span>推荐人</span>
+                        </strong>
+                        <input type="text" name="refereeName" class="ipt_text ipt-text check-vali" data-must="1" data-mustname="证件号码" placeholder="推荐人" value="">
+
+                    </li>
+                    <li class="col-md-6">
+                        <strong>
+                            <span class="mustWrite">*</span>
+                            <span>Agtcode</span>
+                        </strong>
+                        <div class="ipt-text">
+                            <input type="text" name="refereeNo" class="ipt-text sencond_input" placeholder="推荐人code" value="">
+                        </div>
+                        <label class="legal-person ipt-checkbox-custom payment-rule">
+                            <input name="beneficiaryType" type="checkbox" value="1">
+                            非本人
+                        </label>
+                    </li>
+                </ul>
+            </li>
+            <!-- 引荐关系确认-->
+            <li>
+                <i>引荐关系确认</i>
+                <div class="list">
+                    <span class="col-md-2">确认声明</span>
+                    <span class="col-md-2 span_second">签署声明</span>
+                    <strong class="col-md-2">
+                        <span class="mustWrite">*</span>
+                        <span>开始日期</span>
+                    </strong>
+                    <div class="ipt-datetime col-md-2">
+                        <input type="text" name="createTime" class="ipt-text ipt_date" placeholder="请选择有效期" readonly value="">
+                        <i class="icon-date"></i>
+                    </div>
+                    <span class="col-md-2 h38"></span>
+                    <span class="col-md-2">提交引荐关系</span>
+
+                </div>
+            </li>
+            <li>
+
+                <div class="content-last-list">
+                    <i class="icon-jinggao"></i>
+                    Tips：自引荐关系开始日起，6 个月内不得转投其他业务主管组别之增员。
+
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!-- 公共底部-->
+    <div class="bot-button"> <div class="buttonGroup"> <button type="button" class="savePersonalInfo">保存</button> <button type="button" class="goNext">下一步</button> </div></div>
+</body>
+</html>

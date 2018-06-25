@@ -1,0 +1,33 @@
+"memberList": [   {                           "agentCode": 1001,
+	               "agentName": "first",
+	               "ranking": 1,
+	               "FYP": 20000,
+	               "FYC": 20000,
+	               "CASE": 20           
+},
+            {               "agentCode": 1002,
+	               "agentName": "second",
+	               "ranking": 2,
+	               "FYP": 19000,
+	               "FYC": 19000,
+	               "CASE": 19           
+},
+  {               "agentCode": 1002,
+	               "agentName": "third",
+	               "ranking": 3,
+	               "FYP": 18000,
+	               "FYC": 18000,
+	               "CASE": 18           
+} ],
+"honorList": [        {       "original": "http://me.jpg",
+	       "certificateName": "高级执业证书",
+	       "certificateNo": "432503************6212",
+	       "grantDate": "2013-12-23",
+	       "other": "{}"       
+},
+        {       "original": "http://me.jpg",
+	        "certificateName": "top sale",
+	       "certificateNo": "432503************6213",
+	       "grantDate": "2013-12-23",
+	       "other": "{}"       
+}        ]

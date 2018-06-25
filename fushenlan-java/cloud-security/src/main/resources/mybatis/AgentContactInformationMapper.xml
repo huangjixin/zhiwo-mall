@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fulan.application.mapper.AgentContactInformationMapper" >
+  <resultMap id="BaseResultMap" type="com.fulan.api.security.domain.AgentContactInformation" >
+    <id column="agent_contact_id" property="agentContactId" jdbcType="BIGINT" />
+    <result column="agent_id" property="agentId" jdbcType="VARCHAR" />
+    <result column="contact_type" property="contactType" jdbcType="VARCHAR" />
+    <result column="contact_num" property="contactNum" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_by_name" property="createByName" jdbcType="VARCHAR" />
+    <result column="create_by_id" property="createById" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_by_name" property="updateByName" jdbcType="VARCHAR" />
+    <result column="update_by_id" property="updateById" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    agent_contact_id, agent_id, contact_type, contact_num, create_time, create_by_name, 
+    create_by_id, update_time, update_by_name, update_by_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from agent_contact_information
+    where agent_contact_id = #{agentContactId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from agent_contact_information
+    where agent_id = #{agentId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fulan.api.security.domain.AgentContactInformation" >
+    insert into agent_contact_information (agent_contact_id, agent_id, contact_type, 
+      contact_num, create_time, create_by_name, 
+      create_by_id, update_time, update_by_name, 
+      update_by_id)
+    values (#{agentContactId,jdbcType=BIGINT}, #{agentId,jdbcType=VARCHAR}, #{contactType,jdbcType=VARCHAR}, 
+      #{contactNum,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createByName,jdbcType=VARCHAR}, 
+      #{createById,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateByName,jdbcType=VARCHAR}, 
+      #{updateById,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fulan.api.security.domain.AgentContactInformation" >
+    insert into agent_contact_information
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="agentContactId != null" >
+        agent_contact_id,
+      </if>
+      <if test="agentId != null" >
+        agent_id,
+      </if>
+      <if test="contactType != null" >
+        contact_type,
+      </if>
+      <if test="contactNum != null" >
+        contact_num,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createByName != null" >
+        create_by_name,
+      </if>
+      <if test="createById != null" >
+        create_by_id,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateByName != null" >
+        update_by_name,
+      </if>
+      <if test="updateById != null" >
+        update_by_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="agentContactId != null" >
+        #{agentContactId,jdbcType=BIGINT},
+      </if>
+      <if test="agentId != null" >
+        #{agentId,jdbcType=VARCHAR},
+      </if>
+      <if test="contactType != null" >
+        #{contactType,jdbcType=VARCHAR},
+      </if>
+      <if test="contactNum != null" >
+        #{contactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createByName != null" >
+        #{createByName,jdbcType=VARCHAR},
+      </if>
+      <if test="createById != null" >
+        #{createById,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateByName != null" >
+        #{updateByName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateById != null" >
+        #{updateById,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fulan.api.security.domain.AgentContactInformation" >
+    update agent_contact_information
+    <set >
+      <if test="agentId != null" >
+        agent_id = #{agentId,jdbcType=VARCHAR},
+      </if>
+      <if test="contactType != null" >
+        contact_type = #{contactType,jdbcType=VARCHAR},
+      </if>
+      <if test="contactNum != null" >
+        contact_num = #{contactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createByName != null" >
+        create_by_name = #{createByName,jdbcType=VARCHAR},
+      </if>
+      <if test="createById != null" >
+        create_by_id = #{createById,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateByName != null" >
+        update_by_name = #{updateByName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateById != null" >
+        update_by_id = #{updateById,jdbcType=BIGINT},
+      </if>
+    </set>
+    where agent_contact_id = #{agentContactId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fulan.api.security.domain.AgentContactInformation" >
+    update agent_contact_information
+    set agent_id = #{agentId,jdbcType=VARCHAR},
+      contact_type = #{contactType,jdbcType=VARCHAR},
+      contact_num = #{contactNum,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by_name = #{createByName,jdbcType=VARCHAR},
+      create_by_id = #{createById,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by_name = #{updateByName,jdbcType=VARCHAR},
+      update_by_id = #{updateById,jdbcType=BIGINT}
+    where agent_contact_id = #{agentContactId,jdbcType=BIGINT}
+  </update>
+</mapper>

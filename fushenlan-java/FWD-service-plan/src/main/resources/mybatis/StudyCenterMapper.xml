@@ -1,0 +1,771 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.StudyCenterMapper">
+	<resultMap id="MyStudyPlanResultMap" type="com.fulan.api.plan.vo.StudyPlanVo">
+			<id column="id" property="id" />
+			<result column="name" property="name" />
+			<result column="endDate" property="endDate" />
+			<result column="is_reward_point" property="isRewardPoint" />
+			<result column="is_reward_certification" property="isRewardCertification" />
+			<result column="is_reward_qualification" property="isRewardQualification" />
+			<result column="isExpiredAlarm" property="isExpiredAlarm" />
+			<result column="planType" property="planType"/>
+	</resultMap>
+	
+	<select id="findMyClassPlanById" parameterType="map"
+		resultMap="MyStudyPlanResultMap">
+	<![CDATA[
+			SELECT
+	classPlan.id,
+	'5' AS planType,
+	classPlan. NAME,
+	classPlan.start_date AS startDate,
+	classPlan.end_date AS endDate,
+	IFNULL(
+		classPlan.is_expired_alarm,
+		0
+	) AS isExpiredAlarm,
+	IFNULL(
+		classPlan.is_reward_point,
+		0
+	) AS is_reward_point,
+	IFNULL(
+		classPlan.is_reward_certification,
+		0
+	) AS is_reward_certification,
+	IFNULL(
+		classPlan.is_reward_qualification,
+		0
+	) AS is_reward_qualification
+FROM
+	el_class_plan_enter enter
+INNER JOIN el_class_plan classPlan ON enter.plan_id = classPlan.id
+AND classPlan.state = 1
+WHERE
+	enter.user_id = #{accountId}
+
+		]]>
+	</select>
+
+	<select id="findMyPostPlanById" parameterType="map"
+			resultMap="MyStudyPlanResultMap">
+		SELECT
+		post.id,
+		'3' AS planType,
+		post. NAME,
+		'' AS startDate,
+		'' AS endDate,
+		'' AS isExpiredAlarm,
+		'' AS is_reward_point,
+		'' AS is_reward_certification,
+		'' AS is_reward_qualification
+		FROM
+		el_learning_progress progress
+		INNER JOIN el_post_development post ON progress.plan_id = post.id
+		where progress.user_id=#{accountId}
+	</select>
+
+	<select id="findMyCompPlanById" parameterType="map"
+			resultMap="MyStudyPlanResultMap">
+		SELECT
+		cplan.id,
+		'4' AS planType,
+		cplan. NAME,
+		cplan.start_date AS startDate,
+		cplan.end_date AS endDate,
+		IFNULL(cplan.is_expired_alarm, 0) AS isExpiredAlarm,
+		IFNULL(cplan.is_reward_point, 0) AS is_reward_point,
+		IFNULL(
+		cplan.is_reward_certification,
+		0
+		) AS is_reward_certification,
+		IFNULL(
+		cplan.is_reward_qualification,
+		0
+		) AS is_reward_qualification
+		FROM
+		el_learning_progress progress
+		INNER JOIN el_compulsory_cplan cplan ON progress.plan_id = cplan.id
+		where progress.user_id=#{accountId}
+	</select>
+	
+	<select id="getIntegral" parameterType="long" resultType="com.fulan.api.plan.vo.SignIntegralVo">
+		SELECT
+		IFNULL(sum(inte.integral), 0) AS integral,
+		CASE
+		WHEN DATE(MAX(inte.gmt_create)) - DATE(now()) = 0 THEN
+		1
+		ELSE
+		0
+		END AS signFlag
+		FROM
+		(
+		SELECT
+		user_id,
+		detail.gmt_create,
+		CASE
+		WHEN detail.integral_type = 1 THEN
+		integral_number
+		WHEN detail.integral_type = 2 THEN
+		(0 - integral_number)
+		ELSE
+		0
+		END AS integral
+		FROM
+		el_integral_detail detail order by gmt_create desc
+		) inte
+		WHERE
+		inte.user_id =  #{id}
+	</select>
+
+
+	<resultMap id="ActivityCollectResultMap" type="com.fulan.api.plan.vo.ActivityCollectVo">
+		<id column="collectId" property="collectId" />
+		<result column="eoaId" property="id" />
+		<result column="eoaName" property="name" />
+		<result column="eoaStartDate" property="startDate" />
+		<result column="eoaEndDate" property="endDate" />
+		<result column="eoaBannerPath" property="bannerPath" />
+		<result column="eoaAddress" property="address" />
+		<result column="eoaLimitEnter" property="limitEnter" />
+		<result column="eoaRewardPoint" property="rewardPoint" />
+		<result column="elLecturer" property="lecturer" />
+		<result column="epcStartDate" property="courseStartTime" />
+		<result column="ecDescription" property="courseDescription" />
+		<result column="eccId" property="courseCollectId" />
+		<result column="epcEndDate" property="courseEndTime" />
+		<result column="eaeId" property="enterId" />
+		<result column="eoasId" property="signId" />
+		<result column="eaeSignNumber" property="signUpNumber" />
+		<result column="eqName" property="qualificationName" />
+		<result column="ecfName" property="certificateName" />
+		<result column="ecfPath" property="certificatePath" />
+		<result column="ecId" property="courseId" />
+		<result column="eoaBeforeBegin" property="beforeBegin" />
+		<result column="eoaAfterBegin" property="afterBegin" />
+		<result column="eoaSignTimeType" property="signTimeType" />
+		<result column="eoaEnterStartDate" property="enterStartTime" />
+		<result column="eoaEnterEndDate" property="enterEndTime" />
+		<result column="hasAuthority" property="hasAuthority" />
+	</resultMap>
+
+	<!-- 个人收藏  -->
+	<select id="getActivityCollectByAccountId" parameterType="com.fulan.api.plan.vo.ActivityVO" resultMap="ActivityCollectResultMap">
+		SELECT
+		collect.id as collectId,
+		eoa.id AS eoaId,
+		eoa.before_begin AS eoaBeforeBegin,
+		eoa.enter_start_date AS eoaEnterStartDate,
+		eoa.enter_end_date AS eoaEnterEndDate,
+		eoa.after_begin AS eoaAfterBegin,
+		eoa.sign_time_type AS eoaSignTimeType,
+		eq. NAME AS eqName,
+		ecf. NAME AS ecfName,
+		ecf.path ecfPath,
+		COUNT(DISTINCT(eae.id)) AS eaeSignNumber,
+		eoa. NAME AS eoaName,
+		eoa.start_date AS eoaStartDate,
+		eoa.end_date AS eoaEndDate,
+		eoa.banner_path AS eoaBannerPath,
+		eoa.address AS eoaAddress,
+		eoa.limit_enter AS eoaLimitEnter,
+		eoa.reward_point AS eoaRewardPoint,
+		eoa.course_id AS ecId,
+		ec.lecturer AS elLecturer,
+		eaee.enterId AS eaeId,
+		eoas.id AS eoasId,
+		ec.description AS ecDescription,
+		epc.start_time AS epcStartDate,
+		epc.end_time AS epcEndDate,
+		ecc.id AS eccId,
+		IF(paa.id is null,'0','1' ) AS hasAuthority
+		FROM
+		el_plan_collect collect
+		LEFT JOIN el_offline_activity eoa ON collect.plan_id = eoa.id
+		LEFT JOIN el_plan_course epc ON eoa.id = epc.plan_id
+		LEFT JOIN el_course ec ON eoa.course_id = ec.id and epc.associate_id=ec.id
+		LEFT JOIN el_offline_activity_enter eae ON eoa.id = eae.course_id
+		LEFT JOIN
+		(
+		SELECT max(oae.id) AS enterId,oae.course_id
+		FROM el_offline_activity_enter oae
+		WHERE
+		1=1
+		<if test="userId != null and userId != '' ">
+			AND oae.user_id=#{userId}
+		</if>
+		GROUP BY oae.course_id
+		) eaee ON eoa.id = eaee.course_id
+		LEFT JOIN el_offline_activity_sign eoas ON eoas.course_id = eoa.id and collect.user_id=eoas.user_id
+		LEFT JOIN el_plan_collect ecc ON ecc.plan_id = eoa.id
+		LEFT JOIN el_qualification eq ON eq.id = eoa.qualification_id
+		LEFT JOIN el_certificate ecf ON ecf.id = eoa.certification_id
+		LEFT JOIN (
+		select pa.id,pa.course_id from el_plan_authority pa
+		where pa.course_type=6
+		<if test="userId != null and userId != '' ">
+			AND pa.associate_id=#{userId}
+		</if>
+		)paa
+		ON paa.course_id = eoa.id
+		WHERE
+		collect.plan_type = 6
+		AND collect.user_id = #{userId}
+		GROUP BY
+		eoa.id
+		HAVING
+		(
+		eoa.start_date >= NOW()
+		OR eoa.end_date >= NOW()
+		)
+		ORDER BY
+		epcEndDate ASC,
+		eoaEnterStartDate ASC
+	</select>
+
+	<select id="queryActivityCollectCount" parameterType="map" resultType="java.lang.Integer">
+		SELECT
+		IFNULL(
+		(
+		SELECT
+		COUNT(DISTINCT(collect.id))
+		FROM
+		el_plan_collect collect
+		INNER JOIN el_offline_activity eoa ON collect.plan_id = eoa.id
+		LEFT JOIN el_course ec ON eoa.course_id = ec.id
+		LEFT JOIN el_plan_course epc ON ec.is_online = epc.associate_type
+		LEFT JOIN el_offline_activity_enter eae ON eoa.id = eae.course_id
+		LEFT JOIN el_offline_activity_sign eoas ON eoas.course_id = eoa.id
+		LEFT JOIN el_plan_collect ecc ON ecc.plan_id = eoa.id
+		LEFT JOIN el_qualification eq ON eq.id = eoa.qualification_id
+		LEFT JOIN el_certificate ecf ON ecf.id = eoa.certification_id
+		WHERE
+		collect.plan_type = 2
+		AND collect.user_id = #{accountId}
+		AND (
+		eoa.start_date >= NOW()
+		OR eoa.end_date >= NOW()
+		)
+		GROUP BY
+		eoa.id
+		),
+		0
+		) AS count
+		FROM
+		DUAL
+	</select>
+
+
+	<resultMap id="PublicClassCollectResultMap" type="com.fulan.api.plan.vo.PublicClassCollectVo">
+		<id column="collectId" property="collectId"/>
+		<result column="id" property="id" />
+		<result column="planId" property="planId" />
+		<result column="planType" property="type" />
+		<result column="isRewardPoint" property="isRewardPoint" />
+		<result column="isRewardCertification" property="isRewardCertification" />
+		<result column="isRewardQualification" property="isRewardQualification" />
+		<result column="name" property="name" />
+		<result column="description" property="description" />
+	</resultMap>
+
+	<select id="getPublicClassCollectByAccountId" parameterType="map" resultMap="PublicClassCollectResultMap">
+		SELECT
+		collect.id as collectId,
+		pu.id,
+		pu.plan_id AS planId,
+		'1' AS planType,
+		IFNULL(pu.is_reward_point ,0) AS isRewardPoint,
+		IFNULL(pu.is_reward_certification,0) AS isRewardCertification,
+		IFNULL(pu.is_reward_qualification,0) AS isRewardQualification,
+		esp.name,
+		esp.description
+		FROM
+		el_public_class pu
+		INNER JOIN el_plan_collect collect ON pu.id=collect.plan_id and collect.plan_type=1
+		LEFT JOIN el_study_plan esp ON esp.id = pu.plan_id
+		WHERE
+		pu.state = 1 and collect.user_id=#{accountId}
+		ORDER  BY collect.gmt_create desc
+	</select>
+
+
+	<delete id="deleteCollectById" parameterType="long">
+		delete from el_plan_collect where id=#{id}
+	</delete>
+
+    <delete id="deleteHistoryById" parameterType="long">
+        delete from el_history where id=#{id}
+    </delete>
+
+
+	<delete id="deleteHistoryByIds" parameterType="java.util.ArrayList">
+		delete from el_history where id in
+		<foreach collection="historyIds" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		 </foreach>
+	</delete>
+
+	<delete id="deleteCollectByIds" parameterType="java.util.ArrayList">
+		delete from el_plan_collect where id IN
+		<foreach collection="collectIds" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<select id="getCourseIdByPC" parameterType="map" resultType="com.fulan.api.plan.vo.CourseVo">
+		select result.id,result.type
+		from (select distinct course.id,
+		CASE
+		WHEN course.type = 1 THEN
+		'视频'
+		WHEN course.type = 2 THEN
+		'SCORM'
+		WHEN course.type = 3 THEN
+		'PPT'
+		WHEN course.type = 4 THEN
+		'WORD'
+		WHEN course.type = 5 THEN
+		'EXCEL'
+		END AS type
+		from el_public_class class
+		left join el_study_plan plan on class.plan_id=plan.id
+		left join el_plan_course planCourse on plan.id=planCourse.plan_id
+		left join el_course course on planCourse.associate_id=course.id
+		WHERE
+		class.state = 1 and class.id= #{classId})result where result.id is not null
+	</select>
+
+	<select id="getLearningProgress" parameterType="map" resultType="int">
+		SELECT
+		IFNULL(
+		(
+		SELECT
+		CASE
+		WHEN progress.studyTime >= course.learning_time THEN
+		1
+		ELSE
+		0
+		END AS learningTime
+		FROM
+		el_course course
+		LEFT JOIN (
+		SELECT
+		course.id,
+		IFNULL(
+		SUM(progress.learning_time),
+		0
+		) AS studyTime
+		FROM
+		el_course course
+		LEFT JOIN el_learning_progress progress ON course.id = progress.course_id
+		AND progress.plan_id = #{planId}
+		WHERE
+		progress.user_id = #{accountId}
+		) progress ON progress.id = course.id
+		WHERE
+		course.id = #{courseId}
+		),
+		0
+		) AS learningTime
+		FROM
+		DUAL
+	</select>
+
+
+	<resultMap id="HistoryResultMap" type="com.fulan.api.plan.vo.HistoryVo">
+		<id column="historyId" property="historyId"/>
+		<result column="planId" property="planId" />
+		<result column="historyType" property="planType" />
+		<result column="isRewardPoint" property="isRewardPoint" />
+		<result column="isRewardCertification" property="isRewardCertification" />
+		<result column="isRewardQualification" property="isRewardQualification" />
+		<result column="name" property="name" />
+		<result column="description" property="description" />
+		<result column="bannerPath" property="bannerPath" />
+		<result column="courseId" property="courseId" />
+		<result column="enterStartDate" property="enterStartDate" />
+		<result column="startDate" property="startDate" />
+		<result column="endDate" property="endDate" />
+		<result column="enterEndDate" property="enterEndDate" />
+		<result column="isNeedSign" property="isNeedSign" />
+		<result column="isNeedEnter" property="isNeedEnter" />
+		<result column="isNoneedEnter" property="isNoneedEnter" />
+		<result column="signTimeType" property="signTimeType" />
+		<result column="beforeBegin" property="beforeBegin" />
+		<result column="afterBegin" property="afterBegin" />
+		<result column="address" property="address" />
+		<result column="rewardPoint" property="rewardPoint" />
+		<result column="certificationId" property="certificationId" />
+		<result column="qualificationId" property="qualificationId" />
+		<result column="limitEnter" property="limitEnter" />
+		<result column="certificationName" property="certificationName" />
+		<result column="qualificationName" property="qualificationName" />
+		<result column="signUpNumber" property="signUpNumber" />
+		<result column="courseCollectId" property="courseCollectId" />
+		<result column="enterId" property="enterId" />
+		<result column="signId" property="signId" />
+		<result column="hasAuthority" property="hasAuthority" />
+		<result column="commentId" property="commentId" />
+	</resultMap>
+
+	<select id="getHistoryRecord" parameterType="map" resultMap="HistoryResultMap">
+		SELECT DISTINCT
+		result.historyId,
+		result.historyType,
+		result.planId,
+		result.isRewardPoint,
+		result.isRewardCertification,
+		result.isRewardQualification,
+		result. NAME,
+		result.description,
+		result.courseId,
+		result.bannerPath,
+		result.enterStartDate,
+		result.startDate,
+		result.endDate,
+		result.enterEndDate,
+		result.isNeedSign,
+		result.isNeedEnter,
+		result.isNoneedEnter,
+		result.signTimeType,
+		result.beforeBegin,
+		result.afterBegin,
+		result.address,
+		result.rewardPoint,
+		result.certificationId,
+		result.qualificationId,
+		result.limitEnter,
+		result.certificationName,
+		result.qualificationName,
+		result.signUpNumber,
+		result.courseCollectId,
+		result.enterId,
+		result.signId,
+		result.hasAuthority,
+		result.commentId
+		FROM
+		(
+		SELECT
+		history.id AS historyId,
+		'1' AS historyType,
+		pu.id AS planId,
+		IFNULL(pu.is_reward_point, 0) AS isRewardPoint,
+		IFNULL(
+		pu.is_reward_certification,
+		0
+		) AS isRewardCertification,
+		IFNULL(
+		pu.is_reward_qualification,
+		0
+		) AS isRewardQualification,
+		esp. NAME,
+		esp.description,
+		history.gmt_create,
+		null AS courseId,
+		null AS bannerPath,
+		null AS enterStartDate,
+		null AS startDate,
+		null AS endDate,
+		null AS enterEndDate,
+		null AS isNeedSign,
+		null AS isNeedEnter,
+		null AS isNoneedEnter,
+		null AS signTimeType,
+		null AS beforeBegin,
+		null AS afterBegin,
+		null AS address,
+		null AS rewardPoint,
+		null AS certificationId,
+		null AS qualificationId,
+		null AS limitEnter,
+		null AS certificationName,
+		null AS qualificationName,
+		null AS signUpNumber,
+		null AS courseCollectId,
+		null AS enterId,
+		null AS signId,
+		null AS hasAuthority,
+		null AS commentId
+		FROM
+		el_history history
+		INNER JOIN el_public_class pu ON history.plan_id = pu.id
+		LEFT JOIN el_study_plan esp ON esp.id = pu.plan_id
+		WHERE
+		history.user_id = #{accountId}
+		UNION ALL
+		SELECT
+		history.id AS historyId,
+		'5' AS historyType,
+		class.id AS planId,
+		IFNULL(class.is_reward_point, 0) AS isRewardPoint,
+		IFNULL(
+		class.is_reward_certification,
+		0
+		) AS isRewardCertification,
+		IFNULL(
+		class.is_reward_qualification,
+		0
+		) AS isRewardQualification,
+		class. NAME,
+		class.description,
+		history.gmt_create,
+		null AS courseId,
+		null AS bannerPath,
+		null AS enterStartDate,
+		null AS startDate,
+		null AS endDate,
+		null AS enterEndDate,
+		null AS isNeedSign,
+		null AS isNeedEnter,
+		null AS isNoneedEnter,
+		null AS signTimeType,
+		null AS beforeBegin,
+		null AS afterBegin,
+		null AS address,
+		null AS rewardPoint,
+		null AS certificationId,
+		null AS qualificationId,
+		null AS limitEnter,
+		null AS certificationName,
+		null AS qualificationName,
+		null AS signUpNumber,
+		null AS courseCollectId,
+		null AS enterId,
+		null AS signId,
+		null AS hasAuthority,
+		null AS commentId
+		FROM
+		el_history history
+		INNER JOIN el_class_plan class ON history.plan_id = class.id
+		WHERE
+		history.user_id = #{accountId}
+		UNION ALL
+		SELECT
+		history.id AS historyId,
+		'3' AS historyType,
+		post.id AS planId,
+		0 AS isRewardPoint,
+		0 AS isRewardCertification,
+		0 AS isRewardQualification,
+		post. NAME,
+		post.description,
+		history.gmt_create,
+		null AS courseId,
+		null AS bannerPath,
+		null AS enterStartDate,
+		null AS startDate,
+		null AS endDate,
+		null AS enterEndDate,
+		null AS isNeedSign,
+		null AS isNeedEnter,
+		null AS isNoneedEnter,
+		null AS signTimeType,
+		null AS beforeBegin,
+		null AS afterBegin,
+		null AS address,
+		null AS rewardPoint,
+		null AS certificationId,
+		null AS qualificationId,
+		null AS limitEnter,
+		null AS certificationName,
+		null AS qualificationName,
+		null AS signUpNumber,
+		null AS courseCollectId,
+		null AS enterId,
+		null AS signId,
+		null AS hasAuthority,
+		null AS commentId
+		FROM
+		el_history history
+		INNER JOIN el_post_development post ON history.plan_id = post.id
+		WHERE
+		history.user_id = #{accountId}
+		UNION ALL
+		SELECT
+		history.id AS historyId,
+		'4' AS historyType,
+		cplan.id AS planId,
+		IFNULL(cplan.is_reward_point, 0) AS isRewardPoint,
+		IFNULL( cplan.is_reward_certification, 0 ) AS isRewardCertification,
+		IFNULL( cplan.is_reward_qualification, 0 ) AS isRewardQualification,
+		cplan. NAME,
+		cplan.description,
+		history.gmt_create,
+		null AS courseId,
+		null AS bannerPath,
+		null AS enterStartDate,
+		null AS startDate,
+		null AS endDate,
+		null AS enterEndDate,
+		null AS isNeedSign,
+		null AS isNeedEnter,
+		null AS isNoneedEnter,
+		null AS signTimeType,
+		null AS beforeBegin,
+		null AS afterBegin,
+		null AS address,
+		null AS rewardPoint,
+		null AS certificationId,
+		null AS qualificationId,
+		null AS limitEnter,
+		null AS certificationName,
+		null AS qualificationName,
+		null AS signUpNumber,
+		null AS courseCollectId,
+		null AS enterId,
+		null AS signId,
+		null AS hasAuthority,
+		null AS commentId
+		FROM
+		el_history history
+		INNER JOIN el_compulsory_cplan cplan ON history.plan_id = cplan.id
+		WHERE
+		history.user_id = #{accountId}
+		UNION ALL
+		SELECT
+		history.id AS historyId,
+		'6' AS historyType,
+		pu.id AS planId,
+		IFNULL(pu.is_reward_point, 0) AS isRewardPoint,
+		IFNULL( pu.is_reward_certification, 0 ) AS isRewardCertification,
+		IFNULL( pu.is_reward_qualification, 0 ) AS isRewardQualification,
+		pu. NAME,
+		pu.description,
+		history.gmt_create,
+		pu.course_id AS courseId,
+		pu.banner_path AS bannerPath,
+		pu.enter_start_date AS enterStartDate,
+		pu.start_date AS startDate,
+		pu.end_date AS endDate,
+		pu.enter_end_date AS enterEndDate,
+		pu.is_need_sign AS isNeedSign,
+		pu.is_need_enter AS isNeedEnter,
+		pu.is_noneed_enter AS isNoneedEnter,
+		pu.sign_time_type AS signTimeType,
+		pu.before_begin AS beforeBegin,
+		pu.after_begin AS afterBegin,
+		pu.address,
+		pu.reward_point AS rewardPoint,
+		pu.certification_id AS certificationId,
+		pu.qualification_id AS qualificationId,
+		pu.limit_enter AS limitEnter,
+		cer. NAME AS certificationName,
+		qual. NAME AS qualificationName,
+		hp.signUpNumber,
+		cp.courseCollectId,
+		oaee.course_id AS enterId,
+		oass.course_id AS signId,
+		IF (paa.id IS NULL, '0', '1') AS hasAuthority,
+		epcoo.commentId
+		FROM
+		el_history history
+		INNER JOIN el_offline_activity pu ON history.plan_id = pu.id
+		LEFT JOIN el_certificate cer ON cer.id = pu.certification_id
+		LEFT JOIN el_qualification qual ON qual.id = pu.qualification_id
+		LEFT JOIN (
+		SELECT
+		count(*) AS signUpNumber,
+		h.course_id
+		FROM
+		el_offline_activity_enter h
+		GROUP BY
+		h.course_id
+		) hp ON hp.course_id = pu.id
+		LEFT JOIN (
+		SELECT
+		max(epc.id) AS courseCollectId,
+		epc.plan_id
+		FROM
+		el_plan_collect epc
+		WHERE
+		epc.plan_type = 6
+		AND epc.user_id = #{accountId}
+		GROUP BY
+		epc.plan_id
+		) cp ON cp.plan_id = pu.id
+		LEFT JOIN (
+		SELECT
+		max(oae.id) AS enterId,
+		oae.course_id
+		FROM
+		el_offline_activity_enter oae
+		WHERE
+		1 = 1
+		AND oae.user_id = #{accountId}
+		GROUP BY
+		oae.course_id
+		) oaee ON oaee.course_id = pu.id
+		LEFT JOIN (
+		SELECT
+		max(oas.id) AS signId,
+		oas.course_id
+		FROM
+		el_offline_activity_sign oas
+		WHERE
+		1 = 1
+		AND oas.user_id = #{accountId}
+		GROUP BY
+		oas.course_id
+		) oass ON oass.course_id = pu.id
+		LEFT JOIN (
+		SELECT
+		pa.id,
+		pa.course_id
+		FROM
+		el_plan_authority pa
+		WHERE
+		pa.course_type = 6
+		AND pa.associate_id = #{accountId}
+		GROUP BY
+		pa.course_id
+		) paa ON paa.course_id = pu.id
+		LEFT JOIN (
+		SELECT
+		max(epco.id) AS commentId,
+		epco.course_id
+		FROM
+		el_plan_comment epco
+		WHERE
+		epco.course_type = 6
+		AND epco.comment_user = #{accountId}
+		GROUP BY
+		epco.course_id
+		) epcoo ON epcoo.course_id = pu.id
+		WHERE
+		history.plan_type=6 and history.user_id=#{accountId}
+		) result
+		ORDER BY
+		result.gmt_create DESC
+	</select>
+
+	<select id="getCourses" parameterType="long" resultType="com.fulan.api.plan.vo.CourseVo">
+		SELECT
+		result.id,
+		result.type
+		FROM
+		(
+		SELECT
+		course.id,
+		CASE
+		WHEN course.type = 1 THEN
+		'视频'
+		WHEN course.type = 2 THEN
+		'SCORM'
+		WHEN course.type = 3 THEN
+		'PPT'
+		WHEN course.type = 4 THEN
+		'WORD'
+		WHEN course.type = 5 THEN
+		'EXCEL'
+		END AS type
+		FROM
+		el_plan_course planCourse
+		LEFT JOIN el_course course ON planCourse.associate_id = course.id
+		WHERE
+		planCourse.plan_id = #{planId}
+		) result
+		WHERE
+		result.id IS NOT NULL
+	</select>
+
+</mapper>

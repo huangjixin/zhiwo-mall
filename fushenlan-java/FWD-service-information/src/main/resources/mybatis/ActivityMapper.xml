@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fulan.application.mapper.ActivityMapper" >
+ <resultMap id="BaseResultMap" type="com.fulan.api.information.domain.Activity" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="path" property="path" jdbcType="VARCHAR"  javaType = "java.lang.String" />
+    <result column="attachment_path" property="attachmentPath" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="CLOB" />
+    <result column="content_type" property="contentType" jdbcType="TINYINT" />
+    <result column="external_link_url" property="externalLinkUrl" jdbcType="VARCHAR" />
+    <result column="is_secret" property="isSecret" jdbcType="TINYINT" />
+    <result column="open_share" property="openShare" jdbcType="TINYINT" />
+    <result column="activity_address" property="activityAddress" jdbcType="VARCHAR" />
+    <result column="act_start_date" property="actStartDate" jdbcType="TIMESTAMP" />
+    <result column="act_end_date" property="actEndDate" jdbcType="TIMESTAMP" />
+    <result column="sign_up_start_date" property="signUpStartDate" jdbcType="TIMESTAMP" />
+    <result column="sign_up_end_date" property="signUpEndDate" jdbcType="TIMESTAMP" />
+    <result column="sign_up_set" property="signUpSet" jdbcType="TINYINT" />
+     <result column="limit_number" property="limitNumber" jdbcType="TINYINT" />
+     <result column="specity_type" property="specityType" jdbcType="TINYINT" />
+    <result column="send_type" property="sendType" jdbcType="TINYINT" />
+    <result column="timing" property="timing" jdbcType="DATE" />
+   <result column="is_active" property="isActive" jdbcType="TINYINT" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="modify_user" property="modifyUser" jdbcType="BIGINT" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" /> 
+   <result column="deleted" property="deleted" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap> 
+
+  
+  <select id="listForManageCount"  resultType="Integer" >
+		select count(*) from iris_activity where 1=1 
+		
+		<if test="title != null and title != '' ">
+			and title LIKE CONCAT('%', #{title},'%')
+		</if> 
+		<if test="type != null and type != '' ">
+			and type =#{type}
+		</if> 
+		<if test="status != null and status != '' ">
+			and status =#{status}
+		</if> 
+		 <if test="actStartDate != null and actStartDate != '' ">
+        <![CDATA[ and DATE_FORMAT(act_start_date,'%Y-%m-%d')>= #{actStartDate}]]>
+      </if>
+      <if test="actEndDate !=null and actEndDate != ''">
+        <![CDATA[ and DATE_FORMAT(act_end_date,'%Y-%m-%d')<= #{actEndDate}]]>
+      </if>
+      and deleted=0
+	</select>
+  
+  <select id="listForManage" resultType="com.fulan.api.information.vo.ActivityVo" >
+		select i.id,i.title,i.type,i.status,i.sign_up_set as signUpSet, i.timing,invd.view_count AS viewCount from iris_activity i 
+left join iris_news_view_details invd on i.id=invd.news_id
+ 			where  1=1  
+		<if test="title != null and title != '' ">
+			and i.title LIKE CONCAT('%', #{title},'%')
+		</if> 
+		<if test="type != null and type != '' ">
+			and i.type =#{type}
+		</if> 
+		<if test="status != null and status != '' ">
+			and i.status =#{status}
+		</if> 
+		
+		 <if test="actStartDate != null and actStartDate != '' ">
+        <![CDATA[ and DATE_FORMAT(i.act_start_date,'%Y-%m-%d')>= #{actStartDate}]]>
+      </if>
+      <if test="actEndDate !=null and actEndDate != ''">
+        <![CDATA[ and DATE_FORMAT(i.act_end_date,'%Y-%m-%d')<= #{actEndDate}]]>
+      </if>
+    and  i.deleted=0
+    group by i.id
+	</select>
+  
+  <!-- <update id="updateStatus" >
+	    update iris_news set status = #{status} where id =#{id}
+	</update> -->
+	
+	<update id="updateStatus" >
+		update iris_activity
+		<set>
+		     <if test="status != null and status != ''">
+		        status= #{status},
+		      </if>
+		      <if test="date != null">
+		        timing= #{date},
+		      </if>
+		     </set>
+    	where id = #{id}
+	</update>
+	
+	<update id="deleteActivity" >
+	    update iris_activity set deleted =1 where id =#{id}
+	</update>
+	
+	
+	<insert id="insertActivity" parameterType="com.fulan.api.information.vo.ActivityVo">
+	     insert into iris_activity
+	     <trim prefix="(" suffix=")" suffixOverrides=",">
+	     	 <if test="id != null">
+		        id,
+		      </if>
+		      <if test="code != null and code != ''">
+		        code,
+		      </if>
+		     <if test="title != null and title != ''">
+		        title,
+		      </if>
+		      <if test="type != null and type != ''">
+		        type,
+		      </if>
+		      <if test="path != null and path != ''">
+		        path,
+		      </if>
+		      <if test="attachmentPath != null and attachmentPath != ''">
+		        attachment_path,
+		      </if>
+		       <if test="content != null  and content != ''">
+		        content,
+		      </if>
+		      <if test="contentType != null">
+		        content_type,
+		      </if>
+		       <if test="externalLinkUrl != null and externalLinkUrl != ''">
+		        external_link_url,
+		      </if>
+		       <if test="isSecret != null ">
+		        is_secret,
+		      </if>
+		       <if test="openShare != null">
+		        open_share,
+		      </if>
+		       <if test="activityAddress != null and activityAddress != ''">
+		        activity_address,
+		      </if>
+		      <if test="actStartDate != null">
+		        act_start_date,
+		      </if>
+		      <if test="actEndDate != null">
+		        act_end_date,
+		      </if>
+		      <if test="signUpStartDate != null">
+		        sign_up_start_date,
+		      </if>
+		      <if test="signUpEndDate != null">
+		        sign_up_end_date,
+		      </if>
+		      <if test="limitNumber != null">
+		        limit_number,
+		      </if>
+		       <if test="signUpSet != null">
+		       sign_up_set,
+		      </if>
+		       <if test="specifyType != null">
+		        specify_type,
+		      </if>
+		       <if test="sendType != null">
+		        send_type,
+		      </if>
+		       <if test="timing != null">
+		        timing,
+		      </if>
+		       <if test="isActive != null">
+		        isActive,
+		      </if>
+		       <if test="createUser != null">
+		        create_user,
+		      </if>
+		      <if test="gmtCreate != null">
+		        gmt_create,
+		      </if>
+		      <if test="modifyUser != null">
+		        modify_user,
+		      </if>
+		      <if test="gmtModified != null">
+		        gmt_modified,
+		      </if>
+		       <if test="deleted != null">
+		        deleted,
+		      </if>
+		       <if test="status != null">
+		        status,
+		      </if>
+		       <if test="remark != null and remark != ''">
+		        remark,
+		      </if>
+		        <if test="bak1 != null and bak1 != ''">
+		        bak1,
+		      </if>
+	     </trim>
+	     <trim prefix="values (" suffix=")" suffixOverrides=",">
+		       <if test="id != null">
+		         #{id},
+		      </if>
+		      <if test="code != null and code != ''">
+		         #{code},
+		      </if>
+		     <if test="title != null and title != ''">
+		         #{title},
+		      </if>
+		      <if test="type != null and type != ''">
+		         #{type},
+		      </if>
+		      <if test="path != null and path != ''">
+		        #{path},
+		      </if>
+		      <if test="attachmentPath != null and attachmentPath != ''">
+		         #{attachmentPath},
+		      </if>
+		       <if test="content != null and content != ''">
+		         #{content},
+		      </if>
+		      <if test="contentType != null">
+		         #{contentType},
+		      </if>
+		       <if test="externalLinkUrl != null and externalLinkUrl != ''">
+		         #{externalLinkUrl},
+		      </if>
+		       <if test="isSecret != null ">
+		         #{isSecret},
+		      </if>
+		       <if test="openShare != null">
+		         #{openShare},
+		      </if>
+		       <if test="activityAddress != null and activityAddress != ''">
+		         #{activityAddress},
+		      </if>
+		      <if test="actStartDate != null">
+		        #{actStartDate},
+		      </if>
+		      <if test="actEndDate != null">
+		         #{actEndDate},
+		      </if>
+		      <if test="signUpStartDate != null">
+		         #{signUpStartDate},
+		      </if>
+		      <if test="signUpEndDate != null">
+		         #{signUpEndDate},
+		      </if>
+		      <if test="limitNumber != null">
+		         #{limitNumber},
+		      </if>
+		       <if test="signUpSet != null">
+		        #{signUpSet},
+		      </if>
+		       <if test="specifyType != null">
+		         #{specifyType},
+		      </if>
+		       <if test="sendType != null">
+		         #{sendType},
+		      </if>
+		       <if test="timing != null">
+		        #{timing},
+		      </if>
+		       <if test="isActive != null">
+		        #{isActive},
+		      </if>
+		       <if test="createUser != null">
+		         #{createUser},
+		      </if>
+		      <if test="gmtCreate != null">
+		         #{gmtCreate},
+		      </if>
+		      <if test="modifyUser != null">
+		         #{modifyUser},
+		      </if>
+		      <if test="gmtModified != null">
+		         #{gmtModified},
+		      </if>
+		       <if test="deleted != null">
+		         #{deleted},
+		      </if>
+		       <if test="status != null">
+		        #{status},
+		      </if>
+		       <if test="remark != null and remark != ''">
+		         #{remark},
+		      </if>
+		        <if test="bak1 != null and bak1 != ''">
+		         #{bak1},
+		      </if>
+	     </trim>
+	</insert>
+	
+	<insert id="insertActivityMemberMapping" parameterType="com.fulan.api.information.domain.ActivityMemberMapping">
+	     insert into iris_activity_member_mapping
+	     <trim prefix="(" suffix=")" suffixOverrides=",">
+	     	 <if test="id != null">
+		        id,
+		      </if>
+		      <if test="activityId != null">
+		        activity_id,
+		      </if>
+		       <if test="agentCode != null and agentCode != ''">
+		        agent_code,
+		      </if>
+		        <if test="acountName != null and acountName != ''">
+		        acount_name,
+		      </if>
+		       <if test="companyId != null and companyId != ''">
+		        company_id,
+		      </if>
+		       <if test="companyName != null and companyName != ''">
+		        company_name,
+		      </if>
+		       <if test="branchCompanyId != null and branchCompanyId != ''">
+		        branch_company_id,
+		      </if>
+		       <if test="branchCompanyName != null and branchCompanyName != ''">
+		        branch_company_name,
+		      </if>
+		       <if test="orgId != null and orgId != ''">
+		        org_id,
+		      </if>
+		       <if test="orgName != null and orgName != ''">
+		        org_name,
+		      </if>
+		       <if test="levelId != null and levelId != ''">
+		        level_id,
+		      </if>
+		       <if test="levelName != null and levelName != ''">
+		        level_name,
+		      </if>
+		       <if test="targetType != null and targetType != ''">
+		        target_type,
+		      </if>
+	     </trim>
+	     <trim prefix="values (" suffix=")" suffixOverrides=",">
+		    <if test="id != null">
+		        #{id},
+		      </if>
+		      <if test="activityId != null">
+		        #{activityId},
+		      </if>
+		       <if test="agentCode != null and agentCode != ''">
+		        #{agentCode},
+		      </if>
+		        <if test="acountName != null and acountName != ''">
+		        #{acountName},
+		      </if>
+		       <if test="companyId != null and companyId != ''">
+		       #{companyId},
+		      </if>
+		       <if test="companyName != null and companyName != ''">
+		        #{companyName},
+		      </if>
+		       <if test="branchCompanyId != null and branchCompanyId != ''">
+		        #{branchCompanyId},
+		      </if>
+		       <if test="branchCompanyName != null and branchCompanyName != ''">
+		        #{branchCompanyName},
+		      </if>
+		       <if test="orgId != null and orgId != ''">
+		        #{orgId},
+		      </if>
+		       <if test="orgName != null and orgName != ''">
+		        #{orgName},
+		      </if>
+		       <if test="levelId != null and levelId != ''">
+		        #{levelId},
+		      </if>
+		       <if test="levelName != null and levelName != ''">
+		        #{levelName},
+		      </if>
+		       <if test="targetType != null and targetType != ''">
+		       #{targetType},
+		      </if>
+	     </trim>
+	</insert>
+	
+	<delete id="deleActivityMemberMapping"   >
+    delete from iris_activity_member_mapping where activity_id=#{id}
+</delete>
+	
+	<update id="updateActivity" parameterType="com.fulan.api.information.vo.ActivityVo">
+		update iris_activity
+		<set>
+		      <if test="code != null and code != ''">
+		        code= #{code},
+		      </if>
+		     <if test="title != null and title != ''">
+		         title=#{title},
+		      </if>
+		      <if test="type != null and type != ''">
+		        type= #{type},
+		      </if>
+		      <if test="path != null and path != ''">
+		        path=#{path},
+		      </if>
+		      <if test="attachmentPath != null and attachmentPath != ''">
+		        attachment_path= #{attachmentPath},
+		      </if>
+		       <if test="content != null and content != ''">
+		         content=#{content},
+		      </if>
+		      <if test="contentType != null">
+		         content_type=#{contentType},
+		      </if>
+		       <if test="externalLinkUrl != null and externalLinkUrl != ''">
+		        external_link_url= #{externalLinkUrl},
+		      </if>
+		       <if test="isSecret != null ">
+		         is_secret=#{isSecret},
+		      </if>
+		       <if test="openShare != null">
+		         open_share=#{openShare},
+		      </if>
+		       <if test="activityAddress != null and activityAddress != ''">
+		         activity_address=#{activityAddress},
+		      </if>
+		      <if test="actStartDate != null">
+		        act_start_date=#{actStartDate},
+		      </if>
+		      <if test="actEndDate != null">
+		        act_end_date= #{actEndDate},
+		      </if>
+		      <if test="signUpStartDate != null">
+		         sign_up_start_date=#{signUpStartDate},
+		      </if>
+		      <if test="signUpEndDate != null">
+		         sign_up_end_date=#{signUpEndDate},
+		      </if>
+		      <if test="limitNumber != null">
+		         limit_number=#{limitNumber},
+		      </if>
+		       <if test="signUpSet != null">
+		       sign_up_set= #{isActive},
+		      </if>
+		       <if test="specityType != null">
+		        specify_type= #{specityType},
+		      </if>
+		       <if test="sendType != null">
+		        send_type= #{sendType},
+		      </if>
+		       <if test="timing != null">
+		        timing=#{timing},
+		      </if>
+		       <if test="isActive != null">
+		       is_active= #{isActive},
+		      </if>
+		       <if test="createUser != null">
+		       create_user=  #{createUser},
+		      </if>
+		      <if test="gmtCreate != null">
+		        gmt_create= #{gmtCreate},
+		      </if>
+		      <if test="modifyUser != null">
+		        modify_user= #{modifyUser},
+		      </if>
+		      <if test="gmtModified != null">
+		        gmt_modified= #{gmtModified},
+		      </if>
+		       <if test="deleted != null">
+		        deleted= #{deleted},
+		      </if>
+		       <if test="status != null">
+		        status=#{status},
+		      </if>
+		       <if test="remark != null and remark != ''">
+		        remark= #{remark},
+		      </if>
+		        <if test="bak1 != null and bak1 != ''">
+		        bak1= #{bak1},
+		      </if>
+    	</set>
+    	where id = #{id}
+	</update>
+	
+	<select id="selectOneActivityById" resultMap="BaseResultMap"> 
+		select * from iris_activity where id =#{id}
+	</select>
+	
+	<select id="selectActivityMemberMapping" resultType="com.fulan.api.information.domain.ActivityMemberMapping"> 
+	SELECT iad.id,iad.activity_id AS activityId,iad.agent_code AS agentCode,iad.acount_name AS acountName,iad.company_id AS companyId,iad.company_name AS companyName,iad.branch_company_id AS branchCompanyId,iad.branch_company_name AS branchCompanyName,iad.org_id AS orgId,iad.org_name AS orgName,iad.level_id AS levelId,iad.target_type AS targetType,ip.level_name as levelName 
+	FROM iris_activity_member_mapping iad left join iris_professional_promote_check ip on iad.level_id=ip.level_short_name where  iad.target_type=1 
+	</select>
+	 
+	<select id="selectActivityCount" resultType="java.lang.Long"> 
+		select count(*) from iris_apply_detail where activity_id=#{id}
+
+	</select>
+	
+	
+	<select id="activityApplyListCount"  resultType="Integer" >
+		select count(*) from iris_apply_detail where 1=1
+		
+		<if test="acounyName != null and acounyName != '' ">
+			and acount_name LIKE CONCAT('%', #{acounyName},'%')
+		</if> 
+      and activity_id=#{id}
+	</select>
+  
+  <select id="activityApplyListForManage" resultType="com.fulan.api.information.domain.ApplyDetail" >
+		SELECT iad.id,iad.activity_id AS activityId,iad.agent_code AS agentCode,iad.acount_name AS acountName,iad.company_id AS companyId,iad.company_name AS companyName,iad.branch_company_id AS branchCompanyId,iad.branch_company_name AS branchCompanyName,iad.org_id AS orgId,iad.org_name AS orgName,iad.level_id AS levelId,iad.apply_date AS applyDate,ip.level_name as levelName 
+		FROM iris_apply_detail iad left join iris_professional_promote_check ip on iad.level_id=ip.level_short_name
+ 			where  1=1  
+		<if test="acounyName != null and acounyName != '' ">
+			and iad.acount_name LIKE CONCAT('%', #{acounyName},'%')
+		</if> 
+     and iad.activity_id=#{id}
+    group by iad.id
+	</select>
+	
+	<select id="selectActivityMamerCount"  resultType="Integer" >
+		SELECT COUNT(*) from iris_activity_member_mapping  where  1=1
+		
+		<if test="acounyName != null and acounyName != '' ">
+			and acount_name LIKE CONCAT('%', #{acounyName},'%')
+		</if> 
+      and activity_id=#{id} and target_type=#{signUpSet}
+	</select>
+  
+  <select id="selectActivityMamerForManage" resultType="com.fulan.api.information.domain.ApplyDetail" >
+		SELECT iad.id,iad.activity_id AS activityId,iad.agent_code AS agentCode,iad.acount_name AS acountName,iad.company_id AS companyId,iad.company_name AS companyName,iad.branch_company_id AS branchCompanyId,iad.branch_company_name AS branchCompanyName,iad.org_id AS orgId,iad.org_name AS orgName,iad.level_id AS levelId,ip.level_name as levelName 
+		FROM iris_activity_member_mapping iad left join iris_professional_promote_check ip on iad.level_id=ip.level_short_name
+ 			where  1=1  
+		<if test="acounyName != null and acounyName != '' ">
+			and iad.acount_name LIKE CONCAT('%', #{acounyName},'%')
+		</if> 
+     and iad.activity_id=#{id}
+     and iad.target_type=#{signUpSet}
+    group by iad.id
+	</select>
+	
+</mapper>

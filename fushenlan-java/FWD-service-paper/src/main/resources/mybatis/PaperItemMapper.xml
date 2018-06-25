@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.PaperItemMapper">
+  <resultMap id="BaseResultMap" type="com.fulan.api.paper.domain.er.PaperItem">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="paper_id" jdbcType="BIGINT" property="paperId" />
+    <result column="paper_item_name" jdbcType="VARCHAR" property="paperItemName" />
+    <result column="paper_item_desc" jdbcType="VARCHAR" property="paperItemDesc" />
+    <result column="total_score" jdbcType="INTEGER" property="totalScore" />
+    <result column="warning_score" jdbcType="INTEGER" property="warningScore" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="paper_type" jdbcType="INTEGER" property="paperType" />
+    <result column="create_time" jdbcType="DATE" property="createTime" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="update_time" jdbcType="DATE" property="updateTime" />
+    <result column="update_user" jdbcType="BIGINT" property="updateUser" />
+  </resultMap>
+  
+  <resultMap id="BaseResultMap2" type="com.fulan.api.paper.vo.PaperItemPVo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="paper_id" jdbcType="BIGINT" property="paperId" />
+    <result column="paper_item_name" jdbcType="VARCHAR" property="paperItemName" />
+    <result column="paper_item_desc" jdbcType="VARCHAR" property="paperItemDesc" />
+    <result column="total_score" jdbcType="INTEGER" property="totalScore" />
+    <result column="warning_score" jdbcType="INTEGER" property="warningScore" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="paper_type" jdbcType="INTEGER" property="paperType" />
+    <result column="create_time" jdbcType="DATE" property="createTime" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="update_time" jdbcType="DATE" property="updateTime" />
+    <result column="update_user" jdbcType="BIGINT" property="updateUser" />
+    <result column="score" jdbcType="INTEGER" property="score" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, paper_id, paper_item_name, paper_item_desc, total_score, warning_score, seq, 
+    paper_type, create_time, create_user, update_time, update_user
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from er_paper_item
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from er_paper_item
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.fulan.api.paper.domain.er.PaperItem">
+    insert into er_paper_item (id, paper_id, paper_item_name, 
+      paper_item_desc, total_score, warning_score, 
+      seq, paper_type, create_time, 
+      create_user, update_time, update_user
+      )
+    values (#{id,jdbcType=BIGINT}, #{paperId,jdbcType=BIGINT}, #{paperItemName,jdbcType=VARCHAR}, 
+      #{paperItemDesc,jdbcType=VARCHAR}, #{totalScore,jdbcType=INTEGER}, #{warningScore,jdbcType=INTEGER}, 
+      #{seq,jdbcType=INTEGER}, #{paperType,jdbcType=INTEGER}, #{createTime,jdbcType=DATE}, 
+      #{createUser,jdbcType=BIGINT}, #{updateTime,jdbcType=DATE}, #{updateUser,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.fulan.api.paper.domain.er.PaperItem">
+    insert into er_paper_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="paperId != null">
+        paper_id,
+      </if>
+      <if test="paperItemName != null">
+        paper_item_name,
+      </if>
+      <if test="paperItemDesc != null">
+        paper_item_desc,
+      </if>
+      <if test="totalScore != null">
+        total_score,
+      </if>
+      <if test="warningScore != null">
+        warning_score,
+      </if>
+      <if test="seq != null">
+        seq,
+      </if>
+      <if test="paperType != null">
+        paper_type,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="paperId != null">
+        #{paperId,jdbcType=BIGINT},
+      </if>
+      <if test="paperItemName != null">
+        #{paperItemName,jdbcType=VARCHAR},
+      </if>
+      <if test="paperItemDesc != null">
+        #{paperItemDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="totalScore != null">
+        #{totalScore,jdbcType=INTEGER},
+      </if>
+      <if test="warningScore != null">
+        #{warningScore,jdbcType=INTEGER},
+      </if>
+      <if test="seq != null">
+        #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="paperType != null">
+        #{paperType,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=DATE},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fulan.api.paper.domain.er.PaperItem">
+    update er_paper_item
+    <set>
+      <if test="paperId != null">
+        paper_id = #{paperId,jdbcType=BIGINT},
+      </if>
+      <if test="paperItemName != null">
+        paper_item_name = #{paperItemName,jdbcType=VARCHAR},
+      </if>
+      <if test="paperItemDesc != null">
+        paper_item_desc = #{paperItemDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="totalScore != null">
+        total_score = #{totalScore,jdbcType=INTEGER},
+      </if>
+      <if test="warningScore != null">
+        warning_score = #{warningScore,jdbcType=INTEGER},
+      </if>
+      <if test="seq != null">
+        seq = #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="paperType != null">
+        paper_type = #{paperType,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=DATE},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=DATE},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fulan.api.paper.domain.er.PaperItem">
+    update er_paper_item
+    set paper_id = #{paperId,jdbcType=BIGINT},
+      paper_item_name = #{paperItemName,jdbcType=VARCHAR},
+      paper_item_desc = #{paperItemDesc,jdbcType=VARCHAR},
+      total_score = #{totalScore,jdbcType=INTEGER},
+      warning_score = #{warningScore,jdbcType=INTEGER},
+      seq = #{seq,jdbcType=INTEGER},
+      paper_type = #{paperType,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=DATE},
+      create_user = #{createUser,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=DATE},
+      update_user = #{updateUser,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <resultMap id="PaperItemVoMap"  type="com.fulan.api.paper.vo.PaperItemVo">
+  	<collection property="paperItem" ofType="com.fulan.api.paper.domain.er.PaperItem" select="com.fulan.application.mapper.PaperItemMapper.selectByMap" column="id">
+  	</collection>
+  	<collection property="paperItemInfo" ofType="com.fulan.api.paper.domain.er.PaperItemInfo" select="com.fulan.application.mapper.PaperItemInfoMapper.selectByPaperItemInfoId" column="id">
+  	</collection>
+  </resultMap>
+  <resultMap id="PaperItemVoMap2"  type="com.fulan.api.paper.vo.PaperItemInfoVo">
+  	<collection property="paperItemPVo" ofType="com.fulan.api.paper.vo.PaperItemPVo" select="com.fulan.application.mapper.PaperItemMapper.selectByMap2" column="{id=id,personnelId=personnelId}">
+  	</collection>
+  	<collection property="paperItemInfo" ofType="com.fulan.api.paper.domain.er.PaperItemInfo" select="com.fulan.application.mapper.PaperItemInfoMapper.selectByPaperItemInfoId" column="id">
+  	</collection>
+  </resultMap>
+  <select id="selectByPaperId"    resultMap="PaperItemVoMap">
+  	 select 
+     id, paper_id, paper_item_name, paper_item_desc, total_score, warning_score, seq, 
+    paper_type, create_time, create_user, update_time, update_user 
+    from er_paper_item
+    where paper_id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectByPaperId2"  parameterType="java.util.Map"  resultMap="PaperItemVoMap2">
+  	 select 
+     id, paper_id, paper_item_name, paper_item_desc, total_score, warning_score, seq, 
+    paper_type, create_time, create_user, update_time, update_user 
+    <if test="personnelId != null and personnelId != ''">, #{personnelId} as personnelId </if>
+    from er_paper_item
+    where paper_id = #{id,jdbcType=BIGINT}
+  </select>
+  
+<select id="selectByMap" resultMap="BaseResultMap">
+	 select 
+   <include refid="Base_Column_List" />
+    from er_paper_item 
+    where id = #{id,jdbcType=BIGINT} 
+</select>
+
+<select id="selectByMap2" parameterType="java.util.Map" resultMap="BaseResultMap2">
+	 select 
+    epi.id as id, epi.paper_id as paper_id,epi.paper_item_name as  paper_item_name,epi.paper_item_desc as  paper_item_desc,epi.total_score as total_score, epi.warning_score as warning_score, epi.seq as seq, 
+    epi.paper_type as paper_type, epi.create_time as create_time,epi.create_user as create_user, epi.update_time as update_time,epi.update_user as update_user,eppi.score as score
+    from er_paper_item epi
+	LEFT JOIN er_personnel_paper_info eppi ON  epi.id = eppi.paper_item_id <if test="personnelId != null and personnelId != ''">and eppi.personnel_id = #{personnelId} </if>
+    where epi.id = #{id,jdbcType=BIGINT} 
+</select>
+  
+  
+  <resultMap id="BaseRecordMap" type="com.fulan.api.paper.vo.PaperInfoVo">
+    <result column="paper_id" jdbcType="BIGINT" property="paperId" />
+    <result column="paper_item_id" jdbcType="BIGINT" property="paperItemId" />
+    <result column="personnel_id" jdbcType="BIGINT" property="personnelId" />
+    <result column="paper_item_name" jdbcType="VARCHAR" property="paperItemName" />
+    <result column="paper_item_desc" jdbcType="VARCHAR" property="paperItemDesc" />
+    <result column="total_score" jdbcType="INTEGER" property="totalScore" />
+    <result column="warning_score" jdbcType="INTEGER" property="warningScore" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="paper_type" jdbcType="INTEGER" property="paperType" />
+    <result column="score" jdbcType="INTEGER" property="score" />
+  </resultMap>
+   <sql id="Base_Record_List">
+  	eppi.paper_id AS paper_id,
+	eppi.paper_item_id AS paper_item_id,
+	eppi.personnel_id AS personnel_id,
+	epi.paper_item_name AS paper_item_name,
+	epi.paper_item_desc AS paper_item_desc,
+	epi.total_score AS total_score,
+	epi.warning_score AS warning_score,
+	epi.paper_type AS paper_type,
+	epi.seq AS seq,
+	eppi.score AS score
+   </sql>
+  <select id="selectByRecord" parameterType="java.util.Map" resultMap="BaseRecordMap">
+  	 select 
+    <include refid="Base_Record_List" />
+    from er_personnel_paper_info eppi
+	LEFT JOIN er_paper_item epi ON eppi.paper_item_id = epi.id 
+	where eppi.personnel_id = #{personnelId} and eppi.paper_id = #{paperId}
+	order by epi.seq asc
+  </select>
+</mapper>

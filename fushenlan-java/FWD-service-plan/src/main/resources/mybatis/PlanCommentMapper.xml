@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.PlanCommentMapper">
+    <sql id="conditionSQL">
+		<if test="userName !=null and userName !='' ">
+			and epq.create_name like CONCAT('%',#{userName},'%')
+		</if>
+		<if test="comment != null and comment !='' ">
+			and epq.comment like CONCAT('%',#{comment},'%')
+		</if>
+		<if test="isOpen !=null and isOpen !='' ">
+			and epq.is_open = #{isOpen}
+		</if>
+		<if test="beginTime !=null and beginTime !='' ">
+		  <![CDATA[ and DATE_FORMAT(epq.gmt_create,'%Y-%m-%d')>= #{beginTime}]]> 
+		</if>
+		<if test="endTime !=null and endTime !='' ">
+		  <![CDATA[ and DATE_FORMAT(epq.gmt_create,'%Y-%m-%d')<= #{endTime}]]> 
+		</if>
+    </sql>
+    <select id="manageListByPage" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT epq.id as id,
+    		   epq.course_id as courseId,	
+    		   epq.create_name as userName,
+    		   epq.comment as comment,
+    		   epq.is_open as isOpen,
+    		   epq.gmt_create as gmtCreate,
+    		   COUNT(el.id) as likeNum
+		FROM el_plan_comment epq
+		LEFT JOIN el_like el ON el.host_id = epq.id
+		WHERE epq.course_id =#{courseId}
+		<include refid="conditionSQL" />
+		GROUP BY epq.id
+    </select>
+    <select id="manageListByPageCount" resultType="int" parameterType="java.util.Map">
+    	SELECT count(epq.id)
+    	from el_plan_comment epq
+    	where epq.course_id =#{courseId}
+    	<include refid="conditionSQL"/>
+    </select>
+
+	<select id="searchPlanComment" parameterType="java.util.Map" resultType="com.fulan.api.plan.vo.PlanCommentDto">
+		SELECT epc.star,
+		epc.modify_user AS modifyUser,
+		epc.is_open AS isOpen,
+		epc.id,
+		epc.gmt_modified AS gmtModified,
+		epc.gmt_create AS gmtCreate,
+		epc.create_name AS createName,
+		epc.course_type AS courseType,
+		epc.course_id AS courseId,
+		epc.comment_user AS commentUser,
+		epc.comment, eln.likeNum, eid.likeId
+				FROM el_plan_comment epc
+			LEFT JOIN (
+						SELECT count( * ) AS likeNum,host_id
+							FROM el_like
+						WHERE type = 1
+						GROUP BY host_id
+				) eln
+				ON eln.host_id = epc.id
+			LEFT JOIN (
+						SELECT max(id) AS likeId,host_id
+							FROM el_like
+						WHERE 1=1
+					<if test="userId != null and userId != '' ">
+						AND user_id=#{userId}
+					</if>
+						GROUP BY host_id
+					) eid
+				ON eid.host_id = epc.id
+		where  1=1
+		<if test="isOpen != null and isOpen != '' ">
+			AND epc.is_open=#{isOpen}
+		</if>
+		<if test="planId != null and planId != '' ">
+			AND epc.course_id=#{planId}
+		</if>
+		ORDER BY eln.likeNum desc,epc.gmt_modified desc
+	</select>
+</mapper>

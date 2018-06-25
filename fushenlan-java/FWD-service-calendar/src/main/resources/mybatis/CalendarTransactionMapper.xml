@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fulan.application.mapper.CalendarTransactionMapper" >
+  <resultMap id="BaseResultMap" type="com.fulan.api.calendar.domain.CalendarTransaction" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="calendar_id" property="calendarId" jdbcType="BIGINT" />
+    <result column="theme" property="theme" jdbcType="VARCHAR" />
+    <result column="agent_code" property="agentCode" jdbcType="VARCHAR" />
+    <result column="transaction_type" property="transactionType" jdbcType="TINYINT" />
+    <result column="date" property="date" jdbcType="DATE" />
+    <result column="day" property="day" jdbcType="TINYINT" />
+    <result column="transaction_future_time" property="transactionFutureTime" jdbcType="TIMESTAMP" />
+    <result column="transation_stage" property="transationStage" jdbcType="TINYINT" />
+    <result column="transaction_desc" property="transactionDesc" jdbcType="VARCHAR" />
+    <result column="transaction_result" property="transactionResult" jdbcType="VARCHAR" />
+    <result column="transaction_ref_customer" property="transactionRefCustomer" jdbcType="BIGINT" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="gmt_time" property="gmtTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="modify_user" property="modifyUser" jdbcType="BIGINT" />
+    <result column="deleted" property="deleted" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, calendar_id, theme, agent_code, transaction_type, date, day, transaction_future_time, 
+    transation_stage, transaction_desc, transaction_result, transaction_ref_customer, 
+    customer_name, remark, gmt_time, create_user, gmt_modified, modify_user, deleted
+  </sql>
+
+</mapper>

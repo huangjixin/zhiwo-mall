@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fulan.application.mapper.SmsParameterFactorMapper" >
+  <resultMap id="BaseResultMap" type="com.fulan.api.message.domain.SmsParameterFactor" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="factor" property="factor" jdbcType="VARCHAR" />
+    <result column="factor_name" property="factorName" jdbcType="VARCHAR" />
+    <result column="factor_type" property="factorType" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="listForManageCount" resultType="Integer" >
+		select  count(*)  from sms_parameter_factor
+	</select>
+  
+  <select id="listForManage" resultMap="BaseResultMap" >
+		select id,factor,factor_name,factor_type,remark from sms_parameter_factor  
+		
+	</select>
+  
+  <select id="selectParameterById" resultMap="BaseResultMap" >
+		select id,factor,factor_name,factor_type,remark from sms_parameter_factor  where id=#{id}
+		
+	</select>
+	
+	 <select id="listFactor" resultMap="BaseResultMap" >
+		select id,factor,factor_name,factor_type,remark from sms_parameter_factor 
+		
+	</select>
+  
+</mapper>

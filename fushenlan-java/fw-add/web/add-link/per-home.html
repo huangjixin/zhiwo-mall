@@ -1,0 +1,24 @@
+<div class="detail-right">
+    {{~it:val:index}}
+    <div class="detail-right-each width-one">
+        <span class="content_type">关系</span>
+        <span class="content_get">{{=val.relationship || ''}}</span>
+    </div>
+    <div class="detail-right-each width-two">
+        <span class="content_type width-three">姓名</span>
+        <span class="content_get">{{=val.name || ''}}</span>
+    </div>
+    <div class="detail-right-each width-tel">
+        <span class="content_type">电话</span>
+        <span class="content_get">{{=val.telephone || ''}}</span>
+    </div>
+    <div class="detail-right-each width-one">
+        <span class="content_type">公司</span>
+        <span class="content_get">{{=val.company || ''}}</span>
+    </div>
+    <div class="detail-right-each width-three">
+        <span class="content_type">职业</span>
+        <span class="content_get">{{=val.post || ''}}</span>
+    </div>
+    {{~}}
+</div>

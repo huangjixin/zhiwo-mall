@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.PaperItemInfoMapper">
+  <resultMap id="BaseResultMap" type="com.fulan.api.paper.domain.er.PaperItemInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="paper_item_id" jdbcType="BIGINT" property="paperItemId" />
+    <result column="paper_content" jdbcType="VARCHAR" property="paperContent" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="create_time" jdbcType="DATE" property="createTime" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="update_time" jdbcType="DATE" property="updateTime" />
+    <result column="update_user" jdbcType="BIGINT" property="updateUser" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, paper_item_id, paper_content, seq, create_time, create_user, update_time, update_user
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from er_paper_item_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from er_paper_item_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.fulan.api.paper.domain.er.PaperItemInfo">
+    insert into er_paper_item_info (id, paper_item_id, paper_content, 
+      seq, create_time, create_user, 
+      update_time, update_user)
+    values (#{id,jdbcType=BIGINT}, #{paperItemId,jdbcType=BIGINT}, #{paperContent,jdbcType=VARCHAR}, 
+      #{seq,jdbcType=INTEGER}, #{createTime,jdbcType=DATE}, #{createUser,jdbcType=BIGINT}, 
+      #{updateTime,jdbcType=DATE}, #{updateUser,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fulan.api.paper.domain.er.PaperItemInfo">
+    insert into er_paper_item_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="paperItemId != null">
+        paper_item_id,
+      </if>
+      <if test="paperContent != null">
+        paper_content,
+      </if>
+      <if test="seq != null">
+        seq,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="paperItemId != null">
+        #{paperItemId,jdbcType=BIGINT},
+      </if>
+      <if test="paperContent != null">
+        #{paperContent,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null">
+        #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=DATE},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fulan.api.paper.domain.er.PaperItemInfo">
+    update er_paper_item_info
+    <set>
+      <if test="paperItemId != null">
+        paper_item_id = #{paperItemId,jdbcType=BIGINT},
+      </if>
+      <if test="paperContent != null">
+        paper_content = #{paperContent,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null">
+        seq = #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=DATE},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=DATE},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fulan.api.paper.domain.er.PaperItemInfo">
+    update er_paper_item_info
+    set paper_item_id = #{paperItemId,jdbcType=BIGINT},
+      paper_content = #{paperContent,jdbcType=VARCHAR},
+      seq = #{seq,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=DATE},
+      create_user = #{createUser,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=DATE},
+      update_user = #{updateUser,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+<delete id="deletePaperItemVoByPaperId" parameterType="java.lang.Long">
+	DELETE er_paper_item_info,er_paper_item
+	FROM er_paper_item
+	LEFT JOIN er_paper_item_info ON er_paper_item_info.paper_item_id = er_paper_item.id
+	WHERE er_paper_item.paper_id = #{id}
+</delete>
+<select id="selectByPaperItemInfoId" resultMap="BaseResultMap">
+	 select 
+    <include refid="Base_Column_List" />
+    from er_paper_item_info
+    where paper_item_id = #{paperItemId,jdbcType=BIGINT}
+</select>
+</mapper>

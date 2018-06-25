@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.StudyPlanMapper">
+	<resultMap id="StudyPlanResultMap" type="com.fulan.api.plan.domain.StudyPlan">
+		<id column="id" property="id" />
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="description" property="description" />
+		<result column="group_id" property="groupId" />
+		<result column="tag_id" property="tagId" />
+		<result column="state" property="state" />
+		<result column="stage_num" property="stageNum" />
+		<result column="course_num" property="courseNum" />
+		<result column="create_user" property="createUser" />
+		<result column="gmt_create" property="gmtCreate" />
+		<result column="modify_user" property="modifyUser" />
+		<result column="gmt_modified" property="gmtModified" />
+		<result column="plan_type" property="planType" jdbcType="BIT" />
+	</resultMap>
+	
+	<resultMap id="StudyVoPlanResultMap" type="com.fulan.api.plan.vo.StudyPlanVvo">
+		<id column="id" property="id" />
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="group_id" property="groupId" />
+		<result column="tag_id" property="tagId" />
+		<result column="state" property="state" />
+		<result column="stage_num" property="stageNum" />
+		<result column="course_num" property="courseNum" />
+		<result column="isNo" property="isAssociate" />
+	</resultMap>
+	
+	
+	
+	<sql id="Base_Column_List">
+		id, name, code, description, group_id, tag_id, state,
+		stage_num,course_num, create_user,
+		gmt_create, modify_user,
+		gmt_modified, plan_type
+	</sql>
+     
+     
+     <select id="selectByElspId" parameterType="java.lang.String"  resultType="com.fulan.api.course.domain.Course">
+        select * from el_course elc
+        where is_online =#{type} 
+        group by elc.id
+    </select>
+     
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="StudyPlanResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from el_study_plan
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<select id="findPlanByPage" resultMap="StudyPlanResultMap">
+		select
+		<include refid="Base_Column_List"></include>
+		from el_study_plan
+		<where>
+			1=1
+			<if test="code != null and code != ''">
+				and code = #{code}
+			</if>
+			<if test="name != null and name != ''">
+				and name = #{name}
+			</if>
+			<if test="tagId != null and tagId != ''">
+				and tag_id = #{tagId}
+			</if>
+		</where>
+	</select>
+	
+	<select id="planList" resultMap="StudyPlanResultMap">
+		select
+		<include refid="Base_Column_List"></include>
+		from el_study_plan esp
+		<where>
+			1=1
+			<if test="keyWord != null and keyWord != '' ">
+	  			and esp.name like CONCAT('%',#{keyWord},'%') 
+	  		</if>
+			<if test="code != null and code != ''">
+				and esp.code like CONCAT('%',#{code},'%')
+			</if>
+			<if test="tagId != null and tagId != '' ">
+	  			and esp.tag_id = #{tagId}
+	  		</if>
+	  		<if test="uploadTimeBegin != null and uploadTimeBegin !='' ">
+	  			<![CDATA[ and DATE_FORMAT(esp.gmt_create,'%Y-%m-%d')>= #{uploadTimeBegin}]]>  
+	  		</if>
+	  		<if test="uploadTimeEnd !=null and uploadTimeEnd !='' ">
+	  			<![CDATA[ and DATE_FORMAT(esp.gmt_create,'%Y-%m-%d')<= #{uploadTimeEnd}]]>  
+	  		</if>
+		</where>
+	</select>
+
+
+	<delete id="deletePlanBatchByIds" parameterType="long">
+		delete from el_study_plan where id in
+		<foreach collection="planIds" item="id" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<resultMap id="BaseResultMapVo" type="com.fulan.api.plan.domain.StudyPlan">
+		<id column="id" property="id" />
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="description" property="description" />
+		<result column="group_id" property="groupId" />
+		<result column="tag_id" property="tagId" />
+		<result column="state" property="state" />
+		<result column="stage_num" property="stageNum" />
+		<result column="course_num" property="courseNum" />
+		<result column="create_user" property="createUser" />
+		<result column="gmt_create" property="gmtCreate" />
+		<result column="modify_user" property="modifyUser" />
+		<result column="gmt_modified" property="gmtModified" />
+		<result column="plan_type" property="planType" />
+		<collection property="courses"
+			ofType="com.fulan.api.plan.vo.CourseVo">
+			<id column="courseId" property="courseId" />
+			<result column="courseName" property="courseName" />
+			<result column="descript" property="descript" />
+			<result column="isRelatePlan" property="isRelatePlan" />
+			<result column="stage" property="stage" />
+			<result column="isCompulsory" property="isCompulsory" />
+		</collection>
+	</resultMap>
+	<select id="findPlanDetailById" parameterType="long" resultMap="BaseResultMapVo">
+		SELECT
+			sp.id,
+			sp.code,
+			sp.name,
+			sp.description,
+			sp.group_id,
+			sp.tag_id,
+			sp.state,
+			sp.stage_num,
+			sp.course_num,
+			sp.create_user,
+			sp.gmt_create,
+			sp.modify_user,
+			sp.gmt_modified,
+			sp.plan_type,
+			co.id as courseId,
+			co.name as courseName,
+			co.is_online as isOnline,
+			co.description as descript,
+			co.is_relate_plan as isRelatePlan,
+			pc.stage,
+			pc.is_compulsory as isCompulsory
+		FROM
+		el_study_plan sp
+		inner join el_plan_course pc on sp.id=pc.associate_id
+		inner join el_course co on pc.associate_id=co.id
+		where sp.id = #{id}
+	</select>
+
+
+<!--   public  Integer planCourseSerach(Long id); -->
+<select id="planCourseSerach" resultType="java.lang.Integer">
+select count(*)
+from el_plan_course
+where associate_id=#{id}
+</select>
+
+
+<!-- public List<StudyPlan> studyPlanCollection(StudyPlan studyPlan); -->
+<select id="studyPlanCollection" resultType="com.fulan.api.plan.domain.StudyPlan" resultMap="StudyPlanResultMap">
+select * 
+from el_study_plan
+<where>
+<if test="code!=null and code!=''">
+code=#{code} 
+</if> 
+<if test="name!=null and name!=''">
+and name=#{name}
+</if>
+<if test="tagId!=null and tagId!=''"> 
+and tag_id=#{tagId}
+</if>
+</where>
+</select>
+
+
+<!--  public void deletePlanStudyByIds(List<Long> ids); -->
+<delete id="deletePlanStudyByIds">
+delete from el_study_plan
+where id in
+ <foreach item="item"  collection="list" open="(" separator="," close=")">
+        #{item}
+  </foreach>
+</delete>
+
+ <!-- public void deletePlanCourseByIds(List<Long> planIds); -->
+ <delete id="deletePlanCourseByIds">
+delete from el_plan_course
+where plan_id in
+ <foreach item="item"  collection="list" open="(" separator="," close=")">
+        #{item}
+  </foreach>
+ 
+ </delete>
+
+
+<!-- public StudyPlan selectPlanById(Long id); -->
+<select id="selectPlanById" parameterType="java.lang.Long" resultMap="StudyPlanResultMap">
+select * 
+from el_study_plan
+where id=#{id}
+</select>
+
+<!--  public void  updateStudyPlan(StudyPlan studyPlan); -->
+<update id="updateStudyPlan" parameterType="com.fulan.api.plan.domain.StudyPlan">
+update el_study_plan
+set state=#{state}
+where id=#{id}
+</update>
+
+  <select id="studyPlanManageSearchCount" parameterType="java.lang.String" resultType="int">
+  	select count(*) from el_study_plan epl where 1=1
+		<if test="keyWord != null and keyWord != ''">
+			and epl.NAME LIKE CONCAT(CONCAT('%', #{keyWord}),'%')
+			or epl.CODE LIKE CONCAT(CONCAT('%', #{keyWord}),'%')
+			or epl.tag_id LIKE CONCAT(CONCAT('%', #{keyWord}),'%')
+		</if>
+  </select>
+  
+  
+   <select id="studyPlanManageSearch" resultType="com.fulan.api.plan.vo.StudyPlanVvo">
+  		SELECT esp.code code,esp.name name,esp.group_id groupId,esp.tag_id,
+  		esp.course_num courseNum,esp.stage_num stageNum,esp.state state,
+  	    FROM el_study_plan esp
+        LEFT JOIN el_plan_course epc ON epc.plan_id = esp.id
+        LEFT JOIN el_course ec ON epc.associate_id = ec.id
+		where 1=1
+		<if test="keyWord != null and keyWord != ''">
+			and epl.NAME LIKE CONCAT(CONCAT('%', #{keyWord}),'%')
+			or epl.IDENTITY_CODE LIKE CONCAT(CONCAT('%', #{keyWord}),'%')
+			or epl.CELLPHONE LIKE CONCAT(CONCAT('%', #{keyWord}),'%')
+		</if>
+  </select>
+  
+  
+ <select id="studyPlansSearch" resultMap="StudyVoPlanResultMap">
+	SELECT esp.*,(CASE(SELECT COUNT(*) FROM el_plan_course epc
+	WHERE epc.associate_id = esp.id) WHEN 0 THEN '0' ELSE '1' END) AS isNo
+	FROM el_study_plan esp
+	where 1=1
+	<if test="name != null and name !=''">
+		and name like CONCAT('%',#{name},'%')
+	</if>
+	<if test="code != null and code !=''">
+		and code like CONCAT('%',#{code},'%')
+	</if>
+	<if test="tagId != null and tagId !=''">
+		and tag_id = #{tagId}
+	</if>
+</select>
+ 
+ <select id="stuPlanNum" resultType="java.lang.Integer">
+	select count(*) from el_study_plan
+	where 1=1
+	<if test="name != null and name !=''">
+		and name like CONCAT('%',#{name},'%')
+	</if>
+	<if test="code != null and code !=''">
+		and code like CONCAT('%',#{code},'%')
+	</if>
+	<if test="tagId != null and tagId !=''">
+		and tag_id = #{tagId}
+	</if>
+</select>
+</mapper>

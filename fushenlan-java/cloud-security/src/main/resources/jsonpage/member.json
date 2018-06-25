@@ -1,0 +1,21 @@
+"memberList": [   {                           "agentCode": 1001,
+	               "agentName": "first",
+	               "ranking": 1,
+	               "FYP": 20000,
+	               "FYC": 20000,
+	               "CASE": 20           
+},
+            {               "agentCode": 1002,
+	               "agentName": "second",
+	               "ranking": 2,
+	               "FYP": 19000,
+	               "FYC": 19000,
+	               "CASE": 19           
+},
+  {               "agentCode": 1002,
+	               "agentName": "third",
+	               "ranking": 3,
+	               "FYP": 18000,
+	               "FYC": 18000,
+	               "CASE": 18           
+} ]

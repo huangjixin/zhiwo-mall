@@ -1,0 +1,1020 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.IndexBaseMapper">
+	<resultMap id="ClassPlanResultMap" type="com.fulan.api.plan.vo.ClassPlanVo">
+		<id column="id" property="id" />
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="description" property="description" />
+		<result column="group_id" property="groupId" />
+		<result column="tag_id" property="tagId" />
+		<result column="is_reward_point" property="isRewardPoint" />
+		<result column="is_reward_certification" property="isRewardCertification" />
+		<result column="is_reward_qualification" property="isRewardQualification" />
+		<result column="is_allow_expired" property="isAllowExpired" />
+		<result column="reward_point" property="rewardPoint" />
+		<result column="start_date" property="startDate" />
+		<result column="end_date" property="endDate" />
+		<result column="certification_id" property="certificationId" />
+		<result column="qualification_id" property="qualificationId" />
+		<result column="is_seq" property="isSeq" />
+		<result column="open_range" property="openRange" />
+		<collection property="planCourses"
+			ofType="com.fulan.api.plan.vo.PlanCourseVo">
+			<result column="stage" property="stage" />
+			<result column="sTime" property="startTime" />
+			<result column="eTime" property="endTime" />
+			<collection property="courses"
+				ofType="com.fulan.api.plan.vo.CourseVo">
+				<result column="cId" property="id" />
+				<result column="cName" property="name" />
+				<result column="cType" property="type" />
+				<result column="courseType" property="courseType" />
+				<result column="is_compulsory" property="isCompulsory" />
+			</collection>
+		</collection>
+	</resultMap>
+	
+	<resultMap id="PostDevelopmentResultMap" type="com.fulan.api.plan.vo.PostDevelopmentVo">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="description" property="description" />
+		<result column="is_allow_expired" property="isAllowExpired" />
+		<result column="limit_types" property="limitTypes" />
+		<result column="start_days" property="startDays" />
+		<result column="end_days" property="endDays" />
+		<result column="post_level" property="postLevel" />
+		<result column="is_expired_alarm" property="isExpiredAlarm" />
+		<collection property="planCourses"
+					ofType="com.fulan.api.plan.vo.PlanCourseVo">
+			<result column="stage" property="stage" />
+			<result column="sTime" property="startTime" />
+			<result column="eTime" property="endTime" />
+			<collection property="courses"
+						ofType="com.fulan.api.plan.vo.CourseVo">
+				<result column="cId" property="id" />
+				<result column="cName" property="name" />
+				<result column="cType" property="type" />
+				<result column="courseType" property="courseType" />
+				<result column="is_compulsory" property="isCompulsory" />
+			</collection>
+		</collection>
+	</resultMap>
+	
+	
+	<resultMap id="CompulsoryCplanResultMap" type="com.fulan.api.plan.vo.CompulsoryPlanVo">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="description" property="description" />
+		<result column="group_id" property="groupId" />
+		<result column="tag_id" property="tagId" />
+		<result column="start_date" property="startTime" />
+		<result column="end_date" property="endTime" />
+		<result column="is_reward_point" property="isRewardPoint" />
+		<result column="is_reward_certification" property="isRewardCertification" />
+		<result column="reward_point" property="rewardPoint" />
+		<result column="certification_id" property="certificationId" />
+		<result column="qualification_id" property="qualificationId" />
+		<result column="is_allow_expired" property="isAllowExpired" />
+		<result column="is_seq" property="isSeq" />
+		<result column="open_range" property="openRange" />
+		<collection property="planCourses"
+					ofType="com.fulan.api.plan.vo.PlanCourseVo">
+			<result column="stage" property="stage" />
+			<result column="sTime" property="startTime" />
+			<result column="eTime" property="endTime" />
+			<collection property="courses"
+						ofType="com.fulan.api.plan.vo.CourseVo">
+				<result column="cId" property="id" />
+				<result column="cName" property="name" />
+				<result column="cType" property="type" />
+				<result column="courseType" property="courseType" />
+				<result column="is_compulsory" property="isCompulsory" />
+			</collection>
+		</collection>
+	</resultMap>
+
+	<select id="getPaperStatus" resultType="int" parameterType="map">
+		<![CDATA[
+		SELECT DISTINCT
+	CASE
+WHEN paper.pass_mark <= (
+	SELECT
+		SUM(score)
+	FROM
+		(
+			SELECT
+				exam.score
+			FROM
+				el_user_exam exam
+			WHERE
+				exam.paper_id = #{paperId}
+			AND exam.user_id = #{id}
+			GROUP BY
+				exam.question_id
+		) t
+) THEN
+	1
+WHEN paper.pass_mark > (
+	SELECT
+		SUM(score)
+	FROM
+		(
+			SELECT
+				exam.score
+			FROM
+				el_user_exam exam
+			WHERE
+				exam.paper_id = #{paperId}
+			AND exam.user_id = #{id}
+			GROUP BY
+				exam.question_id
+		) t
+) THEN
+	0
+END AS paperStatus
+FROM
+	el_paper paper
+WHERE
+	paper.id = #{paperId}
+
+		]]>
+	</select>
+
+	<select id="getCourseStatus" parameterType="map" resultType="int">
+        <![CDATA[
+		SELECT DISTINCT
+	CASE
+WHEN course.learning_time IS NOT NULL
+AND progress.learning_time IS NOT NULL
+AND course.learning_time <= SUM(progress.learning_time) THEN
+	2
+WHEN course.learning_time IS NOT NULL
+AND progress.learning_time IS NOT NULL
+AND SUM(progress.learning_time) >= 0
+AND course.learning_time > SUM(progress.learning_time) THEN
+	1
+ELSE
+	0
+END AS courseStatus
+FROM
+	${tableName} classPlan
+LEFT JOIN el_plan_course planCourse ON classPlan.id = planCourse.plan_id and planCourse.course_type=#{courseType}
+LEFT JOIN el_course course ON planCourse.associate_id = course.id
+LEFT JOIN el_learning_progress progress ON course.id = progress.course_id
+AND classPlan.id = progress.plan_id
+WHERE
+	progress.user_id = #{id} and course.id = #{courseId} and classPlan.id=#{planId}
+group by course.id
+		]]>
+	</select>
+
+	<select id="getEnterDetail" parameterType="long" resultType="com.fulan.api.plan.vo.ClassPlanVo">
+		SELECT DISTINCT
+		plan.id,
+		plan.`name`,
+		plan.description,
+		plan.start_date AS startDate,
+		plan.end_date AS endDate
+		FROM
+		el_class_plan_enter enter
+		INNER JOIN el_class_plan plan ON enter.plan_id = plan.id
+		WHERE
+		enter.user_id = #{accountId}
+	</select>
+
+	<select id="getPlanIdByAccountId" parameterType="map" resultType="long">
+		SELECT DISTINCT
+		enter.plan_id
+		FROM
+		el_class_plan_enter enter
+		WHERE
+		enter.user_id = #{accountId}
+		and enter.plan_id in (SELECT id
+		FROM
+			el_class_plan
+		WHERE
+			state = 1 )
+	</select>
+
+	<select id="findClassPlanByAccountId" parameterType="map"
+		resultMap="ClassPlanResultMap">
+		<![CDATA[
+		SELECT DISTINCT
+	classPlan.id,
+	classPlan. NAME,
+	classPlan. CODE,
+	classPlan.description,
+	classPlan.start_date,
+	classPlan.end_date,
+	classPlan.is_reward_point,
+	classPlan.is_reward_certification,
+	classPlan.is_reward_qualification,
+	classPlan.is_allow_expired,
+	classPlan.reward_point,
+	classPlan.is_seq,
+	classPlan.open_range,
+	classPlan.certification_id,
+	classPlan.qualification_id,
+	planCourse.stage,
+	planCourse.start_time AS sTime,
+	planCourse.end_time AS eTime,
+	CASE
+		WHEN course.id IS NOT NULL THEN
+		1
+		ELSE
+		2
+		END AS courseType,
+		CASE
+		WHEN course.id IS NOT NULL THEN
+		course.id
+		ELSE
+		paper.id
+		END AS cId,
+		CASE
+		WHEN course. NAME IS NOT NULL THEN
+		course. NAME
+		ELSE
+		paper. NAME
+		END AS cName,
+		CASE
+		WHEN course.type IS NOT NULL THEN
+		CASE
+		WHEN course.type = 1 THEN
+		'视频'
+		WHEN course.type = 2 THEN
+		'SCORM'
+		WHEN course.type = 3 THEN
+		'PPT'
+		WHEN course.type = 4 THEN
+		'WORD'
+		WHEN course.type = 5 THEN
+		'EXCEL'
+		END
+		ELSE
+		paper.type
+		END AS cType,
+		planCourse.is_compulsory
+]]>
+FROM el_class_plan classPlan
+INNER JOIN el_plan_course planCourse ON classPlan.id = planCourse.plan_id
+LEFT JOIN el_course course ON planCourse.associate_id = course.id
+LEFT JOIN el_paper paper ON planCourse.associate_id = paper.id
+WHERE classPlan.state = 1 and planCourse.course_type=#{courseType}
+		<if test="planId != null and planId != ''">
+			and classPlan.id = #{planId}
+		</if>
+ORDER BY
+	planCourse.stage,
+	planCourse.seq
+	</select>
+
+	<select id="getPostIdByPostType" parameterType="map" resultType="long">
+		SELECT
+		id
+		FROM
+		el_post_development post
+		WHERE
+		post.post_level = #{postType}
+	</select>
+	
+	<select id="findPostDevelopmentByAccountId" parameterType="map"
+		resultMap="PostDevelopmentResultMap">
+		SELECT DISTINCT
+		post.id,
+		post. NAME,
+		post.is_allow_expired,
+		post.limit_types,
+		post.start_days,
+		post.end_days,
+		post.post_level,
+		post.is_expired_alarm,
+		planCourse.stage,
+		planCourse.start_time AS sTime,
+		planCourse.end_time AS eTime,
+		CASE
+		WHEN course.id IS NOT NULL THEN
+		1
+		ELSE
+		2
+		END AS courseType,
+		CASE
+		WHEN course.id IS NOT NULL THEN
+		course.id
+		ELSE
+		paper.id
+		END AS cId,
+		CASE
+		WHEN course. NAME IS NOT NULL THEN
+		course. NAME
+		ELSE
+		paper. NAME
+		END AS cName,
+		CASE
+		WHEN course.type IS NOT NULL THEN
+		CASE
+		WHEN course.type = 1 THEN
+		'视频'
+		WHEN course.type = 2 THEN
+		'SCORM'
+		WHEN course.type = 3 THEN
+		'PPT'
+		WHEN course.type = 4 THEN
+		'WORD'
+		WHEN course.type = 5 THEN
+		'EXCEL'
+		END
+		ELSE
+		paper.type
+		END AS cType,
+		planCourse.is_compulsory
+		FROM
+		el_post_development post
+		INNER JOIN el_plan_course planCourse ON post.id = planCourse.plan_id
+		LEFT JOIN el_course course ON planCourse.associate_id = course.id
+		LEFT JOIN el_paper paper ON planCourse.associate_id = paper.id
+		WHERE post.state = 1 and  planCourse.course_type=#{courseType}
+		<if test="planId != null and planId != ''">
+			and post.id = #{planId}
+		</if>
+		ORDER BY
+		planCourse.stage,
+		planCourse.seq
+	</select>
+	
+	
+	<select id="findCompulsoryCplanByAccountId" parameterType="map"
+		resultMap="CompulsoryCplanResultMap">
+		<![CDATA[
+		SELECT DISTINCT
+	cplan.id,
+	cplan.name,
+	cplan.group_id,
+	cplan.tag_id,
+	cplan.start_date,
+	cplan.end_date,
+	cplan.is_reward_point,
+	cplan.is_reward_certification,
+	cplan.reward_point,
+	cplan.certification_id,
+	cplan.qualification_id,
+	cplan.is_allow_expired,
+	planCourse.stage,
+	planCourse.start_time AS sTime,
+	planCourse.end_time AS eTime,
+	cplan.is_seq,
+	cplan.open_range,
+	CASE
+		WHEN course.id IS NOT NULL THEN
+		1
+		ELSE
+		2
+		END AS courseType,
+		CASE
+		WHEN course.id IS NOT NULL THEN
+		course.id
+		ELSE
+		paper.id
+		END AS cId,
+		CASE
+		WHEN course. NAME IS NOT NULL THEN
+		course. NAME
+		ELSE
+		paper. NAME
+		END AS cName,
+		CASE
+		WHEN course.type IS NOT NULL THEN
+		CASE
+
+		WHEN course.type = 1 THEN
+		'视频'
+		WHEN course.type = 2 THEN
+		'SCORM'
+		WHEN course.type = 3 THEN
+		'PPT'
+		WHEN course.type = 4 THEN
+		'WORD'
+		WHEN course.type = 5 THEN
+		'EXCEL'
+		END
+		ELSE
+		paper.type
+		END AS cType,
+		planCourse.is_compulsory]]>
+FROM
+	el_plan_authority planAuthority
+INNER JOIN el_compulsory_cplan cplan ON planAuthority.course_id = cplan.id
+AND cplan.state = 1
+INNER JOIN el_plan_course planCourse ON cplan.id = planCourse.plan_id and planCourse.course_type=#{courseType}
+LEFT JOIN el_course course ON planCourse.associate_id = course.id
+LEFT JOIN el_paper paper ON planCourse.associate_id = paper.id
+WHERE
+	planAuthority.associate_id = #{accountId} and planAuthority.course_type=#{courseType}
+		<if test="planId != null and planId != ''">
+			and cplan.id = #{planId}
+		</if>
+ORDER BY
+	cplan.id,
+	planCourse.stage,
+	planCourse.seq
+
+	</select>
+		
+
+	<select id="getLearningTime" parameterType="map" resultType="string">
+		<choose>
+			<when test="courseType == 1">
+				<![CDATA[
+				SELECT
+				CASE WHEN progress.lTime IS NOT NULL AND progress.lTime <=sum(course.learning_time)
+				THEN FORMAT( progress.lTime/sum(course.learning_time),2)
+				WHEN progress.lTime IS NOT NULL AND progress.lTime > sum(course.learning_time)
+				THEN 1
+				ELSE 0 END AS learningTime
+				FROM  el_study_plan classPlan
+				LEFT JOIN el_plan_course planCourse ON classPlan.id=planCourse.plan_id and planCourse.course_type=1 and planCourse.is_compulsory=1
+				LEFT JOIN el_course course ON course.id=planCourse.associate_id
+				LEFT JOIN (
+				SELECT classPlan.id,
+				CASE
+				WHEN sum(progress.learning_time) >= course.learning_time THEN
+				course.learning_time
+				ELSE
+				progress.learning_time
+				END AS lTime ]]>
+				FROM el_study_plan classPlan
+				LEFT JOIN el_plan_course planCourse ON classPlan.id=planCourse.plan_id and planCourse.course_type=1 and planCourse.is_compulsory=1
+				LEFT JOIN el_course course ON course.id=planCourse.associate_id
+				LEFT JOIN el_learning_progress progress ON course.id=progress.course_id and classPlan.id=progress.plan_id
+				where progress.user_id=#{id}
+
+				<if test="planId != null and planId != '' ">
+					and classPlan.id=#{planId}
+				</if>
+
+				)progress  on classPlan.id=progress.id
+				<if test="planId != null and planId != '' ">
+					and classPlan.id=#{planId}
+				</if>
+			</when>
+			<when test="courseType == 3">
+				<![CDATA[
+		SELECT
+		CASE WHEN progress.lTime IS NOT NULL AND progress.lTime <=sum(course.learning_time)
+		THEN FORMAT( progress.lTime/sum(course.learning_time),2)
+		WHEN progress.lTime IS NOT NULL AND progress.lTime > sum(course.learning_time)
+		THEN 1
+		ELSE 0 END AS learningTime
+				FROM  el_post_development  classPlan
+				LEFT JOIN el_plan_course planCourse ON classPlan.id=planCourse.plan_id and planCourse.course_type=#{courseType} and planCourse.is_compulsory=1
+				LEFT JOIN el_course course ON course.id=planCourse.associate_id
+				LEFT JOIN (
+				SELECT  classPlan.post_level,
+				CASE
+				WHEN sum(progress.learning_time) >= course.learning_time THEN
+				course.learning_time
+				ELSE
+				progress.learning_time
+				END AS lTime ]]>
+				FROM el_post_development classPlan
+				LEFT JOIN el_plan_course planCourse ON classPlan.id=planCourse.plan_id and planCourse.course_type=#{courseType} and planCourse.is_compulsory=1
+				LEFT JOIN el_course course ON course.id=planCourse.associate_id
+				LEFT JOIN el_learning_progress progress ON course.id=progress.course_id and classPlan.id=progress.plan_id
+				where progress.user_id=#{id}
+				<if test="planId != null and planId != '' ">
+					and classPlan.id=#{planId}
+				</if>
+				)progress  ON classPlan.post_level=progress.post_level
+				where 1=1
+				<if test="planId != null and planId != '' ">
+					and classPlan.id=#{planId}
+				</if>
+			</when>
+
+			<when test="courseType == 4">
+				<![CDATA[
+		SELECT
+		CASE WHEN progress.lTime IS NOT NULL AND progress.lTime <=sum(course.learning_time)
+		THEN FORMAT( progress.lTime/sum(course.learning_time),2)
+		  WHEN progress.lTime IS NOT NULL AND progress.lTime > sum(course.learning_time)
+		THEN 1
+		ELSE 0 END AS learningTime
+		FROM el_plan_authority authority
+		LEFT JOIN el_compulsory_cplan cPlan ON cPlan.id=authority.course_id
+		LEFT JOIN el_plan_course planCourse ON cPlan.id=planCourse.plan_id and planCourse.course_type=#{courseType} and planCourse.is_compulsory=1
+		LEFT JOIN el_course course ON course.id=planCourse.associate_id
+		LEFT JOIN (
+			SELECT
+				progress.user_id,
+				CASE
+				WHEN sum(progress.learning_time) >= course.learning_time THEN
+				course.learning_time
+				ELSE
+				progress.learning_time
+				END AS lTime ]]>
+				FROM el_compulsory_cplan cPlan
+				LEFT JOIN el_plan_course planCourse ON cPlan.id=planCourse.plan_id and planCourse.course_type=#{courseType} and planCourse.is_compulsory=1
+				LEFT JOIN el_course course ON course.id=planCourse.associate_id
+				LEFT JOIN el_learning_progress progress ON course.id=progress.course_id and cPlan.id=progress.plan_id
+				where progress.user_id=#{id}
+				<if test="planId != null and planId != '' ">
+					and cPlan.id=#{planId}
+				</if>
+				)progress on progress.user_id=authority.associate_id
+				where authority.associate_id=#{id}
+				<if test="planId != null and planId != '' ">
+					and cPlan.id=#{planId}
+				</if>
+			</when>
+
+			<when test="courseType == 5">
+				<![CDATA[
+			SELECT
+		CASE WHEN progress.lTime IS NOT NULL AND progress.lTime <=sum(course.learning_time)
+		THEN FORMAT( progress.lTime/sum(course.learning_time),2)
+		  WHEN progress.lTime IS NOT NULL AND progress.lTime > sum(course.learning_time)
+		THEN 1
+		ELSE 0 END AS learningTime
+
+				FROM el_class_plan_enter enter
+				LEFT JOIN el_class_plan classPlan ON classPlan.id=enter.plan_id
+				LEFT JOIN el_plan_course planCourse ON classPlan.id=planCourse.plan_id and planCourse.course_type=5 and planCourse.is_compulsory=1
+				LEFT JOIN el_course course ON course.id=planCourse.associate_id
+				LEFT JOIN (
+				SELECT
+				progress.user_id,
+				CASE
+				WHEN sum(progress.learning_time) >= course.learning_time THEN
+				course.learning_time
+				ELSE
+				progress.learning_time
+				END AS lTime ]]>
+				FROM el_class_plan classPlan
+				LEFT JOIN el_plan_course planCourse ON classPlan.id=planCourse.plan_id and planCourse.course_type=5 and planCourse.is_compulsory=1
+				LEFT JOIN el_course course ON course.id=planCourse.associate_id
+				LEFT JOIN el_learning_progress progress ON course.id=progress.course_id and classPlan.id=progress.plan_id
+				where progress.user_id=#{id}
+				<if test="planId != null and planId != '' ">
+					and classPlan.id=#{planId}
+				</if>
+				)progress on progress.user_id=enter.user_id
+				where enter.user_id=#{id}
+				<if test="planId != null and planId != '' ">
+					and enter.plan_id=#{planId}
+				</if>
+
+			</when>
+		</choose>
+
+	</select>
+
+
+
+	<select id="getPostLearningTime" parameterType="map" resultType="string">
+		<![CDATA[
+		SELECT
+		CASE WHEN progress.lTime IS NOT NULL AND progress.lTime <=sum(course.learning_time)
+		THEN FORMAT( progress.lTime/sum(course.learning_time),2)
+		WHEN progress.lTime IS NOT NULL AND progress.lTime > sum(course.learning_time)
+		THEN 1
+		ELSE 0 END AS learningTime
+		FROM  el_post_development  classPlan
+		LEFT JOIN el_plan_course planCourse ON classPlan.id=planCourse.plan_id and planCourse.course_type=#{courseType} and planCourse.is_compulsory=1
+		LEFT JOIN el_course course ON course.id=planCourse.associate_id
+		LEFT JOIN (
+		SELECT  classPlan.post_level,
+		SUM(progress.learning_time) as lTime
+		FROM el_post_development classPlan
+		LEFT JOIN el_plan_course planCourse ON classPlan.id=planCourse.plan_id and planCourse.course_type=#{courseType} and planCourse.is_compulsory=1
+		LEFT JOIN el_course course ON course.id=planCourse.associate_id
+		LEFT JOIN el_learning_progress progress ON course.id=progress.course_id and classPlan.id=progress.plan_id
+		where progress.user_id=#{id}
+		and classPlan.id=#{plandId}
+		)progress  ON classPlan.post_level=progress.post_level
+		where  classPlan.id=#{plandId}
+		]]>
+	</select>
+
+	<select id="getCompLearningTime" parameterType="map" resultType="string">
+		<![CDATA[
+		SELECT
+CASE WHEN progress.lTime IS NOT NULL AND progress.lTime <=sum(course.learning_time)
+THEN FORMAT( progress.lTime/sum(course.learning_time),2)
+  WHEN progress.lTime IS NOT NULL AND progress.lTime > sum(course.learning_time)
+THEN 1
+ELSE 0 END AS learningTime
+FROM el_plan_authority authority
+LEFT JOIN el_compulsory_cplan cPlan ON cPlan.id=authority.course_id
+LEFT JOIN el_plan_course planCourse ON cPlan.id=planCourse.plan_id and planCourse.course_type=#{courseType} and planCourse.is_compulsory=1
+LEFT JOIN el_course course ON course.id=planCourse.associate_id
+LEFT JOIN (
+SELECT progress.user_id,
+SUM(progress.learning_time) as lTime
+FROM el_compulsory_cplan cPlan
+LEFT JOIN el_plan_course planCourse ON cPlan.id=planCourse.plan_id and planCourse.course_type=#{courseType} and planCourse.is_compulsory=1
+LEFT JOIN el_course course ON course.id=planCourse.associate_id
+LEFT JOIN el_learning_progress progress ON course.id=progress.course_id and cPlan.id=progress.plan_id
+ where progress.user_id=#{id} and cPlan.id=#{planId}
+)progress on progress.user_id=authority.associate_id
+where authority.associate_id=#{id} and cPlan.id=#{planId}
+
+		]]>
+	</select>
+
+	<resultMap id="RemindingExpireResultMap" type="com.fulan.api.plan.vo.RemindingExpireVo">
+		<result column="timeType" property="timeType" />
+		<collection property="courseVos"
+					ofType="com.fulan.api.plan.vo.CourseVo">
+			<result column="id" property="id" />
+			<result column="name" property="name" />
+			<result column="description" property="description" />
+			<result column="course_type" property="type" />
+		</collection>
+	</resultMap>
+
+	<select id="getRemindingExpire" parameterType="long" resultMap="RemindingExpireResultMap">
+		select result.timeType,result.id,result.course_type,result.name,result.description
+		from (select '1' as timeType,today.id,today.name,today.course_type,today.description
+		from (select
+		classplan.id,classplan.name,authority.course_type,classplan.description
+		from el_plan_authority authority
+		left join el_class_plan classplan on authority.course_id=classplan.id and classplan.is_expired_alarm=1 and classplan.state=1
+		and date(classplan.end_date)-date(now())=0
+		where authority.associate_id=#{id}
+		UNION
+		select
+		cplan.id,cplan.name,authority.course_type,cplan.description
+		from el_plan_authority authority
+		left join el_compulsory_cplan cplan on cplan.id=authority.course_id and cplan.is_expired_alarm=1 and cplan.state=1
+		and date(cplan.end_date)-date(now())=0
+		where authority.associate_id=#{id}
+		UNION
+		select
+		activity.id,activity.name,'0' as course_type,activity.description
+		from el_offline_activity_enter enter
+		left join el_offline_activity activity on enter.course_id=activity.id and date(activity.end_date)-date(now())=0
+		where enter.user_id=#{id}
+		) today
+		UNION
+		select '2' as timeType,tommrrow.id,tommrrow.name,tommrrow.course_type,tommrrow.description
+		from (select
+		classplan.id,classplan.name,authority.course_type,classplan.description
+		from el_plan_authority authority
+		left join el_class_plan classplan on authority.course_id=classplan.id and classplan.is_expired_alarm=1 and classplan.state=1
+		and date(classplan.end_date)-date(now())=1
+		where authority.associate_id=#{id}
+		UNION
+		select
+		cplan.id,cplan.name,authority.course_type,cplan.description
+		from el_plan_authority authority
+		left join el_compulsory_cplan cplan on cplan.id=authority.course_id and cplan.is_expired_alarm=1 and cplan.state=1
+		and date(cplan.end_date)-date(now())=1
+		where authority.associate_id=#{id}
+		UNION
+		select
+		activity.id,activity.name,'0' as course_type,activity.description
+		from el_offline_activity_enter enter
+		left join el_offline_activity activity on enter.course_id=activity.id  and date(activity.end_date)-date(now())=1
+		where enter.user_id=#{id}
+		) tommrrow
+		UNION
+		select '3' as timeType,afterTom.id,afterTom.name,afterTom.course_type,afterTom.description
+		from (select
+		classplan.id,classplan.name,authority.course_type,classplan.description
+		from el_plan_authority authority
+		left join el_class_plan classplan on authority.course_id=classplan.id and classplan.is_expired_alarm=1 and classplan.state=1
+		and date(classplan.end_date)-date(now())=2
+		where authority.associate_id=#{id}
+		UNION
+		select
+		cplan.id,cplan.name,authority.course_type,cplan.description
+		from el_plan_authority authority
+		left join el_compulsory_cplan cplan on cplan.id=authority.course_id and cplan.is_expired_alarm=1 and cplan.state=1
+		and date(cplan.end_date)-date(now())=2
+		where authority.associate_id=#{id}
+		UNION
+		select
+		activity.id,activity.name,'0' as course_type,activity.description
+		from el_offline_activity_enter enter
+		left join el_offline_activity activity on enter.course_id=activity.id and date(activity.end_date)-date(now())=2
+		where enter.user_id=#{id}
+		) afterTom
+		)result where result.name IS NOT NULL
+
+	</select>
+
+
+	<resultMap id="HotPublicClassResultMap" type="com.fulan.api.plan.vo.HotPublicClassVo">
+		<result column="id" property="id" />
+        <result column="planId" property="planId" />
+		<result column="name" property="name" />
+		<result column="num" property="num" />
+		<result column="type" property="courseType" />
+		<result column="lecturerId" property="lecturerId" />
+		<result column="bannerPath" property="bannerPath" />
+		<result column="isFree" property="isFree" />
+		<result column="isRewardPoint" property="isRewardPoint" />
+		<result column="rewardPoint" property="rewardPoint" />
+        <result column="exchange_point" property="exchangePoint" />
+        <result column="is_reward_certification" property="isRewardCertification" />
+        <result column="is_reward_qualification" property="isRewardQualification" />
+	</resultMap>
+
+	<select id="getHotPublicClass" parameterType="long" resultMap="HotPublicClassResultMap">
+		<![CDATA[
+		SELECT
+	result.num,
+	result.id,
+	result.planId,
+	result. NAME,
+	CASE
+WHEN result.type = 1 THEN
+	'视频'
+WHEN result.type = 2 THEN
+	'SCORM'
+WHEN result.type = 3 THEN
+	'PPT'
+WHEN result.type = 4 THEN
+	'WORD'
+WHEN result.type = 5 THEN
+	'EXCEL'
+END AS type,
+ result.banner_path AS bannerPath,
+ result.lecturer AS lecturerId,
+ result.is_reward_point AS isRewardPoint,
+ result.is_free AS isFree,
+ result.reward_point AS rewardPoint,
+ result.exchange_point,
+ result.is_reward_certification,
+ result.is_reward_qualification
+FROM
+	(
+		SELECT
+			history.num,
+			class.id AS planId,
+			course.id,
+			course. NAME,
+			course.type,
+			course.banner_path,
+			course.lecturer,
+			class.is_reward_point,
+			class.is_reward_certification,
+			class.is_reward_qualification,
+			class.is_free,
+			class.reward_point,
+			class.exchange_point
+		FROM
+			el_public_class class
+		INNER JOIN el_study_plan studyPlan ON class.plan_id = studyPlan.id
+		AND studyPlan.state = 1
+		LEFT JOIN el_plan_course planCourse ON planCourse.plan_id = studyPlan.id
+		AND planCourse.associate_type <> 1
+		AND planCourse.associate_type IS NOT NULL
+		LEFT JOIN (SELECT h.plan_id,count( * ) AS num
+        FROM el_history h
+        WHERE h.plan_type = 1
+        GROUP BY h.plan_type, h.plan_id
+        ) history ON history.plan_id = class.id
+		INNER JOIN el_course course ON course.id = planCourse.associate_id
+		AND course.is_share = 1
+		WHERE
+			class.state = 1
+		GROUP BY
+			course.id
+	) result
+	ORDER BY
+	result.num desc
+		LIMIT 0,
+		3
+		]]>
+	</select>
+
+
+	<select id="getPaperState" parameterType="map" resultType="int">
+		SELECT
+		IFNULL(
+		(
+		SELECT DISTINCT
+		IFNULL(exam.paper_state, 0)
+		FROM
+		el_user_exam exam
+		WHERE
+		exam.user_id = #{id}
+		AND exam.paper_id = #{paperId}
+		),
+		0
+		) AS paperState
+		FROM
+		DUAL
+	</select>
+
+	<select id="getExamNum" parameterType="map" resultType="int">
+		SELECT
+		CASE
+		WHEN (
+		select
+		IFNULL(max(exam.exam_num), 0) AS exam_num
+		FROM
+		el_user_exam exam
+		WHERE
+		exam.user_id = #{id} and exam.plan_course_id= #{planId}
+		AND exam.paper_id = #{paperId}
+		) >= (
+		SELECT DISTINCT
+		IFNULL(paper.test_num, 0) AS test_num
+		FROM
+		el_paper paper
+		WHERE
+		paper.id = #{paperId}
+		) THEN
+		1
+		ELSE
+		0
+		END AS examNum
+		FROM
+		DUAL
+	</select>
+
+	<select id="getCoursePaperListByPlan" parameterType="java.util.Map" resultType="com.fulan.api.plan.vo.CourseVo">
+		SELECT *  FROM (
+		(SELECT pc.associate_id AS id, pc.id as planCourseId, pc.associate_type AS courseType,
+		pc.is_compulsory AS isCompulsory,pc.start_time AS startTime,pc.end_time AS endTime,
+		pc.stage, pc.seq, c.NAME, c.description, c.type, c.learning_time AS learningTime,
+		(case when slp.learningTimeSum > c.learning_time*60 then 2
+		when c.learning_time*60>slp.learningTimeSum and slp.learningTimeSum>0 then 1
+		else 0
+		end )AS learningStatus, '0' AS paperState,'1' AS isAllowStudy
+		FROM (
+		SELECT * FROM el_plan_course
+		WHERE associate_type != 1
+		<if test = "planId != null and planId != '' " >
+		AND plan_id = #{planId}
+		</if>
+		<if test="courseType != null and courseType != '' ">
+		AND course_type = #{courseType}
+		</if>
+		<if test="stage != null and stage != '' ">
+		AND stage = #{stage}
+		</if>
+		) pc
+		LEFT JOIN el_course c ON c.id = pc.associate_id
+		<if test="accountId != null and accountId != '' ">
+		LEFT JOIN ( SELECT SUM( lp.learning_time ) AS learningTimeSum,lp.course_id
+		FROM el_learning_progress lp
+		WHERE
+		1 = 1
+		<if test = "planId != null and planId != '' " >
+		AND lp.plan_id = #{planId}
+		</if>
+		<if test="courseType != null and courseType != '' ">
+		AND type = #{courseType}
+		</if>
+		AND lp.user_id =#{accountId}
+		GROUP BY lp.course_id
+		) slp
+		ON slp.course_id = pc.associate_id
+		</if>
+		)
+		UNION
+		(SELECT pc.associate_id AS id, pc.id as planCourseId,pc.associate_type AS courseType,
+		pc.is_compulsory AS isCompulsory,pc.start_time AS startTime,pc.end_time AS endTime,
+		pc.stage,pc.seq,p.NAME,p.discription,p.type,p.exam_time AS learningTime,
+		(CASE
+		when slp.examNum is NULL then 0
+		when slp.paper_state!=2 and slp.scoreSum >= p.pass_mark then 2
+		else 1
+		end) AS learningStatus,
+		(CASE
+		when slp.paper_state=2 then 2
+		when slp.paper_state=1 then 1
+		else 0
+		end) AS paperState,
+		IF(p.test_num > slp.examNum || slp.examNum is NULL,'1','0') AS isAllowStudy
+		FROM (
+		SELECT *  FROM el_plan_course
+		WHERE
+		associate_type = 1
+		<if test = "planId != null and planId != '' " >
+			AND plan_id =#{planId}
+		</if>
+		<if test="courseType != null and courseType != '' ">
+		AND course_type = #{courseType}
+		</if>
+		<if test="stage != null and stage != '' ">
+		AND stage = #{stage}
+		</if>
+		) pc
+		LEFT JOIN el_paper p ON p.id = pc.associate_id
+		<if test = "accountId != null and accountId != '' " >
+		LEFT JOIN (
+		SELECT SUM( ue.score ) AS scoreSum,ue.paper_state, ue.plan_course_id AS planCourseId, eump.maxExamNum AS examNum
+		FROM el_user_exam ue
+		LEFT JOIN (
+		SELECT
+			max(exam_num) as maxExamNum,plan_course_id AS planCourseId
+		FROM
+		el_user_exam
+		WHERE
+		1 = 1
+		AND user_id =  #{accountId}
+		GROUP BY
+			plan_course_id
+		) eump
+		ON eump.planCourseId = ue.plan_course_id
+		WHERE
+		1 = 1
+		AND ue.user_id = #{accountId}
+		AND eump.maxExamNum= ue.exam_num
+		GROUP BY
+		ue.plan_course_id
+		) slp
+		ON slp.planCourseId = pc.id
+		</if>
+		)
+		) se
+		ORDER BY se.seq
+	</select>
+
+	<select id="getStartFlag" parameterType="map" resultType="int">
+			SELECT IF(sum( slp.learning_time ) > 0,1,0 ) AS startFlag
+				FROM el_learning_progress slp
+			  WHERE
+				slp.user_id = #{accountId}
+				AND slp.plan_id = #{planId}
+				AND slp.type = #{courseType}
+				AND slp.course_id IN (
+					SELECT epc.associate_id FROM el_plan_course epc WHERE epc.plan_id = #{planId} AND epc.course_type = #{courseType} AND epc.stage=#{stage})
+	</select>
+
+
+
+	<select id="findClassPlan" parameterType="long"
+			resultType="com.fulan.api.plan.vo.ClassPlanVo">
+		SELECT DISTINCT id,
+				NAME,
+				CODE,
+				description,
+				start_date AS startDate ,
+				end_date AS endDate,
+				is_reward_point as isRewardPoint,
+				is_reward_certification AS isRewardCertification,
+				is_reward_qualification AS isRewardQualification,
+				is_allow_expired AS isAllowExpired,
+				reward_point AS rewardPoint,
+				certification_id AS certificationId,
+				qualification_id AS qualificationId
+					FROM el_class_plan
+					WHERE state = 1
+			and id = #{planId}
+	</select>
+	<select id="findCompulsoryPlan" parameterType="map"
+			resultType="com.fulan.api.plan.vo.CompulsoryPlanVo">
+		SELECT DISTINCT
+		cplan.id,
+		cplan.name,
+		cplan.group_id,
+		cplan.tag_id,
+		cplan.start_date,
+		cplan.end_date,
+		cplan.is_reward_point,
+		cplan.is_reward_certification,
+		cplan.reward_point,
+		cplan.certification_id,
+		cplan.qualification_id,
+		cplan.is_allow_expired
+		FROM
+		el_compulsory_cplan cplan
+		WHERE
+		cplan.id in(
+		select planAuthority.course_id from el_plan_authority planAuthority where planAuthority.associate_id = #{accountId} and planAuthority.course_type=4)
+		<if test="planId != null and planId != ''">
+			and cplan.id = #{planId}
+		</if>
+		OR cplan.open_range =0
+		<if test="dictCode != null and dictCode != ''">
+			and cplan.dict_code = #{dictCode}
+		</if>
+		ORDER BY
+		cplan.start_date desc
+	</select>
+
+	<select id="findPostDevelopment" parameterType="map"
+			resultType="com.fulan.api.plan.vo.PostDevelopmentVo">
+		SELECT DISTINCT
+		post.id,
+		post. NAME,
+		post.is_allow_expired as isAllowExpired,
+		post.limit_types AS limitTypes,
+		post.start_days AS startDays,
+		post.end_days AS endDays,
+		post.post_level AS postLevel,
+		post.is_expired_alarm AS isExpiredAlarm,
+		post.is_seq AS isSeq
+		FROM
+		el_post_development post
+		WHERE post.state = 1
+		<if test="postType != null and postType != ''">
+			AND post.post_level = #{postType}
+		</if>
+	</select>
+</mapper>

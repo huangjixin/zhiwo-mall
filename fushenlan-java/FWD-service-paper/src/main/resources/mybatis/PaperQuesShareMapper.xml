@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.PaperQuesShareMapper">
+	<resultMap id="BaseResultMap" type="com.fulan.api.paper.domain.el.PaperQuesShare">
+		<id column="id" jdbcType="BIGINT" property="id" />
+	    <result column="host_id" jdbcType="BIGINT" property="hostId" />
+	    <result column="type" jdbcType="INTEGER" property="type" />
+	    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+	    <result column="gmt_create" jdbcType="DATE" property="gmtCreate" />
+	</resultMap>
+	<sql id="Base_Column_List">
+	    id, host_id, type, group_id, gmt_create, gmt_modified
+  	</sql>
+  	<insert id="saveBatch" parameterType="java.util.List"> 
+  		insert into el_paper_ques_share (id, host_id, type, group_id, gmt_create)
+  		values
+            <foreach collection="listMap" item="groupIdItem" index="index" separator=",">
+	            (
+	             #{groupIdItem.id,jdbcType=BIGINT}
+	            ,#{groupIdItem.hostId,jdbcType=BIGINT}
+	            ,#{type,jdbcType=INTEGER}
+	            ,#{groupIdItem.groupId,jdbcType=BIGINT}
+	            ,#{gmtCreate,jdbcType=DATE}
+	            )
+        	</foreach>
+  	</insert>
+	<delete id="deleBatchIds">
+		delete from el_paper_ques_share
+		where host_id in 
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+	</delete>
+	<select id="seleByhostId" resultType="java.util.Map">
+		select group_id from el_paper_ques_share where host_id = #{id} GROUP by group_id
+	</select>
+	
+	<select id="selectShareQuestion" resultType="java.lang.Long">
+		select group_id  from el_paper_ques_share where type=1 and host_id=#{id}
+	</select>
+	
+	<select id="selectSharePaper" resultType="java.lang.Long">
+		select group_id  from el_paper_ques_share where type=2 and host_id=#{id}
+	</select>
+</mapper>

@@ -1,0 +1,91 @@
+{
+   "note":[{
+          "noteNo": "P123456789012",
+          "insureName": "Jason Tang",
+          "insuredName": "Clould Wang",
+          "content": "由于投被保人免体检保额超限，需要提交A类体检报告。",
+          "type": "1"
+        },
+        {
+          "noteNo": "P123456789012",
+          "insureName": "Jason Tang",
+          "insuredName": "Clould Wang",
+          "content": "由于赔付内容涉及医疗费用，需要提交三甲医院开具的发票原件。",
+          "type": "3"
+        },
+        {
+          "noteNo": "P123456789012",
+          "insureName": "Jason Tang",
+          "insuredName": "Clould Wang",
+          "content": "由于赔付内容涉及医疗费用，需要提交三甲医院开具的发票原件。",
+          "type": "2"
+        },
+         {
+           "noteNo": "P123456789012",
+           "insureName": "Jason Tang",
+           "insuredName": "Clould Wang",
+           "content": "我也不知道其他类型照会都有什么内容，大家自己看着办吧1",
+           "type": "4"
+         }
+   ],
+   "customerManagement":[{
+     "noteNo": "P123456789012",
+     "insureName": "Jason Tang",
+     "insuredName": "Clould Wang",
+     "content": "由于投被保人免体检保额超限，需要提交A类体检报告。",
+     "type": ""
+   },
+     {
+       "noteNo": "P123456789012",
+       "insureName": "Jason Tang",
+       "insuredName": "Clould Wang",
+       "content": "由于赔付内容涉及医疗费用，需要提交三甲医院开具的发票原件。",
+       "type": "3"
+     },
+     {
+       "noteNo": "P123456789012",
+       "insureName": "Jason Tang",
+       "insuredName": "Clould Wang",
+       "content": "由于赔付内容涉及医疗费用，需要提交三甲医院开具的发票原件。",
+       "type": "2"
+     },
+     {
+       "noteNo": "P123456789012",
+       "insureName": "Jason Tang",
+       "insuredName": "Clould Wang",
+       "content": "我也不知道其他类型照会都有什么内容，大家自己看着办吧2",
+       "type": "4"
+     }
+   ],
+     "mobileApproval":[
+       {
+         "noteNo": "P123456789012",
+         "insureName": "Jason Tang",
+         "insuredName": "Clould Wang",
+         "content": "由于投被保人免体检保额超限，需要提交A类体检报告。",
+         "type": "1"
+       },
+       {
+         "noteNo": "P123456789012",
+         "insureName": "Jason Tang",
+         "insuredName": "Clould Wang",
+         "content": "由于赔付内容涉及医疗费用，需要提交三甲医院开具的发票原件。",
+         "type": "3"
+       },
+       {
+         "noteNo": "P123456789012",
+         "insureName": "Jason Tang",
+         "insuredName": "Clould Wang",
+         "content": "由于赔付内容涉及医疗费用，需要提交三甲医院开具的发票原件。",
+         "type": "2"
+       },
+       {
+         "noteNo": "P123456789012",
+         "insureName": "Jason Tang",
+         "insuredName": "Clould Wang",
+         "content": "我也不知道其他类型照会都有什么内容，大家自己看着办吧3",
+         "type": "3"
+       }
+     ]
+}
+

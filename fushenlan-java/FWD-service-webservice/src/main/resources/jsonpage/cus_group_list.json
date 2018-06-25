@@ -1,0 +1,84 @@
+{
+  "code": "1",
+  "msg": "查询客户分组信息成功",
+  "data": [
+    {
+      "A": [
+        {
+          "id": 1001,
+          "customerName": "阿里扎",
+          "mobile": "18399898888",
+          "flags": "老客户|VIP",
+          "selectAddress": ["上海", "长沙"],
+		  "address": "上海",
+		  "age": "18",
+		  "grade": "铜牌会员",
+          "head": "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3025792005,4204962863&fm=27&gp=0.jpg"
+        },
+        {
+          "id": 1002,
+          "customerName": "阿里巴巴",
+          "mobile": "18399898888",
+          "flags": "老客户|VIP",
+          "selectAddress": ["上海", "长沙"],
+		  "address": "上海",
+		  "age": "18",
+		  "grade": "铜牌会员",
+          "head": "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3025792005,4204962863&fm=27&gp=0.jpg"
+        }
+      ]
+    },
+    {
+      "B": [
+        {
+          "id": 2001,
+          "customerName": "宝马",
+          "mobile": "18676767777",
+          "flags": "准客户",
+          "selectAddress": ["上海", "长沙"],
+		  "address": "上海",
+		  "age": "18",
+		  "grade": "铜牌会员",
+          "head": "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3025792005,4204962863&fm=27&gp=0.jpg"
+        },
+        {
+          "id": 2002,
+          "customerName": "奔驰",
+          "mobile": "18878787888",
+          "flags": "准客户",
+          "selectAddress": ["上海", "长沙"],
+		  "address": "上海",
+		  "age": "18",
+		  "grade": "铜牌会员",
+          "head": "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3025792005,4204962863&fm=27&gp=0.jpg"
+        }
+      ]
+    },
+    {
+      "C": [
+        {
+          "id": 3001,
+          "customerName": "C罗",
+          "mobile": "18676767777",
+          "flags": "线上客户",
+          "selectAddress": ["上海", "长沙"],
+		  "address": "上海",
+		  "age": "18",
+		  "grade": "铜牌会员",
+          "head": "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3025792005,4204962863&fm=27&gp=0.jpg"
+        },
+        {
+          "id": 3002,
+          "customerName": "CAnerl",
+          "mobile": "18878787888",
+          "flags": "线上客户",
+          "selectAddress": ["上海", "长沙"],
+		  "address": "上海",
+		  "age": "18",
+		  "grade": "铜牌会员",
+          "head": "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3025792005,4204962863&fm=27&gp=0.jpg"
+        }
+      ]
+    }
+  ]
+}

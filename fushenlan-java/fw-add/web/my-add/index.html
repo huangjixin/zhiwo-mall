@@ -1,0 +1,201 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=1024, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>在线增员系统</title>
+    <link rel="stylesheet" href="../../css/iconfont/iconfont.css">
+    <link rel="stylesheet" href="../../css/reset.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <script type="text/javascript">
+        if (/Android (\d+\.\d+)/.test(navigator.userAgent)) {
+            var version = parseFloat(RegExp.$1);
+            if (version > 2.3) {
+                var phoneScale = parseInt(window.screen.width) / 1024;
+                document.write('<meta name="viewport" content="width=1024, minimum-scale=' + phoneScale + ', maximum-scale=' + phoneScale + ', target-densitydpi=device-dpi">');
+            } else {
+                document.write('<meta name="viewport" content="width=1024, target-densitydpi=device-dpi">');
+            }
+        } else {
+            document.write('<meta name="viewport" content="width=1024, user-scalable=no, target-densitydpi=device-dpi">');
+        }
+        ;
+
+        function onLoad() {
+            document.addEventListener("deviceready", onDeviceReady, false);
+        }
+
+        function onDeviceReady() {
+            document.addEventListener("resume", onResume, false);
+        }
+
+        function onResume() {
+            //回到前台后  调用这里
+            console.log("-----onResume-----");
+            try {
+                Cordova.cordovaComplete = true;
+                navigator.splashscreen.hide();
+            } catch (e) {
+                console.log("exec=============" + e.message)
+            }
+        }
+    </script>
+</head>
+<body onload="onLoad()">
+<!--盒子容器-->
+<div class="wrapper">
+    <!--头部logo以及功能按钮-->
+    <div class="header header-logo">
+        <div class="logo">
+            <img src="../../images/logo_white@2x.png" alt="">在线增员系统
+        </div>
+        <div class="hello-user">
+            <i class="icon-users"></i>
+            hi, <span class="user-name"></span>
+        </div>
+        <button class="btn-menu">
+            <i class="icon-sign-out"></i>退出
+        </button>
+    </div>
+
+    <!--侧边导航栏-->
+    <div class="recruit-sidebar">
+        <!--打开弹层按钮 -->
+        <div class="open">
+            <i class="icon-back"></i><i class="icon-back"></i>
+        </div>
+
+        <!--侧边栏导航按钮-->
+        <button type="button" class="online toggle main active" data-href="main">
+            <i class="icon-adduser"></i>首页
+        </button>
+
+        <button type="button" class="online addRecruit toggle" data-href="addRecruit">
+            <i class="icon-adduser"></i>我的增员
+        </button>
+
+        <button type="button" class="talents preAdd toggle" data-href="preAdd">
+            <i class="icon-xinwen-dengjiren"></i>人才库
+        </button>
+
+        <button class="back">
+            <i class="icon-back"></i><i class="icon-back"></i>
+        </button>
+    </div>
+
+    <!--内容区-->
+    <div class="recruit-clientInfo">
+
+    </div>
+    <!--底部浮动层-->
+    <div class="float-bot">
+    </div>
+
+    <!--面试官意见-->
+    <div class="popup-box popup-suggest">
+        <div class="popup-header">
+            <h2>请在此输入您的面试意见</h2>
+            <button type="button" class="popup-close"><i class="icon-close-empty"></i></button>
+        </div>
+        <div class="popup-content">
+            <div class="suggest-plan hidden">
+                <em>人才计划</em>
+                <div class="talent-plan ipt-select"> <i class="icon-arrow-full-down"></i>
+                    <input type="text" class="ipt-text" placeholder="请选择人才计划" readonly="">
+                    <select name="talentPlan">
+
+                    </select>
+                </div>
+            </div>
+            <div class="suggest-text hidden">
+                <textarea id="suggest"></textarea>
+            </div>
+        </div>
+        <div class="suggest-button">
+        </div>
+    </div>
+    <!-- video页面图片放大 -->
+    <div class="popup-box popup-largeImg">
+        <div class="popup-content">
+            <img src="" alt="" class="large-img">
+        </div>
+    </div>
+        <!-- plan页面签名弹框 -->
+    <div class="popup-box popup-largeState">
+        <div class="popup-content">
+            <div class="planHeader"></div>
+            <div class="content content_bg">
+                <div class="main clearfix">
+                    <h2>招募代理制保险营业员重要事项告知书</h2>
+                    <p>为确保本公司代理制保险营业员招募行为规范、透明，确保应募者的知情权，本公司向您告知如下重要事项：</p>
+                    <ul>
+                        <li>一、根据中国保监会规定，保险公司需对从业人员进行甄选，加强专业培训，因此代理制保险营销员必须参加本公司的专项培训并通过培训考试。</li>
+                        <li>二、本公司与完成培训并通过考试的人员签订个人保险代理合同（非劳动合同）并颁发执业证书，合同当事人一方为本公司，另一方为代理制保险营业员。代理制保险营业员须亮证（执业证书）营销。</li>
+                        <li>三、代理制保险营业员的薪酬与业绩直接挂钩，其收入形式通常为佣金（非工资）。</li>
+                        <li class="hidden sign">请认真阅读上述告知内容并作亲笔签名</li>
+                    </ul>
+                    <div class="name fr">
+                        <p>富卫保险</p>
+                        <div class="check-declaration hidden">
+                            <p>申请人（准新人）签名</p>
+                            <p id="pen-sign">
+                                <img src="" alt="" />
+                            </p>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>     
+        <div class="planCloseOrSure sureOrClose">
+            <button class="planClose hidden" value="取消">取消</button>
+            <button class="planSure" value="确定">确定</button>
+        </div>
+    </div>
+
+</div>
+<!--盒子容器-->
+
+<script src="../../lib/zepto.min.js"></script>
+<script src="../../lib/seajs/sea.js"></script>
+<script src="../../lib/common/common.js"></script>
+<script src="../../lib/cordova/cordova.js"></script>
+<script src="../../lib/vconsole.min.js"></script>
+<script>
+    var dateTag = new Date();
+//    var vConsole = new VConsole();
+    seajs.config({
+        base: '../../',
+        alias: {
+            'interface': 'utils/interface',
+            'validation': 'utils/validation',
+            'seajsText': 'lib/seajs/seajs-text',
+            'seajsCss': 'lib/seajs/seajs-css',
+            'zeptoTouch': 'lib/zepto.touch',
+            'zeptoMd5': 'lib/zepto.md5',
+            'doT': 'lib/doT.min',
+            'cordova': 'lib/cordova/cordova',
+            'hammer': 'lib/hammer.min',
+            'dropload': 'lib/dropload',
+            'moment': 'lib/moment.min',
+            'base64': 'lib/base64',
+            'datepicker': 'lib/LCalendar.min',
+            'swiper': 'lib/swiper.min',
+            'echarts': 'lib/echarts.min'
+        },
+        paths: {},
+        preload: [
+            'common'
+        ],
+        map: [
+            [/^(.*\.(?:css|js|html))(.*)$/i, '$1?' + dateTag.getTime()]
+        ]
+    });
+    seajs.use('./index.js')
+</script>
+</body>
+</html>

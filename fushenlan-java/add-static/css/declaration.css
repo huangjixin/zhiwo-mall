@@ -1,0 +1,51 @@
+.content{
+    padding-top: 50px;;
+}
+.content .main{
+    padding: 20px 50px;
+    background: #C3C3C3;
+    color: #007aff;
+    font-size: 16px;
+    line-height: 24px;
+}
+.content .main h2{
+    color: red;
+    font-size: 20px;
+    line-height: 30px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.fr{
+    float: right;
+}
+.fl{
+    float: left;
+}
+.content .main .name p:nth-child(1){
+
+}
+.content .main .name p:nth-child(2){
+    color: red;
+}
+.content .main .name p:nth-child(3){
+    width: 250px;
+    height: 50px;
+    background-color: #fff;
+}
+.content .main .name p:nth-child(4){
+
+}
+.content .footer button{
+    height: 50px;
+    line-height: 50px;
+}
+.content .footer button.left{
+    background-color: #ccc;
+    color: #17A87C;
+}
+.content .footer button.right{
+    height: 50px;
+    line-height: 50px;
+    background-color:yellow;
+    color: #ffecec;
+}

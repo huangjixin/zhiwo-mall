@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fulan.application.mapper.AttendanceHistoryMapper" >
+  <resultMap id="BaseResultMap" type="com.fulan.api.calendar.domain.AttendanceHistory" >
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="type" property="code" jdbcType="VARCHAR" />
+    <result column="check_time" property="checkTime" jdbcType="TIME" />
+    <result column="check_date" property="checkDate" jdbcType="DATE" />
+    <result column="agent_code" property="agentCode" jdbcType="VARCHAR" />
+    <result column="agent_name" property="agentName" jdbcType="VARCHAR" />
+  </resultMap>
+    <select id="selectAllHistory"  resultMap="BaseResultMap" parameterType="java.lang.String">
+      SELECT h.* FROM iris_attendance_history h
+      WHERE exists(select agent_code from iris_attendance_objects
+      where agent_code =h.agent_code AND org_id=#{orgId}) and h.agent_code = #{agentCode}
+      AND DATE_FORMAT(h.check_date, '%Y%m' ) = DATE_FORMAT(#{calendarDate} , '%Y%m' )
+    </select>
+
+    <select id="selectCountByCalendarDate" resultType="java.lang.Integer" parameterType="java.lang.String">
+      SELECT COUNT( DISTINCT h.check_date) FROM iris_attendance_history h
+      WHERE exists(select agent_code from iris_attendance_objects
+      where agent_code =h.agent_code AND org_id=#{orgId}) and h.agent_code = #{agentCode}
+      AND DATE_FORMAT(h.check_date, '%Y%m' ) = DATE_FORMAT(#{calendarDate} , '%Y%m' )
+    </select>
+    <!-- 根据条件检索考勤结果列表 -->
+    <select id="selectAttendanceResultByParams"  resultMap="BaseResultMap">
+        select 
+        *
+	    from iris_attendance_history
+	    where 1=1
+    <include refid="conditionSql"/>
+   </select>
+   <!-- 根据条件检索考勤结果 个数-->
+   <select id="selectAttendanceResultCountByParams"  resultType="java.lang.Integer" >
+        select 
+        count(1)
+	    from iris_attendance_history
+	    where 1=1
+    <include refid="conditionSql"/>
+   </select>
+   <sql id="conditionSql">
+	<if test="keyWord != null and keyWord != '' ">
+		and agent_code like CONCAT('%',#{keyWord},'%')
+		or  agent_name like CONCAT('%',#{keyWord},'%')
+	</if>
+	<if test="startDate != null and startDate != '' ">
+        <![CDATA[ and DATE_FORMAT(check_date,'%Y-%m-%d')>= #{startDate}]]>
+    </if>
+    <if test="endDate !=null and endDate != ''">
+      <![CDATA[ and DATE_FORMAT(check_date,'%Y-%m-%d')<= #{endDate}]]>
+    </if>
+  </sql>
+    <insert id="addAttendanceHistory" parameterType="com.fulan.api.calendar.domain.AttendanceHistory" >
+        insert into iris_attendance_history
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="id != null" >
+            id,
+        </if>
+        <if test="code != null" >
+            type,
+        </if>
+        <if test="checkTime != null" >
+            check_time,
+        </if>
+        <if test="checkDate != null" >
+            check_date,
+        </if>
+        <if test="agentCode != null" >
+            agent_code,
+        </if>
+        <if test="agentName != null" >
+            agent_name,
+        </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="id != null" >
+            #{id,jdbcType=BIGINT},
+        </if>
+        <if test="code != null" >
+            #{code,jdbcType=VARCHAR},
+        </if>
+        <if test="checkTime != null" >
+            #{checkTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="checkDate != null" >
+            #{checkDate,jdbcType=TIMESTAMP},
+        </if>
+        <if test="agentCode != null" >
+            #{agentCode,jdbcType=VARCHAR},
+        </if>
+        <if test="agentName != null" >
+            #{agentName,jdbcType=VARCHAR},
+        </if>
+        </trim>
+    </insert>
+</mapper>

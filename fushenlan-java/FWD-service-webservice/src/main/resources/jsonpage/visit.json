@@ -1,0 +1,22 @@
+{
+	"name":"拜访记录",
+    "status": 1,
+    "message": "信息获取成功",
+    "code": 200,
+    "data": {
+        "vistList": [
+            {
+                "visitType": "成交面谈",
+                "visitAddress": "上海市黄埔区云南南路118号",
+                "visitTime": "2017/12/01 08:00 AM"
+
+            },
+            {
+                "visitType": "销售面谈",
+                "visitAddress": "上海市黄埔区云南南路118号",
+                "visitTime": "2017/12/01 15:00 PM"
+            }
+        ]
+    }
+}
+

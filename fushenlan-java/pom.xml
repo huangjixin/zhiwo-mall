@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.fulan</groupId>
+	<artifactId>cloud</artifactId>
+	<version>1.0</version>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>cloud-util</module>
+		<module>cloud-security</module>
+		<module>cloud-core</module>
+		<module>cloud-admin</module>
+		<module>cloud-gateWay</module>
+		<module>cloud-eureka</module>
+		<module>cloud-config</module>
+		<module>cloud-api-security</module>
+		<module>cloud-api-system</module>
+		<module>cloud-system</module>
+		<module>cloud-lib</module>
+		<module>cloud-job</module>
+		<module>cloud-log</module>
+		<module>cloud-orm</module>
+		<module>FWD-api-personnel</module>
+		<module>FWD-service-personnel</module>
+		<module>FWD-api-flow</module>
+		<module>FWD-service-flow</module>
+		<module>FWD-api-paper</module>
+		<module>FWD-service-paper</module>
+		<module>FWD-api-course</module>
+		<module>FWD-service-course</module>
+		<module>FWD-api-material</module>
+		<module>FWD-service-material</module>
+		<module>FWD-api-plan</module>
+		<module>FWD-service-plan</module>
+		<module>FWD-api-message</module>
+		<module>FWD-service-message</module>
+		<module>FWD-api-webservice</module>
+		<module>FWD-service-webservice</module>
+		<module>cloud-web-manage</module>
+		<module>FW-service-calendar</module>
+		<module>FW-api-calendar</module>
+		<module>FW-web-manage</module>
+		<module>FWD-service-achievement</module>
+    <module>FWD-api-achievement</module>
+    <module>FWD-service-information</module>
+    <module>FWD-api-information</module>
+	<module>FWD-service-customer</module>
+    <module>FWD-api-customer</module>
+	<module>FWD-service-personalInfo</module>
+    <module>FWD-api-personalInfo</module>
+	</modules>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<tomcat.version>8.5.15</tomcat.version>
+		<spring-cloud.version>Dalston.SR4</spring-cloud.version>
+		<spring-boot-admin.version>1.5.4</spring-boot-admin.version>
+		<spring-boot.version>1.5.4.RELEASE</spring-boot.version>
+		<ojdbc6.version>11.2.0.4.0</ojdbc6.version>
+		<quartz.version>2.2.1</quartz.version>
+		<swagger.version>2.7.0</swagger.version>
+		<org.aspectj-version>1.6.10</org.aspectj-version>
+		<cpic-tom.version>1.4.16</cpic-tom.version>
+		<swagger-annotations.version>1.5.13</swagger-annotations.version>
+		<kafka.version>1.1.1.RELEASE</kafka.version>
+		<lombok.version>1.16.18</lombok.version>
+		<mysql-jdbc.version>5.1.35</mysql-jdbc.version>
+		<jjwt.version>0.6.0</jjwt.version>
+		<mybatis-spring-boot.version>1.3.1</mybatis-spring-boot.version>
+		<spring-boot-starter-amqp.version>1.5.9.RELEASE</spring-boot-starter-amqp.version>
+		<lcn.last.version>4.1.0</lcn.last.version>
+	</properties>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.4.RELEASE</version>
+		<relativePath />
+	</parent>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<!-- swagger -->
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger-ui</artifactId>
+				<version>${swagger.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger2</artifactId>
+				<version>${swagger.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.kafka</groupId>
+				<artifactId>spring-kafka</artifactId>
+				<version>${kafka.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>cglib</groupId>
+				<artifactId>cglib</artifactId>
+				<version>2.2.2</version>
+			</dependency>
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>${lombok.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql-jdbc.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.jsonwebtoken</groupId>
+				<artifactId>jjwt</artifactId>
+				<version>${jjwt.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.mybatis.spring.boot</groupId>
+				<artifactId>mybatis-spring-boot-starter</artifactId>
+				<version>${mybatis-spring-boot.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-amqp</artifactId>
+				<version>${spring-boot-starter-amqp.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+
+		<!-- <dependency> <groupId>com.google.code.gson</groupId> <artifactId>gson</artifactId> 
+			</dependency> -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-freemarker</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils-core</artifactId>
+			<version>1.8.3</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.36</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-juli</artifactId>
+			<version>${tomcat.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+		<dependency>
+			    <groupId>org.apache.ibatis</groupId>
+			    <artifactId>ibatis-core</artifactId>
+			    <version>3.0</version>
+		</dependency>
+		<!-- swagger -->
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger-ui</artifactId>
+				<version>${swagger.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger2</artifactId>
+				<version>${swagger.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.kafka</groupId>
+				<artifactId>spring-kafka</artifactId>
+				<version>${kafka.version}</version>
+			</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+		<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

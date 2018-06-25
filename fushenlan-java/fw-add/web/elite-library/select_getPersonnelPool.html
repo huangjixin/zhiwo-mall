@@ -1,0 +1,56 @@
+{{?it}}
+<ul class="clearfix top">
+    <li class="col-md-2">
+        <a href="javascript:;">
+            <img src="../../images/client.png" alt=""/>
+        </a>
+    </li>
+    <li class="col-md-2">
+        <a href="javascript:;">
+            <p class="name">{{=it.name ||''}}</p>
+            <p class="text-left"><i class="icon-solid-person"></i>{{=it.sex==="M"?"男":"女"}} {{=it.age ||''}}岁</p>
+            <p class="text-left"><i class="icon-3"></i>{{=it.cellphone ||''}}</p>
+        </a>
+    </li>
+    <li class="col-md-2">
+        <a href="javascript:;">
+            {{? !it.talentPlan}}
+            <p class="col_E87722 text-indent opcity"></p>
+            {{??}}
+            <p class="col_E87722 text-indent">{{=it.talentPlan ||''}}</p>
+            {{?}}
+            <p class="col_AAA">人才计划</p>
+            <p></p>
+        </a>
+    </li>
+    <li class="col-md-2">
+        <a href="javascript:;">
+            <p class="col_E87722">{{=it.refereeName ||''}}</p>
+            <p class="col_AAA">推荐人</p>
+            <p></p>
+        </a>
+    </li>
+    <li class="col-md-2">
+        <a href="javascript:;">
+            <p class="col_E87722">{{=it.referrerName ||''}}</p>
+            <p class="col_AAA">引荐人</p>
+            <p></p>
+        </a>
+    </li>
+    <li class="col-md-2">
+        <a href="javascript:;">
+            <div class="wraper">
+                <p class="hecha"><i class="fa fa-minus-circle"></i>&nbsp;核查</p>
+                <p class="col_AAA">当前环节</p>
+            </div>
+        </a>
+    </li>
+</ul>
+<ul class="clearfix bottom-top">
+    <li class="col-md-2"><em>准增员</em></li>
+    <li class="col-md-2"><i class="col_A1A1A1">学历</i> {{=it.education ||''}}</li>
+    <li class="col-md-3"><i class="col_A1A1A1">毕业院校</i> {{=it.school ||''}}</li>
+    <li class="col-md-3"><i class="col_A1A1A1">来源渠道</i> {{=it.channel ||''}}</li>
+    <li class="col-md-2"></li>
+</ul>
+{{?}}

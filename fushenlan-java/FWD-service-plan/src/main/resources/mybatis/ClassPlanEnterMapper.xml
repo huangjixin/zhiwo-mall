@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.ClassPlanEnterMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fulan.api.plan.domain.ClassPlanEnter">
+        <id column="id" property="id" />
+        <result column="plan_id" property="planId" />
+        <result column="user_id" property="userId" />
+        <result column="gmt_create" property="gmtCreate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, plan_id AS planId, user_id AS userId, gmt_create AS gmtCreate
+    </sql>
+
+    <select id="getEnterCount" resultType="int" parameterType="java.util.Map">
+        select count(*)
+        from el_class_plan_enter
+        where 1=1
+        <if test="userId != null and userId != ''">
+            and user_id=#{userId}
+        </if>
+        <if test="planId != null and planId != ''">
+         AND  plan_id = #{planId}
+        </if>
+    </select>
+
+    <select id="findClassPlanEnterByMap" parameterType="java.util.Map" resultType="com.fulan.api.plan.domain.ClassPlanEnter">
+        SELECT id,plan_id AS planId,user_id AS userId,gmt_create AS gmtCreate FROM el_class_plan_enter
+        WHERE
+        1=1
+        <if test="planId != null and planId != '' ">
+            AND plan_id = #{planId}
+        </if>
+        <if test="userId != null and userId != '' ">
+            AND user_id = #{userId}
+        </if>
+    </select>
+
+</mapper>

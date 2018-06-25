@@ -1,0 +1,19 @@
+{
+	"code": "1",
+	"msg": "查询客户详情成功",
+	"data": [{
+		"id": 1001,
+		"customerName": "阿里扎",
+		"mobile": "18399898888",
+		"flags": "老客户|VIP",
+		"type": "1",
+		"selectAddress": ["上海", "长沙"],
+		"address": "上海",
+		"age": "18",
+		"grade": "铜牌会员",
+		"head": "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3025792005,4204962863&fm=27&gp=0.jpg",
+		"upgrade":"距离升级银牌会员还需要200,000",
+		"totalPremium":"25,000",
+		"policyData":"20",
+	}]
+}

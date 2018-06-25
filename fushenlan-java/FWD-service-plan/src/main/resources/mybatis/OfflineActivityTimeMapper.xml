@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.OfflineActivityTimeMapper">
+	<resultMap id="BaseMap" type="com.fulan.api.plan.domain.OfflineActivityTime">
+		<id column="id" property="id" />
+
+	</resultMap>
+
+	<!--<select id="selectTimeIdById" resultType="java.lang.Long">
+			SELECT  id FROM el_offline_activity_time WHERE course_id=#{id}
+	</select>-->
+
+
+</mapper>

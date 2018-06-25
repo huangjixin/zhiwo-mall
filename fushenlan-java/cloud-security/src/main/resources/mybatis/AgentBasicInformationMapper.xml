@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fulan.application.mapper.AgentBasicInformationMapper" >
+  <resultMap id="BaseResultMap" type="com.fulan.api.security.domain.AgentBasicInformation" >
+    <id column="basic_id" property="basicId" jdbcType="BIGINT" />
+    <result column="agent_id" property="agentId" jdbcType="VARCHAR" />
+    <result column="agent_name" property="agentName" jdbcType="VARCHAR" />
+    <result column="channel_cd" property="channelCd" jdbcType="VARCHAR" />
+    <result column="agent_status_cd" property="agentStatusCd" jdbcType="VARCHAR" />
+    <result column="joining_dt" property="joiningDt" jdbcType="DATE" />
+    <result column="designation_cd" property="designationCd" jdbcType="VARCHAR" />
+    <result column="agent_class" property="agentClass" jdbcType="VARCHAR" />
+    <result column="la_company_code" property="laCompanyCode" jdbcType="CHAR" />
+    <result column="la_branch_code" property="laBranchCode" jdbcType="VARCHAR" />
+    <result column="la_policy_branch_seq" property="laPolicyBranchSeq" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_by_name" property="createByName" jdbcType="VARCHAR" />
+    <result column="create_by_id" property="createById" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_by_name" property="updateByName" jdbcType="VARCHAR" />
+    <result column="update_by_id" property="updateById" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    basic_id, agent_id, agent_name, channel_cd, agent_status_cd, joining_dt, designation_cd, 
+    agent_class, la_company_code, la_branch_code, la_policy_branch_seq, create_time, 
+    create_by_name, create_by_id, update_time, update_by_name, update_by_id
+  </sql>
+  <sql id="name_Column_List" >
+    agent_id, agent_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from agent_basic_information
+    where basic_id = #{basicId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from agent_basic_information
+    where agent_id = #{agentId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fulan.api.security.domain.AgentBasicInformation" >
+    insert into agent_basic_information (basic_id, agent_id, agent_name, 
+      channel_cd, agent_status_cd, joining_dt, 
+      designation_cd, agent_class, la_company_code, 
+      la_branch_code, la_policy_branch_seq, create_time, 
+      create_by_name, create_by_id, update_time, 
+      update_by_name, update_by_id)
+    values (#{basicId,jdbcType=BIGINT}, #{agentId,jdbcType=VARCHAR}, #{agentName,jdbcType=VARCHAR}, 
+      #{channelCd,jdbcType=VARCHAR}, #{agentStatusCd,jdbcType=VARCHAR}, #{joiningDt,jdbcType=DATE}, 
+      #{designationCd,jdbcType=VARCHAR}, #{agentClass,jdbcType=VARCHAR}, #{laCompanyCode,jdbcType=CHAR}, 
+      #{laBranchCode,jdbcType=VARCHAR}, #{laPolicyBranchSeq,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createByName,jdbcType=VARCHAR}, #{createById,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateByName,jdbcType=VARCHAR}, #{updateById,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fulan.api.security.domain.AgentBasicInformation" >
+    insert into agent_basic_information
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="basicId != null" >
+        basic_id,
+      </if>
+      <if test="agentId != null" >
+        agent_id,
+      </if>
+      <if test="agentName != null" >
+        agent_name,
+      </if>
+      <if test="channelCd != null" >
+        channel_cd,
+      </if>
+      <if test="agentStatusCd != null" >
+        agent_status_cd,
+      </if>
+      <if test="joiningDt != null" >
+        joining_dt,
+      </if>
+      <if test="designationCd != null" >
+        designation_cd,
+      </if>
+      <if test="agentClass != null" >
+        agent_class,
+      </if>
+      <if test="laCompanyCode != null" >
+        la_company_code,
+      </if>
+      <if test="laBranchCode != null" >
+        la_branch_code,
+      </if>
+      <if test="laPolicyBranchSeq != null" >
+        la_policy_branch_seq,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createByName != null" >
+        create_by_name,
+      </if>
+      <if test="createById != null" >
+        create_by_id,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateByName != null" >
+        update_by_name,
+      </if>
+      <if test="updateById != null" >
+        update_by_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="basicId != null" >
+        #{basicId,jdbcType=BIGINT},
+      </if>
+      <if test="agentId != null" >
+        #{agentId,jdbcType=VARCHAR},
+      </if>
+      <if test="agentName != null" >
+        #{agentName,jdbcType=VARCHAR},
+      </if>
+      <if test="channelCd != null" >
+        #{channelCd,jdbcType=VARCHAR},
+      </if>
+      <if test="agentStatusCd != null" >
+        #{agentStatusCd,jdbcType=VARCHAR},
+      </if>
+      <if test="joiningDt != null" >
+        #{joiningDt,jdbcType=DATE},
+      </if>
+      <if test="designationCd != null" >
+        #{designationCd,jdbcType=VARCHAR},
+      </if>
+      <if test="agentClass != null" >
+        #{agentClass,jdbcType=VARCHAR},
+      </if>
+      <if test="laCompanyCode != null" >
+        #{laCompanyCode,jdbcType=CHAR},
+      </if>
+      <if test="laBranchCode != null" >
+        #{laBranchCode,jdbcType=VARCHAR},
+      </if>
+      <if test="laPolicyBranchSeq != null" >
+        #{laPolicyBranchSeq,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createByName != null" >
+        #{createByName,jdbcType=VARCHAR},
+      </if>
+      <if test="createById != null" >
+        #{createById,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateByName != null" >
+        #{updateByName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateById != null" >
+        #{updateById,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fulan.api.security.domain.AgentBasicInformation" >
+    update agent_basic_information
+    <set >
+      <if test="agentId != null" >
+        agent_id = #{agentId,jdbcType=VARCHAR},
+      </if>
+      <if test="agentName != null" >
+        agent_name = #{agentName,jdbcType=VARCHAR},
+      </if>
+      <if test="channelCd != null" >
+        channel_cd = #{channelCd,jdbcType=VARCHAR},
+      </if>
+      <if test="agentStatusCd != null" >
+        agent_status_cd = #{agentStatusCd,jdbcType=VARCHAR},
+      </if>
+      <if test="joiningDt != null" >
+        joining_dt = #{joiningDt,jdbcType=DATE},
+      </if>
+      <if test="designationCd != null" >
+        designation_cd = #{designationCd,jdbcType=VARCHAR},
+      </if>
+      <if test="agentClass != null" >
+        agent_class = #{agentClass,jdbcType=VARCHAR},
+      </if>
+      <if test="laCompanyCode != null" >
+        la_company_code = #{laCompanyCode,jdbcType=CHAR},
+      </if>
+      <if test="laBranchCode != null" >
+        la_branch_code = #{laBranchCode,jdbcType=VARCHAR},
+      </if>
+      <if test="laPolicyBranchSeq != null" >
+        la_policy_branch_seq = #{laPolicyBranchSeq,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createByName != null" >
+        create_by_name = #{createByName,jdbcType=VARCHAR},
+      </if>
+      <if test="createById != null" >
+        create_by_id = #{createById,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateByName != null" >
+        update_by_name = #{updateByName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateById != null" >
+        update_by_id = #{updateById,jdbcType=BIGINT},
+      </if>
+    </set>
+    where basic_id = #{basicId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fulan.api.security.domain.AgentBasicInformation" >
+    update agent_basic_information
+    set agent_id = #{agentId,jdbcType=VARCHAR},
+      agent_name = #{agentName,jdbcType=VARCHAR},
+      channel_cd = #{channelCd,jdbcType=VARCHAR},
+      agent_status_cd = #{agentStatusCd,jdbcType=VARCHAR},
+      joining_dt = #{joiningDt,jdbcType=DATE},
+      designation_cd = #{designationCd,jdbcType=VARCHAR},
+      agent_class = #{agentClass,jdbcType=VARCHAR},
+      la_company_code = #{laCompanyCode,jdbcType=CHAR},
+      la_branch_code = #{laBranchCode,jdbcType=VARCHAR},
+      la_policy_branch_seq = #{laPolicyBranchSeq,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by_name = #{createByName,jdbcType=VARCHAR},
+      create_by_id = #{createById,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by_name = #{updateByName,jdbcType=VARCHAR},
+      update_by_id = #{updateById,jdbcType=BIGINT}
+    where basic_id = #{basicId,jdbcType=BIGINT}
+  </update>
+  <!-- 查询所有代理人工号姓名集合 -->
+  <select id="selectAllAgentBasicInformation" resultMap="BaseResultMap">
+  select <include refid="name_Column_List"/> from agent_basic_information
+  </select>
+</mapper>

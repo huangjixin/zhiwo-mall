@@ -1,0 +1,738 @@
+
+/*****************************--人才库：准增员 增员中 代理人***************************************************/
+
+/*准增员*/
+.preson-wraper{
+    width: 100%;
+    height: 100%;
+    background-color:#fff;
+    /*box-shadow: 0 2px 15px 0 rgba(157,157,157,0.27);*/
+    border-radius: 10px;
+    overflow-y: auto;
+    margin-bottom: 66px;
+    background: url("../images/bg-content.png") no-repeat;
+    background-color:#fff;
+    background-size: 100% 16%;
+}
+
+/*头部tap-*/
+.preson-tap{
+    width: 146px;
+    height: 40px;
+    line-height: 40px;
+    margin: 24px auto 29px;
+}
+.preson-tap li{
+    float: left;
+    width: 146px;
+    height: 40px;
+    /*opacity: 0.63;*/
+    background: rgba(255,255,255,0.50);
+    border: 1px solid #DDCBCB;
+    text-align: center;
+}
+.preson-tap .active{
+    background: linear-gradient(-10deg, #E87722 4%, #FB5340 100%);
+    background: -webkit-linear-gradient(-10deg, #E87722 4%, #FB5340 100%);
+    color: #fff;
+}
+
+.preson-tap li{
+     border-radius: 15px;
+ }
+
+/*状态栏*/
+.preson-state{
+    width: 615px;
+    height: 38px;
+    border: 1px solid #E8E8E8;
+    border-radius: 100px;
+    margin: 5px 0 10px 33px;
+}
+.preson-state li{
+    float: left;
+    color: #8B8A8A;
+    padding-left: 26px;
+    height: 38px;
+    line-height: 38px;
+}
+.preson-state li i{
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 23px;
+    margin-right: 5px;
+}
+
+/*人员数据列表栏*/
+.preson-content{
+    width: 100%;
+    padding:0 29px 0 33px;
+    box-sizing: border-box;
+}
+.preson-content-pre{
+    width: 100%;
+    height: 155px;
+    border: 1px solid #E1E1E1;
+    border-radius: 10px;
+    display: flex;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.preson-info{
+    width: 179px;
+    height: 100%;
+    background-image: url(../images/client.png);
+    background-size: 100% 100%;
+    color: #FFFFFF;
+}
+.preson-content-pre div:nth-child(1){flex-shrink:0}
+.pre-md-1{width:29%}
+.pre-md-2{width:29%}
+.pre-md-3{width:20%}
+.pre-md-4{width:26%}
+.pre-md-5{width:27%}
+.pre-md-6{width:26%}
+
+.preson-info-left{
+    box-sizing: border-box;
+    padding: 20px 0 12px 28px;
+}
+.preson-info-left h1{
+    font-family: SFNSDisplay;
+    font-size: 20px;
+    font-weight: bold;
+    color: #575756;
+    padding-bottom: 5px;
+}
+.preson-info-left p{
+    font-size: 16px;
+    color: #717171;
+    padding-top: 6px;
+}
+.preson-info-left p i{
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 17px;
+    margin-right: 11px;
+}
+.span-md-1{margin-left: 17px}
+.span-md-2{
+    display: inline-block;
+    width: 104px;
+    margin-right: 5px;
+}
+.preson-info-line{
+    width: 1px;
+    height: 88px;
+    margin-top: 42px;
+    background-color: #EBEBEB;
+}
+.preson-info-mid{
+    box-sizing: border-box;
+    padding: 58px 30px 41px 36px;
+}
+.preson-info-mid p:not(:first-child){
+    padding-top: 6px
+}
+
+.preson-info-tip{
+    box-sizing: border-box;
+    padding: 47px 0 28px 0;
+    text-align: center;
+}
+.preson-info-tip p{
+    height: 22px;
+    line-height: 22px;
+    float:left;
+    font-size: 13px;
+    color: #4877A5;
+    border: 1px solid #DCDCDC;
+    border-radius: 69px;
+    padding: 0 9px;
+    margin:0 6px 6px 0
+}
+
+.preson-add-mid ,.preson-add-tip{
+    box-sizing: border-box;
+    padding: 87px 0 12px 26px;
+}
+.preson-add-mid p:not(:first-child),.preson-add-tip p:not(:first-child){
+    padding-top: 6px
+}
+.preson-add-tip i{
+    display: inline-block;
+    font-size: 20px;
+    margin-left: 10px;
+}
+
+/*页面底部浮层*/
+.preson-footer{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 66px;
+    z-index: 10;
+    background-image: url("../images/common-bottom.png");
+    background-size:100% 100%;
+    /*opacity: .8*/
+}
+.bot-button .add-client{
+    width: 220px;
+    font-size: 18px;
+    color: #FFFFFF;
+    position: absolute;
+    right: 0;
+    height: 66px;
+    line-height: 76px;
+}
+.bot-button span{
+    padding-left: 6px;
+}
+
+.work-list-head:after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 100%;
+    background-color: #EDEDED;
+    left: 3px;
+    top: 15px;
+}
+.preson-tip-add{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    border: 1px solid #DCDCDC;
+    padding: 5px 5px;
+    border-radius: 10px;
+    display: none;
+}
+
+
+/*iconfont颜色*/
+.icon-gengduo{color:rgb(61,174,642)}
+.icon-correct{color:rgb(87,218,179)}
+.icon-jinggao{color:rgb(235,135,60)}
+.icon-qianbipen{color:rgb(245,166,35)}
+.icon-shanchu{color:rgb(207,30,74)}
+.icon-solid-person,.icon-3,.icon-icon-test{color: #E4E4E4}
+
+
+
+/************************************************目标管理（无设计图，根据原型写的）*****************************/
+.target-wraper{
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+}
+.target-content{
+    width: 100%;
+    padding: 0 45px;
+    box-sizing: border-box;
+    margin-bottom: 70px;
+    margin-top: -90px;
+}
+.target-set{
+    color:  #E87722;
+    font-size: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #E87722;
+}
+.target-set i{
+    color: #575757;
+}
+.target-time{
+    height: 60px;
+    line-height: 60px;
+}
+.target-time span {
+    color: #E87722;
+    padding: 0 20px;
+}
+.target-month{
+    width: 100%;
+    margin: 10px 0 0 0;
+    display: flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+}
+.target-month li{
+    height: 120px;
+    width: 180px;
+    margin: 0;
+    border: 1px solid  #E87722;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.each-month{
+    font-size: 30px;
+    padding: 5px 10px;
+}
+
+.each-month i{
+    position: absolute;
+    top:5px;
+    right:10px;
+    color: #E87722;
+    font-size: 24px;
+}
+.each-preson{
+    font-size: 18px;
+    text-align: center;
+}
+
+.each-preson span{
+    font-size: 30px;
+    color: #E87722;
+    padding: 0 10px;
+}
+.edit-target .month-target {
+    width: 100%;
+    height: 44px;
+    box-sizing: border-box;
+    border: 1px solid #cccccc;
+}
+.target-btn-group {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.target-btn-group button {
+    width: 30%;
+}
+.target-btn-group button:first-child {
+    margin-right: 20px;
+}
+
+
+
+
+/*********************************************初审面试：基础信息****************************************************/
+
+/*基础信息页*/
+.baseInfo-wraper{
+    width: 100%;
+    border-radius: 10px;
+    background: url("../images/bg-content.png") no-repeat;
+    background-size: 100% 19%;
+}
+
+/*顶部tab栏-*/
+.basicInfo-content-header{
+    width: 100%;
+    height: 93px;
+    position: relative}
+.info-header{
+    overflow: hidden;
+    line-height: 45px;
+    position: absolute;
+    top:20px;
+    right: 47px}
+.info-header li{
+    width: 150px;
+    height: 45px;
+    float: left;
+    text-align: center;
+    font-size: 14px;
+    color: #B9A496;
+    border-bottom: 3px solid #DDC9BA;}
+.info-header li i{
+    display: inline-block;
+    margin-right: 10px
+}
+
+/*信息内容区*/
+.basicInfo-content{
+    width: 100%
+}
+.basicInfo-content-header{
+    width: 100%;
+    height: 93px;
+    position: relative
+}
+.basicInfo-content{
+    width: 100%
+}
+.info-header{
+    overflow: hidden;
+    line-height: 45px;
+    position: absolute;
+    top:20px;
+    right: 47px
+}
+.info-header li{
+    width: 150px;
+    height: 45px;
+    float: left;
+    text-align: center;
+    font-size: 15px;
+    color: #B9A496;
+    border-bottom: 3px solid #DDC9BA;
+}
+.info-header li i{
+    display: inline-block;
+    margin-right: 10px
+}
+.info-header .active{
+    color: #E87722;
+    border-color: #E87722
+}
+
+.detil-content{
+    display: flex;
+    overflow:hidden
+}
+/*.detil-content:nth-child(1),.detil-content:nth-child(3){height:144px}*/
+/*.detil-content:nth-child(2){height:118px}*/
+.detil-content:nth-child(4){margin-bottom: 50px;}
+
+.detail-left{
+    width: 10%;
+    display: flex;
+    justify-content:center;
+    align-items:center }
+.detail-left div{
+    height: 68px;width:68px;
+    border-radius: 68px;
+    background: linear-gradient(-90deg, #30E5AF  -40%, #FBAC40 45%);
+    display: flex;
+    justify-content:center;
+    align-items:center
+}
+.detail-left span{
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    width: 62px;
+    height: 62px;
+    border-radius: 62px;
+    background-color: #fff;
+    font-weight:bold;
+    color: #4A4A4A;
+    vertical-align: middle;
+    text-align: center;
+    box-sizing: border-box;
+    padding: 12px 0;
+    line-height: 20px;
+
+}
+/*工作信息栏图标*/
+.detail-left-last{
+    align-items:stretch;
+    margin-top: 30px}
+
+
+.detail-right{
+    width: 90%;
+    display: flex;
+    flex-wrap:wrap;
+    align-content:space-between;
+    padding: 30px 0;
+    border-bottom:1px dashed #E0E0E0;}
+.detail-right-each{
+    height: 30px;
+    padding: 10px 0;
+}
+
+
+.width-one{width: 25%}
+.width-two{width: 24%}
+.width-three{width: 23%}
+.width-four{width: 28%}
+.width-num{width: 47%}
+.width-tel{width: 51%}
+
+.content_type{
+    display:inline-block;
+    width: 80px;
+    color: #AAAAAA;
+    text-align: right;
+    margin-right: 11px
+}
+.name-organization {
+    width: 126px;
+}
+.content_get{
+    color:  #717171
+}
+.width-four .content_type{
+    width: 100px
+}
+
+
+/*工作经历*/
+.work-message-right{
+    width:770px;
+    padding-top: 30px
+}
+.last-message{
+    display: flex;
+    flex-wrap:wrap;
+}
+.width-work{width:49%}
+.width-work .content_type{width: 160px}
+.width-work .content_get:nth-of-type(2){margin: 0 24px 0 24px}
+
+.work-list{
+    padding-left: 25px;
+    position: relative
+}
+.work-list:last-child{
+    padding-bottom: 20px;
+}
+.work-list-head{
+    color:  #8B572A
+}
+.work-list-head:before{
+    content:'';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color:#D8D8D8;
+    left: 0;
+    margin-top:6px;
+    z-index: 2
+}
+.work-list-head:after{
+    content:'';
+    position: absolute;
+    width: 2px;
+    height: 100%;
+    background-color:#EDEDED;
+    left:3px;
+    top:15px
+}
+.last-message{
+    margin-bottom: 16px
+}
+.work-message-all{
+    display: flex;
+    flex-wrap:wrap;
+    align-content:space-between;
+    height:98px;
+    padding: 20px 0}
+.work-message-each{
+    height: 21px
+}
+.work-message-all div {
+    width: 28%;
+}
+.work-message-all div:first-child, .work-message-all div:nth-child(2) {
+    width: 22%;
+}
+.work-message-type{
+    display:inline-block;
+    width: 70px;
+    color: #AAAAAA;
+    text-align: right
+}
+
+/*页面底部浮层*/
+.basicInfo-footer{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 66px;
+    z-index: 10;
+    background-image: url("../images/common-bottom.png");
+    background-size:100% 100%;
+    /*opacity: .8*/
+}
+
+.basicInfo-footer .buttonBouth{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 440px;
+    height: 100%;
+    display: flex;
+
+}
+.basicInfo-footer button{
+    width: 50%;
+    height: 66px;
+    font-size: 18px;
+    line-height: 86px;
+}
+.basicInfo-footer .next-client{
+    color: #FFFFFF;
+}
+.basicInfo-footer .info-save{
+    color: #C3C3C3;
+}
+
+
+
+/***********************************************在线增员：学历证明******************************************/
+
+.educat-wrp{
+    display: flex;
+    margin-bottom: 44px;
+    /*justify-content:space-between;*/
+}
+.educat-til{
+    padding: 15px 0 18px 0;
+}
+.educattials-wrp{
+    width: 382px;
+    margin: 0 auto;
+}
+
+.educat-business .business-title{
+    height: 52px;
+    line-height: 52px;
+}
+
+/*******************************************************甄选面试-提交预览*************************************/
+.interview-wrapper{
+    background-color: #fff;
+    width: 100%;
+}
+.interview-wrapper .score-wrapper {
+    padding: 0 32px;
+}
+.preson-bg-head{
+    margin-right: 15px;
+}
+.view-top{
+    height: 106px;
+    width: 100%;
+}
+.get-score{
+    width: 100%;
+    height: 76px;
+    border: 1px solid #E2E2E2;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start
+}
+.get-score p:nth-child(1){
+    font-size: 18px;
+    color: #575756;
+    text-align: right;
+    width: 45%;
+}
+.get-score .score-one{
+    color: #E87722;
+    padding-right: 9px;
+}
+.get-score .score-two{
+    display: inline-block;
+    font-size: 14px;
+    color: #AAAAAA;
+    width: 73px;
+    text-align: left;
+}
+.get-score .score-three{
+    font-size: 14px;
+    color: #AAAAAA;
+    padding-left: 5px;
+    width: 20%;
+}
+
+.get-score .get-rang{
+    position: relative;
+    width: 34%;
+    height: 5px;
+    background: #D7D7D7;
+    border-radius: 74px;
+}
+
+.get-score .get-rang-son{
+    position: absolute;
+    height: 5px;
+    background-image: linear-gradient(-90deg, #E87722 3%, #FB5340 100%);
+    border-radius: 74px;
+}
+.preson-bg{
+    width:100%;
+    border: 1px solid #E2E2E2;
+    border-radius: 10px;
+    margin-bottom: 14px;
+}
+.interview-wrapper .hide-paper .shrink-area{
+    display: none;
+}
+.preson-bg-top{
+    height:76px;
+    background: #F6F6F6;
+    padding: 0 32px 0 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+}
+.bg-top-left{
+    font-size: 18px;
+    color: #575756;
+}
+.bg-top-right span:nth-child(1){
+    font-size: 20px;
+    color: #E87722;
+}
+.bg-top-right span:nth-child(2){
+    font-size: 14px;
+    color: #000000;
+}
+.bg-gouxian{
+    padding: 0 25px 0 38px;
+    color: #1FD09B;
+    font-size: 24px;
+}
+.bg-arrowup{
+    color: #CECECE;
+    font-size: 21px;
+    display: inline-block;
+    transition: all .5s linear;
+}
+.bg-arrow-down {
+    transform: rotate(180deg);
+}
+.preson-bg-list{
+    height: 95px;
+    margin: 0 30px;
+    border-bottom: 1px dashed #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.stars-list{
+    width: 193px;
+    height: 60px;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+}
+.stars-list li{
+    width: 30px;
+    height: 60px;
+    margin: 0;
+}
+.stars-list li i{
+    display: block;
+    font-size: 25px;
+    color: #E5E5E5;
+}
+.stars-list li span{
+    font-size: 13px;
+    color:  #8D8D8D;
+}
+.stars-list .active i,.stars-list .active span{
+    color: #E87722
+}
+
+.preson-bg-asses{
+    height: 99px;
+    margin: 0 30px;
+}
+.preson-bg-asses strong{
+    display: block;
+    padding:22px 0 8px 0;
+}

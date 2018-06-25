@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fulan.application.mapper.SmsBlackUserMapper" >
+  <resultMap id="BaseResultMap" type="com.fulan.api.message.domain.SmsBlackUser" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user_id" property="updateUserId" jdbcType="BIGINT" />
+  </resultMap>
+
+  <select id="selectUserByPage" resultMap="BaseResultMap" parameterType="com.fulan.api.message.vo.SmsBlackUserVO" >
+    select id, phone,type,remark,create_time, create_user_id, update_time, update_user_id
+    from sms_black_user
+    <where>
+      <if test="phone != null and phone != ''">
+        phone = #{phone}
+      </if>
+      <if test="type != null and type != ''">
+        and type = #{type}
+      </if>
+      <if test="remark != null and remark != ''">
+        and remark = #{remark}
+      </if>
+      <if test="startDate != null and startDate != '' ">
+        <![CDATA[ and DATE_FORMAT(create_time,'%Y-%m-%d')>= #{startDate}]]>
+      </if>
+      <if test="endDate !=null and endDate != ''">
+        <![CDATA[ and DATE_FORMAT(create_time,'%Y-%m-%d')<= #{endDate}]]>
+      </if>
+    </where>
+  </select>
+  <select id="listForManageCount" resultType="Integer" parameterType="java.lang.String">
+		select count(*) from sms_black_user where 1=1
+		<if test="phone != null and phone != '' ">
+			and phone LIKE CONCAT('%', #{phone},'%')
+		</if> 
+		<if test="type != null and type != '' ">
+			 and type=#{type}
+		</if> 
+	</select>
+  
+  <select id="listForManage" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select id,customer_id,phone,type,create_time,create_user_id,update_time,update_user_id,remark from sms_black_user  where 1=1
+		<if test="phone != null and phone != '' "> 
+			and phone LIKE CONCAT(CONCAT('%', #{phone}),'%')
+		</if> 
+		<if test="type != null and type != '' ">
+			 and type=#{type}
+		</if> 
+		order by create_time desc
+	</select>
+  
+</mapper>

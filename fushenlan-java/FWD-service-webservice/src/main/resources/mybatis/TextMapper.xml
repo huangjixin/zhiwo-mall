@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.TextMapper">
+
+
+    <select id="getPerform" resultType="com.fulan.api.agent.vo.PerformVo">
+
+        SELECT ind.`code`,ind.`name` as indexName,ind.actual_val as actualVal
+        from my_perform perform
+        left join index_check ind on ind.perform_id=perform.id
+        where perform.agentCode=#{agentCode} and perform.`month`=#{month} and perform.type=#{type}
+
+    </select>
+
+
+
+
+
+</mapper>

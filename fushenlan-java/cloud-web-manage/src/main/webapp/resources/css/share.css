@@ -1,0 +1,104 @@
+body{
+  font-family: MicrosoftYaHei;
+}
+.back{
+  min-height: 100%;
+  /*height: 768px;*/
+  background: rgba(0,0,0,0.50);
+  /*position: relative;*/
+  padding: 100px;
+}
+.back .content{
+  height: 100%;
+  background: #FFFFFF;
+  border-radius: 5px;
+  /*position: absolute;*/
+  /*top: 50%;*/
+  /*left: 50%;*/
+  /*transform: translate(-50%,-50%);*/
+}
+.back .head{
+  border-bottom:1px solid #E4E4E4;
+  height: 50px;
+  line-height: 50px;
+  text-indent: 31px;
+}
+.back .head i{
+  margin-right: 30px;
+  float: right;
+}
+.back .content .main{
+  padding: 25px 30px 34px 31px;
+  /*line-height: 40px;*/
+}
+.back .content .main span.name{
+  font-family: MicrosoftYaHei;
+  font-size: 14px;
+  color: #575756;
+  padding-right: 12px;
+  width: 12%;
+  text-align: right;
+  line-height: 40px;
+  box-sizing: border-box;
+}
+.back .content .main .input{
+  width: 80%;
+  display: inline-block;
+}
+.back .content .main .share_radios{
+  width: 88%;
+  display: inline-block;
+  background: #F8F8F8;
+  border-radius: 5px;
+  height: 98px;
+  
+}
+.back .content .main .input input{
+  margin-right: 18.5px;
+  background: #FFFFFF;
+  border: 1px solid #E4E4E4;
+  width: 27%;
+  height: 38px;
+  text-align: center;
+  margin-bottom: 31px;
+}
+.back .content .main .share_radios .radios{
+  border-radius: 5px;
+  width: 20%;
+  height: 19px;
+  /*line-height: 19px;*/
+  text-align: center;
+  float: left;
+  margin-top: 20px;
+  /*margin-bottom: 25px;*/
+  
+}
+/*.back .content .main .share_radios .radios span{*/
+  /*margin-top: 9px;*/
+/**/
+/*}*/
+.back .content .main .bottom{
+  margin-bottom:29px;
+}
+.back .content .main .button{
+  width: 300px;
+  height: 42px;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+.back .content .main .button button{
+  width: 120px;
+  height: 40px;
+  border: 1px solid #DEDEDE;
+  border-radius: 5px;
+  line-height: 40px;
+  font-size: 16px;
+  color: #fff;
+  background: #E87722;;
+}
+.back .content .main .button button:first-child{
+  margin-right: 50px;
+  color: #E87722;
+  background: #fff;
+}
+

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<config mode="client">
+	<domain id="plan"/>
+	<!--<server ip="192.168.5.196" port="2280" http-port="8080" />-->
+</config>

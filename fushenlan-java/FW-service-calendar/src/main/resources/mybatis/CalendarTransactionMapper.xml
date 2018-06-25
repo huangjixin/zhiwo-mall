@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fulan.application.mapper.CalendarTransactionMapper" >
+  <resultMap id="BaseResultMap" type="com.fulan.api.calendar.domain.CalendarTransaction" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="calendar_id" property="calendarId" jdbcType="BIGINT" />
+    <result column="theme" property="theme" jdbcType="VARCHAR" />
+    <result column="agent_code" property="agentCode" jdbcType="VARCHAR" />
+    <result column="transaction_type" property="transactionType" jdbcType="TINYINT" />
+    <result column="date" property="date" jdbcType="DATE" />
+    <result column="day" property="day" jdbcType="TINYINT" />
+    <result column="transaction_future_start_time" property="transactionFutureStartTime" jdbcType="TIMESTAMP" />
+    <result column="transaction_future_end_time" property="transactionFutureEndTime"     jdbcType="TIMESTAMP" />
+    <result column="transation_stage" property="transationStage" jdbcType="TINYINT" />
+    <result column="transaction_address" property="transactionAddress" jdbcType="VARCHAR" />
+    <result column="transaction_desc" property="transactionDesc" jdbcType="VARCHAR" />
+    <result column="transaction_result" property="transactionResult" jdbcType="VARCHAR" />
+    <result column="transaction_ref_customer" property="transactionRefCustomer" jdbcType="BIGINT" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="gmt_time" property="gmtTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="modify_user" property="modifyUser" jdbcType="BIGINT" />
+    <result column="deleted" property="deleted" jdbcType="TINYINT" />
+    <result column="state" property="state"/>
+    <result column="send_type" property="sendType"/>
+    <result column="specify_type" property="specifyType"/>
+  </resultMap>
+    <!--格式化SQL,添加transaction_future_end_time to  select List 修改人,Lycol-->
+  <sql id="Base_Column_List" >
+           id,
+         calendar_id,
+         theme,
+         agent_code,
+         transaction_type,
+         date,
+         DAY,
+         transaction_future_start_time,
+         transaction_future_end_time,
+         transation_stage,
+         transaction_desc,
+         transaction_result,
+         transaction_address,
+         transaction_ref_customer,
+         customer_name,
+         remark,
+         gmt_time,
+         create_user,
+         gmt_modified,
+         modify_user,
+         deleted,
+         state,
+         send_type,
+         specify_type
+  </sql>
+
+<select id="selectTransactionByPage" parameterType="java.util.Map" resultMap="BaseResultMap">
+    SELECT id,theme,date,state FROM iris_calendar_transaction WHERE 1=1 AND deleted = '0'
+    <if test="theme != null and theme != ''">
+        AND theme LIKE CONCAT(CONCAT('%',#{theme}),'%')
+    </if>
+    <if test="state != null and state != ''">
+        AND state = #{state}
+    </if>
+    <if test="stateTime != null and stateTime != ''">
+        AND DATE_FORMAT(date,'%Y-%m-%d') &gt;= #{stateTime}
+    </if>
+    <if test="endTime != null and endTime != ''">
+        AND DATE_FORMAT(date,'%Y-%m-%d') &lt;= #{endTime}
+    </if>
+    ORDER BY date DESC
+
+</select>
+
+
+	
+
+      <!--根据代理人查询日历的事务-->
+    <select id="selectTransactionByAgents" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT
+        id,
+        theme,
+        date,
+        state,
+        transaction_future_start_time,
+        transaction_future_end_time,
+        transation_stage,
+        transaction_desc,
+        transaction_result,
+        transaction_address,
+        transaction_ref_customer
+        FROM
+        iris_calendar_transaction
+        <where>
+        1=1 AND deleted = '0'
+            AND is_closed=0
+         <![CDATA[ AND transaction_future_start_time<=now()  ]]>
+            <if test="agentCode != null and agentCode != ''">
+            AND agent_code= #{agentCode}
+        </if>
+        </where>
+        ORDER BY transaction_future_start_time DESC
+        union all
+        SELECT
+        t.id,
+        t.theme,
+        t.date,
+        t.state,
+        t.transaction_future_start_time,
+        t.transaction_future_end_time,
+        t.transation_stage,
+        t.transaction_desc,
+        t.transaction_result,
+        t.transaction_address,
+        t.transaction_ref_customer
+        FROM
+        iris_calendar_transaction t
+        LEFT JOIN
+        iris_transaction_member_list m
+        ON
+        t.id = m.transaction_id
+        <where>
+            1=1 AND t.deleted = '0'
+            AND t.is_closed=0
+            <![CDATA[ AND t.transaction_future_start_time<=now()  ]]>
+            <if test="agentCode != null and agentCode != ''">
+                AND m.agent_code= #{agentCode}
+            </if>
+        </where>
+        ORDER BY t.transaction_future_start_time DESC
+
+    </select>
+
+    <select id="findTransactionByCalendarDate" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        id,
+        theme,
+        date,
+        transaction_future_start_time
+        FROM iris_calendar_transaction
+        WHERE agent_code =#{agentCode} 
+        AND DATE_FORMAT(date, '%Y-%m-%d' ) &gt; DATE_FORMAT(#{calendarDate}, '%Y-%m-%d')
+        AND DATE_FORMAT(date, '%Y-%m-%d' ) &lt; DATE_FORMAT(timestampadd(day, 7, #{calendarDate}), '%Y-%m-%d')
+    </select>
+    
+    <select id="selectAttendanceRulesCountByParams" parameterType="java.util.Map" resultType="int">
+		SELECT count(1) FROM iris_calendar_transaction WHERE 1=1 AND deleted = '0'
+		<if test="theme!= null and theme != ''">
+			AND theme LIKE CONCAT(CONCAT('%',#{theme}),'%')
+		</if>
+		<if test="state != null and state != ''">
+			AND state = #{state}
+		</if>
+		<if test="startTime != null and startTime != ''">
+			AND DATE_FORMAT(date,'%Y-%m-%d') &gt;= #{startTime}  
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND DATE_FORMAT(date,'%Y-%m-%d') &lt;= #{endTime}
+		</if>
+
+
+</select>
+    
+    <select id="findCustomerCalendarDate" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		select transation_stage ,date ,transaction_address,
+		transaction_result ,agent_code ,transaction_ref_customer,customer_name 
+		from iris_calendar_transaction where 1 = 1
+		<if test="agentCode != null and agentCode != ''">
+			and agent_code = #{agentCode}
+		</if>
+		<if test="transactionType != null and transactionType != ''">
+			and transaction_type = #{transactionType}
+		</if>
+		<if test="date != null and date != ''">
+			and date(date,'%Y-%m-%d') &gt;= #{date}
+		</if>
+		<if test="transactionRefCustomer != null and transactionRefCustomer != ''">
+			and transaction_ref_customer = #{transactionRefCustomer}
+		</if>
+		<if test="Keyword != null and Keyword != ''">
+		and(
+			 transaction_address like CONCAT('%',#{Keyword},'%')  
+			or transaction_result like CONCAT('%',#{Keyword},'%')  
+			)
+		</if>
+		ORDER BY transation_stage DESC
+	</select> 
+	
+	<select id = "selectCalendarTransactionById" parameterType="long"
+		resultMap="BaseResultMap">
+		select 
+		 <include refid="Base_Column_List" />
+		 from iris_calendar_transaction where 1 = 1
+		 <if test="id != null and id != ''">
+			and id = #{id}
+		</if>
+		
+		
+		</select>
+	
+</mapper>

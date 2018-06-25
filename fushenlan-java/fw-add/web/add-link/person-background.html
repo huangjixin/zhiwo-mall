@@ -1,0 +1,101 @@
+<!--头部背景区-->
+<div class="bg-top">
+    <!-- tab导航区 -->
+    <div class="materials-header">
+        <div class="mater-top-flag">
+            <ul class="mater-flag">
+                {{?it.personnelStatus==='2'}}
+                <li class="already" data-type="reMaterials"><i class="iconfont icon-wenjianfile65"></i>材料复核</li>
+                <li class="already" data-type="video"><i class="iconfont icon-tianjiawenjian"></i>证件资料</li>
+                <li class="active" data-type="personBackground"><i class="iconfont icon-wenhao"></i>初审试卷</li>
+                <li class="future" data-type="application"><i class="iconfont icon-wenjiangongxiangicon"></i>计划申请</li>
+                {{??it.personnelStatus==='3'}}
+                <li class="already" data-type="basicInfo"><i class="iconfont icon-wenjianfile65"></i>基础信息</li>
+                <li class="active" data-type="personBackground"><i class="iconfont icon-wenhao"></i>甄选问卷</li>
+                <li class="future" data-type="declaration"><i class="iconfont icon-tianjiawenjian"></i>声明与告知</li>
+                <li class="future" data-type="pickInterview"><i class="iconfont icon-wenjiangongxiangicon"></i>提交预览</li>
+                {{??}}
+                <li class="already" data-type="basicInfo"><i class="iconfont icon-wenjianfile65"></i>基础信息</li>
+                <li class="active" data-type="personBackground"><i class="iconfont icon-wenhao"></i>决定问卷</li>
+                <li class="future" data-type="declaration"><i class="iconfont icon-tianjiawenjian"></i>声明与告知</li>
+                <li class="future" data-type="pickInterview"><i class="iconfont icon-wenjiangongxiangicon"></i>提交预览</li>
+                {{?}}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!--内容区-->
+<div class="answer-content paper-main">
+    {{~it.renderList:val:index}}
+    <div class="box" data-id="{{=val.paperPVo.id}}">
+        <!--个人背景头部部分-->
+        <div class="person-background">
+            <div class="box-header">
+                <div class="box-left">
+                    <i class="matter icon-wenjian"></i>
+                    <span> {{=val.paperPVo.paperName}}</span>
+                </div>
+                <div class="box-right">
+                    <div class="rs-scores">
+                        <p class="header-scores"><span></span><span>{{=val.allScore}} 分</span></p>
+                        <i class="header-checked icon-gouxuan{{?val.score === 0}}{{=' hidden'}}{{?}}"></i>
+                    </div>
+                    <i class="header-arrow icon-z-arrowUp "></i>
+                </div>
+            </div>
+        </div>
+        <!--个人背景-->
+        <div class="box-background main-item">
+            {{~val.paperItemVo:value:key}}
+            <div class="person-items" data-flow="{{=value.paperItemPVo.id}}">
+                <div class="person-term">
+                    <div class="person-left">
+                        <span>{{=value.paperItemPVo.paperItemName}}</span>
+                        <br>
+                        <span>{{=value.paperItemPVo.paperItemDesc}}</span>
+                    </div>
+                    <div class="person-right">
+                        <div class="person-star">
+                            <div class="person-icon {{=value.paperItemPVo.score>=1 ? 'per-star':''}}">
+                                <i class="start-one icon-stars"></i>
+                                <span>1分</span>
+                            </div>
+                            <div class="person-icon {{=value.paperItemPVo.score>=2 ? 'per-star':''}}">
+                                <i class="iconfont icon-stars "></i>
+                                <span>2分</span>
+                            </div>
+                            <div class="person-icon {{=value.paperItemPVo.score>=3 ? 'per-star':''}}">
+                                <i class="iconfont icon-stars"></i>
+                                <span>3分</span>
+                            </div>
+                            <div class="person-icon {{=value.paperItemPVo.score>=4 ? 'per-star':''}}">
+                                <i class="iconfont icon-stars"></i>
+                                <span>4分</span>
+                            </div>
+                            <div class="person-icon {{=value.paperItemPVo.score>=5 ? 'per-star':''}}">
+                                <i class="iconfont icon-stars"></i>
+                                <span>5分</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="person-bottom">
+                    <ul>
+                        {{~value.paperItemInfo:items:item}}
+                        <li><span>{{=items.paperContent}}</span></li>
+                        {{~}}
+                    </ul>
+                </div>
+            </div>
+            {{~}}
+            <!--评价-->
+            <div class="evaluate-text">
+                <span class="text-bottom">评价</span>
+                <textarea class="evaluate" name="evaluate">{{=val.paperPVo.evaluate || ''}}</textarea>
+                <button class="btn-submit">提交</button>
+            </div>
+        </div>
+    </div>
+    {{~}}
+</div>

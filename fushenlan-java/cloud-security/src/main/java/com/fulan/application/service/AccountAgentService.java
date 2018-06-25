@@ -1,0 +1,1 @@
+package com.fulan.application.service;import com.fulan.api.security.domain.AccountAgent;public interface AccountAgentService {	int deleteByPrimaryKey(String agentId);	int insert(AccountAgent record);	AccountAgent selectByPrimaryKey(String agentId);}

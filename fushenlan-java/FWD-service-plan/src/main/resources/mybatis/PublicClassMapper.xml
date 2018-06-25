@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.PublicClassMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fulan.api.plan.domain.PublicClass">
+        <id column="id" property="id" />
+        <result column="plan_id" property="planId" />
+        <result column="tag_id" property="tagId" />
+        <result column="child_tag_id" property="childTagId" />
+        <result column="is_free" property="isFree" />
+        <result column="exchange_point" property="exchangePoint" />
+        <result column="is_reward_point" property="isRewardPoint" />
+        <result column="is_reward_certification" property="isRewardCertification" />
+        <result column="is_reward_qualification" property="isRewardQualification" />
+        <result column="reward_point" property="rewardPoint" />
+        <result column="certification_id" property="certificationId" />
+        <result column="qualification_id" property="qualificationId" />
+        <result column="is_long_term" property="isLongTerm" />
+        <result column="start_date" property="startDate" />
+        <result column="end_date" property="endDate" />
+        <result column="online_date" property="onlineDate" />
+        <result column="offline_date" property="offlineDate" />
+        <result column="state" property="state" />
+        <result column="is_question" property="isQuestion" />
+        <result column="is_sticky" property="isSticky" />
+        <result column="sticky_seq" property="stickySeq" />
+        <result column="score" property="score" />
+        <result column="create_user" property="createUser" />
+        <result column="gmt_create" property="gmtCreate" />
+        <result column="modify_user" property="modifyUser" />
+        <result column="gmt_modified" property="gmtModified" />
+        <result column="tag_name" property="tagName" />
+        <result column="child_tag_name" property="childTagName" />
+        <result column="plan_type" property="planType" jdbcType="BIT" />
+	    <result column="open_range" property="openRange" jdbcType="BIT" />
+	    <result column="is_seq" property="isSeq" jdbcType="BIT" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, plan_id AS planId, tag_id AS tagId, child_tag_id AS childTagId, is_free AS isFree, exchange_point AS exchangePoint, is_reward_point AS isRewardPoint, is_reward_certification AS isRewardCertification, is_reward_qualification AS isRewardQualification, reward_point AS rewardPoint, certification_id AS certificationId, qualification_id as qualificationId, is_long_term AS isLongTerm, start_date AS startDate, end_date AS endDate, online_date AS onlineDate, offline_date AS offlineDate, state, is_question AS isQuestion, is_sticky AS isSticky, sticky_seq AS stickySeq, score, create_user AS createUser, gmt_create AS gmtCreate, modify_user AS modifyUser, gmt_modified AS gmtModified,
+        plan_type as planType, open_range as openRange, is_seq as isSeq
+    </sql>
+
+    <select id="searchPublicClass" parameterType="java.util.Map" resultType="com.fulan.api.plan.vo.PublicCourseDto">
+        SELECT pu.id,pu.plan_id AS planId,pu.tag_id AS tagId,
+        pu.child_tag_id AS childTagId,pu.is_free AS isFree,
+        pu.exchange_point AS exchangePoint,pu.is_reward_point AS isRewardPoint,
+        pu.is_reward_certification AS isRewardCertification,
+        pu.is_reward_qualification AS isRewardQualification,
+        pu.reward_point AS rewardPoint,pu.certification_id AS certificationId,
+        pu.certificationName,pu.qualification_id as qualificationId,
+        pu.qualificationName,pu.is_long_term AS isLongTerm,
+        pu.start_date AS startDate,pu.end_date AS endDate,
+        pu.online_date AS onlineDate,pu.offline_date AS offlineDate,
+        pu.state,pu.is_question AS isQuestion,pu.is_sticky AS isSticky,
+        pu.sticky_seq AS stickySeq,pu.score,
+        pu.create_user AS createUser,pu.gmt_create AS gmtCreate,pu.modify_user AS modifyUser,
+        pu.gmt_modified AS gmtModified,esp.name,esp.description,hp.viewsNum
+        FROM
+        ( SELECT ppu.*, cer.NAME AS certificationName,qual.NAME AS qualificationName
+        FROM el_public_class ppu
+        LEFT JOIN el_certificate cer ON cer.id = ppu.certification_id
+        LEFT JOIN el_qualification qual ON qual.id = ppu.qualification_id
+        ) pu
+        LEFT JOIN el_study_plan esp
+        on esp.id = pu.plan_id
+        LEFT JOIN (SELECT h.plan_id,count( * ) AS viewsNum
+        FROM el_history h
+        WHERE h.plan_type = 1
+        GROUP BY h.plan_type, h.plan_id
+        ) hp ON hp.plan_id = pu.id
+        WHERE
+        1 = 1
+        AND pu.state =1
+        <if test="tagId != null and tagId != '' ">
+            AND pu.tag_id=#{tagId}
+        </if>
+        <if test="childTagId != null and childTagId != '' ">
+            AND pu.child_tag_id=#{childTagId}
+        </if>
+        <if test="name != null and name != '' ">
+            AND esp.name LIKE CONCAT('%', #{name},'%')
+        </if>
+        <if test="viewFlag != null and viewFlag==1">
+            AND pu.id IN (select course_id from el_plan_authority pa
+            where pa.course_type=1
+            <if test="userId != null and userId != '' ">
+                AND pa.associate_id=#{userId}
+            </if>)
+        </if>
+        ORDER  BY
+        <choose>
+            <when test="pageSortFiled != null and pageSortFiled=='gmtModified'">
+                gmtModified
+            </when>
+            <when test="pageSortFiled != null and pageSortFiled=='onlineDate'">
+                onlineDate
+            </when>
+            <otherwise>
+                viewsNum
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="pageSortType != null and pageSortType=='desc'">
+                DESC
+            </when>
+              <otherwise>
+                  ASC
+              </otherwise>
+        </choose>
+    </select>
+
+    <select id="listByPage" parameterType="java.util.Map" resultType="com.fulan.api.plan.vo.PublicCourseDto">
+    	select
+    	epc.id as id, epc.plan_id as planId, epc.tag_id as tagId,epc.child_tag_id as childTagId,epc.tag_name as tagName,
+    	epc.start_date as startDate,epc.end_date as endDate,epc.score as score,epc.state as state,epc.child_tag_name as childTagName,
+    	esp.name as name,epc.create_user as createUser,epc.gmt_modified as gmtModified,epc.modify_user as modifyUser
+    	,epc.gmt_create as gmtCreate,epc.is_sticky as isSticky,epc.sticky_seq as stickySeq
+     	from el_public_class epc
+    	left join el_study_plan esp on esp.id = epc.plan_id
+    	where 1=1
+    	<include refid="conditionSQL" />
+    	ORDER BY epc.is_sticky desc ,epc.sticky_seq desc,epc.start_date desc
+    </select>
+    <sql id="conditionSQL">
+    	<if test="name != null and name != '' ">
+            AND esp.name LIKE CONCAT('%',#{name},'%')
+        </if>
+    	<if test="startDate != null and startDate != '' ">
+    		<![CDATA[ and DATE_FORMAT(epc.start_date,'%Y-%m-%d')>= #{startDate}]]>
+    	</if>
+    	<if test="endDate !=null and endDate != ''">
+    		<![CDATA[ and DATE_FORMAT(epc.end_date,'%Y-%m-%d')>= #{endDate}]]>
+    	</if>
+    	<if test="tagId !=null and tagId != '' ">
+    		and epc.tag_id = #{tagId}
+    	</if>
+    	<if test="childTagId !=null and childTagId !=''  ">
+    		and epc.child_tag_id = #{childTagId}
+    	</if>
+    	<if test="state !=null and state != '' ">
+    		and epc.state = #{state}
+    	</if>
+    	<if test="isSticky != null and isSticky != '' ">
+    		and epc.is_sticky =  #{isSticky}
+    	</if>
+    </sql>
+    <select id="listByPageCount" resultType="int" parameterType="java.util.Map">
+    	select count(epc.id)
+    	from el_public_class epc
+    	left join el_study_plan esp on esp.id = epc.plan_id
+    	where 1=1
+    	<include refid="conditionSQL" />
+    </select>
+    <resultMap id="PublicClassVoMap" extends="BaseResultMap" type="com.fulan.api.plan.vo.PublicClassVo">
+    	<collection property="studyPlan" ofType="com.fulan.api.plan.domain.StudyPlan">
+    		<result column="s_code"  property="code"/>
+    		<result column="s_name"  property="name"/>
+    		<result column="s_description"  property="description"/>
+    		<result column="s_group_id"  property="groupId"/>
+    		<result column="s_tag_id"  property="tagId"/>
+    	</collection>
+    	<collection property="course" ofType="com.fulan.api.plan.vo.CourseVo" >
+    		<id column="c_id" property="id" />
+    		<result column="c_name"  property="name"/>
+    		<result column="c_description"  property="description"/>
+    		<result column="c_is_compulsory"  property="isCompulsory"/>
+    		<result column="lecturer"  property="lecturer"/>
+    	</collection>
+    </resultMap>
+    <select id="publicClassVoInFo"  resultMap="PublicClassVoMap" parameterType="java.lang.String">
+    	SELECT epc.*,
+ 		 esp.code AS s_code,esp.name AS s_name,esp.description AS s_description,esp.group_id AS s_group_id,esp.tag_id AS s_tag_id,
+ 		 cp.id AS c_id,cp.name AS c_name, cp.description AS c_description,epce.is_compulsory AS c_is_compulsory,ec.lecturer as lecturer
+		FROM el_public_class epc
+		LEFT JOIN el_study_plan esp ON esp.id = epc.plan_id
+		LEFT JOIN el_plan_course epce ON epce.plan_id = esp.id
+		LEFT JOIN el_course ec ON epce.associate_id = ec.id
+		LEFT JOIN
+		 		(
+		SELECT id,name,description
+		FROM el_course UNION 
+		SELECT id,name,discription
+		FROM el_paper) cp ON cp.id = epce.associate_id
+		WHERE epc.id =#{id}
+		ORDER BY epce.stage,epce.seq
+    </select>
+
+    <select id="getMaterialListByCourseId"  parameterType="java.lang.Long" resultType="com.fulan.api.material.vo.MaterialAttachDto">
+        SELECT
+                *
+            FROM
+                el_material m
+            WHERE
+                m.id IN (
+            SELECT DISTINCT
+                ( cm.material_id )
+            FROM
+                el_course_material cm
+            WHERE
+                cm.course_id = #{courseId}
+                )
+    </select>
+    
+	<select id="PublicClassListByPageCount" resultType="int" parameterType="java.util.Map">
+    	select count(epc.id) from el_public_class epc
+		INNER JOIN el_plan_course epcc
+		on epc.id = epcc.associate_id
+		INNER JOIN el_study_plan esp
+		on epcc.plan_id = esp.id
+		INNER JOIN el_course ec
+		on epcc.associate_id = ec.id
+    	where 1=1
+    	<include refid="publicClassConditionSQL" />
+    </select>
+    
+    <select id="PublicClassListByPage" parameterType="java.util.Map" resultType="com.fulan.api.plan.vo.PublicCourseDto">
+    	select
+    	epc.id as id, epc.plan_id as planId, epc.tag_id as tagId,epc.child_tag_id as childTagId,
+    	epc.start_date as startDate,epc.end_date as endDate,epc.score as score,epc.state as state,
+    	ec.name as name from el_public_class epc
+	    INNER JOIN el_plan_course epcc
+		on epc.id = epcc.associate_id
+		INNER JOIN el_study_plan esp
+		on epcc.plan_id = esp.id
+		INNER JOIN el_course ec
+		on epcc.associate_id = ec.id
+    	where 1=1
+    	<include refid="conditionSQL" />
+    </select>
+    
+    	
+	<sql id="publicClassConditionSQL">
+    	<if test="startDate != null and startDate != '' ">
+    		<![CDATA[ and DATE_FORMAT(epc.start_date,'%Y-%m-%d')>= #{startDate}]]>
+    	</if>
+    	<if test="endDate !=null and endDate != ''">
+    		<![CDATA[ and DATE_FORMAT(epc.end_date,'%Y-%m-%d')>= #{endDate}]]>
+    	</if>
+    	<if test="tagId !=null and tagId != '' ">
+    		and epc.tag_id = #{tagId}
+    	</if>
+    	<if test="childTagId !=null and childTagId !=''  ">
+    		and epc.child_tag_id = #{childTagId}
+    	</if>
+    	<if test="state !=null and state != '' ">
+    		and epc.state = #{state}
+    	</if>
+    	<if test="isSticky != null and isSticky != '' ">
+    		and epc.is_sticky =  #{isSticky}
+    	</if>
+    	<if test="name != null and name != '' ">
+            AND ec.name LIKE CONCAT('%',#{name},'%')
+        </if>
+    </sql>
+    
+    <update id="updateStateById" parameterType="com.fulan.api.plan.domain.PublicClass">
+    	update el_public_class
+    	<set>
+			<if test="state != null and state != '' ">
+			state = #{state},
+			</if>
+    	</set>
+    	where 1=1
+    	<if test="id !=null and id != '' ">
+    		and id = #{id}
+    	</if>
+    </update>
+    
+    
+</mapper>

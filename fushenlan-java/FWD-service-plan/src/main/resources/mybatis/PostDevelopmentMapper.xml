@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.PostDevelopmentMapper">
+
+
+ <resultMap id="ResultMap" type="com.fulan.api.plan.vo.PostDevelopmentVo">
+    <result column="id" property="id"/>
+    <result column="startday" property="startDays"/>
+    <result column="endday" property="endDays"/>
+	
+    <collection property="planCourses" ofType="com.fulan.api.plan.vo.PlanCourseVo">
+        <result column="stage" property="stage"/>
+		
+        <collection property="postVO" ofType="com.fulan.api.plan.vo.PostVO">
+			
+            <result column="iscompulsory" property="iscompulsory"/>
+            <result column="pname" property="pname"/>
+            <result column="cname" property="cname"/>
+			<result column="pid" property="pid"/>
+			<result column="cid" property="cid"/>
+			<result column="seq" property="seq"/>
+        </collection>
+    </collection>
+</resultMap>
+
+<resultMap id="DevelopmentResultMap" type="com.fulan.api.plan.domain.PostDevelopment">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="description" property="description" />
+		<result column="is_allow_expired" property="isAllowExpired" />
+		<result column="limit_types" property="limitTypes" />
+		<result column="start_days" property="startDays" />
+		<result column="end_days" property="endDays" />
+		<result column="post_level" property="postLevel" />
+		<result column="state" property="state" />
+		<result column="is_expired_alarm" property="isExpiredAlarm" />
+		<result column="create_user" property="createUser" />
+		<result column="modify_user" property="modifyUser" />
+		<result column="gmt_create" property="gmtCreate" />
+		<result column="gmt_modified" property="gmtModified" />
+		<result column="plan_type" property="planType" jdbcType="BIT" />
+		<result column="is_seq" property="isSeq" jdbcType="BIT" />
+	</resultMap>
+
+<sql id="Development">
+		id, name,description, is_allow_expired, limit_types, start_days,
+		end_days,post_level, state,
+		is_expired_alarm,create_user,modify_user,gmt_create,gmt_modified, plan_type, is_seq
+		
+	</sql>
+
+    <select id="getPostDevelopmentInfo" parameterType="Long" resultMap="ResultMap">
+        SELECT
+    	
+        pd.id id,"src/main/resources/mybatis/PostDevelopmentMapper.xml"
+        pd.start_days startday,
+        pd.end_days endday,
+        pc.stage stage,
+        pc.is_compulsory iscompulsory,
+        c.`name` cname,
+        p.`name` pname,
+        c.`id` cid,
+  		p.`id` pid,
+  		pc.seq seq
+        FROM
+        el_plan_course pc
+        LEFT JOIN el_post_development pd ON pc.plan_id = pd.id
+        LEFT JOIN el_course c ON pc.associate_id = c.id
+        LEFT JOIN el_paper p ON pc.associate_id = p.id
+        WHERE
+        pc.stage IS NOT NULL 
+        AND
+        pd.id = #{Id}
+          ORDER BY stage,pid;
+
+    </select>
+    
+   <!-- 
+   <insert id="inserBylist" parameterType="java.util.List" >
+		insert into account_role (id,account_id,role_id) values 
+			<foreach collection="list" index="index" item="item" open="" separator="," close="">
+              (#{item.id},#{item.accountId}, #{item.roleId})
+        	</foreach>
+        	
+	</insert>
+    -->
+   
+    <insert id="batchSavePlanCourse" parameterType="java.util.List">
+    insert into el_plan_course (id,plan_id,course_type,associate_id,associate_type,
+    is_compulsory,stage,seq,start_time,end_time,sign_address,create_user,gmt_create,
+    modify_user,gmt_modified,plan_type) values 
+    <foreach collection="list" index="index" item="item" open="" separator="," close="">
+    (#{item.id},#{item.courseType},#{item.associateId},#{item.associateType},#{item.isCompulsory},#{item.stage},#{item.seq},
+    #{item.startTime},#{item.endTime},#{item.signAddress},#{item.createUser},#{item.gmtCreate},#{item.modifyUser},
+    #{item.gmtModified},#{item.planType}) 
+        </foreach>
+    </insert>
+
+    <delete id="deletPlanCourse" parameterType="Long">
+    delete from el_plan_course
+    where plan_id=#{Id}
+    </delete>
+
+
+    <select id="selectDeveById" resultMap="DevelopmentResultMap">
+      select
+      <include refid="Development" />
+      from el_post_development where post_level=#{id}
+     
+    </select>
+	<resultMap id="BaseResultDeveMapVo" type="com.fulan.api.plan.vo.DevelopmentFwVo">
+		<result column="stage" property="stage"/>
+		<collection column="{planId=id,stage=stage}" property="planCourseDtoFMVo" select="com.fulan.application.mapper.PlanCourseMapper.seleByPlanIdAndstage" fetchType="eager"></collection>
+	</resultMap>
+
+    <select id="seleStageDevelopmentById" resultMap="BaseResultDeveMapVo">
+		<![CDATA[select epd .id as id,epc.stage as stage
+		from el_post_development epd 
+		left join el_plan_course epc
+		on epd.id = epc.plan_id
+		where epd .id =#{id}
+		and epc.course_type = 3 
+		and epc.stage >= 1
+		group by epc.stage 
+		
+		]]>
+	</select>
+
+ <insert id="insertDevelopment" parameterType="com.fulan.api.plan.domain.PostDevelopment" >
+    insert into el_post_development
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="isAllowExpired != null" >
+        is_allow_expired,
+      </if>
+      <if test="limitTypes != null" >
+        limit_types,
+      </if>
+      <if test="startDays != null" >
+        start_days,
+      </if>
+      <if test="endDays != null" >
+        end_days,
+      </if>
+      <if test="postLevel != null" >
+        post_level,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="isExpiredAlarm != null" >
+        is_expired_alarm,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="modifyUser != null" >
+        modify_user,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+      <if test="planType != null" >
+        plan_type,
+      </if>
+     <if test="isSeq != null" >
+        is_seq,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isAllowExpired != null" >
+        #{isAllowExpired,jdbcType=TINYINT},
+      </if>
+      <if test="limitTypes != null" >
+        #{limitTypes,jdbcType=TINYINT},
+      </if>
+      <if test="startDays != null" >
+        #{startDays,jdbcType=TINYINT},
+      </if>
+      <if test="endDays != null" >
+        #{endDays,jdbcType=TINYINT},
+      </if>
+      <if test="postLevel != null" >
+        #{postLevel,jdbcType=BIGINT},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=TINYINT},
+      </if>
+      <if test="isExpiredAlarm != null" >
+        #{isExpiredAlarm,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUser != null" >
+        #{modifyUser,jdbcType=BIGINT},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="planType != null" >
+        #{planType,jdbcType=BIT},
+      </if>
+      <if test="isSeq != null" >
+        #{isSeq,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateDevelopmentById"  parameterType="com.fulan.api.plan.domain.PostDevelopment">
+ UPDATE el_post_development
+ <trim prefix="set" suffixOverrides=",">
+  <if test="description!=null">description=#{description},</if>
+  <if test="isAllowExpired!=null">is_allow_expired=#{isAllowExpired},</if>
+  <if test="limitTypes!=null">limit_types=#{limitTypes},</if>
+  <if test="startDays!=null">start_days=#{startDays},</if>
+  <if test="endDays!=null">end_days=#{endDays},</if>
+  <if test="postLevel!=null">post_level=#{postLevel},</if>
+  <if test="state!=null">state=#{state},</if>
+  <if test="isExpiredAlarm!=null">is_expired_alarm=#{isExpiredAlarm},</if>
+  <if test="createUser!=null">create_user=#{createUser},</if>
+  <if test="gmtCreate!=null">gmt_create=#{gmtCreate},</if>
+  <if test="modifyUser!=null">modify_user=#{modifyUser},</if>
+  <if test="gmtModified!=null">gmt_modified=#{gmtModified},</if>
+  <if test="planType!=null">plan_type=#{planType},</if>
+  <if test="isSeq!=null">is_seq=#{isSeq},</if>
+ </trim>
+ WHERE id=#{id}
+</update>
+  
+</mapper>

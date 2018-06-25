@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fulan.application.mapper.CompulsoryCplanMapper" >
+  <resultMap id="BaseResultMap" type="com.fulan.api.plan.domain.CompulsoryCplan" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="group_id" property="groupId" jdbcType="BIGINT" />
+    <result column="tag_id" property="tagId" jdbcType="BIGINT" />
+    <result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
+    <result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="is_reward_point" property="isRewardPoint" jdbcType="TINYINT" />
+    <result column="is_reward_certification" property="isRewardCertification" jdbcType="TINYINT" />
+    <result column="is_reward_qualification" property="isRewardQualification" jdbcType="TINYINT" />
+    <result column="reward_point" property="rewardPoint" jdbcType="SMALLINT" />
+    <result column="certification_id" property="certificationId" jdbcType="BIGINT" />
+    <result column="qualification_id" property="qualificationId" jdbcType="BIGINT" />
+    <result column="is_allow_expired" property="isAllowExpired" jdbcType="TINYINT" />
+    <result column="state" property="state" jdbcType="TINYINT" />
+    <result column="is_expired_alarm" property="isExpiredAlarm" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="modify_user" property="modifyUser" jdbcType="BIGINT" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="plan_type" property="planType" jdbcType="TINYINT" />
+    <result column="open_range" property="openRange" jdbcType="TINYINT" />
+    <result column="is_seq" property="isSeq" jdbcType="TINYINT" />
+    <result column="dict_code" property="dictCode" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  <select id="compulsoryCplanSerch" parameterType="java.lang.String" resultType="com.fulan.api.plan.vo.CompulsoryCplanVo">
+		select elc.id AS id ,elc.code AS code, elc.name AS name , elc.tag_id AS tagId, elc.state AS state, 
+		count(elp.associate_id) AS associateId ,elc.start_date AS startDate ,elc.end_date AS endDate 
+		from el_compulsory_cplan elc 
+		LEFT JOIN el_plan_authority elp on elc.id = elp.course_id
+		WHERE 1=1
+		<if test="name != null and name != '' ">
+			and elc.name LIKE CONCAT('%',#{name},'%')
+		</if>
+		<if test="state != null and state != '' ">
+			and elc.state =#{state}
+		</if>
+		<if test="tagId != null and tagId != '' ">
+			and elc.tag_id =#{tagId}
+		</if>
+		group by elc.id
+	</select>
+	
+	<select id="compulsoryCplanSerchCount" parameterType="java.lang.String" resultType="int">
+	 SELECT count(*)
+		FROM el_compulsory_cplan
+		WHERE 1=1
+		<if test="name != null and name != '' ">
+			and name LIKE CONCAT('%',#{name},'%')
+		</if>
+		<if test="state != null and state != '' ">
+			and state =#{state}
+		</if>
+		<if test="tagId != null and tagId != '' ">
+			and tag_id =#{tagId}
+		</if>
+   </select>
+   <delete id="deleteByPrimaryKey" >
+    delete el_compulsory_cplan ,el_plan_authority from el_compulsory_cplan 
+    left join el_plan_authority on el_plan_authority.course_id = el_compulsory_cplan.id
+    where el_compulsory_cplan.id = #{id}
+   </delete>
+   <select id ="selectOne" parameterType="java.lang.String" resultMap="BaseResultMap" >
+      select * from el_compulsory_cplan 
+      where id= #{id}
+   </select>
+   
+   <update id="updateByPrimaryKeySelective" parameterType="com.fulan.api.plan.domain.CompulsoryCplan">
+    update el_compulsory_cplan
+    <set>
+      <if test="code != null">
+        code = #{code},
+      </if>
+      <if test="name != null">
+        name = #{name},
+      </if>
+      <if test="description != null">
+        description = #{description},
+      </if>
+      <if test="groupId != null">
+        group_id = #{groupId},
+      </if>
+      <if test="tagId != null">
+        tag_id = #{tagId},
+      </if>
+      <if test="startDate != null">
+        start_date = #{startDate},
+      </if>
+      <if test="endDate != null">
+        end_date = #{endDate},
+      </if>
+      
+        is_reward_point = #{isRewardPoint},
+     
+      <if test="isRewardCertification != null">
+        is_reward_certification = #{isRewardCertification},
+      </if>
+      <if test="isRewardQualification != null">
+        is_reward_qualification = #{isRewardQualification},
+      </if>
+      
+        reward_point = #{rewardPoint},
+      
+      <if test="certificationId != null">
+        certification_id = #{certificationId},
+      </if>
+      <if test="qualificationId != null">
+        qualification_id = #{qualificationId},
+      </if>
+      <if test="isAllowExpired != null">
+        is_allow_expired = #{isAllowExpired},
+      </if>
+      <if test="state != null">
+        state = #{state},
+      </if>
+      <if test="isExpiredAlarm != null">
+        is_expired_alarm = #{isExpiredAlarm},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate},
+      </if>
+      <if test="modifyUser != null">
+        modify_user = #{modifyUser},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified},
+      </if>
+      <if test="planType != null">
+        plan_type = #{planType},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  
+  
+  <update id="updateByPrimaryKeySelective1" parameterType="com.fulan.api.plan.domain.CompulsoryCplan">
+    update el_compulsory_cplan
+    <set>
+      <if test="code != null">
+        code = #{code},
+      </if>
+      <if test="name != null">
+        name = #{name},
+      </if>
+      <if test="description != null">
+        description = #{description},
+      </if>
+      <if test="groupId != null">
+        group_id = #{groupId},
+      </if>
+      <if test="tagId != null">
+        tag_id = #{tagId},
+      </if>
+      <if test="startDate != null">
+        start_date = #{startDate},
+      </if>
+      <if test="endDate != null">
+        end_date = #{endDate},
+      </if>
+      
+        is_reward_point = #{isRewardPoint},
+     
+      <if test="isRewardCertification != null">
+        is_reward_certification = #{isRewardCertification},
+      </if>
+     
+        is_reward_qualification = #{isRewardQualification},
+      
+        reward_point = #{rewardPoint},
+      
+      <if test="certificationId != null">
+        certification_id = #{certificationId},
+      </if>
+      
+        qualification_id = #{qualificationId},
+      
+      <if test="isAllowExpired != null">
+        is_allow_expired = #{isAllowExpired},
+      </if>
+      <if test="state != null">
+        state = #{state},
+      </if>
+      <if test="isExpiredAlarm != null">
+        is_expired_alarm = #{isExpiredAlarm},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate},
+      </if>
+      <if test="modifyUser != null">
+        modify_user = #{modifyUser},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified},
+      </if>
+      <if test="planType != null">
+        plan_type = #{planType},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+   
+   <!-- <insert id="insertCompulsoryCplan" parameterType="com.fulan.api.plan.domain.CompulsoryCplan">
+    insert into el_compulsory_cplan (id, code, name, description,group_id ,tag_id, start_date,end_date,is_reward_point,is_reward_certification,
+    is_reward_qualification,reward_point,certification_id,qualification_id,is_allow_expired,state,is_expired_alarm,create_user,gmt_create,modify_user,gmt_modified )
+    values (#{id}, #{code}, #{name}, #{description}, #{groupId}, #{tagId},  #{startDate}, #{endDate}),
+     #{isRewardPoint}),#{isRewardCertification}),#{isRewardQualification}),#{rewardPoint}, #{certificationId},#{qualificationId},#{isAllowExpired},#{state},#{isExpiredAlarm}, #{createUser},#{gmtCreate},#{modifyUser},#{gmtModified}),
+  </insert> -->
+  
+  
+  
+  <insert id="insertCompulsoryCplan" parameterType="com.fulan.api.plan.domain.CompulsoryCplan">
+    insert into el_compulsory_cplan
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="tagId != null">
+        tag_id,
+      </if>
+      <if test="startDate != null">
+        start_date,
+      </if>
+      <if test="endDate != null">
+        end_date,
+      </if>
+      <if test="isRewardPoint != null">
+        is_reward_point,
+      </if>
+      <if test="isRewardCertification != null">
+        is_reward_certification,
+      </if>
+      <if test="isRewardQualification != null">
+        is_reward_qualification,
+      </if>
+      <if test="rewardPoint != null">
+        reward_point,
+      </if>
+      <if test="certificationId != null">
+        certification_id,
+      </if>
+      <if test="qualificationId != null">
+        qualification_id,
+      </if>
+      <if test="isAllowExpired != null">
+        is_allow_expired,
+      </if>
+       <if test="state != null">
+        state,
+      </if>
+      <if test="isExpiredAlarm != null">
+        is_expired_alarm,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="modifyUser != null">
+        modify_user,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="planType != null">
+        plan_type = #{planType},
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        #{groupId},
+      </if>
+      <if test="tagId != null">
+        #{tagId},
+      </if>
+      <if test="startDate != null">
+        #{startDate},
+      </if>
+      <if test="endDate != null">
+        #{endDate},
+      </if>
+      <if test="isRewardPoint != null">
+        #{isRewardPoint},
+      </if>
+      <if test="isRewardCertification != null">
+        #{isRewardCertification},
+      </if>
+      <if test="isRewardQualification != null">
+        #{isRewardQualification},
+      </if>
+      <if test="rewardPoint != null">
+        #{rewardPoint},
+      </if>
+      <if test="certificationId != null">
+        #{certificationId},
+      </if>
+      <if test="qualificationId != null">
+        #{qualificationId},
+      </if>
+      <if test="isAllowExpired != null">
+        #{isAllowExpired},
+      </if>
+      <if test="state != null">
+        #{state},
+      </if>
+      <if test="isExpiredAlarm != null">
+        #{isExpiredAlarm},
+      </if>
+      <if test="createUser != null">
+        #{createUser},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate},
+      </if>
+      <if test="modifyUser != null">
+        #{modifyUser},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified},
+      </if>
+      <if test="planType != null">
+        #{planType},
+      </if>
+    </trim>
+  </insert>
+  
+  <resultMap id="CompulsoryCplanManageVoMap" type="com.fulan.api.plan.vo.CompulsoryCplanManageVo" >
+		<collection property="compulsoryCplan" ofType="com.fulan.api.plan.domain.CompulsoryCplan" select="com.fulan.application.mapper.CompulsoryCplanMapper.checkId" column="id"></collection>
+		<collection property="expiredAlarmList" ofType="com.fulan.api.plan.domain.ExpiredAlarm" select="com.fulan.application.mapper.ExpiredAlarmMapper.selectByCourseId" column="id"></collection>
+		<collection property="planAuthorityList" ofType="com.fulan.api.plan.domain.PlanAuthority" select="com.fulan.application.mapper.PlanAuthorityMapper.selectByAssociateId" column="id"></collection>
+ </resultMap>
+  <select id="checkId" resultMap="BaseResultMap">
+		select * from el_compulsory_cplan
+   		 where id = #{id,jdbcType=BIGINT}
+ </select>
+  <select id="selectById" resultMap="CompulsoryCplanManageVoMap">
+		select id  from el_compulsory_cplan
+   		 where id = #{id,jdbcType=BIGINT}
+ </select>
+   
+  </mapper>

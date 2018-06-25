@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fulan.application.mapper.CalendarDailyTransactionMapper" >
+  <resultMap id="BaseResultMap" type="com.fulan.api.calendar.domain.CalendarDailyTransaction" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="calendar_id" property="calendarId" jdbcType="BIGINT" />
+    <result column="day" property="day" jdbcType="DATE" />
+    <result column="day_of_week" property="dayOfWeek" jdbcType="INTEGER" />
+    <result column="transation_type" property="transationType" jdbcType="TINYINT" />
+    <result column="attendance_type" property="attendanceType" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, calendar_id, day,day_of_week, transation_type
+  </sql>
+
+  <select id="findCalendarByCalendarDate" resultMap="BaseResultMap" parameterType="java.lang.String">
+    SELECT d.id, d.calendar_id, d.day,d.day_of_week, d.attendance_type,d.transation_type FROM iris_attendance_objects o
+    LEFT JOIN iris_attendance_rules r ON o.rule_id = r.id
+    INNER JOIN iris_calendar_book b ON b.id = r.calendar_id
+    LEFT JOIN iris_calendar_daily_transaction d  ON d.calendar_id=b.id
+    WHERE o.agent_code = #{agentCode} AND o.org_id=#{orgId} AND b.org_id =#{orgId}
+    AND DATE_FORMAT(d.day, '%Y%m' ) = DATE_FORMAT( #{calendarDate} , '%Y%m' )
+  </select>
+
+  <select id="selectCountByCalendarDate" resultType="java.lang.Integer" parameterType="java.lang.String">
+    SELECT COUNT(DISTINCT d.day) FROM iris_attendance_objects o
+    LEFT JOIN iris_attendance_rules r ON o.rule_id = r.id
+    INNER JOIN iris_calendar_book b ON b.id = r.calendar_id
+    LEFT JOIN iris_calendar_daily_transaction d  ON d.calendar_id=b.id
+    WHERE o.agent_code = #{agentCode} AND o.org_id=#{orgId} AND b.org_id =#{orgId}
+    AND DATE_FORMAT(d.day, '%Y%m' ) = DATE_FORMAT( #{calendarDate} , '%Y%m' )
+  </select>
+</mapper>

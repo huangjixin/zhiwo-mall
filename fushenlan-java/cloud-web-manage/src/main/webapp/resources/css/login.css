@@ -1,0 +1,17 @@
+
+/* Wrapper 全局容器
+*****************************************/
+.wrapper.wrap-login{background:#fff url(../imgs/bg-login.jpg) no-repeat center center;background-size:cover}
+
+/* Login 登录页
+*****************************************/
+.login-box{position:absolute;left:50%;top:50%;width:570px;height:448px;-webkit-transform:translate(-50%,-50%);-moz-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);-o-transform:translate(-50%,-50%);transform:translate(-50%,-50%);background-color:#fff;border-radius:10px;overflow:hidden}
+.login-box h2{height:76px;line-height:76px;font-size:24px;text-align:center;color:#fff;background:#373737 url(../imgs/bg-login-title.png) no-repeat left top}
+.login-box h2 img{vertical-align:middle;width:90px;margin-right:10px}
+.login-box ul{margin-top:50px}
+.login-box li{width:440px;margin:0 auto 40px}
+.login-box li .ipt-text{height:64px;border-width:2px;border-radius:0}
+.login-box .ipt-icon i{height:64px;line-height:64px;color:#c5c5c5;font-size:24px;padding-left:2px}
+.login-box .login-btn{padding:10px 0;margin:0 auto}
+.login-box .login-btn button{width:100%;height:64px;line-height:64px;font-size:18px;border-radius:0}
+

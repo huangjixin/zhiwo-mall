@@ -1,0 +1,249 @@
+/*基础信息页*/
+.baseInfo-wraper{
+    width: 100%;
+    height: 100%;
+    /*box-shadow: 0 2px 15px 0 rgba(157,157,157,0.27);*/
+    border-radius: 10px;
+    background: url("../images/bg-content.png") no-repeat;
+    background-color: #FFF;
+    background-size: 100% 19%;
+    overflow-y: auto;
+}
+
+/*顶部tab栏-*/
+.basicInfo-content-header{
+    width: 100%;
+    height: 93px;
+    position: relative}
+.info-header{
+    overflow: hidden;
+    line-height: 45px;
+    position: absolute;
+    top:20px;
+    right: 47px}
+.info-header li{
+    width: 150px;
+    height: 45px;
+    float: left;
+    text-align: center;
+    font-size: 14px;
+    color: #B9A496;
+    border-bottom: 3px solid #DDC9BA;}
+.info-header li i{
+    display: inline-block;
+    margin-right: 10px
+}
+
+/*信息内容区*/
+.basicInfo-content{
+    width: 100%
+}
+.basicInfo-content-header{
+    width: 100%;
+    height: 93px;
+    position: relative
+}
+.basicInfo-content{
+    width: 100%
+}
+.info-header{
+    overflow: hidden;
+    line-height: 45px;
+    position: absolute;
+    top:20px;
+    right: 47px
+}
+.info-header li{
+    width: 150px;
+    height: 45px;
+    float: left;
+    text-align: center;
+    font-size: 15px;
+    color: #B9A496;
+    border-bottom: 3px solid #DDC9BA;
+}
+.info-header li i{
+    display: inline-block;
+    margin-right: 10px
+}
+.info-header .active{
+    color: #E87722;
+    border-color: #E87722
+}
+
+.detil-content{
+    display: flex;
+    overflow:hidden
+}
+.detil-content:nth-child(1),.detil-content:nth-child(3){height:144px}
+.detil-content:nth-child(2){height:118px}
+.detil-content:nth-child(4){margin-bottom: 50px;}
+
+.detail-left{
+    width: 130px;
+    display: flex;
+    justify-content:center;
+    align-items:center }
+.detail-left div{
+    height: 68px;width:68px;
+    border-radius: 68px;
+    background: linear-gradient(-90deg, #30E5AF  -40%, #FBAC40 45%);
+    display: flex;
+    justify-content:center;
+    align-items:center
+}
+.detail-left span{
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    width: 62px;
+    height: 62px;
+    border-radius: 62px;
+    background-color: #fff;
+    font-weight:bold;
+    color: #4A4A4A;
+    vertical-align: middle;
+    text-align: center;
+    box-sizing: border-box;
+    padding: 12px 0;
+    line-height: 20px;
+
+}
+/*工作信息栏图标*/
+.detail-left-last{
+    align-items:stretch;
+    margin-top: 30px}
+
+
+.detail-right{
+    width:80%;
+    display: flex;
+    flex-wrap:wrap;
+    align-content:space-between;
+    padding: 30px 0;
+    border-bottom:1px dashed #E0E0E0;}
+.detail-right-each{
+    height: 21px
+}
+
+
+.width-one{width: 25%}
+.width-two{width: 24%}
+.width-three{width: 23%}
+.width-four{width: 28%}
+.width-four .content_type{width: 230px}
+.width-num{width: 47%}
+.width-tel{width: 51%}
+
+.content_type{
+    display:inline-block;
+    width: 64px;
+    color: #AAAAAA;
+    text-align: right;
+    margin-right: 11px}
+.content_get{
+    color:  #717171
+}
+.width-four .content_type{
+    width: 96px
+}
+
+
+/*工作经历*/
+.work-message-right{
+    width:770px;
+    padding-top: 30px
+}
+.last-message{
+    display: flex;
+    flex-wrap:wrap;
+}
+.width-work{width:49%}
+.width-work .content_type{width: 112px}
+.width-work .content_get:nth-of-type(2){margin: 0 24px 0 24px}
+
+.work-list{
+    padding-left: 25px;
+    position: relative
+}
+.work-list:last-child{
+    padding-bottom: 20px;
+}
+.work-list-head{
+    color:  #8B572A
+}
+.work-list-head:before{
+    content:'';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color:#D8D8D8;
+    left: 0;
+    margin-top:6px;
+    z-index: 2
+}
+.work-list-head:after{
+    content:'';
+    position: absolute;
+    width: 2px;
+    height: 100%;
+    background-color:#EDEDED;
+    left:3px;
+    top:15px
+}
+.last-message{
+    margin-bottom: 16px
+}
+.work-message-all{
+    display: flex;
+    flex-wrap:wrap;
+    align-content:space-between;
+    height:98px;
+    padding: 20px 0}
+.work-message-each{
+    height: 21px
+}
+.w-one{width:28%}
+.w-two{width:22%}
+.work-message-type{
+    display:inline-block;
+    width: 64px;
+    color: #AAAAAA;
+    text-align: right
+}
+
+/*页面底部浮层*/
+.basicInfo-footer{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 66px;
+    z-index: 10;
+    background-image: url("../images/common-bottom.png");
+    background-size:100% 100%;
+    /*opacity: .8*/
+}
+
+.basicInfo-footer .buttonBouth{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 440px;
+    height: 100%;
+    display: flex;
+
+}
+.basicInfo-footer button{
+    width: 50%;
+    height: 66px;
+    font-size: 18px;
+    line-height: 86px;
+}
+.basicInfo-footer .next-client{
+    color: #FFFFFF;
+}
+.basicInfo-footer .info-save{
+    color: #C3C3C3;
+}

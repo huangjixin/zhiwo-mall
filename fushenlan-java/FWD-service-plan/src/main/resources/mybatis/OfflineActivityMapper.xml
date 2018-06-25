@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.OfflineActivityMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fulan.api.plan.domain.OfflineActivity">
+        <id column="id" property="id" />
+        <result column="course_id" property="courseId" />
+        <result column="name" property="name" />
+        <result column="description" property="description" />
+        <result column="banner_path" property="bannerPath" />
+        <result column="start_date" property="startDate" />
+        <result column="end_date" property="endDate" />
+        <result column="enter_start_date" property="enterStartDate" />
+        <result column="enter_end_date" property="enterEndDate" />
+        <result column="is_need_sign" property="isNeedSign" />
+        <result column="is_need_enter" property="isNeedEnter" />
+        <result column="is_noneed_enter" property="isNoneedEnter" />
+        <result column="sign_time_type" property="signTimeType" />
+        <result column="before_begin" property="beforeBegin" />
+        <result column="after_begin" property="afterBegin" />
+        <result column="address" property="address" />
+        <result column="is_reward_point" property="isRewardPoint" />
+        <result column="is_reward_certification" property="isRewardCertification" />
+        <result column="is_reward_qualification" property="isRewardQualification" />
+        <result column="reward_point" property="rewardPoint" />
+        <result column="certification_id" property="certificationId" />
+        <result column="qualification_id" property="qualificationId" />
+        <result column="limit_enter" property="limitEnter" />
+        <result column="state" property="state" />
+        <result column="create_user" property="createUser" />
+        <result column="gmt_create" property="gmtCreate" />
+        <result column="modify_user" property="modifyUser" />
+        <result column="gmt_modified" property="gmtModified" />
+	    <result column="open_range" property="openRange" jdbcType="BIT" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+		id, course_id AS courseId, name, description, banner_path AS bannerPath,
+		start_date AS startDate, end_date AS endDate, enter_start_date AS enterStartDate,
+		enter_end_date AS enterEndDate, is_need_sign AS isNeedSign, is_need_enter AS isNeedEnter,
+		is_noneed_enter AS isNoneedEnter, sign_time_type AS signTimeType, before_begin AS beforeBegin, 
+		after_begin AS afterBegin, address, is_reward_point AS isRewardPoint, 
+		is_reward_certification AS isRewardCertification, is_reward_qualification AS isRewardQualification, 
+		reward_point AS rewardPoint, certification_id AS certificationId, 
+		qualification_id AS qualificationId, limit_enter AS limitEnter,state, create_user AS createUser,
+		gmt_create AS gmtCreate, modify_user AS modifyUser, gmt_modified AS gmtModified,
+		open_range as openRange
+    </sql>
+
+
+    <select id="searchOfflineActivity" resultType="com.fulan.api.plan.vo.OfflineActivityDto" parameterType="java.util.Map">
+        SELECT
+        pu.id, pu.course_id AS courseId, pu.name, pu.description, pu.banner_path AS bannerPath,
+        pu.enter_start_date AS enterStartDate,pu.start_date AS startDate,
+        pu.end_date AS endDate,
+        pu.enter_end_date AS enterEndDate, pu.is_need_sign AS isNeedSign, pu.is_need_enter AS isNeedEnter,
+        pu.is_noneed_enter AS isNoneedEnter, pu.sign_time_type AS signTimeType, pu.before_begin AS beforeBegin,
+        pu.after_begin AS afterBegin, pu.address, pu.is_reward_point AS isRewardPoint,
+        pu.is_reward_certification AS isRewardCertification, pu.is_reward_qualification AS isRewardQualification,
+        pu.reward_point AS rewardPoint, pu.certification_id AS certificationId,
+        pu.qualification_id AS qualificationId, pu.limit_enter AS limitEnter,pu.state, pu.create_user AS createUser,
+        pu.gmt_create AS gmtCreate, pu.modify_user AS modifyUser, pu.gmt_modified AS gmtModified,
+        cer.NAME AS certificationName,
+        pu.is_seq,
+        qual.name AS qualificationName,hp.signUpNumber,cp.courseCollectId,oaee.course_id AS enterId,oass.course_id AS signId,
+        IF(paa.id is null,'0','1' ) AS hasAuthority,epcoo.commentId
+        FROM
+    el_offline_activity pu
+    LEFT JOIN el_certificate cer ON cer.id = pu.certification_id
+    LEFT JOIN el_qualification qual ON qual.id = pu.qualification_id
+    LEFT JOIN ( SELECT count( * ) AS signUpNumber,h.course_id
+            FROM el_offline_activity_enter h
+                GROUP BY
+                h.course_id
+                ) hp
+        ON hp.course_id=pu.id
+    LEFT JOIN (
+        SELECT max(epc.id) AS courseCollectId,epc.plan_id
+        FROM el_plan_collect epc
+        WHERE
+        epc.plan_type=6
+         <if test="userId != null and userId != '' ">
+            AND epc.user_id=#{userId}
+         </if>
+        GROUP BY epc.plan_id
+        ) cp
+    ON cp.plan_id=pu.id
+    LEFT JOIN (
+        SELECT max(oae.id) AS enterId,oae.course_id
+        FROM el_offline_activity_enter oae
+        WHERE
+        1=1
+          <if test="userId != null and userId != '' ">
+        AND oae.user_id=#{userId}
+           </if>
+        GROUP BY oae.course_id
+        ) oaee
+    ON oaee.course_id=pu.id
+    LEFT JOIN (
+        SELECT max(oas.id) AS signId,oas.course_id
+        FROM el_offline_activity_sign oas
+        WHERE
+        1=1
+          <if test="userId != null and userId != '' ">
+        AND oas.user_id=#{userId}
+           </if>
+        GROUP BY oas.course_id
+        )oass
+    ON oass.course_id=pu.id
+    LEFT JOIN (
+        select pa.id,pa.course_id from el_plan_authority pa
+        where pa.course_type=6
+            <if test="userId != null and userId != '' ">
+                AND pa.associate_id=#{userId}
+            </if>
+        GROUP BY pa.course_id
+        )paa
+        ON paa.course_id = pu.id
+    LEFT JOIN	( SELECT max(epco.id) AS commentId,epco.course_id
+        FROM el_plan_comment epco
+        WHERE
+        epco.course_type=6
+        <if test="userId != null and userId != '' ">
+            AND epco.comment_user=#{userId}
+        </if>
+        GROUP BY epco.course_id
+        ) epcoo
+        ON epcoo.course_id=pu.id
+    WHERE
+          1=1
+        <if test="planId != null and planId != '' ">
+            AND pu.id=#{planId}
+        </if>
+        <if test="state != null and state != '' ">
+            AND pu.state=#{state}
+        </if>
+       <choose>
+           <when test="outEnterEndDate==1">
+               <![CDATA[ AND pu.enter_end_date <= NOW() ]]>
+           </when>
+           <otherwise>
+               <![CDATA[ AND pu.enter_end_date > NOW() ]]>
+           </otherwise>
+       </choose>
+        ORDER BY hp.signUpNumber DESC
+    </select>
+    
+    <select id="pageList" parameterType="java.util.Map" resultType="com.fulan.api.plan.vo.OfflineActivityVoFw">
+    	select eoa.id as id, eoa.course_id as courseId, eoa.name as name, eoa.state as state, eoa.start_date as startDate, eoa.end_date as endDate, 
+    	epc.star as star, (select count(eoae.id) from el_offline_activity_enter eoae where eoae.course_id = eoa.id) as enter
+    	from el_offline_activity eoa 
+    	left join (select * from el_plan_comment GROUP BY course_id ) as epc on epc.course_id = eoa.id
+    	<where>
+    		<if test="name != null and name != '' ">
+           		eoa.name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}),'%')
+       		</if>
+    		<if test="state != null and state != '' ">
+           		and eoa.state=#{state}
+       		</if>
+       			<if test="startDate != null">
+       		    <![CDATA[ and enter_start_date >= #{startDate} ]]>
+       		</if>
+       		<if test="endDate != null">
+       		    <![CDATA[ and enter_end_date <= #{endDate} ]]>
+       		</if>
+    	</where>
+    	group by eoa.id
+    </select>
+    
+    <select id="pageListCount" parameterType="java.util.Map" resultType="Integer">
+    	select count(id) from el_offline_activity
+    	<where>
+    		<if test="name != null and name != '' ">
+           		name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}),'%')
+       		</if>
+    		<if test="state != null and state != '' ">
+           		and state=#{state}
+       		</if>
+       		<if test="startDate != null">
+       		    <![CDATA[ and enter_start_date >= #{startDate} ]]>
+       		</if>
+       		<if test="endDate != null">
+       		    <![CDATA[ and enter_end_date <= #{endDate} ]]>
+       		</if>
+    	</where>
+    </select>
+    <select id="seleByIdList" parameterType="java.util.Map" resultType="java.lang.Long">
+    	select eoae.user_id 
+    	from el_offline_activity eoa 
+		inner join el_offline_activity_enter eoae 
+		on eoa.id=eoae.course_id 
+		left join el_offline_activity_sign eoas
+		on eoa.id = eoas.course_id 
+		where eoa.id = #{id} 
+		<choose>
+			<when test="isSign == 0">
+				and eoas.course_id =  #{id} and eoas.user_id not in(eoae.user_id)
+			</when>
+			<when test="isSign == 1">
+				and eoas.course_id =  #{id} and eoas.user_id in(eoae.user_id)
+			</when>
+		</choose>
+    </select>
+    
+    <!-- <resultMap type="java.util.HashMap" id="BaseResultMapKV">
+    	<result property="userId" column="user_id"/>
+    	<collection property="value" column="{id=id,userId=key}" ofType="com.fulan.api.plan.vo.OfflineActivityVoFw" select="com.fulan.application.mapper.OfflineActivityMapper.seleByIdAndUserId" fetchType="eager"></collection>
+    </resultMap> -->
+    <select id="seleByCourseIdIsSign" resultType="com.fulan.api.plan.vo.OfflineActivityVoFw">
+ 		select eoa.id,eoae.user_id as userId,(CASE 
+ 		(select count(id) from el_offline_activity_sign eoas 
+ 		where eoas.course_id = #{id} 
+ 		and eoas.user_id = eoae.user_id) when 0 then '未签到' else '已签到' end) as isSign,
+ 		eoae.gmt_create as gmtCreate
+    	from el_offline_activity eoa 
+		left join el_offline_activity_enter eoae 
+		on eoa.id=eoae.course_id 
+		where eoa.id = #{id} and 
+		eoae.user_id in 
+    	<foreach collection="userIdList" index="index" item="item" open="(" separator="," close=")">
+          	#{item}
+ 		</foreach>
+    </select>
+    <!-- <select id="seleByIdAndUserId" resultType="com.fulan.api.plan.vo.OfflineActivityVoFw">
+        select eoa.id,eoae.user_id as userId,(CASE 
+ 		(select count(id) from el_offline_activity_sign eoas 
+ 		where eoas.course_id = #{id} 
+ 		and eoas.user_id = eoae.user_id) when 0 then '已签到' else '未签到' end) as isSign
+    	from el_offline_activity eoa 
+		left join el_offline_activity_enter eoae 
+		on eoa.id=eoae.course_id 
+		where eoa.id = #{id} and 
+		eoae.user_id and #{userId}
+    </select> -->
+    
+    <insert id="insertSelective" parameterType="com.fulan.api.plan.domain.OfflineActivity">
+    insert into el_offline_activity
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="courseId != null">
+        course_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="bannerPath != null">
+        banner_path,
+      </if>
+      <if test="openClassType != null">
+        open_class_type,
+      </if>
+      <if test="startDate != null">
+        start_date,
+      </if>
+      <if test="endDate != null">
+        end_date,
+      </if>
+      <if test="enterStartDate != null">
+        enter_start_date,
+      </if>
+      <if test="enterEndDate != null">
+        enter_end_date,
+      </if>
+      <if test="isNeedSign != null">
+        is_need_sign,
+      </if>
+      <if test="isNeedEnter != null">
+        is_need_enter,
+      </if>
+      <if test="isNoneedEnter != null">
+        is_noneed_enter,
+      </if>
+      <if test="signTimeType != null">
+        sign_time_type,
+      </if>
+      <if test="beforeBegin != null">
+        before_begin,
+      </if>
+      <if test="afterBegin != null">
+        after_begin,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="isRewardPoint != null">
+        is_reward_point,
+      </if>
+      <if test="isRewardCertification != null">
+        is_reward_certification,
+      </if>
+      <if test="isRewardQualification != null">
+        is_reward_qualification,
+      </if>
+      <if test="rewardPoint != null">
+        reward_point,
+      </if>
+      <if test="certificationId != null">
+        certification_id,
+      </if>
+      <if test="qualificationId != null">
+        qualification_id,
+      </if>
+      <if test="limitEnter != null">
+        limit_enter,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="modifyUser != null">
+        modify_user,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="openRange != null" >
+        open_range,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="courseId != null">
+        #{courseId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="bannerPath != null">
+        #{bannerPath,jdbcType=VARCHAR},
+      </if>
+      <if test="openClassType != null">
+        #{openClassType,jdbcType=TINYINT},
+      </if>
+      <if test="startDate != null">
+        #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="enterStartDate != null">
+        #{enterStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="enterEndDate != null">
+        #{enterEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isNeedSign != null">
+        #{isNeedSign,jdbcType=TINYINT},
+      </if>
+      <if test="isNeedEnter != null">
+        #{isNeedEnter,jdbcType=TINYINT},
+      </if>
+      <if test="isNoneedEnter != null">
+        #{isNoneedEnter,jdbcType=TINYINT},
+      </if>
+      <if test="signTimeType != null">
+        #{signTimeType,jdbcType=TINYINT},
+      </if>
+      <if test="beforeBegin != null">
+        #{beforeBegin,jdbcType=SMALLINT},
+      </if>
+      <if test="afterBegin != null">
+        #{afterBegin,jdbcType=SMALLINT},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="isRewardPoint != null">
+        #{isRewardPoint,jdbcType=TINYINT},
+      </if>
+      <if test="isRewardCertification != null">
+        #{isRewardCertification,jdbcType=TINYINT},
+      </if>
+      <if test="isRewardQualification != null">
+        #{isRewardQualification,jdbcType=TINYINT},
+      </if>
+      <if test="rewardPoint != null">
+        #{rewardPoint,jdbcType=SMALLINT},
+      </if>
+      <if test="certificationId != null">
+        #{certificationId,jdbcType=BIGINT},
+      </if>
+      <if test="qualificationId != null">
+        #{qualificationId,jdbcType=BIGINT},
+      </if>
+      <if test="limitEnter != null">
+        #{limitEnter,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUser != null">
+        #{modifyUser,jdbcType=BIGINT},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="openRange != null" >
+        #{openRange,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+</mapper>

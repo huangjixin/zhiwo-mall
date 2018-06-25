@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.PaperExamMapper">
+    <resultMap type="com.fulan.api.paper.vo.ExamPaperVo" id="ExamResultMap">
+        <id column="id"  property="id" />
+        <result column="name"  property="name" />
+        <result column="type" property="type" />
+        <result column="exam_time" property="examTime" />
+        <result column="full_mark" property="fullMark" />
+        <result column="pass_mark" property="passMark" />
+        <result column="test_num" property="testNum" />
+        <result column="discription" property="discription" />
+        <result column="is_artificial_mark" property="isArtificialMark" />
+        <result column="is_random" property="type" />
+        <collection property="questions" ofType="com.fulan.api.paper.vo.QuestionVo">
+            <result column="qId"   property="id" />
+            <result column="content"   property="content" />
+            <result column="qType"   property="type" />
+            <result column="question_score"   property="questionScore" />
+            <collection property="questionAnswer" ofType="com.fulan.api.paper.domain.el.QuestionAnswer">
+                <result column="aId"   property="id" />
+                <result column="question_type"   property="questionType" />
+                <result column="answer"   property="answer" />
+                <result column="seq"   property="seq" />
+                <result column="optionType"   property="option" />
+                <result column="is_right"   property="isRight" />
+            </collection>
+        </collection>
+    </resultMap>
+    <select id="getPaperExam" parameterType="long" resultMap="ExamResultMap">
+        SELECT
+        paper.id,
+        paper.name,
+        paper.type,
+        paper.exam_time,
+        paper.full_mark,
+        paper.pass_mark,
+        paper.test_num,
+        paper.discription,
+        paper.is_artificial_mark,
+        paper.is_random,
+        paper.qId,
+        paper.content,
+        paper.qType,
+        paper.question_score,
+        paper.aId,
+        paper.seq,
+        paper.question_type,
+        paper.optionType,
+        paper.is_right,
+        paper.answer
+        FROM
+        (
+        SELECT
+        paper.id,
+        paper. NAME,
+        paper.type,
+        paper.exam_time,
+        paper.full_mark,
+        paper.pass_mark,
+        paper.test_num,
+        paper.discription,
+        paper.is_artificial_mark,
+        paper.is_random,
+        CASE
+        WHEN paper.is_question_shuffle = 0 THEN
+        pq.seq
+        ELSE
+        1
+        END AS paperSeq,
+        CASE
+        WHEN paper.is_question_item_shuffle = 0 THEN
+        answer.seq
+        ELSE
+        1
+        END AS answerSeq,
+        question.id AS qId,
+        question.content,
+        question.type AS qType,
+        pq.question_score,
+        answer.id AS aId,
+        answer.seq,
+        answer.question_type,
+        answer.option as optionType,
+        answer.is_right,
+        answer.answer
+        FROM
+        el_paper paper
+        LEFT JOIN el_paper_question pq ON pq.paper_id = paper.id
+        LEFT JOIN el_question question ON pq.question_id = question.id
+        LEFT JOIN el_question_answer answer ON answer.question_id = question.id
+        WHERE
+        paper.id = #{paperId}
+        ) paper
+
+        ORDER BY
+        paper.paperSeq,
+        paper.answerSeq
+    </select>
+
+    <select id="getScore" parameterType="map" resultType="int">
+        select distinct IFNULL((select SUM(score)
+        FROM
+        (
+        SELECT
+        exam.score
+        FROM
+        el_user_exam exam
+        WHERE
+        exam.paper_id = #{paperId}
+        AND exam.user_id = #{accountId}
+        GROUP BY
+        exam.question_id
+        ) t),0) as score
+        from el_user_exam exam
+    </select>
+
+
+
+    <resultMap type="com.fulan.api.paper.domain.el.UserExam" id="UserExamResultMap">
+        <id column="id"  property="id" />
+        <result column="paper_id"  property="paperId" />
+        <result column="paper_state"  property="paperState" />
+        <result column="question_id"  property="questionId" />
+        <result column="question_type"  property="questionType" />
+        <result column="question_seq"  property="questionSeq" />
+        <result column="question_score"  property="questionScore" />
+        <result column="answer_id"  property="answerId" />
+        <result column="answer_seq"  property="answerSeq" />
+        <result column="user_name"  property="userName" />
+        <result column="user_id"  property="userId" />
+        <result column="answer"  property="answer" />
+        <result column="score"  property="score" />
+        <result column="gmt_create"  property="gmtCreate" />
+        <result column="gmt_modified"  property="gmtModified" />
+        <result column="exam_num"  property="examNum" />
+        <result column="plan_course_id"  property="planCourseId" />
+    </resultMap>
+    
+    <select id="selectExamAccount" parameterType="java.lang.String" resultType="com.fulan.api.paper.vo.ExamAccountVo">
+     select	id as id,
+        paper_id as paperId,
+        paper_state as paperState,
+        question_id as questionId,
+        question_type as questionType,
+        question_seq as questionSeq,
+        question_score as questionScore,
+        answer_id as answerId,
+        answer_seq answerSeq,
+        user_id as userId,
+        user_name as userName,
+        answer as answer,
+        SUM(exam.score) as score
+        from el_user_exam exam
+        where 1=1
+        and exam.paper_id=#{id}
+        <if test="userName != null and userName != '' ">
+			and exam.user_name LIKE CONCAT('%',#{userName},'%')
+		</if>
+		<if test="questionType != null and questionType != '' ">
+			and exam.question_type =#{questionType}
+		</if>
+		 GROUP BY exam.user_id,exam.exam_num
+		
+    </select>
+    
+    
+    
+    <select id="selectExamAccountSearch" parameterType="java.lang.String" resultType="com.fulan.api.paper.vo.ExamAccountVo">
+     select	id as id,
+        paper_id as paperId,
+        paper_state as paperState,
+        question_id as questionId,
+        question_type as questionType,
+        question_seq as questionSeq,
+        question_score as questionScore,
+        answer_id as answerId,
+        answer_seq answerSeq,
+        user_id as userId,
+        user_name as userName,
+        answer as answer,
+        score as score
+        from el_user_exam exam
+        where exam.user_name=#{userName}
+    </select>
+    
+    
+    <select id="getUserExam" parameterType="map" resultMap="UserExamResultMap">
+        select	id,
+        paper_id,
+        paper_state,
+        question_id,
+        question_type,
+        question_seq,
+        question_score,
+        answer_id,
+        answer_seq ,
+        user_id ,
+        user_name,
+        answer,
+        score ,
+        gmt_create,
+        gmt_modified,
+        exam_num,
+        plan_course_id
+        from el_user_exam exam
+        where exam.user_id=#{accountId} and exam.plan_course_id=#{planCourseId}
+    </select>
+
+    <resultMap type="com.fulan.api.paper.vo.ExamPaperVo" id="AnalysisResultMap">
+        <result column="testNum" property="testNum" />
+        <collection property="questions" ofType="com.fulan.api.paper.vo.QuestionVo">
+            <result column="qId"   property="id" />
+            <result column="analysis"   property="analysis" />
+            <collection property="userAnswer" ofType="com.fulan.api.paper.vo.QuestionAnswerVo">
+                <result column="userAnswer"   property="userAnswer" />
+                <result column="score"   property="score" />
+                <result column="userOption"   property="option" />
+            </collection>
+        </collection>
+    </resultMap>
+
+    <select id="getAnalysis" parameterType="map" resultMap="AnalysisResultMap">
+        SELECT
+        paper.testNum,
+        paper.qId,
+        paper.analysis,
+        IFNULL(paper.userOption,'') AS userOption,
+        IFNULL(paper.userAnswer,'') AS userAnswer,
+        paper.score,
+        COUNT(DISTINCT paper.qId)
+        FROM
+        (
+        SELECT
+        paper.test_num-IFNULL(exam.exam_num,0) as testNum,
+        question.id AS qId,
+        question.analysis,
+        exam.answer as userAnswer,
+        exam.score,
+        userAns.option as userOption
+        FROM
+        el_paper paper
+        INNER JOIN el_paper_question pq ON pq.paper_id = paper.id
+        INNER JOIN el_question question ON pq.question_id = question.id
+        LEFT JOIN el_question_answer answer ON answer.question_id = question.id and answer.is_right=1
+        LEFT JOIN (select DISTINCT * from el_user_exam where  plan_course_id=#{planCourseId}
+        and exam_num = (select max(exam_num) from el_user_exam where plan_course_id=#{planCourseId} and paper_id = #{paperId} and  user_id=#{accountId} ))
+        exam ON exam.paper_id=paper.id and exam.question_id=question.id and user_id=#{accountId}
+        LEFT JOIN el_question_answer userAns ON   exam.answer_id=userAns.id and userAns.question_id=question.id
+        WHERE
+        paper.id = #{paperId} and question.id=#{questionId}
+        ) paper   group by paper.qId
+
+    </select>
+
+    <select id="getExamNum" parameterType="map" resultType="int">
+        SELECT
+        CASE
+        WHEN (
+        SELECT max( exam.exam_num) AS exam_num
+        FROM
+        el_user_exam exam
+        WHERE
+        exam.user_id = #{accountId}
+        AND exam.plan_course_id = #{planCourseId}
+        ) >= (
+        SELECT DISTINCT
+        IFNULL(paper.test_num, 0) AS test_num
+        FROM
+        el_paper paper
+        WHERE paper.id = #{paperId}
+        ) THEN
+        1
+        ELSE
+        0
+        END AS examNum
+        FROM DUAL
+    </select>
+
+
+
+    <select id="getMaxExamNum" parameterType="map" resultType="int">
+        SELECT max(exam.exam_num) AS exam_num
+        FROM
+        el_user_exam exam
+        WHERE
+        exam.user_id =#{accountId}
+        AND exam.plan_course_id = #{planCourseId}
+    </select>
+</mapper>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fulan.application.mapper.SmsNewsInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.fulan.api.message.domain.SmsNewsInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="sms_news_id" property="smsNewsId" jdbcType="BIGINT" />
+    <result column="msg_id" property="msgId" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="customer_id" property="customerId" jdbcType="VARCHAR" />
+    <result column="reply_content" property="replyContent" jdbcType="VARCHAR" />
+    <result column="receive_phone" property="receivePhone" jdbcType="VARCHAR" />
+  </resultMap>
+
+</mapper>

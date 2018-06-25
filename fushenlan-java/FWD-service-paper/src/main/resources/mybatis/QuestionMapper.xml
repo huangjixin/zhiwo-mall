@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.QuestionMapper">
+	<resultMap type="com.fulan.api.paper.domain.el.Question" id="BaseResultMap">
+		<id column="id" jdbcType="BIGINT" property="id" />
+	    <result column="content" jdbcType="VARCHAR" property="content" />
+	    <result column="type" jdbcType="INTEGER" property="type" />
+	    <result column="analysis" jdbcType="VARCHAR" property="analysis" />
+	    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+	    <result column="tag_id" jdbcType="BIGINT" property="tagId" />
+	    <result column="is_share" jdbcType="INTEGER" property="isShare" />
+	    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+	    <result column="gmt_create" jdbcType="DATE" property="gmtCreate" />
+	    <result column="modify_user" jdbcType="BIGINT" property="modifyUser" />
+	    <result column="gmt_modified" jdbcType="DATE" property="gmtModified" />
+	</resultMap>
+ 	<sql id="Base_Column_List">
+	    id, content, type, analysis, group_id, tag_id, create_user, is_share,
+	    gmt_create, modify_user, gmt_modified
+  	</sql>
+  	<sql id="condition">
+  		<if test="createUser != null and createUser != '' ">
+			and eq.create_user = #{createUser,jdbcType=BIGINT}
+		</if> 
+		<if test="content != null and content != ''">
+			and eq.content LIKE CONCAT(CONCAT('%', #{content}),'%')
+		</if> 
+		<if test="type != null and type !='' ">
+			and eq.type = #{type,jdbcType=INTEGER}
+		</if> 
+		<if test="groupId != null and groupId != '' ">
+			and eq.group_id = #{groupId,jdbcType=BIGINT}
+		</if> 
+		<if test="tagId != null and tagId != '' ">
+			and eq.tag_id = #{tagId,jdbcType=INTEGER}
+		</if> 
+  	</sql>
+  	
+  	<select id="listForOtherManage" resultMap="BaseResultMap">
+  	    select <include refid="Base_Column_List" /> from el_question eq
+				where 1=1
+			  	<if test="tagId !=null and tagId != '' ">
+				    and eq.tag_id =  #{tagId}
+				</if>
+				<if test="type !=null and type != '' ">
+				    and eq.type =  #{type}
+				</if>
+				<if test="keyWord !=null and keyWord != '' ">
+				    and eq.content like  CONCAT('%', #{keyWord}, '%') 
+				</if>
+				<if test="createUser !=null and createUser != '' ">
+				    and eq.create_user =  #{createUser}
+				</if>
+			    order by gmt_create desc
+  	</select>
+  	
+	<select id="listForManage" resultMap="BaseResultMap">
+		<choose>
+	  		<when test="pubType!=null and pubType == 1">
+	  		 	select <include refid="Base_Column_List" /> from el_question eq
+				where 1=1
+			  	<if test="submitter !=null and submitter != '' ">
+				    and group_id =  #{submitter}
+				</if>
+			    <include refid="condition"/>
+			    order by gmt_create desc
+	  		</when>
+	  		<otherwise>
+	  		 	select 
+	  		 	
+	  		 	 eq.id, eq.content, eq.type, eq.analysis, eq.group_id, eq.tag_id, eq.create_user, 
+	            eq.gmt_create, eq.modify_user, eq.gmt_modified
+	  		 	
+	  		 	from 
+	  		 	 el_paper_ques_share epqs 
+	  		 	inner join el_question eq on eq.id = epqs.host_id
+	  		 	where epqs.group_id = #{submitter} and epqs.type = '1'
+	  		 	<include refid="condition"/>
+	  		 	order by eq.gmt_create desc
+	  		</otherwise>
+	  	</choose>
+	</select>
+	<select id="listForManageCount" resultType="Integer">
+		<choose>
+	  		<when test="pubType!=null and pubType == 1">
+	  		 	select count(*) from el_question eq
+				where 1=1
+			  	<if test="submitter !=null and submitter != '' ">
+				    and eq.group_id =  #{submitter}
+				</if>
+			    <include refid="condition"/>
+	  		</when>
+	  		<otherwise>
+	  		 	select count(*) from (select eq.id, eq.content, eq.type, eq.analysis, eq.group_id, eq.tag_id, eq.create_user, 
+	            eq.gmt_create, eq.modify_user, eq.gmt_modified
+	  		 	from  
+	  		 	 el_paper_ques_share epqs 
+	  		 	inner join el_question eq on eq.id = epqs.host_id
+	  		 	where epqs.group_id = #{submitter} 
+	  		 	<include refid="condition"/>
+	  		 	) el_question
+	  		</otherwise>
+	  	</choose>
+	</select>
+	<resultMap type="com.fulan.api.paper.vo.QuestionVo" extends="BaseResultMap" id="BaseResultMapVo">
+		<collection column="id" ofType="QuestionAnswer" property="questionAnswer" select="com.fulan.application.mapper.QuestionAnswerMapper.seleByQuestionId" fetchType="eager"></collection>
+		<collection column="id" property="listRelationMap" select="com.fulan.application.mapper.ElPaperMapper.seleByQuestionId" fetchType="eager"></collection>
+		<collection column="id" property="listShareMap" select="com.fulan.application.mapper.PaperQuesShareMapper.seleByhostId" fetchType="eager"></collection>
+	</resultMap>
+	<select id="questionAndAnswer" resultMap="BaseResultMapVo"> 
+		select * from el_question where id = #{id}
+		<!-- select eq.*,
+		case count(epqs.id) when '0' then '否' else '是' end as isNotShare
+		case count(epq.id) when '0' then '否' else '是' end as isNotRelation
+		from el_question eq 
+		inner join el_paper_ques_share epqs 
+		on eq.id = epqs.host_id 
+		inner join el_paper_question epq
+		on eq.id = epq.question_id
+		where eq.id=#{id}; -->
+	</select>
+	
+	<resultMap type="com.fulan.api.paper.vo.QuestionVo" extends="BaseResultMap" id="BaseResultMapVoT">
+		<collection column="id" ofType="QuestionAnswer" property="questionAnswer" select="com.fulan.application.mapper.QuestionAnswerMapper.seleByQuestionId" fetchType="eager"></collection>
+	</resultMap>	
+	<select id="questionAndAnswerVo" resultMap="BaseResultMapVoT"> 
+		select * from el_question where id = #{questionId}
+	</select>
+	<select id="questionAndAnswerVoS" resultMap="BaseResultMapVoT"> 
+		select eq.*,epq.question_score as questionScore
+		from el_question eq
+		LEFT JOIN el_paper_question epq
+		on epq.question_id = eq.id 
+		where epq.paper_id = #{id}
+	</select>
+	<resultMap type="com.fulan.api.paper.vo.QuestionVo" extends="BaseResultMapVoT" id="BaseResultMapVoWF">
+		<result column="questionScore" property="questionScore"/>
+		<result column="answer" property="answer"/>
+		<result column="answerQuestionScore" property="answerQuestionScore"/>
+		<result column="eueId" property="eueId" />
+	</resultMap>
+	<select id="questionAndAnswerVoWF" resultMap="BaseResultMapVoWF"> 
+		select eq.*,eue.question_score as questionScore,eue.score as answerQuestionScore ,eue.answer as answer,
+		eue.id as eueId
+		from el_question eq
+		left JOIN el_user_exam eue
+		on eue.question_id = eq.id 
+		where eue.paper_id = #{id}
+	</select>
+	<select id="questionAndAnswerVoWFTWO" resultMap="BaseResultMapVoWF"> 
+		select eq.*,eue.question_score as questionScore,eue.score as answerQuestionScore ,eue.answer as answer,
+		eue.id as eueId
+		from el_question eq
+		left JOIN el_user_exam eue
+		on eue.question_id = eq.id 
+		where eue.paper_id = #{id} and eue.user_id = #{userId} and eue.exam_num = #{examNum} and eue.plan_course_id =#{planCourseId}
+	</select>
+	<select id="questionAndAnswerVoS" resultMap="BaseResultMapVoT"> 
+		select eq.*,eue.question_score as questionScore,eue.score as answerQuestionScore 
+		eue.id as eueId
+		from el_question eq
+		LEFT JOIN el_paper_question epq
+		on epq.question_id = eq.id 
+		left JOIN el_user_exam eue
+		on eue.question_id = eq.id 
+		where eue.paper_id = #{id}
+	</select>
+	<select id="seleRandomForManage" resultMap="BaseResultMap">
+	SELECT * FROM el_question eq where 1=1
+	<include refid="condition"/>
+	 ORDER BY RAND() LIMIT #{questionNum}
+	</select>
+	
+	<delete id="deleById">
+		delete eq,eqa,epqs from el_question eq 
+		INNER join el_question_answer eqa 
+		on (eq.id = eqa.question_id)
+		INNER join el_paper_ques_share epqs
+		on eq.id = epqs.host_id
+		where eq.id = 1;
+	</delete>
+	
+	<delete id="deleBatchIds">
+		delete eq,eqa,epqs from el_question eq 
+		INNER join el_question_answer eqa 
+		on (eq.id = eqa.question_id)
+		INNER join el_paper_ques_share epqs
+		on eq.id = epqs.host_id
+		where eq.id in 
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+	</delete>
+	
+	<select id="isNotRelation" resultType="java.util.Map">
+		select content from el_question eq
+		inner join el_paper_question epq on eq.id = epq.question_id
+		where eq.id in 
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        group by eq.content
+	</select>
+	
+	<select id="selectPaperName" resultType="java.lang.String">
+		select ep.name from el_paper_question eq left join el_paper ep on eq.paper_id=ep.id  where eq.question_id  in 
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+	</select>
+	
+	
+	<insert id="saveQuestion" parameterType="com.fulan.api.paper.vo.QuestionVo">
+	     insert into el_question
+	     <trim prefix="(" suffix=")" suffixOverrides=",">
+	     	 <if test="id != null">
+		        id,
+		      </if>
+		      <if test="content != null and content != ''">
+		        content,
+		      </if>
+		      <if test="type != null">
+		        type,
+		      </if>
+		      <if test="analysis != null and analysis != ''">
+		        analysis,
+		      </if>
+		      <if test="groupId != null">
+		        group_id,
+		      </if>
+		      <if test="tagId != null">
+		        tag_id,
+		      </if>
+		      <if test="createUser != null">
+		        create_user,
+		      </if>
+		      <if test="gmtCreate != null">
+		        gmt_create,
+		      </if>
+		      <if test="modifyUser != null">
+		        modify_user,
+		      </if>
+		      <if test="gmtModified != null">
+		        gmt_modified,
+		      </if>
+	     </trim>
+	     <trim prefix="values (" suffix=")" suffixOverrides=",">
+	     	  <if test="id != null">
+		        #{id,jdbcType=BIGINT},
+		      </if>
+		      <if test="content != null and content != ''">
+		        #{content},
+		      </if>
+		      <if test="type != null">
+		        #{type},
+		      </if>
+		      <if test="analysis != null and analysis != ''">
+		        #{analysis},
+		      </if>
+		      <if test="groupId != null">
+		        #{groupId},
+		      </if>
+		      <if test="tagId != null">
+		        #{tagId},
+		      </if>
+		      <if test="createUser != null">
+		        #{createUser},
+		      </if>
+		      <if test="gmtCreate != null">
+		        #{gmtCreate},
+		      </if>
+		      <if test="modifyUser != null">
+		        #{modifyUser},
+		      </if>
+		      <if test="gmtModified != null">
+		        #{gmtModified},
+		      </if>
+	     </trim>
+	</insert>
+	
+	<update id="updateQuestion" parameterType="com.fulan.api.paper.vo.QuestionVo">
+		update el_question
+		<set>
+		      <if test="content != null and content != ''">
+		       content = #{content},
+		      </if>
+		      <if test="type != null">
+		       type = #{type},
+		      </if>
+		      <if test="analysis != null and analysis != ''">
+		        analysis = #{analysis},
+		      </if>
+		      <if test="groupId != null">
+		        group_id = #{groupId},
+		      </if>
+		      <if test="tagId != null">
+		        tag_id = #{tagId},
+		      </if>
+		      <if test="createUser != null">
+		        create_user = #{createUser},
+		      </if>
+		      <if test="gmtCreate != null">
+		        gmt_create = #{gmtCreate},
+		      </if>
+		      <if test="modifyUser != null">
+		        modify_user = #{modifyUser},
+		      </if>
+		      <if test="gmtModified != null">
+		        gmt_modified = #{gmtModified},
+		      </if>
+    	</set>
+    	where id = #{id}
+	</update>
+	
+	<update id="updateByIdList">
+	    update el_question set is_share = #{isShare} where id in
+	    <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+	</update>
+	
+	<resultMap type="com.fulan.api.paper.vo.QuestionVo" extends="BaseResultMap" id="BaseResultMapPreView">
+		<collection column="id" ofType="QuestionAnswer" property="questionAnswer" select="com.fulan.application.mapper.QuestionAnswerMapper.seleByQuestionId" fetchType="eager"></collection>
+	</resultMap>	
+	<select id="seleByIdList" resultMap="BaseResultMapPreView"> 
+		select * from el_question where id in 
+		<foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+	</select>
+</mapper>

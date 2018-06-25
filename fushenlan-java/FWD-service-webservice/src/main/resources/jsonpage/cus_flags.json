@@ -1,0 +1,22 @@
+{
+  "code": "1",
+  "msg": "查询客户分组信息成功",
+  "data": [
+    {
+      "id":100,
+       "flagName":"标准客户",
+       "index":1
+    },
+    {
+      "id":200,
+      "flagName":"VIP",
+      "index":2
+    },
+    {
+      "id":300,
+      "flagName":"VIP",
+      "index":2
+    }
+
+  ]
+}

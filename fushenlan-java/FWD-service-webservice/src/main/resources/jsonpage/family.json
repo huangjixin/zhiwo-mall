@@ -1,0 +1,28 @@
+{
+	"name":"家庭成员",
+    "status": 1,
+    "message": "信息获取成功",
+    "code": 200,
+    "data":
+        [
+            {
+                "customerName": "大头儿子",
+                "age": 54,
+                "relationship": "父子",
+                "identifyNumber": "2039**************321",
+                "mobile": "1500188****",
+                "insuranceCount": 1,
+                "gender": "男"
+            },
+            {
+                "customerName": "小头儿子",
+                "age": 54,
+                "relationship": "父子",
+                "identifyNumber": "2039**************321",
+                "mobile": "1500188****",
+                "insuranceCount": 1,
+                "gender": "男"
+            }
+        ]
+
+}

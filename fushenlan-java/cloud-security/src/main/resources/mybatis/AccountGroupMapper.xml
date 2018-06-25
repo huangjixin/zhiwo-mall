@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.AccountGroupMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fulan.api.security.domain.AccountGroup">
+        <id column="id" property="id" />
+        <result column="account_id" property="accountId" />
+        <result column="group_id" property="groupId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, account_id AS accountId, group_id AS groupId
+    </sql>
+    
+    <select id="countUser" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        select count(*) from account_group where group_id = #{groupId}
+    </select>
+	
+	<select id="listAccountGroupByGroupId" parameterType="java.lang.Long" resultType="com.fulan.api.security.vo.AccountGroupVo">
+        select a.id as id,a.group_id as groupId,a.account_id as accountId,b.account_name as accountName,g.group_name as groupName 
+                from account_group a
+                    left join account b on a.account_id = b.id
+                    left join user_group g on g.id = a.group_id
+                 where a.group_id = #{groupId}   
+    </select>
+
+</mapper>

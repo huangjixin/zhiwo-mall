@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=100%, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-ap-p-capable" content="yes">
+    <meta name="apple-mobile-web-appstatus-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>招募平台</title>
+    <link rel="stylesheet" href="../../css/iconfont/iconfont.css">
+    <link rel="stylesheet" href="../../css/reset.css">
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+ <!--盒子容器-->
+ <div class="wrapper">
+     <!--头部logo以及功能按钮-->
+     <div class="header header-logo">
+         <div class="logo">
+             <img src="../../images/logo_white@2x.png" alt="">在线增员系统
+         </div>
+         <div class="hello-user">
+             <i class="icon-users"></i>
+             hi, 某某
+         </div>
+         <button class="btn-menu">
+            <i class="icon-sign-out"></i>退出
+         </button>
+     </div>
+
+     <!--内容区-->
+     <div class="recruit-content">
+         <!--侧边导航栏-->
+         <div class="recruit-sidebar">
+             <!--打开弹层按钮 -->
+             <div class="open">
+                 <i class="icon-back"></i><i class="icon-back"></i>
+             </div>
+
+             <!--侧边栏导航按钮-->
+             <button type="button" class="online toggle active" data-href="main">
+                 <i class="icon-adduser"></i>我的增员
+             </button>
+
+             <button type="button" class="online toggle" data-href="personalInfo">
+                 <i class="icon-adduser"></i>在线增员
+             </button>
+
+             <button type="button" class="talents toggle" data-href="select">
+                 <i class="icon-xinwen-dengjiren"></i>人才库
+             </button>
+
+             <button type="button" class="activity toggle" data-href="basicInfo">
+                 <i class="icon-gerenziliao"></i>增员活动
+             </button>
+
+             <button type="button" class="collect toggle" data-href="preAdd">
+                 <i class="icon-jisuanqi"></i>收入试算
+             </button>
+
+             <button class="back">
+                 <i class="icon-back"></i><i class="icon-back"></i>
+             </button>
+         </div>
+
+         <!--客户详情区-->
+         <div class="recruit-clientInfo">
+
+         </div>
+     </div>
+ </div>
+ <!--盒子容器-->
+
+ <script src="../../lib/zepto.min.js"></script>
+ <script src="../../lib/seajs/sea.js"></script>
+ <script src="../../lib/common/common.js"></script>
+ <script src="../../lib/cordova/cordova.js"></script>
+ <script>
+     var dateTag = new Date();
+     seajs.config({
+         base : '../../',
+         alias: {
+             'interface' : 'utils/interface',
+             'validation' : 'utils/validation',
+             'seajsText' : 'lib/seajs/seajs-text',
+             'seajsCss' : 'lib/seajs/seajs-css',
+             'zeptoTouch' : 'lib/zepto.touch',
+             'zeptoMd5' : 'lib/zepto.md5',
+             'doT' : 'lib/doT.min',
+             'cordova' : 'lib/cordova/cordova',
+             'hammer' : 'lib/hammer.min',
+             'dropload' : 'lib/dropload',
+             'moment' : 'lib/moment.min',
+             'base64' : 'lib/base64',
+             'datepicker' : 'lib/LCalendar.min',
+             'swiper' : 'lib/swiper.min',
+             'echarts' : 'lib/echarts.min'
+         },
+         paths: {},
+         preload : [
+             'common'
+         ],
+         map: [
+             [/^(.*\.(?:css|js|html))(.*)$/i, '$1?' + dateTag.getTime()]
+         ]
+     });
+     seajs.use('./index.js');
+ </script>
+</body>
+</html>

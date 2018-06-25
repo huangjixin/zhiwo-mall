@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.MaterialMapper">
+  <resultMap id="BaseResultMap" type="com.fulan.api.material.domain.Material">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="tag_id" jdbcType="BIGINT" property="tagId" />
+    <result column="is_share" jdbcType="TINYINT" property="isShare" />
+    <result column="is_relate_plan" jdbcType="TINYINT" property="isRelatePlan" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="modify_user" jdbcType="BIGINT" property="modifyUser" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, type, description, group_id, tag_id, is_share, is_relate_plan, create_user, 
+    gmt_create, modify_user, gmt_modified
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from el_material
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from el_material
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.fulan.api.material.domain.Material">
+    insert into el_material (id, name, type, 
+      description, group_id, tag_id, 
+      is_share, is_relate_plan, create_user, 
+      gmt_create, modify_user, gmt_modified
+      )
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
+      #{description,jdbcType=VARCHAR}, #{groupId,jdbcType=BIGINT}, #{tagId,jdbcType=BIGINT}, 
+      #{isShare,jdbcType=TINYINT}, #{isRelatePlan,jdbcType=TINYINT}, #{createUser,jdbcType=BIGINT}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{modifyUser,jdbcType=BIGINT}, #{gmtModified,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.fulan.api.material.domain.Material">
+    insert into el_material
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="tagId != null">
+        tag_id,
+      </if>
+      <if test="isShare != null">
+        is_share,
+      </if>
+      <if test="isRelatePlan != null">
+        is_relate_plan,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="modifyUser != null">
+        modify_user,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="tagId != null">
+        #{tagId,jdbcType=BIGINT},
+      </if>
+      <if test="isShare != null">
+        #{isShare,jdbcType=TINYINT},
+      </if>
+      <if test="isRelatePlan != null">
+        #{isRelatePlan,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUser != null">
+        #{modifyUser,jdbcType=BIGINT},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fulan.api.material.domain.Material">
+    update el_material
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        group_id = #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="tagId != null">
+        tag_id = #{tagId,jdbcType=BIGINT},
+      </if>
+      <if test="isShare != null">
+        is_share = #{isShare,jdbcType=TINYINT},
+      </if>
+      <if test="isRelatePlan != null">
+        is_relate_plan = #{isRelatePlan,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUser != null">
+        modify_user = #{modifyUser,jdbcType=BIGINT},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fulan.api.material.domain.Material">
+    update el_material
+    set name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=TINYINT},
+      description = #{description,jdbcType=VARCHAR},
+      group_id = #{groupId,jdbcType=BIGINT},
+      tag_id = #{tagId,jdbcType=BIGINT},
+      is_share = #{isShare,jdbcType=TINYINT},
+      is_relate_plan = #{isRelatePlan,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=BIGINT},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      modify_user = #{modifyUser,jdbcType=BIGINT},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <sql id="conditionSql">
+  		<if test="keyWord != null and keyWord != '' ">
+  			and em.name like CONCAT('%',#{keyWord},'%') 
+  		</if>
+  		<if  test="type != null and type != '' ">
+  			and em.type = #{type}
+  		</if>
+  		<if test="uploadTimeBegin != null and uploadTimeBegin !='' ">
+  			<![CDATA[ and DATE_FORMAT(em.gmt_create,'%Y-%m-%d')>= #{uploadTimeBegin}]]>  
+  		</if>
+  		<if test="uploadTimeEnd !=null and uploadTimeEnd !='' ">
+  			<![CDATA[ and DATE_FORMAT(em.gmt_create,'%Y-%m-%d')<= #{uploadTimeEnd}]]>  
+  		</if>
+  </sql>
+  <select id="materialManageSearch" resultMap="BaseResultMap">
+  		 <choose>
+  		 <when test="pubType == 1">
+ 			<if test="loginUser ==null or loginUser == '' ">
+		    	select 
+		    	<include refid="Base_Column_List" />
+		    from el_material em  
+ 			    where 1=1 <include refid="conditionSql" /> 
+ 			        order by em.gmt_create desc
+		    </if>
+	  		<if test="loginUser !=null and loginUser != '' ">
+		    	select em.* from 
+  		 	   el_material em
+  		 	left join el_material_share ems on em.id = ems.material_id
+  		 	where ems.group_id =#{loginUser}  
+  		 	  <include refid="conditionSql" />
+  		 	      order by em.gmt_create desc
+		    </if>
+  		 </when>
+  		 <otherwise>
+  		    select em.* from el_material em where create_user =#{submitter}
+            <include refid="conditionSql"/>
+            order by em.gmt_create desc
+  		 </otherwise>
+  		 </choose>
+  </select>
+  <select id="materialManageSearchCount" resultType="int">
+ 	<choose>
+  		 <when test="pubType == 2">
+  		 	select 
+		    	count(em.id)
+		    from el_material em
+ 			where 1=1
+	  		<if test="submitter !=null and submitter != '' ">
+		    	and em.create_user =  #{submitter}
+		    </if>
+		    <include refid="conditionSql" />
+  		 </when>
+  		 <otherwise>
+  		 	select count(em.id) from 
+  		 	 el_material_share ems 
+  		 	left join el_material em on em.id = ems.material_id
+  		 	where ems.group_id = #{submitter}
+  		 	<include refid="conditionSql"/>
+  		 </otherwise>
+  		 </choose>
+  </select>
+  <delete id="deleteRelation" parameterType="java.util.List">
+  	delete el_material_share,el_material,el_course_material	
+  	from el_material 
+  	left join el_material_share  on  el_material.id=el_material_share.material_id
+  	left join el_course_material on el_course_material.material_id = el_material.id
+  	 where el_material.id in
+  	 <foreach collection="list" item="employeeId" index="index"
+    		open="(" close=")" separator=",">
+   			 #{employeeId}
+  	  </foreach>
+  </delete>
+  <delete id="deleteShar">
+  	delete from el_material_share where material_id = #{materialId}
+  </delete>
+  <insert id="share" parameterType="java.util.Map">
+  	  insert into el_material_share (id, group_id, material_id, 
+      gmt_create)
+  	  values(#{id,jdbcType=BIGINT},#{groupId,jdbcType=BIGINT},#{materialId,jdbcType=BIGINT},now())
+  </insert>
+  <select id="selectMaterAndCourseRe" resultType="int">
+  	select count(*)  from el_course_material where material_id = #{id}
+  </select>
+  <resultMap id="MaterialCourseVoMap" extends="BaseResultMap" type="com.fulan.api.material.vo.MaterialCourseVo">
+        <collection property="courses" ofType="java.lang.String">
+            <result column="course_name" jdbcType="VARCHAR" property="name" />
+        </collection>
+        <collection property="materialShares" ofType="com.fulan.api.material.domain.MaterialShare">
+            <id column="share_id" jdbcType="BIGINT" property="id"/>
+            <result column="share_group_id" jdbcType="BIGINT" property="groupId"/>
+        </collection>
+        <collection property="classPlan" ofType="java.lang.String">
+            <result column="classPlan" jdbcType="VARCHAR" property="name" />
+        </collection>
+        <collection property="postDevelopment" ofType="java.lang.String">
+            <result column="postDevelopment" jdbcType="VARCHAR" property="name" />
+        </collection>
+        <collection property="compulsoryCplan" ofType="java.lang.String">
+            <result column="compulsoryCplan" jdbcType="VARCHAR" property="name" />
+        </collection>
+        <collection property="studyPlan" ofType="java.lang.String">
+            <result column="studyPlan" jdbcType="VARCHAR" property="name" />
+        </collection>
+    </resultMap>
+    <select id="checkMaterialInfo" resultMap="MaterialCourseVoMap">
+        select
+        em.id as id, em.name as name, em.type as type, em.description as description,
+        em.group_id as group_id, em.tag_id as tag_id, em.is_share as is_share,
+        em.is_relate_plan as is_relate_plan, em.create_user as create_user,
+        em.gmt_create as gmt_create, em.modify_user as gmt_create, em.gmt_modified as gmt_modified,
+        ec.name as course_name,
+        ems.id as share_id ,ems.group_id as share_group_id,
+        esp.name as studyPlan,
+        ecp.name as classPlan,
+        epd.name as postDevelopment,
+        ecc.name as compulsoryCplan
+        from el_material em
+        left join el_course_material ecm on ecm.material_id = em.id
+        left join el_course ec on ec.id = ecm.course_id
+        left join el_material_share ems on em.id = ems.material_id
+        left join el_plan_course epc on epc.associate_id = ec.id
+        left join el_study_plan esp on esp.id = epc.plan_id
+        left join el_class_plan ecp on ecp.id = epc.plan_id
+        left join el_post_development epd on epd.id = epc.plan_id
+        left join el_compulsory_cplan ecc on ecc.id = epc.plan_id
+        where em.id=#{id,jdbcType=BIGINT}
+    </select>
+    
+    <select id="getAllShared" resultType="String">
+  	select group_id from  el_material_share where material_id = #{materialId}
+    </select>
+    
+    <select id="listMaterialByCourseId" resultMap="BaseResultMap">
+        select em.* from el_material em
+            where em.id in ( 
+                select distinct(emc.material_id) from el_course_material emc where emc.course_id = #{courseId}
+                )
+    </select>
+    
+     <resultMap id="MaterialShareResultMap" type="com.fulan.api.material.domain.MaterialShare">
+	    <id column="id" jdbcType="BIGINT" property="id" />
+	    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+	    <result column="material_id" jdbcType="BIGINT" property="materialId" />
+	    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+	    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    </resultMap>
+    <select id="listMaterialShareByMaterialId" resultMap="MaterialShareResultMap">
+        select * from el_material_share 
+            where material_id in (${materialIds})
+    </select>
+    
+    <resultMap id="MaterialVoCMSResultMap" type="com.fulan.api.material.vo.MaterialVoCMS">
+	    <id column="id" jdbcType="BIGINT" property="id" />
+	    <result column="name" jdbcType="VARCHAR" property="name" />
+	    <result column="type" jdbcType="TINYINT" property="type" />
+	    <result column="description" jdbcType="VARCHAR" property="description" />
+	    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+	    <result column="tag_id" jdbcType="BIGINT" property="tagId" />
+	    <result column="is_share" jdbcType="TINYINT" property="isShare" />
+	    <result column="is_relate_plan" jdbcType="TINYINT" property="isRelatePlan" />
+	    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+	    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+	    <result column="modify_user" jdbcType="BIGINT" property="modifyUser" />
+	    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+	    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+	    <result column="tag_name" jdbcType="VARCHAR" property="tagName" />
+	  </resultMap>
+    <select id="listMaterialByPage" resultMap="MaterialVoCMSResultMap" >
+         <choose>
+            <!-- 私人资料库 -->
+	         <when test="pubType == 1">
+	            select em.* from el_material em where em.create_user = #{loginUser}
+                <include refid="conditionSql"/>
+                order by em.gmt_create desc
+	         </when>
+	         <otherwise>
+	           <!-- 管理员显示 -->
+	            <if test="groupId ==null or groupId == '' ">
+                    select 
+                    em.*
+                from el_material em
+                where 1=1   <include refid="conditionSql" />
+                order by em.gmt_create desc
+                </if>
+                <!--公共资料库   -->
+                <if test="groupId !=null and groupId != '' ">
+                    select em.* from el_material em 
+		                  where em.id in (select distinct(ems.material_id) from el_material_share ems where ems.group_id = #{groupId}) 
+                    <include refid="conditionSql" />
+                    order by em.gmt_create desc 
+                </if>
+	         </otherwise>
+         </choose>
+  </select>
+  
+  <select id="getMaterialCount" resultType="java.lang.Integer" >
+        <choose>
+             <!-- 私人资料库 -->
+             <when test="pubType == 1">
+                select count(em.id) from el_material em where em.create_user = #{loginUser}
+                <include refid="conditionSql"/>
+                order by em.gmt_create desc
+             </when>
+             <otherwise>
+                <!-- 管理员显示 -->
+                <if test="groupId ==null or groupId == '' ">
+                 select count(em.id)
+	                from el_material em
+	                   where 1=1 
+                </if>
+                <!--公共资料库   -->
+                <if test="groupId !=null and groupId != '' ">
+                    select count(em.id) from el_material em 
+                          where em.id in (select distinct(ems.material_id) from el_material_share ems where ems.group_id = #{groupId}) 
+                </if>
+                    <include refid="conditionSql" />
+                    order by em.gmt_create desc
+             </otherwise>
+         </choose>
+  </select>
+</mapper>

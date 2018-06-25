@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.CourseLecturerMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fulan.api.course.domain.CourseLecturer">
+        <id column="id" property="id" />
+        <result column="course_id" property="courseId" />
+        <result column="lecturer_id" property="lecturerId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, course_id, lecturer_id
+    </sql>
+
+    <select id="findCourseLecturer" resultMap="BaseResultMap" parameterType="com.fulan.api.course.domain.CourseLecturer">
+        SELECT
+          <include refid="Base_Column_List" />
+        FROM  el_course_lecturer
+        WHERE  1=1
+        <if test="courseId != null and courseId != '' ">
+            and course_id = #{courseId}
+        </if>
+         <if test="lecturerId != null and lecturerId != '' ">
+            and lecturer_id = #{lecturerId}
+        </if>
+    </select>
+    
+    <delete id="deleteCourseLecturerByCourseId" parameterType="java.lang.Long">
+	  	delete from el_course_lecturer
+	  		where course_id = #{courseId}
+  </delete>
+  <insert id="inserBylist" parameterType="java.util.List" >
+		insert into el_course_lecturer (id,course_id,lecturer_id) values 
+			<foreach collection="list" index="index" item="item" open="" separator="," close="">
+              (#{item.id},#{item.courseId}, #{item.lecturerId})
+        	</foreach>
+	</insert>
+
+</mapper>

@@ -1,0 +1,1 @@
+package com.fulan.application.mapper;import org.springframework.stereotype.Repository;import com.baomidou.mybatisplus.mapper.BaseMapper;import com.fulan.api.security.domain.RoleResource;@Repositorypublic interface RoleResourceMapper extends BaseMapper<RoleResource>{    }

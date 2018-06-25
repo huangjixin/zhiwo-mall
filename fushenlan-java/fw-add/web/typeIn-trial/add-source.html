@@ -1,0 +1,78 @@
+<div class="add-source">
+    <div class="source-info">
+        <i class="icon-users"></i>
+        <span>人才信息</span>
+    </div>
+
+    <div class="source-form">
+        <form id="source-info">
+            <input type="text" hidden name="id" value="{{=it.personnel&&it.personnel.id?it.personnel.id:''}}">
+            <ul class="grid-row  ui-form">
+                <li class="col-md-12 ui-form-auto">
+                    <strong><span class="mustWrite">*</span><span>证件类型</span></strong>
+                    <div class="ipt-radio auto">
+                        <label class="{{=it.personnel&&it.personnel.identityType==='111'?'checked':''}}"><input type="radio" name="identityType" value="111" {{=it.personnel&&it.personnel.identityType==='111'?'checked':''}}>身份证</label>
+                        <label class="{{=it.personnel&&it.personnel.identityType==='414'?'checked':''}}"><input type="radio" name="identityType" value="414" {{=it.personnel&&it.personnel.identityType==='414'?'checked':''}}>护照</label>
+                        <label class="{{=it.personnel&&it.personnel.identityType==='117'?'checked':''}}"><input type="radio" name="identityType" value="117" {{=it.personnel&&it.personnel.identityType==='117'?'checked':''}}>出生证</label>
+                        <label class="{{=it.personnel&&it.personnel.identityType==='114'?'checked':''}}"><input type="radio" name="identityType" value="114" {{=it.personnel&&it.personnel.identityType==='114'?'checked':''}}>军人证</label>
+                        <label class="{{=it.personnel&&it.personnel.identityType==='511'?'checked':''}}"><input type="radio" name="identityType" value="511" {{=it.personnel&&it.personnel.identityType==='511'?'checked':''}}>台胞证</label>
+                        <label class="{{=it.personnel&&it.personnel.identityType==='516'?'checked':''}}"><input type="radio" name="identityType" value="516" {{=it.personnel&&it.personnel.identityType==='516'?'checked':''}}>港澳回乡证</label>
+                    </div>
+                </li>
+                <li class="col-md-12">
+                    <strong><span class="mustWrite">*</span><span>证件号</span></strong>
+                    <label class="identify-code">
+                        <input type="text" data-must="1" data-mustname="证件号" value="{{=it.personnel&&it.personnel.identityCode?it.personnel.identityCode:''}}" name="identityCode" class="ipt-text check-vali" placeholder="请输入证件号">
+                    </label>
+                    <a href="javascript:;" class="paper-scan hidden">
+                        <i class="icon-scan"></i>
+                        <span>证件扫描</span>
+                    </a>
+                </li>
+                <li class="col-md-6">
+                    <strong><span class="mustWrite">*</span><span>姓名</span></strong>
+                    <input type="text" maxlength="50" value="{{=it.personnel&&it.personnel.name?it.personnel.name:''}}" name="name" class="ipt-text check-vali" data-must="1" data-mustname="姓名" placeholder="请输入姓名">
+                </li>
+                <li class="col-md-6">
+                    <strong><span class="mustWrite">*</span><span>联系电话</span></strong>
+                    <input maxlength="11" value="{{=it.personnel&&it.personnel.cellphone?it.personnel.cellphone:''}}" type="text" name="cellphone" class="ipt-text check-vali" data-must="1" data-mustname="电话号码" placeholder="请输入电话号码">
+                </li>
+                <li class="col-md-6 input-radio">
+                    <strong><span class="mustWrite">*</span><span>性别</span></strong>
+                    <div class="ipt-radio">
+                        <label class="{{=it.personnel&&it.personnel.sex==='M'?'checked':''}}"><input type="radio" name="sex" value="M" {{=it.personnel&&it.personnel.sex==='M'?'checked':''}}>男</label>
+                        <label class="{{=it.personnel&&it.personnel.sex==='F'?'checked':''}}"><input type="radio" name="sex" value="F" {{=it.personnel&&it.personnel.sex==='F'?'checked':''}}>女</label>
+                    </div>
+                </li>
+                <li class="col-md-6">
+                    <strong><span class="mustWrite">*</span><span>年龄</span></strong>
+                    <input type="text" maxlength="3" name="age" value="{{=it.personnel&&it.personnel.age?it.personnel.age:''}}" class="ipt-text check-vali" data-must="1" data-mustname="年龄" placeholder="请输入年龄">
+                </li>
+                <li class="col-md-12 tagNameLi">
+                    <strong><span>添加标签</span></strong>
+                    <div class="search-tagList">
+                        <div class="tag-wrapper">
+                            {{?it.tagList && it.tagList.length > 0}}
+                                {{~it.tagList:value:index}}
+                                <div class="tag-item" data-id="{{=value.id}}">
+                                    <span class="tag-content">{{=value.tagName}}</span>
+                                    <i class="icon-close close"></i>
+                                </div>
+                                {{~}}
+                            {{?}}
+                        </div>
+                        <div class="pull-down">
+                            <input type="text" maxlength="20" name="tagName" class="ipt-text" placeholder="请输入标签名">
+                            <button type="button" class="confirm-label">确定</button>
+                        </div>
+                    </div>
+                </li>
+                <li class="col-md-12 system-tag">
+                </li>
+                <li class="col-md-12 initiate hidden">
+                    <button type="button" class="initiate-btn">发起招募</button>
+                </li>
+            </ul>
+        </form>
+    </div>
+</div>

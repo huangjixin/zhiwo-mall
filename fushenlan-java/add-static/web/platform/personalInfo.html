@@ -1,0 +1,147 @@
+<div class="info-wrapper">
+    <!--头像-->
+    <div class="head-portrait">
+        <div>
+            <img src="../../images/client.png" alt="">
+        </div>
+    </div>
+
+    <!--个人信息表单-->
+    <form id="personalForm" action="">
+        <ul class="grid-row ui-form">
+            <li class="col-md-12 ui-form-auto">
+                <strong><span class="mustWrite">*</span><span>证件类型</span></strong>
+                <div class="ipt-radio auto">
+                    <label class="{{=it.identityType == 111?'checked':''}}"><input type="radio" name="identityType" value="111" {{=it.identityType == 111? 'checked' : ''}}>身份证</label>
+                    <label class="{{=it.identityType == 414?'checked':''}}"><input type="radio" name="identityType" value="414" {{=it.identityType == 414? 'checked' : ''}}>护照</label>
+                    <label class="{{=it.identityType == 117?'checked':''}}"><input type="radio" name="identityType" value="117" {{=it.identityType == 117? 'checked' : ''}}>出生证</label>
+                    <label class="{{=it.identityType == 114?'checked':''}}"><input type="radio" name="identityType" value="114" {{=it.identityType == 114? 'checked' : ''}}>军人证</label>
+                    <label class="{{=it.identityType == 511?'checked':''}}"><input type="radio" name="identityType" value="511" {{=it.identityType == 511? 'checked' : ''}}>台胞证</label>
+                    <label class="{{=it.identityType == 516?'checked':''}}"><input type="radio" name="identityType" value="516" {{=it.identityType == 516? 'checked' : ''}}>港澳回乡证</label>
+                </div>
+            </li>
+            <li class="col-md-12 ui-form-auto">
+                <strong><span>证件照</span></strong>
+                <div class="ipt-file">
+                    <p><i class="icon-upload"></i>上传证件照正面</p>
+                    <img src="{{=it.leftImg?'/uploadCustom?ppath='+it.leftImg:''}}" alt="" {{=it.leftImg?'':'hidden'}}>
+                    <div id="identityCardFrontFile" class="file-upload"></div>
+                    <input type="hidden" name="leftImg" value="{{=it.leftImg || ''}}">
+                </div>
+                <div class="ipt-file">
+                    <p><i class="icon-upload"></i>上传证件照反面</p>
+                    <img src="{{=it.rightImg?'/uploadCustom?ppath='+it.rightImg:''}}" alt="" {{=it.rightImg?'':'hidden'}}>
+                    <div id="identityCardBackFile" class="file-upload"></div>
+                    <input type="hidden" name="rightImg" value="{{=it.rightImg || ''}}">
+                </div>
+            </li>
+            <li class="col-md-6">
+                <strong><span class="mustWrite">*</span><span>证件号</span></strong>
+                <input type="text" name="identityCode" class="ipt-text check-vali" data-must="1" data-mustname="证件号码" placeholder="请输入证件号" value="{{=it.identityCode || ''}}">
+            </li>
+            <li class="col-md-6">
+                <strong><span class="mustWrite">*</span><span>有效期至</span></strong>
+                <div class="ipt-datetime">
+                    <input type="hidden" name="ctfexpireDate" id="date-yxq-long" value="2099-01-01" {{=it.ctfexpireDate==='2099-01-01'?'':'disabled'}}>
+                    <input type="text" id="date-yxq" name="ctfexpireDate" class="ipt-text" placeholder="请选择有效期" readonly value="{{=it.ctfexpireDate==='2099-01-01'?'': ''}}" {{=it.ctfexpireDate==='2099-01-01'?'disabled':''}}>
+                    <i class="icon-date"></i>
+                </div>
+            </li>
+            <li class="col-md-6">
+                <strong><span class="mustWrite">*</span><span>姓名</span></strong>
+                <input type="text" name="identityCode" class="ipt-text check-vali" data-must="1" data-mustname="姓名" placeholder="请输入姓名" value="{{=it.name || ''}}">
+            </li>
+            <li class="col-md-6">
+                <label class="legal-person ipt-checkbox-custom payment-rule"><input name="beneficiaryType" type="checkbox" value="1">长期有效</label>
+            </li>
+            <li class="col-md-6">
+                <strong><span class="mustWrite">*</span><span>出生日期</span></strong>
+                <div class="ipt-datetime-age">
+                    <div class="ipt-datetime">
+                        <input type="text" name="birthday" class="ipt-text check-vali" data-must="1" data-mustname="出生日期" placeholder="请输入出生日期" value="{{=it.birthday || ''}}">
+                    </div>
+                    <input type="text" id="age" name="age" class="ipt-text" readonly value="{{=it.age || ''}}">
+                </div>
+                <div class="ui-form-fun">岁</div>
+            </li>
+            <li class="col-md-6">
+                <strong><span class="mustWrite">*</span><span>性别</span></strong>
+                <div class="ipt-radio">
+                    <label class="{{=it.sex == 1?'checked':''}}" data-must="1"><input type="radio" name="sex" value="1" {{=it.sex == 1? 'checked' : ''}}>男</label>
+                    <label class="{{=it.sex == 2?'checked':''}}" data-must="1"><input type="radio" name="sex" value="2" {{=it.sex == 2? 'checked' : ''}}>女</label>
+                </div>
+            </li>
+            <li class="col-md-6">
+                <strong><span class="mustWrite">*</span><span>民族</span></strong>
+                <div class="ipt-select">
+                    <i class="icon-arrow-full-down"></i>
+                    <input type="text" class="ipt-text" placeholder="请选择处理方式" readonly>
+                    <select name="cashBonus">
+                        <option disabled selected value="">请选择民族</option>
+                        <option value="汉族">汉族</option>
+                        <option value="回族">回族</option>
+                        <option value="人族">人族</option>
+                    </select>
+                </div>
+            </li>
+            <li class="col-md-6">
+                <strong><span class="mustWrite">*</span><span>政治面貌</span></strong>
+                <div class="ipt-select">
+                    <i class="icon-arrow-full-down"></i>
+                    <input type="text" class="ipt-text" placeholder="请选择处理方式" readonly>
+                    <select name="cashBonus">
+                        <option disabled selected value="">请选择政治面貌</option>
+                        <option value="党员">党员</option>
+                        <option value="团员">团员</option>
+                    </select>
+                </div>
+            </li>
+            <li class="col-md-6">
+                <strong><span class="mustWrite">*</span><span>新人来源</span></strong>
+                <div class="ipt-select">
+                    <i class="icon-arrow-full-down"></i>
+                    <input type="text" class="ipt-text" placeholder="请选择处理方式" readonly>
+                    <select name="cashBonus">
+                        <option disabled selected value="">请选择新人来源</option>
+                        <option value="222">111</option>
+                        <option value="222">222</option>
+                    </select>
+                </div>
+            </li>
+            <li class="col-md-6">
+                <strong><span class="mustWrite">*</span><span>来源渠道</span></strong>
+                <div class="ipt-select">
+                    <i class="icon-arrow-full-down"></i>
+                    <input type="text" class="ipt-text" placeholder="请选择处理方式" readonly>
+                    <select name="cashBonus">
+                        <option disabled selected value="">请选择来源渠道</option>
+                        <option value="333">333</option>
+                        <option value="444">444</option>
+                    </select>
+                </div>
+            </li>
+            <li class="col-md-6">
+                <strong><span class="mustWrite">*</span><span>国籍</span></strong>
+                <div class="ipt-select">
+                    <i class="icon-arrow-full-down"></i>
+                    <input type="text" class="ipt-text" placeholder="请选择国籍" readonly>
+                    <select name="cashBonus">
+                        <option disabled selected value="">请选择国籍</option>
+                        <option value="333">中国</option>
+                        <option value="444">美国</option>
+                        <option value="333">意大利</option>
+                        <option value="444">瑞士</option>
+                    </select>
+                </div>
+            </li>
+        </ul>
+    </form>
+</div>
+
+<!--底部按钮-->
+<div class="bot-button">
+    <div class="buttonGroup">
+        <button type="button" class="savePersonalInfo">保存</button>
+        <button type="button" class="goNext">下一步</button>
+    </div>
+</div>

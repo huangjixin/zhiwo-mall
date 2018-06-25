@@ -1,0 +1,20 @@
+<div class="detail-right">
+    {{~it:val:index}}
+    <div class="detail-right-each width-one">
+        <span class="content_type">开始年月</span>
+        <span class="content_get">{{=val.startTime?common.getFormatDate(new Date(val.startTime)) : ''}}</span>
+    </div>
+    <div class="detail-right-each width-two">
+        <span class="content_type width-three">结束年月</span>
+        <span class="content_get">{{=val.endTime?common.getFormatDate(new Date(val.endTime)) : ''}}</span>
+    </div>
+    <div class="detail-right-each width-three">
+        <span class="content_type">学历</span>
+        <span class="content_get">{{=val.education || ''}}</span>
+    </div>
+    <div class="detail-right-each width-four">
+        <span class="content_type">毕业院校</span>
+        <span class="content_get">{{=val.school || ''}}</span>
+    </div>
+    {{~}}
+</div>

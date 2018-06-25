@@ -1,0 +1,8 @@
+{{~it:val:index}}
+<ul class="grid-row need-padding">
+  <li class="col-md-3"><strong>开始时间</strong><p>{{=val.startTime?common.getFormatDate(new Date(val.startTime)):''}}</p></li>
+  <li class="col-md-3"><strong>结束时间</strong><p>{{=val.endTime?common.getFormatDate(new Date(val.endTime)):''}}</p></li>
+  <li class="col-md-3"><strong>学历</strong><p>{{=val.education}}</p></li>
+  <li class="col-md-3"><strong>学校</strong><p>{{=val.school}}</p></li>
+</ul>
+{{~}}

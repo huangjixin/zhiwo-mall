@@ -1,0 +1,244 @@
+<!--工作经验-->
+<div class="experience-wrapper">
+    <!--头部背景样式及工作选择-->
+    <div class="experience-header">
+        <!--tap导航-->
+        <div class="materials-header">
+            <div class="mater-top-flag form-header-tap">
+                <ul class="mater-flag">
+                    <li class="already" data-type="personnelInfo"><i class="icon-users"></i>个人信息</li>
+                    <li class="already" data-type="family"><i class="icon-jiatingfang"></i>家庭信息</li>
+                    <li class="already" data-type="showEducation"><i class="icon-jiaoyu"></i>教育信息</li>
+                    <li class="active" data-type="workExperience"><i class="icon-gongzuojingli"></i>工作经历</li>
+                    <li class="future" data-type="plan"><i class="icon-jihuashucur"></i>计划申请</li>
+                    <li class="future" data-type="preview"><i class="icon-2yulan"></i>提交预览</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <form id="work-experience">
+        <ul class="work-time">
+            <li class="col-md-12">
+                <strong>原保险公司工作经历</strong>
+                <div class="ipt-radio input-list">
+                    <label class="{{=it.isInsuranceCompany=='1'?'checked':''}}"><input type="radio" name="isInsuranceCompany" value="1" {{=it.isInsuranceCompany=='1'?'checked':''}} />是</label>
+                    <label class="{{=it.isInsuranceCompany=='2'?'checked':it.isInsuranceCompany==''?'checked':''}}"><input type="radio" name="isInsuranceCompany" value="2" {{=it.isInsuranceCompany=='2'?'checked':it.isInsuranceCompany==''?'checked':''}} />否</label>
+                </div>
+            </li>
+            <li class="experience col-md-12 hidden">
+                <ul class="grid-row ui-form clearfix">
+                    <li class="col-md-5" style="padding: 0 0px 0 149px;">
+                        <strong><span>原保险机构名称</span></strong>
+                        <div class="ipt-text">
+                            <input value="{{=it.originalCompany || ''}}" type="text" name="originalCompany" class="ipt-text" placeholder="请输入原保险机构名称">
+                        </div>
+                    </li>
+                    <li class="col-md-3 change-label" style="padding: 0 0 0 149px;">
+                        <strong><span>是否离职</span></strong>
+                        <div class="ipt-text">
+                            <div class="ipt-select">
+                                <i class="icon-arrow-full-down"></i>
+                                <input type="text" class="ipt-text" placeholder="请选择是否离职"  value="{{=it.isQuit== '1' ?'是':it.isQuit == '0'?'否':''}}" readonly>
+                                <select name="isQuit">
+                                    <option value selected disabled>请选择是否离职</option>
+                                    <option {{=it.isQuit=='1'?'selected':''}} value="1">是</option>
+                                    <option {{=it.isQuit=='0'?'selected':''}} value="0">否</option>
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-md-4 change-label" style="padding: 0 10px 0 149px;">
+                        <strong><span>离职日期</span></strong>
+                        <div class="ipt-text">
+                            <input value="{{=it.departureDate?common.getFormatDate(new Date(it.departureDate)) : ''}}" type="text" id="departureDate" name="departureDate" class="ipt-text" readonly placeholder="请输入离职日期">
+                        </div>
+                    </li>
+
+                </ul>
+            </li>
+            <li class="col-md-12 lizhiMonth">
+                <strong>离职满6个月</strong>
+                <div class="ipt-radio">
+                    <label class="{{=it.isOverSix=='1'?'checked':''}}">
+                        <input {{=it.isOverSix=='1'?'checked':''}} type="radio" name="isOverSix" value="1" class="ipt-radio">是
+                    </label>
+                    <label class="{{=it.isOverSix=='2'?'checked':''}}">
+                        <input {{=it.isOverSix=='2'?'checked':''}} type="radio" name="isOverSix" value="2" class="ipt-radio">否
+                    </label>
+                </div>
+            </li>
+            <li class="alien-wrapper lizhi col-md-12 hidden">
+                 <div class="part-form-title"> 
+                     <p class="part-title">离职证明</p> 
+                 </div>
+                 <div class="lizhi-wrapper credentials-wrapper"> 
+                     <img src="../../images/paper1.jpg" alt="">
+                     <span></span> 
+                     <input type="text" hidden="" name="oId" value=""> 
+                 </div>
+           </li>
+        </ul>
+        <div class="all-business">
+            <div class="part-form-title">
+                <p class="part-title">工作经历</p>
+            </div>
+
+            <!--工作经验小表单-->
+            <div class="tiny-form">
+                {{?it.workExperience.length > 0}}
+                {{~it.workExperience:value:index}}
+                <div class="business educat-business">
+                    <div class="business-title">
+                        <span class="sort">工作经历{{=index+1}}</span>
+                        <div class="operation-tool {{=it.workExperience.length==1?'hidden': ''}}">
+                            <i class="icon-close"></i>
+                        </div>
+                    </div>
+                    <ul class="grid-row ui-form">
+                        <li class="col-md-6">
+                            <strong><span class="mustWrite">*</span><span>开始年月</span></strong>
+                            <div class="ipt-text">
+                                <input type="text"
+                                       value="{{=value.startTime?common.getFormatDate(new Date(value.startTime)):''}}"
+                                       class="ipt-text" placeholder="请选择开始年月" readonly name="startTime">
+                            </div>
+                        </li>
+                        <li class="col-md-6">
+                            <strong><span class="mustWrite">*</span><span>结束年月</span></strong>
+                            <div class="ipt-text">
+                                <input type="text"
+                                       value="{{=value.endTime?common.getFormatDate(new Date(value.endTime)):''}}"
+                                       class="ipt-text" placeholder="请选择结束年月" readonly name="endTime">
+                            </div>
+                        </li>
+                        <li class="col-md-6">
+                            <strong><span class="mustWrite">*</span><span>行业</span></strong>
+                            <div class="ipt-select">
+                                <i class="icon-arrow-full-down"></i>
+                                <input type="text" class="ipt-text" placeholder="请选择行业" readonly>
+                                <select name="occupation">
+                                </select>
+                            </div>
+                        </li>
+                        <li class="col-md-6">
+                            <strong><span class="mustWrite">*</span><span>单位名称</span></strong>
+                            <div class="ipt-text">
+                                <input type="text" placeholder="请输入单位名称" value="{{=value.company || ''}}"
+                                       class="ipt-text" name="company">
+                            </div>
+                        </li>
+                        <li class="col-md-6">
+                            <strong><span class="mustWrite">*</span><span>职位</span></strong>
+                            <div class="ipt-text">
+                                <input type="text" value="{{=value.post || ''}}" class="ipt-text" placeholder="请输入职位" name="post">
+                            </div>
+                        </li>
+                        <li class="col-md-6">
+                            <strong><span class="mustWrite">*</span><span>年收入</span></strong>
+                            <div class="ipt-text annual-income">
+                                <input type="text" value="{{=value.annualIncome || ''}}" class="ipt-text"
+                                       placeholder="请输入年收入" name="annualIncome">万元
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                {{~}}
+                {{?}}
+            </div>
+
+            <div class="business educat-business hidden" id="workExperiencePart">
+                <div class="business-title">
+                    <span class="sort"></span>
+                    <div class="operation-tool">
+                        <i class="icon-close"></i>
+                    </div>
+                </div>
+                <ul class="grid-row ui-form">
+                    <li class="col-md-6">
+                        <strong><span class="mustWrite">*</span><span>开始年月</span></strong>
+                        <div class="ipt-text">
+                            <input type="text" placeholder="请选择开始年月" class="ipt-text" readonly name="startTime">
+                        </div>
+                    </li>
+                    <li class="col-md-6">
+                        <strong><span class="mustWrite">*</span><span>结束年月</span></strong>
+                        <div class="ipt-text">
+                            <input type="text" placeholder="请选择结束年月" class="ipt-text" readonly name="endTime">
+                        </div>
+                    </li>
+                    <li class="col-md-6">
+                        <strong><span class="mustWrite">*</span><span>行业</span></strong>
+                        <div class="ipt-select">
+                            <i class="icon-arrow-full-down"></i>
+                            <input type="text" class="ipt-text" placeholder="请选择行业" readonly>
+                            <select name="occupation">
+                            </select>
+                        </div>
+                    </li>
+                    <li class="col-md-6">
+                        <strong><span class="mustWrite">*</span><span>单位名称</span></strong>
+                        <div class="ipt-text">
+                            <input type="text" placeholder="请输入单位名称" class="ipt-text" name="company">
+                        </div>
+                    </li>
+                    <li class="col-md-6">
+                        <strong><span class="mustWrite">*</span><span>职位</span></strong>
+                        <div class="ipt-text">
+                            <input type="text" placeholder="请输入职位" class="ipt-text" name="post">
+                        </div>
+                    </li>
+                    <li class="col-md-6">
+                        <strong><span class="mustWrite">*</span><span>年收入</span></strong>
+                        <div class="ipt-text annual-income">
+                            <input type="text" placeholder="请输入年收入" class="ipt-text" name="annualIncome">万元
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!--添加工作经历-->
+            <div class="add-another-business">
+                <button type="button" class="add-business"><i class="icon-jia"></i>添加工作经历</button>
+            </div>
+
+            <div class="part-form-title">
+                <p class="part-title">外籍人员就业证</p>
+            </div>
+
+            <!--外籍人员就业证-->
+            <div class="alien-wrapper">
+                <div class="wraper credentials-wrapper">
+                    <img src="../../images/paper1.jpg" alt="">
+                    <span></span>
+                    <input type="text" hidden name="pId" value="">
+                </div>
+            </div>
+
+            <!--本地工作时间-->
+            <div class="local-time">
+                <ul class="local-time-input ui-form">
+                    <li class="col-md-6">
+                        <strong><span class="mustWrite">*</span><span>本地工作时间</span></strong>
+                        <div class="ipt-select annual-income">
+                            <i class="icon-arrow-full-down"></i>
+                            <input type="text" class="ipt-text" value="{{=it.nativeWorkTime || ''}}" placeholder="请选择本地工作时间" readonly>
+                            <select name="nativeWorkTime">
+                                <option value selected disabled>请选择本地工作时间</option>
+                                <option {{=it.nativeWorkTime==="无"?"selected":""}} value="无">无</option>
+                                <option {{=it.nativeWorkTime==="1~2年"?"selected":""}} value="1~2年">1~2年</option>
+                                <option {{=it.nativeWorkTime==="2~3年"?"selected":""}} value="2~3年">2~3年</option>
+                                <option {{=it.nativeWorkTime==="3~5年"?"selected":""}} value="3~5年">3~5年</option>
+                                <option {{=it.nativeWorkTime==="5~10年"?"selected":""}} value="5~10年">5~10年</option>
+                                <option {{=it.nativeWorkTime==="10年以上"?"selected":""}} value="10年以上">10年以上</option>
+                            </select>
+                        </div>
+                    </li>
+                    <li class="col-md-6">
+                        <strong><span>累计工作时间</span></strong>
+                        <div><span class="all-work-time">0</span>年</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </form>
+</div>

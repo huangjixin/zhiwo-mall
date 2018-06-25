@@ -1,0 +1,57 @@
+
+  .progress-bar{
+    display: flex;
+    align-items:center;
+    flex:1;
+    margin-top:-20px;
+    margin: 0 35px;
+    justify-content:flex-end;
+  }
+  .pv-teb{
+    flex-basis:350px;
+    display: flex;
+    width: 350px;
+    height: 5px;
+    background: #D7D7D7;
+    border-radius: 74px;
+
+  }
+  .pv-teb .pv-orange{
+    display: flex;
+    width: 286px;
+    height: 5px;
+    background: #E87722;
+    border-radius: 74px;
+    margin-right:0px;
+  }
+  .pv-main{
+    /*display: flex;*/
+    /*width: 894px;*/
+    width: 100%;
+    margin-left:35px;
+    justify-content:space-around;
+  }
+  .pv-main .pv-line{
+    display: flex;
+    /*flex:1;*/
+    border-bottom: 2px solid #E57A30;
+    font-family: MicrosoftYaHei;
+    font-size: 16px;
+    color: #575756;
+    letter-spacing: 0;
+    margin-bottom:30px;
+  }
+ .pv-main .pv-plan{
+   display: flex;
+   width: 804px;
+   height: 90px;
+   border: 1px solid #DCDCDC;
+   border-radius: 10px;
+ }
+ .pv-main .pv-plan #pv-select{
+   width: 232px;
+   height: 38px;
+   background: #FFFFFF;
+   border: 1px solid #DADADA;
+   border-radius: 3px;
+ }

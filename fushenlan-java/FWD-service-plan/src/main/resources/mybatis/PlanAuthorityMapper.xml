@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.PlanAuthorityMapper">
+ <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fulan.api.plan.domain.PlanAuthority">
+        <id column="id" property="id" />
+        <result column="course_type" property="courseType" />
+        <result column="course_id" property="courseId" />
+        <result column="organization" property="organization" />
+        <result column="authority_type" property="authorityType" />
+        <result column="associate_id" property="associateId" />
+        <result column="create_user" property="createUser" />
+        <result column="gmt_create" property="gmtCreate" />
+        <result column="modify_user" property="modifyUser" />
+        <result column="gmt_modified" property="gmtModified" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, course_type AS courseType, course_id AS courseId, organization, authority_type AS authorityType, associate_id AS associateId, create_user AS createUser, gmt_create AS gmtCreate, modify_user AS modifyUser, gmt_modified AS gmtModified
+    </sql>
+
+    <select id="hasAuthority" parameterType="java.util.Map" resultType="java.lang.Integer">
+
+        select if(ppa.id is null,'0','1') as hasAuthority
+        from
+        (SELECT
+        max(pa.id) as id
+        FROM
+        el_plan_authority pa
+        WHERE
+        1=1
+        <if test="planId != null and planId != '' ">
+            AND  pa.course_id=#{planId}
+        </if>
+        <if test="planType != null and planType != '' ">
+            AND pa.course_type=#{planType}
+        </if>
+        <if test="userId != null and userId != '' ">
+            AND pa.associate_id=#{userId}
+        </if>) ppa
+
+    </select>
+    
+    
+    <select id="selectByAssociateId" resultMap="BaseResultMap">
+	 select * from el_plan_authority
+    where course_id = #{id,jdbcType=BIGINT}
+    </select>
+    
+   <delete id="deleteByCourseId">
+		DELETE FROM  el_plan_authority WHERE course_id=#{courseId}
+	</delete>
+	
+	<select id="selectByCourseId" resultMap="BaseResultMap">
+	 select * from el_plan_authority
+    where course_id = #{courseId,jdbcType=BIGINT}
+    </select>
+</mapper>

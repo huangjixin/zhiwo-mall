@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.AttendanceRulesMapper">
+  <resultMap id="BaseResultMap" type="com.fulan.api.calendar.domain.AttendanceRules">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="rule_name" jdbcType="VARCHAR" property="ruleName" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="rules_type" jdbcType="TINYINT" property="rulesType" />
+    <result column="calendar_id" jdbcType="TINYINT" property="calendarId" />
+    <result column="valid_sign_in_time" jdbcType="DATE" property="validSignInTime" />
+    <result column="valid_sign_up_time" jdbcType="DATE" property="validSignUpTime" />
+    <result column="attendance_object_type" jdbcType="TINYINT" property="attendanceObjectType" />
+    <result column="start_date_of_rule" jdbcType="TIMESTAMP" property="startDateOfRule" />
+    <result column="end_date_of_rule" jdbcType="TIMESTAMP" property="endDateOfRule" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="gmt_time" jdbcType="TIMESTAMP" property="gmtTime" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="modify_user" jdbcType="BIGINT" property="modifyUser" />
+    <result column="modify_user_name" jdbcType="VARCHAR" property="modifyUserName" />
+    <result column="deleted" jdbcType="TINYINT" property="deleted" />
+    <result column="bak1" jdbcType="VARCHAR" property="bak1" />
+    <result column="bak2" jdbcType="VARCHAR" property="bak2" />
+    <result column="bak3" jdbcType="VARCHAR" property="bak3" />
+    <result column="bak4" jdbcType="VARCHAR" property="bak4" />
+    <result column="bak5" jdbcType="VARCHAR" property="bak5" />
+  </resultMap>
+  <sql id="Base_Column_List_All">
+    id, code, rule_name, description, rules_type, calendar_id, valid_sign_in_time, valid_sign_up_time, attendance_object_type, 
+    start_date_of_rule, end_date_of_rule, status, remark, gmt_time, create_user,create_user_name, gmt_modified,modify_user,modify_user_name,deleted,bak1,bak2,bak3,bak4,bak5
+  </sql>
+   <sql id="Base_Column_List_params">
+    iar.id,iar.rule_name,iar.description,iar.rules_type,iar.modify_user,iar.modify_user_name,iar.gmt_modified
+  </sql>
+   <select id="selectAttendanceRulesByParams"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List_params" />
+    from iris_attendance_rules iar 
+    right join iris_calendar_book icb 
+    on iar.calendar_id=icb.id 
+    right join iris_calendar_daily_transaction icdt
+    on icb.id=icdt.calendar_id 
+    where month(icdt.day)=#{month,jdbcType=TINYINT}
+    and year(icdt.day)=DATE_FORMAT(NOW(), '%Y')
+    and iar.rules_type=#{rulesType,jdbcType=TINYINT}
+    <include refid="conditionSql"/>
+    group by iar.id
+  </select>
+  <sql id="conditionSql">
+	<if test="keyWord != null and keyWord != '' ">
+		and iar.rule_name like CONCAT('%',#{keyWord},'%') 
+	</if>
+  </sql>
+  <select id="selectAttendanceRulesCountByParams"  resultType="int">
+  select count(1) from
+	(SELECT iar.id FROM iris_attendance_rules iar
+	RIGHT JOIN iris_calendar_book icb ON iar.calendar_id = icb.id
+	RIGHT JOIN iris_calendar_daily_transaction icdt ON icb.id = icdt.calendar_id
+	WHERE MONTH (icdt. DAY) =#{month,jdbcType=TINYINT}
+	AND year(icdt.day)=DATE_FORMAT(NOW(), '%Y')
+	AND iar.rules_type =#{rulesType,jdbcType=TINYINT}
+	<include refid="conditionSql"/>
+	GROUP BY iar.id) t
+  </select>
+</mapper>

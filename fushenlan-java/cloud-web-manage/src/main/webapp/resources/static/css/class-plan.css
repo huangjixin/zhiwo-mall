@@ -1,0 +1,96 @@
+.class-plan {
+    width: 100%;
+    background-color: #EEEEEE;
+    padding: 0 16px 20px;
+}
+.import-table {
+    width: 100px;
+    height: 30px;
+    background: #F5F5F5;
+    border: 1px solid #E4E4E4;
+    border-radius: 5px;
+    font-size: 12px;
+    color: #575756;
+    margin-top: 6px;
+}
+.integral {
+    font-size: 12px;
+    color: #8F8F8F;
+    margin-left: 8px;
+}
+.gap {
+    margin-left: 16px;
+}
+.need-top-gap {
+    margin-top: 20px;
+}
+.fixed-top {
+    margin-top: 7px;
+}
+.fiexd-height {
+    margin-top: 20px;
+}
+.form-checkbox .ipt-select {
+    display: inline-block;
+}
+.endTime {
+    margin-left: 10px;
+}
+.form-radio {
+    position: relative;
+}
+.remind {
+    position: absolute;
+    bottom: -10px;
+    left: 86px;
+}
+.set-remind {
+    display: inline-block;
+    padding-left: 18px;
+    padding-right: 25px;;
+    height: 48px;
+    line-height: 48px;
+    background-color: #FAFAFA;
+    border-radius: 4px;
+    vertical-align: middle;
+    font-size: 12px;
+    color: #A8A7A7;
+}
+.set-remind .remind-time {
+    background-color: #FFFFFF;
+    border: 1px solid #DEDEDE;
+    border-radius: 3px;
+    width: 70px;
+    height: 34px;
+}
+.add {
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+    background: #FFFFFF;
+    border: 1px solid #E4E4E4;
+    color: #06B08E;
+    text-align: center;
+    line-height: 26px;
+}
+
+
+/* 定制化按钮 */
+
+.fixed-width {
+    width: 90px;
+}
+.fixed-right {
+    margin-right: 28px
+}
+.need-flex {
+    display: flex;
+}
+.need-flex .flex-content {
+    flex: 1
+}
+.flex-content label {
+    width: 70px;
+    margin-left: 0
+}
+/* 定制化按钮 */

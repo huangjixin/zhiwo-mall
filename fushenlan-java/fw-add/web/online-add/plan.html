@@ -1,0 +1,90 @@
+<!--计划申请内容区-->
+<div class="plan-content">
+    <!-- 头部区域-->
+    <div class="plan-header">
+        <!--tap导航-->
+        <div class="materials-header">
+            <div class="mater-top-flag form-header-tap">
+                <ul class="mater-flag">
+                    <li class="already" data-type="personnelInfo"><i class="icon-users"></i>个人信息</li>
+                    <li class="already" data-type="family"><i class="icon-jiatingfang"></i>家庭信息</li>
+                    <li class="already" data-type="showEducation"><i class="icon-jiaoyu"></i>教育信息</li>
+                    <li class="already" data-type="workExperience"><i class="icon-gongzuojingli"></i>工作经历</li>
+                    <li class="active" data-type="plan"><i class="icon-jihuashucur"></i>计划申请</li>
+                    <li class="future" data-type="preview"><i class="icon-2yulan"></i>提交预览</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <ul class="content-body">
+        <!-- 申请人计划-->
+        <li>
+            <i>申请人才计划</i>
+            <div class="list">
+            	<span class="mustWrite">*</span>
+                <em>人才计划</em>
+                <div class="ipt_select ipt-select"> <i class="icon-arrow-full-down"></i>
+                    <input type="text" class="ipt-text" placeholder="请选择人才计划" readonly="">
+                    <select name="talentPlan">
+
+                    </select>
+                </div>
+            </div>
+        </li>
+        <!--推荐人信息 -->
+        <li>
+            <i>推荐人信息</i>
+            <ul class="list clearfix ui-form form">
+                <li class="col-md-6">
+                    <strong>
+                        <span class="mustWrite">*</span>
+                        <span>推荐人</span>
+                    </strong>
+                    <input type="text" name="refereeName"  value="{{=it.refereeName}}" class="ipt_text ipt-text check-vali" data-must="1" data-mustname="推荐人" placeholder="请输入推荐人" >
+                    <div class="select-refereeName">
+
+                    </div>
+                </li>
+                <li class="col-md-6">
+                    <strong>
+                        <span class="mustWrite">*</span>
+                        <span>Agtcode</span>
+                    </strong>
+                    <div class="ipt-text">
+                        <input type="text"  value="{{=it.refereeNo || '' }}" name="refereeNo" class="ipt-text sencond_input" />
+                    </div>
+                </li>
+                <li class="agent-ship">
+                    <label class="legal-person ipt-checkbox-custom payment-rule">
+                        <input {{=it.refereeNo==it.currentAccountId?'':'checked'}} name="beneficiaryType" value="1" type="checkbox">
+                        非本人
+                    </label>
+                </li>
+            </ul>
+        </li>
+        <!-- 引荐关系确认-->
+        <li>
+            <i>引荐关系确认</i>
+            <div class="list">
+                <span class="col-md-2">确认声明</span>
+                <span class="col-md-2 span_second">
+                    签署声明
+                </span>
+                <strong class="col-md-2">
+                    <span class="mustWrite">*</span>
+                    <span>开始日期</span>
+                </strong>
+                <div class="ipt-datetime col-md-2">
+                    <input name="createTime" value="{{=it.createTime?common.getFormatDate(new Date(it.createTime)):''}}" class="ipt-text ipt_date" placeholder="请选择有效期" readonly>
+                    <i class="icon-date"></i>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="content-last-list">
+                <i class="icon-jinggao"></i>
+                Tips：自引荐关系开始日起，6 个月内不得转投其他业务主管组别之增员。
+            </div>
+        </li>
+    </ul>
+</div>

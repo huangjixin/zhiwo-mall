@@ -1,0 +1,197 @@
+* {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+.resourceBox {
+  background-color: rgba(143, 143, 143, 0.12);
+  height: 100%;
+  width: 100%;
+}
+.resourceBox .resourceTitle {
+  color: #8f8f8f;
+  padding: 14px 14px;
+  overflow: hidden;
+  font-family: MicrosoftYaHei;
+  font-size: 12px;
+  letter-spacing: 0.6px;
+}
+.resourceBox .resourceTitle span {
+  color: #000000;
+}
+.resourceBox .resourceTitle ul {
+  overflow: hidden;
+}
+.resourceBox .resourceTitle ul li {
+  float: left;
+  color: #999999;
+}
+.resourceContent {
+  width: 98%;
+  height: 100%;
+  background: white;
+  margin: 14px auto;
+  font-size: 12px;
+}
+.resourceContent li {
+  height: 40px;
+  margin-left: 70px;
+  padding: 10px 0;
+}
+.resourceContent li input,
+.resourceContent li select {
+  margin-left: 10px;
+  width: 205px;
+  height: 36px;
+}
+.resourceContent p span {
+  color: #D0021B;
+}
+.resourceCheckbox li {
+  width: 290px;
+  height: 84px;
+}
+.resourceCheckbox li span {
+  font-family: MicrosoftYaHei;
+  font-size: 14px;
+  color: #D0021B;
+  letter-spacing: 0.69px;
+  line-height: 14px;
+  float: left;
+}
+.resourceCheckbox li p {
+  font-size: 14px;
+  color: #575756;
+  display: block;
+  float: left;
+}
+.resourceCheckbox li div {
+  width: 210px;
+  height: 84px;
+  float: right;
+}
+.resourcebottom {
+  padding-bottom: 40px;
+}
+.examBox {
+  background-color: rgba(143, 143, 143, 0.12);
+  height: 100%;
+  width: 100%;
+}
+.examBox .examTitle {
+  color: #8f8f8f;
+  padding: 14px 14px;
+  overflow: hidden;
+  font-family: MicrosoftYaHei;
+  font-size: 12px;
+  letter-spacing: 0.6px;
+}
+.examBox .examTitle span {
+  color: #000000;
+}
+.examBox .examTitle ul {
+  overflow: hidden;
+}
+.examBox .examTitle ul li {
+  float: left;
+  color: #999999;
+}
+.examContent {
+  width: 98%;
+  height: 100%;
+  background: white;
+  margin: 14px auto;
+  font-size: 12px;
+}
+.examContent .examContentTop .examOnea .danxuan {
+  font-family: MicrosoftYaHei;
+  font-size: 16px;
+  color: #333333;
+  width: 96%;
+  margin: 0px auto;
+  font-weight: bolder;
+}
+.examContent .examContentTop .examOnea ul {
+  width: 96%;
+  margin: 15px auto;
+  overflow: hidden;
+  font-size: 12px;
+}
+.examContent .examContentTop .examOnea ul li {
+  float: left;
+  line-height: 40px;
+  font-size: 14px;
+  color: #6E6E6E;
+}
+.examContent .examContentTop .examOnea ul li:nth-child(1) {
+  width: 30px;
+  line-height: 40px;
+}
+.examContent .examContentTop .examOnea ul li:nth-child(2) {
+  width: 220px;
+  height: 40px;
+  padding: 0 10px;
+}
+.examContent .examContentTop .examOnea ul li:nth-child(2) input {
+  height: 80%;
+  border: 1px solid #DEDEDE;
+}
+.examContent .examContentTop .examOnea ul li:nth-child(3) {
+  width: 300px;
+}
+.examContent .examContentTop .examOnea ul li:nth-child(4) {
+  width: 86px;
+  height: 28px;
+  margin-right: 20px;
+}
+.examContent .examContentTop .examOnea ul li:nth-child(4) p {
+  color: white;
+  text-align: center;
+  background: #06B08E;
+  border-radius: 5px;
+}
+.examContent .examContentTop .examOnea ul li:nth-child(5) {
+  width: 86px;
+  height: 28px;
+  margin-right: 20px;
+}
+.examContent .examContentTop .examOnea ul li:nth-child(5) p {
+  color: white;
+  text-align: center;
+  background: #06B08E;
+  border-radius: 5px;
+}
+.examContent .examOneb ul {
+  width: 96%;
+  margin: 0 auto;
+  display: flex;
+  font-size: 14px;
+  color: #575756;
+  line-height: 50px;
+  background: #FEFEFE;
+  border-bottom: 1px solid #DEDEDE;
+  border-left: 1px solid #DEDEDE;
+  border-right: 1px solid #DEDEDE;
+  border-radius: 1px;
+}
+.examContent .examOneb ul li:nth-child(1) {
+  flex: 8;
+  text-indent: 32px;
+}
+.examContent .examOneb ul li:nth-child(2) {
+  flex: 3;
+  text-align: center;
+}
+.examContent .examOneb ul li:nth-child(3) {
+  flex: 2;
+  text-align: center;
+}
+.exambottom {
+  padding: 40px 0;
+}

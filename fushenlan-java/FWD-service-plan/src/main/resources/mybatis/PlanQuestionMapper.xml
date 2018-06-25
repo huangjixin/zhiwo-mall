@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.PlanQuestionMapper">
+
+    
+    <sql id="conditionSQL">
+    	<if test="questionType == 1"> <!--已回复  -->
+			AND CASE IFNULL(epq.ques_answer,'') WHEN '' THEN 1!=1 ELSE 1=1 END <!--根据回复内容判断是否以回复  -->
+		</if>
+		<if test="questionType == 0"> <!--未回复  -->
+			AND CASE IFNULL(epq.ques_answer,'') WHEN '' THEN 1=1 ELSE 1!=1 END <!--根据回复内容判断是否以回复  -->
+		</if>
+		<if test="userName !=null and userName !='' ">
+			and epq.create_name like CONCAT('%',#{userName},'%')
+		</if>
+		<if test="comment != null and comment !='' ">
+			and epq.ques_desc like CONCAT('%',#{comment},'%')
+		</if>
+		<if test="isOpen !=null and isOpen !='' ">
+			and epq.is_open = #{isOpen}
+		</if>
+		<if test="beginTime !=null and beginTime !='' ">
+		  <![CDATA[ and DATE_FORMAT(epq.gmt_create,'%Y-%m-%d')>= #{beginTime}]]> 
+		</if>
+		<if test="endTime !=null and endTime !='' ">
+		  <![CDATA[ and DATE_FORMAT(epq.gmt_create,'%Y-%m-%d')<= #{endTime}]]> 
+		</if>
+    </sql>
+    <select id="manageListByPage" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT epq.id as id,
+    		   epq.course_id as courseId,	
+    		   epq.create_name as userName,
+    		   epq.ques_desc as quesDesc,
+    		   epq.ques_answer as quesAnswer,
+    		   epq.is_open as isOpen,
+			   epq.answer_user_name as answerUserName,
+    		   epq.gmt_create as gmtCreate,
+    		   COUNT(el.id) as likeNum
+		FROM el_plan_question epq
+		LEFT JOIN el_like el ON el.host_id = epq.id
+		WHERE epq.course_id =#{courseId}
+		<include refid="conditionSQL" />
+		GROUP BY epq.id
+    </select>
+    <select id="manageListByPageCount" resultType="int" parameterType="java.util.Map">
+    	SELECT count(epq.id)
+    	from el_plan_question epq
+    	where epq.course_id =#{courseId}
+    	<include refid="conditionSQL"/>
+    </select>
+    <update id="hideOrOpenAll" parameterType="java.util.Map">
+    	<choose>
+    		<when test="type == 'Question'">
+    			update el_plan_question set is_open =#{isOpen},gmt_modified=now() 
+    			where id in
+    			<foreach collection="list" item="id" index="index"
+    				open="(" close=")" separator=",">
+   			 		#{id}
+  	  			</foreach> 
+    		</when>
+    		<when test="type == 'Comment'">
+    			update el_plan_comment set is_open =#{isOpen},gmt_modified=now() 
+    			where id in
+    			<foreach collection="list" item="id" index="index"
+    				open="(" close=")" separator=",">
+   			 		#{id}
+  	  			</foreach> 
+    		</when>
+    	</choose>
+    </update>
+
+
+	<select id="searchPlanQuestion" parameterType="java.util.Map" resultType="com.fulan.api.plan.vo.PlanQuestionDto">
+		SELECT epc.ques_desc as quesDesc,
+		epc.ques_answer as quesAnswer,
+		epc.modify_user as modifyUser,
+		epc.is_open as isOpen,
+		epc.id as id,
+		epc.gmt_modified AS gmtModified,
+		epc.gmt_create AS gmtCreate,
+		epc.create_user as createUser,
+		epc.create_name as createName,
+		epc.course_type as courseType,
+		epc.course_id as courseId,
+		epc.answer_user_name as answerUserName,
+		epc.answer_user as answerUser,
+		epc.answer_time as answerTime,
+		eln.likeNum, eid.likeId
+		FROM el_plan_question epc
+		LEFT JOIN (
+		SELECT count( * ) AS likeNum,host_id
+		FROM el_like
+		WHERE type = 2
+		GROUP BY host_id
+		) eln
+		ON eln.host_id = epc.id
+		LEFT JOIN (
+		SELECT max(id) AS likeId,host_id
+		FROM el_like
+		WHERE 1=1
+		<if test="userId != null and userId != '' ">
+			AND user_id=#{userId}
+		</if>
+		GROUP BY host_id
+		) eid
+		ON eid.host_id = epc.id
+		where  1=1
+		<if test="isOpen != null and isOpen != '' ">
+			AND epc.is_open=#{isOpen}
+		</if>
+		<if test="planId != null and planId != '' ">
+			AND epc.course_id=#{planId}
+		</if>
+		ORDER BY epc.answer_time desc,epc.gmt_modified desc
+	</select>
+</mapper>

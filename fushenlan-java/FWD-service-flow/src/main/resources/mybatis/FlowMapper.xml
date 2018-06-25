@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.FlowMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fulan.api.flow.domain.Flow">
+        <id column="id" property="id" />
+        <result column="flow_desc" property="flowDesc" />
+        <result column="flow_name" property="flowName" />
+        <result column="head_flag" property="headFlag" />
+        <result column="org_id" property="orgId" />
+        <result column="create_time" property="createTime" />
+        <result column="create_user" property="createUser" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_user" property="updateUser" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, flow_desc, flow_name , org_id , head_flag,create_time , create_user , update_time , update_user 
+    </sql>
+    
+     <!-- 我的增员 -->
+    <select id="PersonnelSearchbyagentCode" resultType="com.fulan.api.flow.vo.PersonnelAddVo">
+  		SELECT
+						pl.id AS id,
+						pl. NAME AS NAME,
+						pl.SEX AS sex,
+						(
+							SELECT
+								TIMESTAMPDIFF(YEAR, pl.BIRTHDAY, CURDATE())
+						) AS age,
+						pl.CELLPHONE AS cellphone,
+						eay.talent_plan AS talentPlan,
+						fa.step AS processProgress,
+						item.moudle_name AS currentprogress,
+						item.flow_item_name AS currentLink,
+						(
+							SELECT
+								count(*)
+							FROM
+								er_flow_action efa 
+							LEFT JOIN er_flow flow  ON    efa.flow_id=flow.id
+							WHERE
+									case (select count(*) from er_flow where org_id=#{orgId} )
+									when 0 
+									then 
+										flow.head_flag="Y"
+									else
+									 	flow.org_id =#{orgId}
+									end
+						) AS countProgress
+					FROM
+					er_personnel pl 
+					LEFT JOIN er_apply eay ON eay.personnel_id = pl.id
+					LEFT JOIN er_interview_action ia ON ia.personnel_id = pl.id and  ia.end_time is null
+					LEFT JOIN er_flow_action fa ON ia.flow_action_id = fa.id
+					LEFT JOIN er_flow_item item ON fa.flow_item_id = item.id
+			where		
+		<if test="keyWord != null and  keyWord !=''">
+			( pl.NAME  LIKE CONCAT(CONCAT('%', #{keyWord},'%'))
+			or pl.CELLPHONE LIKE CONCAT(CONCAT('%', #{keyWord},'%') ))  and 
+		</if>
+		<if test="agentCode != null">
+			 pl.create_user = #{agentCode} and
+		</if>
+		1=1  and pl.personnel_status != '0' order by pl.create_time desc
+  </select>
+  
+  
+  <!-- 我的面试 -->
+    <select id="PersonnelpaperSearchbyParam" resultType="com.fulan.api.flow.vo.PersonnelAddVo">
+		SELECT
+				pel.id AS id,
+				pel. NAME AS NAME,
+				pel.SEX AS sex,
+				(
+					SELECT
+						TIMESTAMPDIFF(
+							YEAR,
+							pel.BIRTHDAY,
+							CURDATE()
+						)
+				) AS age,
+				pel.CELLPHONE AS cellphone,
+				eay.talent_plan AS talentPlan,
+				fa.step AS processProgress,
+				item.moudle_name AS currentprogress,
+				item.flow_item_name AS currentLink,
+				pel.org_id as orgId	,
+				(
+							SELECT
+								count(*)
+							FROM
+								er_flow_action efa 
+							LEFT JOIN er_flow flow  ON    efa.flow_id=flow.id
+							WHERE
+								case (select count(*) from er_flow where org_id=orgId )
+								when 0 
+								then 
+									flow.head_flag="Y"
+								else
+								 	flow.org_id =orgId
+								end
+						) AS countProgress
+			FROM
+				er_personnel  pel
+					LEFT JOIN er_apply eay ON eay.personnel_id =  pel.id
+					LEFT JOIN er_interview_action ia ON ia.personnel_id =  pel.id and  ia.end_time is null  and ia.processing_person= #{agentCode}
+					LEFT JOIN er_flow_action fa ON ia.flow_action_id = fa.id
+					LEFT JOIN er_flow_item item ON fa.flow_item_id = item.id
+			where		
+		<if test="keyWord != null and  keyWord !=''">
+			( pel.NAME  LIKE CONCAT(CONCAT('%', #{keyWord},'%'))
+			or pel.CELLPHONE LIKE CONCAT(CONCAT('%', #{keyWord},'%') ) ) and 
+		</if>
+		
+		1=1 and item.id  in ('2','3','4') and pel.personnel_status != '0' order by pel.create_time desc
+		
+	
+  </select>
+    
+    
+    
+     <!-- 我的签约 -->
+    <select id="PersonnelSignSearchbyParam" resultType="com.fulan.api.flow.vo.PersonnelAddVo">
+		SELECT
+				pel.id AS id,
+				pel. NAME AS NAME,
+				pel.SEX AS sex,
+				(
+					SELECT
+						TIMESTAMPDIFF(
+							YEAR,
+							pel.BIRTHDAY,
+							CURDATE()
+						)
+				) AS age,
+				pel.CELLPHONE AS cellphone,
+				eay.talent_plan AS talentPlan,
+				fa.step AS processProgress,
+				item.moudle_name AS currentprogress,
+				item.flow_item_name AS currentLink,
+				(
+							SELECT
+								count(*)
+							FROM
+								er_flow_action efa 
+							LEFT JOIN er_flow flow  ON    efa.flow_id=flow.id
+							WHERE
+								case (select count(*) from er_flow where org_id=#{orgId} )
+								when 0 
+								then 
+									flow.head_flag="Y"
+								else
+								 	flow.org_id =#{orgId}
+								end
+						) AS countProgress
+			FROM
+				er_personnel  pel
+					LEFT JOIN er_apply eay ON eay.personnel_id =  pel.id
+					LEFT JOIN er_interview_action ia ON ia.personnel_id =  pel.id and  ia.end_time is null 
+					LEFT JOIN er_flow_action fa ON ia.flow_action_id = fa.id
+					LEFT JOIN er_flow_item item ON fa.flow_item_id = item.id
+			where		
+		<if test="keyWord != null and  keyWord !=''">
+			( pel.NAME  LIKE CONCAT(CONCAT('%', #{keyWord},'%'))
+			or pel.CELLPHONE LIKE CONCAT(CONCAT('%', #{keyWord},'%') ) ) and 
+		</if>
+		
+		1=1 and item.id  = '5' and pel.personnel_status != '0' and pel.create_user=#{agentCode}
+		 order by pel.create_time desc
+	
+  </select>
+    
+    
+    
+    
+    
+    
+    
+    <!-- 面试流程节点 -->
+    <select id="flowNodebyParam" resultType="com.fulan.api.flow.vo.FlowVO">
+  		SELECT	fa.id  as flowActionId,
+  				fa.org_id  AS orgId,
+  				fi.id  AS flowItemId,
+  				pel.create_user as  accountId,
+				fi.flow_item_name AS flowName,
+				fi.moudle_name  AS moudleName,
+				ia.processing_status AS processingStatus,
+				ia.processing_person AS processingPerson,
+				ia.processing_desc AS processingDesc,
+				ia.personnel_id AS personnelId,
+				ia.end_time,
+				CASE 	WHEN ia.end_time <![CDATA[<>]]>  '' AND  ia.processing_status = '1'  and  fi.moudle_name  in (2,3,4) THEN '1' 
+						WHEN ia.end_time <![CDATA[<>]]>  '' AND  ia.processing_status = '2' and  fi.moudle_name  in (2,3,4) THEN '0'
+						WHEN ia.end_time <![CDATA[<>]]>  '' and  fi.moudle_name  not in (2,3,4) THEN '1'
+					  ELSE '0' END 			 AS  flowNode
+			FROM
+				er_flow_item   fi
+			LEFT JOIN er_flow_action fa ON  fi.id = fa.flow_item_id 
+			LEFT JOIN  er_flow fl ON fa.flow_id  = fl.id
+			LEFT JOIN er_interview_action ia ON fa.id = ia.flow_action_id    AND ia.personnel_id = #{personnelId}
+			LEFT JOIN er_personnel pel  on ia.personnel_id = pel.id
+			where
+								case (select count(*) from er_flow where org_id=#{orgId} )
+								when 0 
+								then 
+									fl.head_flag="Y"
+								else
+								 	fl.org_id =#{orgId}
+								end
+			ORDER BY moudle_name asc
+  </select>
+    
+    
+     <!-- 面试得分详情 -->
+    <select id="flowPersonnelDetail" resultType="com.fulan.api.flow.vo.FlowPersonnelVO">
+  		SELECT
+			pi.id AS id,
+			PI.paper_item_name AS paperItemName,
+			PI.paper_item_desc AS paperItemDesc,
+			ppi.score AS score,
+			ia.processing_status AS processingStatus,
+			ia.processing_desc AS processingDesc,
+			pp.personnel_id AS personnelId
+		FROM
+			er_personnel_paper pp
+		LEFT JOIN er_interview_action ia ON pp.flow_item_id = ia.flow_item_id
+		LEFT JOIN er_personnel_paper_info ppi ON ppi.paper_id = pp.paper_id
+		LEFT JOIN er_paper_item pi ON pi.paper_id = pp.paper_id
+		WHERE
+			pp.personnel_id =  #{personnelId}
+		AND ia.flow_item_id =  #{flowItemId}	
+		GROUP BY
+			pi.id		
+  </select>
+    
+    
+    
+
+</mapper>

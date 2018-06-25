@@ -1,0 +1,134 @@
+<div class="experience-header">
+    <!--tap导航-->
+    <div class="materials-header">
+        <div class="mater-top-flag form-header-tap">
+            <ul class="mater-flag">
+                <li class="already" data-type="personnelInfo"><i class="icon-users"></i>个人信息</li>
+                <li class="already" data-type="family"><i class="icon-jiatingfang"></i>家庭信息</li>
+                <li class="active" data-type="showEducation"><i class="icon-jiaoyu"></i>教育信息</li>
+                <li class="future" data-type="workExperience"><i class="icon-gongzuojingli"></i>工作经历</li>
+                <li class="future" data-type="plan"><i class="icon-jihuashucur"></i>计划申请</li>
+                <li class="future" data-type="preview"><i class="icon-2yulan"></i>提交预览</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="work-experience">
+    <div class="all-business">
+        <!--最高学历证明-->
+        <div class="part-form-title" >
+            <p class="part-title">最高学历证明</p>
+        </div>
+        <div class="educat-wrp alien-wrapper">
+            <div class="col-md-6">
+                <div class="educattials-wrp">
+                    <p class="educat-til">学历证明</p>
+                    <div class="  credentials-wrapper first">
+                        <img src="../../images/paper1.jpg" alt="">
+                        <span></span>
+                        <input type="text" hidden name="pId" value="">
+                    </div>
+                    <div class="tips">
+                        Tips:  请确保上传的照片信息清晰可见。
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="educattials-wrp">
+                    <p class="educat-til">学信网验证页面</p>
+                    <div class="  credentials-wrapper second">
+                        <img src="../../images/paper1.jpg" alt="">
+                        <span></span>
+                        <input type="text" hidden name="oId" value="">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--教育经历-->
+        <div class="part-form-title">
+            <p class="part-title">教育经历</p>
+        </div>
+        {{~it:value:index}}
+        <div class="business educat-business">
+            <div class="business-title">
+                <span class="education-title">教育经历{{=index + 1}}</span>
+                <div class="operation-tool {{=it.length==1?'hidden': ''}}">
+                    <i class="icon-close"></i>
+                </div>
+            </div>
+            <ul class="grid-row ui-form">
+                <li class="col-md-6">
+                    <strong><span class="mustWrite">*</span><span>开始年月</span></strong>
+                    <div class="ipt-text">
+                        <input type="text" value="{{=value.startTime?common.getFormatDate(new Date(value.startTime)) : ''}}" class="ipt-text" placeholder="请选择开始年月" readonly name="startTime">
+                    </div>
+                </li>
+                <li class="col-md-6">
+                    <strong><span class="mustWrite">*</span><span>结束年月</span></strong>
+                    <div class="ipt-text">
+                        <input type="text" value="{{=value.endTime?common.getFormatDate(new Date(value.endTime)) : ''}}" class="ipt-text" placeholder="请选择结束年月" readonly name="endTime">
+                    </div>
+                </li>
+                <li class="col-md-6">
+                    <strong><span class="mustWrite">*</span><span>学历</span></strong>
+                    <div class="ipt-select">
+                        <i class="icon-arrow-full-down"></i>
+                        <input type="text" class="ipt-text" value="本科" placeholder="请选择学历" readonly>
+                        <select name="education">
+                        </select>
+                    </div>
+                </li>
+                <li class="col-md-6">
+                    <strong><span class="mustWrite">*</span><span>毕业院校</span></strong>
+                    <div class="ipt-text">
+                        <input type="text" placeholder="请输入院校" value="{{=value.school || ''}}" class="ipt-text" name="school">
+                    </div>
+                </li>
+            </ul>
+        </div>
+        {{~}}
+        <div class="business educat-business clearfix hidden" id="education-part">
+            <div class="business-title">
+                <span class="education-title"></span>
+                <div class="operation-tool">
+                    <i class="icon-close"></i>
+                </div>
+            </div>
+            <ul class="grid-row ui-form">
+                <li class="col-md-6">
+                    <strong><span class="mustWrite">*</span><span>开始年月</span></strong>
+                    <div class="ipt-text">
+                        <input type="text" class="ipt-text" readonly name="startTime" placeholder="请选择开始年月">
+                    </div>
+                </li>
+                <li class="col-md-6">
+                    <strong><span class="mustWrite">*</span><span>结束年月</span></strong>
+                    <div class="ipt-text">
+                        <input type="text" class="ipt-text" readonly name="endTime" placeholder="请选择结束年月">
+                    </div>
+                </li>
+                <li class="col-md-6">
+                    <strong><span class="mustWrite">*</span><span>学历</span></strong>
+                    <div class="ipt-select">
+                        <i class="icon-arrow-full-down"></i>
+                        <input type="text" class="ipt-text" placeholder="请选择学历" value="本科" readonly>
+                        <select name="education">
+                        </select>
+                    </div>
+                </li>
+                <li class="col-md-6">
+                    <strong><span class="mustWrite">*</span><span>毕业院校</span></strong>
+                    <div class="ipt-text">
+                        <input type="text" placeholder="请输入院校" class="ipt-text" name="school">
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!--添加工作经历-->
+        <div class="add-another-business">
+            <button type="button" class="add-business"><i class="icon-jia"></i>添加教育经历</button>
+        </div>
+    </div>
+</div>

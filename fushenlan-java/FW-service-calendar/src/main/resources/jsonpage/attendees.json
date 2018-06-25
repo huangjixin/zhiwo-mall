@@ -1,0 +1,12 @@
+{
+  'memberLists':[
+  	{'agentCode':'3','id':'3','mobile':'2','personalName':'张三','transactionId':'0'},
+  	{'agentCode':'3','id':'3','mobile':'2','personalName':'李四','transactionId':'0'},
+  	{'agentCode':'3','id':'3','mobile':'2','personalName':'王五','transactionId':'0'},
+  	{'agentCode':'3','id':'3','mobile':'2','personalName':'赵六','transactionId':'0'},
+  	{'agentCode':'3','id':'3','mobile':'2','personalName':'刘七','transactionId':'0'},
+  	{'agentCode':'3','id':'3','mobile':'2','personalName':'王八','transactionId':'0'},
+  	{'agentCode':'3','id':'3','mobile':'2','personalName':'张九','transactionId':'0'}
+  ],
+  'count':'7'
+}

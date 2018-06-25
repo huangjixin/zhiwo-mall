@@ -1,0 +1,17 @@
+.educat-wrp{
+    display: flex;
+    margin-bottom: 44px;
+    /*justify-content:space-between;*/
+}
+.educat-til{
+    padding: 15px 0 18px 0;
+}
+.educattials-wrp{
+    width: 382px;
+    margin: 0 auto;
+}
+
+.educat-business .business-title{
+    height: 52px;
+    line-height: 52px;
+}

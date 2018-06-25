@@ -1,0 +1,41 @@
+.require-task {
+    width: 100%;
+    background-color: #EEEEEE;
+    padding: 0 16px 20px;
+}
+.gap {
+    margin-left: 16px;
+}
+.import-table {
+    width: 100px;
+    height: 30px;
+    background: #F5F5F5;
+    border: 1px solid #E4E4E4;
+    border-radius: 5px;
+    font-size: 12px;
+    color: #575756;
+    margin-top: 6px;
+}
+.fixed-width {
+    width: 90px;
+}
+.fiexd-height {
+    margin-top: 20px;
+}
+.form-checkbox .ipt-select, .at-one-line {
+    display: inline-block;
+}
+.at-one-line {
+    margin-left: 10px;
+}
+.integral {
+    font-size: 12px;
+    color: #8F8F8F;
+    margin-left: 8px;
+}
+.fixed-top {
+    margin-top: 7px;
+}
+.endTime {
+    margin-left: 10px;
+}

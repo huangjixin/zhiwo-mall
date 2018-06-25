@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fulan.application.mapper.IRISManageNewsMapper" >
+ <resultMap id="BaseResultMap" type="com.fulan.api.information.domain.News" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="send_type" property="sendType" jdbcType="TINYINT" />
+    <result column="content_type" property="contentType" jdbcType="TINYINT" />
+    <result column="schedule_time" property="scheduleTime" jdbcType="DATE" />
+    <result column="content" property="content" jdbcType="CLOB" />
+    <result column="is_secret" property="isSecret" jdbcType="TINYINT" />
+    <result column="open_share" property="openShare" jdbcType="TINYINT" />
+    <result column="msg_type" property="msgType" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="is_active" property="isActive" jdbcType="TINYINT" />
+    <result column="external_link_url" property="externalLinkUrl" jdbcType="VARCHAR" />
+     <result column="path" property="path" jdbcType="VARCHAR"  javaType = "java.lang.String" />
+     <result column="attachment_path" property="attachmentPath" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="deleted" property="deleted" jdbcType="TINYINT" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="modify_user" property="modifyUser" jdbcType="BIGINT" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+  </resultMap> 
+
+  
+  <select id="listForManageCount"  resultType="Integer" >
+		select count(*) from iris_news where 1=1 
+		
+		<if test="title != null and title != '' ">
+			and title LIKE CONCAT('%', #{title},'%')
+		</if> 
+		<if test="type != null and type != '' ">
+			and type =#{type}
+		</if> 
+		<if test="status != null and status != '' ">
+			and status =#{status}
+		</if> 
+		 <if test="satrtTime != null and satrtTime != '' ">
+        <![CDATA[ and DATE_FORMAT(schedule_time,'%Y-%m-%d')>= #{satrtTime}]]>
+      </if>
+      <if test="endTime !=null and endTime != ''">
+        <![CDATA[ and DATE_FORMAT(schedule_time,'%Y-%m-%d')<= #{endTime}]]>
+      </if>
+      and deleted=0
+	</select>
+  
+  <select id="listForManage" resultType="com.fulan.api.information.vo.NewsManageVo" >
+		SELECT i.id,i.title,i.type,i.status,i.schedule_time AS scheduleTime,invd.view_count AS viewCount
+			FROM iris_news i
+			LEFT JOIN iris_news_view_details invd ON  i.id=invd.news_id
+ 			where  1=1  
+		<if test="title != null and title != '' ">
+			and i.title LIKE CONCAT('%', #{title},'%')
+		</if> 
+		<if test="type != null and type != '' ">
+			and i.type =#{type}
+		</if> 
+		<if test="status != null and status != '' ">
+			and i.status =#{status}
+		</if> 
+		
+		 <if test="satrtTime != null and satrtTime != '' ">
+        <![CDATA[ and DATE_FORMAT(i.schedule_time,'%Y-%m-%d')>= #{satrtTime}]]>
+      </if>
+      <if test="endTime !=null and endTime != ''">
+        <![CDATA[ and DATE_FORMAT(i.schedule_time,'%Y-%m-%d')<= #{endTime}]]>
+      </if>
+    and  i.deleted=0
+    group by i.id
+	</select>
+  
+  <!-- <update id="updateStatus" >
+	    update iris_news set status = #{status} where id =#{id}
+	</update> -->
+	
+	<update id="updateStatus" >
+		update iris_news
+		<set>
+		     <if test="status != null and status != ''">
+		        status= #{status},
+		      </if>
+		      <if test="date != null">
+		        schedule_time= #{date},
+		      </if>
+		     </set>
+    	where id = #{id}
+	</update>
+	
+	<update id="deleteNews" >
+	    update iris_news set deleted =1 where id =#{id}
+	</update>
+	
+	
+	<insert id="insertNews" parameterType="com.fulan.api.information.vo.NewsManageVo">
+	     insert into iris_news
+	     <trim prefix="(" suffix=")" suffixOverrides=",">
+	     	 <if test="id != null">
+		        id,
+		      </if>
+		      <if test="code != null and code != ''">
+		        code,
+		      </if>
+		     <if test="title != null and title != ''">
+		        title,
+		      </if>
+		      <if test="type != null">
+		        type,
+		      </if>
+		      <if test="sendType != null">
+		        send_type,
+		      </if>
+		      <if test="contentType != null">
+		        content_type,
+		      </if>
+		      <if test="scheduleTime != null">
+		        schedule_time,
+		      </if>
+		      <if test="content != null and content != ''">
+		        content,
+		      </if>
+		      <if test="isSecret != null ">
+		        is_secret,
+		      </if>
+		      <if test="msgType != null">
+		        msg_type,
+		      </if>
+		       <if test="status != null">
+		        status,
+		      </if>
+		       <if test="openShare != null">
+		        open_share,
+		      </if>
+		       <if test="externalLinkUrl != null and externalLinkUrl != ''">
+		        external_link_url,
+		      </if>
+		       <if test="path != null and path != ''">
+		        path,
+		      </if>
+		       <if test="attachmentPath != null and attachmentPath != ''">
+		        attachment_path,
+		      </if>
+		       <if test="isActive != null">
+		        isActive,
+		      </if>
+		       <if test="remark != null and remark != ''">
+		        remark,
+		      </if>
+		        <if test="bak1 != null and bak1 != ''">
+		        bak1,
+		      </if>
+		       <if test="deleted != null">
+		        deleted,
+		      </if>
+		      <if test="createUser != null">
+		        create_user,
+		      </if>
+		      <if test="gmtCreate != null">
+		        gmt_create,
+		      </if>
+		      <if test="modifyUser != null">
+		        modify_user,
+		      </if>
+		      <if test="gmtModified != null">
+		        gmt_modified,
+		      </if>
+	     </trim>
+	     <trim prefix="values (" suffix=")" suffixOverrides=",">
+		      <if test="id != null">
+		        #{id,jdbcType=BIGINT},
+		      </if>
+		      <if test="code != null and code != ''">
+		        #{code},
+		      </if>
+		     <if test="title != null and title != ''">
+		        #{title},
+		      </if>
+		      <if test="type != null">
+		        #{type},
+		      </if>
+		      <if test="sendType != null">
+		        #{sendType},
+		      </if>
+		      <if test="contentType != null">
+		        #{contentType},
+		      </if>
+		      <if test="scheduleTime != null">
+		        #{scheduleTime},
+		      </if>
+		      <if test="content != null and content != ''">
+		        #{content},
+		      </if>
+		      <if test="isSecret != null ">
+		        #{isSecret},
+		      </if>
+		      <if test="msgType != null">
+		        #{msgType},
+		      </if>
+		       <if test="status != null">
+		        #{status},
+		      </if>
+		       <if test="openShare != null">
+		        #{openShare},
+		      </if>
+		       <if test="externalLinkUrl != null and externalLinkUrl != ''">
+		        #{externalLinkUrl},
+		      </if>
+		       <if test="path != null and path != ''">
+		        #{path},
+		      </if>
+		       <if test="attachmentPath != null and attachmentPath != ''">
+		       #{attachmentPath},
+		      </if>
+		       <if test="isActive != null">isActive</if>
+		       <if test="remark != null and remark != ''">
+		        #{remark},
+		      </if>
+		       <if test="bak1 != null and bak1 != ''">
+		        #{bak1},
+		      </if>
+		       <if test="deleted != null">
+		        #{deleted},
+		      </if>
+		      <if test="createUser != null">
+		        #{createUser},
+		      </if>
+		      <if test="gmtCreate != null">
+		        #{gmtCreate},
+		      </if>
+		      <if test="modifyUser != null">
+		        #{modifyUser},
+		      </if>
+		      <if test="gmtModified != null">
+		        #{gmtModified},
+		      </if>
+	     </trim>
+	</insert>
+	
+	<insert id="insertMessageDeptMapping" parameterType="com.fulan.api.information.domain.MessageDeptMapping">
+	     insert into iris_message_dept_mapping
+	     <trim prefix="(" suffix=")" suffixOverrides=",">
+	     	 <if test="id != null">
+		        id,
+		      </if>
+		      <if test="newsId != null">
+		        news_id,
+		      </if>
+		     <if test="deptId != null and deptId !='' ">
+		        dept_id,
+		      </if>
+		       <if test="companyId != null and companyId != ''">
+		        company_id,
+		      </if>
+		      <if test="agentCode != null and agentCode != ''">
+		        agent_code,
+		      </if>
+		      <if test="targetType != null ">
+		        target_type,
+		      </if>
+		     
+	     </trim>
+	     <trim prefix="values (" suffix=")" suffixOverrides=",">
+		     <if test="id != null">
+		        #{id},
+		      </if>
+		      <if test="newsId != null">
+		        #{newsId},
+		      </if>
+		     <if test="deptId != null and deptId !=''">
+		        #{deptId},
+		      </if>
+		      <if test="companyId != null and companyId != ''">
+		         #{companyId},
+		      </if>
+		      <if test="agentCode != null and agentCode != ''">
+		        #{agentCode},
+		      </if>
+		      <if test="targetType != null ">
+		        #{targetType},
+		      </if>
+	     </trim>
+	</insert>
+	
+	<delete id="deleMessageDeptMapping"   >
+    delete from iris_message_dept_mapping where news_id=#{id}
+</delete>
+	
+	<update id="updateNews" parameterType="com.fulan.api.information.vo.NewsManageVo">
+		update iris_news
+		<set>
+		      <if test="code != null and code != ''">
+		        code= #{code},
+		      </if>
+		     <if test="title != null and title != ''">
+		        title= #{title},
+		      </if>
+		      <if test="type != null">
+		        type= #{type},
+		      </if>
+		      <if test="sendType != null">
+		        send_type= #{sendType},
+		      </if>
+		      <if test="contentType != null">
+		        content_type= #{contentType},
+		      </if>
+		      <if test="scheduleTime != null">
+		        schedule_time= #{scheduleTime},
+		      </if>
+		      <if test="content != null and content != ''">
+		        content= #{content},
+		      </if>
+		      <if test="isSecret != null ">
+		        is_secret= #{isSecret},
+		      </if>
+		      <if test="msgType != null">
+		        msg_type= #{msgType},
+		      </if>
+		       <if test="status != null">
+		        status= #{status},
+		      </if>
+		       <if test="openShare != null and openShare != ''">
+		        open_share= #{openShare},
+		      </if>
+		       <if test="externalLinkUrl != null and externalLinkUrl != ''">
+		        external_link_url= #{externalLinkUrl},
+		      </if>
+		       <if test="path != null and path != ''">
+		        path= #{path},
+		      </if>
+		       <if test="attachmentPath != null and attachmentPath != ''">
+		        attachment_path= #{attachmentPath},
+		      </if>
+		       <if test="isActive != null">
+		        isActive= #{isActive},
+		      </if>
+		       <if test="remark != null and remark != ''">
+		        remark= #{remark},
+		      </if>
+		       <if test="deleted != null">
+		        deleted= #{deleted},
+		      </if>
+		      <if test="createUser != null">
+		        create_user= #{createUser},
+		      </if>
+		      <if test="gmtCreate != null">
+		        gmt_create= #{gmtCreate},
+		      </if>
+		      <if test="modifyUser != null">
+		        modify_user= #{modifyUser},
+		      </if>
+		      <if test="gmtModified != null">
+		        gmt_modified= #{gmtModified},
+		      </if>
+    	</set>
+    	where id = #{id}
+	</update>
+	
+	<select id="selectOneNewsById" resultMap="BaseResultMap"> 
+		select * from iris_news where id =#{id}
+	</select>
+	
+	<select id="selectMessageDeptMappingList" resultType="com.fulan.api.information.domain.MessageDeptMapping"> 
+		select  id,news_id as newsId,dept_id as deptId,agent_code as agentCode,target_type as targetType    from iris_message_dept_mapping where news_id=#{id}
+	</select>
+	 
+	
+</mapper>

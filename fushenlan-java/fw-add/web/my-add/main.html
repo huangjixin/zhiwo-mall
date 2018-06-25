@@ -1,0 +1,108 @@
+<div>
+    <!--客户信息及排名-->
+    <div class="client-info-rank">
+        <!--客户信息-->
+        <div class="client-info">
+
+        </div>
+
+        <!--进度及排名-->
+        <div class="client-rank">
+            <div class="client-title">
+                <span class="schedule">进度排名</span>
+            </div>
+            <div class="parent-map">
+                <div class="schedule-map">
+                    <div id="schedule-table"></div>
+                    <div class="now-schedule">当前进度</div>
+                    <div class="schedule-text"><span>0</span> / <span>0</span></div>
+                </div>
+
+                <div class="control-time schedule-time">
+                    <div data-time="year">年</div><div class="active" data-time="month">月</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-control-team">
+            <button type="button" class="control active" data-type="single">个人</button>
+            <button type="button" class="control" data-type="team">团队</button>
+            <button type="button" class="write"><i class="icon-writefill"></i></button>
+        </div>
+
+        <div class="client-team-rank">
+            <div class="bottom-rank">
+                <div class="single-team-rank">
+                    <p>分公司排名</p>
+                    <p><span>0</span>名</p>
+                </div>
+                <div class="curve">
+                    <img src="../../images/curve.png" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--最新动态-->
+    <div class="recent-state">
+        <h2>最新动态</h2>
+        <div class="message-wrapper">
+
+            <!--全屏时的swiper-->
+            <div class="full-slide">
+                <div class="swiper-wrapper">
+
+                </div>
+
+                <!--分页器-->
+                <div class="swiper-pagination"></div>
+            </div>
+
+            <!--半屏时的swiper-->
+            <div class="half-slide">
+                <div class="swiper-wrapper">
+
+                </div>
+
+                <!--分页器-->
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </div>
+
+    <!--增员招聘-->
+    <div class="add-recruit-list" style="position: relative;">
+        <div class="toggle-table-cond">
+            <p class="active">我的增员（<span>0</span>）</p>
+            <p>我的面试（<span>0</span>）</p>
+            <p>班级报名（<span>0</span>）</p>
+        </div>
+        <div class="search"> <i class="icon-search"></i> </div>
+        <div class="search-box">
+            <div class="search-input">
+                <div class="icon-flag">
+                    <i class="icon-search"></i>
+                </div>
+                <input type="text" class="search-content ipt-text" placeholder="输入姓名、联系电话" />
+            </div>
+            <div class="btn-group">
+                <button type="button" class="confirm-ok">确定</button>
+                <button type="button" class="confirm-no">取消</button>
+            </div>
+        </div>
+        <div class="list-recruit-add list-table">
+            <div class="mock-table">
+                <div class="mock-row mock-header">
+                    <div class="mock-cell">姓名</div>
+                    <div class="mock-cell">性别</div>
+                    <div class="mock-cell">年龄</div>
+                    <div class="mock-cell">联系方式</div>
+                    <div class="mock-cell">人才计划</div>
+                    <div class="mock-cell">增员进度</div>
+                    <div class="mock-cell">当前环节</div>
+                </div>
+                <div class="mock-table scroll-add-member"></div>
+            </div>
+        </div>
+    </div>
+</div>

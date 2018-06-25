@@ -1,0 +1,135 @@
+.application-wrapper {
+  width: 100%;
+  background-color: #FFFFFF;
+  min-height: 100%;
+}
+.bg-top{
+  height: 93px;
+  width: 100%;
+}
+.bg-top .bg-header{
+  height: 63px;
+  margin-right: 47px;
+  width: 480px;
+  display: flex;
+  flex-flow:row nowrap;
+  justify-content: space-around;
+}
+.bg-header .iconfont{
+  margin-right: 11px;
+}
+.bg-header li{
+  height: 63px;
+  line-height: 63px;
+  width: 33.33%;
+  text-align: center;
+  font-size: 14px;
+  margin: 0;
+}
+.bg-header li.bg-wenjian {
+  color: #E87722;
+  border-bottom: 3px solid #F7B787;
+}
+.bg-header li.bg-ziliao{
+  color:#E87722;
+  border-bottom: 3px solid #E87722;
+}
+.bg-header li.bg-plan {
+  color: #B9A496;
+  border-bottom: 3px solid #DDC9BA;
+}
+.applicationWrapper {
+  width: 100%;
+  height: 100%;
+  padding: 0 45px;
+}
+.bg-top {
+  width: 100%;
+  height: 212px;
+  background: url("../images/bg-content.png") no-repeat;
+  background-size: 100% 100%;
+}
+.plan-apply {
+  width: 100%;
+  padding: 0 45px;
+  margin-top: -50px;
+}
+.box {
+  width: 100%;
+  height: 365px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.box .plan {
+  width: 100%;
+  height: 93px;
+  background: #FFFFFF;
+  border: 1px solid #E8CDCD;
+  border-radius: 100px;
+  box-sizing: border-box;
+  margin-top: 26px;
+}
+.box .plan .person-plan {
+  position: relative;
+  display: flex;
+}
+.box .plan .person-plan .plan-left {
+  width: 72px;
+  height: 74px;
+  overflow: hidden;
+  border-radius: 50%;
+  position: absolute;
+  margin-top: 8px;
+  margin-left: 13px;
+}
+.person-plan .plan-left img {
+  width: 100%;
+  height: 100%;
+}
+.box .plan .person-plan .plan-right {
+  flex: 1;
+  height: 93px;
+  box-sizing: border-box;
+  margin-left: 130px;
+  margin-top: 0;
+  position: absolute;
+}
+.box .plan .person-plan .plan-right span {
+  font-size: 16px;
+  color: #717171;
+  letter-spacing: 0;
+  font-weight: bold;
+  height: 93px;
+  line-height: 93px;
+  margin-right: 26px;
+}
+
+.box .plan .person-plan .plan-right .plan-state {
+  width: 130px;
+  height: 37px;
+  line-height: 37px;
+  border: 1px solid #E87722;
+  border-radius: 100px;
+  text-align: center;
+  display: inline-block;
+  margin-right: 26px;
+  vertical-align: middle;
+}
+.box .plan .person-plan .plan-right .plan-state i {
+  font-family: MicrosoftYaHei;
+  font-size: 15px;
+  color: #E87722;
+  letter-spacing: 0;
+}
+.editPlan {
+  position: absolute;
+  width: 100px;
+  height: 80%;
+  line-height: 60px;
+  right: 440px;
+  bottom: 0;
+  font-size: 13px;
+  color: #939393;
+}

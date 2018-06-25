@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulan.application.mapper.PlanCourseMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fulan.api.plan.domain.PlanCourse">
+        <id column="id" property="id" />
+        <result column="plan_id" property="planId" />
+        <result column="course_type" property="courseType" />
+        <result column="associate_id" property="associateId" />
+        <result column="associate_type" property="associateType" />
+        <result column="is_compulsory" property="isCompulsory" />
+        <result column="stage" property="stage" />
+        <result column="seq" property="seq" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="sign_address" property="signAddress" />
+        <result column="create_user" property="createUser" />
+        <result column="gmt_create" property="gmtCreate" />
+        <result column="modify_user" property="modifyUser" />
+        <result column="gmt_modified" property="gmtModified" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,plan_id as planId, course_type AS courseType, associate_id AS associateId, associate_type AS associateType, is_compulsory AS isCompulsory, stage, seq, start_time AS startTime, end_time AS endTime, sign_address AS signAddress, create_user AS createUser, gmt_create AS gmtCreate, modify_user AS modifyUser, gmt_modified AS gmtModified
+    </sql>
+    <select id="selectByPlanIdOff" resultType="com.fulan.api.plan.domain.PlanCourse">
+    	select <include refid="Base_Column_List"/> from el_plan_course 
+    	where plan_id = #{planId}
+    </select>
+
+    <select id="getPlanStageNum" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT max(pc.stage)
+            FROM
+              el_plan_course pc
+            WHERE
+            1 =1
+            <if test="planId != null and planId != '' ">
+                AND pc.plan_id=#{planId}
+            </if>
+            <if test="courseType != null and courseType != '' ">
+                AND pc.course_type=#{courseType}
+            </if>
+    </select>
+
+
+
+    <select id="getLecturerList"  parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT cl.lecturer_id FROM el_course_lecturer cl
+        WHERE
+            1= 1
+            <if test="courseId != null and courseId != '' ">
+                AND cl.course_id=#{courseId}
+            </if>
+    </select>
+
+
+    <select id="getPlanDescById"  parameterType="java.util.Map" resultType="com.fulan.api.plan.vo.PlanDetailDto">
+        <choose>
+            <when test="planType ==1">
+                SELECT pu.plan_id as planId,esp.name,esp.description,hp.viewsNum,
+                pu.is_free as isFree,pu.exchange_point,	pu.is_reward_point AS isRewardPoint,
+                pu.is_reward_certification AS isRewardCertification,
+                pu.is_reward_qualification as isRewardQualification ,pu.reward_point AS rewardPoint,pu.certification_id AS certificationId,pu.qualification_id AS qualificationId,
+                pu.certificationName,pu.is_seq,pu.qualificationName,pu.is_question AS isQuestion,
+                cp.courseCollectId,epcoo.commentId
+                FROM
+                ( SELECT ppu.*, cer.NAME AS certificationName,qual.NAME AS qualificationName
+                FROM el_public_class ppu
+                LEFT JOIN el_certificate cer ON cer.id = ppu.certification_id
+                LEFT JOIN el_qualification qual ON qual.id = ppu.qualification_id
+                ) pu
+                left join el_study_plan esp
+                on esp.id = pu.plan_id
+                LEFT JOIN (SELECT h.plan_id,count( * ) AS viewsNum
+                FROM el_history h
+                WHERE h.plan_type = 1
+                GROUP BY h.plan_type, h.plan_id
+                ) hp ON hp.plan_id = pu.id
+                LEFT JOIN (
+                SELECT max(epc.id) AS courseCollectId,epc.plan_id
+                FROM el_plan_collect epc
+                WHERE
+                epc.plan_type=1
+                    <if test="userId != null and userId != '' ">
+                    AND epc.user_id=#{userId}
+                    </if>
+                GROUP BY epc.plan_id
+                ) cp
+                ON cp.plan_id=pu.id
+                LEFT JOIN	( SELECT max(epco.id) AS commentId,epco.course_id
+                FROM el_plan_comment epco
+                WHERE
+                epco.course_type=1
+                <if test="userId != null and userId != '' ">
+                    AND epco.comment_user=#{userId}
+                </if>
+                GROUP BY epco.course_id
+                ) epcoo
+                ON epcoo.course_id=pu.id
+                WHERE 1=1
+                <if test="planId != null and planId != '' ">
+                    AND pu.id=#{planId}
+                </if>
+            </when>
+            <when test="planType ==2">
+                SELECT esp.id as planId,esp.name,esp.description,hp.viewsNum,esp.is_seq from el_study_plan esp
+                LEFT JOIN (SELECT h.plan_id,count( * ) AS viewsNum
+                FROM el_history h
+                WHERE h.plan_type = 2
+                GROUP BY h.plan_type, h.plan_id
+                ) hp ON hp.plan_id = esp.id
+                WHERE 1=1
+                <if test="planId != null and planId != '' ">
+                    AND esp.id=#{planId}
+                </if>
+            </when>
+            <when test="planType ==5">
+                SELECT pu.id as planId,pu.name,pu.description,hp.viewsNum,
+                pu.is_free as isFree,pu.exchange_point,
+                pu.is_reward_point AS isRewardPoint,
+                pu.is_reward_certification AS isRewardCertification,
+                pu.is_reward_qualification as isRewardQualification ,pu.reward_point AS rewardPoint,pu.certification_id AS certificationId,pu.qualification_id AS qualificationId
+                ,pu.certificationName,pu.qualificationName
+                ,pu.is_seq
+                FROM ( SELECT ppu.*, cer.NAME AS certificationName,qual.NAME AS qualificationName
+                FROM el_class_plan ppu
+                LEFT JOIN el_certificate cer ON cer.id = ppu.certification_id
+                LEFT JOIN el_qualification qual ON qual.id = ppu.qualification_id
+                ) pu
+                LEFT JOIN (SELECT h.plan_id,count( * ) AS viewsNum
+                FROM el_history h
+                WHERE h.plan_type = 5
+                GROUP BY h.plan_type, h.plan_id
+                ) hp ON hp.plan_id = pu.id
+                WHERE 1=1
+                <if test="planId != null and planId != '' ">
+                    AND pu.id=#{planId}
+                </if>
+            </when>
+            <when test="planType ==3">
+                SELECT pu.id as planId,pu.name,pu.description,hp.viewsNum,pu.is_seq
+                FROM
+                el_post_development pu
+                LEFT JOIN (SELECT h.plan_id,count( * ) AS viewsNum
+                FROM el_history h
+                WHERE h.plan_type =3
+                GROUP BY h.plan_type, h.plan_id
+                ) hp ON hp.plan_id = pu.id
+                WHERE 1=1
+                <if test="planId != null and planId != '' ">
+                    AND pu.id=#{planId}
+                </if>
+            </when>
+            <when test="planType ==4">
+                SELECT pu.name,pu.description,hp.viewsNum,
+                pu.is_reward_point AS isRewardPoint,
+                pu.is_reward_certification AS isRewardCertification,
+                pu.is_reward_qualification as isRewardQualification ,pu.reward_point AS rewardPoint,pu.certification_id AS certificationId,pu.qualification_id AS qualificationId,
+                pu.certificationName,pu.qualificationName,
+                pu.is_seq
+                FROM
+                ( SELECT ppu.*, cer.NAME AS certificationName,qual.NAME AS qualificationName
+                FROM el_compulsory_cplan ppu
+                LEFT JOIN el_certificate cer ON cer.id = ppu.certification_id
+                LEFT JOIN el_qualification qual ON qual.id = ppu.qualification_id
+                ) pu
+                LEFT JOIN (SELECT h.plan_id,count( * ) AS viewsNum
+                FROM el_history h
+                WHERE h.plan_type = 4
+                GROUP BY h.plan_type, h.plan_id
+                ) hp ON hp.plan_id = pu.id
+                WHERE 1=1
+                <if test="planId != null and planId != '' ">
+                    AND pu.id=#{planId}
+                </if>
+            </when>
+        </choose>
+    </select>
+
+
+    <select id="getCoursePaperListByPlan" parameterType="java.util.Map" resultType="com.fulan.api.plan.vo.PlanCoursePaperDto">
+        SELECT *  FROM (
+        (SELECT pc.id, pc.plan_id AS planId, pc.course_type AS courseType,
+        pc.associate_id AS associateId, pc.associate_type AS associateType,
+        pc.is_compulsory AS isCompulsory,
+        pc.stage, pc.seq, c.NAME, c.description, c.type, c.learning_time AS learningTime,
+        IF(slp.learningTimeSum > c.learning_time*60,'1','0' ) AS finishFlag,'1' AS canExam
+        FROM (
+        SELECT * FROM el_plan_course
+        WHERE associate_type != 1
+        <if test = "planId2 != null and planId2 != '' " >
+            AND plan_id = #{planId2}
+        </if>
+        <if test="courseType2 != null and courseType2 != '' ">
+            AND course_type = #{courseType2}
+        </if>
+        <if test="stage != null and stage != '' ">
+            AND stage = #{stage}
+        </if>
+        ) pc
+        LEFT JOIN el_course c ON c.id = pc.associate_id
+        <if test="userId != null and userId != '' ">
+            LEFT JOIN ( SELECT SUM( lp.learning_time ) AS learningTimeSum,lp.course_id
+            FROM el_learning_progress lp
+            WHERE
+            1 = 1
+            <if test = "planId != null and planId != '' " >
+                AND lp.plan_id = #{planId}
+            </if>
+            <if test="courseType != null and courseType != '' ">
+                AND type = #{courseType}
+            </if>
+            AND lp.user_id =#{userId}
+            GROUP BY lp.course_id
+            ) slp
+            ON slp.course_id = pc.associate_id
+        </if>
+        )
+        UNION
+        (SELECT pc.id,pc.plan_id AS planId,pc.course_type AS courseType,
+        pc.associate_id AS associateId,pc.associate_type AS associateType,
+        pc.is_compulsory AS isCompulsory,
+        pc.stage,pc.seq,p.NAME,p.discription,p.type,p.exam_time AS learningTime,
+        (CASE
+        when slp.paper_state=2 then 2
+        when slp.paper_state!=2 and slp.scoreSum >= p.pass_mark then 1
+        else 0
+        end) AS finishFlag,
+        IF(p.test_num > slp.examNum || slp.examNum is NULL,'1','0') AS canExam
+        FROM (
+        SELECT *  FROM el_plan_course
+        WHERE
+        associate_type = 1
+        <if test = "planId2 != null and planId2 != '' " >
+            AND plan_id = #{planId2}
+        </if>
+        <if test="courseType2 != null and courseType2 != '' ">
+            AND course_type = #{courseType2}
+        </if>
+        <if test="stage != null and stage != '' ">
+            AND stage = #{stage}
+        </if>
+        ) pc
+        LEFT JOIN el_paper p ON p.id = pc.associate_id
+        <if test = "userId != null and userId != '' " >
+            LEFT JOIN (
+            SELECT SUM( ue.score ) AS scoreSum,ue.paper_state, ue.plan_course_id AS planCourseId, eump.maxExamNum AS examNum
+            FROM el_user_exam ue
+            LEFT JOIN (
+                SELECT
+                  max(exam_num) as maxExamNum,plan_course_id
+                FROM
+                el_user_exam
+                WHERE
+                1 = 1
+                AND user_id =  #{userId}
+                GROUP BY
+                  plan_course_id
+                ) eump
+            ON eump.plan_course_id = ue.plan_course_id
+            WHERE
+            1 = 1
+            AND ue.user_id = #{userId}
+            AND eump.maxExamNum= ue.exam_num
+            GROUP BY
+              ue.plan_course_id
+            ) slp
+            ON slp.planCourseId = pc.id
+        </if>
+        )
+        ) se
+        ORDER BY se.seq
+    </select>
+
+    <select id="getOfflineCourseListByPlan" parameterType="java.util.Map" resultType="com.fulan.api.plan.vo.PlanCoursePaperDto">
+        SELECT *  FROM (
+        SELECT pc.id, pc.plan_id AS planId, pc.course_type AS courseType,
+        pc.associate_id AS associateId, pc.associate_type AS associateType,
+        pc.is_compulsory AS isCompulsory,
+        pc.stage, pc.seq, c.NAME, c.description, c.type, c.learning_time AS learningTime,
+        IF(slp.learningTimeSum > c.learning_time,'1','0' ) AS finishFlag,'1' AS canExam,
+        pc.start_time as startTime, pc.end_time AS endTime, pc.sign_address as signAddress
+        FROM (
+        SELECT * FROM el_plan_course
+        WHERE associate_type = 3
+        <if test = "planId != null and planId != '' " >
+            AND plan_id = #{planId}
+        </if>
+        <if test="courseType != null and courseType != '' ">
+            AND course_type = #{courseType}
+        </if>
+        ) pc
+        LEFT JOIN el_course c ON c.id = pc.associate_id
+        <if test="userId != null and userId != '' ">
+            LEFT JOIN ( SELECT SUM( lp.learning_time ) AS learningTimeSum,lp.course_id
+            FROM el_learning_progress lp
+            WHERE
+            1 = 1
+            <if test = "planId != null and planId != '' " >
+                AND lp.plan_id = #{planId}
+            </if>
+            <if test="courseType != null and courseType != '' ">
+                AND type = #{courseType}
+            </if>
+            AND lp.user_id =#{userId}
+            GROUP BY lp.course_id
+            ) slp
+            ON slp.course_id = pc.associate_id
+        </if>
+        )se
+        ORDER BY se.seq
+    </select>
+
+    <delete id="deletePlanCourseId">
+		DELETE FROM  el_plan_course WHERE plan_id=#{cId}
+	</delete>
+	<resultMap id="BaseResultMapVo" extends="BaseResultMap" type="com.fulan.api.plan.vo.PlanCourseDtoFMVo">
+		<collection column="{id = associate_id,type = associate_type" property="name" select="com.fulan.application.mapper.PlanCourseMapper.seleCourseById" fetchType="eager"></collection>
+	</resultMap>
+	<select id="seleByPlanIdAndstage" parameterType="java.util.Map" resultMap="BaseResultMapVo">
+		select * from 
+		el_plan_course 
+		where plan_id = #{planId} 
+		and stage = #{stage}
+		and associate_type in (1,2,3)
+		order by seq asc
+	</select>
+	<select id="seleByPlanIdLine" resultMap="BaseResultMapVo">
+		select * from 
+		el_plan_course 
+		where plan_id = #{planId}
+		and associate_type = 3
+		order by seq asc
+	</select>
+	<select id="seleCourseById" parameterType="java.util.Map" resultType="java.lang.String" >
+			<choose>
+	    	<when test="type == 1">
+		    	select name from el_paper
+		    	where id = #{id}
+	    	</when>
+	    	<otherwise>
+	    		select name from el_course
+		    	where id = #{id}
+	    	</otherwise>
+    	</choose>
+	</select>
+	
+	<resultMap id="BaseResultMap1" type="com.fulan.api.course.vo.CourseManageVo">
+	  <id column="id" property="id" />
+	  <result column="is_online" property="isLine" />
+	  <result column="plan_id" property="planId" />
+	  <result column="seq" property="seq" />
+	  <result column="course_type" property="courseType" />
+	  <result column="associate_id" property="associateId" />
+	  <result column="associate_type" property="associateType" /> 
+	  <result column="is_compulsory" property="isCompulsory" /> 
+	  <result column="stage" property="stage" /> 
+	  <collection column="{id=associate_id,type=associate_type}" property="name" select="com.fulan.application.mapper.PlanCourseMapper.asd" fetchType="eager"></collection>
+	</resultMap>
+	
+	 <select id="selectByPlanOtherId" resultMap="BaseResultMap1">
+    	select * from
+    	el_plan_course where plan_id = #{id}
+    	and associate_type ='3'
+    	order by seq
+    </select>
+
+    <select id="selectPlanAndCourse" parameterType="java.lang.Long" resultType="com.fulan.api.plan.vo.PlanCourseVoQ">
+        SELECT
+        ec.id, ec.course_type, ec.plan_id,ec.is_compulsory isCompulsory, ec.stage, ec.seq, ec.start_time,ec.end_time,ec.sign_address,
+        ec.create_user,ec.gmt_create, ec.modify_user,ec.gmt_modified,ec.associate_type associateType,ec.associate_id associateId,
+        CASE ec.associate_type WHEN 2 THEN (SELECT NAME FROM el_course WHERE id = ec.associate_id)
+        WHEN 1 THEN (SELECT NAME FROM el_paper WHERE id = ec.associate_id)
+        WHEN 3 THEN (SELECT NAME FROM el_course WHERE id = ec.associate_id)
+        ELSE '' END AS NAME
+        FROM el_plan_course ec WHERE  ec.plan_id = #{planId}
+    </select>
+	
+	
+	<select id="selectMaxByPlanId" resultType="java.lang.String">
+    	select MAX(stage) as stage from 
+    	el_plan_course 
+    	where plan_id =#{id} LIMIT 1
+    </select>
+    
+    
+    
+    <select id="selectByPlanId" resultMap="BaseResultMap1">
+    	select * from
+    	el_plan_course where plan_id = #{id}
+    	order by seq
+    </select>
+    <select id="asd" parameterType="java.util.Map" resultType="java.lang.String">
+    <choose>
+    	<when test="type == 1">
+    		select name from el_paper
+	    	where id = #{id};
+    	</when>
+    	<when test="type == 2">
+	    	select name from el_course
+	    	where id = #{id};
+    	</when>
+    	<when test="type == 3">
+	    	select name from el_course
+	    	where id = #{id};
+    	</when>
+    </choose>
+    </select>
+
+    
+    <!--   List<PlanCourseVoQ> selectPlanCourse(Long planId); -->
+    <select id="selectPlanCourse" parameterType="java.lang.Long" resultType="com.fulan.api.plan.vo.PlanCourseVoQ">
+    select id,plan_id planId,course_type courseType,associate_id associateId,associate_type associateType,is_compulsory isIompulsory,stage,seq,start_time startTime,
+    end_time endTime,sign_address signAddress ,create_user createUser,gmt_create gmtCreate,modify_user modifyUser,gmt_modified gmtModified
+    from el_plan_course epc
+    where plan_id=#{planId}
+    
+    </select>
+
+
+
+    <select id="getFirstPlanCourse"  parameterType="java.util.Map" resultType="com.fulan.api.plan.domain.PlanCourse">
+        SELECT id, plan_id AS planId, course_type AS courseType, associate_id AS associateId, associate_type AS associateType, is_compulsory AS isCompulsory, stage, seq, start_time AS startTime, end_time AS endTime, sign_address AS signAddress, create_user AS createUser, gmt_create AS gmtCreate, modify_user AS modifyUser, gmt_modified AS gmtModified
+        FROM el_plan_course epc
+        WHERE
+        1= 1
+        AND epc.stage=1
+        <if test="planId != null and planId != '' ">
+            AND epc.plan_id=#{planId}
+        </if>
+        <if test="planType != null and planType != '' ">
+            AND epc.course_type=#{planType}
+        </if>
+        ORDER BY  epc.seq asc LIMIT 1
+    </select>
+
+    <select id="getPlanCourse"  parameterType="java.util.Map" resultType="com.fulan.api.plan.domain.PlanCourse">
+        SELECT id, plan_id AS planId, course_type AS courseType, associate_id AS associateId, associate_type AS associateType, is_compulsory AS isCompulsory, stage, seq, start_time AS startTime, end_time AS endTime, sign_address AS signAddress, create_user AS createUser, gmt_create AS gmtCreate, modify_user AS modifyUser, gmt_modified AS gmtModified
+        FROM el_plan_course epc
+        WHERE
+        1= 1
+        <if test="planId != null and planId != '' ">
+            AND epc.plan_id=#{planId}
+        </if>
+        <if test="planType != null and planType != '' ">
+            AND epc.course_type=#{planType}
+        </if>
+        <if test="courseId != null and courseId != '' ">
+            AND epc.associate_id=#{courseId}
+        </if>
+    </select>
+</mapper>
