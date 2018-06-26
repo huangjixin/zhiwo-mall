@@ -1,34 +1,17 @@
 import React from 'react';
-import {
-    TouchableOpacity,
-    StyleSheet,
-    ScrollView,
-    Text,
-    BackHandler,
-    View,
-    Platform,
-    Image,
-    Button,
-    TextInput,
-    TouchableWithoutFeedback,
-    TouchableHighlight,
-    ImageBackground
-} from 'react-native';
-import DatePicker from 'react-native-datepicker';
-import ModalDropdown from 'react-native-modal-dropdown';
+import {TouchableOpacity,StyleSheet,ScrollView,Text,BackHandler,Dimensions,View,Platform,Image,Button,TextInput,TouchableWithoutFeedback,TouchableHighlight,ImageBackground} from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import Textarea from 'react-native-textarea';
+import Picker from 'react-native-picker';
+import {ApplyCommonHeader} from "./ApplyCommonHeader";
 import * as RequestURL from "../../common/RequestURL";
-
 //var Fileupload = require('NativeModules').FileUpload;
-var Dimensions = require('Dimensions');
 var ScreenWidth = Dimensions.get('window').width;
 var ScreenHeight = Dimensions.get('window').height;
 const imageWidth = (Dimensions.get('window').width - 15 * 5) / 3;
 const screenWidth = Dimensions.get('window').width / 3 - 60;
 const paddingLeft = (Dimensions.get('window').width / 3 - screenWidth) / 2;
-import Picker from 'react-native-picker';
-import {ApplyCommonHeader} from "./ApplyCommonHeader";
+
 
 export class OaApplyForm extends React.Component {
     constructor(props) {
@@ -359,6 +342,8 @@ export class OaApplyForm extends React.Component {
     }
     //提交数据
     submitData = () => {
+        this.upload1();
+        return;
         if (this.state.leaveTypeArry.length == 0) {
             alert('请选择请假类型');
             return;
@@ -469,33 +454,29 @@ export class OaApplyForm extends React.Component {
     // 单独测试提交一个文件到后台
     upload1=()=>{
         var a =[];
-
-
         let fileData = new FormData();
-
         for (var i =0;i<this.state.imageArray.length;i++){
-            let file = {uri:this.state.imageArray[i].uri,
-                type:this.state.imageArray[i].type, name:this.state.imageArray[i].fileName};
-            // a.push(file);
-            fileData.append("file", file);
+            let file = 'data:image/jpeg;base64,'+this.state.imageArray[i].data;
+            // let aa = [];
+            a.push(file);
+            // fileData.append("file", file);
             //formData.append("file", file);
         }
-
-
         let formData = new FormData();
         formData.append("type", this.state.type);
         formData.append("agentCode", this.state.agentCode);
         formData.append("name", this.state.agentName);
         // let fileData = new FormData();
         // fileData.append("file", file);
-        //formData.append("file", file);
+        // formData.append("file", file);
 
-        url = 'http://10.23.21.120:50000/applyForm/saveMultipleForm';
-        formData.append("files", fileData);
+        let url = RequestURL.HOST+'applyForm/saveForm';
+        formData.append("files", a);
         fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type': 'multipart/form-data',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
             },
             body: formData,
         }).then((response) => {})
@@ -702,20 +683,12 @@ export class OaApplyForm extends React.Component {
                             {/*<Image style={{width:20,height:20,marginTop:-10,marginLeft:-10,}}source={require('../../../img/UserCenter/close.png')}/>*/}
                             {/*</View>*/}
 
-                            {
-                                this.state.imageArray.map((rowData, i) => (
+                            {this.state.imageArray.map((rowData, i) => (
                                     //<Text>{rowData.data}</Text>
                                     // console.log(rowData,i),
                                     // <Image style={styles.avatar} source={this.state.avatarSource} />
                                     // var aa = {}
-                                    <View key={i} style={{
-                                        width: imageWidth,
-                                        height: 70,
-                                        flexDirection: 'row',
-                                        marginRight: 15,
-                                        marginBottom: 10,
-                                        justifyContent: 'center',
-                                    }}>
+                                    <View key={i} style={{width: imageWidth,height: 70,flexDirection: 'row',marginRight: 15,marginBottom: 10,justifyContent: 'center',}}>
                                         <Image style={{width: imageWidth - 15, height: 65, borderRadius: 10,}}
                                                source={{uri: 'data:image/png;base64,' + rowData.data}}/>
                                         <TouchableOpacity
@@ -727,7 +700,6 @@ export class OaApplyForm extends React.Component {
                                     </View>
                                 ))
                             }
-
                             {/*{*/}
                             {/*this.state.imageArray.map((rowData, i) => (*/}
                             {/*//<Text>{rowData.data}</Text>*/}
@@ -765,23 +737,14 @@ export class OaApplyForm extends React.Component {
                     </View>
                 </View>
 
-
                 <View style={{flexDirection: 'row', marginTop: 40, marginBottom: 40,}}>
                     <Text style={{flex: 0.5}}></Text>
-                        <TouchableOpacity style={{flex: 9}} onPress={this.submitData}>
-                            <Text style={{
-                                flex: 6,
-                                fontSize: 20,
-                                height: 50,
-                                lineHeight: 50,
-                                borderRadius: 5,
-                                textAlign: 'center',
-                                fontWeight: '900',
-                                backgroundColor: ((this.state.leaveTypeArry.length !==0) && (this.state.showStartTimeText !== '')&&(this.state.leaveTypeArry.showEndTimeText !=='') && (this.state.leaveOff !== '')) ? '#FFDD00' : '#EBEBEB',
-                                color: ((this.state.leaveTypeArry.length !==0) && (this.state.showStartTimeText !== '')&&(this.state.leaveTypeArry.showEndTimeText !=='') && (this.state.leaveOff !== '')) ?'#000000':'#858585',
-                            }}
-                            >提交</Text>
-                        </TouchableOpacity>
+                    <TouchableOpacity style={{flex: 9}} onPress={this.submitData}>
+                        <Text style={{flex: 6,fontSize: 20,height: 50,lineHeight: 50,borderRadius: 5,textAlign: 'center',fontWeight: '900',
+                            backgroundColor: ((this.state.leaveTypeArry.length !== 0) && (this.state.showStartTimeText !== '') && (this.state.leaveTypeArry.showEndTimeText !== '') && (this.state.leaveOff !== '')) ? '#FFDD00' : '#EBEBEB',
+                            color: ((this.state.leaveTypeArry.length !== 0) && (this.state.showStartTimeText !== '') && (this.state.leaveTypeArry.showEndTimeText !== '') && (this.state.leaveOff !== '')) ? '#000000' : '#858585',}}
+                        >提交</Text>
+                    </TouchableOpacity>
 
                     <Text style={{flex: 0.5}}></Text>
                 </View>
