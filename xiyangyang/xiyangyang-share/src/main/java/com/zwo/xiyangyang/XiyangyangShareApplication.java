@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
-@MapperScan(basePackages = "com.zwo.xiyangyang.modules.*.dao")
+@MapperScan(basePackages = "com.zwo.xiyangyang")
 @EnableScheduling
 @EnableWebMvc
 public class XiyangyangShareApplication {
