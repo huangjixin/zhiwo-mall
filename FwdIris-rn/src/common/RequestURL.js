@@ -1,6 +1,5 @@
-export const HOST = 'http://10.23.21.44:50000/';
-//simulator test
-//const HOST = 'http://172.31.249.193:32000/'
+//mobile test
+export const HOST = 'http://172.31.249.193:32000/'
 
 /**
  * 业绩模块
@@ -12,3 +11,8 @@ export const RANK_PROMOTION = HOST + 'achivement/agentRankAssessmentPromotion';
 export const RANK_EVALUATION = HOST + 'achivement/agentRankAssessmentKeep';
 
 
+//我的申请
+//银行卡
+export const BANKCARD_LIST = HOST + 'bankCard/selectByAgentCode';
+export const VERIFICATION_CODE = HOST + 'bankCard/sendVerificationCode';
+export const TO_DEFAULT = HOST + 'bankCard/toDefault';

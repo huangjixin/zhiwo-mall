@@ -40,3 +40,11 @@ export  function calcBalance(target,num) {
     const result = target - num;
     return toMoneyStr(result<0?0:result);
 }
+
+
+export function hiddenBankCard(str){
+    let reg = /(\d{12})/;
+    if(!reg.test(str))
+        return '';
+    return str.replace(reg,'****  ****  ****  ');
+}

@@ -3,57 +3,111 @@ import {StyleSheet,Dimensions, ScrollView, Text,View,Image,TextInput,TouchableWi
 
 import {ApplyCommonHeader} from "./ApplyCommonHeader";
 import {ApplyVerificationCode} from "./ApplyVerificationCode";
+import * as RequestURL from "../../common/RequestURL";
+import * as FetchUtils from "../../common/FetchUtils";
+import * as NumberUtils from "../../common/NumberUtils";
 
 var ScreenWidth = Dimensions.get('window').width;
 var ScreenHeight = Dimensions.get('window').height;
-
+const g_agentCode = '888999';   //暂时用于显示当前职级
+const g_mobileNo = '13764723865'
 export class BankCardReleaseBindingDetails extends React.Component {
     constructor(props) {
         super(props);
+
+        const params = this.props.navigation.state.params;
+
+        const cardNo = params.cardNo;
+        const tailNo = cardNo.substring(cardNo.length-4);
+
         this.state={
-            verificationCode : '',
-            nextIndicator : false,
+            mobileNo:g_mobileNo,//TODO
+            verificationCode:'',
+            filledIndicator : false,
+            cardId:params.id,
+            cardIcon:params.icon,
+            cardBgColor:params.backgroundColor,
+            cardTailNo:tailNo,
+            bankName:params.description
         };
     }
 
     verificationCodeCheck = (text)=>{
         this.setState({
             verificationCode:text,
-            nextIndicator : text.length>=4?true:false
+            filledIndicator : text.length>=4?true:false
         });
     }
 
+    sendVerificationCode = ()=>{
+        const {cardId,mobileNo} = this.state;
+        const params = {
+            agentCode:g_agentCode,
+            cardId:cardId,
+            mobileNo:mobileNo,
+        }
+        FetchUtils.Post({
+            url:RequestURL.VERIFICATION_CODE,
+            params:params,
+            success:(respData)=>{},
+            error:()=>{}
+        })
+    }
+
     onSubmit = ()=>{
-        const {nextIndicator} = this.state;
-        if(nextIndicator)
-            alert(JSON.stringify(this.state));
+        const {filledIndicator,verificationCode,cardId,mobileNo} = this.state;
+        if(!filledIndicator)
+            return;
+
+        const params = {
+            agentCode:g_agentCode,
+            cardId:cardId,
+            mobileNo:mobileNo,
+            verificationCode:verificationCode
+        }
+        FetchUtils.Post({
+            url:RequestURL.TO_DEFAULT,
+            params:params,
+            success:(respData)=>{
+                console.log('FetchUtils.Post call back')
+                this.props.navigation.pop(3)
+            },
+            error:()=>{}
+        })
 
     }
 
     render() {
-        const nextIndicator = this.state.nextIndicator;
+        const {
+            mobileNo,
+            filledIndicator,
+            cardIcon,
+            cardBgColor,
+            cardTailNo,
+            bankName,
+        } = this.state;
 
         return (
             <ScrollView style={{backgroundColor:'#FFFFFF',height:ScreenHeight}}>
                 <View>
                     <ApplyCommonHeader title={'变更银行卡'} onReturn={() => this.props.navigation.goBack()}/>
                     <View style={{backgroundColor:'#ffffff',height:120}}>
-                        <View style={{flexDirection: 'row',backgroundColor:'#37B5FF',height:80,marginTop:20,marginLeft:20,marginRight:20,borderRadius:10}}>
+                        <View style={[cardBgColor,{flexDirection: 'row',height:80,marginTop:20,marginLeft:20,marginRight:20,borderRadius:10}]}>
                             <View style={{height:80,flexDirection: 'column',justifyContent: 'center',marginLeft:30}}>
-                                <Image style={{width:50,height:50,}}source={require('../../../img/UserCenter/BOCOM.gif')}/>
+                                <Image style={{width:50,height:50,}} source={cardIcon}/>
                             </View>
                             <View style={{height:80,flexDirection: 'column',justifyContent: 'center',marginLeft:10}}>
-                                <Text style={{fontSize:20,color:'#FFFFFF'}}>交行储蓄卡</Text>
-                                <Text style={{color:'#B6E3FF',fontWeight:'300'}}>尾号4579</Text>
+                                <Text style={{fontSize:20,color:'#FFFFFF'}}>{bankName}</Text>
+                                <Text style={{color:'#FFFFFF',fontWeight:'300'}}>尾号{cardTailNo}</Text>
                             </View>
                         </View>
                     </View>
                     <View  style={{flexDirection: 'row',justifyContent:'flex-start',
                         alignItems: 'center',backgroundColor:'#ffffff',height:50}}>
                         <Text  style={{flex:2,lineHeight:50,height:50,marginLeft:10,textAlign:'center',fontSize:16,}}>手机码</Text>
-                        <Text  style={{flex:5,lineHeight:50,height:50,marginLeft:10,fontSize:16}}>13764723865</Text>
+                        <Text  style={{flex:5,lineHeight:50,height:50,marginLeft:10,fontSize:16}}>{mobileNo}</Text>
 
-                        <ApplyVerificationCode style={{flex:2.5}} onClick={()=>{}}/>
+                        <ApplyVerificationCode style={{flex:2.5}} onClick={this.sendVerificationCode}/>
 
 
                         <Text  style={{flex:0.5}}></Text>
@@ -75,7 +129,7 @@ export class BankCardReleaseBindingDetails extends React.Component {
                         <TouchableWithoutFeedback onPress={()=>{this.onSubmit()}}>
                             <Text style={[{flex:9,fontSize:20,height: 50,lineHeight:50,borderRadius:5,
                                 textAlign:'center',backgroundColor:'#FFF9D2'},
-                                nextIndicator?{backgroundColor:'#FFDD00',color:'#000000'}:{backgroundColor:'#FFF9D2',color:'#D5D5D2'}
+                                filledIndicator?{backgroundColor:'#FFDD00',color:'#000000'}:{backgroundColor:'#FFF9D2',color:'#D5D5D2'}
                                 ]}
                             >下一步</Text>
                         </TouchableWithoutFeedback>
