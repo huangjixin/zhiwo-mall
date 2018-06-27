@@ -2,6 +2,9 @@ package com.zwo.xiyangyang.modules.guess.domain;
 
 import javax.persistence.*;
 
+import lombok.Data;
+
+@Data
 @Table(name = "guess_options")
 public class GuessOptions implements java.io.Serializable {
 

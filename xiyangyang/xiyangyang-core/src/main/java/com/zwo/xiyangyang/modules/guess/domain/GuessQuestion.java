@@ -6,7 +6,11 @@ import java.util.List;
 
 import javax.persistence.Transient;
 
+import lombok.Data;
+
+@Data
 public class GuessQuestion implements Serializable {
+	
 	@Transient
 	private GuessCategory guessCategory;
 	@Transient

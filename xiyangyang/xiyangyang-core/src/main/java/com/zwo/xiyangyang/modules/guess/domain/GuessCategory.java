@@ -8,6 +8,9 @@ import javax.persistence.Table;
 
 import com.zwo.xiyangyang.modules.core.domain.Node;
 
+import lombok.Data;
+
+@Data
 @Table(name = "guess_category")
 public class GuessCategory extends Node implements java.io.Serializable {
 

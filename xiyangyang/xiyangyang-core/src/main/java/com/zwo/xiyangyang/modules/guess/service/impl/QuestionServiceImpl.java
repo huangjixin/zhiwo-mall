@@ -235,20 +235,8 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 
 		GuessQuestion result = questionMapper.selectByPrimaryKey(id);
 		if (getLogger().isInfoEnabled()) {
-			try {
-				String jsonStr = null;
-				if (result != null) {
-					Gson gson = new Gson();
-					jsonStr = gson.toJson((Object) result);
-				} else {
-					jsonStr = "查询不到";
-				}
-
-				getLogger().info(getBaseMessage() + "查询单条记录结果：" + jsonStr);
-			} catch (Exception e) {
-				getLogger().info("系统打印参数序列化的时候发生了异常，该异常不会影响数据库操作");
-			}
-			
+			String jsonStr = result.toString();
+			getLogger().info(getBaseMessage() + "查询单条记录结果：" + jsonStr);
 		}
 		
 

@@ -124,13 +124,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 			e.printStackTrace();
 		}
 		if (getLogger().isInfoEnabled()) {
-			try {
-				Gson gson = new Gson();
-				String jsonStr = gson.toJson((Object) record);
-				getLogger().info(getBaseMessage() + "插入开始，参数对象的值是：" + jsonStr);
-			} catch (Exception e) {
-				getLogger().info("系统打印参数序列化的时候发生了异常，该异常不会影响数据库操作");
-			}
+			getLogger().info(getBaseMessage() + "插入开始，参数对象的值是：" + record.toString());
 		}
 		
 
@@ -166,13 +160,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 		}
 
 		if (getLogger().isInfoEnabled()) {
-			try {
-				Gson gson = new Gson();
-				String jsonStr = gson.toJson((Object) record);
-				getLogger().info(getBaseMessage() + "插入开始，参数对象的值是：" + jsonStr);
-			} catch (Exception e) {
-				getLogger().info("系统打印参数序列化的时候发生了异常，该异常不会影响数据库操作");
-			}
+			getLogger().info(getBaseMessage() + "插入开始，参数对象的值是：" + record.toString());
 		}
 
 		int result = getBaseMapper().insertSelective(record);
@@ -191,20 +179,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 		T result = getBaseMapper().selectByPrimaryKey(id);
 		
 		if (getLogger().isInfoEnabled()) {
-			try {
-				String jsonStr = null;
-				if (result != null) {
-					Gson gson = new Gson();
-					jsonStr = gson.toJson((Object) result);
-				} else {
-					jsonStr = "查询不到";
-				}
-
-				getLogger().info(getBaseMessage() + "查询单条记录结果：" + jsonStr);
-			} catch (Exception e) {
-				getLogger().info("系统打印参数序列化的时候发生了异常，该异常不会影响数据库操作");
-			}
-			
+			getLogger().info(getBaseMessage() + "查询单条记录结果：" + result.toString());
 		}
 
 		return result;
