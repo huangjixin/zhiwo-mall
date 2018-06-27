@@ -15,12 +15,12 @@ import com.github.pagehelper.PageInfo;
 public interface IBaseService<T> {
 	
 	/**
-	 * 批量删除
+	 * 批量删除,参数当中为ID。
 	 * @param list
 	 * @return
 	 * @throws Exception 
 	 */
-	int deteleBatch(List<T> list);
+	int deteleBatch(@SuppressWarnings("rawtypes") List list);
 	
 	/**
 	 * 批量插入

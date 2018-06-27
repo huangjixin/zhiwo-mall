@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
@@ -43,7 +43,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 	public abstract Logger getLogger();
 	
 	@Override
-	public int deteleBatch(List<T> list) {
+	public int deteleBatch(@SuppressWarnings("rawtypes") List list) {
 		Example example = new Example(getTypeClass());
 		Example.Criteria criteria = example.createCriteria();
 		criteria.andIn("id", list);

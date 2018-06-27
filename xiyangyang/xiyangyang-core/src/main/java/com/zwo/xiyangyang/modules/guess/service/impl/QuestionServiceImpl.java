@@ -5,13 +5,15 @@ package com.zwo.xiyangyang.modules.guess.service.impl;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +41,10 @@ import tk.mybatis.mapper.entity.Example;
 @Transactional(readOnly = false)
 public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implements IQuestionService {
 	private static Logger logger = LoggerFactory.getLogger(QuestionServiceImpl.class);
+	
+	public static  final String CACAHE_VALUE = "GuessQuestion";
+	
+	public static  final String CACAHE_KEY_PRIFIX = "";
 	
 	@Override
 	public Logger getLogger() {
@@ -74,21 +80,6 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 	}
 	
 	@Override
-	public int deteleBatch(List<GuessQuestion> list) {
-		List<String> ids = new ArrayList<String>();
-		for (GuessQuestion question : list) {
-			ids.add(question.getId());
-		}
-		GuessQuestionCriteria guessQuestionCriteria = new GuessQuestionCriteria();
-		GuessQuestionCriteria.Criteria criteria= guessQuestionCriteria.createCriteria();
-		criteria.andIdIn(ids);
-		/*Example example = new Example(getTypeClass());
-		Example.Criteria criteria = example.createCriteria();
-		criteria.andIn("id", list);*/
-		return questionMapper.deleteByExample(guessQuestionCriteria);
-	}
-	
-	@Override
 	public int insertBatch(List<GuessQuestion> list) {
 		return 0;
 	}
@@ -112,6 +103,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 		return result;
 	}
 
+	@CacheEvict(value = CACAHE_VALUE, key = "#id")
 	@Override
 	public int deleteById(String id) {
 		if (logger.isInfoEnabled()) {
@@ -125,6 +117,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 		return result;
 	}
 
+	@CachePut(value = CACAHE_VALUE, key = "#record.id")
 	@Override
 	public int insert(GuessQuestion record) {
 		// 利用类反射判断id属性有没有值，没有值就给赋值。
@@ -186,6 +179,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 		return result;
 	}
 
+	@CachePut(value = CACAHE_VALUE, key = "#record.id")
 	@Override
 	public int insertSelective(GuessQuestion record) {
 		// 利用类反射判断id属性有没有值，没有值就给赋值。
@@ -231,6 +225,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 		return result;
 	}
 
+	@Cacheable(value = CACAHE_VALUE, key = "#id")
 	@Override
 	@Transactional(readOnly = true)
 	public GuessQuestion selectByPrimaryKey(String id) {
@@ -278,6 +273,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 		return questionMapper.updateByExample(record, (GuessQuestionCriteria) example);
 	}
 
+	@CachePut(value = CACAHE_VALUE, key = "#record.id")
 	@Override
 	public int updateByPrimaryKeySelective(GuessQuestion record) {
 		if (logger.isInfoEnabled()) {
@@ -290,6 +286,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<GuessQuestion> implemen
 		return result;
 	}
 
+	@CachePut(value = CACAHE_VALUE, key = "#record.id")
 	@Override
 	public int updateById(GuessQuestion record) {
 		if (logger.isInfoEnabled()) {

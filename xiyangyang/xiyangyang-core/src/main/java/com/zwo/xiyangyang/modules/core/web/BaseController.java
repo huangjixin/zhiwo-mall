@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.zwo.xiyangyang.modules.core.service.IBaseService;
@@ -35,27 +37,27 @@ public abstract class BaseController<T> {
 	protected int save(T record, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		//利用类反射判断id属性有没有值，没有值就给赋值。
-		Object o = (Object)record;
-		Method method;
-		try {
-			method = o.getClass().getDeclaredMethod("getId");
-			String id = (String) method.invoke(o);
-			if(id == null) {
-				method = o.getClass().getDeclaredMethod("setId",String.class);
-				id = UUID.randomUUID().toString().replaceAll("-", "");
-				method.invoke(o,id);
-			}
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
+//		Object o = (Object)record;
+//		Method method;
+//		try {
+//			method = o.getClass().getDeclaredMethod("getId");
+//			String id = (String) method.invoke(o);
+//			if(id == null) {
+//				method = o.getClass().getDeclaredMethod("setId",String.class);
+//				id = UUID.randomUUID().toString().replaceAll("-", "");
+//				method.invoke(o,id);
+//			}
+//		} catch (NoSuchMethodException e) {
+//			e.printStackTrace();
+//		} catch (SecurityException e) {
+//			e.printStackTrace();
+//		} catch (IllegalAccessException e) {
+//			e.printStackTrace();
+//		} catch (IllegalArgumentException e) {
+//			e.printStackTrace();
+//		} catch (InvocationTargetException e) {
+//			e.printStackTrace();
+//		}
 	      
 		int result = getBaseService().insertSelective(record);
 		return result;
@@ -77,11 +79,19 @@ public abstract class BaseController<T> {
 		return record;
 	}
 
-	@RequestMapping(value = "delete/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
 	@ResponseBody
 	protected int delete(@PathVariable(name = "id") String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		return getBaseService().deleteById(id);
+	}
+	
+	@RequestMapping(value = "deleteBatch", method = RequestMethod.DELETE)
+	@ResponseBody
+	protected int deleteBatch(@RequestParam("ids") List<String> ids, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
+		int result =  getBaseService().deteleBatch(ids);
+		return result;
 	}
 	
 
