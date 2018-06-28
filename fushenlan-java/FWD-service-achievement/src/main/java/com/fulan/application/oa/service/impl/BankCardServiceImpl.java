@@ -3,6 +3,8 @@
  */
 package com.fulan.application.oa.service.impl;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -89,9 +91,21 @@ public class BankCardServiceImpl implements IBankCardService {
 		if (logger.isInfoEnabled()) {
 			logger.info(BASE_MESSAGE + "更新银行开始，传入的参数是：" + bankCard.toString());
 		}
+		
+		//TODO 更新第三方系统
+		
+		//全部设为非default
+		FwdOaBankCard record = new FwdOaBankCard();
+		record.setIsDefault(false);
+		FwdOaBankCardExample example = new FwdOaBankCardExample();
+		example.createCriteria().andAgentCodeEqualTo(bankCard.getAgentCode());
+		bankCardMapper.updateByExampleSelective(record, example);
+				
 		// 添加表单数据
 		FwdOaApplyForm applyForm = this.saveApplyForm(bankCard.getAgentCode());
 		bankCard.setOaApplyId(applyForm.getId());
+		bankCard.setUpdateDatetime(new Date());
+		bankCard.setIsDefault(true);
 		int result = bankCardMapper.updateByPrimaryKeySelective(bankCard);
 		
 		if (logger.isInfoEnabled()) {
@@ -167,10 +181,8 @@ public class BankCardServiceImpl implements IBankCardService {
 			if (flag == true) {
 				// 比较其它的信息，比如bankC.getAgentName()和地址等其它的信息看看有没有变更，如果有再更新数据库。
 				// 如果有变更了 dataChanged=true;
-				if (!bankC.getUsername().equals(oaBankCard.getUsername())
-						|| !bankC.getAgentCode().equals(oaBankCard.getAgentCode())
-						|| !bankC.getCardNo().equals(oaBankCard.getCardNo())
-						|| !bankC.getAgentName().equals(oaBankCard.getAgentName())) {
+				if (!bankC.getAgentCode().equals(oaBankCard.getAgentCode())
+						|| !bankC.getCardNo().equals(oaBankCard.getCardNo())) {
 					// 修改银行卡默认选中为false
 					FwdOaBankCard record = new FwdOaBankCard();
 					record.setIsDefault(false);
@@ -199,50 +211,21 @@ public class BankCardServiceImpl implements IBankCardService {
 			}
 		}
 
-		// for (FwdOaBankCard oaBankCard : thirdOaBankCardList) {
-		// try {
-		// if (fwdOaBankCardList.size() == 0 || fwdOaBankCardList == null) {
-		// FwdOaApplyForm applyForm=this.saveApplyForm(agentCode);
-		// oaBankCard.setOaApplyId(applyForm.getId());
-		// // 保存本地数据
-		// int num = this.save(oaBankCard);
-		// if (num < 1) {
-		// throw new Exception("保存银行数据失败！！！！");
-		// }
-		// } else {
-		// if (fwdOaBankCardList.contains(oaBankCard)) {
-		// for (FwdOaBankCard bankCard : fwdOaBankCardList) {
-		// if (oaBankCard.getCardNo().equals(bankCard.getCardNo())) {
-		// FwdOaApplyForm applyForm=this.saveApplyForm(agentCode);
-		// oaBankCard.setOaApplyId(applyForm.getId());
-		// // 更新本地数据
-		// oaBankCard.setId(bankCard.getId());
-		// int num = this.update(oaBankCard);
-		// if (num < 1) {
-		// throw new Exception("修改银行数据失败！！！！");
-		// }
-		// }
-		// }
-		// } else {
-		// FwdOaApplyForm applyForm=this.saveApplyForm(agentCode);
-		// oaBankCard.setOaApplyId(applyForm.getId());
-		// // 保存本地数据
-		// int num = this.save(oaBankCard);
-		// if (num < 1) {
-		// throw new Exception("保存银行数据失败！！！！");
-		// }
-		// }
-		// }
-		// } catch (Exception e) {
-		// throw new Exception(e);
-		// }
-		// }
 		// 本地数据库
 		List<FwdOaBankCard> oaBankCardList = null;
 		if (dataChanged == true) {
 			oaBankCardList = this.selectByAgentCode(agentCode);
 		} else {
 			oaBankCardList = fwdOaBankCardList;
+		}
+		
+		if(oaBankCardList!=null && oaBankCardList.size()>0) {
+			Collections.sort(oaBankCardList,new Comparator<FwdOaBankCard>() {
+				@Override
+				public int compare(FwdOaBankCard c1, FwdOaBankCard c2) {
+					return c1.getIsDefault()?-1:1;
+				}
+			});
 		}
 
 		return oaBankCardList;

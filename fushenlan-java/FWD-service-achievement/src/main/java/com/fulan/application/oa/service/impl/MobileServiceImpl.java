@@ -50,6 +50,8 @@ public class MobileServiceImpl implements IMobileService {
 		if (logger.isInfoEnabled()) {
 			logger.info(BASE_MESSAGE + "保存手机开始，传入的参数是：" + mobile.toString());
 		}
+		//TODO 更新第三方系统
+		
 		// 添加表单数据
 		FwdOaApplyForm applyForm = this.saveApplyForm(mobile.getAgentCode());
 		mobile.setOaApplyId(applyForm.getId());
@@ -167,8 +169,7 @@ public class MobileServiceImpl implements IMobileService {
 				// 比较其它的信息，比如bankC.getAgentName()和其它的信息看看有没有变更，如果有再更新数据库。
 				// 如果有变更了 dataChanged=true;
 				if (!mobileC.getAgentCode().equals(fwdOaMobile.getAgentCode())
-						|| !mobileC.getMobileNo().equals(fwdOaMobile.getMobileNo())
-						|| !mobileC.getAgentName().equals(fwdOaMobile.getAgentName())) {
+						|| !mobileC.getMobileNo().equals(fwdOaMobile.getMobileNo())) {
 					// 修改手机变更的默认选中为false
 					FwdOaMobile record = new FwdOaMobile();
 					record.setIsDefault(false);

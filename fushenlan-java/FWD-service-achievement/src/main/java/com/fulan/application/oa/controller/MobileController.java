@@ -3,14 +3,19 @@
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fulan.application.achievement.vo.ErrorMessage;
+import com.fulan.application.achievement.vo.MobileNoDto;
 import com.fulan.application.oa.domain.FwdOaMobile;
 import com.fulan.application.oa.service.IMobileService;
 import com.fulan.application.util.domain.Response;
@@ -23,7 +28,9 @@ import com.fulan.application.util.domain.Response;
 @RestController
 @RequestMapping("/mobile")
 public class MobileController {
-
+	
+	private static final Logger logger = LoggerFactory.getLogger(MobileController.class);
+	
 	@Autowired
 	private IMobileService mobileService;
 
@@ -34,17 +41,29 @@ public class MobileController {
 	 * @return
 	 */
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	private void save(FwdOaMobile mobile) {
-		ErrorMessage errorMessage = new ErrorMessage();
-		mobile.setCreateDatetime(new Date());
-		mobile.setUpdateDatetime(new Date());
+	private Response<String> save(@RequestBody MobileNoDto mobileDto) {
+		
+		String vcCode = mobileDto.getVerificationCode();
+		//TODO 验证码校验
+		if(vcCode==null || vcCode.length()!=4) {
+			Response<String> response = new Response<String>(Response.ERROR,"验证码错误");
+			return response;
+		}
 		try {
+			FwdOaMobile mobile = new FwdOaMobile();
+			mobile.setAgentCode(mobileDto.getAgentCode());
+			mobile.setMobileNo(mobileDto.getMobileNo());
+			mobile.setCreateDatetime(new Date());
+			mobile.setUpdateDatetime(new Date());
 			mobileService.save(mobile);
 		} catch (Exception e) {
-			errorMessage.setState("0");
-			errorMessage.setErrorMessage("error:" + e.getMessage());
-			e.printStackTrace();
+			logger.error("Unknow Error", e);
+			Response<String> response = new Response<String>(Response.ERROR,e.getMessage());
+			return response;
 		}
+		
+		Response<String> response = new Response<String>(Response.SUCCESS,Response.SUCCESS_MESSAGE);
+		return response;
 	}
 
 	/**
