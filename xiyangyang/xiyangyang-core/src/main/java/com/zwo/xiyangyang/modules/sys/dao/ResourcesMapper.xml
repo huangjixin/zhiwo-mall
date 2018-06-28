@@ -27,35 +27,38 @@
   </resultMap>
   <!-- 根据用户名查询权限名 -->
   <select id="selectResoucesByUsername" resultType="String">
-  	SELECT 
+  	SELECT DISTINCT
 	    res.AUTH_NAME
 	FROM
-	    sys_resources res
+	    sys_user user
 	        LEFT JOIN
-	    sys_role_resources role_res ON res.id = role_res.RESOURCES_ID
+	    sys_user_group ug ON user.USERGROUP_ID = ug.id
 	        LEFT JOIN
-	    sys_role r ON role_res.ROLE_ID = r.id
+	    sys_group_role gr ON ug.id = gr.USERGROUP_ID
 	        LEFT JOIN
-	    sys_group_role gr ON r.id = gr.ROLE_ID
+	    sys_role r ON r.id = gr.ROLE_ID
 	        LEFT JOIN
-	    sys_user_group ug ON gr.USERGROUP_ID = ug.id
+	    sys_role_resources role_res ON role_res.ROLE_ID = r.id
 	        LEFT JOIN
-	    sys_user user ON ug.id = user.USERGROUP_ID
-	WHERE
-	    user.USERNAME = #{username} 
-	UNION SELECT 
+	    sys_resources res ON res.id = role_res.RESOURCES_ID
+		        
+		WHERE
+		    user.USERNAME = #{username} 
+	UNION 
+	SELECT DISTINCT
 	    res.AUTH_NAME
 	FROM
-	    sys_resources res
+	    sys_user user
 	        LEFT JOIN
-	    sys_role_resources role_res ON res.id = role_res.RESOURCES_ID
+	    sys_user_role ur ON user.id = ur.USER_ID
 	        LEFT JOIN
-	    sys_role r ON role_res.ROLE_ID = r.id
+	    sys_role r ON r.id = ur.ROLE_ID
 	        LEFT JOIN
-	    sys_user_role user_role ON r.id = user_role.ROLE_ID
+	    sys_role_resources role_res ON role_res.ROLE_ID = r.id
 	        LEFT JOIN
-	    sys_user user ON user_role.USER_ID = user.ID
-	WHERE
-	    user.USERNAME = #{username}
+	    sys_resources res ON res.id = role_res.RESOURCES_ID
+		        
+		WHERE
+		    user.USERNAME = #{username}
   </select>
 </mapper>
