@@ -50,9 +50,9 @@ export class ApplyVerificationCode extends React.Component {
         const {countdown} = this.state;
         let displayVal = null;
         if(countdown == -1){
-            displayVal = "获取验证码";
+            displayVal = "验证码";
         }else{
-            displayVal = "重新获取(" + countdown + ")"
+            displayVal = countdown
         }
         return (
             <TouchableWithoutFeedback onPress={()=>{
@@ -60,7 +60,7 @@ export class ApplyVerificationCode extends React.Component {
                 this.startTiming(defaultCountdown);
             }}>
                 <View style={[styles.container,style]}>
-                        <Text  style={{color:'#E87722',fontSize:13}}>
+                        <Text  style={{color:'#E87722',fontSize:15}}>
                             {displayVal}
                         </Text>
                 </View>
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#E87722',
         borderRadius:20,
-        height:35,
+        height:32,
         paddingBottom:10,
         paddingTop:10,
         paddingLeft:15,

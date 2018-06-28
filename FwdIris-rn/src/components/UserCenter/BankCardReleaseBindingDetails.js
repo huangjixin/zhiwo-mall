@@ -47,7 +47,7 @@ export class BankCardReleaseBindingDetails extends React.Component {
             mobileNo:mobileNo,
         }
         FetchUtils.Post({
-            url:RequestURL.VERIFICATION_CODE,
+            url:RequestURL.SEND_VERIFICATION_CODE,
             params:params,
             success:(respData)=>{},
             error:()=>{}
@@ -69,7 +69,6 @@ export class BankCardReleaseBindingDetails extends React.Component {
             url:RequestURL.TO_DEFAULT,
             params:params,
             success:(respData)=>{
-                console.log('FetchUtils.Post call back')
                 this.props.navigation.pop(3)
             },
             error:()=>{}
@@ -104,8 +103,8 @@ export class BankCardReleaseBindingDetails extends React.Component {
                     </View>
                     <View  style={{flexDirection: 'row',justifyContent:'flex-start',
                         alignItems: 'center',backgroundColor:'#ffffff',height:50}}>
-                        <Text  style={{flex:2,lineHeight:50,height:50,marginLeft:10,textAlign:'center',fontSize:16,}}>手机码</Text>
-                        <Text  style={{flex:5,lineHeight:50,height:50,marginLeft:10,fontSize:16}}>{mobileNo}</Text>
+                        <Text  style={{flex:2,lineHeight:50,height:50,marginLeft:10,textAlign:'center',fontSize:16,color:'#333333'}}>手机码</Text>
+                        <Text  style={{flex:5,lineHeight:50,height:50,marginLeft:10,fontSize:16,color:'#9B9B9B '}}>{mobileNo}</Text>
 
                         <ApplyVerificationCode style={{flex:2.5}} onClick={this.sendVerificationCode}/>
 
@@ -114,7 +113,7 @@ export class BankCardReleaseBindingDetails extends React.Component {
                     </View>
                     <Text style={{borderBottomWidth:2,borderBottomColor:'#F8F8F8',justifyContent:'center',backgroundColor:'#ffffff'}}/>
                     <View  style={{flexDirection: 'row',justifyContent: 'flex-start',backgroundColor:'#ffffff',height:50,marginTop:1}}>
-                        <Text  style={{flex:2,lineHeight:50,height:50,marginLeft:10,textAlign:'center',fontSize:16}}>验证码</Text>
+                        <Text  style={{flex:2,lineHeight:50,height:50,marginLeft:10,textAlign:'center',fontSize:16,color:'#333333'}}>验证码</Text>
                         <TextInput
                             placeholder='请输入验证码'
                             underlineColorAndroid='transparent'
