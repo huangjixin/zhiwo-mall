@@ -9,8 +9,10 @@ import * as RequestURL from "../../common/RequestURL";
 import * as FetchUtils from "../../common/FetchUtils";
 
 const g_agentCode = '00001';   //暂时用于显示当前职级
+const g_agentGrade = 'SM';   //暂时用于显示当前职级
 const IDX_PROMOTION = 0;
 const IDX_EVALUATION = 1;
+
 export class AchvTabPromotion extends React.Component {
     //晋升路径
     promotionCache = [];
@@ -23,16 +25,16 @@ export class AchvTabPromotion extends React.Component {
             isRefreshing:true,
             promotionPostIndex: 0,  //当前代理人  晋升方向选择
             selectedIndex: IDX_PROMOTION,  // 选中(0:晋升 1:考核 )
-            data:{
-                agentGrade:{
+            agentGrade:{
+                "gradeCode": "",
+                "gradeName": ""
+            },
+            promotionDirect:[
+                {
                     "gradeCode": "",
                     "gradeName": ""
-                },
-                promotionDirect:[
-                    {
-                        "gradeCode": "",
-                        "gradeName": ""
-                    }],
+                }],
+            data:{
                 assessPeriodFrom: '',
                 assessPeriodTo: '',
                 nextAssessDay:'',
@@ -53,8 +55,14 @@ export class AchvTabPromotion extends React.Component {
             params:params,
             success:(respData)=>{
                 const data = respData.data;
+                /**/
+                const gradeObj = gradeMap[g_agentGrade];
+                /**/
+
                 this.promotionCache[0]=data;
                 this.setState({
+                    agentGrade:gradeObj.agentGrade,
+                    promotionDirect:gradeObj.direction,
                     data:data,
                     isRefreshing:false,
                 });
@@ -67,6 +75,18 @@ export class AchvTabPromotion extends React.Component {
                 this.setState({isRefreshing:false,})
             }
         })
+
+        this.timer = setInterval(() => {
+            const curVal = this.state.data.nextAssessMinus -1;
+            const data = this.state.data;
+            data.nextAssessMinus = curVal;
+            if(curVal==-1){
+                clearInterval(this.timer);
+                this.timer = null;
+                return;
+            }
+            this.setState({data:data});
+        }, 60000);
     }
 
     componentWillMount(){
@@ -186,10 +206,10 @@ export class AchvTabPromotion extends React.Component {
         this.setState({isRefreshing:true})
 
         if(selectedIndex == IDX_PROMOTION){
-            const {data} = this.state;
-            const agentGrade = data.agentGrade;
-            const toGrade = data.promotionDirect[promotionPostIndex].gradeCode
-            const line = agentGrade.gradeCode+ '-' + toGrade;
+            const {data,agentGrade,promotionDirect} = this.state;
+            const fromGrade = agentGrade.gradeCode;
+            const toGrade = promotionDirect[promotionPostIndex].gradeCode
+            const line = fromGrade + '-' + toGrade;
             const params = {
                 agentCode: g_agentCode,
                 line:line,
@@ -316,7 +336,7 @@ export class AchvTabPromotion extends React.Component {
                     </View>
                     <View style={{flexDirection:'row',alignItems: 'center',flex:1}}>
                         <Image  source={require('../../../img/achievement/nextTime.png')}
-                                style={{width: 20, height:20,}} />
+                                style={{width: 20, height:22,}} />
                         <Text style={{fontSize: 16,marginLeft:8}}>
 
                             {selectedIndex==IDX_PROMOTION?'距离下次晋升时间：':'距离下次考核时间：'}
@@ -353,9 +373,7 @@ export class AchvTabPromotion extends React.Component {
 
 
     renderPromotion=()=>{
-        const {data,promotionPostIndex} = this.state;
-        const agentGrade = data.agentGrade;
-        const promotionDirect = data.promotionDirect;
+        const {data,promotionPostIndex,agentGrade,promotionDirect} = this.state;
         return(
             <View style={{marginTop:10,marginLeft:14,marginRight:14}}>
                 {promotionDirect.length==2 && (
@@ -411,6 +429,99 @@ export class AchvTabPromotion extends React.Component {
     }
 }
 
+const gradeMap = {
+    LA:{
+        agentGrade:{
+            "gradeCode": "LA",
+            "gradeName": "寿险顾问"
+        },
+        direction:[
+            {
+                "gradeCode": "AM",
+                "gradeName": "业务经理"
+            },
+            {
+                "gradeCode": "SM",
+                "gradeName": "销售经理"
+            },
+        ]
+    },
+    SM:{
+        agentGrade:{
+            "gradeCode": "SM",
+            "gradeName": "寿险顾问"
+        },
+        direction:[
+            {
+                "gradeCode": "SSM",
+                "gradeName": "资深销售经理"
+            },
+            {
+                "gradeCode": "AM",
+                "gradeName": "业务经理"
+            },
+        ]
+    },
+    SSM:{
+        agentGrade:{
+            "gradeCode": "SSM",
+            "gradeName": "资深销售经理"
+        },
+        direction:[
+            {
+                "gradeCode": "AM",
+                "gradeName": "业务经理"
+            },
+            {
+                "gradeCode": "SD",
+                "gradeName": "销售总监"
+            },
+        ]
+    },
+    AM:{
+        agentGrade:{
+            "gradeCode": "AM",
+            "gradeName": "业务经理"
+        },
+        direction:[
+            {
+                "gradeCode": "SAM",
+                "gradeName": "资深业务经理"
+            }
+        ]
+    },
+    SAM:{
+        agentGrade:{
+            "gradeCode": "SAM",
+            "gradeName": "资深业务经理"
+        },
+        direction:[
+            {
+                "gradeCode": "AD",
+                "gradeName": "总监"
+            }
+        ]
+    },
+    SD:{
+        agentGrade:{
+            "gradeCode": "SD",
+            "gradeName": "销售总监"
+        },
+        direction:[
+            {
+                "gradeCode": "AM",
+                "gradeName": "业务经理"
+            }
+        ]
+    },
+    AD:{
+        agentGrade:{
+            "gradeCode": "AD",
+            "gradeName": "总监"
+        },
+        direction:[]
+    },
+};
 const styles = StyleSheet.create({
     normalStyle: {width: 40, justifyContent: 'center', alignItems: 'center'},
     selectStyle: {

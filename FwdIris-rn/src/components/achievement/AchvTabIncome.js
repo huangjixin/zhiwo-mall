@@ -240,6 +240,14 @@ export class AchvTabIncome extends React.Component {
                                     renderHeader={(data,collapsed)=>this.renderHeader(data,collapsed,arr.length==(i+1))}
                                     renderBlock={this.renderBlock}
                                     isCollapsed={!(i==selectIndex)}
+                                    pressCallback={()=>{
+                                        if(selectIndex==null)
+                                            this.setState({selectIndex:i})
+
+                                        if(selectIndex==i)
+                                            return
+                                        this.setState({selectIndex:i})
+                                    }}
                                 />
                             ))
                     }

@@ -4,6 +4,7 @@ export class AchvCollapsible extends React.Component {
     static defaultProps = {
         renderHeader:()=>{},
         renderBlock:()=>{},
+        pressCallback:()=>{},
         data:null,
         isCollapsed:true
     };
@@ -26,6 +27,7 @@ export class AchvCollapsible extends React.Component {
             renderBlock,
             data,
             style,
+            pressCallback,
         } = this.props;
         const collapsed = this.state.collapsed;
 
@@ -33,6 +35,7 @@ export class AchvCollapsible extends React.Component {
             <View style={style}>
                 <TouchableWithoutFeedback  onPress={() => {
                     this.setState({ collapsed: !collapsed });
+                    pressCallback();
                 }}>
                     {
                         renderHeader(data,collapsed)
