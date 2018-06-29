@@ -1,5 +1,5 @@
 import React from 'react';
-import {Alert,StyleSheet, ScrollView, Text ,View,Image,ImageBackground,TouchableWithoutFeedback,DeviceEventEmitter,Dimensions} from 'react-native';
+import {Alert,StyleSheet, ScrollView, Text ,View,Image,ImageBackground,TouchableWithoutFeedback,DeviceEventEmitter,Dimensions,Platform} from 'react-native';
 import {TabNavigator, TabBarTop, TabBarBottom} from 'react-navigation';
 import {MyApplyToBeCheck} from './Administrative/MyApplyToBeCheck';
 import {MyApplyToBeAudited} from './Administrative/MyApplyToBeAudited';
@@ -266,8 +266,9 @@ export class Administrative extends React.Component {
 
             <View style={{paddingBottom:10}} onLayout={this._onLayout}>
                 <View style={{height:screenHeight,}}>
+                    <View style={{height:Platform.OS === "ios" ?24 :0,backgroundColor:'#FFDD00',}}></View>
                     <AdministrativeTabr style={{fontSize:22,backgroundColor:'#FFDD00'}}/>
-                    <View style={{width:20,backgroundColor:'#FFDD00',position:'absolute',left:15,top:20,}}>
+                    <View style={{width:20,backgroundColor:'#FFDD00',position:'absolute',left:15,top:Platform.OS === "ios" ?44:20,}}>
                         <TouchableWithoutFeedback style={{width:30,height:30,}}  onPress={() => this.props.navigation.goBack()}>
                             <Image style={{width:11,height:22,}} source={require('../../../img/UserCenter/GoBackBlack.png')}/>
                         </TouchableWithoutFeedback>
