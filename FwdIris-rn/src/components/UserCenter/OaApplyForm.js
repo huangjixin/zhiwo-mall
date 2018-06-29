@@ -433,7 +433,7 @@ export class OaApplyForm extends React.Component {
 
         //  Kane哥，后面这么写，搞一个变量，调试的时候也容易。   
         let url = RequestURL.HOST+'applyForm/upload';
-        url = 'http://10.23.21.120:50000/applyForm/upload';
+        //url = 'http://10.23.21.120:50000/applyForm/upload';
         formData.append("file", file);
         fetch(url, {
             method: 'POST',
@@ -443,7 +443,7 @@ export class OaApplyForm extends React.Component {
             body: formData,
         }).then((response) => {})
             .then((responseData)=> {
-               
+               console.log(responseData);
             })
             .catch((err)=> {
                 console.log('err', err);
@@ -453,31 +453,25 @@ export class OaApplyForm extends React.Component {
 
     // 单独测试提交一个文件到后台
     upload1=()=>{
-        var a =[];
+        var fileStr=''
         let fileData = new FormData();
         for (var i =0;i<this.state.imageArray.length;i++){
-            let file = 'data:image/jpeg;base64,'+this.state.imageArray[i].data;
-            // let aa = [];
-            a.push(file);
-            // fileData.append("file", file);
-            //formData.append("file", file);
+            let file ='data:'+this.state.imageArray[i].type+';base64,'+this.state.imageArray[i].data;
+            if(fileStr==''){
+                fileStr+=file;
+            }else {
+                fileStr=fileStr+'||'+file;
+            }
         }
+        // var aa=JSON.stringify(a);
         let formData = new FormData();
         formData.append("type", this.state.type);
         formData.append("agentCode", this.state.agentCode);
         formData.append("name", this.state.agentName);
-        // let fileData = new FormData();
-        // fileData.append("file", file);
-        // formData.append("file", file);
-
         let url = RequestURL.HOST+'applyForm/saveForm';
-        formData.append("files", a);
+        formData.append("files", fileStr);
         fetch(url, {
             method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'multipart/form-data;charset=utf-8',
-            },
             body: formData,
         }).then((response) => {})
             .then((responseData)=> {
@@ -690,7 +684,8 @@ export class OaApplyForm extends React.Component {
                                     // var aa = {}
                                     <View key={i} style={{width: imageWidth,height: 70,flexDirection: 'row',marginRight: 15,marginBottom: 10,justifyContent: 'center',}}>
                                         <Image style={{width: imageWidth - 15, height: 65, borderRadius: 10,}}
-                                               source={{uri: 'data:image/png;base64,' + rowData.data}}/>
+                                               source={{uri: 'data:'+rowData.type+';base64,' + rowData.data}}/>
+                                               {/*source={{uri: 'data:image/png;base64,' + rowData.data}}/>*/}
                                         <TouchableOpacity
                                             style={{width: 20, height: 20, marginTop: -10, marginLeft: -10,}}
                                             onPress={this.removePhoto.bind(this, i)}>
