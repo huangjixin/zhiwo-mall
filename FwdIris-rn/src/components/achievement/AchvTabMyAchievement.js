@@ -392,7 +392,7 @@ export class AchvTabMyAchievement extends React.Component {
                                         { label: '个人', value: IND_PERSONAL },
                                         { label: '团队', value: IND_TEAM }]}
                                                     buttonColor='#ffffff'
-                                                    backgroundColor='#BCBCBC'
+                                                    backgroundColor='#F8F8F8'
                                                     selectedColor='#000000'
                                                     borderColor='#EAEAEA'
                                                     hasPadding = {true}

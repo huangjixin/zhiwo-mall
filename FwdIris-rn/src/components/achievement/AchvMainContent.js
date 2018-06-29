@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, ScrollView, Text, View,Dimensions} from 'react-native';
+import {StyleSheet, ScrollView, Text, View,Dimensions,Platform} from 'react-native';
 import {TabNavigator, TabBarTop, TabBarBottom} from 'react-navigation';
 
 import {AchvTabMyAchievement} from "./AchvTabMyAchievement";
@@ -97,6 +97,7 @@ export class AchvMainContent extends React.Component {
         );
     return (
         <View style={{paddingTop:0,flex:1}}  onLayout={this._onLayout}>
+            <View style={{backgroundColor:'#FFDD00',height:Platform.OS === "ios" ?24 :0,}}></View>
             <AchievementTabr/>
         </View>
 
