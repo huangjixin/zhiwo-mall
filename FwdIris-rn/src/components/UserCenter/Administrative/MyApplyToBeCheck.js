@@ -17,13 +17,12 @@ const wages = require('../../../../img/UserCenter/wages.png');//7收入证明
 const job = require('../../../../img/UserCenter/job.png');//8工作证明
 const other = require('../../../../img/UserCenter/other.png');//9其它收入证明
 
-const REQUEST_URL = 'https://api.github.com/search/repositories?q=javascript&sort=stars&page=';
 let pageNo = 1;//当前第几页
 let totalPage=10;//总的页数
 let itemNo=10;//item的个数
 var myApplyToBeCheckListCache = [];
 var modelItemCache = new Set([]);
-var isTest=false;
+// var isTest=false;
 export class MyApplyToBeCheck extends React.Component {
     constructor(props){
         var AdministrativeArr = AdministrativeList;
@@ -53,9 +52,9 @@ export class MyApplyToBeCheck extends React.Component {
             });
         }
     }
-    componentDidUpdate (){
-        isTest=false
-    }
+    // componentDidUpdate (){
+    //     isTest=false
+    // }
     componentWillUnmount(){
         myApplyToBeCheckListCache = this.state.myApplyToBeCheckList;
         modelItemCache=this.state.modelItem;
@@ -200,7 +199,7 @@ export class MyApplyToBeCheck extends React.Component {
     //model 中点击确定调用方法
     clickModel=()=>{
 
-        isTest=true;
+        // isTest=true;
         this.setState({
             isFilterCondition:false,
         });
@@ -213,10 +212,10 @@ export class MyApplyToBeCheck extends React.Component {
             isFilterCondition:false
         });
     }
-    _scrollerView=()=>{
-
-        // alert('_scrollerView');
-    }
+    // _scrollerView=()=>{
+    //
+    //     // alert('_scrollerView');
+    // }
     render() {
         return (
             <View style={{height:ScreenHeight-140,}}>
@@ -242,7 +241,7 @@ export class MyApplyToBeCheck extends React.Component {
                     ListFooterComponent={this._renderFooter.bind(this)}
                     onEndReached={this._onEndReached.bind(this)}
                     onEndReachedThreshold={0.1}
-                    onMomentumScrollEnd={this._scrollerView.bind(this)}
+                    // onMomentumScrollEnd={this._scrollerView.bind(this)}
                     renderItem={({item}) =>
                         //{/* 循环数组，根据Type去把信息给显示出来 */}
                         <TouchableWithoutFeedback onPress={this.administrativeToOaApplyFormDetail.bind(this,{itemData:item,baseStatus:0,})}>
@@ -286,8 +285,8 @@ export class MyApplyToBeCheck extends React.Component {
                                                     <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                         <Text style={{fontSize:15,flex:7,}}>请假类型：{item.leaveType==0?'病假':
                                                             (item.leaveType==1?'婚假':
-                                                                (item.leaveType==2?'产假':
-                                                                    (item.leaveType==3?'陪产假':'丧假')))}</Text>
+                                                                (item.type==2?'产假':
+                                                                    (item.type==3?'陪产假':'丧假')))}</Text>
                                                         <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{this.timeTwistsIntoDate(item.createDatetime)}</Text>
                                                     </View>
                                                     <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
@@ -307,7 +306,7 @@ export class MyApplyToBeCheck extends React.Component {
                                                         </View>
                                                         <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                             <Text style={{fontSize:15,flex:7,}}>晋级职级：{item.upGrade}</Text>
-                                                            {/*<Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.agentName}</Text>*/}
+                                                            <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.agentName}</Text>
                                                         </View>
                                                     </View>):(
                                                     // 3复效
@@ -503,7 +502,7 @@ export class MyApplyToBeCheck extends React.Component {
      */
     onRefresh = () => {
         this.fetchData(1,false);
-        isTest=true;
+        // isTest=true;
         this.setState( {
             refreshing:false,
             myApplyToBeCheckAllLoaded:false,
@@ -539,7 +538,7 @@ export class MyApplyToBeCheck extends React.Component {
         // if(pageNo!=1) {
         //     pageNo++;
         // }
-        if (isTest==false){
+        // if (isTest==false){
             if(!this.state.myApplyToBeCheckAllLoaded){
                 pageNo++;
                 this.fetchData(pageNo,true);
@@ -549,9 +548,9 @@ export class MyApplyToBeCheck extends React.Component {
                 // alert('AllLoaded==no');
             }
             // alert('false');
-        }else {
-            // alert('true');
-        }
+        // }else {
+        //     // alert('true');
+        // }
         // this.fetchData(pageNo,true);
         // alert('上拉');
         // //如果是正在加载中或没有更多数据了，则返回

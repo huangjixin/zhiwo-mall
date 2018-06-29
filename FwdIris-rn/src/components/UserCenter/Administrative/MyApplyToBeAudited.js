@@ -1,10 +1,10 @@
 import React from 'react';
 import {StyleSheet,ScrollView,Text,View,Image,Dimensions,TouchableOpacity,FlatList,TouchableWithoutFeedback,DeviceEventEmitter,Modal,Button,ActivityIndicator,} from 'react-native';
 import AdministrativeList from '../Administrative.json';
+import * as RequestURL from "../../../common/RequestURL";
 var ScreenWidth = Dimensions.get('window').width;
 var ScreenHeight = Dimensions.get('window').height;
 var halfWidth = ScreenWidth/2;
-import * as RequestURL from "../../../common/RequestURL";
 
 const quit = require('../../../../img/UserCenter/Quit.png'); //0离职
 const leave = require('../../../../img/UserCenter/leave.png');//1请假
@@ -227,7 +227,7 @@ export class MyApplyToBeAudited extends React.Component {
                     //上拉加载数据
                     ListFooterComponent={this._renderFooter.bind(this)}
                     onEndReached={this._onEndReached.bind(this)}
-                    onEndReachedThreshold={0.5}
+                    onEndReachedThreshold={0.1}
 
                     renderItem={({item}) =>
                         //{/* 循环数组，根据Type去把信息给显示出来 */}
@@ -287,7 +287,7 @@ export class MyApplyToBeAudited extends React.Component {
                                                     <View>
                                                         <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                             <Text style={{fontSize:15,flex:7,}}>当前职级：{item.currentGrade}</Text>
-                                                            <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.createDatetime}</Text>
+                                                            <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{this.timeTwistsIntoDate(item.createDatetime)}</Text>
                                                         </View>
                                                         <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                             <Text style={{fontSize:15,flex:7,}}>晋级职级：{item.upGrade}</Text>
@@ -299,7 +299,7 @@ export class MyApplyToBeAudited extends React.Component {
                                                         <View>
                                                             <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                                 <Text style={{fontSize:15,flex:7,}}>复效人员：{item.name}</Text>
-                                                                <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.createDatetime}</Text>
+                                                                <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{this.timeTwistsIntoDate(item.createDatetime)}</Text>
                                                             </View>
                                                             <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                                 <Text style={{fontSize:15,flex:7,}}>详细说明：{item.description}</Text>
@@ -311,7 +311,7 @@ export class MyApplyToBeAudited extends React.Component {
                                                         <View>
                                                             <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                                 <Text style={{fontSize:15,flex:7,}}>时间：{item.imcomeproveMonth==0?(3):(item.imcomeproveMonth==1?(6):(item.imcomeproveMonth==2?(9):(12)))}个月</Text>
-                                                                <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.createDatetime}</Text>
+                                                                <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{this.timeTwistsIntoDate(item.createDatetime)}</Text>
                                                             </View>
                                                             <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                                 <Text style={{fontSize:15,flex:7,}}>用途：{item.description}</Text>
@@ -320,13 +320,13 @@ export class MyApplyToBeAudited extends React.Component {
                                                     ):(item.type==8?(//8工作证明
                                                         <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                             <Text style={{fontSize:15,flex:7,}}>用途：{item.description}</Text>
-                                                            <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.createDatetime}</Text>
+                                                            <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{this.timeTwistsIntoDate(item.createDatetime)}</Text>
                                                         </View>
                                                     ):(
                                                         //9其它收入证明
                                                         <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                             <Text style={{fontSize:15,flex:7,}}>用途：{item.description}</Text>
-                                                            <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.createDatetime}</Text>
+                                                            <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{this.timeTwistsIntoDate(item.createDatetime)}</Text>
                                                         </View>
                                                     ))))))}
                                     </View>

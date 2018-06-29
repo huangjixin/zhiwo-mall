@@ -1,10 +1,10 @@
 import React from 'react';
 import {StyleSheet,ScrollView,Text,View,Image,Dimensions,TouchableOpacity,FlatList,TouchableWithoutFeedback,DeviceEventEmitter,Modal,Button,ActivityIndicator,} from 'react-native';
 import AdministrativeList from '../Administrative.json';
+import * as RequestURL from "../../../common/RequestURL";
 var ScreenWidth = Dimensions.get('window').width;
 var ScreenHeight = Dimensions.get('window').height;
 var halfWidth = ScreenWidth/2;
-import * as RequestURL from "../../../common/RequestURL";
 
 const quit = require('../../../../img/UserCenter/Quit.png'); //0离职
 const leave = require('../../../../img/UserCenter/leave.png');//1请假
@@ -17,7 +17,6 @@ const wages = require('../../../../img/UserCenter/wages.png');//7收入证明
 const job = require('../../../../img/UserCenter/job.png');//8工作证明
 const other = require('../../../../img/UserCenter/other.png');//9其它收入证明
 
-const REQUEST_URL = 'https://api.github.com/search/repositories?q=javascript&sort=stars&page=';
 let pageNo = 1;//当前第几页
 let totalPage=10;//总的页数
 let itemNo=10;//item的个数
@@ -85,22 +84,21 @@ export class MyApprovalToBeCheck extends React.Component {
         })
             .then((response) => response.json())
             .then((responseData) => {
-
                 if(responseData.code=='1'){
-                    if (isToLoad){
-                        let oldData = this.state.myApprovalToBeCheckList.concat(responseData.data.records);
-                        this.setState({
-                            myApprovalToBeCheckList:oldData,
-                            showFoot:0,
-                        });
-                    }else {
-                        pageNo=1;
-                        this.setState({
-                            myApprovalToBeCheckList:responseData.data.records,
-                            myApprovalToBeCheckAllLoaded:false,
-                            showFoot:0,
-                        });
-                    }
+                if (isToLoad){
+                    let oldData = this.state.myApprovalToBeCheckList.concat(responseData.data.records);
+                    this.setState({
+                        myApprovalToBeCheckList:oldData,
+                        showFoot:0,
+                    });
+                }else {
+                    pageNo=1;
+                    this.setState({
+                        myApprovalToBeCheckList:responseData.data.records,
+                        myApprovalToBeCheckAllLoaded:false,
+                        showFoot:0,
+                    });
+                }
                     if(responseData.data.records.length<pageSize){
                         this.setState({
                             myApprovalToBeCheckAllLoaded:true,
@@ -111,10 +109,18 @@ export class MyApprovalToBeCheck extends React.Component {
                     console.log(responseData.msg);
                     alert('网络异常，请稍后再试');
                 }
+                // console.log(responseData);
+                // 真正做的时候改。
+                // let data = this.state.myApplyToBeCheckList.concat(responseData.movies);
+
+                // this.setState( {
+                //     myApplyToBeCheckList:data,
+                //     selectedIndex:0,
+                // })
             }).catch((err) => {//2
-            console.error(err);
-            alert('网络异常，请稍后再试');
-        }).done();
+                console.error(err);
+                alert('网络异常，请稍后再试');
+            }).done();
     }
     //为了处理item头部信息
     judgeData(value){
@@ -151,22 +157,6 @@ export class MyApprovalToBeCheck extends React.Component {
         let date = standardTime.getDate();
 
         return year+'/'+month+'/'+date;
-    }
-    //时间转换(具体到上下午)
-    timeTwistsIntoAmToPm=(timeTwists)=>{
-        let standardTime = new Date(timeTwists);
-        let year = standardTime.getFullYear();
-        let month = standardTime.getMonth()+1;
-        let date = standardTime.getDate();
-        let hours = standardTime.getHours();
-        let AmToPm='';
-        if(0<=hours<12){
-            AmToPm='上午';
-        }else {
-            AmToPm='下午';
-        }
-
-        return year+'/'+month+'/'+date+' '+AmToPm;
     }
     onRequestClose() {
         this.setState({
@@ -233,7 +223,7 @@ export class MyApprovalToBeCheck extends React.Component {
 
                     renderItem={({item}) =>
                         //{/* 循环数组，根据Type去把信息给显示出来 */}
-                        <TouchableWithoutFeedback onPress={this.administrativeToOaApplyFormDetail.bind(this,{itemData:item,baseStatus:0,})}>
+                        <TouchableWithoutFeedback onPress={this.administrativeToOaApplyFormDetail.bind(this,{itemData:item,baseStatus:1,})}>
                             <View>
                                 {/*//4 地址 5手机号 6银行卡*/}
                                 {item.type==4||item.type==5||item.type==6 ?(
@@ -274,13 +264,13 @@ export class MyApprovalToBeCheck extends React.Component {
                                                             (item.type==1?'婚假':
                                                                 (item.type==2?'产假':
                                                                     (item.type==3?'陪产假':'丧假')))}</Text>
-                                                        <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.createDatetime}</Text>
+                                                        <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{this.timeTwistsIntoDate(item.createDatetime)}</Text>
                                                     </View>
                                                     <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
-                                                        <Text style={{fontSize:15,flex:7,}}>开始时间：{this.timeTwistsIntoAmToPm(item.startTime)}</Text>
+                                                        <Text style={{fontSize:15,flex:7,}}>开始时间：{item.startTime}</Text>
                                                     </View>
                                                     <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
-                                                        <Text style={{fontSize:15,flex:7,}}>结束时间：{this.timeTwistsIntoAmToPm(item.endTime)}</Text>
+                                                        <Text style={{fontSize:15,flex:7,}}>结束时间：{item.endTime}</Text>
                                                         <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.agentName}</Text>
                                                     </View>
                                                 </View>
@@ -289,7 +279,7 @@ export class MyApprovalToBeCheck extends React.Component {
                                                     <View>
                                                         <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                             <Text style={{fontSize:15,flex:7,}}>当前职级：{item.currentGrade}</Text>
-                                                            <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.createDatetime}</Text>
+                                                            <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{this.timeTwistsIntoDate(item.createDatetime)}</Text>
                                                         </View>
                                                         <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                             <Text style={{fontSize:15,flex:7,}}>晋级职级：{item.upGrade}</Text>
@@ -301,11 +291,10 @@ export class MyApprovalToBeCheck extends React.Component {
                                                         <View>
                                                             <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                                 <Text style={{fontSize:15,flex:7,}}>复效人员：{item.name}</Text>
-                                                                <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.createDatetime}</Text>
+                                                                <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{this.timeTwistsIntoDate(item.createDatetime)}</Text>
                                                             </View>
                                                             <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                                 <Text style={{fontSize:15,flex:7,}}>详细说明：{item.description}</Text>
-                                                                <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.agentName}</Text>
                                                             </View>
                                                         </View>
 
@@ -313,7 +302,7 @@ export class MyApprovalToBeCheck extends React.Component {
                                                         <View>
                                                             <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                                 <Text style={{fontSize:15,flex:7,}}>时间：{item.imcomeproveMonth==0?(3):(item.imcomeproveMonth==1?(6):(item.imcomeproveMonth==2?(9):(12)))}个月</Text>
-                                                                <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.createDatetime}</Text>
+                                                                <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{this.timeTwistsIntoDate(item.createDatetime)}</Text>
                                                             </View>
                                                             <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                                 <Text style={{fontSize:15,flex:7,}}>用途：{item.description}</Text>
@@ -322,13 +311,13 @@ export class MyApprovalToBeCheck extends React.Component {
                                                     ):(item.type==8?(//8工作证明
                                                         <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                             <Text style={{fontSize:15,flex:7,}}>用途：{item.description}</Text>
-                                                            <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.createDatetime}</Text>
+                                                            <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{this.timeTwistsIntoDate(item.createDatetime)}</Text>
                                                         </View>
                                                     ):(
                                                         //9其它收入证明
                                                         <View style={{paddingTop:10,marginBottom:10,flexDirection: 'row',marginLeft:15,marginRight:15,}}>
                                                             <Text style={{fontSize:15,flex:7,}}>用途：{item.description}</Text>
-                                                            <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{item.createDatetime}</Text>
+                                                            <Text style={{fontSize:15,flex:3,textAlign:'right',}}>{this.timeTwistsIntoDate(item.createDatetime)}</Text>
                                                         </View>
                                                     ))))))}
                                     </View>
