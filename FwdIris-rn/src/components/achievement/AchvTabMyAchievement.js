@@ -428,7 +428,7 @@ export class AchvTabMyAchievement extends React.Component {
                                         justifyContent: 'flex-start',
                                         alignItems: 'center',
                                     }}>
-                                        <Text style={{paddingLeft:10,paddingTop:10 ,width:40,height:40,borderRadius:20,borderColor:'#E0E0E0',color:'#E0E0E0',borderWidth:1}}>FYP</Text>
+                                        <Text style={{textAlign:'center',paddingTop:10 ,width:40,height:40,borderRadius:20,borderColor:'#E0E0E0',color:'#E0E0E0',borderWidth:1}}>FYP</Text>
                                         <Text style={{marginLeft:10,fontSize:22,color:'#000000'}}>{NumberUtils.toLargeMoneyStr(data.fyp)}</Text>
                                     </View>
                                     <View style={{
@@ -489,7 +489,7 @@ export class AchvTabMyAchievement extends React.Component {
                                         justifyContent: 'flex-start',
                                         alignItems: 'center',
                                     }}>
-                                        <Text style={{paddingLeft:10,paddingTop:10 ,width:40,height:40,borderRadius:20,borderColor:'#E0E0E0',color:'#E0E0E0',borderWidth:1}}>FYC</Text>
+                                        <Text style={{textAlign:'center',paddingTop:10 ,width:40,height:40,borderRadius:20,borderColor:'#E0E0E0',color:'#E0E0E0',borderWidth:1}}>FYC</Text>
                                         <Text style={{marginLeft:10,fontSize:22,color:'#000000'}}>{NumberUtils.toLargeMoneyStr(data.fyc)}</Text>
                                     </View>
                                     <View style={{
@@ -550,7 +550,7 @@ export class AchvTabMyAchievement extends React.Component {
                                         justifyContent: 'flex-start',
                                         alignItems: 'center',
                                     }}>
-                                        <Text style={{paddingLeft:3,paddingTop:10 ,width:40,height:40,borderRadius:20,borderColor:'#E0E0E0',color:'#E0E0E0',borderWidth:1}}>CASE</Text>
+                                        <Text style={{textAlign:'center',paddingTop:10 ,width:40,height:40,borderRadius:20,borderColor:'#E0E0E0',color:'#E0E0E0',borderWidth:1}}>CASE</Text>
                                         <Text style={{marginLeft:10,fontSize:22,color:'#000000'}}>{NumberUtils.toLargeMoneyStr(data.caseNo)}</Text>
                                     </View>
                                     <View style={{
