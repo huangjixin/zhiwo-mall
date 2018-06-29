@@ -550,7 +550,7 @@ export class AchvTabMyAchievement extends React.Component {
                                         justifyContent: 'flex-start',
                                         alignItems: 'center',
                                     }}>
-                                        <Text style={{textAlign:'center',paddingTop:10 ,width:40,height:40,borderRadius:20,borderColor:'#E0E0E0',color:'#E0E0E0',borderWidth:1}}>CASE</Text>
+                                        <Text style={{textAlign:'center',paddingTop:10 ,width:40,height:40,borderRadius:20,borderColor:'#E0E0E0',color:'#E0E0E0',borderWidth:1}}>case</Text>
                                         <Text style={{marginLeft:10,fontSize:22,color:'#000000'}}>{NumberUtils.toLargeMoneyStr(data.caseNo)}</Text>
                                     </View>
                                     <View style={{
