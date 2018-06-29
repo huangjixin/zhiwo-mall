@@ -1,6 +1,6 @@
 
 import React from "react";
-import {View,Text,TouchableWithoutFeedback,Image} from "react-native";
+import {View,Text,TouchableWithoutFeedback,Image,Platform} from "react-native";
 
 export class ApplyCommonHeader extends React.Component {
     static defaultProps = {
@@ -17,14 +17,16 @@ export class ApplyCommonHeader extends React.Component {
         } = this.props;
 
         return (
-                <View style={{height:50,backgroundColor:'#FFDD00'
+            <View style={{height:Platform.OS === "ios" ?64 :44,backgroundColor:'#FFDD00',}}>
+                <View style={{height:Platform.OS === "ios" ?20 :0,backgroundColor:'#FFDD00',}}></View>
+                <View style={{height:44,backgroundColor:'#FFDD00'
                     ,flexDirection:'row',justifyContent: 'center',alignItems: 'center'}}>
                     <TouchableWithoutFeedback onPress={onReturn}>
                         <View style={{flex:1,paddingLeft:10}}>
                                 <Image style={{width:11,height:18,}}source={require('../../../img/UserCenter/GoBackBlack.png')}/>
                         </View>
                     </TouchableWithoutFeedback>
-                    <View style={{flex:1.5,justifyContent: 'center',alignItems: 'center',}}>
+                    <View style={{flex:1,justifyContent: 'center',alignItems: 'center',}}>
                         <Text style={{color:'#000000',fontSize:22}}>{title}</Text>
                     </View>
                     <TouchableWithoutFeedback onPress={onAction}>
@@ -33,6 +35,7 @@ export class ApplyCommonHeader extends React.Component {
                         </View>
                     </TouchableWithoutFeedback>
                 </View>
+            </View>
         );
     }
 }
