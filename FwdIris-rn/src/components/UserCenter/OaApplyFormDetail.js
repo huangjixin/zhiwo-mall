@@ -107,10 +107,10 @@ class PromotionUI extends React.Component {
         var agentGradeArr = PromotionList;
         super(props);
         this.state={
-            currentGradeEn:this.props.currentGrade,
-            currentGradeCn:agentGradeArr[this.props.currentGrade]["currentName"],
-            upGradeEn:this.props.upGrade,
-            upGradeCn:agentGradeArr[this.props.upGrade]["currentName"],
+            currentGradeEn:props.currentGrade===null?'':this.props.currentGrade,
+            currentGradeCn:props.currentGrade===null?'':agentGradeArr[this.props.currentGrade]["currentName"],
+            upGradeEn:props.upGrade===null?'':this.props.upGrade,
+            upGradeCn:props.upGrade===null?'':agentGradeArr[this.props.upGrade]["currentName"],
         }
         // props.username = '';
     }
@@ -349,9 +349,11 @@ export class OaApplyFormDetail extends React.Component {
             id:id,
             description:description,
             type:type,  //0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+            //type:2,  //0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
             agentCode:agentCode,
             createDatetime:createDatetime,
             status:status, //0 表示正在审批当中了；1表示结束；2驳回 3待签约。
+            //status:3, //0 表示正在审批当中了；1表示结束；2驳回 3待签约。
             startTime:startTime,
             endTime:endTime,
             endDatetime:endDatetime,
@@ -368,6 +370,7 @@ export class OaApplyFormDetail extends React.Component {
             processList:[],
             files:files,
         }
+        //{this.state.type==2&&this.state.status=='3'?(
     }
     componentWillMount() {
         this.fetchData();
