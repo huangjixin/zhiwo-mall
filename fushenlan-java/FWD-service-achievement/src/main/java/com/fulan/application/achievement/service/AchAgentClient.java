@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fulan.application.achievement.vo.CommonQueryRepsonse;
 import com.fulan.application.achievement.vo.QueryAgentHistoryIncomeRequest;
 import com.fulan.application.achievement.vo.QueryAgentHistoryIncomeResponse;
+import com.fulan.application.achievement.vo.QueryBasicsActualValueRequest;
+import com.fulan.application.achievement.vo.QueryBasicsActualValueResponse;
 import com.fulan.application.util.domain.Response;
 
 @FeignClient(name = "AchAgentService", url = "${url.agent.service}")
@@ -26,8 +28,13 @@ import com.fulan.application.util.domain.Response;
 @ResponseBody
 public interface AchAgentClient {
 	
+	@RequestMapping(value = "/queryAgentHistoryIncomeInfo", method = RequestMethod.POST)
+	CommonQueryRepsonse<QueryAgentHistoryIncomeResponse> queryAgentHistoryIncomeInfo(@RequestBody QueryAgentHistoryIncomeRequest req);
+	
+	
 	@RequestMapping(value = "/queryAgentAchievementInfo", method = RequestMethod.POST)
-	CommonQueryRepsonse<QueryAgentHistoryIncomeResponse> queryAgentAchievementInfo(@RequestBody QueryAgentHistoryIncomeRequest req);
+	CommonQueryRepsonse<QueryBasicsActualValueResponse> queryAgentAchievementInfo(@RequestBody QueryBasicsActualValueRequest req);
+	
 	
 }
 
