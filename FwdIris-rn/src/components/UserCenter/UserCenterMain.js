@@ -74,7 +74,7 @@ export class UserCenterMain extends React.Component {
                         <Image  source={require('../../../img/UserCenter/UserImage.jpeg')}
                                 style={{width: 70, height: 70,borderRadius:35}} />
                         <Text style={{fontSize:20,color:'#000000',paddingTop:10}}>李俊芮</Text>
-                        <Text style={{paddingTop:10}}>资深业务主管  |  广州  建业营管处</Text>
+                        <Text style={{paddingTop:10,fontSize:12,}}>资深业务主管  |  广州  建业营管处</Text>
                     </View>
                     <View style={{flex:4,flexDirection: 'column',justifyContent: 'center'}}>
                         <View style={{flexDirection: 'row',justifyContent: 'center'}}>
