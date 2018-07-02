@@ -200,7 +200,7 @@ const AdministrativeTabr = TabNavigator({
                 // borderBottomWidth:2,
                 // borderBottomColor:'#000000',
                 // paddingTop:10,
-                // paddingBottom:10,
+                 paddingBottom:10,
             },
             // tabStyle: {
             //     //  backgroundColor: '#FFDD00',
@@ -208,9 +208,9 @@ const AdministrativeTabr = TabNavigator({
             // },
 
             style: {
-                 height:Platform.OS === "ios" ?68 :44,
+                 height:Platform.OS === "ios" ?68:44,
                 textAlign:'center',
-                 //paddingTop:-5,
+                // paddingTop:-5,
                 // paddingLeft:60,
                 // paddingRight:60,
                 // borderBottomWidth:3,
@@ -236,7 +236,7 @@ const AdministrativeTabr = TabNavigator({
         animationEnabled: false,
         swipeEnabled: false,
         lazy:true,
-        backBehavior:'none',
+        backBehavior:'none'
     }
 );
 
@@ -266,10 +266,8 @@ export class Administrative extends React.Component {
 
             <View style={{paddingBottom:10}} onLayout={this._onLayout}>
                 <View style={{height:screenHeight,}}>
-                    {/*//<View style={{height:Platform.OS === "ios" ?24 :0,backgroundColor:'#FFDD00',}}></View>
-                    //Platform.OS === "ios" ?44:*/}
                     <AdministrativeTabr style={{fontSize:22,backgroundColor:'#FFDD00'}}/>
-                    <View style={{width:20,backgroundColor:'#FFDD00',position:'absolute',left:15,top:Platform.OS === "ios" ?44:20,}}>
+                    <View style={{width:20,backgroundColor:'#FFDD00',position:'absolute',left:15,top:Platform.OS === "ios" ?34:20,}}>
                         <TouchableWithoutFeedback style={{width:30,height:30,}}  onPress={() => this.props.navigation.goBack()}>
                             <Image style={{width:11,height:22,}} source={require('../../../img/UserCenter/GoBackBlack.png')}/>
                         </TouchableWithoutFeedback>
