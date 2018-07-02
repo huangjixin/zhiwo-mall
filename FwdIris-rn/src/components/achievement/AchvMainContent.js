@@ -56,7 +56,7 @@ export class AchvMainContent extends React.Component {
                         // borderBottomWidth:2,
                         // borderBottomColor:'#000000',
                         // paddingTop:10,
-                        // paddingBottom:10,
+                         paddingBottom:10,
                     },
                     // tabStyle: {
                     //     //  backgroundColor: '#FFDD00',
@@ -64,7 +64,7 @@ export class AchvMainContent extends React.Component {
                     // },
                     
                     style: {
-                        // height:80,
+                        height:Platform.OS === "ios" ?68 :44,
                         textAlign:'center',
                         paddingTop:-5,
                     // paddingLeft:60,
@@ -97,7 +97,6 @@ export class AchvMainContent extends React.Component {
         );
     return (
         <View style={{paddingTop:0,flex:1}}  onLayout={this._onLayout}>
-            <View style={{backgroundColor:'#FFDD00',height:Platform.OS === "ios" ?24 :0,}}></View>
             <AchievementTabr/>
         </View>
 

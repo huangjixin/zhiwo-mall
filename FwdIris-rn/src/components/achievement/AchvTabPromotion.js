@@ -310,14 +310,16 @@ export class AchvTabPromotion extends React.Component {
                     <TouchableWithoutFeedback onPress={()=>this.switchTab(IDX_PROMOTION) }>
                         <View style ={{marginLeft:4,backgroundColor:selectedIndex==IDX_PROMOTION?'#FFDD00':'#FFFFFF',
                             borderRadius:5,flex:1,height:35,justifyContent: 'center',alignItems: 'center'}}>
-                        <Text style={{fontSize:19,fontFamily:'MicrosoftYaHei'}}>晋升</Text>
+                            {/*<Text style={{fontSize:19,fontFamily:'MicrosoftYaHei'}}>晋升</Text>*/}
+                            <Text style={{fontSize:19,}}>晋升</Text>
                         </View>
                     </TouchableWithoutFeedback>
 
                     <TouchableWithoutFeedback onPress={()=>this.switchTab(IDX_EVALUATION)}>
                         <View style ={{marginLeft:4,backgroundColor:selectedIndex==IDX_EVALUATION?'#FFDD00':'#FFFFFF',
                             borderRadius:5,flex:1,height:35,justifyContent: 'center',alignItems: 'center'}}>
-                            <Text style={{fontSize:19,fontFamily:'MicrosoftYaHei'}}>考核</Text>
+                            {/*<Text style={{fontSize:19,fontFamily:'MicrosoftYaHei'}}>考核</Text>*/}
+                            <Text style={{fontSize:19,}}>考核</Text>
                         </View>
                     </TouchableWithoutFeedback>
                 </View>
