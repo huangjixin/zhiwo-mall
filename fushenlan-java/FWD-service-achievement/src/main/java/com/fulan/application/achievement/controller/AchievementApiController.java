@@ -3,16 +3,22 @@ package com.fulan.application.achievement.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fulan.application.achievement.service.AchAgentClient;
 import com.fulan.application.achievement.vo.AgentGrade;
 import com.fulan.application.achievement.vo.AgentHistoryIncomeDetail;
 import com.fulan.application.achievement.vo.AgentHistoryIncomeDetailedSubItem;
+import com.fulan.application.achievement.vo.CommonQueryRepsonse;
 import com.fulan.application.achievement.vo.ErrorMessage;
 import com.fulan.application.achievement.vo.MyTeamMember;
 import com.fulan.application.achievement.vo.PersonalAchievement;
@@ -26,6 +32,7 @@ import com.fulan.application.achievement.vo.QueryAgentTeamListResponse.AgentTeam
 import com.fulan.application.achievement.vo.QueryBasicsActualValueRequest;
 import com.fulan.application.achievement.vo.QueryBasicsActualValueResponse;
 import com.fulan.application.achievement.vo.RankAssessmentIndicator;
+import com.fulan.application.oa.controller.BankCardController;
 import com.fulan.application.oa.vo.OAApplyFormVo;
 import com.fulan.application.util.domain.Response;
 import com.fulan.application.util.page.PageInfo;
@@ -40,13 +47,17 @@ import com.fulan.application.util.page.PageInfo;
 @RestController
 @RequestMapping("/achivement")
 public class AchievementApiController {
-
+	private static final Logger logger = LoggerFactory.getLogger(AchievementApiController.class);
+	@Autowired
+	private AchAgentClient achAgentClient;
 	/**
 	 * 代理人历史收入查询
 	 * 
 	 * @param queryAgentHistoryIncomeRequest
 	 * @return
 	 */
+
+	
 	@RequestMapping(value = "/queryAgentHistoryIncome", method = RequestMethod.GET)
 	public Response<QueryAgentHistoryIncomeResponse> queryAgentHistoryIncome(@Validated QueryAgentHistoryIncomeRequest queryAgentHistoryIncomeRequest,
 			BindingResult result) {
@@ -58,30 +69,43 @@ public class AchievementApiController {
 			return new Response<QueryAgentHistoryIncomeResponse>(Response.ERROR,errMsg.substring(0, errMsg.lastIndexOf(",")));
 		}
 		
-		List<AgentHistoryIncomeDetailedSubItem> subList = new ArrayList<AgentHistoryIncomeDetailedSubItem>();
-		subList.add(new AgentHistoryIncomeDetailedSubItem("新人引荐奖金","10000"));
-		subList.add(new AgentHistoryIncomeDetailedSubItem("团队育成奖金","20000"));
-		subList.add(new AgentHistoryIncomeDetailedSubItem("年度直接管理奖金","10000"));
+		QueryAgentHistoryIncomeResponse respData= null;
+		try {
+			CommonQueryRepsonse<QueryAgentHistoryIncomeResponse> queryAgentHistoryIncomeResponse = achAgentClient.queryAgentAchievementInfo(queryAgentHistoryIncomeRequest);
+		}catch(Exception e) {
+			logger.error("server Error", e);
+			Response<QueryAgentHistoryIncomeResponse> response = new Response<QueryAgentHistoryIncomeResponse>(Response.ERROR,e.getMessage());
+			return response;
+		}
 		
-		// 代理人历史收入响应参数 明细信息实体类
-		List<AgentHistoryIncomeDetail> detailLsit = new ArrayList<AgentHistoryIncomeDetail>();
-		detailLsit.add(new AgentHistoryIncomeDetail("佣金类收入","200000",subList));
-		detailLsit.add(new AgentHistoryIncomeDetail("新人持续发展奖","100000",subList));
-		detailLsit.add(new AgentHistoryIncomeDetail("个人销售收入","200000",subList));
-		detailLsit.add(new AgentHistoryIncomeDetail("团队管理奖金","150000",subList));
-		detailLsit.add(new AgentHistoryIncomeDetail("增员与团队发展奖金","210000",subList));
-		detailLsit.add(new AgentHistoryIncomeDetail("激励MDRT达成","100000",subList));
-		
-		QueryAgentHistoryIncomeResponse queryAgentHistoryIncomeResponse = new QueryAgentHistoryIncomeResponse();
-		queryAgentHistoryIncomeResponse.setAfterTax("14000");
-		queryAgentHistoryIncomeResponse.setPreTax("20000");
-		queryAgentHistoryIncomeResponse.setTaxAmount("3000");
-		queryAgentHistoryIncomeResponse.setDetailList(detailLsit);
-		
-		Response<QueryAgentHistoryIncomeResponse> response = new Response<QueryAgentHistoryIncomeResponse>(Response.SUCCESS,
-				Response.SUCCESS_MESSAGE);
-		response.setData(queryAgentHistoryIncomeResponse);
+		Response<QueryAgentHistoryIncomeResponse> response = new Response<QueryAgentHistoryIncomeResponse>(Response.SUCCESS,Response.SUCCESS_MESSAGE);
+		response.setData(respData);
 		return response;
+		
+//		List<AgentHistoryIncomeDetailedSubItem> subList = new ArrayList<AgentHistoryIncomeDetailedSubItem>();
+//		subList.add(new AgentHistoryIncomeDetailedSubItem("新人引荐奖金","10000"));
+//		subList.add(new AgentHistoryIncomeDetailedSubItem("团队育成奖金","20000"));
+//		subList.add(new AgentHistoryIncomeDetailedSubItem("年度直接管理奖金","10000"));
+//		
+//		// 代理人历史收入响应参数 明细信息实体类
+//		List<AgentHistoryIncomeDetail> detailLsit = new ArrayList<AgentHistoryIncomeDetail>();
+//		detailLsit.add(new AgentHistoryIncomeDetail("佣金类收入","200000",subList));
+//		detailLsit.add(new AgentHistoryIncomeDetail("新人持续发展奖","100000",subList));
+//		detailLsit.add(new AgentHistoryIncomeDetail("个人销售收入","200000",subList));
+//		detailLsit.add(new AgentHistoryIncomeDetail("团队管理奖金","150000",subList));
+//		detailLsit.add(new AgentHistoryIncomeDetail("增员与团队发展奖金","210000",subList));
+//		detailLsit.add(new AgentHistoryIncomeDetail("激励MDRT达成","100000",subList));
+//		
+//		QueryAgentHistoryIncomeResponse queryAgentHistoryIncomeResponse = new QueryAgentHistoryIncomeResponse();
+//		queryAgentHistoryIncomeResponse.setAfterTax("14000");
+//		queryAgentHistoryIncomeResponse.setPreTax("20000");
+//		queryAgentHistoryIncomeResponse.setTaxAmount("3000");
+//		queryAgentHistoryIncomeResponse.setDetailList(detailLsit);
+//		
+//		Response<QueryAgentHistoryIncomeResponse> response = new Response<QueryAgentHistoryIncomeResponse>(Response.SUCCESS,
+//				Response.SUCCESS_MESSAGE);
+//		response.setData(queryAgentHistoryIncomeResponse);
+//		return response;
 	}
 
 	/**

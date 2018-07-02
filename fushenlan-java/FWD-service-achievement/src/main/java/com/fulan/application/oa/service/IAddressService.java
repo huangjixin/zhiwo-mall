@@ -6,6 +6,7 @@ package com.fulan.application.oa.service;
 import java.util.List;
 
 import com.fulan.application.oa.domain.FwdOaAddress;
+import com.fulan.application.oa.domain.FwdOaAddressExample;
 
 /**
  * @author 黄记新
@@ -43,4 +44,9 @@ public interface IAddressService {
 	 * @return
 	 */
 	FwdOaAddress selectById(int id);
+	
+	
+	List<FwdOaAddress> findByCriteria(FwdOaAddressExample example);
+	
+	
 }

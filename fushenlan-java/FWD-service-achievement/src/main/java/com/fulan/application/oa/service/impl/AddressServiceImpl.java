@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fulan.application.oa.domain.FwdOaAddress;
+import com.fulan.application.oa.domain.FwdOaAddressExample;
 import com.fulan.application.oa.mapper.FwdOaAddressMapper;
 import com.fulan.application.oa.service.IAddressService;
 
@@ -105,6 +106,13 @@ public class AddressServiceImpl implements IAddressService {
 		}
 		return addresses;
 	}
+	
+	@Override
+	public List<FwdOaAddress> findByCriteria(FwdOaAddressExample example){
+		List<FwdOaAddress> addresses = addressMapper.selectByExample(example);
+		return addresses;
+	}
+	
 
 	@Override
 	public FwdOaAddress selectById(int id) {

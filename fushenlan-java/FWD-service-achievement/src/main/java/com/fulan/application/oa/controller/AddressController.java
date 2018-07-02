@@ -3,14 +3,20 @@ package com.fulan.application.oa.controller;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fulan.application.oa.domain.FwdOaAddress;
+import com.fulan.application.oa.domain.FwdOaAddressExample;
+import com.fulan.application.oa.domain.FwdOaBankCard;
 import com.fulan.application.oa.service.IAddressService;
+import com.fulan.application.util.domain.Response;
 
 /**
  * 地址控制层
@@ -21,7 +27,7 @@ import com.fulan.application.oa.service.IAddressService;
 @RestController
 @RequestMapping("/address")
 public class AddressController {
-
+	private static final Logger logger = LoggerFactory.getLogger(AddressController.class);
 	@Autowired
 	private IAddressService addressService;
 
@@ -70,10 +76,22 @@ public class AddressController {
 	 * @param selectAll
 	 * @return
 	 */
-	@RequestMapping(value = "/selectAll", method = RequestMethod.GET)
-	private List<FwdOaAddress> selectAll() {
-		List<FwdOaAddress> addresses = addressService.selectAll();
-		return addresses;
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	private Response<List<FwdOaAddress>> findAddresses(@RequestParam("agentCode") String agentCode) {
+		List<FwdOaAddress> oaBankCardList = null;
+		
+		FwdOaAddressExample example = new FwdOaAddressExample();
+		example.createCriteria().andAgentCodeEqualTo(agentCode);
+		try {
+			oaBankCardList = addressService.findByCriteria(example);
+		} catch (Exception e) {
+			logger.error("Unknow Error", e);
+			Response<List<FwdOaAddress>> response = new Response<List<FwdOaAddress>>(Response.ERROR,e.getMessage());
+			return response;
+		}
+		Response<List<FwdOaAddress>> response = new Response<List<FwdOaAddress>>(Response.SUCCESS,Response.SUCCESS_MESSAGE);
+		response.setData(oaBankCardList);
+		return response;
 	}
 
 	/**
