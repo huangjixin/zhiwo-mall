@@ -476,7 +476,7 @@ export class AchvTabMyAchievement extends React.Component {
 
                             <Progress.Bar
                                 marginTop={20}
-                                progress={0.6}
+                                progress={NumberUtils.divisionDot2(data.fyp,50000)}
                                 width={Dimensions.get('window').width-80}
                                 height={2}
                                 borderRadius={0}
@@ -537,7 +537,7 @@ export class AchvTabMyAchievement extends React.Component {
 
                             <Progress.Bar
                                 marginTop={20}
-                                progress={0.6}
+                                progress={NumberUtils.divisionDot2(data.fyc,50000)}
                                 width={Dimensions.get('window').width-80}
                                 height={2}
                                 borderRadius={0}
@@ -598,7 +598,7 @@ export class AchvTabMyAchievement extends React.Component {
 
                             <Progress.Bar
                                 marginTop={20}
-                                progress={0.6}
+                                progress={NumberUtils.divisionDot2(data.caseNo,5)}
                                 width={Dimensions.get('window').width-80}
                                 height={2}
                                 borderRadius={0}

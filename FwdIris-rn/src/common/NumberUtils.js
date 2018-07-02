@@ -48,3 +48,9 @@ export function hiddenBankCard(str){
         return '';
     return str.replace(reg,'****  ****  ****  ');
 }
+
+/*保留小数点后两位*/
+export function divisionDot2(molecule,denominator) {
+    let percent = molecule/denominator;
+    return percent.toFixed(2);
+}
