@@ -35,6 +35,7 @@ export class AchvTabMyAchievement extends React.Component {
         this.state  = {
             isRefreshing:false,
             isLeader:isLeader,          //是否要显示团队信息
+            routerDepth:0,
             personalTeamIndicator:isLeader?IND_TEAM:IND_PERSONAL, //用作切换 个人 or 团队 数据,默认团队
             queryYear:(new Date()).getUTCFullYear(),
             queryMonth:(new Date()).getUTCMonth(),
@@ -118,6 +119,14 @@ export class AchvTabMyAchievement extends React.Component {
             })
         }
     }
+
+    goBack = ()=>{
+        console.log(this.router.length)
+        if(this.router.length!=0){
+            this.clickBackView();
+        }
+    }
+
     componentWillUnmount() {
         if (Platform.OS === 'android') {
             BackHandler.removeEventListener('hardwareBackPress', () => {});
@@ -251,7 +260,8 @@ export class AchvTabMyAchievement extends React.Component {
                     data:respData.data,
                     isLeader:isLeader,
                     personalTeamIndicator:isLeader?IND_TEAM:IND_PERSONAL,
-                    isRefreshing:false
+                    isRefreshing:false,
+                    routerDepth:this.state.routerDepth+1
                 });
 
                 this.router.push(this.curNode);
@@ -284,6 +294,7 @@ export class AchvTabMyAchievement extends React.Component {
             data:this.curNode.teamData,
             isLeader:true,
             personalTeamIndicator:IND_TEAM,
+            routerDepth:this.state.routerDepth-1
         })
 
         console.log('clickBackView(),back to code:'+this.curNode.agentCode + ', grade:'+ this.curNode.agentGrade);
@@ -335,7 +346,7 @@ export class AchvTabMyAchievement extends React.Component {
     }
 
     render() {
-       const {data} = this.state;
+       const {data,routerDepth} = this.state;
        const personalAchievement = data.personalAchievement;
        const groupList = data.groupList;
         return (
@@ -348,6 +359,16 @@ export class AchvTabMyAchievement extends React.Component {
                     />
                 }
             >
+                {routerDepth>0 &&(
+                    <View>
+                        <TouchableWithoutFeedback  onPress={this.goBack} >
+                            <View style={{flex:1,paddingLeft:20,marginTop:20}}>
+                                <Image style={{width:11,height:18,}}source={require('../../../img/UserCenter/GoBackBlack.png')}/>
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </View>
+                )}
+
                 <View style={{
                     flex: 1,
                     backgroundColor:'#F7F7F7',
