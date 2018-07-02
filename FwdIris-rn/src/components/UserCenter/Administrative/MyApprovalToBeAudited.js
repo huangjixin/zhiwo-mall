@@ -104,11 +104,11 @@ export class MyApprovalToBeAudited extends React.Component {
                     }
                 }else {
                     console.log(responseData.msg);
-                    alert('网络异常，请稍后再试');
+                    //alert('网络异常，请稍后再试');
                 }
             }).catch((err) => {//2
             console.error(err);
-            alert('网络异常，请稍后再试');
+            //alert('网络异常，请稍后再试');
         }).done();
     }
     //选中的item跳转到详情页
@@ -456,9 +456,9 @@ export class MyApprovalToBeAudited extends React.Component {
                                     </View>
                                     <TouchableOpacity  onPress={this.clickModel.bind(this)}>
                                         <View style={{flexDirection: 'row',marginBottom:20,}}>
-                                            <Text style={{flex:2.5}}></Text>
-                                            <Text style={{flex:5,fontSize:20,lineHeight:40,borderRadius:5,textAlign:'center',backgroundColor:'#FFDD00',color:'#000000',}}>确定</Text>
-                                            <Text style={{flex:2.5}}></Text>
+                                            <Text style={{flex:1}}></Text>
+                                            <Text style={{flex:8,fontSize:20,lineHeight:40,borderRadius:5,textAlign:'center',backgroundColor:'#FFDD00',color:'#000000',}}>确定</Text>
+                                            <Text style={{flex:1}}></Text>
                                         </View>
                                     </TouchableOpacity>
                                 </View>

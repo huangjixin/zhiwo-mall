@@ -540,9 +540,9 @@ export class MyApplyToBeAudited extends React.Component {
                                 </View>
                                 <TouchableOpacity  onPress={this.clickModel.bind(this)}>
                                     <View style={{flexDirection: 'row',marginBottom:20,}}>
-                                        <Text style={{flex:2.5}}></Text>
-                                        <Text style={{flex:5,fontSize:20,lineHeight:40,borderRadius:5,textAlign:'center',backgroundColor:'#FFDD00',color:'#000000',}}>确定</Text>
-                                        <Text style={{flex:2.5}}></Text>
+                                        <Text style={{flex:1}}></Text>
+                                        <Text style={{flex:8,fontSize:20,lineHeight:40,borderRadius:5,textAlign:'center',backgroundColor:'#FFDD00',color:'#000000',}}>确定</Text>
+                                        <Text style={{flex:1}}></Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
