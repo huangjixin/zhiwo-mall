@@ -394,7 +394,7 @@ export class MyApprovalToBeCheck extends React.Component {
                     >
 
                         <TouchableWithoutFeedback style={{}} onPress={this.hiddenModal}>
-                            <View style={{height:ScreenHeight-220,backgroundColor:'rgba(0, 0, 0, 0.3)'}}></View>
+                            <View style={{height:ScreenHeight-260,backgroundColor:'rgba(0, 0, 0, 0.3)'}}></View>
                         </TouchableWithoutFeedback>
                         <View style={{flex:1,justifyContent:'flex-end',alignItems:'flex-end',backgroundColor:'rgba(0, 0, 0, 0.3)'}}>
                             <View style={{height:240,width:ScreenWidth,backgroundColor:'white'}}>
