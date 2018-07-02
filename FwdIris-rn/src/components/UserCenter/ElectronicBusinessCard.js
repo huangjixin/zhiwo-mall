@@ -1,10 +1,11 @@
 import React from 'react';
-import {StyleSheet, ScrollView, Text ,View,Image,Button,ImageBackground,TouchableWithoutFeedback} from 'react-native';
+import {StyleSheet, ScrollView, Text ,View,Image,Button,ImageBackground,TouchableWithoutFeedback,Platform} from 'react-native';
 export class ElectronicBusinessCard extends React.Component {
     render() {
         return (
             <ScrollView style={{backgroundColor:'#999999',}}>
-                <ImageBackground style={{ flexDirection: 'row',justifyContent: 'space-between',height:40}} source={require('../../../img/UserCenter/BackgroundTitleImage.png')}>
+                {Platform.OS === "ios" ?<View style={{backgroundColor:'#323232',height:20,}}></View>:<View></View>}
+                <ImageBackground style={{ flexDirection: 'row',justifyContent: 'space-between',height:44}} source={require('../../../img/UserCenter/BackgroundTitleImage.png')}>
                     <TouchableWithoutFeedback  onPress={() => this.props.navigation.goBack()}>
                         <Image style={{width:30,height:30,marginTop:5,marginLeft:5,}}source={require('../../../img/UserCenter/GoBack.png')}/>
                     </TouchableWithoutFeedback>
