@@ -493,10 +493,10 @@ export class MyApplyToBeAudited extends React.Component {
                     >
 
                         <TouchableWithoutFeedback style={{}} onPress={this.hiddenModal}>
-                            <View style={{height:ScreenHeight-240,backgroundColor:'rgba(0, 0, 0, 0.3)'}}></View>
+                            <View style={{height:ScreenHeight-220,backgroundColor:'rgba(0, 0, 0, 0.3)'}}></View>
                         </TouchableWithoutFeedback>
                         <View style={{flex:1,justifyContent:'flex-end',alignItems:'flex-end',backgroundColor:'rgba(0, 0, 0, 0.3)'}}>
-                            <View style={{height:220,width:ScreenWidth,backgroundColor:'white'}}>
+                            <View style={{height:240,width:ScreenWidth,backgroundColor:'white'}}>
 
                                 <Text style={{fontWeight:'bold',color:'#151515',fontSize:16,paddingTop:20,paddingLeft:15,paddingBottom:10,}}>类型</Text>
                                 <View style={{flexWrap:'wrap',flexDirection: 'row',justifyContent: 'flex-start',marginBottom:10,marginLeft:15,paddingRight:15,}}>
@@ -538,7 +538,13 @@ export class MyApplyToBeAudited extends React.Component {
                                     </TouchableOpacity>
 
                                 </View>
-                                <Button title='确定' onPress={this.clickModel.bind(this)}/>
+                                <TouchableOpacity  onPress={this.clickModel.bind(this)}>
+                                    <View style={{flexDirection: 'row',marginBottom:20,}}>
+                                        <Text style={{flex:2.5}}></Text>
+                                        <Text style={{flex:5,fontSize:20,lineHeight:40,borderRadius:5,textAlign:'center',backgroundColor:'#FFDD00',color:'#000000',}}>确定</Text>
+                                        <Text style={{flex:2.5}}></Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </Modal>
@@ -613,8 +619,9 @@ export class MyApplyToBeAudited extends React.Component {
     }
 }
 
+
 const styles = StyleSheet.create({
-    modelText:{marginBottom:10,textAlign:'center',marginLeft:20,borderRadius:5,borderWidth:0.5,borderColor:'black',padding:5,height:30,backgroundColor:'#F2F2F2',color:'#000000'},
-    selectModelText:{marginBottom:10,textAlign:'center',marginLeft:20,borderRadius:5,borderWidth:0.5,borderColor:'black',padding:5,height:30,backgroundColor:'#169BD5',color:'#ffffff'},
+    modelText:{marginBottom:10,textAlign:'center',marginLeft:20,borderRadius:5,borderWidth:1,borderColor:'#949494',padding:5,height:30,color:'#949494'},
+    selectModelText:{marginBottom:10,textAlign:'center',marginLeft:20,borderRadius:5,borderWidth:1,borderColor:'#E87722',padding:5,height:30,color:'#E87722'},
     footer:{flexDirection:'row', height:50, justifyContent:'center', alignItems:'center', marginBottom:10,marginTop:10,},
 });
