@@ -17,7 +17,7 @@ export class ApplyCommonHeader extends React.Component {
         } = this.props;
 
         return (
-            <View style={{height:Platform.OS === "ios" ?68 :44,backgroundColor:'#FFDD00',}}>
+            <View style={{height:Platform.OS === "ios" ?68 :50,backgroundColor:'#FFDD00',}}>
                 <View style={{height:Platform.OS === "ios" ?24 :0,backgroundColor:'#FFDD00',}}></View>
                 <View style={{height:44,backgroundColor:'#FFDD00'
                     ,flexDirection:'row',justifyContent: 'center',alignItems: 'center'}}>

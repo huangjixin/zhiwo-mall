@@ -208,7 +208,7 @@ const AdministrativeTabr = TabNavigator({
             // },
 
             style: {
-                 height:Platform.OS === "ios" ?68:44,
+                 height:Platform.OS === "ios" ?68:50,
                 textAlign:'center',
                 // paddingTop:-5,
                 // paddingLeft:60,

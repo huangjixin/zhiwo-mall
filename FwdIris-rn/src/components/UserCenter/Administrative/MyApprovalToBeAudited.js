@@ -500,7 +500,7 @@ export class MyApprovalToBeAudited extends React.Component {
         } else if(this.state.showFoot === 0){
             return (
                 <View style={styles.footer}>
-                    <Text>上拉加载更多数据...</Text>
+                    {/*<Text>上拉加载更多数据...</Text>*/}
                 </View>
             );
         }
