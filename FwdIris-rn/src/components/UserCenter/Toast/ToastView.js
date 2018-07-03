@@ -11,12 +11,10 @@ import {
     Animated
 } from 'react-native';
 import PropTypes from 'prop-types';
-//import Toast from "./Toast";
+import Toast from "./Toast";
 
 const {width, height} = Dimensions.get("window");
 const viewHeight = 35;
-const LONG = 2000;
-const SHORT = 1000;
 
 class ToastView extends Component {
     static propTypes = {
@@ -32,7 +30,7 @@ class ToastView extends Component {
         console.log("constructor:ToastView")
         this.state = {
             message: props.message !== undefined ? props.message : '',
-            time: props.time && props.time < 1500 ? SHORT : LONG,
+            time: props.time && props.time < 1500 ? Toast.SHORT : Toast.LONG,
         }
     }
 
@@ -51,7 +49,7 @@ class ToastView extends Component {
         console.log("nextProps", nextProps)
         this.setState({
             message: nextProps.message !== undefined ? nextProps.message : '',
-            time: nextProps.time && nextProps.time < 1500 ? SHORT : LONG,
+            time: nextProps.time && nextProps.time < 1500 ? Toast.SHORT : Toast.LONG,
         })
         clearTimeout(this.dismissHandler)
         this.timingDismiss()

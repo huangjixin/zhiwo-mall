@@ -19,6 +19,8 @@ Toast.show("测试",Toast.LONG);
 
 */}
 class Toast {
+    static LONG = 2000;
+    static SHORT = 1000;
 
     static show(msg) {
         RootView.setView(<ToastView
