@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -63,7 +64,8 @@ public class ApplyFormController {
 	private IAttachmentService attachmentService;
 
 	// 暂时写在D盘，后续应该配置成为注入值。
-	private String uploadPath = "C:";
+	@Value("${uploadPath}")
+	private String uploadPath;
 
 	/**
 	 * @Description:待我审批

@@ -229,7 +229,7 @@ public class ApplyFormServiceImpl implements IApplyFormService {
 		String formId = applyForm.getId().toString();
 		String agentCode = applyForm.getAgentCode();
 		String branchCode = ApplyConstant.BRANCH_CODE_SHANG_HAI;
-		this.workFlowService.startProcessAndSubmitForm(applyType, formId, agentCode, branchCode, params);
+		//this.workFlowService.startProcessAndSubmitForm(applyType, formId, agentCode, branchCode, params);
 		return num;
 	}
 
