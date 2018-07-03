@@ -151,10 +151,10 @@ export class AchvTabIncome extends React.Component {
                 data.subList.map((v, i) => (
                     <View key={i} style={{flexDirection:'row',justifyContent: 'center',alignItems: 'center',marginTop:10,}}>
                         <View style={{flex:2,paddingLeft:15}}>
-                            <Text style={{fontSize:14,color:'#4A4A4A'}}>{v.category}</Text>
+                            <Text style={{fontSize:14,color:'#4A4A4A'}}>{v.subCategory}</Text>
                         </View>
                         <View style={{paddingRight:30,flex:1,flexDirection:'row',justifyContent: 'flex-end',alignItems:'center'}}>
-                            <Text style={{fontSize:16,color:'#878787'}}>{NumberUtils.toLargeMoneyStr(v.amount)}</Text>
+                            <Text style={{fontSize:16,color:'#878787'}}>{NumberUtils.toLargeMoneyStr(v.subAmount)}</Text>
                         </View>
                     </View>
                 ))

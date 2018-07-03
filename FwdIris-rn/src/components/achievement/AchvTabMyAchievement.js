@@ -304,9 +304,9 @@ export class AchvTabMyAchievement extends React.Component {
         const month = this.state.queryMonth;
         const year = this.state.queryYear;
         if(month<10)
-            return year + '-0' + month;
+            return year + '-0' + month+'-01';
         else
-            return year + '-' + month;
+            return year + '-' + month+'-01';
     }
 
     //时间选择 TODO
