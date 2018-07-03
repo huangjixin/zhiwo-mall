@@ -552,17 +552,15 @@ public class ApplyFormController {
 						promotions.add(dto);
 					}
 				}
-				response.setData(promotions);
 			}
-			
 			String statusCode = resp.getStatus().getStatusCode();
 			String statusMessage = resp.getStatus().getStatusMessage();
-			if("01".equals(statusCode))
+			if("01".equals(statusCode)) {
 				response = new Response<List<OaAgentDto>>(Response.SUCCESS,Response.SUCCESS_MESSAGE);
-			else {
+				response.setData(promotions);
+			}else {
 				response = new Response<List<OaAgentDto>>(Response.ERROR,statusMessage);
 			}
-			
 		} catch (Exception e) {
 			logger.error("Unknow Error", e);
 			return new Response<List<OaAgentDto>>(Response.ERROR, e.getMessage());
