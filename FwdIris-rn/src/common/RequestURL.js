@@ -18,6 +18,9 @@ export const TO_DEFAULT = HOST + 'bankCard/toDefault';
 //手机更新
 export const CHANGE_MOBILE_NO = HOST + 'mobile/save';
 
+//地址
+export const ADDRESS_LIST = HOST + 'address/list';
+
 //other
 export const SEND_VERIFICATION_CODE = HOST + 'oaCommon/sendVerificationCode';
 export const VERIFY_VERIFICATION_CODE = HOST + 'oaCommon/verifyVerificationCode';

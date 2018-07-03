@@ -2,42 +2,14 @@ import React from 'react';
 import {StyleSheet, ScrollView, Text,View,Image,TextInput,TouchableWithoutFeedback,DeviceEventEmitter,FlatList,Dimensions,TouchableOpacity} from 'react-native';
 import CheckBox from 'react-native-checkbox';
 import {ApplyCommonHeader} from "./ApplyCommonHeader";
+import {FwdLoading} from "./FwdLoading";
+import * as FetchUtils from "../../common/FetchUtils";
+import * as RequestURL from "../../common/RequestURL";
+import * as NumberUtils from "../../common/NumberUtils";
 var ScreenWidth = Dimensions.get('window').width;
 var ScreenHeight = Dimensions.get('window').height;
-
+const g_agentCode = '888999';
 export class AddressChangeApply extends React.Component {
-
-    requestData = [{
-        id:1,
-        isDefault:true,
-        country:"中国",
-        province:"",
-        city:"上海市",
-        area:"松江区",
-        street:"古楼路",
-        addressDetail:"古楼路1899弄8号楼902室",
-    },{
-        id:2,
-        isDefault:false,
-        country:"中国",
-        province:"江苏省",
-        city:"无锡市",
-        area:"惠山区",
-        street:"中山路",
-        addressDetail:"中山路500号",
-    },{
-        id:3,
-        isDefault:false,
-        country:"中国",
-        province:"江苏省",
-        city:"无锡市",
-        area:"惠山区",
-        street:"中山路",
-        addressDetail:"中山路501号",
-    }
-    ];
-
-
     constructor(props){
         super(props);
         this.state = {
@@ -54,41 +26,45 @@ export class AddressChangeApply extends React.Component {
         DeviceEventEmitter.emit('AddAddressPage'); //地址变更申请-》添加地址页面
     }
 
+    modifyAddressPage=(item)=>{
+        // DeviceEventEmitter.emit('AddAddressPage',item); //地址变更申请-》添加地址页面
+        DeviceEventEmitter.emit('AddAddressPage',item); //地址变更申请-》添加地址页面
+    }
 
     // 网络请求
     fetchData() {
-        // fetch('https://facebook.github.io/react-native/movies.json', {
-        // })
-        //     .then((response) => response.json())
-        //     .then((responseData) => {
-        //         let data = this.state.dataSource.concat(responseData.movies);
-        //         let newData = [];
-        //         for (var i = 0; i < data.length-2; i++) {
-        //             newData.push(data[i]);
-        //         }
-        //         this.setState( {
-        //             dataSource:data,
-        //             newData:newData,
-        //         })
-        //     }).done();
+        const params = {
+            agentCode:g_agentCode,
+        }
+        this.setState({isLoading:true});
+        FetchUtils.Get({
+            url:RequestURL.ADDRESS_LIST,
+            params:params,
+            success:(respData)=>{
+                const defaultAddress = respData.data.filter(item=>{
+                    return item.isDefault;
+                });
 
-        const defaultAddress = this.requestData.filter(item=>{
-            return item.isDefault;
-        });
+                const otherAddress = respData.data.filter(item=>{
+                    return !item.isDefault;
+                });
 
-        const otherAddress = this.requestData.filter(item=>{
-            return !item.isDefault;
-        });
+                this.setState({
+                    defaultAddress:defaultAddress[0],
+                    otherAddress:otherAddress,
+                    isLoading:false
+                });
 
-        this.setState({
-            defaultAddress:defaultAddress[0],
-            otherAddress:otherAddress,
-        });
+            },
+            error:()=>{
+                this.setState({isLoading:false});
+            }
+        })
     }
 
     render() {
 
-        const {defaultAddress,otherAddress} = this.state;
+        const {defaultAddress,otherAddress,isLoading} = this.state;
 
         return (
             <ScrollView style={{backgroundColor:'#FBFBFB',}}>
@@ -98,6 +74,7 @@ export class AddressChangeApply extends React.Component {
                     actionName={'新增地址'}
                     onAction={() => this.AddAddressPage()}
                 />
+                <FwdLoading isLoading={isLoading}/>
                 <View  style={{marginTop:20}}></View>
 
                 <View  style={{flexDirection: 'row',justifyContent: 'center',backgroundColor:'#ffffff',paddingLeft:15,paddingRight:10,
@@ -112,7 +89,7 @@ export class AddressChangeApply extends React.Component {
                             <Text>{defaultAddress.addressDetail}</Text>
                         </Text>
                     </View>
-                    <TouchableOpacity onPress={this.AddAddressPage} style={{justifyContent:'center',alignItems: 'center',flex:1}}>
+                    <TouchableOpacity onPress={()=>{this.modifyAddressPage(defaultAddress)}} style={{justifyContent:'center',alignItems: 'center',flex:1}}>
                         <View style={{flex:1,justifyContent: 'center',alignItems: 'center',}}>
                             <Image style={{width: 30, height: 30}} source={require('../../../img/UserCenter/timg.png')} />
                         </View>
@@ -122,7 +99,7 @@ export class AddressChangeApply extends React.Component {
                 <View  style={{borderRadius:10,backgroundColor:'#ffffff',marginLeft:15,marginRight:15,paddingLeft:15,paddingRight:10}}>
                 {
                     otherAddress.map((rowData, i,array) => (
-                        <View  style={[{flexDirection: 'row',justifyContent: 'center',height:80,borderColor:'#F4F4F4',},
+                        <View  key={i} style={[{flexDirection: 'row',justifyContent: 'center',height:80,borderColor:'#F4F4F4',},
                             array.length!=(i+1) && {borderBottomWidth:1}
                         ]}>
                             <View style={{flex:5,flexDirection: 'column',justifyContent: 'center',}}>
@@ -133,7 +110,7 @@ export class AddressChangeApply extends React.Component {
                                     <Text>{rowData.addressDetail}</Text>
                                 </Text>
                             </View>
-                            <TouchableOpacity onPress={this.AddAddressPage} style={{justifyContent:'center',alignItems: 'center',flex:1}}>
+                            <TouchableOpacity onPress={()=>{this.modifyAddressPage(rowData)}} style={{justifyContent:'center',alignItems: 'center',flex:1}}>
                                 <View style={{flex:1,justifyContent: 'center',alignItems: 'center',}}>
                                     <Image style={{width: 30, height: 30}} source={require('../../../img/UserCenter/timg.png')} />
                                 </View>

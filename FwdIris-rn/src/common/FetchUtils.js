@@ -30,7 +30,7 @@ export async function Get({url,params,success,error}){
                 if(typeof error === 'function'){
                     error(respData);
                 }
-                alert(respData.msg);
+                // alert(respData.msg);
                 return;
             }
 
@@ -44,7 +44,7 @@ export async function Get({url,params,success,error}){
             if(typeof error === 'function'){
                 error(errResp);
             }
-            alert('network error!');
+            // alert('network error!');
             console.log(errResp.toString());
         });
 
@@ -75,7 +75,7 @@ export async function Post({url,params,success,error}){
                 if(typeof error === 'function'){
                     error(respData);
                 }
-                alert(respData.msg);
+                // alert(respData.msg);
                 return;
             }
 
@@ -89,7 +89,7 @@ export async function Post({url,params,success,error}){
             if(typeof error === 'function'){
                 error(errResp);
             }
-            alert('network error!');
+            // alert('network error!');
             console.log(errResp.toString());
         });
 
