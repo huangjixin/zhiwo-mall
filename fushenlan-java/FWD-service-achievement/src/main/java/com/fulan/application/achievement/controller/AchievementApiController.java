@@ -138,6 +138,9 @@ public class AchievementApiController {
 						achAgentClient.queryAgentAchievementInfo(queryBasicsActualValueRequest);
 			//TODO status
 			queryBasicsActualValueResponse = queryBasicsActualResponse.getResponse();
+			if(queryBasicsActualValueResponse==null) {
+				queryBasicsActualValueResponse= new QueryBasicsActualValueResponse();
+			}
 		}catch(Exception e) {
 			logger.error("server Error", e);
 			Response<QueryBasicsActualValueResponse> response = new Response<QueryBasicsActualValueResponse>(Response.ERROR,e.getMessage());

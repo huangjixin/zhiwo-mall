@@ -34,7 +34,6 @@ public interface AchAgentClient {
 	
 	@RequestMapping(value = "/queryAgentAchievementInfo", method = RequestMethod.POST)
 	CommonQueryRepsonse<QueryBasicsActualValueResponse> queryAgentAchievementInfo(@RequestBody QueryBasicsActualValueRequest req);
-	
-	
+
 }
 
