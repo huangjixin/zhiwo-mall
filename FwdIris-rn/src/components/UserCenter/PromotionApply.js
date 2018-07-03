@@ -3,7 +3,7 @@ import {Modal,Button,TouchableOpacity,StyleSheet, ScrollView, Text,View,Image,Te
 import CheckBox from 'react-native-checkbox';
 import {ApplyCommonHeader} from "./ApplyCommonHeader";
 import Picker from 'react-native-picker';
-
+import Toast from './Toast/Toast';
 import * as RequestURL from "../../common/RequestURL";
 
 var ScreenWidth = Dimensions.get('window').width;
@@ -23,7 +23,7 @@ export class PromotionApply extends React.Component {
             //jobApplication:[],
             //agentGrade:agentGrade,   //当前代理人职级
             //  dataSource:[]
-            agentGradeList: agentGradeArr[agentGrade],    //当前代理人晋升渠道数据
+            agentGradeList: [],    //当前代理人晋升渠道数据
 
 
             id:'',
@@ -40,16 +40,59 @@ export class PromotionApply extends React.Component {
             title:'',
             imcomeproveMonth:'',
             currentGrade:agentGrade,//当前代理人职级
-            upGrade:agentGradeArr[agentGrade]['child'].length==1?agentGradeArr[agentGrade]['child'][0]['childEnName']:'',
+            upGrade:'',
             name: '',
             agentName: 'JohnnyZ'
 
 
         }
 
-        
+        this.fetchUpGrade();
         // this.fetchData = this.fetchData.bind(this);
     }
+
+
+    // 提交数据到后台
+    fetchUpGrade() {
+        //  Kane哥，后面这么写，搞一个变量，调试的时候也容易。
+        let url = RequestURL.HOST+'applyForm/selectPromotion?agentCode=123';
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type':'multipart/form-data;charset=utf-8',
+            },
+           // body: parmars,
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                if(responseJson.length==0){
+                    this.setState({
+                        upGrade:''
+                    });
+                }
+                else if(responseJson.length==1){
+                    this.setState({
+                        upGrade:responseJson,
+                    });
+                }else{
+                    this.setState({
+                        agentGradeList:responseJson,
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
+
+
+
+
+
+
+
     PromotionNoticePage=()=>{
         if(this.state.isSe1 == true){
             //DeviceEventEmitter.emit('PromotionNoticePage'); //晋级详情页面-》晋级通知书页面
@@ -77,7 +120,7 @@ export class PromotionApply extends React.Component {
 
                 // 做网络代码提交，此处暂时先做alert处理。
                 this.fetchData(formData);
-                alert(formData);
+                //alert(formData);
             }
 
 
@@ -102,10 +145,15 @@ export class PromotionApply extends React.Component {
         })
             .then((response) => response.json( ))
             .then((responseJson) => {
-                alert(parmars);
+                //alert(parmars);
                 // if (responseJson===1){
                 //     DeviceEventEmitter.emit('userCenterToAdministrative'); //用户中心跳转到行政审批
                 // }
+                if (responseJson.state==='1'){
+                    Toast.show("保存成功",Toast.LONG);
+                }else {
+                    Toast.show("保存失败",Toast.LONG);
+                }
             })
             .catch((error) => {
                 console.error(error);
@@ -139,7 +187,7 @@ export class PromotionApply extends React.Component {
 
     _showApplicationPicker() {
         Picker.init({
-            pickerData:this._applicationData(),
+            pickerData:this.upGrade,
             pickerFontColor: [0, 0 ,0, 1],
             pickerConfirmBtnText:'确定',
             pickerCancelBtnText:'取消',
