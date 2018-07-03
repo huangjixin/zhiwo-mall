@@ -380,7 +380,7 @@ export class OaApplyForm extends React.Component {
      //因为需要上传多张图片,所以需要遍历数组,把图片的路径数组放入formData中
         var i = 0;
         // for(i = 0;i<imgAry.length;i++){
-        
+
         // //截取获取文件名
         //     var a=imgAry[i].uri;
         //     var arr = a.split('/');
@@ -393,112 +393,39 @@ export class OaApplyForm extends React.Component {
         //     //这里的files就是后台需要的key
         // }
 
+        const data = [];
+        imgAry.forEach(photo => {
+            data.push(photo.data);
+        });
+
         //先上传第一个文件。
-        if(imgAry.length>0){
-            let obj = imgAry[0];
-            let file = {uri: obj.path, type: obj.type, name: obj.fileName};
-            fileData.append("file", file);
-        }
         // let file = {uri: params.path, type: 'application/octet-stream', name: 'image.jpg'};
         // formData.append("file", file);
 
-        let formData = new FormData();
-        formData.append("type", this.state.type);
-        formData.append("leaveType", this.state.leaveType);
-        formData.append("leaveOff", this.state.leaveOff);
-        formData.append("startTime", this.state.startTime);
-        formData.append("endTime", this.state.endTime);
-        formData.append("description", this.state.description);
-        formData.append("agentCode", this.state.agentCode);
-        formData.append("agentName", this.state.agentName);
-        if(this.state.imageArray.length>0){
-            formData.append("file", fileData);
-        }
-        
-        this.fetchData(formData);
+        let jsonData = {
+            type : this.state.type,
+            leaveType : this.state.leaveType,
+            leaveOff : this.state.leaveOff,
+            startTime : this.state.startTime,
+            endTime : this.state.endTime,
+            description : this.state.description,
+            agentCode : this.state.agentCode,
+            agentName : this.state.agentName,
+            files : data
+        };
+
+        this.fetchData(JSON.stringify(jsonData));
     }
-
-
-    // 单独测试提交一个文件到后台
-    upload=()=>{
-        let file = {uri:this.state.imageArray[0].uri,
-         type:this.state.imageArray[0].type, name:this.state.imageArray[0].fileName};
-        
-        let formData = new FormData();
-        formData.append("type", this.state.type);
-        formData.append("agentCode", this.state.agentCode);
-        formData.append("name", this.state.name);
-        let fileData = new FormData(); 
-        // fileData.append("file", file);
-        formData.append("file", file);
-
-        //  Kane哥，后面这么写，搞一个变量，调试的时候也容易。   
-        let url = RequestURL.HOST+'applyForm/upload';
-        //url = 'http://10.23.21.120:50000/applyForm/upload';
-        formData.append("file", file);
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'multipart/form-data;charset=utf-8',
-            },
-            body: formData,
-        }).then((response) => {})
-            .then((responseData)=> {
-               console.log(responseData);
-            })
-            .catch((err)=> {
-                console.log('err', err);
-            });
-
-    }
-
-    // 单独测试提交一个文件到后台
-    upload1=()=>{
-        var fileStr=''
-        let fileData = new FormData();
-        for (var i =0;i<this.state.imageArray.length;i++){
-            let file ='data:'+this.state.imageArray[i].type+';base64,'+this.state.imageArray[i].data;
-            if(fileStr==''){
-                fileStr+=file;
-            }else {
-                fileStr=fileStr+'||'+file;
-            }
-        }
-        // var aa=JSON.stringify(a);
-        let formData = new FormData();
-        formData.append("type", this.state.type);
-        formData.append("agentCode", this.state.agentCode);
-        formData.append("name", this.state.agentName);
-        // let fileData = new FormData();
-        // fileData.append("file", file);
-        // formData.append("file", file);
-
-        let url = RequestURL.HOST+'applyForm/saveForm';
-        formData.append("files", fileStr);
-        fetch(url, {
-            method: 'POST',
-
-            body: formData,
-        }).then((response) => {})
-            .then((responseData)=> {
-
-            })
-            .catch((err)=> {
-                console.log('err', err);
-            });
-
-    }
-
 
     // 提交数据到后台
     fetchData(parmars) {
          //  Kane哥，后面这么写，搞一个变量，调试的时候也容易。   
-        let url = RequestURL.HOST+'applyForm/saveSingleForm';
+        let url = RequestURL.HOST+'applyForm/saveMultipleFormBase64';
 
         fetch(url, {
             method: 'POST',
             headers: {
-            'Content-Type':'multipart/form-data;charset=utf-8',
+                'Content-Type':'application/json;charset=utf-8',
             },
             body: parmars,
         })
