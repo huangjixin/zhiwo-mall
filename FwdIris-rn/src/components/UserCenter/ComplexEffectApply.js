@@ -42,7 +42,7 @@ export class ComplexEffectApply extends React.Component {
     }
 
 
-    fetchNameData(parmars) {
+    fetchNameData() {
         let url = RequestURL.HOST+'applyForm/selectComplexEffect?agentCode=123';
         fetch(url, {
             method: 'GET',
@@ -50,7 +50,7 @@ export class ComplexEffectApply extends React.Component {
                 'Accept': 'application/json',
    　　　　      'Content-Type': 'application/json',
             },
-            body:parmars,
+            // body:parmars,
             // body: JSON.stringify({
             //     firstParam: 'yourValue',
             //     secondParam: 'yourOtherValue',
@@ -58,8 +58,13 @@ export class ComplexEffectApply extends React.Component {
         })
             .then((response) => response.json( ))
             .then((responseJson) => {
+                var responseData = [];
+                for(let i =0;i<responseJson.length;i++){
+                    responseData.push(responseJson[i]["agentName"]);
+                }
+                
                     this.setState({
-                        agentGradeList:responseJson,
+                        complexEffectList:responseData,
                     });
             })
             .catch((error) => {
@@ -125,7 +130,7 @@ export class ComplexEffectApply extends React.Component {
             });
     }
 
-    _showOaApplyPicker() {
+    _showOaApplyPicker=()=> {
         Picker.init({
             pickerData: this.state.complexEffectList,
             pickerFontColor: [0, 0 ,0, 1],

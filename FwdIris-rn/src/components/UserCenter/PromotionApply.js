@@ -175,20 +175,20 @@ export class PromotionApply extends React.Component {
 
     _applicationData(){
         var data = [];
-        var agentList = this.state.agentGradeList['child'];
+        var agentList = this.state.agentGradeList;
         if(agentList.length==0 || agentList.length==1 ){
             return ;
         }else{
             for (var i = 0; i < agentList.length; i++) {
-                data.push(agentList[i]['childEnName']);
+                data.push(agentList[i]);
             }
         }
         return data;
     }
 
-    _showApplicationPicker() {
+    _showApplicationPicker=()=> {
         Picker.init({
-            pickerData:this.upGrade,
+            pickerData:this.state.agentGradeList,
             pickerFontColor: [0, 0 ,0, 1],
             pickerConfirmBtnText:'确定',
             pickerCancelBtnText:'取消',
@@ -222,14 +222,14 @@ export class PromotionApply extends React.Component {
                 </View>
 
                 {/*//当前职位是AD 总监(没有晋升渠道)的时候不显示晋升渠道*/}
-                {this.state.agentGradeList['child'].length==0?(null):(
+                {this.state.agentGradeList.length==0?(null):(
                     <View>
                         <View style={{flexDirection: 'row',height:40,backgroundColor:'white',alignItems:'center',}}>
                             <Text  style={{flex:2,lineHeight:40,height:40,marginLeft:25,color:'#000000',fontSize:16}}>申请职级</Text>
                             <View style={{flex:8,flexDirection:'row',paddingRight:10,}}>
-                                {this.state.agentGradeList['child'].length==1?(
+                                {this.state.agentGradeList.length==1?(
                                     <View style={{flexDirection:'row',}}>
-                                        <Text style={{flex:9.5,textAlign:'right',paddingRight:15,fontSize:16,color:'#000000',lineHeight:40,}}>{this.state.agentGradeList['child'][0]['childEnName']}</Text>
+                                        <Text style={{flex:9.5,textAlign:'right',paddingRight:15,fontSize:16,color:'#000000',lineHeight:40,}}>{this.state.agentGradeList[0]}</Text>
                                         <Text style={{flex:0.5,}}></Text>
                                     </View>
                                          ):(

@@ -389,11 +389,11 @@ export class OaApplyFormDetail extends React.Component {
                     })
                 }else{
                     console.log(responseData.msg);
-                    alert('网络异常，请稍后再试');
+                    //alert('网络异常，请稍后再试');
                 }
             }).catch((err) => {//2
             console.error(err);
-            alert('网络异常，请稍后再试');
+            //alert('网络异常，请稍后再试');
         }).done();
     }
 
@@ -557,6 +557,9 @@ export class OaApplyFormDetail extends React.Component {
                         <OtherProofUI description={this.state.description} title={this.state.title}  files={this.state.files}></OtherProofUI>
                     )
                 }
+
+
+                {this.state.processList.length>0?
                 <View style={styles.process}>
                     <FlatList
                         style={{}}
@@ -695,7 +698,7 @@ export class OaApplyFormDetail extends React.Component {
                             <Text style={{}}>提交申请</Text>
                         </View>
                     </View>*/}
-                </View>
+                </View>:<View></View>}
                 {this.state.showNatationAndAgreed==1?
                     <View style={{ paddingTop: 20}}>
                         <TextInput
