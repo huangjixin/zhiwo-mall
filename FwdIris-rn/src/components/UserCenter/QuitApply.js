@@ -6,7 +6,6 @@ import Textarea from 'react-native-textarea';
 //import ModalDropdown from 'react-native-modal-dropdown';
 import * as RequestURL from "../../common/RequestURL";
 
-
 var Dimensions = require('Dimensions');
 var ScreenWidth = Dimensions.get('window').width;
 var ScreenHeight = Dimensions.get('window').height;
@@ -38,6 +37,7 @@ export class QuitApply extends React.Component {
     }
 
     QuitApplySubmission=()=>{
+
         // if(this.state.title!==''&&this.state.description!==''){
             let reason = this.state.title;
             let descr = this.state.description;
