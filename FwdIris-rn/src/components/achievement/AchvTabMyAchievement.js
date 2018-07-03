@@ -347,7 +347,18 @@ export class AchvTabMyAchievement extends React.Component {
 
     render() {
        const {data,routerDepth} = this.state;
-       const personalAchievement = data.personalAchievement;
+       let personalAchievement = data.personalAchievement;
+       if(personalAchievement==null) {
+           personalAchievement = {
+               fyc: 0,
+               activeNo: 0,
+               effectiveNo: 0,
+               bredNo: 0,
+               recruitNo: 0,
+               k1Rate: 0,
+           }
+       }
+
        const groupList = data.groupList;
         return (
             <ScrollView
