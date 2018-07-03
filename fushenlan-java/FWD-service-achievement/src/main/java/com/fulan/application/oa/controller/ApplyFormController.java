@@ -420,6 +420,32 @@ public class ApplyFormController {
 	}
 
 	/**
+	 * 多个文件上传 基于base64
+	 *
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.POST, value = "/saveMultipleFormBase64")
+	public Response saveMultipleFormBase64(@RequestBody FwdOaApplyForm applyForm) {
+		if (applyForm != null && StringUtils.isBlank(applyForm.getAgentCode())) {
+			Response response = new Response(Response.ERROR, "表单有必填字段未填！");
+			return response;
+		}
+
+		applyForm.setCreateDatetime(new Date());
+		String strDirPath = this.uploadPath + File.separator;
+		try {
+			applyFormService.saveMultipleFormBase64(strDirPath, applyForm.getFiles(), applyForm);
+		} catch (Exception e) {
+			Response response = new Response(Response.ERROR, "保存出错！");
+			e.printStackTrace();
+			return response;
+		}
+
+		// 启动申请流程。
+		return new Response(Response.SUCCESS, Response.SUCCESS_MESSAGE);
+	}
+
+	/**
 	 * 根据ID查询数据
 	 * 
 	 * @param selectById

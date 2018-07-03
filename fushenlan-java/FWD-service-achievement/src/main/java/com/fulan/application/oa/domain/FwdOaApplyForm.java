@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 public class FwdOaApplyForm implements Serializable {
@@ -65,6 +66,7 @@ public class FwdOaApplyForm implements Serializable {
      *
      * @mbggenerated Thu May 24 09:50:15 CST 2018
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date startTime;
 
     /**
@@ -73,6 +75,7 @@ public class FwdOaApplyForm implements Serializable {
      *
      * @mbggenerated Thu May 24 09:50:15 CST 2018
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date endTime;
 
     /**
@@ -134,6 +137,8 @@ public class FwdOaApplyForm implements Serializable {
     private String name;
 
     private String agentName;
+
+    private String[] files;
     
     public String getName() {
 		return name;
@@ -526,4 +531,12 @@ public class FwdOaApplyForm implements Serializable {
 	public void setFile(MultipartFile file) {
 		this.file = file;
 	}
+
+    public void setFiles(String[] files) {
+        this.files = files;
+    }
+
+    public String[] getFiles() {
+        return files;
+    }
 }

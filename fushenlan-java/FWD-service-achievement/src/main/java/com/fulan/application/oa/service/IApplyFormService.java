@@ -72,6 +72,12 @@ public interface IApplyFormService {
 	  * @return
 	  */
 	 int saveMultipleForm(String strDirPath,CommonsMultipartFile[] files,FwdOaApplyForm applyForm) throws Exception;
+
+	/**
+	 * 多个文件上传 base64
+	 * @return
+	 */
+	int saveMultipleFormBase64(String strDirPath,String[] files,FwdOaApplyForm applyForm) throws Exception;
 	
 	 /**
 	  * @Description:id查申请表单

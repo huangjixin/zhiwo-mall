@@ -4,6 +4,7 @@
 package com.fulan.application.oa.service.impl;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +48,7 @@ import com.fulan.application.oa.service.IAttachmentService;
 import com.fulan.application.oa.service.WorkFlowService;
 import com.fulan.application.oa.vo.OAApplyFormVo;
 import com.fulan.application.oa.vo.OAApplyFormVoParameter;
+import sun.misc.BASE64Decoder;
 
 /**
  * @author 黄记新 Tony
@@ -288,7 +292,126 @@ public class ApplyFormServiceImpl implements IApplyFormService {
 		this.workFlowService.startProcessAndSubmitForm(applyType, formId, agentCode, branchCode, params);
 		return num;
 	}
-	
+
+	/**
+	 * 获取文件的后缀
+	 * @return
+	 */
+	public static String getImageSuffix(String base64){
+		if (base64.contains("data:image/png;base64")) {
+			return "png";
+		} else if (base64.contains("data:image/jpg;base64")) {
+			return "jpg";
+		} else if (base64.contains("data:image/gif;base64")) {
+			return "gif";
+		} else if (base64.contains("data:image/bmp;base64")) {
+			return "bmp";
+		} else if (base64.contains("data:image/jpeg;base64")) {
+			return "jpeg";
+		} else {
+			return "png";
+		}
+	}
+
+	/**
+	 * base64字符串转文件
+	 * @param base64
+	 * @return
+	 */
+	public static File base64ToFile(String fileName, String base64) {
+		File file = null;
+		//去掉base64前面的data:image/png;base64,
+		base64 = base64.replaceAll("data:[^b]+base64,","");
+		try {
+			file = new File(fileName);
+			byte[] buffer = new BASE64Decoder().decodeBuffer(base64);
+			FileOutputStream out = new FileOutputStream(file);
+			out.write(buffer);
+			out.flush();
+			out.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return file;
+	}
+
+	/**
+	 * 创建 保存的目标文件
+	 * @param fileSuffix
+	 * @return
+	 */
+	private File createSaveTarget(String fileSuffix, String relateFolderPath,String fileName){
+		File folderPath = new File(relateFolderPath);
+		if (!folderPath.exists()) {
+			folderPath.mkdirs();
+		}
+
+		File tmp = new File(relateFolderPath, fileName);
+		return tmp;
+	}
+
+	public File saveFile(File file,String suffix,String relateFolderPath,String fileName) throws IOException {
+		if (file == null || !file.exists()) {
+			throw new NullPointerException("保存的文件不存在");
+		}
+
+		File saveTarget = this.createSaveTarget(suffix, relateFolderPath,fileName);
+		FileUtils.copyFile(file, saveTarget);
+
+		return saveTarget;
+	}
+
+	@Override
+	public int saveMultipleFormBase64(String strDirPath, String[] files, FwdOaApplyForm applyForm) throws Exception {
+		String newFileName = null;
+		File targetFile = null;
+
+		// 如果绑定没有错误的话把applyForm插进去数据库。
+		int num = this.save(applyForm);
+
+		for (String file : files) {
+			String suffix = getImageSuffix(file);
+			File f = base64ToFile("temp."+suffix,file);
+
+			// 获取文件提交路径(服务器)
+			// 把上传的文件写入到upload/images/{agentCode}/文件名 (先判断一下文件是否存在，不存在则先创建)
+			String path = strDirPath + "upload" + File.separator + "images" + File.separator + applyForm.getAgentCode();
+			File filePath = new File(path);
+			if (!filePath.exists()) {
+				boolean establish = filePath.mkdirs();
+				if (!establish) {
+					throw new RuntimeException("文件创建失败");
+				}
+			}
+
+			// 文件重命名
+			// 时间(毫秒数)+随机数+suffix
+			// 1970-1-1~今天 System.currentTimeMillis();
+			newFileName = System.currentTimeMillis() + new Random().nextInt(1000000) + "."+suffix;
+
+			targetFile = saveFile(f,suffix,path,newFileName);
+
+			FwdOaFormAttachment oaFormAttachment = new FwdOaFormAttachment();
+
+			String url = "upload/images/" + applyForm.getAgentCode() + "/" + newFileName;
+			if (targetFile != null)
+				oaFormAttachment.setPath(targetFile.toString());
+			oaFormAttachment.setUrl(url);
+			oaFormAttachment.setFormId(applyForm.getId());
+			int count = attachmentService.save(oaFormAttachment);
+		}
+
+		// 启动申请流程。
+		ApplyTypeEnum applyType = ApplyTypeEnum.getByCode(applyForm.getType());
+		Map<String, Object> params = new HashMap<String, Object>();
+		String formId = applyForm.getId().toString();
+		String agentCode = applyForm.getAgentCode();
+		String branchCode = ApplyConstant.BRANCH_CODE_SHANG_HAI;
+		this.workFlowService.startProcessAndSubmitForm(applyType, formId, agentCode, branchCode, params);
+		return num;
+	}
+
 	@Override
 	public FwdOaApplyForm findById(Integer formId) {
 		FwdOaApplyForm from = this.applyFormMapper.selectByPrimaryKey(formId);
