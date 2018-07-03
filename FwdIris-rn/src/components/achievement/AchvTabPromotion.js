@@ -8,7 +8,7 @@ import * as NumberUtils from "../../common/NumberUtils";
 import * as RequestURL from "../../common/RequestURL";
 import * as FetchUtils from "../../common/FetchUtils";
 
-const g_agentCode = '00001';   //暂时用于显示当前职级
+const g_agentCode = '10000792';   //暂时用于显示当前职级
 const g_agentGrade = 'SM';   //暂时用于显示当前职级
 const IDX_PROMOTION = 0;
 const IDX_EVALUATION = 1;

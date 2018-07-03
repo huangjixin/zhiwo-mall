@@ -9,7 +9,7 @@ import Picker from 'react-native-picker';
 
 
 const g_agentGrade = 'AD';   //暂时用于显示当前职级
-const g_agentCode = '000000';   //暂时用于显示当前职级
+const g_agentCode = '10000792';   //暂时用于显示当前职级
 export class AchvTabIncome extends React.Component {
     constructor(props){
         super(props)

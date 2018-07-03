@@ -11,7 +11,7 @@ import * as RequestURL from "../../common/RequestURL";
 import * as FetchUtils from "../../common/FetchUtils";
 
 const g_agentGrade = 'AD';   //暂时用于显示当前职级
-const g_agentCode = '000000';   //暂时用于显示当前职级
+const g_agentCode = '10000792';   //暂时用于显示当前职级
 const IND_PERSONAL = 0;
 const IND_TEAM = 1;
 
