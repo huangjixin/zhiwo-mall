@@ -1,9 +1,23 @@
 import React from 'react';
-import {StyleSheet, ScrollView, Text,View,Image,TextInput,TouchableWithoutFeedback,Button,TouchableOpacity } from 'react-native';
+import {
+    StyleSheet,
+    ScrollView,
+    Text,
+    View,
+    Image,
+    TextInput,
+    TouchableWithoutFeedback,
+    Button,
+    TouchableOpacity,
+    Dimensions
+} from 'react-native';
 import {ApplyCommonHeader} from "./ApplyCommonHeader";
 import Textarea from 'react-native-textarea';
 import * as RequestURL from "../../common/RequestURL";
 import Toast from './Toast/Toast';
+import ImagePicker from "react-native-image-picker";
+const imageWidth = (Dimensions.get('window').width - 15 * 5) / 3;
+const screenWidth = Dimensions.get('window').width / 3 - 60;
 
 export class OtherApply extends React.Component {
     constructor(props) {
@@ -11,6 +25,7 @@ export class OtherApply extends React.Component {
         this.state = {
             id:'',
             description:'',
+            imageArray: [], //图片数组
             type:'10',  //0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
             agentCode:'10000',
             createDatetime:'',
@@ -26,6 +41,52 @@ export class OtherApply extends React.Component {
             agentName:'JohnnyZ'
         }
     }
+    //选择照片
+    selectPhotoTapped = () => {
+        const options = {
+            quality: 1.0,
+            maxWidth: 500,
+            maxHeight: 500,
+            storageOptions: {
+                skipBackup: true
+            }
+
+        };
+
+        ImagePicker.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
+
+            if (response.didCancel) {
+                console.log('User cancelled photo picker');
+            }
+            else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            }
+            else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            }
+            else {
+                let source = {uri: response.uri};
+
+                // You can also display the image using data:
+                //let source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+                this.state.imageArray.push(response);
+                this.setState({
+                    imageNamePath: response.fileName,
+                    imageDate: source,
+                });
+                // this.imageArray.push(response);
+                console.log(this.state.imageArray);
+            }
+        });
+    }
+//删除照片
+    removePhoto = (index) => {
+        this.setState({
+            imageArray: this.state.imageArray.filter((_, i) => i !== index)
+        })
+    }
     submissionForm=()=>{
         let descr = this.state.description;
         // 用途不写予以警告。
@@ -34,22 +95,31 @@ export class OtherApply extends React.Component {
             return;
         }
 
-        let formData = new FormData();
-        formData.append("type",this.state.type);
-        formData.append("description",this.state.description);
-        formData.append("agentCode",this.state.agentCode);
-        formData.append("agentName",this.state.agentName);
+        let imgAry= this.state.imageArray;
+        console.log('imgAry', imgAry);
 
-        this.fetchData(formData);
+        const data = [];
+        imgAry.forEach(photo => {
+            data.push(photo.data);
+        });
+
+        let jsonData = {
+            type : this.state.type,
+            description : this.state.description,
+            agentCode : this.state.agentCode,
+            agentName : this.state.agentName,
+            files : data
+        };
+
+        this.fetchData(JSON.stringify(jsonData));
     }
     fetchData(parmars) {
-        let url = RequestURL.HOST+'applyForm/saveSingleForm';
+        let url = RequestURL.HOST+'applyForm/saveMultipleFormBase64';
         fetch(url, {
             method: 'POST',
-//             headers: {
-//                 'Accept': 'application/json',
-//    　　　　      'Content-Type': 'application/json',
-//             },
+            headers: {
+                'Content-Type':'application/json;charset=utf-8',
+            },
             body:parmars,
             // body: JSON.stringify({
             //     firstParam: 'yourValue',
@@ -59,7 +129,7 @@ export class OtherApply extends React.Component {
             .then((response) => response.json( ))
             .then((responseJson) => {
                 //alert(parmars);
-                if (responseJson.state==='1'){
+                if (responseJson.code==='1'){
                     Toast.show("保存成功",Toast.LONG);
                     //DeviceEventEmitter.emit('userCenterToAdministrative'); //用户中心跳转到行政审批
 
@@ -99,11 +169,76 @@ export class OtherApply extends React.Component {
                         </View>
                     </View>
 
-                    <View style={{marginTop:10,marginBottom:10}}>
-                        <Text style={{color:'#333333',fontSize:16}}>图片</Text>
-                    </View>
-                    <View style={{width:70,height:70,flexDirection:'row',marginRight:15,}}>
-                        <Image style={{width:70,height:65,}} source={require('../../../img/UserCenter/addImage.png')} />
+                    <View style={{backgroundColor: 'white', marginTop: 1, alignItems: 'flex-start', paddingBottom: 15,}}>
+                        <Text style={{height: 40, paddingLeft: 20, paddingTop: 10,}}>图片</Text>
+                        <View style={{flexDirection: 'row',}}>
+                            <View style={{
+                                flexWrap: 'wrap',
+                                flexDirection: 'row',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                                marginLeft: 30,
+                            }}>
+
+
+                                {/*<View style={{width:imageWidth,height:70,flexDirection:'row',marginRight:15,}}>*/}
+                                {/*<Image style={{width:imageWidth-15,height:65,borderRadius:10,}} source={require('../../../img/Home/banner1.jpg')} />*/}
+                                {/*<Image style={{width:20,height:20,marginTop:-10,marginLeft:-10,}}source={require('../../../img/UserCenter/close.png')}/>*/}
+                                {/*</View>*/}
+
+                                {this.state.imageArray.map((rowData, i) => (
+                                    //<Text>{rowData.data}</Text>
+                                    // console.log(rowData,i),
+                                    // <Image style={styles.avatar} source={this.state.avatarSource} />
+                                    // var aa = {}
+                                    <View key={i} style={{width: imageWidth,height: 70,flexDirection: 'row',marginRight: 15,marginBottom: 10,justifyContent: 'center',}}>
+                                        <Image style={{width: imageWidth - 15, height: 65, borderRadius: 10,}}
+                                               source={{uri: 'data:'+rowData.type+';base64,' + rowData.data}}/>
+                                        {/*source={{uri: 'data:image/png;base64,' + rowData.data}}/>*/}
+                                        <TouchableOpacity
+                                            style={{width: 20, height: 20, marginTop: -10, marginLeft: -10,}}
+                                            onPress={this.removePhoto.bind(this, i)}>
+                                            <Image style={{width: 20, height: 20,}}
+                                                   source={require('../../../img/UserCenter/close.png')}/>
+                                        </TouchableOpacity>
+                                    </View>
+                                ))
+                                }
+                                {/*{*/}
+                                {/*this.state.imageArray.map((rowData, i) => (*/}
+                                {/*//<Text>{rowData.data}</Text>*/}
+                                {/*// console.log(rowData,i),*/}
+                                {/*// <Image style={styles.avatar} source={this.state.avatarSource} />*/}
+                                {/*// var aa = {}*/}
+                                {/*<Image key={i} style={{width: 80, height: 80,margin:5,}} source={{uri:'data:image/png;base64,'+ rowData.data}}/>*/}
+                                {/*))*/}
+                                {/*}*/}
+
+
+                                {this.state.imageArray.length < 9 ? (
+                                    <View style={{
+                                        width: imageWidth,
+                                        height: 70,
+                                        flexDirection: 'row',
+                                        marginRight: 15,
+                                        justifyContent: 'center',
+                                    }}>
+                                        <TouchableOpacity style={{flex: 9, justifyContent: 'center',}}
+                                                          onPress={this.selectPhotoTapped}>
+                                            <Image style={{width: imageWidth - 15, height: 65,}}
+                                                   source={require('../../../img/UserCenter/addImage.png')}/>
+                                        </TouchableOpacity>
+                                    </View>
+                                ) : (<View></View>)}
+
+
+                                {/*<View style={{margin:10,backgroundColor:'#F2F2F2',}}>*/}
+                                {/*<TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>*/}
+                                {/*<Text style={{color:'#333333',fontSize:60,textAlign:'center',}}>+</Text>*/}
+                                {/*</TouchableOpacity>*/}
+                                {/*</View>*/}
+                            </View>
+                        </View>
                     </View>
                 </View>
 

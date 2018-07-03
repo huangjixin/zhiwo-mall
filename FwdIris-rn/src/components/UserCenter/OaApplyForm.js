@@ -375,7 +375,6 @@ export class OaApplyForm extends React.Component {
 
         let imgAry= this.state.imageArray;
         console.log('imgAry', imgAry);
-        let fileData = new FormData();  
 
      //因为需要上传多张图片,所以需要遍历数组,把图片的路径数组放入formData中
         var i = 0;

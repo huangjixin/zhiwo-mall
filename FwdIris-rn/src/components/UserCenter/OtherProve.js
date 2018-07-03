@@ -4,15 +4,19 @@ import {ApplyCommonHeader} from "./ApplyCommonHeader";
 import Textarea from 'react-native-textarea';
 import Picker from 'react-native-picker';
 import ImagePicker from 'react-native-image-picker';
+import Toast from "./Toast/Toast";
+import * as RequestURL from "../../common/RequestURL";
 const imageWidth = (Dimensions.get('window').width - 15 * 5) / 3;
 export class OtherProve extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             imageArray: [], //图片数组
-            // text: '',
+            type:'9',
             purpose:'',
             materialsType:'',
+            agentCode:'10000',
+            agentName:'JohnnyZ',
             submitIndicator:false
         }
     }
@@ -38,8 +42,53 @@ export class OtherProve extends React.Component {
 
     onSubmit= ()=>{
         if(this.state.submitIndicator){
-            alert(JSON.stringify(this.state));
+            let descr = this.state.purpose;
+            // 用途不写予以警告。
+            if(descr===''){
+                alert('详细说明没有编写');
+                return;
+            }
+
+            let imgAry= this.state.imageArray;
+            console.log('imgAry', imgAry);
+
+            const data = [];
+            imgAry.forEach(photo => {
+                data.push(photo.data);
+            });
+
+            let jsonData = {
+                type : this.state.type,
+                description : this.state.purpose,
+                agentCode : this.state.agentCode,
+                agentName : this.state.agentName,
+                files : data
+            };
+
+            this.fetchData(JSON.stringify(jsonData));
         }
+    }
+
+    fetchData(parmars) {
+        let url = RequestURL.HOST+'applyForm/saveMultipleFormBase64';
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type':'application/json;charset=utf-8',
+            },
+            body:parmars
+        })
+            .then((response) => response.json( ))
+            .then((responseJson) => {
+                if (responseJson.code==='1'){
+                    Toast.show("保存成功",Toast.LONG);
+                }else {
+                    Toast.show("保存失败",Toast.LONG);
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
     _showMaterialsPicker() {
