@@ -5,6 +5,7 @@ import Textarea from 'react-native-textarea';
 // import * as RequestURL from "../../common/RequestURL";
 //import ModalDropdown from 'react-native-modal-dropdown';
 import * as RequestURL from "../../common/RequestURL";
+import Toast from './Toast/Toast';
 
 var Dimensions = require('Dimensions');
 var ScreenWidth = Dimensions.get('window').width;
@@ -83,10 +84,14 @@ export class QuitApply extends React.Component {
         })
             .then((response) => response.json( ))
             .then((responseJson) => {
-                alert(parmars);
-                // if (responseJson===1){
-                //     DeviceEventEmitter.emit('userCenterToAdministrative'); //用户中心跳转到行政审批
-                // }
+                //alert(parmars);
+                if (responseJson.state==='1'){
+                    Toast.show("保存成功",Toast.LONG);
+                    //DeviceEventEmitter.emit('userCenterToAdministrative'); //用户中心跳转到行政审批
+
+                }else {
+                    Toast.show("保存失败",Toast.LONG);
+                }
             })
             .catch((error) => {
                 console.error(error);
