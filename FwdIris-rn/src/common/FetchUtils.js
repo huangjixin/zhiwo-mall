@@ -22,7 +22,7 @@ export async function Get ({ url, params, success, error }) {
 
   new Promise((resolve, reject) => {
     var timeout = setTimeout(() => {
-      reject({ status: 408, message: 'Request timed out' })
+      reject(new Error('Request timed out'))
     }, FETCH_TIMEOUT)
 
     fetch(url, {
@@ -33,12 +33,8 @@ export async function Get ({ url, params, success, error }) {
         if (response && response.ok) return response.json()
         else reject(new Error('Response error'))
       })
-      .then(responseObject => {
-        resolve(responseObject)
-      })
-      .catch(err => {
-        reject(err)
-      })
+      .then(responseObject => resolve(responseObject))
+      .catch(err => reject(err))
   })
     .then(respData => {
       console.log(respData)
@@ -46,7 +42,8 @@ export async function Get ({ url, params, success, error }) {
         if (typeof error === 'function') {
           error(respData)
         }
-        alert(respData.msg)
+        // alert(respData.msg)
+        console.log(respData.msg)
         return
       }
 
@@ -58,13 +55,7 @@ export async function Get ({ url, params, success, error }) {
       if (typeof error === 'function') {
         error(errResp)
       }
-      if (errResp.status === 408) {
-        alert(errResp.message)
-      } else {
-        alert('network error!')
-      }
-
-      console.log(errResp.message)
+      console.log(errResp)
     })
 
   console.log('*******************request end**********************')
@@ -80,7 +71,7 @@ export async function Post ({ url, params, success, error }) {
 
   new Promise((resolve, reject) => {
     var timeout = setTimeout(() => {
-      reject({ status: 408, message: 'Request timed out' })
+      reject(new Error('Request timed out'))
     }, FETCH_TIMEOUT)
 
     fetch(url, {
@@ -96,12 +87,8 @@ export async function Post ({ url, params, success, error }) {
         if (response && response.ok) return response.json()
         else reject(new Error('Response error'))
       })
-      .then(responseObject => {
-        resolve(responseObject)
-      })
-      .catch(err => {
-        reject(err)
-      })
+      .then(responseObject => resolve(responseObject))
+      .catch(err => reject(err))
   })
     .then(respData => {
       console.log(respData)
@@ -109,7 +96,8 @@ export async function Post ({ url, params, success, error }) {
         if (typeof error === 'function') {
           error(respData)
         }
-        alert(respData.msg)
+        // alert(respData.msg)
+        console.log(respData.msg)
         return
       }
 
@@ -121,12 +109,7 @@ export async function Post ({ url, params, success, error }) {
       if (typeof error === 'function') {
         error(errResp)
       }
-      if (errResp.status === 408) {
-        alert(errResp.message)
-      } else {
-        alert('network error!')
-      }
-      console.log(errResp.message)
+      console.log(errResp)
     })
 
   console.log('*******************request end**********************')
