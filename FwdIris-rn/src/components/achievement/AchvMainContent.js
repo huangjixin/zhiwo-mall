@@ -30,7 +30,7 @@ export class AchvMainContent extends React.Component {
                     navigationOptions: {
                         tabBarLabel: '我的业绩',
                     }
-                }, 
+                },
                 AchvTabPromotion: {
                     screen: AchvTabPromotion,
                     navigationOptions: {
@@ -42,7 +42,7 @@ export class AchvMainContent extends React.Component {
                     navigationOptions: {
                         tabBarLabel: '我的收入',
                     }
-                }, 
+                },
             },{
                 tabBarOptions: {
                     activeTintColor: '#000000',
@@ -62,7 +62,7 @@ export class AchvMainContent extends React.Component {
                     //     //  backgroundColor: '#FFDD00',
                     //     //  textAlign:'center',
                     // },
-                    
+
                     style: {
                         height:Platform.OS === "ios" ?68 :50,
                         textAlign:'center',
@@ -96,7 +96,7 @@ export class AchvMainContent extends React.Component {
             }
         );
     return (
-        <View style={{paddingTop:0,flex:1}}  onLayout={this._onLayout}>
+        <View style={{paddingTop:0,flex:1}}  >
             <AchievementTabr/>
         </View>
 
