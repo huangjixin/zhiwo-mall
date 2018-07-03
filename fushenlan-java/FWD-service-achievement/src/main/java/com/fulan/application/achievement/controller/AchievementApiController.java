@@ -130,32 +130,38 @@ public class AchievementApiController {
 			return new Response<QueryBasicsActualValueResponse>(Response.ERROR,errMsg.substring(0, errMsg.lastIndexOf(",")));
 		}
 		
-		QueryBasicsActualValueResponse queryBasicsActualValueResponse = null;
-		//TODO
-		queryBasicsActualValueRequest.setQueryDate("2018-05-01");
+		Response<QueryBasicsActualValueResponse> response = null;
 		try {
-			CommonQueryRepsonse<QueryBasicsActualValueResponse> queryBasicsActualResponse = 
-						achAgentClient.queryAgentAchievementInfo(queryBasicsActualValueRequest);
-			//TODO status
-			queryBasicsActualValueResponse = queryBasicsActualResponse.getResponse();
+			CommonQueryRepsonse<QueryBasicsActualValueResponse> queryBasicsActualResponse 
+									= achAgentClient.queryAgentAchievementInfo(queryBasicsActualValueRequest);
+			
+			QueryBasicsActualValueResponse queryBasicsActualValueResponse = queryBasicsActualResponse.getResponse();
 			if(queryBasicsActualValueResponse==null) {
 				queryBasicsActualValueResponse= new QueryBasicsActualValueResponse();
 			}
+			String statusCode = queryBasicsActualResponse.getStatus().getStatusCode();
+			String statusMessage = queryBasicsActualResponse.getStatus().getStatusMessage();
+			if("01".equals(statusCode))
+				response = new Response<QueryBasicsActualValueResponse>(Response.SUCCESS,Response.SUCCESS_MESSAGE);
+			else {
+				response = new Response<QueryBasicsActualValueResponse>(Response.ERROR,statusMessage);
+			}
+			response.setData(queryBasicsActualValueResponse);
 		}catch(Exception e) {
 			logger.error("server Error", e);
-			Response<QueryBasicsActualValueResponse> response = new Response<QueryBasicsActualValueResponse>(Response.ERROR,e.getMessage());
+			response = new Response<QueryBasicsActualValueResponse>(Response.ERROR,e.getMessage());
 			return response;
 		}
 		
-		Response<QueryBasicsActualValueResponse> response = new Response<QueryBasicsActualValueResponse>(Response.SUCCESS,Response.SUCCESS_MESSAGE);
-		response.setData(queryBasicsActualValueResponse);
 		return response;
+//		
+//		QueryBasicsActualValueResponse queryBasicsActualValueResponse = new QueryBasicsActualValueResponse();
 //		String type = queryBasicsActualValueRequest.getGroupType();
 //		String agentCode = queryBasicsActualValueRequest.getAgentCode();
 //		if("1".equals(type)) {
 //			queryBasicsActualValueResponse.setAgentGrade("DD");
-//			queryBasicsActualValueResponse.setFyc(11705);
-//			queryBasicsActualValueResponse.setFyp(337650000);
+//			queryBasicsActualValueResponse.setFyc("11705");
+//			queryBasicsActualValueResponse.setFyp("337650000");
 //			queryBasicsActualValueResponse.setCaseNo(5);
 //			
 //			PersonalAchievement personalAchievement = new PersonalAchievement();
@@ -170,8 +176,8 @@ public class AchievementApiController {
 //		}else {
 //			
 //			queryBasicsActualValueResponse.setAgentGrade("DD");
-//			queryBasicsActualValueResponse.setFyc(21705);
-//			queryBasicsActualValueResponse.setFyp(537650000);
+//			queryBasicsActualValueResponse.setFyc("21705");
+//			queryBasicsActualValueResponse.setFyp("537650000");
 //			queryBasicsActualValueResponse.setCaseNo(10);
 //			
 //			PersonalAchievement personalAchievement = new PersonalAchievement();

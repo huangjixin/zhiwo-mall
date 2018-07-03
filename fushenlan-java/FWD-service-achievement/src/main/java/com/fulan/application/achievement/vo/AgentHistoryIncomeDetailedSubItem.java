@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AgentHistoryIncomeDetailedSubItem {
 
-	private String category; // 收入子项
+	private String subCategory; // 收入子项
 
-	private String amount; // 收入金额
+	private String subAmount; // 收入金额
 }

@@ -1,13 +1,13 @@
 package com.fulan.application.achievement.vo;
 
 import lombok.Data;
-
 @Data
 public class CommonQueryRepsonse<T> {
 	private T response;
 	private Status status;
 	
-	static class Status{
+	
+	public static class Status{
 		private String statusCode;
 		private String statusMessage;
 		

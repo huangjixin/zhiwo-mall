@@ -15,9 +15,9 @@ public class QueryBasicsActualValueResponse {
 
 	private String agentGrade; // 代理人职级 01,"处理成功"；02,"处理失败"；03,"处理异常"
 
-	private String fYC;// 当前代理人FYC
+	private String fyc;// 当前代理人FYC
 
-	private String fYP; // 当前代理人FYP
+	private String fyp; // 当前代理人FYP
 
 	private Integer caseNo;// 当前代理人CASE
 
