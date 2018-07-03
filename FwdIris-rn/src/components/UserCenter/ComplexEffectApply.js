@@ -46,10 +46,10 @@ export class ComplexEffectApply extends React.Component {
         let url = RequestURL.HOST+'applyForm/selectComplexEffect?agentCode=123';
         fetch(url, {
             method: 'POST',
-//             headers: {
-//                 'Accept': 'application/json',
-//    　　　　      'Content-Type': 'application/json',
-//             },
+            headers: {
+                'Accept': 'application/json',
+   　　　　      'Content-Type': 'application/json',
+            },
             body:parmars,
             // body: JSON.stringify({
             //     firstParam: 'yourValue',

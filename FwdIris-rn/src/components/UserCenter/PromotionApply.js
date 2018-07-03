@@ -60,7 +60,8 @@ export class PromotionApply extends React.Component {
         fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type':'multipart/form-data;charset=utf-8',
+                'Accept': 'application/json',
+   　　　　      'Content-Type': 'application/json',
             },
            // body: parmars,
         })
