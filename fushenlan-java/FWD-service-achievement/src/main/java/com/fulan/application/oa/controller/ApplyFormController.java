@@ -32,16 +32,26 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.fulan.application.achievement.service.AchAgentClient;
+import com.fulan.application.achievement.vo.CommonQueryRepsonse;
 import com.fulan.application.achievement.vo.ErrorMessage;
+import com.fulan.application.achievement.vo.QueryAgentHistoryIncomeResponse;
 import com.fulan.application.oa.constant.ApplyAction;
 import com.fulan.application.oa.domain.FwdOaApplyForm;
 import com.fulan.application.oa.domain.FwdOaFormAttachment;
 import com.fulan.application.oa.service.IApplyFormService;
 import com.fulan.application.oa.service.IAttachmentService;
+import com.fulan.application.oa.service.OaAgentClient;
 import com.fulan.application.oa.service.WorkFlowService;
 import com.fulan.application.oa.vo.ApprovalRecordVo;
 import com.fulan.application.oa.vo.OAApplyFormVo;
 import com.fulan.application.oa.vo.OAApplyFormVoParameter;
+import com.fulan.application.oa.vo.OaAgentDto;
+import com.fulan.application.oa.vo.OaReqParamAgentCodeDto;
+import com.fulan.application.oa.vo.OaRespAgentGroupInfoDto;
 import com.fulan.application.util.domain.Response;
 import com.fulan.application.util.page.PageInfo;
 
@@ -66,6 +76,9 @@ public class ApplyFormController {
 
 	@Autowired
 	private IAttachmentService attachmentService;
+	
+	@Autowired
+	private OaAgentClient oaAgentClient;
 
 	// 暂时写在D盘，后续应该配置成为注入值。
 	@Value("${uploadPath}")
@@ -526,22 +539,34 @@ public class ApplyFormController {
 	 * @return
 	 */
 	@RequestMapping(value = "/selectComplexEffect", method = RequestMethod.GET)
-	private List<Map> selectComplexEffect(@RequestParam(value = "agentCode") String agentCode ) {
-		List<Map> promotions = new ArrayList<Map>();
-		// 調用第三方接口后，循環替換一下下面的數據，把isAtWork為false的給塞進去
-		for (int i = 0; i < 2; i++) {
-			Map map = new HashMap();
-			map.put("agentCode", "123");
-			map.put("isSupervisor", "true");
-			map.put("isAtWork", "false");
-			if(i == 0) {
-				map.put("agentName", "劉明");	
-			}else {
-				map.put("agentName", "章虹");	
+	private Response<List<OaAgentDto>> selectComplexEffect(@RequestParam(value = "agentCode") String agentCode ) {
+		List<OaAgentDto> promotions = new ArrayList<OaAgentDto>();
+		Response<List<OaAgentDto>> response = null;
+		try {
+			OaReqParamAgentCodeDto oaReqParamAgentCodeDto = new OaReqParamAgentCodeDto(agentCode);
+			CommonQueryRepsonse<OaRespAgentGroupInfoDto> resp = oaAgentClient.queryAgentGroupInfo(oaReqParamAgentCodeDto);
+			OaRespAgentGroupInfoDto agentGroupInfo = resp.getResponse();
+			if(agentGroupInfo!=null) {
+				for (OaAgentDto dto: agentGroupInfo.getGroupList()) {
+					if("Y".equals(dto.getSubIsAtWork())) {
+						promotions.add(dto);
+					}
+				}
+				response.setData(promotions);
 			}
-			map.put("jobPosition", "ABC");
-			promotions.add(map);
+			
+			String statusCode = resp.getStatus().getStatusCode();
+			String statusMessage = resp.getStatus().getStatusMessage();
+			if("01".equals(statusCode))
+				response = new Response<List<OaAgentDto>>(Response.SUCCESS,Response.SUCCESS_MESSAGE);
+			else {
+				response = new Response<List<OaAgentDto>>(Response.ERROR,statusMessage);
+			}
+			
+		} catch (Exception e) {
+			logger.error("Unknow Error", e);
+			return new Response<List<OaAgentDto>>(Response.ERROR, e.getMessage());
 		}
-		return promotions;
+		return response;
 	}
 }

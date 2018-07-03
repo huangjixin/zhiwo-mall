@@ -153,86 +153,86 @@ public class AchievementApiController {
 			return new Response<QueryBasicsActualValueResponse>(Response.ERROR,errMsg.substring(0, errMsg.lastIndexOf(",")));
 		}
 		
-//		Response<QueryBasicsActualValueResponse> response = null;
-//		try {
-//			CommonQueryRepsonse<QueryBasicsActualValueResponse> queryBasicsActualResponse 
-//									= achAgentClient.queryAgentAchievementInfo(queryBasicsActualValueRequest);
-//			
-//			QueryBasicsActualValueResponse queryBasicsActualValueResponse = queryBasicsActualResponse.getResponse();
-//			if(queryBasicsActualValueResponse==null) {
-//				queryBasicsActualValueResponse= new QueryBasicsActualValueResponse();
-//			}
-//			String statusCode = queryBasicsActualResponse.getStatus().getStatusCode();
-//			String statusMessage = queryBasicsActualResponse.getStatus().getStatusMessage();
-//			if("01".equals(statusCode))
-//				response = new Response<QueryBasicsActualValueResponse>(Response.SUCCESS,Response.SUCCESS_MESSAGE);
-//			else {
-//				response = new Response<QueryBasicsActualValueResponse>(Response.ERROR,statusMessage);
-//			}
-//			response.setData(queryBasicsActualValueResponse);
-//		}catch(Exception e) {
-//			logger.error("server Error", e);
-//			response = new Response<QueryBasicsActualValueResponse>(Response.ERROR,e.getMessage());
-//			return response;
-//		}
-//		
-//		return response;
-		
-		QueryBasicsActualValueResponse queryBasicsActualValueResponse = new QueryBasicsActualValueResponse();
-		String type = queryBasicsActualValueRequest.getGroupType();
-		String agentCode = queryBasicsActualValueRequest.getAgentCode();
-		if("1".equals(type)) {
-			queryBasicsActualValueResponse.setAgentGrade("DD");
-			queryBasicsActualValueResponse.setFyc("11705");
-			queryBasicsActualValueResponse.setFyp("337650000");
-			queryBasicsActualValueResponse.setCaseNo(35);
+		Response<QueryBasicsActualValueResponse> response = null;
+		try {
+			CommonQueryRepsonse<QueryBasicsActualValueResponse> queryBasicsActualResponse 
+									= achAgentClient.queryAgentAchievementInfo(queryBasicsActualValueRequest);
 			
-			PersonalAchievement personalAchievement = new PersonalAchievement();
-			personalAchievement.setActiveNo(41);
-			personalAchievement.setFyc(238001);
-			personalAchievement.setEffectiveNo(111);
-			personalAchievement.setBredNo(29);
-			personalAchievement.setRecruitNo(61);
-			personalAchievement.setK1Rate(91);
-			
-			queryBasicsActualValueResponse.setPersonalAchievement(personalAchievement);
-		}else {
-			
-			queryBasicsActualValueResponse.setAgentGrade("DD");
-			queryBasicsActualValueResponse.setFyc("21705");
-			queryBasicsActualValueResponse.setFyp("537650000");
-			queryBasicsActualValueResponse.setCaseNo(4);
-			
-			PersonalAchievement personalAchievement = new PersonalAchievement();
-			personalAchievement.setActiveNo(40);
-			personalAchievement.setFyc(238000);
-			personalAchievement.setEffectiveNo(110);
-			personalAchievement.setBredNo(28);
-			personalAchievement.setRecruitNo(60);
-			personalAchievement.setK1Rate(90);
-			
-			List<MyTeamMember> list = new ArrayList<MyTeamMember>();
-			if("000000".equals(agentCode)) {
-				list.add(new MyTeamMember("000001","张三","AM",1,2,2,5));
-				list.add(new MyTeamMember("000002","李四","AM",2,1,2,3));
-				list.add(new MyTeamMember("000003","袁华","SAM",3,2,1,5));
-			}else if("000001".equals(agentCode)||"000002".equals(agentCode)||"000003".equals(agentCode)){
-				list.add(new MyTeamMember("000004","陈浩天","SSM",1,2,2,5));
-				list.add(new MyTeamMember("000005","李赋斌","SD",2,1,2,3));
-				list.add(new MyTeamMember("000006","刘天","SSM",3,2,1,5));
-			}else {
-				list.add(new MyTeamMember("00005","李权","LA",2,1,2,3));
-				list.add(new MyTeamMember("00006","周翔","SM",3,2,1,5));
+			QueryBasicsActualValueResponse queryBasicsActualValueResponse = queryBasicsActualResponse.getResponse();
+			if(queryBasicsActualValueResponse==null) {
+				queryBasicsActualValueResponse= new QueryBasicsActualValueResponse();
 			}
-			
-			queryBasicsActualValueResponse.setPersonalAchievement(personalAchievement);
-			queryBasicsActualValueResponse.setGroupList(list);
+			String statusCode = queryBasicsActualResponse.getStatus().getStatusCode();
+			String statusMessage = queryBasicsActualResponse.getStatus().getStatusMessage();
+			if("01".equals(statusCode))
+				response = new Response<QueryBasicsActualValueResponse>(Response.SUCCESS,Response.SUCCESS_MESSAGE);
+			else {
+				response = new Response<QueryBasicsActualValueResponse>(Response.ERROR,statusMessage);
+			}
+			response.setData(queryBasicsActualValueResponse);
+		}catch(Exception e) {
+			logger.error("server Error", e);
+			response = new Response<QueryBasicsActualValueResponse>(Response.ERROR,e.getMessage());
+			return response;
 		}
 		
-		Response<QueryBasicsActualValueResponse> response = new Response<QueryBasicsActualValueResponse>(Response.SUCCESS,
-				Response.SUCCESS_MESSAGE);
-		response.setData(queryBasicsActualValueResponse);
 		return response;
+		
+//		QueryBasicsActualValueResponse queryBasicsActualValueResponse = new QueryBasicsActualValueResponse();
+//		String type = queryBasicsActualValueRequest.getGroupType();
+//		String agentCode = queryBasicsActualValueRequest.getAgentCode();
+//		if("1".equals(type)) {
+//			queryBasicsActualValueResponse.setAgentGrade("DD");
+//			queryBasicsActualValueResponse.setFyc("11705");
+//			queryBasicsActualValueResponse.setFyp("337650000");
+//			queryBasicsActualValueResponse.setCaseNo(35);
+//			
+//			PersonalAchievement personalAchievement = new PersonalAchievement();
+//			personalAchievement.setActiveNo(41);
+//			personalAchievement.setFyc(238001);
+//			personalAchievement.setEffectiveNo(111);
+//			personalAchievement.setBredNo(29);
+//			personalAchievement.setRecruitNo(61);
+//			personalAchievement.setK1Rate(91);
+//			
+//			queryBasicsActualValueResponse.setPersonalAchievement(personalAchievement);
+//		}else {
+//			
+//			queryBasicsActualValueResponse.setAgentGrade("DD");
+//			queryBasicsActualValueResponse.setFyc("21705");
+//			queryBasicsActualValueResponse.setFyp("537650000");
+//			queryBasicsActualValueResponse.setCaseNo(4);
+//			
+//			PersonalAchievement personalAchievement = new PersonalAchievement();
+//			personalAchievement.setActiveNo(40);
+//			personalAchievement.setFyc(238000);
+//			personalAchievement.setEffectiveNo(110);
+//			personalAchievement.setBredNo(28);
+//			personalAchievement.setRecruitNo(60);
+//			personalAchievement.setK1Rate(90);
+//			
+//			List<MyTeamMember> list = new ArrayList<MyTeamMember>();
+//			if("000000".equals(agentCode)) {
+//				list.add(new MyTeamMember("000001","张三","AM",1,2,2,5));
+//				list.add(new MyTeamMember("000002","李四","AM",2,1,2,3));
+//				list.add(new MyTeamMember("000003","袁华","SAM",3,2,1,5));
+//			}else if("000001".equals(agentCode)||"000002".equals(agentCode)||"000003".equals(agentCode)){
+//				list.add(new MyTeamMember("000004","陈浩天","SSM",1,2,2,5));
+//				list.add(new MyTeamMember("000005","李赋斌","SD",2,1,2,3));
+//				list.add(new MyTeamMember("000006","刘天","SSM",3,2,1,5));
+//			}else {
+//				list.add(new MyTeamMember("00005","李权","LA",2,1,2,3));
+//				list.add(new MyTeamMember("00006","周翔","SM",3,2,1,5));
+//			}
+//			
+//			queryBasicsActualValueResponse.setPersonalAchievement(personalAchievement);
+//			queryBasicsActualValueResponse.setGroupList(list);
+//		}
+//		
+//		Response<QueryBasicsActualValueResponse> response = new Response<QueryBasicsActualValueResponse>(Response.SUCCESS,
+//				Response.SUCCESS_MESSAGE);
+//		response.setData(queryBasicsActualValueResponse);
+//		return response;
 	}
 
 	/**
