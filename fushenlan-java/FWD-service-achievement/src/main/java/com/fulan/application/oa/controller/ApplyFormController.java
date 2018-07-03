@@ -2,7 +2,9 @@ package com.fulan.application.oa.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -17,19 +19,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.fulan.application.oa.constant.ApplyAction;
+
 import com.fulan.application.achievement.vo.ErrorMessage;
+import com.fulan.application.oa.constant.ApplyAction;
 import com.fulan.application.oa.domain.FwdOaApplyForm;
 import com.fulan.application.oa.domain.FwdOaFormAttachment;
 import com.fulan.application.oa.service.IApplyFormService;
@@ -459,6 +463,7 @@ public class ApplyFormController {
 	 * @return
 	 */
 	@RequestMapping(value = "/updateTaskInfosByName", method = RequestMethod.POST)
+	@ResponseBody
 	private Response updateTaskInfosByName(@RequestParam(value = "name", required = true) String name,
 			@RequestBody List<Map<String, String>> nodeMap) {
 		try {
@@ -471,5 +476,46 @@ public class ApplyFormController {
 		
 		Response response = new Response(Response.SUCCESS, "保存成功");
 		return response;
+	}
+	
+
+	/**
+	 * 返回晉升路綫
+	 * 
+	 * @param selectById
+	 * @return
+	 */
+	@RequestMapping(value = "/selectPromotion", method = RequestMethod.GET)
+	private List<String> selectPromotion(@RequestParam(value = "agentCode") String agentCode ) {
+		List<String> promotions = new ArrayList<String>();
+		promotions.add("AM");
+		promotions.add("SD");
+		return promotions;
+	}
+	
+	/**
+	 * 返回復效人員接口
+	 * 
+	 * @param selectById
+	 * @return
+	 */
+	@RequestMapping(value = "/selectComplexEffect", method = RequestMethod.GET)
+	private List<Map> selectComplexEffect(@RequestParam(value = "agentCode") String agentCode ) {
+		List<Map> promotions = new ArrayList<Map>();
+		// 調用第三方接口后，循環替換一下下面的數據，把isAtWork為false的給塞進去
+		for (int i = 0; i < 2; i++) {
+			Map map = new HashMap();
+			map.put("agentCode", "123");
+			map.put("isSupervisor", "true");
+			map.put("isAtWork", "false");
+			if(i == 0) {
+				map.put("agentName", "劉明");	
+			}else {
+				map.put("agentName", "章虹");	
+			}
+			map.put("jobPosition", "ABC");
+			promotions.add(map);
+		}
+		return promotions;
 	}
 }
