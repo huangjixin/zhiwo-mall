@@ -362,11 +362,11 @@ public class ApplyFormController {
 		applyForm.setCreateDatetime(new Date());
 		ErrorMessage errorMessage = new ErrorMessage();
 		// applyForm.setId(1000);
-		if (result.hasErrors()) {
-			errorMessage.setState("0");
-			errorMessage.setErrorMessage("表单有必填字段未填！");
-			return errorMessage;
-		}
+//		if (result.hasErrors()) {
+//			errorMessage.setState("0");
+//			errorMessage.setErrorMessage("表单有必填字段未填！");
+//			return errorMessage;
+//		}
 		String strDirPath = this.uploadPath + File.separator;
 		try {
 			applyFormService.saveForm(strDirPath, file, applyForm);
