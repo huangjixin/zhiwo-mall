@@ -14,7 +14,9 @@ export class ComplexEffectApply extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            //answerEffectPerson:[],
+            complexEffectList:[], //复效人员
+
+
             id: '',
             description: '',
             type: 3,  //0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
@@ -35,8 +37,40 @@ export class ComplexEffectApply extends React.Component {
 
 
         }
+        this.fetchNameData();
         // this.fetchData = this.fetchData.bind(this);
     }
+
+
+    fetchNameData(parmars) {
+        let url = RequestURL.HOST+'applyForm/selectComplexEffect?agentCode=123';
+        fetch(url, {
+            method: 'POST',
+//             headers: {
+//                 'Accept': 'application/json',
+//    　　　　      'Content-Type': 'application/json',
+//             },
+            body:parmars,
+            // body: JSON.stringify({
+            //     firstParam: 'yourValue',
+            //     secondParam: 'yourOtherValue',
+            // })
+        })
+            .then((response) => response.json( ))
+            .then((responseJson) => {
+                    this.setState({
+                        agentGradeList:responseJson,
+                    });
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
+
+
+
+
     ComplexEffectApplySubmission=()=>{
         let comPerson = this.state.name;
         let descr = this.state.description;
@@ -93,7 +127,7 @@ export class ComplexEffectApply extends React.Component {
 
     _showOaApplyPicker() {
         Picker.init({
-            pickerData: ['范冰冰','林心如','赵薇','李冰冰'],
+            pickerData: this.state.complexEffectList,
             pickerFontColor: [0, 0 ,0, 1],
             pickerConfirmBtnText:'确定',
             pickerCancelBtnText:'取消',
