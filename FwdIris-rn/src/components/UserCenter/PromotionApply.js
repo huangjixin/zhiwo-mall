@@ -58,7 +58,7 @@ export class PromotionApply extends React.Component {
         let url = RequestURL.HOST+'applyForm/selectPromotion?agentCode=123';
 
         fetch(url, {
-            method: 'POST',
+            method: 'GET',
             headers: {
                 'Accept': 'application/json',
    　　　　      'Content-Type': 'application/json',
