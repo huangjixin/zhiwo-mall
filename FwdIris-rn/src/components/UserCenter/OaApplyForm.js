@@ -5,6 +5,7 @@ import Textarea from 'react-native-textarea';
 import Picker from 'react-native-picker';
 import {ApplyCommonHeader} from "./ApplyCommonHeader";
 import * as RequestURL from "../../common/RequestURL";
+import Toast from './Toast/Toast';
 //var Fileupload = require('NativeModules').FileUpload;
 var ScreenWidth = Dimensions.get('window').width;
 var ScreenHeight = Dimensions.get('window').height;
@@ -468,10 +469,15 @@ export class OaApplyForm extends React.Component {
         formData.append("type", this.state.type);
         formData.append("agentCode", this.state.agentCode);
         formData.append("name", this.state.agentName);
+        // let fileData = new FormData();
+        // fileData.append("file", file);
+        // formData.append("file", file);
+
         let url = RequestURL.HOST+'applyForm/saveForm';
         formData.append("files", fileStr);
         fetch(url, {
             method: 'POST',
+
             body: formData,
         }).then((response) => {})
             .then((responseData)=> {
@@ -498,8 +504,11 @@ export class OaApplyForm extends React.Component {
         })
             .then((response) => response.json())
             .then((responseJson) => {
-                if (responseJson === 1) {
-                    DeviceEventEmitter.emit('userCenterToAdministrative'); //用户中心跳转到行政审批
+                if (responseJson === '1') {
+                    Toast.show("保存成功",Toast.LONG);
+                    //DeviceEventEmitter.emit('userCenterToAdministrative'); //用户中心跳转到行政审批
+                }else {
+                    Toast.show("保存失败",Toast.LONG);
                 }
             })
             .catch((error) => {

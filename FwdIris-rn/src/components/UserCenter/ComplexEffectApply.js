@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, ScrollView, Text,View,Image,TextInput,TouchableWithoutFeedback,TouchableOpacity} from 'react-native';
 import {ApplyCommonHeader} from "./ApplyCommonHeader";
+import Toast from './Toast/Toast';
 //import ModalDropdown from 'react-native-modal-dropdown';
 import Textarea from 'react-native-textarea';
 import Picker from 'react-native-picker';
@@ -75,10 +76,15 @@ export class ComplexEffectApply extends React.Component {
         })
             .then((response) => response.json( ))
             .then((responseJson) => {
-            alert(parmars);
+           // alert(parmars);
                 // if (responseJson===1){
                 //     DeviceEventEmitter.emit('userCenterToAdministrative'); //用户中心跳转到行政审批
                 // }
+                if (responseJson.state==='1'){
+                    Toast.show("保存成功",Toast.LONG);
+                }else {
+                    Toast.show("保存失败",Toast.LONG);
+                }
             })
             .catch((error) => {
                 console.error(error);
