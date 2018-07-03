@@ -527,8 +527,19 @@ public class ApplyFormController {
 	@RequestMapping(value = "/selectPromotion", method = RequestMethod.GET)
 	private List<String> selectPromotion(@RequestParam(value = "agentCode") String agentCode ) {
 		List<String> promotions = new ArrayList<String>();
-		promotions.add("AM");
-		promotions.add("SD");
+//		promotions.add("AM");
+//		promotions.add("SD");
+//		List<Map> promotions = new ArrayList<Map>();
+//		for (int i = 0; i < 2; i++) {
+//			Map map = new HashMap();
+//			if(i == 0) {
+//				map.put("agentName", "劉明");	
+//			}else {
+//				map.put("agentName", "章虹");	
+//			}
+//		}
+//		promotions.add("AM");
+//		promotions.add("SD");
 		return promotions;
 	}
 	
@@ -539,7 +550,7 @@ public class ApplyFormController {
 	 * @return
 	 */
 	@RequestMapping(value = "/selectComplexEffect", method = RequestMethod.GET)
-	private Response<List<OaAgentDto>> selectComplexEffect(@RequestParam(value = "agentCode") String agentCode ) {
+	private List<OaAgentDto> selectComplexEffect(@RequestParam(value = "agentCode") String agentCode ) {
 		List<OaAgentDto> promotions = new ArrayList<OaAgentDto>();
 		Response<List<OaAgentDto>> response = null;
 		try {
@@ -553,18 +564,18 @@ public class ApplyFormController {
 					}
 				}
 			}
-			String statusCode = resp.getStatus().getStatusCode();
-			String statusMessage = resp.getStatus().getStatusMessage();
-			if("01".equals(statusCode)) {
-				response = new Response<List<OaAgentDto>>(Response.SUCCESS,Response.SUCCESS_MESSAGE);
-				response.setData(promotions);
-			}else {
-				response = new Response<List<OaAgentDto>>(Response.ERROR,statusMessage);
-			}
+//			String statusCode = resp.getStatus().getStatusCode();
+//			String statusMessage = resp.getStatus().getStatusMessage();
+//			if("01".equals(statusCode)) {
+//				response = new Response<List<OaAgentDto>>(Response.SUCCESS,Response.SUCCESS_MESSAGE);
+//				response.setData(promotions);
+//			}else {
+//				response = new Response<List<OaAgentDto>>(Response.ERROR,statusMessage);
+//			}
 		} catch (Exception e) {
 			logger.error("Unknow Error", e);
-			return new Response<List<OaAgentDto>>(Response.ERROR, e.getMessage());
+//			return new Response<List<OaAgentDto>>(Response.ERROR, e.getMessage());
 		}
-		return response;
+		return promotions;
 	}
 }
