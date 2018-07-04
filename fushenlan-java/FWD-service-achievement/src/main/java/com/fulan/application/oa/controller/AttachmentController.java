@@ -48,13 +48,12 @@ public class AttachmentController {
 	 * @param response
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/getImage/{id}")
-	public void getImage(@PathVariable(value = "id") Integer id,
-			@RequestParam(name = "agentCode", required = true) String agentCode, HttpServletRequest request,
+	public void getImage(@PathVariable(value = "id") Integer id, HttpServletRequest request,
 			HttpServletResponse response) {
 		// 真正业务应该是查询id对应的记录，路径是this.uploadPath+File.separator+记录的物理路径
 		String fileName = this.uploadPath + File.separator + "upload" + File.separator + "images" + File.separator
-				+ agentCode;
-		fileName += File.separator + "1.jpg";
+				+ 10000;
+		fileName += File.separator + "1530627443832.png";
 		File file = new File(fileName);
 		FwdOaFormAttachment att = attachmentService.selectById(id);
 		if(att!=null) {
