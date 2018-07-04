@@ -65,8 +65,14 @@ class LeaveUI extends React.Component {
                         <Text style={{flex:3,textAlign:'right',fontSize:16}}>图片</Text>
                         <View style={{flexWrap:'wrap',flex:8,paddingLeft:20,flexDirection: 'row',alignItems:'center',}}>
                             {/*//<Text>{this.props.files}</Text>*/}
-                            <Image style={{width: 80, height: 80,margin:5,}} source={require('../../../img/UserCenter/UserImage.jpeg')}/>
-                            <Image style={{width: 80, height: 80,margin:5,}} source={require('../../../img/UserCenter/UserImage.jpeg')}/>
+                            {this.props.files.map((rowData, i) => (
+                                <View key={i} style={{width: imageWidth,height: 70,flexDirection: 'row',marginRight: 15,marginBottom: 10,justifyContent: 'center',}}>
+                                    <Image source={{uri: rowData}} style={{width: 80, height: 80,margin:5}} />
+                                </View>
+                                ))
+                            }
+                            {/*<Image style={{width: 80, height: 80,margin:5,}} source={require('../../../img/UserCenter/UserImage.jpeg')}/>*/}
+                            {/*<Image style={{width: 80, height: 80,margin:5,}} source={require('../../../img/UserCenter/UserImage.jpeg')}/>*/}
                         </View>
                     </View>
                 </View>
@@ -277,7 +283,6 @@ export class OaApplyFormDetail extends React.Component {
         let leaveOff = '';
         let agentName = '';
         let imcomeproveMonth = '';
-        let files = [];
         if(params != undefined){
             if(params.hasOwnProperty('value')){
                 let objData = params['value'];
@@ -331,9 +336,6 @@ export class OaApplyFormDetail extends React.Component {
                     if(obj.hasOwnProperty('agentName')){
                         agentName = params.value.itemData.agentName;
                     }
-                    if(obj.hasOwnProperty('file')){
-                        files = params.value.itemData.file;
-                    }
                     if(obj.hasOwnProperty('imcomeproveMonth')){
                         imcomeproveMonth = params.value.itemData.imcomeproveMonth;
                     }
@@ -368,13 +370,38 @@ export class OaApplyFormDetail extends React.Component {
             showAgreedAndDismiss:baseStatus,
             showNatationAndAgreed:0,
             processList:[],
-            files:files,
+            files:[],
         }
         //{this.state.type==2&&this.state.status=='3'?(
+        if (this.state.type==1||this.state.type==9||this.state.type==10){this.fetchImageData();}
     }
     componentWillMount() {
         this.fetchData();
     }
+
+    // 网络请求
+    fetchImageData=()=> {
+        let url = RequestURL.HOST+'attachment/getImage/'+this.state.id;
+        fetch(url, {
+        })
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code=='1'){
+                    let data = responseData.data;
+                    this.setState( {
+                        files:data
+                    })
+                }else{
+                    console.log(responseData.msg);
+                    //alert('网络异常，请稍后再试');
+                }
+            }).catch((err) => {//2
+            console.error(err);
+            //alert('网络异常，请稍后再试');
+        }).done();
+    }
+
+
     // 网络请求
     fetchData() {
         let url = RequestURL.HOST+'applyForm/'+this.state.id+'/approvalRecord';
