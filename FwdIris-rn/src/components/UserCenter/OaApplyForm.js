@@ -432,6 +432,7 @@ export class OaApplyForm extends React.Component {
             .then((responseJson) => {
                 if (responseJson.code === '1') {
                     Toast.show("保存成功",Toast.LONG);
+                    this.props.navigation.goBack();
                     //DeviceEventEmitter.emit('userCenterToAdministrative'); //用户中心跳转到行政审批
                 }else {
                     Toast.show("保存失败",Toast.LONG);

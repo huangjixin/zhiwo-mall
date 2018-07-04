@@ -386,7 +386,7 @@ export class OaApplyFormDetail extends React.Component {
         })
             .then((response) => response.json())
             .then((responseData) => {
-                if(responseData.code=='1'){
+                    if(responseData.code=='1'){
                     let data = responseData.data;
                     this.setState( {
                         files:data
