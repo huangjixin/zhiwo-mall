@@ -23,6 +23,11 @@
 
 	<dependencies>
 		<dependency>  
+		    <groupId>com.fulan</groupId>
+		    <artifactId>cloud-api-system</artifactId>
+		    <version>1.0</version> 
+		</dependency>
+		<dependency>  
 		    <groupId>com.thoughtworks.xstream</groupId>  
 		    <artifactId>xstream</artifactId>  
 		    <version>1.4.7</version>  
