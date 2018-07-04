@@ -201,15 +201,28 @@ public class ApplyFormController {
 		if (formId == null) {
 			return new Response(Response.ERROR, "参数错误");
 		}
-		List<ApprovalRecordVo> recordList = null;
-		try {
-			recordList = workFlowService.findApprovalRecord(formId.toString());
-		} catch (Exception e) {
-			logger.error("Unknow Error", e);
-			return new Response(Response.ERROR, e.getMessage());
-		}
+		List<ApprovalRecordVo> recordList = new ArrayList<ApprovalRecordVo>();
+//		try {
+//			recordList = workFlowService.findApprovalRecord(formId.toString());
+//		} catch (Exception e) {
+//			logger.error("Unknow Error", e);
+//			return new Response(Response.ERROR, e.getMessage());
+//		}
 		Response<List<ApprovalRecordVo>> response = new Response<List<ApprovalRecordVo>>(Response.SUCCESS,
 				Response.SUCCESS_MESSAGE);
+		
+		/***************for test*****************/
+		if(recordList==null || recordList.size()==0) {
+			ApprovalRecordVo arVo = new ApprovalRecordVo();
+			arVo.setNodeName("提交申请");
+			arVo.setHandleDate(new Date());
+			arVo.setState("1");
+			arVo.setTaskId(13579);
+			arVo.setUserId("10000792");
+			recordList.add(arVo);
+		}
+		/****************************************/
+		
 		response.setData(recordList);
 		return response;
 	}
