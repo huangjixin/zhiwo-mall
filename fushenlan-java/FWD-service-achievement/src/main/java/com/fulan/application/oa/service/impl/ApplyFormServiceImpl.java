@@ -37,6 +37,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import com.alibaba.fastjson.JSONObject;
+import com.fulan.api.system.service.AttachmentService;
 import com.fulan.application.oa.constant.ApplyAction;
 import com.fulan.application.oa.constant.ApplyConstant;
 import com.fulan.application.oa.constant.ApplyTypeEnum;
@@ -69,6 +70,7 @@ public class ApplyFormServiceImpl implements IApplyFormService {
 
 	@Autowired
 	private WorkFlowService workFlowService;
+	
 
 	/*
 	 * (non-Javadoc)

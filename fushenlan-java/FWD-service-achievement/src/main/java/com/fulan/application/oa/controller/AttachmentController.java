@@ -73,7 +73,7 @@ public class AttachmentController {
 			byte[] data = new byte[(int) file.length()];
 			int length = inputStream.read(data);
 			//此处的后缀名要判断一下。
-			response.setContentType("image/png");
+			response.setContentType("image/*");
 			stream = response.getOutputStream();
 			stream.write(data);
 			stream.flush();

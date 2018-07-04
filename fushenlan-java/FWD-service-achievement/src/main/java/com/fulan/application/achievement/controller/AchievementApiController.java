@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fulan.api.system.service.AttachmentService;
 import com.fulan.application.achievement.service.AchAgentClient;
 import com.fulan.application.achievement.vo.AgentGrade;
 import com.fulan.application.achievement.vo.AgentHistoryIncomeDetail;
@@ -136,6 +137,10 @@ public class AchievementApiController {
 //		return response;
 	}
 
+	// 复深蓝的附件service
+	@Autowired
+	private AttachmentService attService;
+	
 	/**
 	 * 基础业绩实际值查询接口
 	 * 
