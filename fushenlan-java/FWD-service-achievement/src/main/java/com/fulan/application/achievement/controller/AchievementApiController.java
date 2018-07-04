@@ -138,8 +138,8 @@ public class AchievementApiController {
 	}
 
 	// 复深蓝的附件service
-	@Autowired
-	private AttachmentService attService;
+//	@Autowired
+//	private AttachmentService attService;
 	
 	/**
 	 * 基础业绩实际值查询接口
