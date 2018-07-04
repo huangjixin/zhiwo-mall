@@ -756,7 +756,8 @@ export class AchvTabMyAchievement extends React.Component {
                                             <View style={{flex:1.5,flexDirection: 'column',
                                                 justifyContent: 'center',
                                                 alignItems: 'center',}}>
-                                                <Image  source={require('../../../img/UserCenter/UserImage.jpeg')}
+                                                <Image
+                                                    source={row.headImageUrl ? {uri: row.headImageUrl} : require('../../../img/UserCenter/default_head_image.png.jpeg')}
                                                         style={{width: 60, height: 60,borderRadius:30}} />
                                                 <View style={{backgroundColor:'#ffffff',
                                                     marginTop:-5,paddingBottom:2,paddingLeft:10,paddingRight:10,
