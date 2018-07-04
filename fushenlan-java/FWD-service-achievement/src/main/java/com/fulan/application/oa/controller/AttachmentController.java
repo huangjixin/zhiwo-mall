@@ -11,9 +11,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.activiti.engine.task.Attachment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,7 +48,7 @@ public class AttachmentController {
 	 * @param response
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/getImage/{id}")
-	public void getImage(@PathVariable(value = "id") String id,
+	public void getImage(@PathVariable(value = "id") Integer id,
 			@RequestParam(name = "agentCode", required = true) String agentCode, HttpServletRequest request,
 			HttpServletResponse response) {
 		// 真正业务应该是查询id对应的记录，路径是this.uploadPath+File.separator+记录的物理路径
@@ -56,7 +56,11 @@ public class AttachmentController {
 				+ agentCode;
 		fileName += File.separator + "1.jpg";
 		File file = new File(fileName);
-
+		FwdOaFormAttachment att = attachmentService.selectById(id);
+		if(att!=null) {
+			fileName = att.getPath();
+			file = new File(fileName);
+		}
 		// 判断文件是否存在如果不存在就返回默认图标
 		if (!(file.exists() && file.canRead())) {
 			// 把file对象new一个，指向默认的图片
