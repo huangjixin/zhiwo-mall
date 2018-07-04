@@ -8,7 +8,7 @@ import * as RequestURL from "../../common/RequestURL";
 import * as NumberUtils from "../../common/NumberUtils";
 var ScreenWidth = Dimensions.get('window').width;
 var ScreenHeight = Dimensions.get('window').height;
-const g_agentCode = '8889991';
+const g_agentCode = '10000792';
 export class AddressChangeApply extends React.Component {
     constructor(props){
         super(props);

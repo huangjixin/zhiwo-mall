@@ -49,17 +49,15 @@ export async function Get({url,params,success,error}){
         .then(response =>response.json())
         .then(respData => {
             console.log(respData);
-            if(respData.code!=null&&respData.code==0){
-                if(typeof error === 'function'){
-                    error(respData);
-                }
-                return;
-            }
 
             if(respData.code!=null
                 && respData.code==1
                 && typeof success === 'function'){
                 success(respData);
+            }else {
+                if(typeof error === 'function'){
+                    error(respData);
+                }
             }
 
         }).catch((errResp) => {
@@ -92,17 +90,15 @@ export async function Post({url,params,success,error}){
         .then(response =>response.json())
         .then(respData => {
             console.log(respData);
-            if(respData.code!=null&&respData.code==0){
-                if(typeof error === 'function'){
-                    error(respData);
-                }
-                return;
-            }
 
             if(respData.code!=null
                 && respData.code==1
                 && typeof success === 'function'){
                 success(respData);
+            }else {
+                if(typeof error === 'function'){
+                    error(respData);
+                }
             }
 
         }).catch((errResp) => {
