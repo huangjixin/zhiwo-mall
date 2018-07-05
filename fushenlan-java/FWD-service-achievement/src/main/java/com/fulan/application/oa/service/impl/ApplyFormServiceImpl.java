@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.w3c.dom.Document;
@@ -248,41 +249,43 @@ public class ApplyFormServiceImpl implements IApplyFormService {
 		// 如果绑定没有错误的话把applyForm插进去数据库。
 		int num = this.save(applyForm);
 				
-		for (CommonsMultipartFile file : files) {
-			String oldFileName = file.getOriginalFilename();
-			// 获取文件后缀
-			String suffix = oldFileName.substring(oldFileName.lastIndexOf("."));
-			// 获取文件提交路径(服务器)
-			// 把上传的文件写入到upload/images/{agentCode}/文件名 (先判断一下文件是否存在，不存在则先创建)
-			String path = strDirPath + "upload" + File.separator + "images" + File.separator + applyForm.getAgentCode();
-			File filePath = new File(path);
-			if (!filePath.exists()) {
-				boolean establish = filePath.mkdirs();
-				if (!establish) {
-					throw new RuntimeException("文件创建失败");
+		if (files != null && files.length > 0) {
+			for (CommonsMultipartFile file : files) {
+				String oldFileName = file.getOriginalFilename();
+				// 获取文件后缀
+				String suffix = oldFileName.substring(oldFileName.lastIndexOf("."));
+				// 获取文件提交路径(服务器)
+				// 把上传的文件写入到upload/images/{agentCode}/文件名 (先判断一下文件是否存在，不存在则先创建)
+				String path = strDirPath + "upload" + File.separator + "images" + File.separator + applyForm.getAgentCode();
+				File filePath = new File(path);
+				if (!filePath.exists()) {
+					boolean establish = filePath.mkdirs();
+					if (!establish) {
+						throw new RuntimeException("文件创建失败");
+					}
 				}
-			}
 
-			// 文件重命名
-			// 时间(毫秒数)+随机数+suffix
-			// 1970-1-1~今天 System.currentTimeMillis();
-			newFileName = System.currentTimeMillis() + new Random().nextInt(1000000) + suffix;
-			// 上传文件 java.io.File
-			targetFile = new File(filePath, newFileName);
-			try {
-				file.transferTo(targetFile);
-			} catch (IllegalStateException | IOException e) {
-				throw new RuntimeException("文件上传失败");
-			}
-			
-			FwdOaFormAttachment oaFormAttachment = new FwdOaFormAttachment();
+				// 文件重命名
+				// 时间(毫秒数)+随机数+suffix
+				// 1970-1-1~今天 System.currentTimeMillis();
+				newFileName = System.currentTimeMillis() + new Random().nextInt(1000000) + suffix;
+				// 上传文件 java.io.File
+				targetFile = new File(filePath, newFileName);
+				try {
+					file.transferTo(targetFile);
+				} catch (IllegalStateException | IOException e) {
+					throw new RuntimeException("文件上传失败");
+				}
 
-			String url = "upload/images/" + applyForm.getAgentCode() + "/" + newFileName;
-			if (targetFile != null)
-				oaFormAttachment.setPath(targetFile.toString());
-			oaFormAttachment.setUrl(url);
-			oaFormAttachment.setFormId(applyForm.getId());
-			int count = attachmentService.save(oaFormAttachment);
+				FwdOaFormAttachment oaFormAttachment = new FwdOaFormAttachment();
+
+				String url = "upload/images/" + applyForm.getAgentCode() + "/" + newFileName;
+				if (targetFile != null)
+					oaFormAttachment.setPath(targetFile.toString());
+				oaFormAttachment.setUrl(url);
+				oaFormAttachment.setFormId(applyForm.getId());
+				int count = attachmentService.save(oaFormAttachment);
+			}
 		}
 
 		// 启动申请流程。
@@ -372,36 +375,38 @@ public class ApplyFormServiceImpl implements IApplyFormService {
 		// 如果绑定没有错误的话把applyForm插进去数据库。
 		int num = this.save(applyForm);
 
-		for (String file : files) {
-			String suffix = getImageSuffix(file);
-			File f = base64ToFile("temp."+suffix,file);
+		if (files != null && files.length > 0) {
+			for (String file : files) {
+				String suffix = getImageSuffix(file);
+				File f = base64ToFile("temp."+suffix,file);
 
-			// 获取文件提交路径(服务器)
-			// 把上传的文件写入到upload/images/{agentCode}/文件名 (先判断一下文件是否存在，不存在则先创建)
-			String path = strDirPath + "upload" + File.separator + "images" + File.separator + applyForm.getAgentCode();
-			File filePath = new File(path);
-			if (!filePath.exists()) {
-				boolean establish = filePath.mkdirs();
-				if (!establish) {
-					throw new RuntimeException("文件创建失败");
+				// 获取文件提交路径(服务器)
+				// 把上传的文件写入到upload/images/{agentCode}/文件名 (先判断一下文件是否存在，不存在则先创建)
+				String path = strDirPath + "upload" + File.separator + "images" + File.separator + applyForm.getAgentCode();
+				File filePath = new File(path);
+				if (!filePath.exists()) {
+					boolean establish = filePath.mkdirs();
+					if (!establish) {
+						throw new RuntimeException("文件创建失败");
+					}
 				}
+
+				// 文件重命名
+				// 时间(毫秒数)+随机数+suffix
+				// 1970-1-1~今天 System.currentTimeMillis();
+				newFileName = System.currentTimeMillis() + new Random().nextInt(1000000) + "."+suffix;
+
+				targetFile = saveFile(f,suffix,path,newFileName);
+
+				FwdOaFormAttachment oaFormAttachment = new FwdOaFormAttachment();
+
+				String url = "upload/images/" + applyForm.getAgentCode() + "/" + newFileName;
+				if (targetFile != null)
+					oaFormAttachment.setPath(targetFile.toString());
+				oaFormAttachment.setUrl(url);
+				oaFormAttachment.setFormId(applyForm.getId());
+				int count = attachmentService.save(oaFormAttachment);
 			}
-
-			// 文件重命名
-			// 时间(毫秒数)+随机数+suffix
-			// 1970-1-1~今天 System.currentTimeMillis();
-			newFileName = System.currentTimeMillis() + new Random().nextInt(1000000) + "."+suffix;
-
-			targetFile = saveFile(f,suffix,path,newFileName);
-
-			FwdOaFormAttachment oaFormAttachment = new FwdOaFormAttachment();
-
-			String url = "upload/images/" + applyForm.getAgentCode() + "/" + newFileName;
-			if (targetFile != null)
-				oaFormAttachment.setPath(targetFile.toString());
-			oaFormAttachment.setUrl(url);
-			oaFormAttachment.setFormId(applyForm.getId());
-			int count = attachmentService.save(oaFormAttachment);
 		}
 
 		// 启动申请流程。
@@ -410,7 +415,7 @@ public class ApplyFormServiceImpl implements IApplyFormService {
 		String formId = applyForm.getId().toString();
 		String agentCode = applyForm.getAgentCode();
 		String branchCode = ApplyConstant.BRANCH_CODE_SHANG_HAI;
-//		this.workFlowService.startProcessAndSubmitForm(applyType, formId, agentCode, branchCode, params);
+		this.workFlowService.startProcessAndSubmitForm(applyType, formId, agentCode, branchCode, params);
 		return num;
 	}
 
