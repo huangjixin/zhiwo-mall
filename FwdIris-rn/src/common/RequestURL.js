@@ -24,3 +24,6 @@ export const ADDRESS_LIST = HOST + 'address/list';
 //other
 export const SEND_VERIFICATION_CODE = HOST + 'oaCommon/sendVerificationCode';
 export const VERIFY_VERIFICATION_CODE = HOST + 'oaCommon/verifyVerificationCode';
+
+//申请表单
+export const APPLY_SAVE_MULTIPLE_FORM_BASE64 = HOST+'achievement/applyForm/saveMultipleFormBase64';

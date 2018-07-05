@@ -419,7 +419,7 @@ export class OaApplyForm extends React.Component {
     // 提交数据到后台
     fetchData(parmars) {
          //  Kane哥，后面这么写，搞一个变量，调试的时候也容易。   
-        let url = RequestURL.HOST+'applyForm/saveMultipleFormBase64';
+        let url = RequestURL.APPLY_SAVE_MULTIPLE_FORM_BASE64;
 
         fetch(url, {
             method: 'POST',

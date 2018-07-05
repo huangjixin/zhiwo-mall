@@ -114,7 +114,7 @@ export class OtherApply extends React.Component {
         this.fetchData(JSON.stringify(jsonData));
     }
     fetchData(parmars) {
-        let url = RequestURL.HOST+'applyForm/saveMultipleFormBase64';
+        let url = RequestURL.APPLY_SAVE_MULTIPLE_FORM_BASE64;
         fetch(url, {
             method: 'POST',
             headers: {
