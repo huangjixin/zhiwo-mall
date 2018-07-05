@@ -17,7 +17,7 @@ import com.fulan.core.monitoring.cat.annotation.EnableCat;
 @SpringBootApplication
 @EnableEurekaClient
 @ComponentScan(basePackages = { "com.fulan" })
-@EnableFeignClients(basePackages = { "com.fulan.api.system" })
+@EnableFeignClients(basePackages = { "com.fulan" })
 //@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 60 * 60 * 24) // session过期时间24小时
 @EnableCat(basePackages = { "com.fulan.application.controller", "com.fulan.application.service.**","com.fulan.application.custom.controller",
 		"com.fulan.application.manage.controller" })
