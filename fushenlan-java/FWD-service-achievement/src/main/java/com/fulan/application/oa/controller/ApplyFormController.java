@@ -572,7 +572,8 @@ public class ApplyFormController {
 			OaRespAgentGroupInfoDto agentGroupInfo = resp.getResponse();
 			if(agentGroupInfo!=null) {
 				for (OaAgentDto dto: agentGroupInfo.getGroupList()) {
-					if("Y".equals(dto.getSubIsAtWork())) {
+					if(!"Y".equals(dto.getSubIsAtWork())
+							&& StringUtils.isNotBlank(dto.getAgentName())) {
 						promotions.add(dto);
 					}
 				}
