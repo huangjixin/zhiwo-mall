@@ -11,6 +11,16 @@ public class ErrorMessage{
 	private String  state;
 	
 	private String  errorMessage;
+	
+	private String code;
+
+	public String getCode() {
+		return state;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
 
 	public String getState() {
 		return state;
