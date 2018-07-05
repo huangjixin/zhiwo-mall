@@ -51,7 +51,6 @@ export async function Get({url,params,success,error}){
             console.log(respData);
 
             if(respData.code!=null
-                && respData.code==1
                 && typeof success === 'function'){
                 success(respData);
             }else {
@@ -71,7 +70,17 @@ export async function Get({url,params,success,error}){
 }
 
 
-export async function Post({url,params,success,error}){
+function toForm(data) {
+    let formData = new FormData();
+    let keyArr = Object.keys(data);
+    if(keyArr.length<1){return {}}
+    keyArr.map((item)=>{
+        formData.append(item, data[item]);
+    });
+    return formData;
+}
+
+export async function Post({url,params,success,error,headers}){
     console.log('*******************request start**********************');
     console.log('url:' + url);
 
@@ -79,20 +88,30 @@ export async function Post({url,params,success,error}){
         return ;
     }
 
-    await fetch(url,{
-        method: 'POST',
-        headers: {
+    const requestHeader = (headers!=null)?
+        headers
+        :{
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(params)
-    })
-        .then(response =>response.json())
+        }
+
+    const ct = requestHeader["Content-Type"]
+    let requestBody = (ct!=null && ct.indexOf('json')>0)?
+                            JSON.stringify(params)
+                            :toForm(params);
+
+    await _fetch(
+        fetch(url,{
+            method: 'POST',
+            headers:requestHeader,
+            body: requestBody
+        }),
+        FETCH_TIMEOUT
+    ).then(response =>response.json())
         .then(respData => {
             console.log(respData);
 
             if(respData.code!=null
-                && respData.code==1
                 && typeof success === 'function'){
                 success(respData);
             }else {

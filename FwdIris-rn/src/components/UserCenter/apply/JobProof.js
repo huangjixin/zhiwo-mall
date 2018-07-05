@@ -4,28 +4,23 @@ import {Alert,StyleSheet, ScrollView,Text,TextInput,
     DeviceEventEmitter,TouchableHighlight} from 'react-native';
 import {ApplyCommonHeader} from "../ApplyCommonHeader";
 import Textarea from 'react-native-textarea';
+import * as FetchUtils from "../../../common/FetchUtils";
+import * as RequestURL from "../../../common/RequestURL";
 
 export class JobProof extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            isLoading:false,
+            agentName:'张三',
+            agentCode:'10000792',
             isPreview:false,
-            id:'',
             description:'',
-            type:8,  //0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它证明
-            agentCode:'',
-            createDatetime:'',
-            status:'', //0 表示正在审批当中了；1表示结束；2驳回。
-            startTime:'',
-            endTime:'',
-            endDatetime:'',
-            leaveType:'',
-            leaveOff:'',
-            title:'台湾还没有回归，心情不好',
-            imcomeproveMonth:'',
-            currentGrade:'',
-            upGrade:''
+            idNo:'12345678910',
+            postTypeName:'寿险顾问（业务经理/销售经理等）',
+            type:'8',  //0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
+
         }
     }
 
@@ -43,13 +38,34 @@ export class JobProof extends React.Component {
         }else if(descr.length > 100){
             alert('字符长度不得大于100');
         }else{
+            const {agentCode,type,description} = this.state;
 
-            let obj= {};
-            obj.type = this.state.type;
-            obj.description = this.state.description;
+            if(description==null || ''==description){
+                alert('请填写用途');
+                return
+            }
 
-            // 做网络代码提交，此处暂时先做alert处理。
-            alert(JSON.stringify(obj));
+            const params = {
+                agentCode:agentCode,
+                type:type,
+                description:description,
+            }
+            this.setState({isLoading:true});
+            FetchUtils.Post({
+                url:RequestURL.SUBMIT_SINGLE_FORM,
+                params:params,
+                headers:{},
+                success:(respData)=>{
+                    if(respData.code==1)
+                        this.props.navigation.pop(2);
+                    else
+                        alert('提交失败');
+                },
+                error:()=>{
+                    alert('请求异常');
+                    this.setState({isLoading:false});
+                }
+            })
         }
     };
 
@@ -91,9 +107,7 @@ export class JobProof extends React.Component {
                 <TouchableWithoutFeedback onPress={this.previewHandler}>
                     <View style={{justifyContent: 'center',alignItems: 'center',backgroundColor:'#FFFFFF',height:50
                         ,borderColor:'#F2F2F2',borderBottomWidth:1,borderTopWidth:1,}}>
-                        <Text style={{flex:1,fontSize:20,height: 50,lineHeight:50,borderRadius:5,textAlign:'center',backgroundColor:this.validate==true?'#FFDD00':'#EBEBEB'
-                                    ,color:this.validate==true?'#000000':'#858585'}}>预览</Text>
-                        {/* <Text style={{color:'#E87722',fontSize:16}}>预览</Text> */}
+                        <Text style={{color:'#E87722',fontSize:16}}>预览</Text>
                     </View>
                 </TouchableWithoutFeedback>
             </View>
@@ -101,6 +115,7 @@ export class JobProof extends React.Component {
     }
 
     _renderPreview = ()=>{
+        const {agentName,idNo,postTypeName} = this.state;
         return (
             <View>
                 <TouchableWithoutFeedback onPress={()=>{this.setState({ isPreview: false});}}>

@@ -27,3 +27,7 @@ export const VERIFY_VERIFICATION_CODE = HOST + 'oaCommon/verifyVerificationCode'
 
 //申请表单
 export const APPLY_SAVE_MULTIPLE_FORM_BASE64 = HOST+'achievement/applyForm/saveMultipleFormBase64';
+
+//oa 表单
+
+export const SUBMIT_SINGLE_FORM = HOST + 'applyForm/saveSingleForm';

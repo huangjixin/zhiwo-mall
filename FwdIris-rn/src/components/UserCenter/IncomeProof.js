@@ -2,19 +2,91 @@
 import React from "react";
 import {View, Text, TouchableWithoutFeedback, Image, StyleSheet,TextInput,ScrollView} from "react-native";
 import {ApplyCommonHeader} from "./ApplyCommonHeader";
-import moment from 'moment';
+import * as RequestURL from "../../common/RequestURL";
+import * as FetchUtils from "../../common/FetchUtils";
+import {FwdLoading} from "./FwdLoading";
+
 export class IncomeProof extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            isLoading:false,
+            agentName:'张三',
+            agentCode:'10000792',
             isPreview:false,
             period:0,
-            purpose:''
+            purpose:'',
+            idNo:'12345678910',
+            postTypeName:'寿险顾问（业务经理/销售经理等）',
+            income:1250,
+            type:'7',  //0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
         }
     }
 
+    _submitForm = ()=>{
+        const {agentCode,type,purpose} = this.state;
+
+        if(purpose==null || ''==purpose){
+            alert('请填写用途');
+            return
+        }
+
+        const params = {
+            agentCode:agentCode,
+            type:type,
+            description:purpose,
+        }
+        this.setState({isLoading:true});
+        FetchUtils.Post({
+            url:RequestURL.SUBMIT_SINGLE_FORM,
+            params:params,
+            headers:{},
+            success:(respData)=>{
+                if(respData.code==1)
+                    this.props.navigation.pop(2);
+                else
+                    alert('提交失败');
+            },
+            error:()=>{
+                alert('请求异常');
+                this.setState({isLoading:false});
+            }
+        })
+    }
+
+    _toPreview = ()=>{
+        const {purpose} = this.state;
+        if(purpose==null || ''==purpose){
+            alert('请填写用途');
+            return
+        }
+
+        this.setState({ isPreview: true});
+    }
+
     _renderPreview = ()=>{
+        const {agentName,idNo,postTypeName,income,period} = this.state;
+
+        let curDate = new Date();
+        const curYear = curDate.getFullYear();
+        const curMonth = curDate.getMonth()+1;
+        const curDay = curDate.getDate();
+
+        let endDate = new Date();
+        endDate.setDate(0);
+        const endYear = endDate.getFullYear();
+        const endMonth = endDate.getMonth()+1;
+        const endDay = endDate.getDate();
+
+        let startDate = new Date();
+        const periodMonth = (period+1)*3;
+        startDate.setMonth(curMonth-1-periodMonth);
+        startDate.setDate(1);
+        const startYear = startDate.getFullYear();
+        const startMonth = startDate.getMonth()+1;
+        const startDay = startDate.getDate();
+
         return (
         <ScrollView>
             <TouchableWithoutFeedback onPress={()=>{this.setState({ isPreview: false});}}>
@@ -30,31 +102,33 @@ export class IncomeProof extends React.Component {
                 </View>
                 <View style={{}}>
                     <Text style={styles.fontStyles}>
-                        兹证明<Text style={styles.redFont}>张三</Text>（<Text style={styles.redFont}>身份证/护照/军官证</Text>号：123456xxxxxxx）为本公司代理制营销员，
-                        入司时间为<Text style={styles.redFont}>2019</Text>年<Text style={styles.redFont}>XX</Text>月<Text style={styles.redFont}>XX</Text>日
-                        ，目前在我司营销员渠道的级别是<Text style={styles.redFont}>寿险顾问（业务经理/销售经理等）</Text>。
+                        兹证明<Text style={styles.redFont}>{agentName}</Text>（<Text style={styles.redFont}>身份证/护照/军官证</Text>号：{idNo}）为本公司代理制营销员，
+                        入司时间为<Text style={styles.redFont}>2016</Text>年<Text style={styles.redFont}>5</Text>月<Text style={styles.redFont}>6</Text>日
+                        ，目前在我司营销员渠道的级别是<Text style={styles.redFont}>{postTypeName}</Text>。
                         {'\n'}
-                        在<Text style={styles.redFont}>2019</Text>年<Text style={styles.redFont}>XX</Text>月<Text style={styles.redFont}>XX</Text>日至2019年XX月XX日期间，其税前收入合计为
-                        <Text style={styles.redFont}>XXXX</Text>元人民币。
+                        在<Text style={styles.redFont}>{startYear}</Text>年<Text style={styles.redFont}>{startMonth}</Text>月<Text style={styles.redFont}>{startDay}</Text>日至{endYear}年{endMonth}月{endDay}日期间，其税前收入合计为
+                        <Text style={styles.redFont}>{income}</Text>元人民币。
                         {'\n'}
                         本公司承诺以上情况正确属实，特此证明。
                     </Text>
                 </View>
                 <View style={{flexDirection:'column',justifyContent: 'center',alignItems: 'flex-start'
                     ,marginTop:20}}>
-                    <Text style={styles.fontStyles}>联系人：XXX</Text>
+                    <Text style={styles.fontStyles}>联系人：王五</Text>
                     <Text style={styles.fontStyles}>联系电话：021-12345678</Text>
                 </View>
                 <View style={{flexDirection:'column',justifyContent: 'center',alignItems: 'flex-end'
                     ,marginTop:20}}>
                     <Text style={{color:'#4A4A4A',fontSize:12}}>富卫人寿保险有限公司</Text>
-                    <Text style={{color:'#4A4A4A',fontSize:12,paddingTop:5}}>2018年8月8号</Text>
+                    <Text style={{color:'#4A4A4A',fontSize:12,paddingTop:5}}>{curYear}年{curMonth}月{curDay}号</Text>
                 </View>
 
-                <View style={{height:46,backgroundColor:'#FFDD00',borderRadius:5,marginTop:20
-                    ,justifyContent: 'center',alignItems: 'center',}}>
-                    <Text style={{fontSize:14,color:'#000000'}}>确认提交</Text>
-                </View>
+                <TouchableWithoutFeedback onPress={this._submitForm}>
+                    <View style={{height:46,backgroundColor:'#FFDD00',borderRadius:5,marginTop:20
+                        ,justifyContent: 'center',alignItems: 'center',}}>
+                        <Text style={{fontSize:14,color:'#000000'}}>确认提交</Text>
+                    </View>
+                </TouchableWithoutFeedback>
             </View>
         </ScrollView>
         )
@@ -122,7 +196,7 @@ export class IncomeProof extends React.Component {
                 </TouchableWithoutFeedback>
             </View>
             {/**/}
-            <TouchableWithoutFeedback onPress={()=>{this.setState({ isPreview: true});}}>
+            <TouchableWithoutFeedback onPress={this._toPreview}>
                 <View style={{justifyContent: 'center',alignItems: 'center',backgroundColor:'#FFFFFF',height:50
                     ,borderColor:'#F2F2F2',borderBottomWidth:1,borderTopWidth:1,}}>
                     <Text style={{color:'#E87722',fontSize:16}}>预览</Text>
@@ -133,7 +207,7 @@ export class IncomeProof extends React.Component {
     }
 
     render() {
-        const {isPreview} = this.state;
+        const {isPreview,isLoading} = this.state;
 
         return (
             <View style={{backgroundColor:'#D7D7D7'}}>
@@ -142,7 +216,7 @@ export class IncomeProof extends React.Component {
                     title={'收入证明'}
                     onReturn={() => this.props.navigation.goBack()}
                 />
-
+                <FwdLoading isLoading={isLoading}/>
                 {!isPreview?(
                     /*body*/
                     this._renderForm()
