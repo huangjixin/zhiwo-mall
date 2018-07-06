@@ -157,6 +157,9 @@ public class ApplyFormServiceImpl implements IApplyFormService {
 		if (logger.isInfoEnabled()) {
 			logger.info(BASE_MESSAGE + "查询分页查询申请表单（主表），地址（子表），银行卡（子表），手机号（子表）开始");
 		}
+		if (logger.isInfoEnabled()) {
+			logger.info(BASE_MESSAGE + "参数是："+parameter.toString());
+		}
 		List<OAApplyFormVo> applyFormes = applyFormMapper.selectOAApplyFormVo(parameter);
 		if (logger.isInfoEnabled()) {
 			String msg = applyFormes.size() + "";

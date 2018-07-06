@@ -4,11 +4,14 @@ import java.io.Serializable;
 
 import com.fulan.application.oa.domain.FwdOaApplyForm;
 
+import lombok.Data;
+
 /**
  * OAApplyFormVo参数实体类
  * @author FWDuser
  *
  */
+@Data
 public class OAApplyFormVoParameter implements Serializable {
       
 	/**
