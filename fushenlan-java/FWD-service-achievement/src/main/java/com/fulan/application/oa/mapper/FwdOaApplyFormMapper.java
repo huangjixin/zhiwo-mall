@@ -1,12 +1,13 @@
 package com.fulan.application.oa.mapper;
 
 import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.fulan.application.oa.domain.FwdOaApplyForm;
 import com.fulan.application.oa.domain.FwdOaApplyFormExample;
+import com.fulan.application.oa.domain.FwdOaFormAttachment;
 import com.fulan.application.oa.vo.OAApplyFormVo;
 import com.fulan.application.oa.vo.OAApplyFormVoParameter;
 
@@ -109,4 +110,6 @@ public interface FwdOaApplyFormMapper{
      * @return
      */
     List<OAApplyFormVo> selectOAApplyFormVo(@Param("parameter")OAApplyFormVoParameter parameter);
+    
+    List<FwdOaFormAttachment> selectAttamentsByFormId(@Param("formId") Integer formId);
 }
