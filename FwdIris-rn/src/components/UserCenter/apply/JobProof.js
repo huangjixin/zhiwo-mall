@@ -6,6 +6,7 @@ import {ApplyCommonHeader} from "../ApplyCommonHeader";
 import Textarea from 'react-native-textarea';
 import * as FetchUtils from "../../../common/FetchUtils";
 import * as RequestURL from "../../../common/RequestURL";
+import {FwdLoading} from "../FwdLoading";
 
 export class JobProof extends React.Component {
 
@@ -62,7 +63,6 @@ export class JobProof extends React.Component {
                         alert('提交失败');
                 },
                 error:()=>{
-                    alert('请求异常');
                     this.setState({isLoading:false});
                 }
             })
@@ -181,12 +181,12 @@ export class JobProof extends React.Component {
     }
 
     render() {
-        const {isPreview,description} = this.state;
+        const {isPreview,description,isLoading} = this.state;
         return (
             <ScrollView style={{backgroundColor:'#FBFBFB'}}>
                     {/*header*/}
                     <ApplyCommonHeader title={'工作证明'} onReturn={() => this.props.navigation.goBack()}/>
-
+                    <FwdLoading isLoading={isLoading}/>
                     {!isPreview?(
                         /*body*/
                         this._renderForm()

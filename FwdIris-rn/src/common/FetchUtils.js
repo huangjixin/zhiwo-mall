@@ -44,7 +44,11 @@ export async function Get({url,params,success,error}){
     }
 
     await _fetch(
-        fetch(url,{method: 'GET',}),
+        fetch(url,{
+            method: 'GET',
+            headers: {
+                // token: isNull(global.token)?'':global.token
+            }}),
         FETCH_TIMEOUT)
         .then(response =>response.json())
         .then(respData => {
@@ -88,12 +92,13 @@ export async function Post({url,params,success,error,headers}){
         return ;
     }
 
-    const requestHeader = (headers!=null)?
-        headers
-        :{
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        }
+    if(headers==null){
+        headers = {'Content-Type': 'application/json'}
+    }
+    const requestHeader = Object.assign({
+        // token: isNull(global.token)?'':global.token
+    }, headers);
+
 
     const ct = requestHeader["Content-Type"]
     let requestBody = (ct!=null && ct.indexOf('json')>0)?

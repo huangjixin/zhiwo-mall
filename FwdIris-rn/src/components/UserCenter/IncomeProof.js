@@ -49,7 +49,6 @@ export class IncomeProof extends React.Component {
                     alert('提交失败');
             },
             error:()=>{
-                alert('请求异常');
                 this.setState({isLoading:false});
             }
         })
