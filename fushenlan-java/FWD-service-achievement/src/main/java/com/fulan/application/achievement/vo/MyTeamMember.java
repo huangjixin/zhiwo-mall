@@ -28,4 +28,6 @@ public class MyTeamMember {
 
 	private Integer caseNo; // 组员CASE 
 
+	private String headImageUrl;//头像
+
 }

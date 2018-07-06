@@ -6,6 +6,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.fulan.api.system.domain.Attachment;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,9 +140,9 @@ public class AchievementApiController {
 //		return response;
 	}
 
-	// 复深蓝的附件service
-//	@Autowired
-//	private AttachmentService attService;
+//	 复深蓝的附件service
+	@Autowired
+	private AttachmentService attService;
 	
 	/**
 	 * 基础业绩实际值查询接口
@@ -162,6 +165,21 @@ public class AchievementApiController {
 		try {
 			CommonQueryRepsonse<QueryBasicsActualValueResponse> queryBasicsActualResponse 
 									= achAgentClient.queryAgentAchievementInfo(queryBasicsActualValueRequest);
+
+			//start 头像获取
+			if (queryBasicsActualResponse != null && queryBasicsActualResponse.getResponse() != null
+					&& CollectionUtils.isNotEmpty(queryBasicsActualResponse.getResponse().getGroupList())) {
+				for (MyTeamMember member : queryBasicsActualResponse.getResponse().getGroupList()) {
+					if (StringUtils.isNotBlank(member.getAgentCode())) {
+						List<Attachment> attachmentList = attService.selectByHostId(member.getAgentCode());
+
+						if (CollectionUtils.isNotEmpty(attachmentList)) {
+							member.setHeadImageUrl(attachmentList.get(0).getPath());
+						}
+					}
+				}
+			}
+			//end 头像获取
 			
 			QueryBasicsActualValueResponse queryBasicsActualValueResponse = queryBasicsActualResponse.getResponse();
 			if(queryBasicsActualValueResponse==null) {
