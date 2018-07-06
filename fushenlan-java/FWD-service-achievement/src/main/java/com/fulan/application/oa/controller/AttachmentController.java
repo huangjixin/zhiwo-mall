@@ -73,7 +73,21 @@ public class AttachmentController {
 			byte[] data = new byte[(int) file.length()];
 			int length = inputStream.read(data);
 			//此处的后缀名要判断一下。
-			response.setContentType("image/*");
+			String path  = att.getPath();
+			if(path.lastIndexOf("png")!=-1) {
+				response.setContentType("image/png");
+			}else if(path.lastIndexOf("jpg")!=-1) {
+				response.setContentType("image/jpg");
+			}else if(path.lastIndexOf("jpeg")!=-1) {
+				response.setContentType("image/jpeg");
+			}else if(path.lastIndexOf("gif")!=-1) {
+				response.setContentType("image/gif");
+			}else if(path.lastIndexOf("webp")!=-1) {
+				response.setContentType("image/webp");
+			}else {
+				
+			}
+			
 			stream = response.getOutputStream();
 			stream.write(data);
 			stream.flush();
