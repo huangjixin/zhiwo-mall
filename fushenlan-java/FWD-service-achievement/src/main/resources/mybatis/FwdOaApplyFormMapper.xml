@@ -531,7 +531,7 @@
 		    <result column="APPLY_NO" property="applyNo" jdbcType="VARCHAR" />
 		    <result column="OA_APPLY_ID" property="oaApplyId" jdbcType="INTEGER" />
         </association> -->	
-		<!-- <collection  property="attachments" ofType="com.fulan.application.oa.domain.FwdOaFormAttachment">
+		<collection  property="attachments" ofType="com.fulan.application.oa.domain.FwdOaFormAttachment">
         	<id column="att_id" property="id" jdbcType="INTEGER" />
 		    <result column="PATH" property="path" jdbcType="VARCHAR" />
 		    <result column="URL" property="url" jdbcType="VARCHAR" />
@@ -539,18 +539,6 @@
 		    <result column="att_name" property="name" jdbcType="VARCHAR" />
 		    <result column="att_create_time" property="createDatetime" jdbcType="TIMESTAMP" />
 		    <result column="att_desc" property="description" jdbcType="VARCHAR" />
-        </collection> -->
-        <collection  property="attachments" 
-        			 ofType="com.fulan.application.oa.domain.FwdOaFormAttachment"
-        			 select="selectAttamentsByFormId"
-					 column="id">
-        	<id column="id" property="id" jdbcType="INTEGER" />
-		    <result column="PATH" property="path" jdbcType="VARCHAR" />
-		    <result column="URL" property="url" jdbcType="VARCHAR" />
-		    <result column="FORM_ID" property="formId" jdbcType="INTEGER" />
-		    <result column="name" property="name" jdbcType="VARCHAR" />
-		    <result column="create_time" property="createDatetime" jdbcType="TIMESTAMP" />
-		    <result column="description" property="description" jdbcType="VARCHAR" />
         </collection>
   </resultMap>
   
@@ -576,41 +564,55 @@
 	    a.CURRENT_GRADE,
 	    a.UP_GRADE,
 	    a.NAME,
-	    a.AGENT_NAME
+	    a.AGENT_NAME,
+	    d.id as att_id,
+	    d.PATH,
+	    d.url,
+	    d.FORM_ID ,
+	    d.name as att_name,
+	    d.CREATE_DATETIME as att_create_time,
+	    d.DESCRIPTION as att_desc
 		FROM
-		    fwd_oa_apply_form AS a
-		WHERE
-		    1 = 1 
-		     <if test="parameter.ids != null  and  parameter.ids != '' " >
-	     			  AND a.ID in
-		             <foreach collection="parameter.ids"  item="item" index="index" open="(" separator="," close=")">
-			         	   #{item}
-			        </foreach>
-		      </if>
-		      <if test="parameter.types != null" >
-	     			  AND a.type in
-		             <foreach collection="parameter.types"  item="item" index="index" open="(" separator="," close=")">
-			         	   #{item}
-			        </foreach>
-		      </if>
-		     <if test="parameter.fwdOaApplyForm != null and parameter.fwdOaApplyForm.type != null" >
-		              AND a.type = #{parameter.fwdOaApplyForm.type}
-		      </if>
-		      <if test="parameter.fwdOaApplyForm != null and parameter.fwdOaApplyForm.status != null" >
-		      		<if test="parameter.fwdOaApplyForm.status == -1" >
-		      			AND a.STATUS != 0
-		      		</if>
-		      		<if test="parameter.fwdOaApplyForm.status != -1" >
-		      			AND a.STATUS = #{parameter.fwdOaApplyForm.status }
-		      		</if> 
-		      </if>
-		      <if test="parameter.fwdOaApplyForm != null and parameter.fwdOaApplyForm.agentCode != null" >
-		              AND a.agent_Code = #{parameter.fwdOaApplyForm.agentCode}
-		      </if>
-		     ORDER BY a.CREATE_DATETIME DESC
-		 	<if test="parameter.start != null and  parameter.size != null " >
-		           	LIMIT #{parameter.start} , #{parameter.size}
-		  	</if>
+		(
+			SELECT * FROM
+			    fwd_oa_apply_form AS a
+			WHERE
+			    1 = 1 
+			     <if test="parameter.ids != null  and  parameter.ids != '' " >
+		     			  AND a.ID in
+			             <foreach collection="parameter.ids"  item="item" index="index" open="(" separator="," close=")">
+				         	   #{item}
+				        </foreach>
+			      </if>
+			      <if test="parameter.types != null" >
+		     			  AND a.type in
+			             <foreach collection="parameter.types"  item="item" index="index" open="(" separator="," close=")">
+				         	   #{item}
+				        </foreach>
+			      </if>
+			     <if test="parameter.fwdOaApplyForm != null and parameter.fwdOaApplyForm.type != null" >
+			              AND a.type = #{parameter.fwdOaApplyForm.type}
+			      </if>
+			      <if test="parameter.fwdOaApplyForm != null and parameter.fwdOaApplyForm.status != null" >
+			      		<if test="parameter.fwdOaApplyForm.status == -1" >
+			      			AND a.STATUS != 0
+			      		</if>
+			      		<if test="parameter.fwdOaApplyForm.status != -1" >
+			      			AND a.STATUS = #{parameter.fwdOaApplyForm.status }
+			      		</if> 
+			      </if>
+			      <if test="parameter.fwdOaApplyForm != null and parameter.fwdOaApplyForm.agentCode != null" >
+			              AND a.agent_Code = #{parameter.fwdOaApplyForm.agentCode}
+			      </if>
+			     ORDER BY a.CREATE_DATETIME DESC
+			 	<if test="parameter.start != null and  parameter.size != null " >
+			           	LIMIT #{parameter.start} , #{parameter.size}
+			  	</if>
+			  )AS a
+		        LEFT JOIN
+		    fwd_oa_form_attachment d ON a.ID = d.FORM_ID
+		
+			ORDER BY a.CREATE_DATETIME DESC
 	</select>
 	
 	<select id="selectByPrimaryKey" resultMap="OAApplyFormVoMap" parameterType="java.lang.Integer" >
