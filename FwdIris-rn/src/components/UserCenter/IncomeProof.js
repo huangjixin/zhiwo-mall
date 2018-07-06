@@ -5,6 +5,7 @@ import {ApplyCommonHeader} from "./ApplyCommonHeader";
 import * as RequestURL from "../../common/RequestURL";
 import * as FetchUtils from "../../common/FetchUtils";
 import {FwdLoading} from "./FwdLoading";
+import Toast from "./Toast/Toast";
 
 export class IncomeProof extends React.Component {
 
@@ -46,9 +47,14 @@ export class IncomeProof extends React.Component {
                 if(respData.code==1)
                     this.props.navigation.pop(2);
                 else
-                    alert('提交失败');
+                    Toast.show(respData.msg,Toast.LONG);
             },
-            error:()=>{
+            error:(isTimeOut)=>{
+                if(isTimeOut){
+                    Toast.show("请求超时",Toast.LONG);
+                }else{
+                    Toast.show("请求失败",Toast.LONG);
+                }
                 this.setState({isLoading:false});
             }
         })

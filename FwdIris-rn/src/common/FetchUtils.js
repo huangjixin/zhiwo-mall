@@ -4,7 +4,7 @@ function _fetch(fetch_promise, timeout) {
     //这是一个可以被reject的promise
     var abort_promise = new Promise(function(resolve, reject) {
         abort_fn = function() {
-            reject('abort promise');
+            reject('FWD_REQUEST_TIMEOUT');
         };
     });
 
@@ -64,9 +64,10 @@ export async function Get({url,params,success,error}){
             }
 
         }).catch((errResp) => {
-        if(typeof error === 'function'){
-            error(errResp);
-        }
+            const isTimeOut = errResp=='FWD_REQUEST_TIMEOUT'
+            if(typeof error === 'function'){
+                error(isTimeOut,errResp);
+            }
         console.log(errResp.toString());
     });
 
@@ -124,10 +125,10 @@ export async function Post({url,params,success,error,headers}){
                     error(respData);
                 }
             }
-
         }).catch((errResp) => {
+            const isTimeOut = errResp=='FWD_REQUEST_TIMEOUT'
             if(typeof error === 'function'){
-                error(errResp);
+                error(isTimeOut,errResp);
             }
             console.log(errResp.toString());
         });

@@ -7,7 +7,7 @@ import Textarea from 'react-native-textarea';
 import * as FetchUtils from "../../../common/FetchUtils";
 import * as RequestURL from "../../../common/RequestURL";
 import {FwdLoading} from "../FwdLoading";
-
+import Toast from "../Toast/Toast";
 export class JobProof extends React.Component {
 
     constructor(props) {
@@ -60,9 +60,14 @@ export class JobProof extends React.Component {
                     if(respData.code==1)
                         this.props.navigation.pop(2);
                     else
-                        alert('提交失败');
+                        Toast.show(respData.msg,Toast.LONG);
                 },
-                error:()=>{
+                error:(isTimeOut)=>{
+                    if(isTimeOut){
+                        Toast.show("请求超时",Toast.LONG);
+                    }else{
+                        Toast.show("请求失败",Toast.LONG);
+                    }
                     this.setState({isLoading:false});
                 }
             })
