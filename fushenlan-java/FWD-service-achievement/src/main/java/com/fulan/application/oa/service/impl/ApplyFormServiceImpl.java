@@ -410,12 +410,12 @@ public class ApplyFormServiceImpl implements IApplyFormService {
 		}
 
 		// 启动申请流程。
-		ApplyTypeEnum applyType = ApplyTypeEnum.getByCode(applyForm.getType());
-		Map<String, Object> params = new HashMap<String, Object>();
-		String formId = applyForm.getId().toString();
-		String agentCode = applyForm.getAgentCode();
-		String branchCode = ApplyConstant.BRANCH_CODE_SHANG_HAI;
-		this.workFlowService.startProcessAndSubmitForm(applyType, formId, agentCode, branchCode, params);
+//		ApplyTypeEnum applyType = ApplyTypeEnum.getByCode(applyForm.getType());
+//		Map<String, Object> params = new HashMap<String, Object>();
+//		String formId = applyForm.getId().toString();
+//		String agentCode = applyForm.getAgentCode();
+//		String branchCode = ApplyConstant.BRANCH_CODE_SHANG_HAI;
+//		this.workFlowService.startProcessAndSubmitForm(applyType, formId, agentCode, branchCode, params);
 		return num;
 	}
 
