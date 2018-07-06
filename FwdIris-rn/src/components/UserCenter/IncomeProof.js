@@ -26,7 +26,7 @@ export class IncomeProof extends React.Component {
     }
 
     _submitForm = ()=>{
-        const {agentCode,type,purpose} = this.state;
+        const {agentCode,type,purpose,period} = this.state;
 
         if(purpose==null || ''==purpose){
             alert('请填写用途');
@@ -37,6 +37,7 @@ export class IncomeProof extends React.Component {
             agentCode:agentCode,
             type:type,
             description:purpose,
+            imcomeproveMonth:period,
         }
         this.setState({isLoading:true});
         FetchUtils.Post({
