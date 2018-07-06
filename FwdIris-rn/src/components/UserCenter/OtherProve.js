@@ -62,6 +62,7 @@ export class OtherProve extends React.Component {
                 description : this.state.purpose,
                 agentCode : this.state.agentCode,
                 agentName : this.state.agentName,
+                title : this.state.materialsType,
                 files : data
             };
 
