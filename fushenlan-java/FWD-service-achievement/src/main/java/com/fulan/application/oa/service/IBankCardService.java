@@ -61,4 +61,11 @@ public interface IBankCardService {
 	  * @throws Exception
 	  */
 	  List<FwdOaBankCard> saveOrUpdate(List<FwdOaBankCard> thirdOaBankCardList, List<FwdOaBankCard> fwdOaBankCardList,String agentCode) throws Exception;
+	
+	  /**
+	   * @Description:从common query 获取代理人银行卡信息
+	   * @param agentCode
+	   * @return
+	   */
+	  List<FwdOaBankCard> getAgentBankCardFromCommonQuery(String agentCode);
 }

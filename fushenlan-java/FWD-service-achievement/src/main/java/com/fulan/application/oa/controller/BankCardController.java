@@ -16,9 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fulan.application.achievement.vo.BankCardDto;
+import com.fulan.application.achievement.vo.CommonQueryRepsonse;
 import com.fulan.application.achievement.vo.ErrorMessage;
 import com.fulan.application.oa.domain.FwdOaBankCard;
 import com.fulan.application.oa.service.IBankCardService;
+import com.fulan.application.oa.service.OaAgentClient;
+import com.fulan.application.oa.vo.FwdCqRespAgentGroupInfoDto;
+import com.fulan.application.oa.vo.OaReqParamAgentCodeDto;
 import com.fulan.application.util.domain.Response;
 
 /**
@@ -34,6 +38,7 @@ public class BankCardController {
 	
 	@Autowired
 	private IBankCardService bankCardService;
+	
 
 	/**
 	 * 保存数据
@@ -127,21 +132,19 @@ public class BankCardController {
 	 */
 	@RequestMapping(value = "/selectByAgentCode", method = RequestMethod.GET)
 	public Response<List<FwdOaBankCard>> selectByAgentCode(@RequestParam(name = "agentCode", required = true) String agentCode) {
-		// 调用第三方接口数据
-		List<FwdOaBankCard> thirdOaBankCardList = new ArrayList<>();
-		// 第三方模拟数据
-		FwdOaBankCard fwdOaBankCard = new FwdOaBankCard();
-		fwdOaBankCard.setAgentCode("888999");
-		fwdOaBankCard.setCardNo("1234123412344511");
-		fwdOaBankCard.setDescription("农业银行");
-		fwdOaBankCard.setCardType("4");
-		thirdOaBankCardList.add(fwdOaBankCard);
-		
-		// 查询本地数据库
-		List<FwdOaBankCard> fwdOaBankCardList = bankCardService.selectByAgentCode(agentCode);
-
 		List<FwdOaBankCard> oaBankCardList = null;
 		try {
+//			List<FwdOaBankCard> thirdOaBankCardList = new ArrayList<>();
+//			FwdOaBankCard fwdOaBankCard = new FwdOaBankCard();
+//			fwdOaBankCard.setAgentCode("888999");
+//			fwdOaBankCard.setCardNo("1234123412344511");
+//			fwdOaBankCard.setDescription("农业银行");
+//			fwdOaBankCard.setCardType("4");
+//			thirdOaBankCardList.add(fwdOaBankCard);
+			// 调用第三方接口数据
+			List<FwdOaBankCard> thirdOaBankCardList = bankCardService.getAgentBankCardFromCommonQuery(agentCode);
+			// 查询本地数据库
+			List<FwdOaBankCard> fwdOaBankCardList = bankCardService.selectByAgentCode(agentCode);
 			oaBankCardList = bankCardService.saveOrUpdate(thirdOaBankCardList, fwdOaBankCardList, agentCode);
 		} catch (Exception e) {
 			logger.error("Unknow Error", e);

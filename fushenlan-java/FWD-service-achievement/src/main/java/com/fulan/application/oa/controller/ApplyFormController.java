@@ -49,9 +49,9 @@ import com.fulan.application.oa.service.WorkFlowService;
 import com.fulan.application.oa.vo.ApprovalRecordVo;
 import com.fulan.application.oa.vo.OAApplyFormVo;
 import com.fulan.application.oa.vo.OAApplyFormVoParameter;
-import com.fulan.application.oa.vo.OaAgentDto;
+import com.fulan.application.oa.vo.FwdAgentDto;
 import com.fulan.application.oa.vo.OaReqParamAgentCodeDto;
-import com.fulan.application.oa.vo.OaRespAgentGroupInfoDto;
+import com.fulan.application.oa.vo.FwdCqRespAgentGroupInfoDto;
 import com.fulan.application.util.domain.Response;
 import com.fulan.application.util.page.PageInfo;
 
@@ -563,15 +563,15 @@ public class ApplyFormController {
 	 * @return
 	 */
 	@RequestMapping(value = "/selectComplexEffect", method = RequestMethod.GET)
-	private List<OaAgentDto> selectComplexEffect(@RequestParam(value = "agentCode") String agentCode ) {
-		List<OaAgentDto> promotions = new ArrayList<OaAgentDto>();
-		Response<List<OaAgentDto>> response = null;
+	private List<FwdAgentDto> selectComplexEffect(@RequestParam(value = "agentCode") String agentCode ) {
+		List<FwdAgentDto> promotions = new ArrayList<FwdAgentDto>();
+		Response<List<FwdAgentDto>> response = null;
 		try {
 			OaReqParamAgentCodeDto oaReqParamAgentCodeDto = new OaReqParamAgentCodeDto(agentCode);
-			CommonQueryRepsonse<OaRespAgentGroupInfoDto> resp = oaAgentClient.queryAgentGroupInfo(oaReqParamAgentCodeDto);
-			OaRespAgentGroupInfoDto agentGroupInfo = resp.getResponse();
+			CommonQueryRepsonse<FwdCqRespAgentGroupInfoDto> resp = oaAgentClient.queryAgentGroupInfo(oaReqParamAgentCodeDto);
+			FwdCqRespAgentGroupInfoDto agentGroupInfo = resp.getResponse();
 			if(agentGroupInfo!=null) {
-				for (OaAgentDto dto: agentGroupInfo.getGroupList()) {
+				for (FwdAgentDto dto: agentGroupInfo.getGroupList()) {
 					if(!"Y".equals(dto.getSubIsAtWork())
 							&& StringUtils.isNotBlank(dto.getAgentName())) {
 						promotions.add(dto);
@@ -581,14 +581,14 @@ public class ApplyFormController {
 //			String statusCode = resp.getStatus().getStatusCode();
 //			String statusMessage = resp.getStatus().getStatusMessage();
 //			if("01".equals(statusCode)) {
-//				response = new Response<List<OaAgentDto>>(Response.SUCCESS,Response.SUCCESS_MESSAGE);
+//				response = new Response<List<FwdAgentDto>>(Response.SUCCESS,Response.SUCCESS_MESSAGE);
 //				response.setData(promotions);
 //			}else {
-//				response = new Response<List<OaAgentDto>>(Response.ERROR,statusMessage);
+//				response = new Response<List<FwdAgentDto>>(Response.ERROR,statusMessage);
 //			}
 		} catch (Exception e) {
 			logger.error("Unknow Error", e);
-//			return new Response<List<OaAgentDto>>(Response.ERROR, e.getMessage());
+//			return new Response<List<FwdAgentDto>>(Response.ERROR, e.getMessage());
 		}
 		return promotions;
 	}

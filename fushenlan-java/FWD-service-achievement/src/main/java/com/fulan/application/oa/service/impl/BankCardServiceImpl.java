@@ -3,6 +3,7 @@
  */
 package com.fulan.application.oa.service.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONObject;
+import com.fulan.application.achievement.vo.CommonQueryRepsonse;
 import com.fulan.application.oa.constant.ApplyConstant;
 import com.fulan.application.oa.constant.ApplyTypeEnum;
 import com.fulan.application.oa.domain.FwdOaApplyForm;
@@ -21,6 +23,10 @@ import com.fulan.application.oa.domain.FwdOaBankCardExample;
 import com.fulan.application.oa.mapper.FwdOaApplyFormMapper;
 import com.fulan.application.oa.mapper.FwdOaBankCardMapper;
 import com.fulan.application.oa.service.IBankCardService;
+import com.fulan.application.oa.service.OaAgentClient;
+import com.fulan.application.oa.vo.FwdCqRespAgentGroupInfoDto;
+import com.fulan.application.oa.vo.OaReqParamAgentCodeDto;
+import com.fulan.application.util.domain.Response;
 
 /**
  * @author 黄记新 Tony
@@ -38,6 +44,9 @@ public class BankCardServiceImpl implements IBankCardService {
 
 	@Autowired
 	private FwdOaApplyFormMapper oaApplyFormMapper;
+	
+	@Autowired
+	private OaAgentClient oaAgentClient;
 
 	/*
 	 * (non-Javadoc)
@@ -252,4 +261,24 @@ public class BankCardServiceImpl implements IBankCardService {
 
 		return applyForm;
 	}
+
+	@Override
+	public List<FwdOaBankCard> getAgentBankCardFromCommonQuery(String agentCode) {
+		OaReqParamAgentCodeDto param = new OaReqParamAgentCodeDto(agentCode);
+		CommonQueryRepsonse<FwdCqRespAgentGroupInfoDto> queryAgentGroupInfo = oaAgentClient.queryAgentGroupInfo(param);
+		String statusCode = queryAgentGroupInfo.getStatus().getStatusCode();
+		String statusMessage = queryAgentGroupInfo.getStatus().getStatusMessage();
+		List<FwdOaBankCard> retList = new ArrayList<FwdOaBankCard>();
+		if("01".equals(statusCode)) {
+			FwdCqRespAgentGroupInfoDto cqRspData = queryAgentGroupInfo.getResponse();
+			FwdOaBankCard fwdOaBankCard = new FwdOaBankCard();
+			fwdOaBankCard.setAgentCode(agentCode);
+			fwdOaBankCard.setCardNo(cqRspData.getBankAccount());
+			fwdOaBankCard.setDescription(cqRspData.getBankName());
+			fwdOaBankCard.setCardType(cqRspData.getBankCode());
+			retList.add(fwdOaBankCard);
+		}
+		return retList;	
+	}
+	
 }

@@ -40,7 +40,10 @@ import com.fulan.application.achievement.vo.QueryBasicsActualValueRequest;
 import com.fulan.application.achievement.vo.QueryBasicsActualValueResponse;
 import com.fulan.application.achievement.vo.RankAssessmentIndicator;
 import com.fulan.application.oa.controller.BankCardController;
+import com.fulan.application.oa.service.OaAgentClient;
+import com.fulan.application.oa.vo.FwdCqRespAgentGroupInfoDto;
 import com.fulan.application.oa.vo.OAApplyFormVo;
+import com.fulan.application.oa.vo.OaReqParamAgentCodeDto;
 import com.fulan.application.util.domain.Response;
 import com.fulan.application.util.page.PageInfo;
 
@@ -57,6 +60,9 @@ public class AchievementApiController {
 	private static final Logger logger = LoggerFactory.getLogger(AchievementApiController.class);
 	@Autowired
 	private AchAgentClient achAgentClient;
+	
+	@Autowired
+	private OaAgentClient oaAgentClient;
 	/**
 	 * 代理人历史收入查询
 	 * 
@@ -78,6 +84,7 @@ public class AchievementApiController {
 		
 		Response<QueryAgentHistoryIncomeResponse> response = null;
 		try {
+			//设置查询参数
 			String queryDate = queryAgentHistoryIncomeRequest.getQueryDate();
 			SimpleDateFormat toDateSdf = new SimpleDateFormat("yyyy-MM");
 			Date d = toDateSdf.parse(queryDate);
@@ -92,20 +99,18 @@ public class AchievementApiController {
 			c.add(Calendar.DAY_OF_MONTH,-1);
 			queryAgentHistoryIncomeRequest.setEndDate(toStrSdf.format(c.getTime()));
 			
-			CommonQueryRepsonse<QueryAgentHistoryIncomeResponse> queryAgentHistoryIncomeResponse = achAgentClient.queryAgentHistoryIncomeInfo(queryAgentHistoryIncomeRequest);
-			QueryAgentHistoryIncomeResponse respDat = queryAgentHistoryIncomeResponse.getResponse();
-			if(respDat==null) {
-				respDat= new QueryAgentHistoryIncomeResponse();
-			}
+			//调用 common query接口
+			CommonQueryRepsonse<QueryAgentHistoryIncomeResponse> queryAgentHistoryIncomeResponse 
+									= achAgentClient.queryAgentHistoryIncomeInfo(queryAgentHistoryIncomeRequest);
 			
 			String statusCode = queryAgentHistoryIncomeResponse.getStatus().getStatusCode();
 			String statusMessage = queryAgentHistoryIncomeResponse.getStatus().getStatusMessage();
-			if("01".equals(statusCode))
+			if("01".equals(statusCode)) {
 				response = new Response<QueryAgentHistoryIncomeResponse>(Response.SUCCESS,Response.SUCCESS_MESSAGE);
-			else {
+				response.setData(queryAgentHistoryIncomeResponse.getResponse());
+			}else {
 				response = new Response<QueryAgentHistoryIncomeResponse>(Response.ERROR,statusMessage);
 			}
-			response.setData(respDat);
 		}catch(Exception e) {
 			logger.error("server Error", e);
 			 response = new Response<QueryAgentHistoryIncomeResponse>(Response.ERROR,e.getMessage());
@@ -181,18 +186,15 @@ public class AchievementApiController {
 			}
 			//end 头像获取
 			
-			QueryBasicsActualValueResponse queryBasicsActualValueResponse = queryBasicsActualResponse.getResponse();
-			if(queryBasicsActualValueResponse==null) {
-				queryBasicsActualValueResponse= new QueryBasicsActualValueResponse();
-			}
+			
 			String statusCode = queryBasicsActualResponse.getStatus().getStatusCode();
 			String statusMessage = queryBasicsActualResponse.getStatus().getStatusMessage();
-			if("01".equals(statusCode))
+			if("01".equals(statusCode)) {
 				response = new Response<QueryBasicsActualValueResponse>(Response.SUCCESS,Response.SUCCESS_MESSAGE);
-			else {
+				response.setData(queryBasicsActualResponse.getResponse());
+			}else {
 				response = new Response<QueryBasicsActualValueResponse>(Response.ERROR,statusMessage);
 			}
-			response.setData(queryBasicsActualValueResponse);
 		}catch(Exception e) {
 			logger.error("server Error", e);
 			response = new Response<QueryBasicsActualValueResponse>(Response.ERROR,e.getMessage());
@@ -348,40 +350,41 @@ public class AchievementApiController {
 	 * @return
 	 */
 	@RequestMapping(value = "/queryAgentTeamList", method = RequestMethod.GET)
-	public void queryAgentTeamListRequest(
+	public Response<FwdCqRespAgentGroupInfoDto> queryAgentTeamListRequest(
 			@Validated QueryAgentTeamListRequest queryAgentTeamListRequest, BindingResult result) {
 		if (result.hasErrors()) {
-			List<ObjectError> ls = result.getAllErrors();
-			List<ErrorMessage> listError = new ArrayList<ErrorMessage>();
-			for (int i = 0; i < ls.size(); i++) {
-				ErrorMessage errorMessage = new ErrorMessage();
-				errorMessage.setState("error");
-				errorMessage.setErrorMessage("error:" + ls.get(i).getDefaultMessage());
-				listError.add(errorMessage);
+			String errMsg="";
+			for (ObjectError err : result.getAllErrors()) {
+				errMsg = err.getDefaultMessage() + ",";
 			}
+			return new Response<FwdCqRespAgentGroupInfoDto>(Response.ERROR,errMsg.substring(0, errMsg.lastIndexOf(",")));
 		}
-		// 代理人团队列表查询接口
-		QueryAgentTeamListResponse queryAgentTeamListResponse = new QueryAgentTeamListResponse();
-
-		// 代理人团队信息
-		AgentTeamInformation agentTeamInformation = queryAgentTeamListResponse.new AgentTeamInformation();
-		agentTeamInformation.setAgentCode("代理人编号");
-		agentTeamInformation.setAgentName("代理人名称");
-		agentTeamInformation.setIsSupervisor("直辖主管标识");
-		agentTeamInformation.setJobPosition("代理人职位");
-		List<AgentTeamInformation> IndicatorList = new ArrayList<AgentTeamInformation>();
-		IndicatorList.add(agentTeamInformation);
-		IndicatorList.add(agentTeamInformation);
-		IndicatorList.add(agentTeamInformation);
-
-		// 参数填充
-		queryAgentTeamListResponse.setStatusCode("1");
-		queryAgentTeamListResponse.setStatusMessage("交易成功！！！代理人团队列表查询接口");
-		queryAgentTeamListResponse.setAgentCode("代理人编号");
-		queryAgentTeamListResponse.setAgentName("代理人名称");
-		queryAgentTeamListResponse.setJobPosition("代理人职位");
-		queryAgentTeamListResponse.setMobile("代理人手机号");
-		queryAgentTeamListResponse.setEmail("代理人邮箱地址");
-		queryAgentTeamListResponse.setGroupList(IndicatorList);
+		
+		Response<FwdCqRespAgentGroupInfoDto> response = null;
+		try {
+			
+			//调用 common query
+			OaReqParamAgentCodeDto param = new OaReqParamAgentCodeDto();
+			param.setAgentCode(queryAgentTeamListRequest.getAgentCode());
+			
+			CommonQueryRepsonse<FwdCqRespAgentGroupInfoDto> queryAgentGroupInfo = 
+					oaAgentClient.queryAgentGroupInfo(param);
+			
+			//返回
+			String statusCode = queryAgentGroupInfo.getStatus().getStatusCode();
+			String statusMessage = queryAgentGroupInfo.getStatus().getStatusMessage();
+			if("01".equals(statusCode)) {
+				response = new Response<FwdCqRespAgentGroupInfoDto>(Response.SUCCESS,Response.SUCCESS_MESSAGE);
+				response.setData(queryAgentGroupInfo.getResponse());
+			}else {
+				response = new Response<FwdCqRespAgentGroupInfoDto>(Response.ERROR,statusMessage);
+			}
+		}catch(Exception e) {
+			logger.error("server Error", e);
+			 response = new Response<FwdCqRespAgentGroupInfoDto>(Response.ERROR,e.getMessage());
+			return response;
+		}
+		
+		return response;
 	}
 }

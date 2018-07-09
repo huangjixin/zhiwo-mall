@@ -22,7 +22,7 @@ import com.fulan.application.achievement.vo.QueryAgentHistoryIncomeResponse;
 import com.fulan.application.achievement.vo.QueryBasicsActualValueRequest;
 import com.fulan.application.achievement.vo.QueryBasicsActualValueResponse;
 import com.fulan.application.oa.vo.OaReqParamAgentCodeDto;
-import com.fulan.application.oa.vo.OaRespAgentGroupInfoDto;
+import com.fulan.application.oa.vo.FwdCqRespAgentGroupInfoDto;
 import com.fulan.application.util.domain.Response;
 
 @FeignClient(name = "OaAgentService", url = "${url.agent.service}")
@@ -31,7 +31,7 @@ import com.fulan.application.util.domain.Response;
 public interface OaAgentClient{
 	
 	@RequestMapping(value = "/queryAgentGroupInfo", method = RequestMethod.POST)
-	CommonQueryRepsonse<OaRespAgentGroupInfoDto> queryAgentGroupInfo(@RequestBody OaReqParamAgentCodeDto req);
+	CommonQueryRepsonse<FwdCqRespAgentGroupInfoDto> queryAgentGroupInfo(@RequestBody OaReqParamAgentCodeDto req);
 	
 }
 

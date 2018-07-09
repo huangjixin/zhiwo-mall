@@ -48,5 +48,12 @@ public interface IAddressService {
 	
 	List<FwdOaAddress> findByCriteria(FwdOaAddressExample example);
 	
+	/**
+	 * @Description:从common query 获取 代理人地址信息
+	 * @param agentCode
+	 * @return
+	 */
+	List<FwdOaAddress> getAgentAddressFromCommonQuery(String agentCode);
+	
 	
 }

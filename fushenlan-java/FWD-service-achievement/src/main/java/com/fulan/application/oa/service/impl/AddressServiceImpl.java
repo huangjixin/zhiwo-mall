@@ -3,6 +3,7 @@
  */
 package com.fulan.application.oa.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -11,10 +12,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fulan.application.achievement.vo.CommonQueryRepsonse;
 import com.fulan.application.oa.domain.FwdOaAddress;
 import com.fulan.application.oa.domain.FwdOaAddressExample;
+import com.fulan.application.oa.domain.FwdOaBankCard;
 import com.fulan.application.oa.mapper.FwdOaAddressMapper;
 import com.fulan.application.oa.service.IAddressService;
+import com.fulan.application.oa.service.OaAgentClient;
+import com.fulan.application.oa.vo.FwdAddressDto;
+import com.fulan.application.oa.vo.FwdCqRespAgentGroupInfoDto;
+import com.fulan.application.oa.vo.OaReqParamAgentCodeDto;
 
 /**
  * @author 黄记新 Tony
@@ -29,6 +36,9 @@ public class AddressServiceImpl implements IAddressService {
 
 	@Autowired
 	private FwdOaAddressMapper addressMapper;
+	
+	@Autowired
+	private OaAgentClient oaAgentClient;
 
 	/*
 	 * (non-Javadoc)
@@ -124,5 +134,31 @@ public class AddressServiceImpl implements IAddressService {
 			logger.info(BASE_MESSAGE+"根据id查询地址数据，结果是："+JSONObject.toJSONString(oaAddress));
 		}
 		return oaAddress;
+	}
+
+	@Override
+	public List<FwdOaAddress> getAgentAddressFromCommonQuery(String agentCode) {
+		OaReqParamAgentCodeDto param = new OaReqParamAgentCodeDto(agentCode);
+		CommonQueryRepsonse<FwdCqRespAgentGroupInfoDto> queryAgentGroupInfo = oaAgentClient.queryAgentGroupInfo(param);
+		String statusCode = queryAgentGroupInfo.getStatus().getStatusCode();
+		List<FwdOaAddress> retList = new ArrayList<FwdOaAddress>();
+		if("01".equals(statusCode)) {
+			FwdCqRespAgentGroupInfoDto response = queryAgentGroupInfo.getResponse();
+			List<FwdAddressDto> addressList = response.getAddressList();
+			
+			if(addressList == null)
+				return retList;
+			
+			for (FwdAddressDto dto : addressList) {
+				FwdOaAddress fwdOaAddress = new FwdOaAddress();
+				fwdOaAddress.setProvince(dto.getProvince());
+				fwdOaAddress.setCity(dto.getCity());
+				fwdOaAddress.setArea(dto.getDistrict());
+				fwdOaAddress.setAddressDetail(dto.getAddressValue());
+				fwdOaAddress.setIsDefault("Y"==dto.getIsUsed()?true:false);
+				retList.add(fwdOaAddress);
+			}
+		}
+		return retList;
 	}
 }

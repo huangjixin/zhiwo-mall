@@ -1,5 +1,6 @@
 package com.fulan.application.oa.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -78,12 +79,9 @@ public class AddressController {
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	private Response<List<FwdOaAddress>> findAddresses(@RequestParam("agentCode") String agentCode) {
-		List<FwdOaAddress> oaBankCardList = null;
-		
-		FwdOaAddressExample example = new FwdOaAddressExample();
-		example.createCriteria().andAgentCodeEqualTo(agentCode);
+		List<FwdOaAddress> oaBankCardList = new ArrayList<FwdOaAddress>();
 		try {
-			oaBankCardList = addressService.findByCriteria(example);
+			oaBankCardList = addressService.getAgentAddressFromCommonQuery(agentCode);
 		} catch (Exception e) {
 			logger.error("Unknow Error", e);
 			Response<List<FwdOaAddress>> response = new Response<List<FwdOaAddress>>(Response.ERROR,e.getMessage());
