@@ -70,6 +70,11 @@ export class AchvTabMyAchievement extends React.Component {
             url:RequestURL.MY_ACHIEVEMENT,
             params:params,
             success:(respData)=>{
+                if(respData.code!='1'){
+                    alert('请求错误');
+                    return;
+                }
+
                 const data = respData.data;
                 if(params.groupType==1){
                     this.curNode.personalData = data;
@@ -358,8 +363,10 @@ export class AchvTabMyAchievement extends React.Component {
                k1Rate: 0,
            }
        }
+       let groupList = data.groupList;
+       if(groupList==null)
+           groupList=[];
 
-       const groupList = data.groupList;
         return (
             <ScrollView
                 style={{backgroundColor: "#F7F7F7"}}

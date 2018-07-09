@@ -38,9 +38,13 @@ export class AchvTabIncome extends React.Component {
             url:RequestURL.MY_INCOME,
             params:params,
             success:(respData)=>{
+                if(respData.code!='1'){
+                    alert('请求错误');
+                    return;
+                }
+
                 const data = respData.data;
                 const option = this.convertToEchartsOption(data.detailList);
-
                 this.setState({
                     echartsOption:option,
                     data:data,
@@ -259,6 +263,10 @@ export class AchvTabIncome extends React.Component {
   }
 
     convertToEchartsOption=(detailList)=>{
+
+      if(detailList==null)
+        detailList = [];
+
       const showData = detailList.map((item)=>{
           return {'value':item.amount,'name':item.category};
       });
