@@ -66,7 +66,7 @@ public class FwdOaApplyForm implements Serializable {
      *
      * @mbggenerated Thu May 24 09:50:15 CST 2018
      */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+//    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date startTime;
 
     /**
@@ -75,7 +75,7 @@ public class FwdOaApplyForm implements Serializable {
      *
      * @mbggenerated Thu May 24 09:50:15 CST 2018
      */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+//    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date endTime;
 
     /**
