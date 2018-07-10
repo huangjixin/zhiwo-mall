@@ -86,19 +86,20 @@ public class AchievementApiController {
 		try {
 			//设置查询参数
 			String queryDate = queryAgentHistoryIncomeRequest.getQueryDate();
-			SimpleDateFormat toDateSdf = new SimpleDateFormat("yyyy-MM");
-			Date d = toDateSdf.parse(queryDate);
-			
-			SimpleDateFormat toStrSdf = new SimpleDateFormat("yyyy-MM-dd");
-			Calendar c = Calendar.getInstance();
-			c.setTime(d);
-			c.set(Calendar.DAY_OF_MONTH,1);
-			queryAgentHistoryIncomeRequest.setStartDate(toStrSdf.format(c.getTime()));
-			
-			c.add(Calendar.MONTH,1);
-			c.add(Calendar.DAY_OF_MONTH,-1);
-			queryAgentHistoryIncomeRequest.setEndDate(toStrSdf.format(c.getTime()));
-			
+			if(StringUtils.isNotBlank(queryDate)) {
+				SimpleDateFormat toDateSdf = new SimpleDateFormat("yyyy-MM");
+				Date d = toDateSdf.parse(queryDate);
+				
+				SimpleDateFormat toStrSdf = new SimpleDateFormat("yyyy-MM-dd");
+				Calendar c = Calendar.getInstance();
+				c.setTime(d);
+				c.set(Calendar.DAY_OF_MONTH,1);
+				queryAgentHistoryIncomeRequest.setStartDate(toStrSdf.format(c.getTime()));
+				
+				c.add(Calendar.MONTH,1);
+				c.add(Calendar.DAY_OF_MONTH,-1);
+				queryAgentHistoryIncomeRequest.setEndDate(toStrSdf.format(c.getTime()));
+			}
 			//调用 common query接口
 			CommonQueryRepsonse<QueryAgentHistoryIncomeResponse> queryAgentHistoryIncomeResponse 
 									= achAgentClient.queryAgentHistoryIncomeInfo(queryAgentHistoryIncomeRequest);
@@ -238,16 +239,16 @@ public class AchievementApiController {
 //			
 //			List<MyTeamMember> list = new ArrayList<MyTeamMember>();
 //			if("000000".equals(agentCode)) {
-//				list.add(new MyTeamMember("000001","张三","AM",1,2,2,5));
-//				list.add(new MyTeamMember("000002","李四","AM",2,1,2,3));
-//				list.add(new MyTeamMember("000003","袁华","SAM",3,2,1,5));
+//				list.add(new MyTeamMember("000001","张三","AM",1,2,2,5,""));
+//				list.add(new MyTeamMember("000002","李四","AM",2,1,2,3,""));
+//				list.add(new MyTeamMember("000003","袁华","SAM",3,2,1,5,""));
 //			}else if("000001".equals(agentCode)||"000002".equals(agentCode)||"000003".equals(agentCode)){
-//				list.add(new MyTeamMember("000004","陈浩天","SSM",1,2,2,5));
-//				list.add(new MyTeamMember("000005","李赋斌","SD",2,1,2,3));
-//				list.add(new MyTeamMember("000006","刘天","SSM",3,2,1,5));
+//				list.add(new MyTeamMember("000004","陈浩天","SSM",1,2,2,5,""));
+//				list.add(new MyTeamMember("000005","李赋斌","SD",2,1,2,3,""));
+//				list.add(new MyTeamMember("000006","刘天","SSM",3,2,1,5,""));
 //			}else {
-//				list.add(new MyTeamMember("00005","李权","LA",2,1,2,3));
-//				list.add(new MyTeamMember("00006","周翔","SM",3,2,1,5));
+//				list.add(new MyTeamMember("00005","李权","LA",2,1,2,3,""));
+//				list.add(new MyTeamMember("00006","周翔","SM",3,2,1,5,""));
 //			}
 //			
 //			queryBasicsActualValueResponse.setPersonalAchievement(personalAchievement);

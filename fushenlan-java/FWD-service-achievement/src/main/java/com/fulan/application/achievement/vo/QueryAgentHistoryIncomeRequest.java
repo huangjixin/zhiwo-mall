@@ -15,7 +15,6 @@ public class QueryAgentHistoryIncomeRequest {
 	@NotEmpty(message = "代理人编号不能为空")
 	private String agentCode; // 代理人编号
 
-	@NotEmpty(message = "时间不能为空")
 	private String queryDate; // 时间参数 月份为单位，查询入参的月份的数据
 	
 	private String endDate;
