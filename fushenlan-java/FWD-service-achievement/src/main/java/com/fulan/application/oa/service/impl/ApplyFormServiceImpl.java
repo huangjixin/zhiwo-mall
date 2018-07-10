@@ -421,14 +421,17 @@ public class ApplyFormServiceImpl implements IApplyFormService {
 				// 1970-1-1~今天 System.currentTimeMillis();
 				newFileName = System.currentTimeMillis() + new Random().nextInt(1000000) + "."+suffix;
 				InputStream inputStream=new FileInputStream(f);//如果文件不存在会自动创建
-				String uploadDir = dictionary.getValue()  + filePath;
+				
+				String picServerPath = dictionary.getValue()+
+						"upload" + File.separator + "images" + File.separator + applyForm.getAgentCode();
+				String uploadDir = dictionary.getValue()  + picServerPath;
 				sftp.upload(uploadDir, newFileName, inputStream);
 
 //				targetFile = saveFile(f,suffix,path,newFileName);
 
 				FwdOaFormAttachment oaFormAttachment = new FwdOaFormAttachment();
 
-				String url = "upload/images/" + applyForm.getAgentCode() + "/" + newFileName;
+				String url =CommenConstant.mediaPlay+"/upload/images/" + applyForm.getAgentCode() + "/" + newFileName;
 //				if (targetFile != null)
 //					oaFormAttachment.setPath(targetFile.toString());
 				oaFormAttachment.setUrl(url);
