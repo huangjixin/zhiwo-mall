@@ -9,7 +9,7 @@ import Picker from 'react-native-picker';
 import * as NumberUtils from "../../common/NumberUtils";
 import * as RequestURL from "../../common/RequestURL";
 import * as FetchUtils from "../../common/FetchUtils";
-
+import Toast from "../UserCenter/Toast/Toast";
 const g_agentGrade = 'AD';   //暂时用于显示当前职级
 const g_agentCode = '10000792';   //暂时用于显示当前职级
 const IND_PERSONAL = 0;
@@ -71,7 +71,8 @@ export class AchvTabMyAchievement extends React.Component {
             params:params,
             success:(respData)=>{
                 if(respData.code!='1'){
-                    alert('请求错误');
+                    this.setState({isRefreshing:false});
+                    Toast.show('请求错误',Toast.LONG);
                     return;
                 }
 
@@ -90,7 +91,12 @@ export class AchvTabMyAchievement extends React.Component {
                 const key = 'AchvTabMyAchievement:'+g_agentCode;
                 AsyncStorage.setItem(key,JSON.stringify(data));
             },
-            error:(err)=>{
+            error:(isTimeOut)=>{
+                if(isTimeOut){
+                    Toast.show("请求超时",Toast.LONG);
+                }else{
+                    Toast.show("未知错误",Toast.LONG);
+                }
                 this.setState({
                     isRefreshing:false,
                 });
@@ -162,6 +168,11 @@ export class AchvTabMyAchievement extends React.Component {
                 url:RequestURL.MY_ACHIEVEMENT,
                 params:params,
                 success:(resp)=>{
+                    if(resp.code!='1'){
+                        this.setState({isRefreshing:false})
+                        Toast.show('请求错误',Toast.LONG);
+                        return;
+                    }
                     const respData = resp.data;
                     if(params.groupType==1){
                         this.curNode.personalData = respData;
@@ -174,7 +185,12 @@ export class AchvTabMyAchievement extends React.Component {
                         isRefreshing:false
                     });
                 },
-                error:()=>{
+                error:(isTimeOut)=>{
+                    if(isTimeOut){
+                        Toast.show("请求超时",Toast.LONG);
+                    }else{
+                        Toast.show("未知错误",Toast.LONG);
+                    }
                     this.setState({isRefreshing:false});
                 }
             })
@@ -208,6 +224,11 @@ export class AchvTabMyAchievement extends React.Component {
             url:RequestURL.MY_ACHIEVEMENT,
             params:params,
             success:(resp)=>{
+                if(resp.code!='1'){
+                    this.setState({isRefreshing:false})
+                    Toast.show('请求错误',Toast.LONG);
+                    return;
+                }
                 const respData = resp.data;
                 if(params.groupType==1){
                     this.curNode.personalData = respData;
@@ -219,7 +240,12 @@ export class AchvTabMyAchievement extends React.Component {
                     isRefreshing:false
                 });
             },
-            error:()=>{
+            error:(isTimeOut)=>{
+                if(isTimeOut){
+                    Toast.show("请求超时",Toast.LONG);
+                }else{
+                    Toast.show("未知错误",Toast.LONG);
+                }
                 this.setState({isRefreshing:false});
             }
         })
@@ -261,6 +287,11 @@ export class AchvTabMyAchievement extends React.Component {
             url:RequestURL.MY_ACHIEVEMENT,
             params:params,
             success:(respData)=>{
+                if(respData.code!='1'){
+                    this.setState({isRefreshing:false})
+                    Toast.show('请求错误',Toast.LONG);
+                    return;
+                }
                 this.setState({
                     data:respData.data,
                     isLeader:isLeader,
@@ -286,7 +317,13 @@ export class AchvTabMyAchievement extends React.Component {
                     }
                 }
             },
-            error:()=>{
+            error:(isTimeOut)=>{
+                if(isTimeOut){
+                    Toast.show("请求超时",Toast.LONG);
+                }else{
+                    Toast.show("未知错误",Toast.LONG);
+                }
+
                 this.setState({isRefreshing:false});
             }
         })

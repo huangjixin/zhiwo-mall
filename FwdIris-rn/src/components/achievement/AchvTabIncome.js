@@ -6,7 +6,7 @@ import * as NumberUtils from "../../common/NumberUtils";
 import * as RequestURL from "../../common/RequestURL";
 import * as FetchUtils from "../../common/FetchUtils";
 import Picker from 'react-native-picker';
-
+import Toast from "../UserCenter/Toast/Toast";
 
 const g_agentGrade = 'AD';   //暂时用于显示当前职级
 const g_agentCode = '10000792';   //暂时用于显示当前职级
@@ -39,11 +39,14 @@ export class AchvTabIncome extends React.Component {
             params:params,
             success:(respData)=>{
                 if(respData.code!='1'){
-                    alert('请求错误');
+                    this.setState({isRefreshing:false})
+                    Toast.show('请求错误',Toast.LONG);
                     return;
                 }
 
                 const data = respData.data;
+                if(data.detailList == null)
+                    data.detailList = [];
                 const option = this.convertToEchartsOption(data.detailList);
                 this.setState({
                     echartsOption:option,
@@ -55,7 +58,12 @@ export class AchvTabIncome extends React.Component {
                 const key = 'AchvTabIncome:'+g_agentCode;
                 AsyncStorage.setItem(key,JSON.stringify(data));
             },
-            error:()=>{
+            error:(isTimeOut)=>{
+                if(isTimeOut){
+                    Toast.show("请求超时",Toast.LONG);
+                }else{
+                    Toast.show("未知错误",Toast.LONG);
+                }
                 this.setState({isRefreshing:false})
             }
         })
@@ -151,7 +159,7 @@ export class AchvTabIncome extends React.Component {
         <View style={{backgroundColor:'#FBFBFB',paddingBottom:10
             ,borderBottomWidth:2, borderBottomColor:'#F4F4F4'
             ,borderLeftWidth:10,borderLeftColor:'#FFDD00'}}>
-            {
+            {data.subList!=null &&
                 data.subList.map((v, i) => (
                     <View key={i} style={{flexDirection:'row',justifyContent: 'center',alignItems: 'center',marginTop:10,}}>
                         <View style={{flex:2,paddingLeft:15}}>

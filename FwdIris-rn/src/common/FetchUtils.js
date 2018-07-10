@@ -24,7 +24,7 @@ function _fetch(fetch_promise, timeout) {
 FETCH_TIMEOUT = 5000;
 
 export async function Get({url,params,success,error}){
-    console.log('*******************request start**********************');
+    console.log('*******************GET request start**********************');
     console.log('url:' + url);
 
     if(url==null){
@@ -59,7 +59,8 @@ export async function Get({url,params,success,error}){
                 success(respData);
             }else {
                 if(typeof error === 'function'){
-                    error(respData);
+                    const isTimeOut = false;
+                    error(isTimeOut,respData);
                 }
             }
 
@@ -71,7 +72,7 @@ export async function Get({url,params,success,error}){
         console.log(errResp.toString());
     });
 
-    console.log('*******************request end**********************');
+    console.log('*******************GET request end**********************');
 }
 
 
@@ -86,7 +87,7 @@ function toForm(data) {
 }
 
 export async function Post({url,params,success,error,headers}){
-    console.log('*******************request start**********************');
+    console.log('*******************POST request start**********************');
     console.log('url:' + url);
 
     if(url==null){
@@ -122,7 +123,8 @@ export async function Post({url,params,success,error,headers}){
                 success(respData);
             }else {
                 if(typeof error === 'function'){
-                    error(respData);
+                    const isTimeOut = false;
+                    error(isTimeOut,respData);
                 }
             }
         }).catch((errResp) => {
@@ -133,7 +135,7 @@ export async function Post({url,params,success,error,headers}){
             console.log(errResp.toString());
         });
 
-    console.log('*******************request end**********************');
+    console.log('*******************POST request end**********************');
 }
 
 

@@ -18,6 +18,7 @@ export class FwdLoading extends React.Component {
     }
     render() {
         const {isLoading} = this.state;
+        const {style} = this.props;
         return (
             <View>
                 {
@@ -26,7 +27,7 @@ export class FwdLoading extends React.Component {
                             color='red'
                             size="large"
                             animating={isLoading}
-                            style={styles.centering} />
+                            style={[styles.centering,style]} />
                     )
                 }
             </View>
@@ -43,10 +44,9 @@ const styles = StyleSheet.create({
     //     alignItems: 'center',
     // },
     centering: {
-        marginTop:20,
-        marginBottom:20,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor:'#FBFBFB'
     },
 });
 
