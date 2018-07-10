@@ -422,8 +422,7 @@ public class ApplyFormServiceImpl implements IApplyFormService {
 				newFileName = System.currentTimeMillis() + new Random().nextInt(1000000) + "."+suffix;
 				InputStream inputStream=new FileInputStream(f);//如果文件不存在会自动创建
 				
-				String picServerPath = dictionary.getValue()+
-						"upload" + File.separator + "images" + File.separator + applyForm.getAgentCode();
+				String picServerPath = "upload" + File.separator + "images" + File.separator + applyForm.getAgentCode();
 				String uploadDir = dictionary.getValue()  + picServerPath;
 				sftp.upload(uploadDir, newFileName, inputStream);
 
