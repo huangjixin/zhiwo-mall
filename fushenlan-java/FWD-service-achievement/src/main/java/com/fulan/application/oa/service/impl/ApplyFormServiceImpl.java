@@ -3,9 +3,7 @@
  */
 package com.fulan.application.oa.service.impl;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,10 +22,15 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import com.fulan.api.system.domain.Dictionary;
+import com.fulan.api.system.service.DictionaryService;
+import com.fulan.application.context.CommenConstant;
+import com.fulan.application.util.file.SFTPUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -71,6 +74,21 @@ public class ApplyFormServiceImpl implements IApplyFormService {
 
 	@Autowired
 	private WorkFlowService workFlowService;
+
+	@Autowired
+	private DictionaryService dictionaryService;
+
+	@Value("${ftpuploadusername}")
+	public  String ftpuploadusername;
+
+	@Value("${ftpuploadpassword}")
+	public  String ftpuploadpassword;
+
+	@Value("${ftpuploadhost}")
+	public  String ftpuploadhost;
+
+	@Value("${ftpuploadport}")
+	public  Integer ftpuploadport;
 	
 
 	/*
@@ -373,12 +391,16 @@ public class ApplyFormServiceImpl implements IApplyFormService {
 	@Override
 	public int saveMultipleFormBase64(String strDirPath, String[] files, FwdOaApplyForm applyForm) throws Exception {
 		String newFileName = null;
-		File targetFile = null;
+//		File targetFile = null;
 
 		// 如果绑定没有错误的话把applyForm插进去数据库。
 		int num = this.save(applyForm);
 
 		if (files != null && files.length > 0) {
+			Dictionary dictionary= dictionaryService.findByCode(CommenConstant.IMAGEDIR);
+
+			SFTPUtil sftp = new SFTPUtil(ftpuploadusername,ftpuploadpassword,ftpuploadhost, ftpuploadport);
+			sftp.login();
 			for (String file : files) {
 				String suffix = getImageSuffix(file);
 				File f = base64ToFile("temp."+suffix,file);
@@ -398,18 +420,23 @@ public class ApplyFormServiceImpl implements IApplyFormService {
 				// 时间(毫秒数)+随机数+suffix
 				// 1970-1-1~今天 System.currentTimeMillis();
 				newFileName = System.currentTimeMillis() + new Random().nextInt(1000000) + "."+suffix;
+				InputStream inputStream=new FileInputStream(f);//如果文件不存在会自动创建
+				String uploadDir = dictionary.getValue()  + filePath;
+				sftp.upload(uploadDir, newFileName, inputStream);
 
-				targetFile = saveFile(f,suffix,path,newFileName);
+//				targetFile = saveFile(f,suffix,path,newFileName);
 
 				FwdOaFormAttachment oaFormAttachment = new FwdOaFormAttachment();
 
 				String url = "upload/images/" + applyForm.getAgentCode() + "/" + newFileName;
-				if (targetFile != null)
-					oaFormAttachment.setPath(targetFile.toString());
+//				if (targetFile != null)
+//					oaFormAttachment.setPath(targetFile.toString());
 				oaFormAttachment.setUrl(url);
 				oaFormAttachment.setFormId(applyForm.getId());
 				int count = attachmentService.save(oaFormAttachment);
 			}
+
+			sftp.logout();
 		}
 
 		// 启动申请流程。
