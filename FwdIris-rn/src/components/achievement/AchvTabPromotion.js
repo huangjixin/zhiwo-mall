@@ -441,7 +441,7 @@ export class AchvTabPromotion extends React.Component {
                     paddingBottom:10,paddingTop:10,backgroundColor:'#FFFFFF'
                 }}>
                     {/*业绩详细*/}
-                    {
+                    {data.indicatorList!=null &&
                         data.indicatorList.map((rowData, i) => (
                             this.renderItemDetail(rowData, i)
                         ))

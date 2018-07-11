@@ -25,6 +25,22 @@ export class AchvTabMyAchievement extends React.Component {
         agentCode:'',
     };
 
+    defaultData = {
+        agentGrade:'',
+        fyc:0,
+        fyp:0,
+        caseNo:0,
+        personalAchievement:{
+            fyc:0,
+            activeNo:0,
+            effectiveNo:0,
+            bredNo:0,
+            recruitNo:0,
+            k1Rate:0,
+        },
+        groupList:[]
+    }
+
     constructor(props){
         super(props);
 
@@ -76,7 +92,11 @@ export class AchvTabMyAchievement extends React.Component {
                     return;
                 }
 
-                const data = respData.data;
+                let data = respData.data;
+                if(data == null){
+                    data = this.defaultData;
+                }
+
                 if(params.groupType==1){
                     this.curNode.personalData = data;
                 }else{
@@ -173,7 +193,12 @@ export class AchvTabMyAchievement extends React.Component {
                         Toast.show('请求错误',Toast.LONG);
                         return;
                     }
-                    const respData = resp.data;
+
+                    let respData = resp.data;
+                    if(respData == null){
+                        respData=this.defaultData;
+                    }
+
                     if(params.groupType==1){
                         this.curNode.personalData = respData;
                     }else{
@@ -229,7 +254,12 @@ export class AchvTabMyAchievement extends React.Component {
                     Toast.show('请求错误',Toast.LONG);
                     return;
                 }
-                const respData = resp.data;
+
+                let respData = resp.data;
+                if(respData == null){
+                    respData=this.defaultData;
+                }
+
                 if(params.groupType==1){
                     this.curNode.personalData = respData;
                 }else{
@@ -292,8 +322,14 @@ export class AchvTabMyAchievement extends React.Component {
                     Toast.show('请求错误',Toast.LONG);
                     return;
                 }
+
+                let data = respData.data;
+                if(data == null){
+                    data=this.defaultData;
+                }
+
                 this.setState({
-                    data:respData.data,
+                    data:data,
                     isLeader:isLeader,
                     personalTeamIndicator:isLeader?IND_TEAM:IND_PERSONAL,
                     isRefreshing:false,
@@ -303,7 +339,7 @@ export class AchvTabMyAchievement extends React.Component {
                 this.router.push(this.curNode);
                 if(params.groupType==1){
                     this.curNode = {
-                        personalData:respData.data,
+                        personalData:data,
                         teamData:{},
                         agentGrade:agentGrade,
                         agentCode:agentCode,
@@ -311,7 +347,7 @@ export class AchvTabMyAchievement extends React.Component {
                 }else{
                     this.curNode = {
                         personalData:{},
-                        teamData:respData.data,
+                        teamData:data,
                         agentGrade:agentGrade,
                         agentCode:agentCode,
                     }

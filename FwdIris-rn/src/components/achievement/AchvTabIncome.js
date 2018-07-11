@@ -11,9 +11,16 @@ import Toast from "../UserCenter/Toast/Toast";
 const g_agentGrade = 'AD';   //暂时用于显示当前职级
 const g_agentCode = '10000792';   //暂时用于显示当前职级
 export class AchvTabIncome extends React.Component {
+
+    defaultData = {
+        preTax:0,
+        afterTax:0,
+        taxAmount:0,
+        detailList:[],
+    }
+
     constructor(props){
         super(props)
-
         this.state={
             isRefreshing:true,
             selectIndex:null,
@@ -21,9 +28,9 @@ export class AchvTabIncome extends React.Component {
             queryYear:(new Date()).getUTCFullYear(),
             queryMonth:(new Date()).getUTCMonth(),
             data:{
-                preTax:'',
-                afterTax:'',
-                taxAmount:'',
+                preTax:0,
+                afterTax:0,
+                taxAmount:0,
                 detailList:[],
             }
         }
@@ -44,10 +51,15 @@ export class AchvTabIncome extends React.Component {
                     return;
                 }
 
-                const data = respData.data;
+                let data = respData.data;
+                if(data==null){
+                    data = this.defaultData;
+                }
+
                 if(data.detailList == null)
                     data.detailList = [];
                 const option = this.convertToEchartsOption(data.detailList);
+
                 this.setState({
                     echartsOption:option,
                     data:data,
