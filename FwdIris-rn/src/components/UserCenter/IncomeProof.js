@@ -91,7 +91,7 @@ export class IncomeProof extends React.Component {
             success:(respData)=>{
                 if(respData.code!='1'){
                     this.setState({isLoading:false})
-                    Toast.show('请求错误',Toast.LONG);
+                    Toast.show('获取数据出错',Toast.LONG);
                     return;
                 }
                 this.setState({
@@ -104,7 +104,7 @@ export class IncomeProof extends React.Component {
                 if(isTimeOut){
                     Toast.show("请求超时",Toast.LONG);
                 }else{
-                    Toast.show("请求失败",Toast.LONG);
+                    Toast.show("未知错误",Toast.LONG);
                 }
                 this.setState({isLoading:false})
             }
