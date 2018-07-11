@@ -6,12 +6,46 @@ import {ApplyCommonHeader} from "../ApplyCommonHeader";
 import Textarea from 'react-native-textarea';
 import * as FetchUtils from "../../../common/FetchUtils";
 import * as RequestURL from "../../../common/RequestURL";
+import * as DateUtils from "../../../common/DateUtils";
 import {FwdLoading} from "../FwdLoading";
 import Toast from "../Toast/Toast";
 export class JobProof extends React.Component {
 
     constructor(props) {
         super(props);
+
+        //职级确定
+        // let position = global.userInfo.postType;
+        let position = 'DD';
+        let postTypeName = "";
+        if (position != null && position != undefined && position != '') {
+            switch(position) {
+                case 'DD':
+                    postTypeName = '区域总监';
+                    break;
+                case 'AD':
+                    postTypeName = '总监';
+                    break;
+                case 'SAM':
+                    postTypeName = '资深业务经理';
+                    break;
+                case 'AM':
+                    postTypeName = '业务经理';
+                    break;
+                case 'SD':
+                    postTypeName = '销售总监';
+                    break;
+                case 'SSM':
+                    postTypeName = '资深销售经理';
+                    break;
+                case 'SM':
+                    postTypeName = '销售经理';
+                    break;
+                default:
+                    postTypeName = '未知职级';
+            }
+        }
+
         this.state = {
             isLoading:false,
             agentName:'张三',
@@ -19,9 +53,10 @@ export class JobProof extends React.Component {
             isPreview:false,
             purpose:'',
             idNo:'12345678910',
-            postTypeName:'寿险顾问（业务经理/销售经理等）',
+            postTypeName:postTypeName,
             type:'8',  //0离职 1请假 2晋升 3复效 4 地址 5手机号 6银行卡 7收入证明 8工作证明 9其它收入证明
-            enterDate:'2016年10月9日',
+            // enterDate:DateUtils.dateFormat(global.userInfo.createTime,'Y年m月d日'),
+            enterDate:DateUtils.dateFormat(new Date().getTime(),'Y年m月d日'),
             proofContent:'',
         }
     }
