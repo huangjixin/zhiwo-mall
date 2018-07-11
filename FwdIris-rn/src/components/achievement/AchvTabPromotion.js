@@ -7,9 +7,10 @@ import * as Progress from 'react-native-progress';
 import * as NumberUtils from "../../common/NumberUtils";
 import * as RequestURL from "../../common/RequestURL";
 import * as FetchUtils from "../../common/FetchUtils";
+import Toast from "../UserCenter/Toast/Toast";
 
-const g_agentCode = '10000792';   //暂时用于显示当前职级
-const g_agentGrade = 'SM';   //暂时用于显示当前职级
+let g_agentCode ;   //暂时用于显示当前职级
+let g_agentGrade ;   //暂时用于显示当前职级
 const IDX_PROMOTION = 0;
 const IDX_EVALUATION = 1;
 
@@ -19,21 +20,29 @@ export class AchvTabPromotion extends React.Component {
     //考核
     evaluationCache = {};
 
+    defaultData = {
+        assessPeriodFrom: '',
+        assessPeriodTo: '',
+        nextAssessDay:'',
+        nextAssessHour:'',
+        nextAssessMinus:'',
+        indicatorList: [],
+    }
+
     constructor(props) {
         super(props);
+
+        g_agentCode = '20000792';   //暂时用于显示当前职级
+        g_agentGrade = 'SM';
+
+        const gradeObj = gradeMap[g_agentGrade];
+
         this.state = {
             isRefreshing:true,
             promotionPostIndex: 0,  //当前代理人  晋升方向选择
             selectedIndex: IDX_PROMOTION,  // 选中(0:晋升 1:考核 )
-            agentGrade:{
-                "gradeCode": "",
-                "gradeName": ""
-            },
-            promotionDirect:[
-                {
-                    "gradeCode": "",
-                    "gradeName": ""
-                }],
+            agentGrade:gradeObj.agentGrade,
+            promotionDirect:gradeObj.direction,
             data:{
                 assessPeriodFrom: '',
                 assessPeriodTo: '',
@@ -54,15 +63,18 @@ export class AchvTabPromotion extends React.Component {
             url:RequestURL.RANK_PROMOTION,
             params:params,
             success:(respData)=>{
-                const data = respData.data;
-                /**/
-                const gradeObj = gradeMap[g_agentGrade];
-                /**/
+                if(respData.code!='1'){
+                    this.setState({isRefreshing:false})
+                    Toast.show('获取数据出错',Toast.LONG);
+                    return;
+                }
+                let data = respData.data;
+                if(data == null){
+                    data = this.defaultData;
+                }
 
                 this.promotionCache[0]=data;
                 this.setState({
-                    agentGrade:gradeObj.agentGrade,
-                    promotionDirect:gradeObj.direction,
                     data:data,
                     isRefreshing:false,
                 });
@@ -71,22 +83,30 @@ export class AchvTabPromotion extends React.Component {
                 const key = 'AchvTabPromotion:'+g_agentCode;
                 AsyncStorage.setItem(key,JSON.stringify(data));
             },
-            error:()=>{
+            error:(isTimeOut)=>{
+                if(isTimeOut){
+                    Toast.show("请求超时",Toast.LONG);
+                }else{
+                    Toast.show("未知错误",Toast.LONG);
+                }
                 this.setState({isRefreshing:false,})
             }
         })
 
-        this.timer = setInterval(() => {
-            const curVal = this.state.data.nextAssessMinus -1;
-            const data = this.state.data;
-            data.nextAssessMinus = curVal;
-            if(curVal==-1){
-                clearInterval(this.timer);
-                this.timer = null;
-                return;
-            }
-            this.setState({data:data});
-        }, 60000);
+        // this.timer = setInterval(() => {
+        //     const nextMinus = this.state.data.nextAssessMinus;
+        //     if(nextMinus==null || nextMinus ==0)
+        //         return
+        //     const curVal = this.state.data.nextAssessMinus -1;
+        //     const data = this.state.data;
+        //     data.nextAssessMinus = curVal;
+        //     if(curVal==-1){
+        //         clearInterval(this.timer);
+        //         this.timer = null;
+        //         return;
+        //     }
+        //     this.setState({data:data});
+        // }, 60000);
     }
 
     componentWillMount(){
@@ -135,7 +155,17 @@ export class AchvTabPromotion extends React.Component {
                     url:RequestURL.RANK_EVALUATION,
                     params: params,
                     success:(resp) => {
-                        const respData = resp.data;
+                        if(resp.code!='1'){
+                            this.setState({isRefreshing:false})
+                            Toast.show('获取数据出错',Toast.LONG);
+                            return;
+                        }
+
+                        let respData = resp.data;
+                        if(respData == null){
+                            respData = this.defaultData;
+                        }
+
                         this.evaluationCache = respData;
                         this.setState({
                             selectedIndex: index,
@@ -143,8 +173,13 @@ export class AchvTabPromotion extends React.Component {
                             isRefreshing:false
                         })
                     },
-                    error:()=>{
-                        this.setStaet({isRefreshing:false})
+                    error:(isTimeOut)=>{
+                        if(isTimeOut){
+                            Toast.show("请求超时",Toast.LONG);
+                        }else{
+                            Toast.show("未知错误",Toast.LONG);
+                        }
+                        this.setState({isRefreshing:false})
                     }
                 } )
             }else{
@@ -169,8 +204,7 @@ export class AchvTabPromotion extends React.Component {
                 data:cacheData
             });
         }else {
-            const {data} = this.state;
-            const agentGrade = data.agentGrade;
+            const {data,agentGrade} = this.state;
             const line = agentGrade.gradeCode+ '-' + gradeCode;
             const params = {
                 agentCode: g_agentCode,
@@ -181,7 +215,17 @@ export class AchvTabPromotion extends React.Component {
                 url:RequestURL.RANK_PROMOTION,
                 params:params,
                 success:(resp) => {
-                    const respData = resp.data;
+                    if(resp.code!='1'){
+                        this.setState({isRefreshing:false})
+                        Toast.show('获取数据出错',Toast.LONG);
+                        return;
+                    }
+
+                    let respData = resp.data;
+                    if(respData == null){
+                        respData = this.defaultData;
+                    }
+
                     this.promotionCache[index] = respData;
                     this.setState({
                         promotionPostIndex: index,
@@ -189,7 +233,12 @@ export class AchvTabPromotion extends React.Component {
                         isRefreshing:false,
                     });
                 },
-                error:()=>{
+                error:(isTimeOut)=>{
+                    if(isTimeOut){
+                        Toast.show("请求超时",Toast.LONG);
+                    }else{
+                        Toast.show("未知错误",Toast.LONG);
+                    }
                     this.setState({isRefreshing:false});
                 }
             })
@@ -218,14 +267,29 @@ export class AchvTabPromotion extends React.Component {
                 url:RequestURL.RANK_PROMOTION,
                 params:params,
                 success:(resp) => {
-                    const respData = resp.data;
+                    if(resp.code!='1'){
+                        this.setState({isRefreshing:false})
+                        Toast.show('获取数据出错',Toast.LONG);
+                        return;
+                    }
+
+                    let respData = resp.data;
+                    if(respData == null){
+                        respData = this.defaultData;
+                    }
+
                     this.promotionCache[promotionPostIndex] = respData;
                     this.setState({
                         data: respData,
                         isRefreshing:false
                     });
                 },
-                error:()=>{
+                error:(isTimeOut)=>{
+                    if(isTimeOut){
+                        Toast.show("请求超时",Toast.LONG);
+                    }else{
+                        Toast.show("未知错误",Toast.LONG);
+                    }
                     this.setState({isRefreshing:false});
                 }
             })
@@ -237,14 +301,29 @@ export class AchvTabPromotion extends React.Component {
                 url:RequestURL.RANK_EVALUATION,
                 params:params,
                 success:(resp) => {
-                    const respData = resp.data;
+                    if(resp.code!='1'){
+                        this.setState({isRefreshing:false})
+                        Toast.show('获取数据出错',Toast.LONG);
+                        return;
+                    }
+
+                    let respData = resp.data;
+                    if(respData == null){
+                        respData = this.defaultData;
+                    }
+
                     this.evaluationCache = respData;
                     this.setState({
                         data:respData,
                         isRefreshing:false
                     })
                 },
-                error:()=>{
+                error:(isTimeOut)=>{
+                    if(isTimeOut){
+                        Toast.show("请求超时",Toast.LONG);
+                    }else{
+                        Toast.show("未知错误",Toast.LONG);
+                    }
                     this.setState({isRefreshing:false})
                 }
             })
