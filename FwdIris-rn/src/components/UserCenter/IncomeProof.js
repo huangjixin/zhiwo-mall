@@ -94,8 +94,13 @@ export class IncomeProof extends React.Component {
                     Toast.show('获取数据出错',Toast.LONG);
                     return;
                 }
+                let income=0;
+                if(respData.data!=null
+                    && respData.data.preTax!=null){
+                    income = respData.data.preTax;
+                }
                 this.setState({
-                    income:respData.data.preTax,
+                    income:income,
                     isLoading:false,
                     isPreview: true
                 });
