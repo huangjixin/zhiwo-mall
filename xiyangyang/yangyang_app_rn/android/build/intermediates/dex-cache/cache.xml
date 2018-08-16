@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\com.facebook.fbui.textlayoutbuilder\textlayoutbuilder\1.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="f90b593491e4044903f0bbf68dc3fa2790b151b9">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\com.facebook.fbui.textlayoutbuilder-textlayoutbuilder-1.0.0_97de2842ed6149833e718b103e2bfee95160919b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\com.facebook.fresco\drawee\1.3.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="c65a2e39d54023bac3aef64a2f0cff89289c7ff6">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\com.facebook.fresco-drawee-1.3.0_d17106e9741480ac7c04455060579b05c9116d82.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\FWDuser\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\okhttp\3.6.0\69edde9fc4b01c9fd51d25b83428837478c27254\okhttp-3.6.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="69edde9fc4b01c9fd51d25b83428837478c27254">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\okhttp-3.6.0_54f6eb03fd6dde261ce658179f35ca8a120ec80c.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\com.facebook.react\react-native\0.55.4\jars\libs\infer-annotations-4.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="9809e90be788acdb479b2b44e2112f3295a03068">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\infer-annotations-4.0_7a919dfe0f7840046d21ff57e187e678e67a2c5e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\com.facebook.fresco\imagepipeline\1.3.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="48c7f54c2515a2312d3a4481d10c43fbb807f3af">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\com.facebook.fresco-imagepipeline-1.3.0_a2d7f790feef76b9410c5156cfeab21eade8c2de.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\com.facebook.soloader\soloader\0.1.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="8f615bca00639150c9eb6175d4b5471193f70794">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\com.facebook.soloader-soloader-0.1.0_644868c87c5c1df7e3863ea5bd68963f44c435db.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\FWDuser\.gradle\caches\modules-2\files-2.1\com.facebook.fbui.textlayoutbuilder\staticlayout-proxy\1.0\f162442a19fff13995fbd51ba414d9ee05579080\staticlayout-proxy-1.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="f162442a19fff13995fbd51ba414d9ee05579080">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\staticlayout-proxy-1.0_fa74c1e387b804984398bdc305eb5f37ff42c33b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-basement\11.0.4\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="364364bf77b4a71afc5930fc3ae57b3f0eea637c">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-basement-11.0.4_a2d85440fd5e9169c45147eb0146a4b2a1c7c069.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\FWDuser\.gradle\caches\modules-2\files-2.1\com.google.code.findbugs\jsr305\3.0.0\5871fb60dc68d67da54a663c3fd636a10a532948\jsr305-3.0.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="5871fb60dc68d67da54a663c3fd636a10a532948">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\jsr305-3.0.0_c5eef18e137fbe5cbfaa4a64777fe5a4f19e1798.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\yangyang\react-native-view-shot\unspecified\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="c617fe8e40b65778d691bd8ab18d3a9fda017478">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\yangyang-react-native-view-shot-unspecified_55ab360b431cb04bfd66cf48fab5e51a9cc7f9eb.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\25.2.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="ee394a892dd21c03a528139c1e8d4e0e1264ac84">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\com.android.support-support-media-compat-25.2.0_dcca21bc80bf1a7179189a81c9c32039682547d7.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\yangyang\react-native-vector-icons\unspecified\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="f2cf527de8d0bd35d72088fafea02395ba4a9eec">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\yangyang-react-native-vector-icons-unspecified_102e2723b6b9808c2e7c614d77f6e05dbae9eb51.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\FWDuser\.m2\repository\com\squareup\okio\okio\1.13.0\okio-1.13.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="a9283170b7305c8d92d25aff02a6ab7e45d06cbe">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\okio-1.13.0_e2d4b7dad8fcc6e7dceacdc29b352f8999ef2e78.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\FWDuser\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\okhttp-urlconnection\3.6.0\3f9b16b774f2c36cfd86dd2053d0b3059531dacc\okhttp-urlconnection-3.6.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="3f9b16b774f2c36cfd86dd2053d0b3059531dacc">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\okhttp-urlconnection-3.6.0_45c5990841e2e01086cf82e0d3950a6cc8d9b4a0.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-iid\11.0.4\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="dd282bdeaa904c59d77e57dedd7e0a241c9b679d">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-iid-11.0.4_075ef32701b9098a4a246b60159cd1e93f4b149c.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\FWDuser\AppData\Local\Android\android-sdk\extras\android\m2repository\com\android\support\support-annotations\25.2.0\support-annotations-25.2.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="4a5a82a027706397fff621b22fd6fa796e91d7c5">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\support-annotations-25.2.0_7613b8dbe84f025e111b94400ce566ac996c2c2a.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.2.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="8fe8a8f77d651982ce5e18f6187dc4daf914ac57">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\com.android.support-support-fragment-25.2.0_94331e41a452d0441756cad84ee8c134312601b1.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.2.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="e820b7be8c035dd522da4bc822e8a76c8e27921a">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\com.android.support-support-core-utils-25.2.0_0c3cf5d248c10a6db82a27aab244a91660e4ba61.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\com.facebook.fresco\fbcore\1.3.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="37345de2ed2772f385eaeec37a9c2ff0fea99ad7">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\com.facebook.fresco-fbcore-1.3.0_455b2042b0570ade61649d53b6bebe3e1a10c1c5.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\com.android.support-appcompat-v7-23.0.1_c19af5e1e5e77a9ca589ef592523d50b692335d8.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-tasks\11.0.4\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="2430e711762a749feb00b3d64858ca4768251b9d">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-tasks-11.0.4_2eef1f0090356c9c6a3b23f63dc7c1eb0ff0daae.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\com.facebook.fresco\fresco\1.3.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="fe85b87215e405f5917d40ae4960488ac9224b74">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\com.facebook.fresco-fresco-1.3.0_a7324961e15d5e41084cc6ab9e16ceb66887dfbd.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\com.facebook.fresco\imagepipeline-base\1.3.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="72128af126ddd7d6252da9357fe560d3abcdfb0c">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\com.facebook.fresco-imagepipeline-base-1.3.0_59e590ac5d76a4a8cde20b17a008fdc5146c359e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\yangyang\react-native-device-info\unspecified\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="7c9450bcd83c55429cc3e678abe447c29c5599ad">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\yangyang-react-native-device-info-unspecified_9d0a1522e9b327104cb92deb0c547a57747a2057.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-gcm\11.0.4\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="d8942ee348aaa9341f08f7e2437063893fe27542">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-gcm-11.0.4_dc456b25f6cbc151af464f28c6251e7381945de2.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\FWDuser\.gradle\caches\modules-2\files-2.1\com.parse.bolts\bolts-tasks\1.4.0\d85884acf6810a3bbbecb587f239005cbc846dc4\bolts-tasks-1.4.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="d85884acf6810a3bbbecb587f239005cbc846dc4">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\bolts-tasks-1.4.0_fc37952e117cce67e902ce1d06c9acb78c1080e1.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\11.0.4\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="70ffe00aaf049893f59d1dad57bd82992faa38ef">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-base-11.0.4_8c58b5b0032730ad45b7878b309e5d7cfa223e71.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.2.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="fa0446a14ed5dd3725047d6399ffea771a564b30">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\com.android.support-support-core-ui-25.2.0_a4489be5122962b01e27a801c98c7a004c5b7218.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\com.facebook.fresco\imagepipeline-okhttp3\1.3.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="c03c08c9934b23c8c09c803345ec51a74119127b">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\com.facebook.fresco-imagepipeline-okhttp3-1.3.0_77044334d224af7cf809868dec4bc3d0c0a00d15.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\FWDuser\.m2\repository\javax\inject\javax.inject\1\javax.inject-1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="6975da39a7040257bd51d21a231b76c915872d38">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\javax.inject-1_d5af05738709ba64e2632ab19ef6e472fd3c2eb2.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\com.facebook.react\react-native\0.55.4\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="e31331bdf6b5952badadbfc171f04b95c55d3b16">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\com.facebook.react-react-native-0.55.4_f2624c3f62ee1b5503167f750e188fdd7f76233d.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\com.android.support\support-v4\25.2.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\com.android.support-support-v4-25.2.0_95c68059f42bbcb175af41efd25a3fcd1db9b69c.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.2.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="67eb33110dbacb46a48175b08ae0c96761d2c17d">
+        <dex dex="C:\tony\fwdworkspace\yangyang\android\app\build\intermediates\pre-dexed\debug\com.android.support-support-compat-25.2.0_a79b91b866346329ff7a365e8d534fab3f4562e3.jar" />
+    </item>
+
+</items>
