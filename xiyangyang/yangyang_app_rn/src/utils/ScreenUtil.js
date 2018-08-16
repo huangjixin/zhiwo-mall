@@ -296,7 +296,7 @@ export const getAsyncStorage = (key, successCallback, errorCallback) =>{
  * @param errorCallback
  */
 export const removeAsyncStorage = (key, successCallback, errorCallback)=> {
-    AsyncStorage.getItem(key, error => {
+    AsyncStorage.removeItem(key, error => {
         if (error) {
             errorCallback(error);
         }

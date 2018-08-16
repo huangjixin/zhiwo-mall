@@ -63,20 +63,29 @@ export class AuthLoadingScreen extends React.Component {
     //   this2.props.navigation.navigate('Auth');
     // });
     // this2.props.navigation.navigate('Auth');
-    ScreenUtil.getAsyncStorage(userToken,this.navigateToApp,this.navigateToAuth);
+    // ScreenUtil.getAsyncStorage(userToken,()=>{
+    //   console.log("获取缓存成功");
+    // },()=>{
+    //   console.log("获取缓存失败");
+    // });
+    this.props.navigation.navigate('Auth');
   };
 
-  navigateToApp = (data)=>{
-    if(ScreenUtil.isEmpty(data)){
-      this.navigateToAuth();
-    }else{
-      let userInfo = JSON.parse(data);
-      this.props.navigation.navigate('App');
-    }
+  navigateToApp = ()=>{
+    console.log("获取缓存成功");
+    //this.props.navigation.navigate('App');
+
+    // if(ScreenUtil.isEmpty(data)){
+    //   this.navigateToAuth();
+    // }else{
+    //   let userInfo = JSON.parse(data);
+    //   this.props.navigation.navigate('App');
+    // }
   }
 
   navigateToAuth = ()=>{
-    this.props.navigation.navigate('Auth');
+    console.log("获取缓存失败");
+    //this.props.navigation.navigate('Auth');
   }
 
   /**

@@ -34,16 +34,25 @@ export class SignInScreen extends BaseScreenComponent {
 
   navigateToApp = ()=>{
     let userToken = HomeConstants.User_TOKEN_CACHE;
+    let this2 = this;
     if(this.props.user){
       global.user = this.props.user;
       let userStr = JSON.stringify(global.user);
-      // ScreenUtil.saveAsyncStorage(userToken,(data)=>{
-      // },()=>{
-      // });
+      ScreenUtil.saveAsyncStorage(userStr,this.navigateToAppHandler,this.navigateToAppError);
     }
+    
+  }
 
+  // 保存缓存成功
+  navigateToAppHandler = (data)=>{
     const App = NavigationConstants.App;
     NavigationService.navigate(App);
+  }
+
+  // error错误
+  navigateToAppError = (error)=>{
+    // const App = NavigationConstants.App;
+    // NavigationService.navigate(App);
   }
 
   // 更新完状态之后跳转；
