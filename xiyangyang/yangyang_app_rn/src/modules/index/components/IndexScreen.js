@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   StyleSheet,
-  SafeAreaView
+  SafeAreaView,Platform
 } from 'react-native';
 import { BaseScreenComponent } from '../../../core/BaseScreenComponent';
 import createMaterialTopTabNavigator from 'react-navigation-tabs/dist/navigators/createMaterialTopTabNavigator';
@@ -95,7 +95,7 @@ export class IndexScreen extends BaseScreenComponent {
             //   // marginTop: -20
             // },
             labelStyle: {
-              fontSize: ScreenUtil.setSpText2(16),
+              fontSize: ScreenUtil.setSpText2(14),
               textAlign:'center',
               // paddingBottom:10,
             },
@@ -122,8 +122,10 @@ export class IndexScreen extends BaseScreenComponent {
               // paddingBottom:25,
               backgroundColor: '#FFFFFF', // TabBar 背景色
           // borderTopWidth:0,
-              paddingTop:0,
-              height: ScreenUtil.scaleSize(38),
+          paddingTop:Platform.OS == 'android'?0:(ScreenUtil.isIphoneX===true?0:ScreenUtil.scaleSize(12)),
+          height: Platform.OS == 'android'?ScreenUtil.scaleSize(38):(ScreenUtil.isIphoneX===true?38:ScreenUtil.scaleSize(42)),
+              //paddingTop:0,
+              //height: ScreenUtil.scaleSize(38),
               // alignItems:'center',
               // width : 200,
               // lineHeight: 30,
@@ -150,7 +152,7 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
+      // alignItems: 'center',
+      // justifyContent: 'center',
     },
   });
