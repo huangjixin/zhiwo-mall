@@ -38,7 +38,9 @@ export class SignInScreen extends BaseScreenComponent {
     if(this.props.user){
       global.user = this.props.user;
       let userStr = JSON.stringify(global.user);
-      ScreenUtil.saveAsyncStorage(userStr,this.navigateToAppHandler,this.navigateToAppError);
+      const App = NavigationConstants.App;
+      NavigationService.navigate(App);
+      // ScreenUtil.saveAsyncStorage(userStr,this.navigateToAppHandler,this.navigateToAppError);
     }
     
   }
