@@ -1,0 +1,12 @@
+eclipse.preferences.version=1
+encoding//src/main/java=UTF-8
+encoding//src/main/resources=UTF-8
+encoding//src/main/resources/bootstrap.properties=UTF-8
+encoding//src/main/resources/client-dev.properties=UTF-8
+encoding//src/main/resources/client-production.properties=UTF-8
+encoding//src/main/resources/client-test.properties=UTF-8
+encoding//src/main/resources/client2-dev.properties=UTF-8
+encoding//src/main/resources/client2-production.properties=UTF-8
+encoding//src/main/resources/client2-test.properties=UTF-8
+encoding//src/test/java=UTF-8
+encoding/<project>=UTF-8
