@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.gson.Gson;
+import com.zwo.modules.core.mapper.BaseMapper;
 import com.zwo.modules.core.service.IBaseService;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -29,7 +30,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 
 //	private static Logger logger;
 
-	protected abstract Mapper<T> getBaseMapper();
+	protected abstract BaseMapper<T> getBaseMapper();
 
 	protected abstract String getBaseMessage();
 
@@ -57,7 +58,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 	@Override
 	@Transactional(readOnly = true)
 	public int countByExample(Object example) {
-		return getBaseMapper().selectCountByExample(example);
+		return getBaseMapper().countByExample(example);
 	}
 
 	@Override

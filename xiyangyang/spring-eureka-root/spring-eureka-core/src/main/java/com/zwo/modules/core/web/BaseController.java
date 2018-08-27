@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -45,12 +43,15 @@ public abstract class BaseController<T> {
 		return response;
 	}
 
+	@ApiOperation(value="基础更新对象", notes="")
 	@PostMapping(value = "update")
 	@ResponseBody
-	protected int update(T record, HttpServletRequest httpServletRequest,
+	protected Response update(T record, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
+		Response response = new Response();
 		int result = getBaseService().updateByPrimaryKeySelective(record);
-		return result;
+		response.setCode(result+"");
+		return response;
 	}
 	
 	@GetMapping(value = "view/{id}")
@@ -63,9 +64,12 @@ public abstract class BaseController<T> {
 
 	@DeleteMapping(value = "delete/{id}")
 	@ResponseBody
-	protected int delete(@PathVariable(name = "id") String id, HttpServletRequest httpServletRequest,
+	protected Response delete(@PathVariable(name = "id") String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-		return getBaseService().deleteById(id);
+		Response response = new Response();
+		int result = getBaseService().deleteById(id);
+		response.setCode(result+"");
+		return response;
 	}
 	
 	@DeleteMapping(value = "deleteBatch")
