@@ -9,9 +9,9 @@ import com.zwo.modules.system.domain.User;
 import com.zwo.modules.system.vo.UserVo;
 
 public interface UserMapper extends BaseMapper<User> {
-	public Set<String> findRoles(@Param("username") String username);
+//	Set<String> findRoles(@Param("username") String username);
+//
+//	Set<String> findPermissions(@Param("username") String username);
 
-	public Set<String> findPermissions(@Param("username") String username);
-
-	public UserVo findByUsername(@Param("username") String username);
+	UserVo findByUsername(@Param("username") String username);
 }
