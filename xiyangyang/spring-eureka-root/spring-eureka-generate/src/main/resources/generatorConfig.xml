@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+	<context id="Mysql"><!-- targetRuntime="MyBatis3Simple" defaultModelType="flat" -->
+		<plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+			<property name="mappers"
+				value="tk.mybatis.mapper.common.Mapper" />
+			<property name="caseSensitive" value="true" />
+		</plugin>
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+		<plugin
+			type="org.mybatis.generator.plugins.CaseInsensitiveLikePlugin"></plugin>
+		<!-- 想要mybaits代码生成器生成Example类换个名字，是通过插件实现的，即下面的这个插件配置参数很关键。 -->
+		<plugin
+			type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+			<property name="searchString" value="Example$" />
+			<property name="replaceString" value="Criteria" />
+		</plugin>
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://localhost:3306/test" userId="root"
+			password="root">
+		</jdbcConnection>
+
+		<javaModelGenerator
+			targetPackage="com.fulan.application.oa.domain"
+			targetProject="src\main\java">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="com.fulan.application.oa.mapper"
+			targetProject="src\main\java">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+
+		<javaClientGenerator
+			targetPackage="com.fulan.application.oa.mapper"
+			targetProject="src\main\java" type="XMLMAPPER">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+		<!-- <table tableName="sys_user" domainObjectName="User" > <generatedKey 
+			column="id" sqlStatement="Mysql" identity="true"/> </table> <table tableName="sys_user_group" 
+			domainObjectName="UserGroup" > </table> <table tableName="sys_group_role" 
+			domainObjectName="GroupRole" > </table> <table tableName="sys_org" domainObjectName="Org" 
+			> </table> <table tableName="sys_role" domainObjectName="Role" > </table> 
+			<table tableName="sys_resources" domainObjectName="Resources" > </table> 
+			<table tableName="sys_role_resources" domainObjectName="RoleResources" > 
+			</table> <table tableName="sys_login_log" domainObjectName="LoginLog" > </table> -->
+		<table tableName="user" domainObjectName="User" >
+		</table>
+	</context>
+</generatorConfiguration>
