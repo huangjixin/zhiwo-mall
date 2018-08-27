@@ -20,24 +20,24 @@
 			<property name="replaceString" value="Criteria" />
 		</plugin>
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
-			connectionURL="jdbc:mysql://localhost:3306/test" userId="root"
+			connectionURL="jdbc:mysql://localhost:3306/guagua" userId="root"
 			password="root">
 		</jdbcConnection>
 
 		<javaModelGenerator
-			targetPackage="com.fulan.application.oa.domain"
+			targetPackage="com.zwo.modules.system.domain"
 			targetProject="src\main\java">
 			<property name="enableSubPackages" value="true" />
 			<property name="trimStrings" value="true" />
 		</javaModelGenerator>
 
-		<sqlMapGenerator targetPackage="com.fulan.application.oa.mapper"
+		<sqlMapGenerator targetPackage="com.zwo.modules.system.mapper"
 			targetProject="src\main\java">
 			<property name="enableSubPackages" value="true" />
 		</sqlMapGenerator>
 
 		<javaClientGenerator
-			targetPackage="com.fulan.application.oa.mapper"
+			targetPackage="com.zwo.modules.system.mapper"
 			targetProject="src\main\java" type="XMLMAPPER">
 			<property name="enableSubPackages" value="true" />
 		</javaClientGenerator>
@@ -49,7 +49,11 @@
 			<table tableName="sys_resources" domainObjectName="Resources" > </table> 
 			<table tableName="sys_role_resources" domainObjectName="RoleResources" > 
 			</table> <table tableName="sys_login_log" domainObjectName="LoginLog" > </table> -->
-		<table tableName="user" domainObjectName="User" >
+		<table tableName="sys_user" domainObjectName="User" >
+		</table>
+		<table tableName="sys_role" domainObjectName="Role" >
+		</table>
+		<table tableName="sys_resources" domainObjectName="Resources" >
 		</table>
 	</context>
 </generatorConfiguration>

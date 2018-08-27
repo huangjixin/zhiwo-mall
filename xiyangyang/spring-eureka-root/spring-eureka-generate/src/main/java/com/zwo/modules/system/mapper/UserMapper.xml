@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zwo.modules.system.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.zwo.modules.system.domain.User">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="USERNAME" jdbcType="VARCHAR" property="username" />
+    <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+    <result column="LOGIN_DATE" jdbcType="TIMESTAMP" property="loginDate" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="LAST_LOGIN_DATE" jdbcType="TIMESTAMP" property="lastLoginDate" />
+    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+    <result column="MOBIL_PHONE" jdbcType="VARCHAR" property="mobilPhone" />
+    <result column="ENABLED" jdbcType="BIT" property="enabled" />
+    <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
+    <result column="UPDATER" jdbcType="VARCHAR" property="updater" />
+    <result column="SEX" jdbcType="BIT" property="sex" />
+    <result column="ICON" jdbcType="VARCHAR" property="icon" />
+    <result column="DESCRIPTION" jdbcType="VARCHAR" property="description" />
+    <result column="AGE" jdbcType="INTEGER" property="age" />
+    <result column="WEIGHT" jdbcType="INTEGER" property="weight" />
+    <result column="QQ" jdbcType="VARCHAR" property="qq" />
+    <result column="WEIXIN" jdbcType="VARCHAR" property="weixin" />
+    <result column="REAL_NAME" jdbcType="VARCHAR" property="realName" />
+    <result column="LOGIN_COUNT" jdbcType="INTEGER" property="loginCount" />
+    <result column="SORT" jdbcType="INTEGER" property="sort" />
+    <result column="ORG_ID" jdbcType="VARCHAR" property="orgId" />
+    <result column="PARENT_ID" jdbcType="VARCHAR" property="parentId" />
+    <result column="PARENTIDS" jdbcType="VARCHAR" property="parentids" />
+    <result column="MEMBER_GROUP_ID" jdbcType="VARCHAR" property="memberGroupId" />
+    <result column="NICKNAME" jdbcType="VARCHAR" property="nickname" />
+    <result column="LOGIN_NAME" jdbcType="VARCHAR" property="loginName" />
+    <result column="USERGROUP_ID" jdbcType="VARCHAR" property="usergroupId" />
+    <result column="EMERGECY_CONTACT" jdbcType="VARCHAR" property="emergecyContact" />
+    <result column="IS_CERTIFICATE_INTERNATIONAL" jdbcType="BIT" property="isCertificateInternational" />
+    <result column="ID_CARD" jdbcType="VARCHAR" property="idCard" />
+    <result column="COOP_NAME" jdbcType="VARCHAR" property="coopName" />
+    <result column="COOP_ADDRESS" jdbcType="VARCHAR" property="coopAddress" />
+    <result column="BUSSINESS_LICENSE_CODE" jdbcType="VARCHAR" property="bussinessLicenseCode" />
+    <result column="ORG_CODE" jdbcType="VARCHAR" property="orgCode" />
+    <result column="TAXPAYER" jdbcType="VARCHAR" property="taxpayer" />
+    <result column="SOCIETY_CODE" jdbcType="VARCHAR" property="societyCode" />
+    <result column="LEGAL_REPRESENTATIVE_CARD1" jdbcType="VARCHAR" property="legalRepresentativeCard1" />
+    <result column="LEGAL_REPRESENTATIVE_CARD2" jdbcType="VARCHAR" property="legalRepresentativeCard2" />
+    <result column="LEGAL_IDCARD_EFFITIVE" jdbcType="VARCHAR" property="legalIdcardEffitive" />
+    <result column="BUSSINESS_LICENSE_PIC" jdbcType="VARCHAR" property="bussinessLicensePic" />
+    <result column="LICENSE_FOR_OPENING_COUNT" jdbcType="VARCHAR" property="licenseForOpeningCount" />
+    <result column="QUANTITY_REPORT_ID" jdbcType="VARCHAR" property="quantityReportId" />
+    <result column="TYPE" jdbcType="VARCHAR" property="type" />
+    <result column="SALT" jdbcType="VARCHAR" property="salt" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    ID, USERNAME, PASSWORD, LOGIN_DATE, CREATE_DATE, UPDATE_DATE, LAST_LOGIN_DATE, EMAIL, 
+    MOBIL_PHONE, ENABLED, CREATOR, UPDATER, SEX, ICON, DESCRIPTION, AGE, WEIGHT, QQ, 
+    WEIXIN, REAL_NAME, LOGIN_COUNT, SORT, ORG_ID, PARENT_ID, PARENTIDS, MEMBER_GROUP_ID, 
+    NICKNAME, LOGIN_NAME, USERGROUP_ID, EMERGECY_CONTACT, IS_CERTIFICATE_INTERNATIONAL, 
+    ID_CARD, COOP_NAME, COOP_ADDRESS, BUSSINESS_LICENSE_CODE, ORG_CODE, TAXPAYER, SOCIETY_CODE, 
+    LEGAL_REPRESENTATIVE_CARD1, LEGAL_REPRESENTATIVE_CARD2, LEGAL_IDCARD_EFFITIVE, BUSSINESS_LICENSE_PIC, 
+    LICENSE_FOR_OPENING_COUNT, QUANTITY_REPORT_ID, TYPE, SALT
+  </sql>
+  <select id="selectByExample" parameterType="com.zwo.modules.system.domain.UserCriteria" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sys_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.zwo.modules.system.domain.UserCriteria">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    delete from sys_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <select id="countByExample" parameterType="com.zwo.modules.system.domain.UserCriteria" resultType="java.lang.Long">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    select count(*) from sys_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    update sys_user
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.username != null">
+        USERNAME = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.password != null">
+        PASSWORD = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.loginDate != null">
+        LOGIN_DATE = #{record.loginDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createDate != null">
+        CREATE_DATE = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateDate != null">
+        UPDATE_DATE = #{record.updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastLoginDate != null">
+        LAST_LOGIN_DATE = #{record.lastLoginDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.email != null">
+        EMAIL = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobilPhone != null">
+        MOBIL_PHONE = #{record.mobilPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.enabled != null">
+        ENABLED = #{record.enabled,jdbcType=BIT},
+      </if>
+      <if test="record.creator != null">
+        CREATOR = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updater != null">
+        UPDATER = #{record.updater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sex != null">
+        SEX = #{record.sex,jdbcType=BIT},
+      </if>
+      <if test="record.icon != null">
+        ICON = #{record.icon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null">
+        DESCRIPTION = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.age != null">
+        AGE = #{record.age,jdbcType=INTEGER},
+      </if>
+      <if test="record.weight != null">
+        WEIGHT = #{record.weight,jdbcType=INTEGER},
+      </if>
+      <if test="record.qq != null">
+        QQ = #{record.qq,jdbcType=VARCHAR},
+      </if>
+      <if test="record.weixin != null">
+        WEIXIN = #{record.weixin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.realName != null">
+        REAL_NAME = #{record.realName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.loginCount != null">
+        LOGIN_COUNT = #{record.loginCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.sort != null">
+        SORT = #{record.sort,jdbcType=INTEGER},
+      </if>
+      <if test="record.orgId != null">
+        ORG_ID = #{record.orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentId != null">
+        PARENT_ID = #{record.parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentids != null">
+        PARENTIDS = #{record.parentids,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memberGroupId != null">
+        MEMBER_GROUP_ID = #{record.memberGroupId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nickname != null">
+        NICKNAME = #{record.nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.loginName != null">
+        LOGIN_NAME = #{record.loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.usergroupId != null">
+        USERGROUP_ID = #{record.usergroupId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.emergecyContact != null">
+        EMERGECY_CONTACT = #{record.emergecyContact,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isCertificateInternational != null">
+        IS_CERTIFICATE_INTERNATIONAL = #{record.isCertificateInternational,jdbcType=BIT},
+      </if>
+      <if test="record.idCard != null">
+        ID_CARD = #{record.idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.coopName != null">
+        COOP_NAME = #{record.coopName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.coopAddress != null">
+        COOP_ADDRESS = #{record.coopAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bussinessLicenseCode != null">
+        BUSSINESS_LICENSE_CODE = #{record.bussinessLicenseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgCode != null">
+        ORG_CODE = #{record.orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taxpayer != null">
+        TAXPAYER = #{record.taxpayer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.societyCode != null">
+        SOCIETY_CODE = #{record.societyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.legalRepresentativeCard1 != null">
+        LEGAL_REPRESENTATIVE_CARD1 = #{record.legalRepresentativeCard1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.legalRepresentativeCard2 != null">
+        LEGAL_REPRESENTATIVE_CARD2 = #{record.legalRepresentativeCard2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.legalIdcardEffitive != null">
+        LEGAL_IDCARD_EFFITIVE = #{record.legalIdcardEffitive,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bussinessLicensePic != null">
+        BUSSINESS_LICENSE_PIC = #{record.bussinessLicensePic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.licenseForOpeningCount != null">
+        LICENSE_FOR_OPENING_COUNT = #{record.licenseForOpeningCount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.quantityReportId != null">
+        QUANTITY_REPORT_ID = #{record.quantityReportId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        TYPE = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.salt != null">
+        SALT = #{record.salt,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    update sys_user
+    set ID = #{record.id,jdbcType=VARCHAR},
+      USERNAME = #{record.username,jdbcType=VARCHAR},
+      PASSWORD = #{record.password,jdbcType=VARCHAR},
+      LOGIN_DATE = #{record.loginDate,jdbcType=TIMESTAMP},
+      CREATE_DATE = #{record.createDate,jdbcType=TIMESTAMP},
+      UPDATE_DATE = #{record.updateDate,jdbcType=TIMESTAMP},
+      LAST_LOGIN_DATE = #{record.lastLoginDate,jdbcType=TIMESTAMP},
+      EMAIL = #{record.email,jdbcType=VARCHAR},
+      MOBIL_PHONE = #{record.mobilPhone,jdbcType=VARCHAR},
+      ENABLED = #{record.enabled,jdbcType=BIT},
+      CREATOR = #{record.creator,jdbcType=VARCHAR},
+      UPDATER = #{record.updater,jdbcType=VARCHAR},
+      SEX = #{record.sex,jdbcType=BIT},
+      ICON = #{record.icon,jdbcType=VARCHAR},
+      DESCRIPTION = #{record.description,jdbcType=VARCHAR},
+      AGE = #{record.age,jdbcType=INTEGER},
+      WEIGHT = #{record.weight,jdbcType=INTEGER},
+      QQ = #{record.qq,jdbcType=VARCHAR},
+      WEIXIN = #{record.weixin,jdbcType=VARCHAR},
+      REAL_NAME = #{record.realName,jdbcType=VARCHAR},
+      LOGIN_COUNT = #{record.loginCount,jdbcType=INTEGER},
+      SORT = #{record.sort,jdbcType=INTEGER},
+      ORG_ID = #{record.orgId,jdbcType=VARCHAR},
+      PARENT_ID = #{record.parentId,jdbcType=VARCHAR},
+      PARENTIDS = #{record.parentids,jdbcType=VARCHAR},
+      MEMBER_GROUP_ID = #{record.memberGroupId,jdbcType=VARCHAR},
+      NICKNAME = #{record.nickname,jdbcType=VARCHAR},
+      LOGIN_NAME = #{record.loginName,jdbcType=VARCHAR},
+      USERGROUP_ID = #{record.usergroupId,jdbcType=VARCHAR},
+      EMERGECY_CONTACT = #{record.emergecyContact,jdbcType=VARCHAR},
+      IS_CERTIFICATE_INTERNATIONAL = #{record.isCertificateInternational,jdbcType=BIT},
+      ID_CARD = #{record.idCard,jdbcType=VARCHAR},
+      COOP_NAME = #{record.coopName,jdbcType=VARCHAR},
+      COOP_ADDRESS = #{record.coopAddress,jdbcType=VARCHAR},
+      BUSSINESS_LICENSE_CODE = #{record.bussinessLicenseCode,jdbcType=VARCHAR},
+      ORG_CODE = #{record.orgCode,jdbcType=VARCHAR},
+      TAXPAYER = #{record.taxpayer,jdbcType=VARCHAR},
+      SOCIETY_CODE = #{record.societyCode,jdbcType=VARCHAR},
+      LEGAL_REPRESENTATIVE_CARD1 = #{record.legalRepresentativeCard1,jdbcType=VARCHAR},
+      LEGAL_REPRESENTATIVE_CARD2 = #{record.legalRepresentativeCard2,jdbcType=VARCHAR},
+      LEGAL_IDCARD_EFFITIVE = #{record.legalIdcardEffitive,jdbcType=VARCHAR},
+      BUSSINESS_LICENSE_PIC = #{record.bussinessLicensePic,jdbcType=VARCHAR},
+      LICENSE_FOR_OPENING_COUNT = #{record.licenseForOpeningCount,jdbcType=VARCHAR},
+      QUANTITY_REPORT_ID = #{record.quantityReportId,jdbcType=VARCHAR},
+      TYPE = #{record.type,jdbcType=VARCHAR},
+      SALT = #{record.salt,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

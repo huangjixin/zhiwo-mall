@@ -1,7 +1,7 @@
-package com.fulan.application.oa.mapper;
+package com.zwo.modules.system.mapper;
 
-import com.fulan.application.oa.domain.User;
-import com.fulan.application.oa.domain.UserCriteria;
+import com.zwo.modules.system.domain.User;
+import com.zwo.modules.system.domain.UserCriteria;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;

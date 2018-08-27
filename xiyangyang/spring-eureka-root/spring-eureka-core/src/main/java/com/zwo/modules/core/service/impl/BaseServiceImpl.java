@@ -33,8 +33,8 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 
 	protected abstract String getBaseMessage();
 
-	@SuppressWarnings("rawtypes")
-	public abstract Class getImplClass();
+//	@SuppressWarnings("rawtypes")
+//	public abstract Class getImplClass();
 
 	@SuppressWarnings("rawtypes")
 	public abstract Class getTypeClass();
