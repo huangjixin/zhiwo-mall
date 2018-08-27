@@ -16,6 +16,7 @@ import com.zwo.modules.core.service.impl.BaseServiceImpl;
 import com.zwo.modules.system.domain.User;
 import com.zwo.modules.system.mapper.UserMapper;
 import com.zwo.modules.system.service.IUserService;
+import com.zwo.modules.system.vo.UserVo;
 
 /**
  * @author 黄记新
@@ -55,26 +56,40 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
 	@Override
 	public Set<String> findRoles(String username) {
 		if (getLogger().isInfoEnabled()) {
-			getLogger().info(getBaseMessage() + "删除开始，参数id的值是：" + id);
+			getLogger().info(getBaseMessage() + "查找角色开始，参数username的值是：" + username);
 		}
 
-		int result = this.userMapper.;
+		Set<String> result = this.userMapper.findRoles(username);
 		if (getLogger().isInfoEnabled())
-			getLogger().info(getBaseMessage() + "删除" + (result == 1 ? "成功" : "失败"));
+			getLogger().info(getBaseMessage() + "查找角色結束,結果條目數為：" + result.size());
 
 		return result;
 	}
 
 	@Override
 	public Set<String> findPermissions(String username) {
-		
-		return null;
+		if (getLogger().isInfoEnabled()) {
+			getLogger().info(getBaseMessage() + "查找权限开始，参数username的值是：" + username);
+		}
+
+		Set<String> result = this.userMapper.findPermissions(username);
+		if (getLogger().isInfoEnabled())
+			getLogger().info(getBaseMessage() + "查找权限結束,結果條目數為：" + result.size());
+
+		return result;
 	}
 
 	@Override
-	public User findByUsername(String username) {
-		
-		return null;
+	public UserVo findByUsername(String username) {
+		if (getLogger().isInfoEnabled()) {
+			getLogger().info(getBaseMessage() + "查找用户开始，参数username的值是：" + username);
+		}
+
+		UserVo result = this.userMapper.findByUsername(username);
+		if (getLogger().isInfoEnabled())
+			getLogger().info(getBaseMessage() + "查找用户結束,結果為：" + result.toString());
+
+		return result;
 	}
 
 
