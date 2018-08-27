@@ -934,4 +934,132 @@
       SALT = #{salt,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=VARCHAR}
   </update>
+  
+  <resultMap id="UserVoMap" type="com.zwo.modules.system.vo.UserVo" >
+  	<id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="USERNAME" jdbcType="VARCHAR" property="username" />
+    <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+    <result column="LOGIN_DATE" jdbcType="TIMESTAMP" property="loginDate" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="LAST_LOGIN_DATE" jdbcType="TIMESTAMP" property="lastLoginDate" />
+    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+    <result column="MOBIL_PHONE" jdbcType="VARCHAR" property="mobilPhone" />
+    <result column="ENABLED" jdbcType="BIT" property="enabled" />
+    <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
+    <result column="UPDATER" jdbcType="VARCHAR" property="updater" />
+    <result column="SEX" jdbcType="BIT" property="sex" />
+    <result column="ICON" jdbcType="VARCHAR" property="icon" />
+    <result column="DESCRIPTION" jdbcType="VARCHAR" property="description" />
+    <result column="AGE" jdbcType="INTEGER" property="age" />
+    <result column="WEIGHT" jdbcType="INTEGER" property="weight" />
+    <result column="QQ" jdbcType="VARCHAR" property="qq" />
+    <result column="WEIXIN" jdbcType="VARCHAR" property="weixin" />
+    <result column="REAL_NAME" jdbcType="VARCHAR" property="realName" />
+    <result column="LOGIN_COUNT" jdbcType="INTEGER" property="loginCount" />
+    <result column="SORT" jdbcType="INTEGER" property="sort" />
+    <result column="ORG_ID" jdbcType="VARCHAR" property="orgId" />
+    <result column="PARENT_ID" jdbcType="VARCHAR" property="parentId" />
+    <result column="PARENTIDS" jdbcType="VARCHAR" property="parentids" />
+    <result column="MEMBER_GROUP_ID" jdbcType="VARCHAR" property="memberGroupId" />
+    <result column="NICKNAME" jdbcType="VARCHAR" property="nickname" />
+    <result column="LOGIN_NAME" jdbcType="VARCHAR" property="loginName" />
+    <result column="USERGROUP_ID" jdbcType="VARCHAR" property="usergroupId" />
+    <result column="EMERGECY_CONTACT" jdbcType="VARCHAR" property="emergecyContact" />
+    <result column="IS_CERTIFICATE_INTERNATIONAL" jdbcType="BIT" property="isCertificateInternational" />
+    <result column="ID_CARD" jdbcType="VARCHAR" property="idCard" />
+    <result column="COOP_NAME" jdbcType="VARCHAR" property="coopName" />
+    <result column="COOP_ADDRESS" jdbcType="VARCHAR" property="coopAddress" />
+    <result column="BUSSINESS_LICENSE_CODE" jdbcType="VARCHAR" property="bussinessLicenseCode" />
+    <result column="ORG_CODE" jdbcType="VARCHAR" property="orgCode" />
+    <result column="TAXPAYER" jdbcType="VARCHAR" property="taxpayer" />
+    <result column="SOCIETY_CODE" jdbcType="VARCHAR" property="societyCode" />
+    <result column="LEGAL_REPRESENTATIVE_CARD1" jdbcType="VARCHAR" property="legalRepresentativeCard1" />
+    <result column="LEGAL_REPRESENTATIVE_CARD2" jdbcType="VARCHAR" property="legalRepresentativeCard2" />
+    <result column="LEGAL_IDCARD_EFFITIVE" jdbcType="VARCHAR" property="legalIdcardEffitive" />
+    <result column="BUSSINESS_LICENSE_PIC" jdbcType="VARCHAR" property="bussinessLicensePic" />
+    <result column="LICENSE_FOR_OPENING_COUNT" jdbcType="VARCHAR" property="licenseForOpeningCount" />
+    <result column="QUANTITY_REPORT_ID" jdbcType="VARCHAR" property="quantityReportId" />
+    <result column="TYPE" jdbcType="VARCHAR" property="type" />
+    <result column="SALT" jdbcType="VARCHAR" property="salt" />
+    <collection  property="roles" ofType="com.zwo.modules.system.domain.Role">
+        	<id column="ID" jdbcType="VARCHAR" property="id" />
+		    <result column="NAME" jdbcType="VARCHAR" property="name" />
+		    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+		    <result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate" />
+		    <result column="ENABLED" jdbcType="BIT" property="enabled" />
+		    <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
+		    <result column="UPDATER" jdbcType="VARCHAR" property="updater" />
+		    <result column="SORT" jdbcType="INTEGER" property="sort" />
+		    <result column="ORG_ID" jdbcType="VARCHAR" property="orgId" />
+		    <result column="CODE" jdbcType="VARCHAR" property="code" />
+    </collection>
+    <collection  property="resources" ofType="com.zwo.modules.system.domain.Resources">
+        	<id column="ID" jdbcType="VARCHAR" property="id" />
+		    <result column="NAME" jdbcType="VARCHAR" property="name" />
+		    <result column="PARENT_ID" jdbcType="VARCHAR" property="parentId" />
+		    <result column="PARENTIDS" jdbcType="VARCHAR" property="parentids" />
+		    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+		    <result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate" />
+		    <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
+		    <result column="UPDATER" jdbcType="VARCHAR" property="updater" />
+		    <result column="DESCRIPTION" jdbcType="VARCHAR" property="description" />
+		    <result column="AUTH_NAME" jdbcType="VARCHAR" property="authName" />
+		    <result column="PATH" jdbcType="VARCHAR" property="path" />
+		    <result column="SORT" jdbcType="INTEGER" property="sort" />
+		    <result column="TYPE" jdbcType="VARCHAR" property="type" />
+		    <result column="CHECKED" jdbcType="BIT" property="checked" />
+		    <result column="TEXT" jdbcType="VARCHAR" property="text" />
+		    <result column="CODE" jdbcType="VARCHAR" property="code" />
+		    <result column="ORG_ID" jdbcType="VARCHAR" property="orgId" />
+		    <result column="URL" jdbcType="VARCHAR" property="url" />
+		    <result column="LEVEL" jdbcType="INTEGER" property="level" />
+    </collection>
+  </resultMap>
+  <select id="findRoles" resultMap="UserVoMap">
+  		SELECT 
+		   distinct r.name
+		FROM
+		    sys_user u
+		        LEFT JOIN
+		    sys_user_role ur ON u.id = ur.USER_ID
+		        LEFT JOIN
+		    sys_role r ON r.id = ur.ROLE_ID
+		WHERE
+		    u.username = #{username}
+  </select>
+  <select id="findPermissions" resultMap="UserVoMap">
+	SELECT DISTINCT
+	    res.AUTH_NAME
+	FROM
+		    sys_user user
+		        LEFT JOIN
+		    sys_user_role ur ON user.id = ur.USER_ID
+		        LEFT JOIN
+		    sys_role r ON r.id = ur.ROLE_ID
+		        LEFT JOIN
+		    sys_role_resources role_res ON role_res.ROLE_ID = r.id
+		        LEFT JOIN
+		    sys_resources res ON res.id = role_res.RESOURCES_ID
+			        
+			WHERE
+			    user.USERNAME = #{username}	
+  </select>
+  <select id="findByUsername" resultMap="UserVoMap">
+  		SELECT DISTINCT
+		    user.*,r.*,res.*
+		FROM
+		    sys_user user
+		        LEFT JOIN
+		    sys_user_role ur ON user.id = ur.USER_ID
+		        LEFT JOIN
+		    sys_role r ON r.id = ur.ROLE_ID
+		        LEFT JOIN
+		    sys_role_resources role_res ON role_res.ROLE_ID = r.id
+		        LEFT JOIN
+		    sys_resources res ON res.id = role_res.RESOURCES_ID
+			        
+			WHERE
+			    user.USERNAME = #{username}
+  </select>
 </mapper>

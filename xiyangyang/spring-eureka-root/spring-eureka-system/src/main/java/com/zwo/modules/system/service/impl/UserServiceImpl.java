@@ -3,6 +3,8 @@
  */
 package com.zwo.modules.system.service.impl;
 
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,31 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
 	@Override
 	public Logger getLogger() {
 		return logger;
+	}
+
+	@Override
+	public Set<String> findRoles(String username) {
+		if (getLogger().isInfoEnabled()) {
+			getLogger().info(getBaseMessage() + "删除开始，参数id的值是：" + id);
+		}
+
+		int result = this.userMapper.;
+		if (getLogger().isInfoEnabled())
+			getLogger().info(getBaseMessage() + "删除" + (result == 1 ? "成功" : "失败"));
+
+		return result;
+	}
+
+	@Override
+	public Set<String> findPermissions(String username) {
+		
+		return null;
+	}
+
+	@Override
+	public User findByUsername(String username) {
+		
+		return null;
 	}
 
 
