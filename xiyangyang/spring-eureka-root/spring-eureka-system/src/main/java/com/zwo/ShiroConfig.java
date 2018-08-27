@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Configuration;
 import com.zwo.modules.shiro.service.impl.UserShiroRealm;
 
 
-@Configuration
+//@Configuration
 public class ShiroConfig {
 
     @Bean
