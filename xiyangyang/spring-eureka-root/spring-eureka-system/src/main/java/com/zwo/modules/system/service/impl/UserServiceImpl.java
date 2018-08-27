@@ -6,6 +6,8 @@ package com.zwo.modules.system.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.zwo.modules.core.service.impl.BaseServiceImpl;
 import com.zwo.modules.system.domain.User;
@@ -18,6 +20,8 @@ import tk.mybatis.mapper.common.Mapper;
  * @author 黄记新
  *
  */
+@Transactional
+@Service
 public class UserServiceImpl extends BaseServiceImpl<User> implements IUserService {
 
 	@Autowired
