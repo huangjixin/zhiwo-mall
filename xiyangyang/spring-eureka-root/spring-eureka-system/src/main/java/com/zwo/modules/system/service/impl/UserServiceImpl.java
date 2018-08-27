@@ -9,12 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.zwo.modules.core.mapper.BaseMapper;
 import com.zwo.modules.core.service.impl.BaseServiceImpl;
 import com.zwo.modules.system.domain.User;
 import com.zwo.modules.system.mapper.UserMapper;
 import com.zwo.modules.system.service.IUserService;
-
-import tk.mybatis.mapper.common.Mapper;
 
 /**
  * @author 黄记新
@@ -32,7 +31,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
 	private static final String BASE_MESSAGE = "用户业务类UserServiceImpl增删改查";
 	
 	@Override
-	protected Mapper<User> getBaseMapper() {
+	protected BaseMapper<User> getBaseMapper() {
 		return this.userMapper;
 	}
 
