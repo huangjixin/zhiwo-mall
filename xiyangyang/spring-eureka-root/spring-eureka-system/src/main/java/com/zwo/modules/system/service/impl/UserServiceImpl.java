@@ -3,6 +3,9 @@
  */
 package com.zwo.modules.system.service.impl;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -58,8 +61,15 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
 		if (getLogger().isInfoEnabled()) {
 			getLogger().info(getBaseMessage() + "查找角色开始，参数username的值是：" + username);
 		}
-		Set<String> result = null;
-//		Set<String> result = this.userMapper.findRoles(username);
+		Set<String> result = new HashSet<>();
+		List<String>list = this.userMapper.findRoles(username);
+		if(list!=null && list.size()>0) {
+			Iterator<String> it = list.iterator();
+			while (it.hasNext()) {
+				String roleName = (String) it.next();
+				result.add(roleName);
+			}
+		}
 		if (getLogger().isInfoEnabled())
 			getLogger().info(getBaseMessage() + "查找角色結束,結果條目數為：" + result.size());
 
@@ -71,8 +81,15 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
 		if (getLogger().isInfoEnabled()) {
 			getLogger().info(getBaseMessage() + "查找权限开始，参数username的值是：" + username);
 		}
-		Set<String> result = null;
-//		Set<String> result = this.userMapper.findPermissions(username);
+		Set<String> result = new HashSet<>();
+		List<String>list = this.userMapper.findPermissions(username);
+		if(list!=null && list.size()>0) {
+			Iterator<String> it = list.iterator();
+			while (it.hasNext()) {
+				String roleName = (String) it.next();
+				result.add(roleName);
+			}
+		}
 		if (getLogger().isInfoEnabled())
 			getLogger().info(getBaseMessage() + "查找权限結束,結果條目數為：" + result.size());
 

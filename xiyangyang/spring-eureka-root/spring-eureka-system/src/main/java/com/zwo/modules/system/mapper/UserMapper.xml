@@ -1016,7 +1016,7 @@
 		    <result column="LEVEL" jdbcType="INTEGER" property="level" />
     </collection>
   </resultMap>
-  <!-- <select id="findRoles">
+  <select id="findRoles" resultType="java.lang.String">
   		SELECT 
 		   distinct r.name
 		FROM
@@ -1028,7 +1028,7 @@
 		WHERE
 		    u.username = #{username}
   </select>
-  <select id="findPermissions">
+  <select id="findPermissions" resultType="java.lang.String">
 	SELECT DISTINCT
 	    res.AUTH_NAME
 	FROM
@@ -1044,7 +1044,7 @@
 			        
 			WHERE
 			    user.USERNAME = #{username}	
-  </select> -->
+  </select> 
   <select id="findByUsername" resultMap="UserVoMap">
   		SELECT DISTINCT
 		    user.*,r.*,res.*
