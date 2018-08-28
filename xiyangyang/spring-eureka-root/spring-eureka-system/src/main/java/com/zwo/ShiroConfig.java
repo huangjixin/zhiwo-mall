@@ -8,6 +8,14 @@ import java.util.Map;
 
 import javax.servlet.Filter;
 
+import org.apache.shiro.authc.credential.CredentialsMatcher;
+import org.apache.shiro.authc.credential.DefaultPasswordService;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.authc.credential.PasswordMatcher;
+import org.apache.shiro.crypto.hash.DefaultHashService;
+import org.apache.shiro.crypto.hash.HashService;
+import org.apache.shiro.crypto.hash.format.DefaultHashFormatFactory;
+import org.apache.shiro.crypto.hash.format.Shiro1CryptFormat;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -24,10 +32,10 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.zwo.modules.shiro.service.impl.UserShiroRealm;
+import com.zwo.modules.system.security.SystemUserRealm;
 
 
-//@Configuration
+@Configuration
 public class ShiroConfig {
 
     @Bean
@@ -52,8 +60,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/img/**", "anon");
         filterChainDefinitionMap.put("/auth/login", "anon");
         filterChainDefinitionMap.put("/auth/logout", "logout");
-        filterChainDefinitionMap.put("/auth/kickout", "anon");
-        filterChainDefinitionMap.put("/**", "authc,kickout");
+//        filterChainDefinitionMap.put("/auth/kickout", "anon");
+//        filterChainDefinitionMap.put("/**", "authc,kickout");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
@@ -64,20 +72,41 @@ public class ShiroConfig {
         // 设置realm.
         securityManager.setRealm(userShiroRealm());
         // 自定义缓存实现 使用redis
-        securityManager.setCacheManager(cacheManager());
+//        securityManager.setCacheManager(cacheManager());
         // 自定义session管理 使用redis
         securityManager.setSessionManager(sessionManager());
         return securityManager;
     }
 
+    @Bean
+    public DefaultPasswordService passwordService() {
+    	HashService hashService = new DefaultHashService();
+    	Shiro1CryptFormat cryptFormat = new Shiro1CryptFormat();
+    	DefaultHashFormatFactory defaultHashFormatFactory = new DefaultHashFormatFactory();
+    	DefaultPasswordService passwordService = new DefaultPasswordService();
+    	passwordService.setHashService(hashService);
+    	passwordService.setHashFormat(cryptFormat);
+    	passwordService.setHashFormatFactory(defaultHashFormatFactory);
+        return passwordService;
+    }
+    
+    @Bean
+    public CredentialsMatcher passwordMatcher() {
+    	HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
+    	credentialsMatcher.setHashAlgorithmName("md5");
+    	return credentialsMatcher;
+    }
+    
     /**
      * 身份认证realm; (这个需要自己写，账号密码校验；权限等)
      *
      * @return
      */
     @Bean
-    public UserShiroRealm userShiroRealm() {
-    	UserShiroRealm myShiroRealm = new UserShiroRealm();
+    public SystemUserRealm userShiroRealm() {
+    	SystemUserRealm myShiroRealm = new SystemUserRealm();
+    	CredentialsMatcher passwordMatcher = passwordMatcher();
+    	myShiroRealm.setCredentialsMatcher(passwordMatcher);
         return myShiroRealm;
     }
 
