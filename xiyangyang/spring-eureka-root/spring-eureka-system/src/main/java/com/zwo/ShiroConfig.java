@@ -8,210 +8,99 @@ import java.util.Map;
 
 import javax.servlet.Filter;
 
-import org.apache.shiro.authc.credential.CredentialsMatcher;
-import org.apache.shiro.authc.credential.DefaultPasswordService;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.authc.credential.PasswordMatcher;
-import org.apache.shiro.crypto.hash.DefaultHashService;
-import org.apache.shiro.crypto.hash.HashService;
-import org.apache.shiro.crypto.hash.format.DefaultHashFormatFactory;
-import org.apache.shiro.crypto.hash.format.Shiro1CryptFormat;
-import org.apache.shiro.spring.LifecycleBeanPostProcessor;
+import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
+import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
-import org.crazycake.shiro.RedisCacheManager;
-import org.crazycake.shiro.RedisManager;
-import org.crazycake.shiro.RedisSessionDAO;
-/**
- * @author FWDuser
- *
- */
-import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.apache.shiro.mgt.SecurityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.zwo.modules.system.security.SystemUserRealm;
+import com.zwo.modules.system.filter.JWTFilter;
+import com.zwo.modules.system.security.ShiroSecurityRealm;
 
-
-//@Configuration
+@Configuration
 public class ShiroConfig {
+	/**
+	 * ShiroFilterFactoryBean 处理拦截资源文件问题。 注意：单独一个ShiroFilterFactoryBean配置是或报错的，以为在
+	 * 初始化ShiroFilterFactoryBean的时候需要注入：SecurityManager Filter Chain定义说明
+	 * 1、一个URL可以配置多个Filter，使用逗号分隔 2、当设置多个过滤器时，全部验证通过，才视为通过 3、部分过滤器可指定参数，如perms，roles
+	 */
+	@Bean
+	public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
 
-    @Bean
-    public ShiroFilterFactoryBean shiroFilter(org.apache.shiro.mgt.SecurityManager securityManager) {
-        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-        shiroFilterFactoryBean.setSecurityManager(securityManager);
-        // 没有登陆的用户只能访问登陆页面
-        shiroFilterFactoryBean.setLoginUrl("/auth/login");
-        // 登录成功后要跳转的链接
-        shiroFilterFactoryBean.setSuccessUrl("/auth/index");
-        // 未授权界面; ----这个配置了没卵用，具体原因想深入了解的可以自行百度
-        //shiroFilterFactoryBean.setUnauthorizedUrl("/auth/403");
-        //自定义拦截器
-        Map<String, Filter> filtersMap = new LinkedHashMap<String, Filter>();
-        //限制同一帐号同时在线的个数。
-//        filtersMap.put("kickout", kickoutSessionControlFilter());
-        shiroFilterFactoryBean.setFilters(filtersMap);
-        // 权限控制map.
-        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
-        filterChainDefinitionMap.put("/css/**", "anon");
-        filterChainDefinitionMap.put("/js/**", "anon");
-        filterChainDefinitionMap.put("/img/**", "anon");
-        filterChainDefinitionMap.put("/auth/login", "anon");
-        filterChainDefinitionMap.put("/auth/logout", "logout");
-//        filterChainDefinitionMap.put("/auth/kickout", "anon");
-//        filterChainDefinitionMap.put("/**", "authc,kickout");
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
-        return shiroFilterFactoryBean;
-    }
+		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+		// 必须设置 SecurityManager
+		shiroFilterFactoryBean.setSecurityManager(securityManager);
+		// 验证码过滤器
+		Map<String, Filter> filtersMap = shiroFilterFactoryBean.getFilters();
+		filtersMap.put("jwt", new JWTFilter());
+		shiroFilterFactoryBean.setFilters(filtersMap);
 
-    @Bean
-    public org.apache.shiro.mgt.SecurityManager securityManager() {
-    	DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        // 设置realm.
-        securityManager.setRealm(userShiroRealm());
-        // 自定义缓存实现 使用redis
-//        securityManager.setCacheManager(cacheManager());
-        // 自定义session管理 使用redis
-        securityManager.setSessionManager(sessionManager());
-        return securityManager;
-    }
+		// 拦截器
+		Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
 
-    @Bean
-    public DefaultPasswordService passwordService() {
-    	HashService hashService = new DefaultHashService();
-    	Shiro1CryptFormat cryptFormat = new Shiro1CryptFormat();
-    	DefaultHashFormatFactory defaultHashFormatFactory = new DefaultHashFormatFactory();
-    	DefaultPasswordService passwordService = new DefaultPasswordService();
-    	passwordService.setHashService(hashService);
-    	passwordService.setHashFormat(cryptFormat);
-    	passwordService.setHashFormatFactory(defaultHashFormatFactory);
-        return passwordService;
-    }
-    
-    @Bean
-    public CredentialsMatcher passwordMatcher() {
-    	HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
-    	credentialsMatcher.setHashAlgorithmName("md5");
-    	return credentialsMatcher;
-    }
-    
-    /**
-     * 身份认证realm; (这个需要自己写，账号密码校验；权限等)
-     *
-     * @return
-     */
-    @Bean
-    public SystemUserRealm userShiroRealm() {
-    	SystemUserRealm myShiroRealm = new SystemUserRealm();
-    	CredentialsMatcher passwordMatcher = passwordMatcher();
-    	myShiroRealm.setCredentialsMatcher(passwordMatcher);
-        return myShiroRealm;
-    }
+		// 其他的
+		filterChainDefinitionMap.put("/**", "jwt");
 
-    /**
-     * cacheManager 缓存 redis实现
-     * 使用的是shiro-redis开源插件
-     *
-     * @return
-     */
-    public RedisCacheManager cacheManager() {
-        RedisCacheManager redisCacheManager = new RedisCacheManager();
-        redisCacheManager.setRedisManager(redisManager());
-        return redisCacheManager;
-    }
+		// 访问401和404页面不通过我们的Filter
+//		filterChainDefinitionMap.put("/401", "anon");
+//		filterChainDefinitionMap.put("/404", "anon");
 
-    /**
-     * 配置shiro redisManager
-     * 使用的是shiro-redis开源插件
-     *
-     * @return
-     */
-    public RedisManager redisManager() {
-        RedisManager redisManager = new RedisManager();
-        redisManager.setHost("localhost");
-        redisManager.setPort(6379);
-        redisManager.setExpire(1800);// 配置缓存过期时间
-        redisManager.setTimeout(0);
-        // redisManager.setPassword(password);
-        return redisManager;
-    }
+		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
+		return shiroFilterFactoryBean;
+	}
 
-    /**
-     * Session Manager
-     * 使用的是shiro-redis开源插件
-     */
-    @Bean
-    public DefaultWebSessionManager sessionManager() {
-        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-        sessionManager.setSessionDAO(redisSessionDAO());
-        return sessionManager;
-    }
+	@Bean("securityManager")
+	public DefaultWebSecurityManager getManager() {
+		DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
+		// 使用自己的realm
+		manager.setRealm(new ShiroSecurityRealm());
+		/**
+		 * 关闭shiro自带的session,详情见文档 /2014th7cj/d/file/p/20171028/session-management.html
+		 */
+		DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
+		DefaultSessionStorageEvaluator defaultSessionStorageEvaluator = new DefaultSessionStorageEvaluator();
+		defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
+		subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
+		manager.setSubjectDAO(subjectDAO);
+		return manager;
+	}
 
-    /**
-     * RedisSessionDAO shiro sessionDao层的实现 通过redis
-     * 使用的是shiro-redis开源插件
-     */
-    @Bean
-    public RedisSessionDAO redisSessionDAO() {
-        RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
-        redisSessionDAO.setRedisManager(redisManager());
-        return redisSessionDAO;
-    }
+	/**
+	 * 身份认证realm; (这个需要自己写，账号密码校验；权限等)
+	 */
+	@Bean
+	public ShiroSecurityRealm myShiroRealm() {
+		ShiroSecurityRealm myShiroRealm = new ShiroSecurityRealm();
+		return myShiroRealm;
+	}
 
-    /**
-     * 限制同一账号登录同时登录人数控制
-     *
-     * @return
-     */
-//    @Bean
-//    public KickoutSessionControlFilter kickoutSessionControlFilter() {
-//        KickoutSessionControlFilter kickoutSessionControlFilter = new KickoutSessionControlFilter();
-//        kickoutSessionControlFilter.setCacheManager(cacheManager());
-//        kickoutSessionControlFilter.setSessionManager(sessionManager());
-//        kickoutSessionControlFilter.setKickoutAfter(false);
-//        kickoutSessionControlFilter.setMaxSession(1);
-//        kickoutSessionControlFilter.setKickoutUrl("/auth/kickout");
-//        return kickoutSessionControlFilter;
-//    }
+	/**
+	 * 开启shiro aop注解支持. 使用代理方式; 所以需要开启代码支持;
+	 *
+	 * @param securityManager 安全管理器
+	 * @return 授权Advisor
+	 */
+	@Bean
+	public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
+		AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+		authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+		return authorizationAttributeSourceAdvisor;
+	}
 
-
-    /***
-     * 授权所用配置
-     *
-     * @return
-     */
-    @Bean
-    public DefaultAdvisorAutoProxyCreator getDefaultAdvisorAutoProxyCreator() {
-        DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
-        defaultAdvisorAutoProxyCreator.setProxyTargetClass(true);
-        return defaultAdvisorAutoProxyCreator;
-    }
-
-    /***
-     * 使授权注解起作用不如不想配置可以在pom文件中加入
-     * <dependency>
-     *<groupId>org.springframework.boot</groupId>
-     *<artifactId>spring-boot-starter-aop</artifactId>
-     *</dependency>
-     * @param securityManager
-     * @return
-     */
-    @Bean
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(org.apache.shiro.mgt.SecurityManager securityManager){
-        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
-        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
-        return authorizationAttributeSourceAdvisor;
-    }
-
-    /**
-     * Shiro生命周期处理器
-     *
-     */
-    @Bean
-    public LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
-        return new LifecycleBeanPostProcessor();
-    }
+	/**
+	 * shiro缓存管理器; 需要注入对应的其它的实体类中： 1、安全管理器：securityManager
+	 * 可见securityManager是整个shiro的核心；
+	 *
+	 * @return
+	 */
+//	@Bean
+//	public EhCacheManager ehCacheManager() {
+//		EhCacheManager cacheManager = new EhCacheManager();
+//		cacheManager.setCacheManagerConfigFile("classpath:ehcache.xml");
+//		return cacheManager;
+//	}
 
 }
