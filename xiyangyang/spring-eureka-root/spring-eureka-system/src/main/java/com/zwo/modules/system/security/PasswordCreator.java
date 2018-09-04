@@ -2,7 +2,7 @@ package com.zwo.modules.system.security;
 
 import org.apache.shiro.crypto.hash.SimpleHash;
 
-public class PasswordHelper {
+public class PasswordCreator {
 
 	public static Object ecrypt(Object crdentials,Object salt) {
 		String hashAlgorithmName = "MD5";//加密方式
@@ -17,7 +17,7 @@ public class PasswordHelper {
 	}
 	
 	public static void main(String[] args) {
-		Object o = PasswordHelper.ecrypt("123456", null);
+		Object o = PasswordCreator.ecrypt("123456", null);
 		System.out.println(o);
 		boolean isMatch = isMatch("123456", null, o);
 		System.out.println(isMatch);

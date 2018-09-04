@@ -35,7 +35,7 @@ import org.springframework.context.annotation.Configuration;
 import com.zwo.modules.system.security.SystemUserRealm;
 
 
-@Configuration
+//@Configuration
 public class ShiroConfig {
 
     @Bean
