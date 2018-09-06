@@ -43,10 +43,7 @@ public class ShiroConfig {
 
 		// 其他的
 		filterChainDefinitionMap.put("/**", "jwt");
-
-		// 访问401和404页面不通过我们的Filter
-//		filterChainDefinitionMap.put("/401", "anon");
-//		filterChainDefinitionMap.put("/404", "anon");
+		filterChainDefinitionMap.put("/login/*", "anon");
 
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 		return shiroFilterFactoryBean;

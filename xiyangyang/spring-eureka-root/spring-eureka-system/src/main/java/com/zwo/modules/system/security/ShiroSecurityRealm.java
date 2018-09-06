@@ -15,27 +15,31 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
 import com.zwo.modules.system.service.IUserService;
 import com.zwo.modules.system.utils.JWTUtil1;
 import com.zwo.modules.system.vo.JWTToken;
 import com.zwo.modules.system.vo.UserVo;
 
+//@Component
 public class ShiroSecurityRealm extends AuthorizingRealm {
 
 	private static Logger logger = LoggerFactory.getLogger(ShiroSecurityRealm.class);;
 	private static final String MESSAGE = "ShiroSecurityRealm认证授权";
 
+	@Lazy(value=true)
 	@Autowired
 	private IUserService userService;
 
 	/**
 	 * 大坑!,必须重写此方法,不然Shiro会报错
 	 */
-	@Override
-	public boolean supports(AuthenticationToken token) {
-		return token instanceof JWTToken;
-	}
+//	@Override
+//	public boolean supports(AuthenticationToken token) {
+//		return token instanceof JWTToken;
+//	}
 
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
@@ -43,8 +47,8 @@ public class ShiroSecurityRealm extends AuthorizingRealm {
 			logger.info(MESSAGE + "权限配置-->SystemUserRealm.doGetAuthorizationInfo()开始");
 		String username = (String) principals.getPrimaryPrincipal();
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-		authorizationInfo.setRoles(userService.findRoles(username));
-		Set<String> set = userService.findPermissions(username);
+		authorizationInfo.setRoles(getUserService().findRoles(username));
+		Set<String> set = getUserService().findPermissions(username);
 		authorizationInfo.setStringPermissions(set);
 		if (logger.isInfoEnabled())
 			logger.info(MESSAGE + "权限配置结束");
@@ -58,7 +62,7 @@ public class ShiroSecurityRealm extends AuthorizingRealm {
         String username = usernamePasswordToken.getUsername();  
         //通过username从数据库中查找 User对象，如果找到，没找到.  
         //实际项目中，这里可以根据实际情况做缓存，如果不做，Shiro自己也是有时间间隔机制，2分钟内不会重复执行该方法  
-        UserVo user = userService.findByUsername(username);  
+        UserVo user = getUserService().findByUsername(username);  
         if (user == null) {  
             return null;  
         }  
@@ -72,6 +76,14 @@ public class ShiroSecurityRealm extends AuthorizingRealm {
                 getName() 
         );  
         return authenticationInfo; 
+	}
+
+	public IUserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(IUserService userService) {
+		this.userService = userService;
 	}
 
 }

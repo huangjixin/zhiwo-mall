@@ -9,6 +9,8 @@ public class JWTToken implements AuthenticationToken {
 	private static final long serialVersionUID = 1L;
 	// 用户名 
 	private String username;
+	// 用户名 
+	private String password;
 	// 密钥 
 	private String token;
 
@@ -24,5 +26,13 @@ public class JWTToken implements AuthenticationToken {
 	@Override
 	public Object getCredentials() {
 		return token;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }
