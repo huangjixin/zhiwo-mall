@@ -19,6 +19,7 @@ import com.zwo.modules.core.service.impl.BaseServiceImpl;
 import com.zwo.modules.system.domain.User;
 import com.zwo.modules.system.mapper.UserMapper;
 import com.zwo.modules.system.service.IUserService;
+import com.zwo.modules.system.utils.BPwdEncoderUtil;
 import com.zwo.modules.system.vo.UserVo;
 
 /**
@@ -56,6 +57,27 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
 		return logger;
 	}
 
+	@Override
+	public int insert(User record) {
+		if(record.getPassword()!=null) {
+			String pass = record.getPassword();
+			pass = BPwdEncoderUtil.BCryptPassword(pass);
+			record.setPassword(pass);
+		}
+		return super.insert(record);
+	}
+	
+
+	@Override
+	public int insertSelective(User record) {
+		if(record.getPassword()!=null) {
+			String pass = record.getPassword();
+			pass = BPwdEncoderUtil.BCryptPassword(pass);
+			record.setPassword(pass);
+		}
+		return super.insertSelective(record);
+	}
+	
 	@Override
 	public Set<String> findRoles(String username) {
 		if (getLogger().isInfoEnabled()) {
