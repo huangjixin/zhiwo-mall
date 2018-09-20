@@ -20,7 +20,7 @@
 			<property name="replaceString" value="Criteria" />
 		</plugin>
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
-			connectionURL="jdbc:mysql://localhost:3306/guagua" userId="root"
+			connectionURL="jdbc:mysql://localhost:3306/bhmall" userId="root"
 			password="root">
 		</jdbcConnection>
 
@@ -49,11 +49,15 @@
 			<table tableName="sys_resources" domainObjectName="Resources" > </table> 
 			<table tableName="sys_role_resources" domainObjectName="RoleResources" > 
 			</table> <table tableName="sys_login_log" domainObjectName="LoginLog" > </table> -->
-		<table tableName="sys_user" domainObjectName="User" >
+		<table tableName="bhm_user" domainObjectName="User" >
 		</table>
-		<table tableName="sys_role" domainObjectName="Role" >
+		<table tableName="bhm_role" domainObjectName="Role" >
 		</table>
-		<table tableName="sys_resources" domainObjectName="Resources" >
+		<table tableName="bhm_resource" domainObjectName="Resource" >
+		</table>
+		<table tableName="bhm_user_role" domainObjectName="UserRole" >
+		</table>
+		<table tableName="bhm_role_res" domainObjectName="RoleResource" >
 		</table>
 	</context>
 </generatorConfiguration>
