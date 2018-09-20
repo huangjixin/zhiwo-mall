@@ -179,7 +179,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 		T result = getBaseMapper().selectByPrimaryKey(id);
 		
 		if (getLogger().isInfoEnabled()) {
-			getLogger().info(getBaseMessage() + "查询单条记录结果：" + result.toString());
+			getLogger().info(getBaseMessage() + "查询单条记录结果：" +  (result==null?"null": result.toString()+""));
 		}
 
 		return result;

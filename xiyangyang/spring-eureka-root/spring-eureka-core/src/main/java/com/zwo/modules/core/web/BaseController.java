@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -33,7 +35,7 @@ public abstract class BaseController<T> {
 	protected abstract IBaseService<T> getBaseService();
 
 	@ApiOperation(value="基础保存对象", notes="")
-	@PostMapping(value = "save")
+	@RequestMapping(value = "save",method=RequestMethod.POST)
 	@ResponseBody
 	protected Response save(T record, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -44,7 +46,7 @@ public abstract class BaseController<T> {
 	}
 
 	@ApiOperation(value="基础更新对象", notes="")
-	@PostMapping(value = "update")
+	@RequestMapping(value = "update",method=RequestMethod.POST)
 	@ResponseBody
 	protected Response update(T record, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
