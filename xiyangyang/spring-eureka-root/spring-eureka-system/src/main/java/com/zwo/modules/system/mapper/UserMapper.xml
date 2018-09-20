@@ -485,7 +485,7 @@
   </select>
   <select id="findPermissions" resultType="java.lang.String">
 	SELECT DISTINCT
-	    res.AUTH_NAME
+	    res.NAME
 	FROM
 		    bhm_user user
 		        LEFT JOIN
