@@ -62,9 +62,9 @@ public class SystemUserRealm extends AuthorizingRealm {
         if (user == null) {  
             return null;  
         }  
-        if (!user.getEnabled()) { //账户冻结  
-            throw new LockedAccountException();  
-        }  
+//        if (!user.getEnabled()) { //账户冻结  
+//            throw new LockedAccountException();  
+//        }  
         
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(  
         		usernamePasswordToken.getPrincipal(), //用户名  

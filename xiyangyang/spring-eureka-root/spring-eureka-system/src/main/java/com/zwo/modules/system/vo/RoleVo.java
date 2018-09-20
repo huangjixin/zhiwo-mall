@@ -5,7 +5,7 @@ package com.zwo.modules.system.vo;
 
 import java.util.List;
 
-import com.zwo.modules.system.domain.Resources;
+import com.zwo.modules.system.domain.Resource;
 import com.zwo.modules.system.domain.Role;
 import com.zwo.modules.system.domain.User;
 
@@ -21,7 +21,7 @@ public class RoleVo extends Role {
 	private static final long serialVersionUID = 1L;
 
 	private List<User> users;
-	private List<Resources> resources;
+	private List<Resource> Resource;
 	
 	public List<User> getUsers() {
 		return users;
@@ -29,10 +29,10 @@ public class RoleVo extends Role {
 	public void setUsers(List<User> users) {
 		this.users = users;
 	}
-	public List<Resources> getResources() {
-		return resources;
+	public List<Resource> getResource() {
+		return Resource;
 	}
-	public void setResources(List<Resources> resources) {
-		this.resources = resources;
+	public void setResource(List<Resource> Resource) {
+		this.Resource = Resource;
 	}
 }

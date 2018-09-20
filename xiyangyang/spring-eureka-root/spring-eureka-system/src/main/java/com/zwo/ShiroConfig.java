@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
 import com.zwo.modules.system.filter.JWTFilter;
 import com.zwo.modules.system.security.ShiroSecurityRealm;
 
-@Configuration
+//@Configuration
 public class ShiroConfig {
 	/**
 	 * ShiroFilterFactoryBean 处理拦截资源文件问题。 注意：单独一个ShiroFilterFactoryBean配置是或报错的，以为在
