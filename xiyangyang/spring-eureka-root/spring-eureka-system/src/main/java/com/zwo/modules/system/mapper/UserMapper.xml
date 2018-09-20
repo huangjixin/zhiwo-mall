@@ -454,7 +454,7 @@
 		    <result column="descrtion" jdbcType="VARCHAR" property="descrtion" />
 		    <result column="is_valid" jdbcType="TINYINT" property="isValid" />
     </collection>
-    <collection  property="resources" ofType="com.zwo.modules.system.domain.Resource">
+    <collection  property="resource" ofType="com.zwo.modules.system.domain.Resource">
         	<id column="id" jdbcType="VARCHAR" property="id" />
 		    <result column="name" jdbcType="VARCHAR" property="name" />
 		    <result column="sort_index" jdbcType="INTEGER" property="sortIndex" />
