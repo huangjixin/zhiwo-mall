@@ -104,7 +104,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
 
 		UserVo result = this.userMapper.findByUsername(username);
 		if (getLogger().isInfoEnabled())
-			getLogger().info(getBaseMessage() + "查找用户結束,結果為：" + result.toString());
+			getLogger().info(getBaseMessage() + "查找用户結束,結果為：" +result==null?"null": result.toString());
 
 		return result;
 	}

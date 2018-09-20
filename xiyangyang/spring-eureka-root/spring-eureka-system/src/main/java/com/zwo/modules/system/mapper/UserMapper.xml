@@ -493,7 +493,7 @@
 		        LEFT JOIN
 		    bhm_role r ON r.id = ur.ROLE_ID
 		        LEFT JOIN
-		    bhm_role_resource role_res ON role_res.ROLE_ID = r.id
+		    bhm_role_res role_res ON role_res.ROLE_ID = r.id
 		        LEFT JOIN
 		    bhm_resource res ON res.id = role_res.RES_ID
 			        
@@ -510,7 +510,7 @@
 		        LEFT JOIN
 		    bhm_role r ON r.id = ur.ROLE_ID
 		        LEFT JOIN
-		    bhm_role_resource role_res ON role_res.ROLE_ID = r.id
+		    bhm_role_res role_res ON role_res.ROLE_ID = r.id
 		        LEFT JOIN
 		    bhm_resource res ON res.id = role_res.RES_ID
 			        
