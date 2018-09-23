@@ -43,28 +43,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(this.userDetailService).passwordEncoder(new BCryptPasswordEncoder());
 	}
 
-	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		endpoints.tokenStore(tokenStore()).tokenEnhancer(jwtTokenEnhancer())
-				.authenticationManager(authenticationManager);
-	}
-	
-
-	@Bean
-	public TokenStore tokenStore() {
-		return new JwtTokenStore(jwtTokenEnhancer());
-	}
-
-	@Bean
-	protected JwtAccessTokenConverter jwtTokenEnhancer() {
-		KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("fzp-jwt.jks"),
-				"fzpl23".toCharArray());
-		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-		converter.setKeyPair(keyStoreKeyFactory.getKeyPair("fzp-jwt"));
-		return converter;
-	}
-	
-
-	@Autowired
-	@Qualifier("authenticationManagerBean")
-	private AuthenticationManager authenticationManager;
+//	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+//		endpoints.tokenStore(tokenStore()).tokenEnhancer(jwtTokenEnhancer())
+//				.authenticationManager(authenticationManager);
+//	}
+//	
+//
+//	@Bean
+//	public TokenStore tokenStore() {
+//		return new JwtTokenStore(jwtTokenEnhancer());
+//	}
+//
+//	@Bean
+//	protected JwtAccessTokenConverter jwtTokenEnhancer() {
+//		KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("fzp-jwt.jks"),
+//				"fzpl23".toCharArray());
+//		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+//		converter.setKeyPair(keyStoreKeyFactory.getKeyPair("fzp-jwt"));
+//		return converter;
+//	}
+//	
+//
+//	@Autowired
+//	@Qualifier("authenticationManagerBean")
+//	private AuthenticationManager authenticationManager;
 }

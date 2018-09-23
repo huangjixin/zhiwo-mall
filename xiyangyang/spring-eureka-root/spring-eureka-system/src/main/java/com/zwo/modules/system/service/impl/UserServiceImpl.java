@@ -3,6 +3,7 @@
  */
 package com.zwo.modules.system.service.impl;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -64,6 +65,8 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
 			pass = BPwdEncoderUtil.BCryptPassword(pass);
 			record.setPassword(pass);
 		}
+		record.setAddTime(new Date());
+		record.setEnabled(Byte.valueOf("1"));
 		return super.insert(record);
 	}
 	
