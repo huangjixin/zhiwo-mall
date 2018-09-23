@@ -23,6 +23,8 @@ public class IUserServiceTest {
     @Test
     public void testSave() {
     	User record = new User();
+    	record.setUsername("huangjixin");
+    	record.setPassword("123456");
     	int res = userService.insert(record);
     	assertEquals(1, res);
     }
