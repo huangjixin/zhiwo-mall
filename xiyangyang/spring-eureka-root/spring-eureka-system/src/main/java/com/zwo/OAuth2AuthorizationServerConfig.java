@@ -24,8 +24,8 @@ import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFacto
 
 import com.zwo.modules.system.vo.CustomTokenEnhancer;
 
-@Configuration
-@EnableAuthorizationServer
+//@Configuration
+//@EnableAuthorizationServer
 public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 	@Autowired
 	private AuthenticationManager authenticationManager;
