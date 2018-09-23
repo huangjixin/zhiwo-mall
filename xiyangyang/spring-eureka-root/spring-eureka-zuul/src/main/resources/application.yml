@@ -16,10 +16,8 @@ eureka:
     lease-expiration-duration-in-seconds: 30   
 zuul:
   routes:
-    api-client:
-      path: /user/**,/role/**
+    system-service:
+      path: /userapi/**,/roleapi/**
       serviceId: system-service
-    api-client2:
-      path: /client2/**
-      serviceId: service2
+      sensitive-headers:
       
