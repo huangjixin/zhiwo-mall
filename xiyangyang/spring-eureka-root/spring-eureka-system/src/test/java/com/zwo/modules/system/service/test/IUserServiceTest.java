@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.zwo.SpringEurekaSystemApplication;
 import com.zwo.modules.system.domain.User;
+import com.zwo.modules.system.domain.UserCriteria;
 import com.zwo.modules.system.service.IUserService;
 
 /**
@@ -34,7 +35,9 @@ public class IUserServiceTest {
 
 	@Test
 	public void testSelectByExample() {
-		List<User> list = userService.selectByExample(null);
+		UserCriteria userCriteria = new UserCriteria();
+		userCriteria.createCriteria().andUsernameEqualTo("1");
+		List<User> list = userService.selectByExample(userCriteria);
 		for (User user : list) {
 			System.out.println(user.toString());
 		}
