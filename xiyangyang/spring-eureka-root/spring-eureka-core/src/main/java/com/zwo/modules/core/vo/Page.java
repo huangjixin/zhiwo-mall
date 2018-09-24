@@ -19,52 +19,52 @@ public class Page implements Serializable {
 	 * 当前页
 	 *  
 	 */
-	private int current = 1;
+	private Integer current;
 	/**
 	 * 总页数
 	 *  
 	 */
-	private int total = 0;
+	private Integer total;
 	/**
 	 * 当前页
 	 *  
 	 */
-	private int size = 10;
+	private Integer size;
 	/**
 	 * 起始条
 	 *  
 	 */
-	private int start = 0;
+	private Integer start;
 
-	public int getCurrent() {
+	public Integer getCurrent() {
 		return current;
 	}
 
-	public void setCurrent(int current) {
+	public void setCurrent(Integer current) {
 		this.current = current;
 	}
 
-	public int getTotal() {
+	public Integer getTotal() {
 		return total;
 	}
 
-	public void setTotal(int total) {
+	public void setTotal(Integer total) {
 		this.total = total;
 	}
 
-	public int getSize() {
+	public Integer getSize() {
 		return size;
 	}
 
-	public void setSize(int size) {
+	public void setSize(Integer size) {
 		this.size = size;
 	}
 
-	public int getStart() {
+	public Integer getStart() {
 		return start;
 	}
 
-	public void setStart(int start) {
+	public void setStart(Integer start) {
 		this.start = start;
 	}
 }
