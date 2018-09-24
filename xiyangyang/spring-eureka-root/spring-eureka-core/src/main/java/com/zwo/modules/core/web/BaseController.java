@@ -58,10 +58,14 @@ public abstract class BaseController<T> {
 	
 	@GetMapping(value = "view/{id}")
 	@ResponseBody
-	protected T getById(@PathVariable(name = "id") String id, HttpServletRequest httpServletRequest,
+	protected Response getById(@PathVariable(name = "id") String id, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
+		Response response = new Response();
 		T record = getBaseService().selectByPrimaryKey(id);
-		return record;
+		response.setData(record);
+		response.setCode("200");
+		response.setMessage("success");
+		return response;
 	}
 
 	@DeleteMapping(value = "delete/{id}")
