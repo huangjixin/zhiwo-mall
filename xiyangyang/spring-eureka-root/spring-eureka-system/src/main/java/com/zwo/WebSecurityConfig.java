@@ -1,70 +1,59 @@
+/**
+ * 
+ */
 package com.zwo;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
+import org.springframework.security.web.AuthenticationEntryPoint;
 
 import com.zwo.modules.system.service.impl.UserDetailService;
 
+/**
+ * @author 黄记新
+ *
+ */
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-//	@Bean
-//	UserDetailsService customUserService() { // 2
-//		return new SysUserServiceImpl();
-//	}
-
-//	@Override
-//	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//		auth.userDetailsService(customUserService());
-//	}
+	@Autowired
+	UserDetailService userServiceDetail;
+	
+	@Override
+	@Bean
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().anyRequest().permitAll();
+		// CSRF:因为不再依赖于Cookie，所以你就不需要考虑对CSRF（跨站请求伪造）的防范。
+		http.csrf().disable().exceptionHandling()
+				// .authenticationEntryPoint((request, response, authException) ->
+				// response.sendError(HttpServletResponse.SC_UNAUTHORIZED))
+				.authenticationEntryPoint(new AuthenticationEntryPoint() {
+					@Override
+					public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+							AuthenticationException e) throws IOException, ServletException {
+						httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+					}
+				}).and().authorizeRequests().antMatchers("/**").authenticated().and().httpBasic();
 	}
-
-	@Autowired
-	UserDetailService userDetailService;
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(this.userDetailService).passwordEncoder(new BCryptPasswordEncoder());
+		auth.userDetailsService(userServiceDetail).passwordEncoder(new BCryptPasswordEncoder());
 	}
-
-//	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-//		endpoints.tokenStore(tokenStore()).tokenEnhancer(jwtTokenEnhancer())
-//				.authenticationManager(authenticationManager);
-//	}
-//	
-//
-//	@Bean
-//	public TokenStore tokenStore() {
-//		return new JwtTokenStore(jwtTokenEnhancer());
-//	}
-//
-//	@Bean
-//	protected JwtAccessTokenConverter jwtTokenEnhancer() {
-//		KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("fzp-jwt.jks"),
-//				"fzpl23".toCharArray());
-//		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-//		converter.setKeyPair(keyStoreKeyFactory.getKeyPair("fzp-jwt"));
-//		return converter;
-//	}
-//	
-//
-//	@Autowired
-//	@Qualifier("authenticationManagerBean")
-//	private AuthenticationManager authenticationManager;
 }

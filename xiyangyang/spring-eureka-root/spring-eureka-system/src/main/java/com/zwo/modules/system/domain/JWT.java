@@ -1,10 +1,16 @@
 package com.zwo.modules.system.domain;
 
+import java.io.Serializable;
+
 /**
  * Created by fangzhipeng on 2017/5/27.
  */
-public class JWT {
-    private String access_token;
+public class JWT implements Serializable {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String access_token;
     private String token_type;
     private String refresh_token;
     private int expires_in;
