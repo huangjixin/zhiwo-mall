@@ -79,13 +79,15 @@
 		</plugins>
 	</build>
 	<modules>
+		<module>spring-eureka-system-api</module>
 		<module>spring-eureka-system</module>
+		<module>spring-eureka-systemservice</module>
+		<module>spring-eureka-systemvo</module>
 		<module>spring-eureka-server</module>
 		<module>spring-eureka-config</module>
     	<module>spring-eureka-zuul</module>
-  		<module>spring-eureka-system-api</module>
     	<module>spring-eureka-log</module>
     	<module>spring-eureka-core</module>
-    <module>spring-eureka-generate</module>
+    	<module>spring-eureka-generate</module>
   </modules>
 </project>
