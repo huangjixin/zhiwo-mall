@@ -3,16 +3,14 @@
  */
 package com.zwo.modules.core.mapper;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
+import tk.mybatis.mapper.common.Mapper;
 
 /**
  * @author 黄记新
  *
  */
-public interface BaseMapper<T> {
-	
+public interface BaseMapper<T> extends Mapper<T> {
+	/*
 	int countByExample(Object example);
 
     
@@ -43,5 +41,5 @@ public interface BaseMapper<T> {
     int updateByPrimaryKeySelective(T record);
 
    
-    int updateByPrimaryKey(T record);
+    int updateByPrimaryKey(T record);*/
 }

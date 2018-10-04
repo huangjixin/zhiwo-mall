@@ -58,7 +58,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 	@Override
 	@Transactional(readOnly = true)
 	public int countByExample(Object example) {
-		return getBaseMapper().countByExample(example);
+		return getBaseMapper().selectCountByExample(example);
 	}
 
 	@Override
