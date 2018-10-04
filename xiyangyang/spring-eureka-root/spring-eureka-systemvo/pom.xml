@@ -5,7 +5,7 @@
 
 	<groupId>com.zwo.spring-eureka-systemvo</groupId>
 	<artifactId>spring-eureka-systemvo</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<packaging>jar</packaging>
 
 	<name>spring-eureka-systemvo</name>
@@ -26,10 +26,15 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
+			<groupId>com.zwo</groupId>
+			<artifactId>spring-eureka-core</artifactId>
+			<version>1.0</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
