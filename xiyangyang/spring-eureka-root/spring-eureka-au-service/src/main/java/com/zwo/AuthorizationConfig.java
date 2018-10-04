@@ -56,4 +56,13 @@ public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
 		converter.setKeyPair(keyStoreKeyFactory.getKeyPair("fzp-jwt"));
 		return converter;
 	}
+	
+
+	@Override
+	public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
+		oauthServer
+				.tokenKeyAccess("permitAll()")
+				.checkTokenAccess("isAuthenticated()");
+
+	}
 }
