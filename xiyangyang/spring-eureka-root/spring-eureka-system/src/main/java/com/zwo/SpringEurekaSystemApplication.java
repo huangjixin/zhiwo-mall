@@ -19,7 +19,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 @EnableEurekaClient
 @EnableSwagger2
-@MapperScan("com.zwo.**.mapper")
+@MapperScan("com.zwo.modules.system.mapper")
 public class SpringEurekaSystemApplication {
 	/**
 	 * @param args
