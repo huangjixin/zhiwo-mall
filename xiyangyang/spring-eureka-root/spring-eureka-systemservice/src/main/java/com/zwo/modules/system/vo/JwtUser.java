@@ -28,7 +28,7 @@ public class JwtUser implements UserDetails {
 		password = user.getPassword();
 		List<GrantedAuthority> auths = new ArrayList<GrantedAuthority>();
 		if (user.getRoles() != null) {
-			List<Role> roles = user.getRoles();
+			List<RoleVo> roles = user.getRoles();
 			for (Role role : roles) {
 				if (role.getName() != null) {
 					auths.add(new SimpleGrantedAuthority(role.getName()));

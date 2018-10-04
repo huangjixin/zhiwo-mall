@@ -27,35 +27,19 @@ public class UserVo extends User implements UserDetails {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private List<Role> roles;
-	private List<Resource> resource;
-
-	public List<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
-	}
-
-	public List<Resource> getResource() {
-		return resource;
-	}
-
-	public void setResource(List<Resource> Resource) {
-		this.resource = Resource;
-	}
+	private List<RoleVo> roles;
+	private List<ResourceVo> resources;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Set<GrantedAuthority> authSet = new HashSet<GrantedAuthority>();
-		if(this.getResource() !=null) {
-			List<Resource> list = this.getResource();
+		if (this.getResources() != null) {
+			List<ResourceVo> list = this.getResources();
 			for (Resource resource : list) {
 				authSet.add(new SimpleGrantedAuthority(resource.getName()));
 			}
 		}
-		
+
 		return authSet;
 	}
 
@@ -76,6 +60,22 @@ public class UserVo extends User implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return this.getEnabled()==1;
+		return this.getEnabled() == 1;
+	}
+
+	public List<RoleVo> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<RoleVo> roles) {
+		this.roles = roles;
+	}
+
+	public List<ResourceVo> getResources() {
+		return resources;
+	}
+
+	public void setResources(List<ResourceVo> resources) {
+		this.resources = resources;
 	}
 }
