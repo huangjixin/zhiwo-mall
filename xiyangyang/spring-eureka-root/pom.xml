@@ -88,6 +88,7 @@
     	<module>spring-eureka-zuul</module>
     	<module>spring-eureka-log</module>
     	<module>spring-eureka-core</module>
+    	<module>spring-eureka-au-service</module>
     	<module>spring-eureka-generate</module>
   </modules>
 </project>
