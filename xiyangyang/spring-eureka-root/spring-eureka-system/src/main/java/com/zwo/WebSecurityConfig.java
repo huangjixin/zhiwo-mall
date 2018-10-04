@@ -19,7 +19,7 @@ import com.zwo.modules.system.service.impl.UserDetailService;
  * @author 黄记新
  *
  */
-@Configuration
+//@Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	UserDetailService userServiceDetail;

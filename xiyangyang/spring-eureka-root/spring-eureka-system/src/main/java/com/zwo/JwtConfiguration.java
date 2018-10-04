@@ -16,7 +16,7 @@ import java.io.IOException;
 /**
  * Created by fangzhipeng on 2017/5/27.
  */
-@Configuration
+//@Configuration
 public class JwtConfiguration {
     @Autowired
     JwtAccessTokenConverter jwtAccessTokenConverter;

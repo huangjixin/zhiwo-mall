@@ -18,8 +18,8 @@ import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFacto
 /**
  * Created by fangzhipeng on 2017/5/27.
  */
-@Configuration
-@EnableAuthorizationServer
+//@Configuration
+//@EnableAuthorizationServer
 public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {

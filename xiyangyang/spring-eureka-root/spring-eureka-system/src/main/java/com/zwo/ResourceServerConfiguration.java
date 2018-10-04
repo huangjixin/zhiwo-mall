@@ -13,8 +13,8 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 /**
  * Created by fangzhipeng on 2017/5/27.
  */
-@Configuration
-@EnableResourceServer
+//@Configuration
+//@EnableResourceServer
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter{
     Logger log = LoggerFactory.getLogger(ResourceServerConfiguration.class);
 
