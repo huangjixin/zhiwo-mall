@@ -12,7 +12,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 @SpringBootApplication
 @EnableEurekaClient
 @EnableSwagger2
-@MapperScan("com.zwo.**.mapper")
+@MapperScan("com.zwo.modules.system.mapper")
 public class SpringEurekaAuServiceApplication {
 
 	public static void main(String[] args) {
