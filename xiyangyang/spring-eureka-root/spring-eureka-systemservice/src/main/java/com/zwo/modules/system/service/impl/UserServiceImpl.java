@@ -66,7 +66,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
 			record.setPassword(pass);
 		}
 		record.setAddTime(new Date());
-		record.setEnabled(Byte.valueOf("1"));
+		record.setEnabled(true);
 		return super.insert(record);
 	}
 	

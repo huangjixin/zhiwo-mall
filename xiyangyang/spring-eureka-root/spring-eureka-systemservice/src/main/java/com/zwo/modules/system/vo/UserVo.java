@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.Transient;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,6 +32,7 @@ public class UserVo extends User implements UserDetails {
 	private List<RoleVo> roles;
 	private List<ResourceVo> resources;
 
+	@Transient
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Set<GrantedAuthority> authSet = new HashSet<GrantedAuthority>();
@@ -43,24 +46,28 @@ public class UserVo extends User implements UserDetails {
 		return authSet;
 	}
 
+	@Transient
 	@Override
 	public boolean isAccountNonExpired() {
 		return false;
 	}
 
+	@Transient
 	@Override
 	public boolean isAccountNonLocked() {
 		return "1".equals(this.getIsValid());
 	}
 
+	@Transient
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return false;
 	}
 
+	@Transient
 	@Override
 	public boolean isEnabled() {
-		return this.getEnabled() == 1;
+		return this.getEnabled() == true;
 	}
 
 	public List<RoleVo> getRoles() {
