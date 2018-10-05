@@ -8,10 +8,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import tk.mybatis.spring.annotation.MapperScan;
 
-//@EnableFeignClients
+@EnableFeignClients
 @SpringBootApplication
 @EnableEurekaClient
-//@EnableSwagger2
+@EnableSwagger2
 @MapperScan("com.zwo.modules.system.mapper")
 public class SpringEurekaAuServiceApplication {
 
