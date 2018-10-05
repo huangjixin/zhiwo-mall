@@ -15,7 +15,7 @@
     <result column="add_by" jdbcType="VARCHAR" property="addBy" />
     <result column="edit_by" jdbcType="VARCHAR" property="editBy" />
     <result column="descrtion" jdbcType="VARCHAR" property="descrtion" />
-    <result column="enabled" jdbcType="TINYINT" property="enabled" />
+    <!-- <result column="enabled" jdbcType="BIT" property="enabled" /> -->
   </resultMap>
   
   <resultMap id="UserVoMap" type="com.zwo.modules.system.vo.UserVo" >
@@ -32,7 +32,7 @@
     <result column="add_by" jdbcType="VARCHAR" property="addBy" />
     <result column="edit_by" jdbcType="VARCHAR" property="editBy" />
     <result column="descrtion" jdbcType="VARCHAR" property="descrtion" />
-    <result column="enabled" jdbcType="BIT" property="enabled" />
+    <!-- <result column="enabled" jdbcType="BIT" property="enabled" /> -->
     <collection  property="roles" ofType="com.zwo.modules.system.vo.RoleVo">
         	<id column="id" jdbcType="VARCHAR" property="id" />
 		    <result column="name" jdbcType="VARCHAR" property="name" />
@@ -94,7 +94,19 @@
   </select> 
   <select id="findByUsername" resultMap="UserVoMap">
   		SELECT DISTINCT
-		    user.*,r.*,res.*
+		    user.id, 
+		    user.username, 
+		    user.password, 
+		    user.is_valid, 
+		    user.sort_index, 
+		    user.add_time, 
+		    user.edit_time, 
+		    user.email, 
+		    user.real_name, 
+    		user.salt, 
+    		user.add_by, 
+    		user.edit_by, 
+    		user.descrtion,r.*,res.*
 		FROM
 		    bhm_user user
 		        LEFT JOIN
