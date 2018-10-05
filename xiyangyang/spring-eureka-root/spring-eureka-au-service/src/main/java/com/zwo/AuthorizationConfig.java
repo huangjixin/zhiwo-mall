@@ -39,7 +39,7 @@ public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
 		.scopes("service")
 		.autoApprove(true)
 		.authorizedGrantTypes("implicit", "refresh_token", "password", "authorization_code")
-		.accessTokenValiditySeconds(12 * 300);// 5min过期
+		.accessTokenValiditySeconds(12 * 3000);// 5min过期
 	}
 
 	@Override
