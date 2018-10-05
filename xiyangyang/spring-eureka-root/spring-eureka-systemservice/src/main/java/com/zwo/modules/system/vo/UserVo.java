@@ -4,18 +4,11 @@
 package com.zwo.modules.system.vo;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import javax.persistence.Transient;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.zwo.modules.system.domain.Resource;
-import com.zwo.modules.system.domain.Role;
 import com.zwo.modules.system.domain.User;
 
 /**
@@ -32,46 +25,46 @@ public class UserVo extends User implements UserDetails {
 	private List<RoleVo> roles;
 	private List<ResourceVo> resources;
 
-	@Transient
+//	@Transient
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		Set<GrantedAuthority> authSet = new HashSet<GrantedAuthority>();
-		if (this.getResources() != null) {
-			List<ResourceVo> list = this.getResources();
-			for (Resource resource : list) {
-				authSet.add(new SimpleGrantedAuthority(resource.getName()));
-			}
-		}
-
-		return authSet;
+		/*
+		 * Set<GrantedAuthority> authSet = new HashSet<GrantedAuthority>(); if
+		 * (this.getResources() != null) { List<ResourceVo> list = this.getResources();
+		 * for (Resource resource : list) { authSet.add(new
+		 * SimpleGrantedAuthority(resource.getName())); } }
+		 * 
+		 * return authSet;
+		 */
+		return resources;
 	}
 
-	@Transient
+//	@Transient
 	@Override
 	public boolean isAccountNonExpired() {
 		return false;
 	}
 
-	@Transient
+//	@Transient
 	@Override
 	public boolean isAccountNonLocked() {
 		return "1".equals(this.getIsValid());
 	}
 
-	@Transient
+//	@Transient
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return false;
 	}
 
-	@Transient
+//	@Transient
 	@Override
 	public boolean isEnabled() {
 		return true;
 	}
-	
+
 	public void setEnabled(boolean enabled) {
-		
+
 	}
 
 	public List<RoleVo> getRoles() {
