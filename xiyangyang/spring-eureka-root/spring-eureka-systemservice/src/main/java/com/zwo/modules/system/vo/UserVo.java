@@ -67,7 +67,11 @@ public class UserVo extends User implements UserDetails {
 	@Transient
 	@Override
 	public boolean isEnabled() {
-		return this.getEnabled() == true;
+		return true;
+	}
+	
+	public void setEnabled(boolean enabled) {
+		
 	}
 
 	public List<RoleVo> getRoles() {
