@@ -58,7 +58,7 @@ public class User implements Serializable {
      */
     private String descrtion;
 
-    private Boolean enabled;
+//    private Boolean enabled;
 
     private static final long serialVersionUID = 1L;
 
@@ -267,14 +267,14 @@ public class User implements Serializable {
     /**
      * @return enabled
      */
-    public Boolean getEnabled() {
-        return enabled;
-    }
+//    public Boolean getEnabled() {
+//        return enabled;
+//    }
 
     /**
      * @param enabled
      */
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
+//    public void setEnabled(Boolean enabled) {
+//        this.enabled = enabled;
+//    }
 }
