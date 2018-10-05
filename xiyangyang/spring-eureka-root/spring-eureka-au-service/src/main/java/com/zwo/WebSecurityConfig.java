@@ -16,6 +16,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.jwt.Jwt;
+import org.springframework.security.jwt.JwtHelper;
 
 import com.zwo.modules.system.service.impl.UserDetailService;
 
@@ -64,13 +66,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 	public static void main(String[] args) {
-		String content = "user-service:123456";
-		String encodeContent = Base64.getEncoder().encodeToString(content.getBytes());
-		System.out.println(encodeContent);
-		byte[] bs = Base64.getDecoder().decode(encodeContent);
-		String res = new String(bs);
-		System.out.println(res);
-//    	Jwt jwt = JwtHelper.decode("c2VydrnljZSloaToxMjMONTY=");
-//    	System.out.println(jwt.getEncoded());
+//		String content = "user-service:123456";
+//		String encodeContent = Base64.getEncoder().encodeToString(content.getBytes());
+//		System.out.println(encodeContent);
+//		byte[] bs = Base64.getDecoder().decode(encodeContent);
+//		String res = new String(bs);
+//		System.out.println(res);
+    	Jwt jwt = JwtHelper.decode("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Mzg3NjMwOTAsInVzZXJfbmFtZSI6IjEiLCJhdXRob3JpdGllcyI6WyIxIl0sImp0aSI6IjUwYTBiOTVhLWQwZGEtNGY1YS05NDI0LTQxZTFkMmM1YTVlOSIsImNsaWVudF9pZCI6InVzZXItc2VydmljZSIsInNjb3BlIjpbInNlcnZpY2UiXX0.I9rN77gGj7YKXVe5q7cTToiyYYLbE5ngzWMCjgHnbiU3wIAVQMz0fHlfl1LB9NOnN4qnwqp5IigaQrIzPnemYYAfMIEE5l8kOBc5M1bwTQmY4-jULQO9zku3YlJ1r43SMTrbR6lL95wA0fCvWtQfu-udeWQLj0neCaN60g9gCgDaQDIXDHWGVHpqorMjoF402kXO4HYKFs8YATsCRqgcVQV8htx5R_RBdvvuse2PGggfCqg4c1eJs8bURj_7T8QmABU1pWHOZZvDvdE64ki9rVdZ4pKUxMOZ36prTpNmT8K4XBVwYbnZQJ8mse6ibCGkBi90iuTC_f3AqM3vjZd8BA");
+    	System.out.println(jwt.getClaims());
 	}
 }
