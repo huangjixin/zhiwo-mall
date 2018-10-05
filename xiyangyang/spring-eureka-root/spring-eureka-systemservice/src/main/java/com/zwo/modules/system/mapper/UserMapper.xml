@@ -34,32 +34,32 @@
     <result column="descrtion" jdbcType="VARCHAR" property="descrtion" />
     <!-- <result column="enabled" jdbcType="BIT" property="enabled" /> -->
     <collection  property="roles" ofType="com.zwo.modules.system.vo.RoleVo">
-        	<id column="id" jdbcType="VARCHAR" property="id" />
-		    <result column="name" jdbcType="VARCHAR" property="name" />
-		    <result column="sort_index" jdbcType="INTEGER" property="sortIndex" />
-		    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
-		    <result column="edit_time" jdbcType="TIMESTAMP" property="editTime" />
-		    <result column="salt" jdbcType="VARCHAR" property="salt" />
-		    <result column="add_by" jdbcType="VARCHAR" property="addBy" />
-		    <result column="edit_by" jdbcType="VARCHAR" property="editBy" />
-		    <result column="descrtion" jdbcType="VARCHAR" property="descrtion" />
-		    <result column="is_valid" jdbcType="TINYINT" property="isValid" />
+        	<id column="role_id" jdbcType="VARCHAR" property="id" />
+		    <result column="role_name" jdbcType="VARCHAR" property="name" />
+		    <result column="role_sort_index" jdbcType="INTEGER" property="sortIndex" />
+		    <result column="role_add_time" jdbcType="TIMESTAMP" property="addTime" />
+		    <result column="role_edit_time" jdbcType="TIMESTAMP" property="editTime" />
+		    <result column="role_salt" jdbcType="VARCHAR" property="salt" />
+		    <result column="role_add_by" jdbcType="VARCHAR" property="addBy" />
+		    <result column="role_edit_by" jdbcType="VARCHAR" property="editBy" />
+		    <result column="role_descrtion" jdbcType="VARCHAR" property="descrtion" />
+		    <result column="role_is_valid" jdbcType="TINYINT" property="isValid" />
     </collection>
     <collection  property="resources" ofType="com.zwo.modules.system.vo.ResourceVo">
-        	<id column="id" jdbcType="VARCHAR" property="id" />
-		    <result column="name" jdbcType="VARCHAR" property="name" />
-		    <result column="sort_index" jdbcType="INTEGER" property="sortIndex" />
-		    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
-		    <result column="edit_time" jdbcType="TIMESTAMP" property="editTime" />
-		    <result column="salt" jdbcType="VARCHAR" property="salt" />
-		    <result column="add_by" jdbcType="VARCHAR" property="addBy" />
-		    <result column="edit_by" jdbcType="VARCHAR" property="editBy" />
-		    <result column="descrtion" jdbcType="VARCHAR" property="descrtion" />
-		    <result column="type" jdbcType="INTEGER" property="type" />
-		    <result column="is_valid" jdbcType="TINYINT" property="isValid" />
-		    <result column="code" jdbcType="VARCHAR" property="code" />
-		    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
-		    <result column="level" jdbcType="INTEGER" property="level" />
+        	<id column="res_id" jdbcType="VARCHAR" property="id" />
+		    <result column="res_name" jdbcType="VARCHAR" property="name" />
+		    <result column="res_sort_index" jdbcType="INTEGER" property="sortIndex" />
+		    <result column="res_add_time" jdbcType="TIMESTAMP" property="addTime" />
+		    <result column="res_edit_time" jdbcType="TIMESTAMP" property="editTime" />
+		    <result column="res_salt" jdbcType="VARCHAR" property="salt" />
+		    <result column="res_add_by" jdbcType="VARCHAR" property="addBy" />
+		    <result column="res_edit_by" jdbcType="VARCHAR" property="editBy" />
+		    <result column="res_descrtion" jdbcType="VARCHAR" property="descrtion" />
+		    <result column="res_type" jdbcType="INTEGER" property="type" />
+		    <result column="res_is_valid" jdbcType="TINYINT" property="isValid" />
+		    <result column="res_code" jdbcType="VARCHAR" property="code" />
+		    <result column="res_parent_id" jdbcType="VARCHAR" property="parentId" />
+		    <result column="res_level" jdbcType="INTEGER" property="level" />
     </collection>
   </resultMap>
   
@@ -93,20 +93,47 @@
 			    user.USERNAME = #{username}	
   </select> 
   <select id="findByUsername" resultMap="UserVoMap">
-  		SELECT DISTINCT
-		    user.id, 
-		    user.username, 
-		    user.password, 
-		    user.is_valid, 
-		    user.sort_index, 
-		    user.add_time, 
-		    user.edit_time, 
-		    user.email, 
-		    user.real_name, 
-    		user.salt, 
-    		user.add_by, 
-    		user.edit_by, 
-    		user.descrtion,r.*,res.*
+  		SELECT 
+		    user.id,
+		    user.username,
+		    user.password,
+		    user.is_valid,
+		    user.sort_index,
+		    user.add_time,
+		    user.edit_time,
+		    user.email,
+		    user.real_name,
+		    user.salt,
+		    user.add_by,
+		    user.edit_by,
+		    user.descrtion,
+		    
+		    r.id as role_id,
+		    r.name as role_name, 
+		    r.sort_index as role_sort_index,
+		    r.add_time as role_add_time, 
+		    r.edit_time as role_edit_time, 
+		    r.salt as role_salt, 
+		    r.add_by as role_add_by, 
+		    r.edit_by as role_edit_by, 
+		    r.descrtion as role_descrtion, 
+		    r.is_valid as role_is_valid,
+		    
+		    
+		    res.id as res_id,
+		    res.name as res_name, 
+		    res.sort_index as res_sort_index,
+		    res.add_time as res_add_time,
+		    res.edit_time as res_edit_time,
+		    res.salt as res_salt, 
+		    res.add_by as res_add_by, 
+		    res.edit_by as res_edit_by, 
+		    res.descrtion as res_descrtion, 
+		    res.type as res_type, 
+		    res.is_valid as res_is_valid, 
+		    res.code as res_code, 
+		    res.parent_id as res_parent_id, 
+		    res.level as res_level
 		FROM
 		    bhm_user user
 		        LEFT JOIN
