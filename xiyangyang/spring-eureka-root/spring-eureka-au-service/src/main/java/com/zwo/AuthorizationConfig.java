@@ -31,6 +31,10 @@ public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
+	private static final String ENV_OAUTH = "authentication.oauth.";
+    private static final String PROP_CLIENTID = "clientid";
+    private static final String PROP_SECRET = "secret";
+    
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.inMemory()
@@ -39,7 +43,7 @@ public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
 		.scopes("service")
 		.autoApprove(true)
 		.authorizedGrantTypes("implicit", "refresh_token", "password", "authorization_code")
-		.accessTokenValiditySeconds(12 * 3000);// 5min过期
+		.accessTokenValiditySeconds(12 * 3000*1000000);// 5min过期
 	}
 
 	@Override
