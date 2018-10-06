@@ -30,7 +30,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 	public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
 		log.info("Configuring ResourceServerSecurityConfigurer");
 		resources.resourceId("user").tokenStore(tokenStore);
-		resources.resourceId("role").tokenStore(tokenStore);
+//		resources.resourceId("role").tokenStore(tokenStore);
 	}
 
 	@Autowired

@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.zwo.modules.system.service.impl.UserDetailService;
 
@@ -19,7 +20,7 @@ import com.zwo.modules.system.service.impl.UserDetailService;
  * @author 黄记新
  *
  */
-@Configuration
+//@Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	UserDetailService userServiceDetail;
@@ -59,7 +60,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //					}
 //				}).and().authorizeRequests().antMatchers("/**").authenticated().and().httpBasic();
 	}
-
+	
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		// return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+		return new BCryptPasswordEncoder();
+	}
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 //		auth.inMemoryAuthentication()
@@ -68,6 +75,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        .password("password")
 //        .roles("USER");
 
-		auth.userDetailsService(userServiceDetail).passwordEncoder(new BCryptPasswordEncoder());
+		auth.userDetailsService(userServiceDetail).passwordEncoder(passwordEncoder());
 	}
 }
