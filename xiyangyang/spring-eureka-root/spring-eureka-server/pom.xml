@@ -44,7 +44,7 @@
                 </executions>
 				<configuration>
 					<mainClass>com.zwo.SpringEurekaServer</mainClass>
-					<skip>true</skip>
+					<!-- <skip>true</skip> -->
 				</configuration>
 			</plugin>
 			<plugin>
