@@ -194,15 +194,21 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
+	-->
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<skip>
+						true
+					</skip>
+					<!--<mainClass>com.zhiye.BhmallCoreApplication</mainClass>-->
+				</configuration>
 			</plugin>
 		</plugins>
-	</build> -->
+	</build> 
 
 
 </project>
