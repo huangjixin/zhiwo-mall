@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.zwo.spring-eureka-systemvo</groupId>
+	<groupId>com.zwo.mall.systemvo</groupId>
 	<artifactId>spring-eureka-systemvo</artifactId>
 	<version>1.0</version>
 	<packaging>jar</packaging>
 
 	<name>spring-eureka-systemvo</name>
-	<description>Demo project for Spring Boot</description>
+	<description>系統VO項目</description>
 
 	<parent>
-		<groupId>eureka-root</groupId>
+		<groupId>com.zwo.mall.root</groupId>
 		<artifactId>spring-eureka-root</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
@@ -25,7 +26,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.zwo</groupId>
+			<groupId>com.zwo.mall.core</groupId>
 			<artifactId>spring-eureka-core</artifactId>
 			<version>1.0</version>
 		</dependency>
@@ -47,10 +48,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<skip>
-						true
-					</skip>
-					<!--<mainClass>com.zhiye.BhmallCoreApplication</mainClass>-->
+					<skip>true</skip>
 				</configuration>
 			</plugin>
 		</plugins>

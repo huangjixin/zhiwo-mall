@@ -5,11 +5,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>eureka-root</groupId>
+		<groupId>com.zwo.mall.eureka-root</groupId>
 		<artifactId>spring-eureka-root</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>spring-eureka-system-api</groupId>
+	<groupId>com.zwo.mall.system-api</groupId>
 	<artifactId>spring-eureka-system-api</artifactId>
 	<version>1.0</version>
 	<name>spring-eureka-system-api</name>
@@ -19,8 +19,8 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>spring-eureka-system</groupId>
-			<artifactId>spring-eureka-system</artifactId>
+			<groupId>com.zwo.mall.systemvo</groupId>
+			<artifactId>spring-eureka-systemvo</artifactId>
 			<version>1.0</version>
 		</dependency>
 		<dependency>
@@ -34,9 +34,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<skip>
-						true
-					</skip>
+					<skip>true</skip>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -5,11 +5,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>eureka-root</groupId>
+		<groupId>com.zwo.mall.root</groupId>
 		<artifactId>spring-eureka-root</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>spring-eureka-system</groupId>
+	<groupId>com.zwo.mall.system</groupId>
 	<artifactId>spring-eureka-system</artifactId>
 	<version>1.0</version>
 	<name>spring-eureka-system</name>
@@ -19,7 +19,7 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>com.zwo.spring-eureka-systemservice</groupId>
+			<groupId>com.zwo.mall.systemservice</groupId>
 			<artifactId>spring-eureka-systemservice</artifactId>
 			<version>1.0</version>
 		</dependency>
@@ -42,11 +42,11 @@
 		<!-- alibaba的druid数据库连接池 -->
 		<!-- <dependency> <groupId>com.alibaba</groupId> <artifactId>druid-spring-boot-starter</artifactId> 
 			<version>1.1.9</version> </dependency> -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>tk.mybatis</groupId>
 			<artifactId>mapper-spring-boot-starter</artifactId>
 			<version>1.2.4</version>
-		</dependency>
+		</dependency> -->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -97,13 +97,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<!-- <executions>
-					<execution>
-						<goals>
-							<goal>repackage</goal>
-						</goals>
-					</execution>
-				</executions> -->
 				<configuration>
 					<!-- fork : 如果没有该项配置则devtools不会起作用，即应用不会restart -->
 					<fork>true</fork>

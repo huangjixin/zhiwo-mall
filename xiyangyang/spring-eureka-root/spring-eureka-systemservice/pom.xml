@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.zwo.spring-eureka-systemservice</groupId>
+	<groupId>com.zwo.mall.systemservice</groupId>
 	<artifactId>spring-eureka-systemservice</artifactId>
 	<version>1.0</version>
 	<packaging>jar</packaging>
@@ -13,7 +13,7 @@
 	<description></description>
 
 	<parent>
-		<groupId>eureka-root</groupId>
+		<groupId>com.zwo.mall.root</groupId>
 		<artifactId>spring-eureka-root</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
@@ -26,28 +26,14 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.zwo.spring-eureka-systemvo</groupId>
+			<groupId>com.zwo.mall.systemvo</groupId>
 			<artifactId>spring-eureka-systemvo</artifactId>
 			<version>1.0</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-jwt</artifactId>
-			<version>1.0.9.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security.oauth</groupId>
-			<artifactId>spring-security-oauth2</artifactId>
-			<version>2.3.3.RELEASE</version>
-		</dependency> -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-oauth2</artifactId>
 		</dependency>
-		<!-- <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency> -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
@@ -71,11 +57,6 @@
 			<artifactId>java-jwt</artifactId>
 			<version>3.3.0</version>
 		</dependency>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -84,9 +65,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<skip>
-						true
-					</skip>
+					<skip>true</skip>
 				</configuration>
 			</plugin>
 		</plugins>
