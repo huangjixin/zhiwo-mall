@@ -97,16 +97,33 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<executions>
+				<!-- <executions>
 					<execution>
 						<goals>
 							<goal>repackage</goal>
 						</goals>
 					</execution>
-				</executions>
+				</executions> -->
 				<configuration>
 					<!-- fork : 如果没有该项配置则devtools不会起作用，即应用不会restart -->
 					<fork>true</fork>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.4.11</version>
+				<configuration>
+					<imageName>${project.artifactId}</imageName>
+					<imageTags>0.0.1</imageTags>
+					<dockerDirectory>src/main/docker</dockerDirectory>
+					<resources>
+						<resource>
+							<targetPath>/</targetPath>
+							<directory>${project.build.directory}</directory>
+							<include>${project.build.finalName}.jar</include>
+						</resource>
+					</resources>
 				</configuration>
 			</plugin>
 			<plugin>
