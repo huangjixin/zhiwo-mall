@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>eureka-root</groupId>
+    <groupId>com.zwo.mall.root</groupId>
     <artifactId>spring-eureka-root</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
@@ -74,4 +74,15 @@
 			<scope>test</scope>
 		</dependency>
   </dependencies>
+  <build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
