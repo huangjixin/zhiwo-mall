@@ -201,10 +201,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<skip>
-						true
-					</skip>
-					<!--<mainClass>com.zhiye.BhmallCoreApplication</mainClass>-->
+					<skip>true</skip>
 				</configuration>
 			</plugin>
 		</plugins>
