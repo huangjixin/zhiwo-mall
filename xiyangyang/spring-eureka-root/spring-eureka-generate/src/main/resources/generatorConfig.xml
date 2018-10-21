@@ -5,11 +5,11 @@
 
 <generatorConfiguration>
 	<context id="Mysql"><!-- targetRuntime="MyBatis3Simple" defaultModelType="flat" -->
-		<!-- <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+		<plugin type="tk.mybatis.mapper.generator.MapperPlugin">
 			<property name="mappers"
 				value="tk.mybatis.mapper.common.Mapper" />
 			<property name="caseSensitive" value="true" />
-		</plugin> -->
+		</plugin>
 		<plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
 		<plugin
 			type="org.mybatis.generator.plugins.CaseInsensitiveLikePlugin"></plugin>
