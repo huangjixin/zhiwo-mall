@@ -3,11 +3,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>eureka-root</groupId>
+		<groupId>com.zwo.mall.root</groupId>
 		<artifactId>spring-eureka-root</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>com.zwo</groupId>
+	<groupId>com.zwo.mall.core</groupId>
 	<artifactId>spring-eureka-core</artifactId>
 	<version>1.0</version>
 	<packaging>jar</packaging>
