@@ -1,12 +1,11 @@
 package com.zwo.modules.system.utils;
 
+import java.util.List;
+
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-
-import com.zwo.modules.core.utils.HttpUtils;
-
-import java.util.List;
 
 /**
  * Created by fangzhipeng on 2017/6/6.
@@ -21,7 +20,8 @@ public class UserUtils {
 	 * @return
 	 */
 	public static String getCurrentToken() {
-		return HttpUtils.getHeaders(HttpUtils.getHttpServletRequest()).get(AUTHORIZATION);
+//		return HttpUtils.getHeaders(HttpUtils.getHttpServletRequest()).get(AUTHORIZATION);
+		return null;
 	}
 
 	/**
