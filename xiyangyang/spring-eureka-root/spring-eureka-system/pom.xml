@@ -107,6 +107,7 @@
 				<configuration>
 					<!-- fork : 如果没有该项配置则devtools不会起作用，即应用不会restart -->
 					<fork>true</fork>
+					<skip>true</skip>
 				</configuration>
 			</plugin>
 			<plugin>
