@@ -14,10 +14,10 @@ eureka:
     hostname: ${spring.cloud.client.ip-address}
     lease-renewal-interval-in-seconds: 10
     lease-expiration-duration-in-seconds: 30   
-zuul:
-  routes:
-    system-service:
-      path: /userapi/**,/roleapi/**
-      serviceId: system-service
-      sensitive-headers:
+#zuul:
+#  routes:
+#    system-service:
+#      path: /userapi/**,/roleapi/**
+#      serviceId: system-service
+#      sensitive-headers:
       
