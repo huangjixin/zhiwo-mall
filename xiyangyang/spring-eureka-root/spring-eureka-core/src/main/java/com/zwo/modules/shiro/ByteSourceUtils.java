@@ -73,10 +73,10 @@ public class ByteSourceUtils {
 
     }
 
-    public static void main(String[] args) {
-        byte[] b = serialize("nanc-shiro-session:703de992-b1f7-4d77-a699-8fba7cdaf4ca");
-        System.out.println(deserialize(b));
-        System.out.println(b);
-    }
+//    public static void main(String[] args) {
+//        byte[] b = serialize("nanc-shiro-session:703de992-b1f7-4d77-a699-8fba7cdaf4ca");
+//        System.out.println(deserialize(b));
+//        System.out.println(b);
+//    }
 
 }
