@@ -14,6 +14,19 @@ eureka:
     hostname: ${spring.cloud.client.ip-address}
     lease-renewal-interval-in-seconds: 10
     lease-expiration-duration-in-seconds: 30   
+
+zuul:
+    host:
+        connect-timeout-millis: 10000
+        socket-timeout-millis: 60000
+
+hystrix:
+    command:
+        default:
+            execution:
+                isolation:
+                    thread:
+                        timeoutInMilliseconds: 60000
 #zuul:
 #  routes:
 #    system-service:
