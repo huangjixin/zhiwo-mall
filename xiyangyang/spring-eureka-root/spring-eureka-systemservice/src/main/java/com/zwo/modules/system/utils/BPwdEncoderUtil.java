@@ -13,9 +13,9 @@ public class BPwdEncoderUtil {
 		return encoder.matches(rawPassword, encodedPassword);
 	}
 
-	public static void main(String[] args) {
-		System.out.println(BPwdEncoderUtil.BCryptPassword("123456"));
-
-	}
+//	public static void main(String[] args) {
+//		System.out.println(BPwdEncoderUtil.BCryptPassword("123456"));
+//
+//	}
 
 }
