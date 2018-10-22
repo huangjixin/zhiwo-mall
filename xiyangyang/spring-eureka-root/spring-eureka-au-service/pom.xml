@@ -26,7 +26,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.zwo.spring-eureka-systemservice</groupId>
+			<groupId>com.zwo.mall.systemservice</groupId>
 			<artifactId>spring-eureka-systemservice</artifactId>
 			<version>1.0</version>
 		</dependency>
