@@ -100,7 +100,7 @@
 				<configuration>
 					<!-- fork : 如果没有该项配置则devtools不会起作用，即应用不会restart -->
 					<fork>true</fork>
-					<skip>true</skip>
+					<!-- <skip>true</skip> -->
 				</configuration>
 			</plugin>
 			<plugin>
@@ -110,7 +110,7 @@
 				<configuration>
 					<imageName>${project.artifactId}</imageName>
 					<imageTags>0.0.1</imageTags>
-					<dockerDirectory>src/main/docker</dockerDirectory>
+					<dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
 					<resources>
 						<resource>
 							<targetPath>/</targetPath>
