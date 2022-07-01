@@ -23,7 +23,7 @@ public class ParameterRequestWrapper extends HttpServletRequestWrapper {
      */
     private static Map<String, String> xssMap = new HashMap<>();
 
-    private static final String OUYEEL_URL_REG = ".*[a-zA-z]+://.*ouyeelintl.com.*";
+    private static final String OUYEEL_URL_REG = ".*[a-zA-z]+://.*baidu.com.*";
     private static final String URL_REG = ".*[a-zA-z]+://.*";
     private static final String IGNORE_PATTERN = "table";
 
